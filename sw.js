@@ -1,5 +1,5 @@
 // Keeps the hub opening even with no signal, and picks up new versions when online.
-var CACHE='hub-v1';
+var CACHE='hub-v2';
 var CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',function(e){
