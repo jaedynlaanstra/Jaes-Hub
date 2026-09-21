@@ -452,6 +452,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   .main.nohead .body{padding-top:calc(env(safe-area-inset-top,0px) + 62px)}
 }
 @media(hover:none){
+  .quick>label.fakebtn{display:none!important}
   .iconedit{display:none!important}
   [data-paste]{display:none!important}
 }
@@ -514,14 +515,84 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   .railcard h3{font-size:12.5px!important;margin-bottom:6px!important}
   #c-when h3{font-size:11px!important;margin-bottom:3px!important}
   #c-when p{font-size:13.5px!important;line-height:1.35}
-  #c-grade p:first-of-type{font-size:21px!important}
-  #c-grade p{font-size:11.5px!important}
+
   #c-prof,#c-next{grid-column:1/-1}
   #c-claude .empty{font-size:11.5px!important}
   #c-claude button{min-height:34px;font-size:12px;padding:6px 8px;white-space:normal}
   .railcard .person{padding:8px 0}
   .railcard .photo,.railcard .photoempty{width:44px!important;height:44px!important}
   .pbtns button,.pbtns .fakebtn{min-height:32px!important;padding:4px 9px}
+}
+
+/* ---------- phones, round two ---------- */
+@media(max-width:700px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .wrap,.layout,.main{max-width:100vw;overflow-x:hidden}
+  .split>div,.two>*,.two2>*,.rail>*{min-width:0}
+
+  /* header sits clear of the hamburger */
+  .main:not(.hascover) .banner{padding-top:calc(env(safe-area-inset-top,0px) + 64px)!important}
+  .main.hascover .banner{padding-top:16px!important}
+  .main .banner.sz-hidden{padding-top:0!important;padding-bottom:0!important}
+  .body{padding-top:14px!important}
+  .main.nohead .body{padding-top:calc(env(safe-area-inset-top,0px) + 64px)!important}
+  .hero{margin-top:2px}
+
+  /* coming up: one tidy row each, all the same height */
+  .cards{grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+  .due{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"what when" "who who";column-gap:12px;row-gap:3px;align-items:baseline;padding:12px 14px!important;border-radius:12px!important;border-left-width:4px!important;min-height:0!important}
+  .due .what{grid-area:what;font-size:14.5px!important;margin:0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3!important}
+  .due .when{grid-area:when;font-size:11.5px!important;white-space:nowrap;text-align:right}
+  .due .who{grid-area:who;font-size:11.5px!important;margin:0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* grids that can never be wider than the screen */
+  .stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  .classcards{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  .classcard{min-width:0}
+  .classcard .nm{overflow-wrap:anywhere}
+  .appgrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+
+  /* class page: clean cards, no panel behind them */
+  .rail{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;background:transparent!important;border:none!important;padding:0!important;gap:10px!important;border-radius:0!important}
+  .railcard{min-width:0;box-shadow:none!important;border:1px solid var(--line)!important}
+  #c-when{border-color:transparent!important}
+  #c-when,#c-grade{display:flex;flex-direction:column;justify-content:flex-start}
+  #c-when p{font-size:14px!important;line-height:1.35}
+  .gbig{font-size:22px!important}
+  #c-grade p:not(.gbig){font-size:11.5px!important;line-height:1.45;margin-top:3px}
+  #c-claude{grid-column:1/-1;padding:0!important;border:none!important;background:transparent!important}
+  #c-claude h3,#c-claude .empty{display:none!important}
+  #c-claude a{display:block}
+  #c-claude button{width:100%;min-height:40px;font-size:13px}
+  #c-next .item .grow{font-size:13.5px}
+  #c-next .tag{font-size:11px}
+  .railcard .person{align-items:center}
+  .railcard .person p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .asgwrap{padding:0!important;margin-top:4px!important}
+}
+
+/* ---------- phones, round three ---------- */
+.side{box-shadow:none}
+.side.open{box-shadow:0 10px 40px rgba(0,0,0,.3)}
+@media(max-width:700px){
+  .rail .railcard{min-width:0!important;flex:none!important}
+
+  /* to do: title gets the full width, date and class underneath */
+  .panel>.item,.panel .more .item{display:grid!important;grid-template-columns:22px minmax(0,1fr) auto;grid-template-areas:"tick title title" "tick when pill";column-gap:12px;row-gap:2px;align-items:center}
+  .panel .item>.tick{grid-area:tick}
+  .panel .item>.grow{grid-area:title;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .panel .item>.tag{grid-area:when;font-size:11.5px;text-align:left}
+  .panel .item>.pill{grid-area:pill;font-size:11px;justify-self:end}
+
+  /* assignments list: percentage on the title line, date lined up under the title */
+  .tbl td:nth-child(3){order:1!important;margin-left:auto!important}
+  .tbl td:nth-child(4){order:2}
+  .tbl td:nth-child(5){order:2;margin-left:32px}
+  .tbl td:nth-child(6){order:2}
+
+  /* files header: smaller buttons that do not crowd the title */
+  #c-files .rowhead,#c-links .rowhead{align-items:center}
+  #c-files .rowhead button,#c-files .rowhead .fakebtn,#c-links .rowhead button{min-height:32px!important;font-size:12px;padding:5px 10px}
 }
 </style>
 </head>
@@ -1211,7 +1282,8 @@ function render(){
   +(S.sideHidden?'':sidebar(c))
   +(S.sideHidden?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
-  +'<main class="main'+((bannerSize()==='hidden'&&!(c?c.cover:(view.page==='home'?S.cover:'')))?' nohead':'')+'">'
+  +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?S.cover:''));
+     return '<main class="main'+(hasCov?' hascover':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
   +'<button class="menubtn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +coverBlock(c)
   +'<div class="banner sz-'+bannerSize()+(view.picker&&bannerSize()==='hidden'?' editing':'')+'" style="background:var(--s-banner-bg,'+head.bg+')">'+pencil('banner')
@@ -1416,7 +1488,7 @@ function dueCard(t,c,kind){
  return '<button class="due'+(late?' overdue':'')+'" style="background:'+p.bg+'" data-open="'+c.id+'">'
   +'<span class="when" style="color:'+(late?'#A34A3F':p.ink2)+'">'+esc(withTime(fmtDue(t.due),t.time))+'</span>'
   +'<span class="what" style="color:'+p.ink+';display:block">'+esc(t.title)+'</span>'
-  +'<span class="who" style="color:'+p.ink2+';display:block">'+esc(c.name)+(kind==='assign'?' \u00b7 assignment':'')+'</span></button>';
+  +'<span class="who" style="color:'+p.ink2+';display:block">'+esc(c.name)+'</span></button>';
 }
 
 function viewHome(){
@@ -1845,7 +1917,7 @@ function viewClass(c){
   var gtxt='';
   if(gi.avg==null)gtxt='<p style="font-size:13px;color:var(--ink2)">No marks entered yet. Add them as work comes back.</p>';
   else{
-   gtxt='<p style="font-size:26px;font-weight:500;line-height:1.1">'+gi.avg.toFixed(1)+'%</p>'
+   gtxt='<p class="gbig" style="font-size:26px;font-weight:500;line-height:1.1">'+gi.avg.toFixed(1)+'%</p>'
     +'<p style="font-size:12px;color:var(--ink2);margin-top:3px">on '+gi.graded+'% of the course marked so far</p>';
    if(gi.need!=null){
     var nd=gi.need;
@@ -1885,11 +1957,11 @@ function viewClass(c){
 
  if(c.claude){
   r+='<div class="railcard" id="c-claude"><h3 style="margin-bottom:8px">Claude project</h3>'
-   +'<a href="'+esc(c.claude)+'" target="_blank" rel="noopener"><button style="width:100%">Open the project for this class</button></a></div>';
+   +'<a href="'+esc(c.claude)+'" target="_blank" rel="noopener"><button style="width:100%">Open Claude project</button></a></div>';
  }else{
   r+='<div class="railcard" id="c-claude"><h3 style="margin-bottom:6px">Claude project</h3>'
    +'<p class="empty" style="margin-bottom:8px">Paste a link in Edit class to keep this class\u2019s project one click away.</p>'
-   +'<button data-edit="class" data-c="'+c.id+'">Add a link</button></div>';
+   +'<button data-edit="class" data-c="'+c.id+'">Add a Claude project link</button></div>';
  }
  r+='<div class="railcard" id="c-next" style="'+surfStyle('next','','','')+'">'+pencil('next')+'<div class="rowhead" style="margin-bottom:8px"><h3 style="color:'+surfHead('next')+'">Upcoming submissions</h3>'
   +'<button class="ghost" data-add="assign" data-c="'+c.id+'" style="font-size:12px">Add</button></div>';
