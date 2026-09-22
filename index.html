@@ -892,7 +892,7 @@ var DEFAULT={
 
 var S=JSON.parse(JSON.stringify(DEFAULT));
 var FILES={};
-var view={page:'home',classId:null,menu:false,paste:null,repos:null,picker:false,editSurf:null,pickPos:null,asgView:'table',range:'week',calMonth:null,answer:{},asking:{},modal:null,storageOk:true};
+var view={page:'home',classId:null,menu:false,paste:null,repos:null,picker:false,editSurf:null,driveError:null,pickPos:null,asgView:'table',range:'week',calMonth:null,answer:{},asking:{},modal:null,storageOk:true};
 var app=document.getElementById('app');
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -1181,6 +1181,7 @@ async function load(){
  if(!S.shorts){seedShorts();S.shorts=true;save()}
  if(!S.weights){seedWeights();S.weights=true;save()}
  setTimeout(checkReminders,1500);
+ if(S.driveOn)ensureTokenClient().then(function(){driveSyncNow(false)});
  for(var i=0;i<S.classes.length;i++){
   var cid=S.classes[i].id;
   await loadFiles(cid);
@@ -1369,32 +1370,37 @@ function loadGis(){
   document.head.appendChild(s);
  });
 }
-async function driveConnect(){
+async function ensureTokenClient(){
+ if(driveTokenClient)return driveTokenClient;
  await loadGis();
- if(!window.google||!google.accounts){alert('Could not reach Google. Check your connection and try again.');return}
- driveTokenClient=google.accounts.oauth2.initTokenClient({
-  client_id:GCLIENT,scope:DRIVE_SCOPE,
-  callback:function(resp){
-   if(resp&&resp.access_token){
-    driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};
-    S.driveOn=true;save();
-    driveSyncNow(true);
-   }else{
-    alert('Google sign-in was cancelled or blocked.');
-   }
+ if(!window.google||!google.accounts)return null;
+ driveTokenClient=google.accounts.oauth2.initTokenClient({client_id:GCLIENT,scope:DRIVE_SCOPE,callback:function(){}});
+ return driveTokenClient;
+}
+async function driveConnect(){
+ var tc=await ensureTokenClient();
+ if(!tc){alert('Could not reach Google. Check your connection and try again.');return}
+ tc.callback=function(resp){
+  if(resp&&resp.access_token){
+   driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};
+   S.driveOn=true;save();
+   driveSyncNow(true);
+  }else{
+   alert('Google sign-in was cancelled or blocked.');
   }
- });
- driveTokenClient.requestAccessToken({prompt:S.driveOn?'':'consent'});
+ };
+ tc.requestAccessToken({prompt:S.driveOn?'':'consent'});
 }
 async function driveToken(){
  if(driveTok&&driveTok.exp>Date.now()+30000)return driveTok.token;
+ var tc=await ensureTokenClient();
+ if(!tc)return null;
  return new Promise(function(res){
-  if(!driveTokenClient){res(null);return}
-  driveTokenClient.callback=function(resp){
+  tc.callback=function(resp){
    if(resp&&resp.access_token){driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};res(driveTok.token)}
    else res(null);
   };
-  driveTokenClient.requestAccessToken({prompt:''});
+  tc.requestAccessToken({prompt:''});
  });
 }
 function driveDisconnect(){
@@ -1478,7 +1484,7 @@ async function driveSyncNow(isFirst){
  if(view.modal&&view.modal.kind==='settings')render();
  try{
   var tok=await driveToken();
-  if(!tok){driveSyncing=false;render();return}
+  if(!tok){view.driveError='Could not get a token from Google. Try Sync now again.';driveSyncing=false;render();return}
   var id=await driveFindOrCreate(tok);
   var r=await driveApi('files/'+id+'?alt=media',{},tok);
   var remote=null;
@@ -1504,13 +1510,24 @@ async function driveSyncNow(isFirst){
   }else{
    S.everSynced=true;
   }
-  var up=await driveApi('upload/drive/v3/files/'+id+'?uploadType=media',{
-   method:'PATCH',headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({state:S,savedAt:new Date().toISOString()})
-  },tok);
-  if(up.ok){S.lastSync=new Date().toISOString();driveDirty=false}
+  var payload=JSON.stringify({state:S,savedAt:new Date().toISOString()});
+  var initRes=await fetch('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=resumable',{
+   method:'PATCH',
+   headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json; charset=UTF-8','X-Upload-Content-Type':'application/json'},
+   body:'{}'
+  });
+  var up={ok:false};
+  if(initRes.ok){
+   var sessionUrl=initRes.headers.get('Location');
+   if(sessionUrl){
+    var putRes=await fetch(sessionUrl,{method:'PUT',headers:{'Content-Type':'application/json'},body:payload});
+    up={ok:putRes.ok};
+   }
+  }
+  if(up.ok){S.lastSync=new Date().toISOString();driveDirty=false;view.driveError=null}
+  else{view.driveError='save failed ('+(initRes?initRes.status:'no response')+')'}
   save();
- }catch(e){}
+ }catch(e){view.driveError=String(e&&e.message||e)}
  driveSyncing=false;
  if(view.modal&&view.modal.kind==='settings')render();
 }
@@ -2373,6 +2390,7 @@ function modalHtml(){
    +'<div class="synclab">SYNC</div>'
    +(S.driveOn
      ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
+       +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
        +'<button data-syncnow="1">Sync now</button>'
        +'<button data-drivesignout="1" style="color:#A34A3F">Disconnect Google Drive</button>'
      : '<button data-driveconnect="1">Sign in with Google to sync</button>'
@@ -2953,7 +2971,11 @@ document.addEventListener('click',function(e){
   if(confirm('Disconnect Google Drive? Your data stays on this device and in Drive, you just stop syncing new changes.')){driveDisconnect()}
   return;
  }
- if(d.syncnow!==undefined){driveSyncNow(false);return}
+ if(d.syncnow!==undefined){
+  if(driveTok&&driveTok.exp>Date.now()+30000){driveSyncNow(false)}
+  else{driveConnect()}
+  return;
+ }
  if(d.remindon!==undefined){enableReminders();return}
  if(d.remindoff!==undefined){S.remind=false;save();render();return}
  if(d.studygo){makeStudy(d.studygo);return}
