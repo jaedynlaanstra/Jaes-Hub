@@ -594,6 +594,86 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   #c-files .rowhead,#c-links .rowhead{align-items:center}
   #c-files .rowhead button,#c-files .rowhead .fakebtn,#c-links .rowhead button{min-height:32px!important;font-size:12px;padding:5px 10px}
 }
+
+/* ---------- app bar ---------- */
+.mbar{display:none}
+.rowmore{display:none}
+.sheetlist{display:flex;flex-direction:column;gap:8px}
+.sheetlist button{width:100%;min-height:46px;font-size:15px;text-align:left;padding:0 16px}
+.sheetlist .danger{color:#A34A3F}
+.sheetmove{display:flex;align-items:center;gap:12px;border:1px solid var(--line2);border-radius:8px;padding:0 6px 0 16px;min-height:46px;font-size:15px}
+.sheetmove select{flex:1;border:none;background:transparent;font-size:15px}
+@media(max-width:900px){
+  .mbar{display:flex;position:fixed;top:0;left:0;right:0;z-index:57;height:calc(env(safe-area-inset-top,0px) + 50px);padding:env(safe-area-inset-top,0px) 10px 0;align-items:center;gap:8px;background:rgba(251,250,248,.88);-webkit-backdrop-filter:saturate(1.6) blur(16px);backdrop-filter:saturate(1.6) blur(16px);border-bottom:1px solid rgba(0,0,0,.07);transform:translateY(-102%);transition:transform .22s ease}
+  .mbar.show{transform:none}
+  .mbar-btn{width:36px;height:36px;border:none;background:transparent;color:var(--ink);padding:0;display:flex;align-items:center;justify-content:center;min-height:0!important}
+  .mbar-btn svg{width:22px;height:22px}
+  .mbar-title{flex:1;text-align:center;font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fb,inherit)}
+  body.scrolled .menubtn{opacity:0;pointer-events:none}
+  .menubtn{transition:opacity .15s ease}
+}
+@media (prefers-reduced-motion:reduce){.mbar,.menubtn{transition:none}}
+
+/* ---------- phones, a proper pass ---------- */
+@media(max-width:700px){
+  /* type scale */
+  .banner h1{font-size:23px!important;line-height:1.2!important;letter-spacing:-.01em}
+  .banner.sz-small h1{font-size:20px!important}
+  .banner .eyebrow{font-size:11.5px!important}
+  .main.hascover .banner{padding-top:14px!important;padding-bottom:14px!important}
+  .main:not(.hascover) .banner{padding-bottom:14px!important}
+  .rowhead h2,.rowhead h2[style]{font-size:18px!important}
+  .panel h3,.railcard h3{font-size:14.5px!important}
+  #c-when h3{font-size:11.5px!important}
+  .hint{font-size:12px}
+
+  /* breathing room */
+  .body{padding-left:16px!important;padding-right:16px!important}
+  .panel{padding:16px!important;border-radius:14px!important}
+  .railcard{padding:14px!important;border-radius:14px!important}
+  .item{min-height:46px;padding:10px 0!important}
+  .two2{gap:14px!important;margin-top:18px}
+  .mini{padding:14px 16px!important;border-radius:14px!important}
+  .donebox{border-radius:14px!important}
+
+  /* file and link rows: name on the left, one "more" button on the right */
+  #c-files .item,#c-links .item{display:flex!important;gap:12px;align-items:center}
+  #c-files .item .grow,#c-links .item .grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14.5px}
+  #c-files .item [data-renamefile],#c-files .item select,#c-files .item [data-savefile],#c-files .item [data-delfile],
+  #c-links .item select,#c-links .item [data-pin],#c-links .item [data-dellink]{display:none!important}
+  .rowmore{display:flex;align-items:center;justify-content:center;width:36px;height:36px;min-height:0!important;border:none;background:transparent;color:var(--ink2);font-size:20px;padding:0;flex-shrink:0;border-radius:8px}
+  .rowmore:active{background:#F1EFEA}
+  .lab2 button{display:none!important}
+  .lab2{margin:16px 0 2px!important}
+
+  /* files header: title and upload, nothing crammed */
+  #c-files .rowhead{flex-wrap:nowrap!important}
+  #c-files .readpdfs{display:none!important}
+  #c-files .rowhead>div{flex-wrap:nowrap!important}
+
+  /* study questions: stacked, full width */
+  .studyrow{flex-direction:column;align-items:stretch!important;gap:8px!important}
+  .studyrow select{max-width:none!important;width:100%!important}
+  .studyrow button{width:100%}
+
+  /* sheets slide up from the bottom */
+  .modal .acts{margin-top:12px}
+  .modal h3{font-size:16px;margin-bottom:12px}
+  .item select{width:auto;max-width:45%}
+}
+
+@media(max-width:700px){
+  .two,.two2,.split,.stats,.cards{min-width:0}
+  .two,.two2{grid-template-columns:minmax(0,1fr)!important}
+  .panel,.mini,.donebox,.asgwrap,#c-overview{min-width:0;max-width:100%}
+}
+
+/* ---------- phones: the column must fit the screen ---------- */
+@media(max-width:700px){
+  .split{align-items:stretch!important}
+  .split>div,.split>.rail{width:100%!important;max-width:100%!important}
+  .banner h1{font-size:22px!important}
+}
 </style>
 </head>
 <body>
@@ -1278,7 +1358,10 @@ function render(){
  else if(view.page==='apps')body=viewApps();
  else if(view.page==='class')body=viewClass(c);
 
- app.innerHTML='<div class="wrap"><div class="layout">'
+ app.innerHTML='<div class="wrap">'
+  +'<div class="mbar'+(view.scrolled?' show':'')+'" id="mbar"><button class="mbar-btn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
+  +'<span class="mbar-title">'+esc(title)+'</span><span style="width:36px"></span></div>'
+  +'<div class="layout">'
   +(S.sideHidden?'':sidebar(c))
   +(S.sideHidden?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
@@ -1470,7 +1553,7 @@ function sidebar(c){
     +sideItem('data-scroll','c-prof','People',false)
     +sideItem('data-scroll','c-files','Files',false)
     +sideItem('data-scroll','c-links','Links',false)
-    +sideItem('data-scroll','c-overview','Ask the files',false)
+    +(LOCAL?'':sideItem('data-scroll','c-overview','Ask the files',false))
     +'</div>';
   }
  });
@@ -1710,8 +1793,9 @@ function viewClass(c){
  }
 
  // ---- main column ----
- var m='<div id="c-overview"><div class="search">'
-  +'<input id="q" placeholder="Ask anything about this class\u2019s files" value="'+esc(view.answer[c.id]&&view.answer[c.id].q||'')+'">'
+ var m=LOCAL?'<div id="c-overview"></div>':'<div id="c-overview"><div class="search">'
+ if(!LOCAL){
+ m+=''  +'<input id="q" placeholder="Ask anything about this class\u2019s files" value="'+esc(view.answer[c.id]&&view.answer[c.id].q||'')+'">'
   +'<button data-ask="'+c.id+'"'+(view.asking[c.id]?' disabled':'')+'>'+(view.asking[c.id]?'<span class="spin"></span>':'Ask')+'</button></div>'
   +'<p class="hint">'+(LOCAL?'Asking only works in the Claude version of this page. Everything else works here.':(function(){
    var n=files.filter(canRead).length,skip=files.length-n;
@@ -1723,6 +1807,7 @@ function viewClass(c){
   m+='<div class="answer" style="background:'+p.bg+';color:'+p.ink+'">'+esc(view.answer[c.id].text)+'</div>';
  }
  m+='</div>';
+ }
 
  var asg=(c.assignments||[]).filter(function(a){return !a.done}).sort(function(a,b){
   if(!a.due)return 1;if(!b.due)return -1;return a.due<b.due?-1:1});
@@ -1774,7 +1859,7 @@ function viewClass(c){
  m+='</div><div class="two2">'
   +'<div class="panel" id="c-files" style="'+surfStyle('files','','','')+'">'+pencil('files')+'<div class="rowhead" style="margin-bottom:8px"><h3 style="color:'+surfHead('files')+'">Files</h3>'
   +'<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">'
-  +'<button data-index="'+c.id+'"'+(view.indexing?' disabled':'')+'>'+(view.indexing?'<span class="spin"></span>':'Read PDFs')+'</button>'
+  +'<button class="readpdfs" data-index="'+c.id+'"'+(view.indexing?' disabled':'')+'>'+(view.indexing?'<span class="spin"></span>':'Read PDFs')+'</button>'
   +'<button data-add="section" data-c="'+c.id+'">New section</button>'
   +'<label class="fakebtn"><input type="file" multiple data-file="'+c.id+'" style="display:none">Upload</label></div></div>'
   +'<input type="text" id="filesearch" placeholder="Search names, links and inside PDFs" value="'+esc(view.fileQ||'')+'" style="width:100%;font-size:12.5px;padding:8px 11px;margin-bottom:6px">';
@@ -1789,13 +1874,15 @@ function viewClass(c){
    +(canOpen?'':'<button class="x" data-savefile="'+i+'" data-c="'+c.id+'" title="Download a copy" aria-label="Download a copy">\u2913</button>')
 
    +(f.saved===false&&f.data?'<span class="tag">too big to keep</span>':'')
-   +'<button class="x" data-delfile="'+i+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button></div>';
+   +'<button class="x" data-delfile="'+i+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button>'
+   +'<button class="rowmore" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">\u22ef</button></div>';
  }
  function linkRow(l,i){
   return '<div class="item">'+linkIcon(l.url,l.title)+'<span class="grow"><a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a></span>'
    +((c.sections||[]).length?'<select data-movelink="'+i+'" data-c="'+c.id+'" style="width:auto;font-size:11.5px;padding:4px 6px">'+sectionOptions(c,l.section||'')+'</select>':'')
    +'<button class="ghost" data-pin="'+i+'" data-c="'+c.id+'" style="font-size:11px;padding:4px 6px">'+(l.pinned?'Unpin':'Pin')+'</button>'
-   +'<button class="x" data-dellink="'+i+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button></div>';
+   +'<button class="x" data-dellink="'+i+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button>'
+   +'<button class="rowmore" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">\u22ef</button></div>';
  }
 
  var fIdx=files.map(function(f,i){return {f:f,i:i}});
@@ -1857,8 +1944,9 @@ function viewClass(c){
  }
  m+='</div>';
 
+ if(!LOCAL){
  var readable=files.filter(canRead);
- m+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px">'
+ m+='<div class="studyrow" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px">'
   +'<span class="hint" style="margin:0">Study questions from</span>'
   +'<select id="studyfile" style="width:auto;max-width:260px;font-size:12.5px;padding:6px 9px">'
   +'<option value="">'+(readable.length?'all readable files':'no files yet')+'</option>'
@@ -1876,6 +1964,7 @@ function viewClass(c){
     }).join('')+'</div>';
   }
  }
+ }
  m+='<div class="doneboxwrap"><div class="donebox" style="'+surfStyle('done','var(--doneBg)','var(--doneLine)','var(--doneInk)')+'">'+pencil('done')+'<h3>Previously completed</h3>';
  if(!finished.length)m+='<p class="empty" style="color:var(--doneInk);opacity:.75">Nothing finished yet. It will collect here.</p>';
  else{
@@ -1884,7 +1973,7 @@ function viewClass(c){
     +(a.mark!==''&&a.mark!=null
       ?'<span class="pill" style="background:var(--card);color:var(--doneInk)">'+a.mark+'%</span>'
       :(a.weight?'<button class="ghost" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" style="font-size:11.5px;color:var(--doneInk)">Add mark</button>':''))
-    +'<span class="when2">'+esc(a.doneAt?'done '+fmtDue(a.doneAt):(a.due?'was due '+fmtDue(a.due):''))+'</span>'
+    +'<span class="when2">'+esc(a.doneAt?'done '+parseISO(a.doneAt).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):(a.due?'was due '+parseISO(a.due).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):''))+'</span>'
     +'<button class="ghost" data-undo="'+a.id+'" data-c="'+c.id+'" style="font-size:11.5px;color:var(--doneInk)">Put back</button></div>';
   }),'finished');
  }
@@ -2073,6 +2162,25 @@ function modalHtml(){
     }).join('')
    +'</select></div>'
    +'<p class="hint" id="asgfilenote">Uploading puts it in this class\u2019s files too.</p></div>';
+ }else if(m.kind==='sheet'){
+  var sc=classById(m.classId);
+  if(m.what==='file'){
+   var sf=(FILES[m.classId]||[])[m.i];
+   if(!sf)return '';
+   h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sf.name)+'</h3><div class="sheetlist">'
+    +(READABLE[sf.kind]?'<button data-sheetdo="open">Open</button>':'<button data-sheetdo="download">Download a copy</button>')
+    +'<button data-sheetdo="rename">Rename</button>'
+    +((sc.sections||[]).length?'<label class="sheetmove">Section<select data-sheetmove="1">'+sectionOptions(sc,sf.section||'')+'</select></label>':'')
+    +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
+  }else{
+   var sl=sc.links[m.i];
+   if(!sl)return '';
+   h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sl.title)+'</h3><div class="sheetlist">'
+    +'<button data-sheetdo="openlink">Open</button>'
+    +'<button data-sheetdo="pin">'+(sl.pinned?'Unpin from the top':'Pin to the top')+'</button>'
+    +((sc.sections||[]).length?'<label class="sheetmove">Section<select data-sheetmove="1">'+sectionOptions(sc,sl.section||'')+'</select></label>':'')
+    +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
+  }
  }else if(m.kind==='settings'){
   h='<h3>Settings</h3>'
    +'<p class="hint" style="margin:0 0 14px">Your backup holds everything: ticks, files, photos, colours.</p>'
@@ -2148,8 +2256,8 @@ function modalHtml(){
   +'<div class="acts">'
   +(m.kind==='class'&&m.classId?'<button data-delclass="'+m.classId+'" style="margin-right:auto;color:#A34A3F">Delete class</button>':'')
   +(m.kind==='app'&&m.id?'<button data-delapp="'+m.id+'" style="margin-right:auto;color:#A34A3F">Remove app</button>':'')
-  +(m.kind==='settings'
-    ?'<button data-close="1" style="background:#33312C;color:#fff;border-color:#33312C">Close</button>'
+  +((m.kind==='settings'||m.kind==='sheet')
+    ?'<button data-close="1" style="background:#33312C;color:#fff;border-color:#33312C;'+(m.kind==='sheet'?'width:100%':'')+'">'+(m.kind==='sheet'?'Cancel':'Close')+'</button>'
     :'<button data-close="1">Cancel</button><button data-savemodal="1" style="background:#33312C;color:#fff;border-color:#33312C">Save</button>')
   +'</div></div></div>';
 }
@@ -2532,7 +2640,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-opencolours],[data-remindon],[data-remindoff],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -2617,6 +2725,23 @@ document.addEventListener('click',function(e){
  }
  if(d.delbookicon){var bcx=classById(d.delbookicon);if(bcx&&bcx.textbook){bcx.textbook.icon='';save();render()}return}
  if(d.dellinkicon!==undefined&&d.dellinkicon!==''){S.homeLinks[+d.dellinkicon].icon='';save();render();return}
+ if(d.sheet){view.modal={kind:'sheet',what:d.sheet,i:+d.i,classId:d.c};render();return}
+ if(d.sheetdo){
+  var sm=view.modal,scc=classById(sm.classId),act=d.sheetdo;
+  view.modal=null;
+  if(sm.what==='file'){
+   var fi=sm.i,fl=(FILES[sm.classId]||[])[fi];
+   if(act==='open'||act==='download'){render();openFile(sm.classId,fi);return}
+   if(act==='rename'){render();var nn=prompt('Name this file',fl.name);if(nn&&nn.trim()){fl.name=nn.trim();saveFiles(sm.classId)}return}
+   if(act==='delete'){if(confirm('Delete '+fl.name+'?')){dropFile(sm.classId,fi)}render();return}
+  }else{
+   var lk=scc.links[sm.i];
+   if(act==='openlink'){render();window.open(lk.url,'_blank','noopener');return}
+   if(act==='pin'){lk.pinned=!lk.pinned;save();render();return}
+   if(act==='delete'){if(confirm('Delete '+lk.title+'?')){scc.links.splice(sm.i,1);save()}render();return}
+  }
+  render();return;
+ }
  if(d.side!==undefined){S.sideHidden=d.side==='0';view.menu=false;save();render();return}
  if(d.editsurf!==undefined){view.editSurf=d.editsurf||null;view.picker=true;render();return}
  if(d.bannersize){S.banners=S.banners||{};S.banners[pageKey()]=d.bannersize;save();render();return}
@@ -2689,6 +2814,12 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('change',function(e){
  var t=e.target;
+ if(t.dataset&&t.dataset.sheetmove&&view.modal&&view.modal.kind==='sheet'){
+  var mm=view.modal;
+  if(mm.what==='file'){var ff=(FILES[mm.classId]||[])[mm.i];if(ff){ff.section=t.value;saveFiles(mm.classId)}}
+  else{var ll=classById(mm.classId).links[mm.i];if(ll){ll.section=t.value;save()}}
+  view.modal=null;render();return;
+ }
  if(t.dataset&&(t.dataset.fontpick||t.dataset.fontit)){
   S.theme=S.theme||{};S.theme.fonts=S.theme.fonts||{};
   if(t.dataset.fontit)S.theme.fonts.it=t.checked;
@@ -2974,8 +3105,31 @@ document.addEventListener('keydown',function(e){
  if(e.key==='Enter'&&view.modal&&e.target.tagName==='INPUT'){saveModal()}
  if(e.key==='Enter'&&!view.modal&&e.target.id==='q'){ask(view.classId)}
 });
+window.addEventListener('scroll',function(){
+ var on=window.scrollY>110;
+ if(on===!!view.scrolled)return;
+ view.scrolled=on;
+ var b=document.getElementById('mbar');if(b)b.classList.toggle('show',on);
+ document.body.classList.toggle('scrolled',on);
+},{passive:true});
 load();
 fetchWeather();
+(function(){
+ var ua=navigator.userAgent||'';
+ var ios=/iPhone|iPad|iPod/.test(ua);
+ var mv=/OS (\d+)_/.exec(ua),ver=mv?+mv[1]:0;
+ var standalone=(navigator.standalone===true)||(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches);
+ if(!(ios&&standalone&&ver>=17))return;
+ document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a[href]');
+  if(!a)return;
+  var href=a.getAttribute('href')||'';
+  if(!/^https?:\/\//i.test(href))return;
+  if(href.indexOf(location.origin)===0)return;
+  e.preventDefault();e.stopPropagation();
+  window.location.href='x-safari-'+href;
+ },true);
+})();
 if('serviceWorker' in navigator&&location.protocol==='https:'){
  navigator.serviceWorker.register('sw.js').catch(function(){});
 }
