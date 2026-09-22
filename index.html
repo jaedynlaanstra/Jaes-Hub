@@ -1370,6 +1370,16 @@ function loadGis(){
   document.head.appendChild(s);
  });
 }
+function isStandaloneApp(){
+ try{return window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches}catch(e){return false}
+}
+function withTimeout(promise,ms,timeoutValue){
+ return new Promise(function(res){
+  var done=false;
+  var t=setTimeout(function(){if(!done){done=true;res(timeoutValue)}},ms);
+  promise.then(function(v){if(!done){done=true;clearTimeout(t);res(v)}});
+ });
+}
 async function ensureTokenClient(){
  if(driveTokenClient)return driveTokenClient;
  await loadGis();
@@ -1378,30 +1388,37 @@ async function ensureTokenClient(){
  return driveTokenClient;
 }
 async function driveConnect(){
+ if(isStandaloneApp()){
+  alert('Google sign-in can\'t finish from this Home Screen app. Open this site in Safari directly (not the Home Screen icon) to sign in the first time, then you can go back to using the Home Screen icon.');
+  return;
+ }
  var tc=await ensureTokenClient();
  if(!tc){alert('Could not reach Google. Check your connection and try again.');return}
- tc.callback=function(resp){
-  if(resp&&resp.access_token){
-   driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};
-   S.driveOn=true;save();
-   driveSyncNow(true);
-  }else{
-   alert('Google sign-in was cancelled or blocked.');
-  }
- };
- tc.requestAccessToken({prompt:S.driveOn?'':'consent'});
+ var signInPromise=new Promise(function(res){
+  tc.callback=function(resp){res(resp)};
+  tc.requestAccessToken({prompt:S.driveOn?'':'consent'});
+ });
+ var resp=await withTimeout(signInPromise,20000,null);
+ if(resp&&resp.access_token){
+  driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};
+  S.driveOn=true;save();
+  driveSyncNow(true);
+ }else{
+  alert(resp===null?'Google sign-in timed out. If you opened this from your phone\'s Home Screen icon, try opening it in Safari directly instead.':'Google sign-in was cancelled or blocked.');
+ }
 }
 async function driveToken(){
  if(driveTok&&driveTok.exp>Date.now()+30000)return driveTok.token;
  var tc=await ensureTokenClient();
  if(!tc)return null;
- return new Promise(function(res){
+ var tokenPromise=new Promise(function(res){
   tc.callback=function(resp){
    if(resp&&resp.access_token){driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};res(driveTok.token)}
    else res(null);
   };
   tc.requestAccessToken({prompt:''});
  });
+ return withTimeout(tokenPromise,20000,null);
 }
 function driveDisconnect(){
  S.driveOn=false;driveTok=null;driveFileId=null;save();render();
@@ -1484,7 +1501,7 @@ async function driveSyncNow(isFirst){
  if(view.modal&&view.modal.kind==='settings')render();
  try{
   var tok=await driveToken();
-  if(!tok){view.driveError='Could not get a token from Google. Try Sync now again.';driveSyncing=false;render();return}
+  if(!tok){view.driveError=isStandaloneApp()?'Sign-in timed out from the Home Screen app. Open this site in Safari directly and try again.':'Could not get a token from Google. Try Sync now again.';driveSyncing=false;render();return}
   var id=await driveFindOrCreate(tok);
   var r=await driveApi('files/'+id+'?alt=media',{},tok);
   var remote=null;
@@ -2893,7 +2910,7 @@ document.addEventListener('click',function(e){
  }
  if(d.undo){
   var cu=classById(d.c);
-  cu.assignments.forEach(function(a){if(a.id===d.undo){a.done=false;a.doneAt=''}});
+  cu.assignments.forEach(function(a){if(a.id===d.undo){a.done=false;a.doneAt='';touch(a)}});
   save();render();return;
  }
  if(d.del==='task'){var c2=classById(d.c);c2.tasks=c2.tasks.filter(function(t){return t.id!==d.id});save();render();return}
