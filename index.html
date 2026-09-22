@@ -2989,8 +2989,7 @@ document.addEventListener('click',function(e){
   return;
  }
  if(d.syncnow!==undefined){
-  if(driveTok&&driveTok.exp>Date.now()+30000){driveSyncNow(false)}
-  else{driveConnect()}
+  driveSyncNow(false);
   return;
  }
  if(d.remindon!==undefined){enableReminders();return}
