@@ -354,6 +354,8 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .search{display:flex;gap:8px;align-items:center;border:1px solid var(--line2);border-radius:10px;padding:6px 6px 6px 13px;background:var(--card)}
 .search input{border:none;padding:5px 0;background:transparent}
 .search input:focus{outline:none}
+.synclab{font-size:11px;color:var(--ink3);letter-spacing:.05em;margin:2px 0 8px}
+.syncrow{font-size:12.5px;color:var(--ink2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .hint{font-size:11.5px;color:var(--ink3);margin:6px 0 0}
 .answer{margin-top:12px;border-radius:12px;padding:14px 16px;font-size:14px;white-space:pre-wrap}
 .prof{display:flex;gap:12px;align-items:center;margin-bottom:12px}
@@ -906,6 +908,13 @@ function fmtTime(t){
  return hh+(m==='00'?'':':'+m)+' '+ap;
 }
 function withTime(str,t){return t?str+' \u00b7 '+fmtTime(t):str}
+function timeAgo(iso){
+ var d=new Date(iso),diff=(Date.now()-d.getTime())/1000;
+ if(diff<60)return 'just now';
+ if(diff<3600)return Math.floor(diff/60)+' min ago';
+ if(diff<86400)return Math.floor(diff/3600)+' hr ago';
+ return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+' at '+d.toLocaleTimeString('en-CA',{hour:'numeric',minute:'2-digit'});
+}
 function fmtDue(s){var d=parseISO(s);if(!d)return '';var n=daysBetween(today(),d);
  if(n===0)return 'Due today';if(n===1)return 'Tomorrow';if(n===-1)return 'Yesterday';
  if(n<0)return Math.abs(n)+' days late';if(n<7)return d.toLocaleDateString('en-CA',{weekday:'long'});
@@ -1031,6 +1040,12 @@ function seedScratch(){
   c.links.push({title:'Go to Scratch',url:'https://scratch.mit.edu/',pinned:true});
  }
 }
+function ensureIds(){
+ S.classes.forEach(function(c){
+  (c.links||[]).forEach(function(l){if(!l.id)l.id=uid()});
+  (c.sections||[]).forEach(function(sc){if(!sc.id)sc.id=uid()});
+ });
+}
 function normalize(){
  S.classes.forEach(function(c){
   if(!c.assignments)c.assignments=[];
@@ -1091,6 +1106,7 @@ function idbDo(mode,fn){
  });
 }
 function save(){
+ scheduleDriveSync();
  try{sset('hub:state',JSON.stringify(S)).catch(function(){view.storageOk=false})}
  catch(e){view.storageOk=false}
 }
@@ -1154,6 +1170,7 @@ async function load(){
   if(r&&r.value){var p=JSON.parse(r.value);if(p&&p.classes){S=p;migrate()}}
  }catch(e){}
  normalize();
+ ensureIds();
  if(!S.seeded){seedDueDates();S.seeded=true;save()}
  if(!S.seededProfs){seedProfs();S.seededProfs=true;save()}
  if(!S.timesParsed){addTimes();S.timesParsed=true;save()}
@@ -1340,6 +1357,172 @@ async function enableReminders(){
  render();
 }
 setInterval(checkReminders,15*60*1000);
+var GCLIENT='176606967492-rf5812hmlduq3n7rqaj0up5g1461i99h.apps.googleusercontent.com';
+var DRIVE_SCOPE='https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
+var driveTok=null,driveTokenClient=null,driveReady=false,driveFileId=null,driveSyncing=false,driveDirty=false,driveTimer=null;
+function loadGis(){
+ return new Promise(function(res){
+  if(window.google&&google.accounts)return res();
+  var s=document.createElement('script');
+  s.src='https://accounts.google.com/gsi/client';
+  s.onload=function(){res()};s.onerror=function(){res()};
+  document.head.appendChild(s);
+ });
+}
+async function driveConnect(){
+ await loadGis();
+ if(!window.google||!google.accounts){alert('Could not reach Google. Check your connection and try again.');return}
+ driveTokenClient=google.accounts.oauth2.initTokenClient({
+  client_id:GCLIENT,scope:DRIVE_SCOPE,
+  callback:function(resp){
+   if(resp&&resp.access_token){
+    driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};
+    S.driveOn=true;save();
+    driveSyncNow(true);
+   }else{
+    alert('Google sign-in was cancelled or blocked.');
+   }
+  }
+ });
+ driveTokenClient.requestAccessToken({prompt:S.driveOn?'':'consent'});
+}
+async function driveToken(){
+ if(driveTok&&driveTok.exp>Date.now()+30000)return driveTok.token;
+ return new Promise(function(res){
+  if(!driveTokenClient){res(null);return}
+  driveTokenClient.callback=function(resp){
+   if(resp&&resp.access_token){driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};res(driveTok.token)}
+   else res(null);
+  };
+  driveTokenClient.requestAccessToken({prompt:''});
+ });
+}
+function driveDisconnect(){
+ S.driveOn=false;driveTok=null;driveFileId=null;save();render();
+}
+async function driveApi(path,opts,tok){
+ opts=opts||{};
+ var r=await fetch('https://www.googleapis.com/drive/v3/'+path,Object.assign({},opts,{
+  headers:Object.assign({'Authorization':'Bearer '+tok},opts.headers||{})
+ }));
+ return r;
+}
+async function driveFindOrCreate(tok){
+ if(driveFileId)return driveFileId;
+ var q=encodeURIComponent("name='hub-data.json' and 'appDataFolder' in parents and trashed=false");
+ var r=await driveApi('files?q='+q+'&spaces=appDataFolder&fields=files(id)',{},tok);
+ var d=await r.json();
+ if(d.files&&d.files.length){driveFileId=d.files[0].id;return driveFileId}
+ var cr=await driveApi('files',{method:'POST',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({name:'hub-data.json',parents:['appDataFolder']})},tok);
+ var cd=await cr.json();
+ driveFileId=cd.id;return driveFileId;
+}
+function childIds(state){
+ var out=[];
+ (state.classes||[]).forEach(function(c){
+  ['assignments','tasks','contacts','links','sections'].forEach(function(k){
+   (c[k]||[]).forEach(function(x){if(x.id)out.push(c.id+':'+k+':'+x.id)});
+  });
+ });
+ return out;
+}
+function sameData(local,remote){
+ var a=childIds(local),b=childIds(remote);
+ if(!a.length&&!b.length)return true;
+ var setB={};b.forEach(function(x){setB[x]=1});
+ var shared=a.filter(function(x){return setB[x]}).length;
+ var total=Math.max(a.length,b.length,1);
+ return (shared/total)>=0.8;
+}
+function mergeState(local,remote){
+ // field-by-field, most recently touched item wins, using each item's own savedAt
+ if(!remote)return local;
+ if(!local)return remote;
+ var out=JSON.parse(JSON.stringify(local));
+ var byId={};out.classes.forEach(function(c){byId[c.id]=c});
+ (remote.classes||[]).forEach(function(rc){
+  var lc=byId[rc.id];
+  if(!lc){out.classes.push(rc);return}
+  mergeClass(lc,rc);
+ });
+ return out;
+}
+function newer(a,b){return (a||'')>(b||'')}
+function mergeList(localList,remoteList,key){
+ localList=localList||[];remoteList=remoteList||[];
+ var byKey={};localList.forEach(function(x){byKey[x[key]]=x});
+ remoteList.forEach(function(rx){
+  var lx=byKey[rx[key]];
+  if(!lx){localList.push(rx);byKey[rx[key]]=rx;return}
+  if(newer(rx.savedAt,lx.savedAt))Object.assign(lx,rx);
+ });
+ return localList;
+}
+function mergeClass(lc,rc){
+ if(newer(rc.savedAt,lc.savedAt)){
+  ['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook'].forEach(function(k){
+   if(rc[k]!==undefined)lc[k]=rc[k];
+  });
+ }
+ lc.assignments=mergeList(lc.assignments,rc.assignments,'id');
+ lc.tasks=mergeList(lc.tasks,rc.tasks,'id');
+ lc.contacts=mergeList(lc.contacts,rc.contacts,'id');
+ lc.links=mergeList(lc.links,rc.links,'id');
+ lc.sections=mergeList(lc.sections,rc.sections,'id');
+}
+function touch(obj){obj.savedAt=new Date().toISOString();return obj}
+async function driveSyncNow(isFirst){
+ if(!S.driveOn||driveSyncing)return;
+ driveSyncing=true;
+ if(view.modal&&view.modal.kind==='settings')render();
+ try{
+  var tok=await driveToken();
+  if(!tok){driveSyncing=false;render();return}
+  var id=await driveFindOrCreate(tok);
+  var r=await driveApi('files/'+id+'?alt=media',{},tok);
+  var remote=null;
+  if(r.ok){try{remote=await r.json()}catch(e){}}
+  if(remote&&remote.state){
+   if(!S.everSynced&&remote.state.classes&&remote.state.classes.length&&(!S.classes||!S.classes.length)){
+    // this device has nothing of its own yet: take the cloud copy as-is, no merge needed
+    S=remote.state;
+   }else if(!S.everSynced&&remote.state.classes&&remote.state.classes.length&&S.classes&&S.classes.length){
+    // both sides already have data and this is the first ever sync: only safe to combine them
+    // automatically if they were seeded from the same source, which shared IDs prove.
+    if(sameData(S,remote.state)){
+     S=mergeState(S,remote.state);
+    }else{
+     var keepLocal=confirm('This device already has its own data that does not match what is in Drive yet. Click OK to keep what is on THIS device and upload it, replacing the cloud copy. Click Cancel to throw away this device\'s data and use the cloud copy instead.');
+     if(!keepLocal)S=remote.state;
+    }
+   }else{
+    S=mergeState(S,remote.state);
+   }
+   S.everSynced=true;
+   applyTheme();
+  }else{
+   S.everSynced=true;
+  }
+  var up=await driveApi('upload/drive/v3/files/'+id+'?uploadType=media',{
+   method:'PATCH',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({state:S,savedAt:new Date().toISOString()})
+  },tok);
+  if(up.ok){S.lastSync=new Date().toISOString();driveDirty=false}
+  save();
+ }catch(e){}
+ driveSyncing=false;
+ if(view.modal&&view.modal.kind==='settings')render();
+}
+function scheduleDriveSync(){
+ if(!S.driveOn)return;
+ driveDirty=true;
+ clearTimeout(driveTimer);
+ driveTimer=setTimeout(function(){driveSyncNow(false)},2500);
+}
+window.addEventListener('online',function(){if(S.driveOn)driveSyncNow(false)});
+setInterval(function(){if(S.driveOn&&!driveSyncing)driveSyncNow(false)},5*60*1000);
+
 function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view.fileQ='';view.appQ='';view.appEdit=false;window.scrollTo(0,0);render()}
 
 /* ---------- rendering ---------- */
@@ -2187,6 +2370,14 @@ function modalHtml(){
    +'<div style="display:flex;flex-direction:column;gap:8px">'
    +'<button data-export="1">Export everything</button>'
    +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
+   +'<div class="synclab">SYNC</div>'
+   +(S.driveOn
+     ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
+       +'<button data-syncnow="1">Sync now</button>'
+       +'<button data-drivesignout="1" style="color:#A34A3F">Disconnect Google Drive</button>'
+     : '<button data-driveconnect="1">Sign in with Google to sync</button>'
+       +'<p class="hint" style="margin-top:6px">Keeps your phone and computer matched automatically.</p>')
+   +'<div class="synclab" style="margin-top:14px">MORE</div>'
    +'<button data-opencolours="1">Change colours</button>'
    +(remindersOn()
      ?'<button data-remindoff="1">Turn reminders off</button>'
@@ -2274,12 +2465,12 @@ function saveModal(){
  var m=view.modal;
  if(m.kind==='task'){
   var t=val('m1');if(!t)return;
-  classById(m.classId).tasks.push({id:uid(),title:t,due:val('m2'),done:false});
+  classById(m.classId).tasks.push(touch({id:uid(),title:t,due:val('m2'),done:false}));
  }else if(m.kind==='assign'){
   var ti=val('m1');if(!ti)return;
   var fid=val('m10')||(view.modal.pendingFileId||'');
-  if(m.id){var a=findAsg(m.classId,m.id);a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=val('m14')===''?'':+val('m14');a.mark=val('m15')===''?'':+val('m15')}
-  else{classById(m.classId).assignments.push({id:uid(),title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:val('m14')===''?'':+val('m14'),mark:val('m15')===''?'':+val('m15'),done:false})}
+  if(m.id){var a=findAsg(m.classId,m.id);a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=val('m14')===''?'':+val('m14');a.mark=val('m15')===''?'':+val('m15');touch(a)}
+  else{classById(m.classId).assignments.push(touch({id:uid(),title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:val('m14')===''?'':+val('m14'),mark:val('m15')===''?'':+val('m15'),done:false}))}
  }else if(m.kind==='app'){
   var an=val('m1'),au=val('m2');if(!an||!au)return;
   if(!/^https?:\/\//i.test(au))au='https://'+au;
@@ -2291,7 +2482,7 @@ function saveModal(){
   var sn=val('m1');if(!sn)return;
   var sc=classById(m.classId);
   sc.sections=sc.sections||[];
-  sc.sections.push({id:uid(),name:sn});
+  sc.sections.push(touch({id:uid(),name:sn}));
  }else if(m.kind==='book'){
   var cbx=classById(m.classId),bn=val('m1'),bu=val('m2');
   var existing=cbx.textbook||null;
@@ -2306,14 +2497,14 @@ function saveModal(){
  }else if(m.kind==='link'){
   var n=val('m1'),u=val('m2');if(!n||!u)return;
   if(!/^https?:\/\//i.test(u))u='https://'+u;
-  classById(m.classId).links.push({title:n,url:u});
+  classById(m.classId).links.push(touch({id:uid(),title:n,url:u}));
  }else if(m.kind==='contact'){
   var c=classById(m.classId||val('m8'));
   if(!c)return;
-  if(m.id){var ct=contactById(c,m.id);ct.name=val('m1');ct.role=val('m5');ct.email=val('m2');ct.office=val('m3');ct.hours=val('m4')}
+  if(m.id){var ct=contactById(c,m.id);ct.name=val('m1');ct.role=val('m5');ct.email=val('m2');ct.office=val('m3');ct.hours=val('m4');touch(ct)}
   else{
    var nm=val('m1');if(!nm&&!val('m2'))return;
-   c.contacts.push({id:uid(),name:nm,role:val('m5'),email:val('m2'),office:val('m3'),hours:val('m4'),photo:''});
+   c.contacts.push(touch({id:uid(),name:nm,role:val('m5'),email:val('m2'),office:val('m3'),hours:val('m4'),photo:''}));
   }
  }else if(m.kind==='class'){
   var cn=val('m1');if(!cn)return;
@@ -2640,7 +2831,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-driveconnect],[data-drivesignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -2668,7 +2859,7 @@ document.addEventListener('click',function(e){
  if(d.ask){ask(d.ask);return}
  if(d.tick){
   var ct1=classById(d.c);
-  ct1.tasks.forEach(function(t){if(t.id===d.tick){t.done=!t.done;if(t.done)celebrate(e.clientX,e.clientY)}});
+  ct1.tasks.forEach(function(t){if(t.id===d.tick){t.done=!t.done;if(t.done)celebrate(e.clientX,e.clientY);touch(t)}});
   save();render();return;
  }
  if(d.tickasg){
@@ -2677,6 +2868,7 @@ document.addEventListener('click',function(e){
    if(a.id===d.tickasg){
     a.done=!a.done;
     if(a.done){a.doneAt=iso(today());celebrate(e.clientX,e.clientY)}
+    touch(a);
    }
   });
   save();render();return;
@@ -2756,6 +2948,12 @@ document.addEventListener('click',function(e){
   if(S.theme&&S.theme.surfaces)delete S.theme.surfaces[d.surfreset];
   save();render();return;
  }
+ if(d.driveconnect!==undefined){driveConnect();return}
+ if(d.drivesignout!==undefined){
+  if(confirm('Disconnect Google Drive? Your data stays on this device and in Drive, you just stop syncing new changes.')){driveDisconnect()}
+  return;
+ }
+ if(d.syncnow!==undefined){driveSyncNow(false);return}
  if(d.remindon!==undefined){enableReminders();return}
  if(d.remindoff!==undefined){S.remind=false;save();render();return}
  if(d.studygo){makeStudy(d.studygo);return}
