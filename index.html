@@ -373,7 +373,15 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .daylist{border-bottom:1px solid var(--line);padding:10px 0}
 .daylist:last-child{border-bottom:none}
 .daylist .dh{font-size:12px;color:var(--ink3);margin-bottom:6px}
-.modalbg{position:fixed;inset:0;background:rgba(40,38,34,.35);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.sgroup{border-top:1px solid var(--line,#E4E0D7)}
+.sgroup summary{list-style:none;cursor:pointer;padding:13px 2px;font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sgroup summary::-webkit-details-marker{display:none}
+.sgroup summary small{margin-left:auto;font-size:12.5px;color:var(--ink3);font-weight:400;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sgroup summary::after{content:'+';color:var(--ink3);font-size:19px;line-height:1;width:14px;text-align:center}
+.sgroup[open] summary::after{content:'\2212'}
+.sgbody{display:flex;flex-direction:column;gap:8px;padding:0 0 14px}
+.sgrow{display:flex;gap:8px}.sgrow>*{flex:1}
+.modalbg{position:fixed;inset:0;background:rgba(40,38,34,.35);display:flex;align-items:center;justify-content:center;padding:20px;z-index:120}
 .modal{overscroll-behavior:contain;background:var(--card);border-radius:14px;padding:20px 22px;width:100%;max-width:400px;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;position:relative}
 .modal .acts{position:sticky;bottom:-20px;background:var(--card);padding:12px 0 4px;margin-top:12px;z-index:1}
 .modalx{float:right;position:sticky;top:-8px;margin:-8px -10px 0 8px;width:34px;height:34px;border-radius:50%;border:none;background:var(--paper);font-size:22px;line-height:1;cursor:pointer;color:var(--ink2);z-index:2;padding:0}
@@ -887,7 +895,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v32';
+var BUILD='v33';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2555,7 +2563,7 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)sche
 window.addEventListener('online',function(){scheduleCloudSync(200)});
 setInterval(function(){if(!document.hidden)scheduleCloudSync(0)},90000);
 
-function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view.fileQ='';view.appQ='';view.appEdit=false;window.scrollTo(0,0);render()}
+function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view.modal=null;view.fileQ='';view.appQ='';view.appEdit=false;window.scrollTo(0,0);render()}
 
 /* ---------- rendering ---------- */
 function render(){
@@ -3402,36 +3410,39 @@ function modalHtml(){
     +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
   }
  }else if(m.kind==='settings'){
+  var sgOpen=function(key,def){return view.sgOpen&&view.sgOpen[key]!==undefined?view.sgOpen[key]:def};
+  var sg=function(key,title,right,inner,def){
+   return '<details class="sgroup" data-sg="'+key+'"'+(sgOpen(key,def)?' open':'')+'><summary><span>'+title+'</span><small>'+esc(right||'')+'</small></summary><div class="sgbody">'+inner+'</div></details>';
+  };
+  var syncRight=sbUser?(driveSyncing?'Syncing…':(S.lastSync?'Synced '+timeAgo(S.lastSync):'Signed in')):'Not signed in';
+  var syncBody=sbUser
+   ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing…':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
+     +'<p class="hint" style="margin:0">Signed in as '+esc(sbUser.email||'your account')+'. Every change syncs automatically, including files.</p>'
+     +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0">'+esc(view.driveError)+'</p>':'')
+     +'<p class="hint" style="font-size:10.5px;margin:0;word-break:break-all">'+esc(view.syncInfo||'build '+BUILD)+'</p>'
+     +'<div class="sgrow"><button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
+     +'<button data-sbsignout="1" style="color:#A34A3F">Sign out</button></div>'
+   : '<p class="hint" style="margin:0">Sign in to keep your phone and computer matched, files included.</p>'
+     +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0">'+esc(view.driveError)+'</p>':'')
+     +'<div class="field" style="margin:0"><label for="sbEmail">Email</label><input id="sbEmail" type="email" autocomplete="email" autocapitalize="none" value="'+esc(view.authEmail||'')+'"></div>'
+     +'<div class="field" style="margin:0"><label for="sbPass">Password</label><input id="sbPass" type="password" autocomplete="current-password"></div>'
+     +'<div class="sgrow"><button data-sbsignin="1">Sign in</button><button data-sbsignup="1">Create account</button></div>';
   h='<h3>Settings</h3>'
-   +'<p class="hint" style="margin:0 0 14px">Your backup holds everything: ticks, files, photos, colours.</p>'
-   +'<div style="display:flex;flex-direction:column;gap:8px">'
-   +'<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
-   +'<div class="field" style="margin:0 0 6px"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>'
-   +'<button data-export="1">Export everything</button>'
-   +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
-   +'<div class="synclab">SYNC</div>'
-   +(sbUser
-     ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
-       +'<p class="hint" style="margin:0 0 8px">Signed in as '+esc(sbUser.email||'your account')+'. Every change syncs automatically, including files.</p>'
-       +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
-       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build '+BUILD)+'</p>'
-       +'<button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing\u2026':'Sync now')+'</button>'
-       +'<button data-sbsignout="1" style="color:#A34A3F">Sign out of sync</button>'
-     : '<p class="hint" style="margin:0 0 8px">Sign in to keep your phone and computer matched, files included.</p>'
-       +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
-       +'<div class="field"><label for="sbEmail">Email</label><input id="sbEmail" type="email" autocomplete="email" autocapitalize="none" value="'+esc(view.authEmail||'')+'"></div>'
-       +'<div class="field"><label for="sbPass">Password</label><input id="sbPass" type="password" autocomplete="current-password"></div>'
-       +'<button data-sbsignin="1">Sign in</button>'
-       +'<button data-sbsignup="1">Create account</button>')
-   +'<div class="synclab" style="margin-top:14px">MORE</div>'
-   +(isInstalledApp()?'':'<button data-xact="openinstall">Get the app on your phone</button>')
-   +(onbPlatform()!=='desktop'?'<button data-xact="togglephoneapps">Open apps in their phone apps: '+(phoneAppsOn()?'On':'Off')+'</button>':'')
-   +'<button data-opencolours="1">Change colours</button>'
-   +(remindersOn()
-     ?'<button data-remindoff="1">Turn reminders off</button>'
-     :'<button data-remindon="1">Turn on reminders</button>')
-   +'</div>'
-   +'<p class="hint" style="margin-top:10px">Reminders arrive the day before and the morning something is due, while the hub is open in a tab.</p>';
+   +sg('sync','Account and sync',syncRight,syncBody,!sbUser||!!view.driveError)
+   +sg('hub','Your hub',S.owner,
+     '<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
+     +'<div class="field" style="margin:0"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>',false)
+   +sg('look','Look and feel','',
+     '<button data-opencolours="1">Change colours</button>'
+     +(onbPlatform()!=='desktop'?'<button data-xact="togglephoneapps">Open apps in their phone apps: '+(phoneAppsOn()?'On':'Off')+'</button>':''),false)
+   +sg('remind','Reminders',remindersOn()?'On':'Off',
+     (remindersOn()?'<button data-remindoff="1">Turn reminders off</button>':'<button data-remindon="1">Turn on reminders</button>')
+     +'<p class="hint" style="margin:0">Reminders arrive the day before and the morning something is due, while the hub is open in a tab.</p>',false)
+   +sg('backup','Backup','',
+     '<p class="hint" style="margin:0">A backup holds everything: ticks, files, photos, colours.</p>'
+     +'<button data-export="1">Export everything</button>'
+     +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>',false)
+   +(isInstalledApp()?'':'<div class="sgroup" style="padding:6px 0 2px"><button data-xact="openinstall" style="width:100%">Get the app on your phone</button></div>');
  }else if(m.kind==='app'){
   var ap=m.id?appById(m.id):null;
   h='<h3>'+(ap?'Edit app':'Add an app')+'</h3>'
@@ -4356,6 +4367,11 @@ document.addEventListener('keydown',function(e){
  if(e.key==='Enter'&&view.modal&&e.target.tagName==='INPUT'){saveModal()}
  if(e.key==='Enter'&&!view.modal&&e.target.id==='q'){ask(view.classId)}
 });
+
+document.addEventListener('toggle',function(e){
+ var d=e.target;
+ if(d&&d.dataset&&d.dataset.sg){view.sgOpen=view.sgOpen||{};view.sgOpen[d.dataset.sg]=d.open}
+},true);
 
 /* ---------- redraws keep your place: panel scroll, popup scroll and the field you are typing in ---------- */
 (function(){
