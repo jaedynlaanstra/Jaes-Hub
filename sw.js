@@ -1,6 +1,6 @@
 // Keeps the hub opening even with no signal, and picks up new versions when online.
-var CACHE='hub-v25';
-var CORE=['./','./index.html','./manifest.webmanifest','./supabase.js','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
+var CACHE='hub-v28';
+var CORE=['./','./index.html','./manifest.webmanifest','./supabase.js','./qrcode.js','./favicon-16.png','./favicon-32.png','./icon-maskable-512.png','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(CORE)}).then(function(){return self.skipWaiting()}));

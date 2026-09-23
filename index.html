@@ -8,10 +8,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Hub">
+<meta name="apple-mobile-web-app-title" content="Doable">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Hub</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='16' y='25' text-anchor='middle' font-family='DM Sans,Helvetica,sans-serif' font-size='27' font-weight='500' fill='%2333312C'%3EJ%3C/text%3E%3C/svg%3E">
+<title>Doable</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 
 <style>
 :root{
@@ -884,7 +885,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v25';
+var BUILD='v28';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1128,7 +1129,7 @@ function persistLocal(){
 }
 /* ---------- change tracking: stamps edits and records deletions so both sync ---------- */
 var LISTS=['assignments','tasks','contacts','links','sections','files'];
-var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook'];
+var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook','shareCode','srcCode'];
 var SEEN=null;
 var TOMB_DAYS=180;
 function fp(o){return JSON.stringify(o,function(k,v){return k==='savedAt'?undefined:v})}
@@ -1423,6 +1424,109 @@ async function enableReminders(){
 }
 setInterval(checkReminders,15*60*1000);
 
+
+/* ---------- "Get the app" guide: big visual steps, QR code, used on its own page and in the welcome ---------- */
+function siteUrl(){return location.href.split('#')[0].split('?')[0].replace(/index\.html$/,'')}
+function guideCss(){
+ if(document.getElementById('igcss'))return;
+ var st=document.createElement('style');st.id='igcss';
+ st.textContent='.igtabs{display:flex;gap:6px;margin:0 0 6px}.igtabs button{flex:1;padding:10px 6px;border-radius:10px;border:1px solid var(--line2,#D4CFC4);background:#fff;font-size:14px;cursor:pointer;color:#33312C}.igtabs button.on{background:#33312C;color:#fff;border-color:#33312C}'
+ +'.igstep{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line,#E4E0D7)}.igstep:last-child{border-bottom:none}'
+ +'.ignum{flex:0 0 32px;height:32px;border-radius:50%;background:#33312C;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}'
+ +'.igtxt{min-width:0}.igtxt b{display:block;font-size:16px;color:var(--ink,#33312C);margin-bottom:3px}.igtxt span{display:block;font-size:14px;color:var(--ink2,#6B675F);line-height:1.5}'
+ +'.igmock{margin-top:10px;display:inline-flex;align-items:center;gap:10px;background:#F2F2F7;color:#1C1C1E;border-radius:12px;padding:10px 14px;font-size:15px;border:1px solid rgba(0,0,0,.07);font-family:-apple-system,system-ui,sans-serif}'
+ +'.igmock svg{width:24px;height:24px;stroke:#0A84FF;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}.igmock .blue{color:#0A84FF;font-weight:600}.igmock img{width:40px;height:40px;border-radius:9px;flex:none}'
+ +'.igmock.wide{display:flex;justify-content:space-between;max-width:290px}'
+ +'.igqr{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:14px 0 4px}.igqr .qrbox{width:168px;height:168px;background:#fff;border:1px solid var(--line2,#D4CFC4);border-radius:14px;padding:8px;display:flex;align-items:center;justify-content:center;flex:none}.igqr .qrbox svg{width:100%;height:100%}'
+ +'.igqr .qrtxt{flex:1;min-width:190px}.igqr .qrtxt b{display:block;font-size:16px;margin-bottom:4px;color:var(--ink,#33312C)}.igqr .qrtxt span{display:block;font-size:14px;color:var(--ink2,#6B675F);line-height:1.5;margin-bottom:10px}'
+ +'.iglink{font-size:13px;word-break:break-all;color:var(--ink2,#6B675F);background:var(--paper,#FBFAF8);border:1px solid var(--line,#E4E0D7);border-radius:9px;padding:8px 10px;margin-bottom:9px}'
+ +'.igbtns{display:flex;gap:8px;flex-wrap:wrap}.igbtns button{padding:9px 14px;border-radius:10px;border:1px solid var(--line2,#D4CFC4);background:#fff;font-size:14px;cursor:pointer;color:#33312C}';
+ document.head.appendChild(st);
+}
+var IG={
+ share:'<svg viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>',
+ plus:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>',
+ dots:'<svg viewBox="0 0 24 24" style="stroke:none;fill:#444"><circle cx="12" cy="5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="19" r="1.9"/></svg>'
+};
+function igStep(n,title,text,mock){return '<div class="igstep"><div class="ignum">'+n+'</div><div class="igtxt"><b>'+title+'</b><span>'+text+'</span>'+(mock||'')+'</div></div>'}
+function installGuideHtml(plat){
+ guideCss();
+ var tabs='<div class="igtabs">'+[['ios','iPhone'],['android','Android'],['desktop','Computer']].map(function(t){return '<button data-xact="plat:'+t[0]+'" class="'+(plat===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>';
+ var body='';
+ if(plat==='ios'){
+  body=igStep(1,'Open this page in Safari','It has to be Safari, the blue compass icon. It will not work from inside another app.','<div class="igmock wide"><span>'+esc(location.host||'this site')+'</span></div>')
+   +igStep(2,'Tap the Share button','It is at the bottom of the screen, a square with an arrow pointing up.','<div class="igmock">'+IG.share+'<span class="blue">Share</span></div>')
+   +igStep(3,'Scroll down and tap Add to Home Screen','You may need to scroll the list of options to find it.','<div class="igmock wide"><span>Add to Home Screen</span>'+IG.plus+'</div>')
+   +igStep(4,'Tap Add','It is at the top right. The app is now on your home screen.','<div class="igmock"><span class="blue">Add</span></div>')
+   +igStep(5,'Open the new icon and sign in once','Use the same email and password. The icon keeps its own storage, so this one sign-in brings all your stuff across.','<div class="igmock"><img src="apple-touch-icon.png" alt=""><span>Doable</span></div>');
+ }else if(plat==='android'){
+  body=igStep(1,'Open this page in Chrome','','<div class="igmock wide"><span>'+esc(location.host||'this site')+'</span></div>')
+   +igStep(2,'Tap the menu','It is the three dots at the top right.','<div class="igmock">'+IG.dots+'<span>Menu</span></div>')
+   +igStep(3,'Tap Install app or Add to Home screen','Chrome shows one or the other. Then confirm.','<div class="igmock wide"><span>Install app</span>'+IG.plus+'</div>')
+   +igStep(4,'Open the new icon and sign in once','Use the same email and password.','<div class="igmock"><img src="apple-touch-icon.png" alt=""><span>Doable</span></div>');
+ }else{
+  var url=siteUrl();
+  body='<div class="igqr"><div class="qrbox" data-qr="'+esc(url)+'"></div><div class="qrtxt"><b>Scan this with your phone</b><span>Open your phone camera, point it at the square, and tap the link that appears. Then follow the iPhone or Android steps.</span>'
+   +'<div class="iglink">'+esc(url)+'</div><div class="igbtns"><button data-xact="copylink">Copy link</button>'+(navigator.share?'<button data-xact="sharelink">Send it to myself</button>':'')+'</div></div></div>'
+   +igStep(1,'Want it as an app on this computer too?','In Chrome or Edge, look for the small install icon at the right end of the address bar, and click it. Nothing else is needed. It works fine in a normal tab.');
+ }
+ return tabs+'<div class="ig">'+body+'</div>';
+}
+function loadQrLib(){
+ return new Promise(function(res){
+  if(window.qrcode)return res(true);
+  var s=document.createElement('script');s.src='qrcode.js';
+  s.onload=function(){res(!!window.qrcode)};s.onerror=function(){res(false)};
+  document.head.appendChild(s);
+ });
+}
+async function fillQr(){
+ var boxes=document.querySelectorAll('.qrbox[data-qr]');
+ if(!boxes.length)return;
+ if(!(await loadQrLib()))return;
+ Array.prototype.forEach.call(boxes,function(b){
+  try{var q=window.qrcode(0,'M');q.addData(b.getAttribute('data-qr'));q.make();b.innerHTML=q.createSvgTag({cellSize:4,margin:0,scalable:true})}catch(e){}
+ });
+}
+function viewInstall(){
+ if(!view.instPlat)view.instPlat=onbPlatform();
+ setTimeout(fillQr,0);
+ var already=isInstalledApp();
+ return '<div class="panel" style="padding:20px 22px;max-width:640px">'
+  +(already?'<p style="margin:0 0 12px;color:var(--ink2)"><b>You are already using it as an app.</b> These steps are for your other devices.</p>'
+           :'<p style="margin:0 0 14px;color:var(--ink2)">Put this on your home screen and it opens like a normal app, with its own icon and no browser bars. Your stuff follows you.</p>')
+  +installGuideHtml(view.instPlat)+'</div>';
+}
+function homeInstallCard(){
+ if(isInstalledApp()||onbPlatform()==='desktop')return '';
+ try{if(localStorage.getItem('hub:instdismiss'))return ''}catch(e){}
+ return '<div class="panel" style="margin-bottom:22px;padding:18px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">'
+  +'<img src="apple-touch-icon.png" alt="" style="width:46px;height:46px;border-radius:11px">'
+  +'<div style="flex:1;min-width:190px"><b style="display:block;font-size:15px">Put this on your home screen</b><span style="font-size:13.5px;color:var(--ink2)">It opens like a real app and stays in sync.</span></div>'
+  +'<div style="display:flex;gap:8px"><button data-go="install" style="background:#33312C;color:#fff;border-color:#33312C">Show me how</button><button class="ghost" data-xact="instdismiss">Not now</button></div></div>';
+}
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-xact]');
+ if(!b)return;
+ var a=b.getAttribute('data-xact');
+ if(a.indexOf('plat:')===0){
+  var pl=a.slice(5);
+  if(onb&&document.getElementById('onb')&&document.getElementById('onb').contains(b)){onb.plat=pl;buildOnb()}
+  else{view.instPlat=pl;render()}
+ }else if(a==='copylink'){
+  var u=siteUrl();
+  (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){b.textContent='Copied'},function(){window.prompt('Copy this link',u)});
+ }else if(a==='sharelink'){
+  try{navigator.share({title:'Doable',url:siteUrl()})}catch(err){}
+ }else if(a.indexOf('shareclass:')===0){openShareModal(a.slice(11));
+ }else if(a.indexOf('ics:')===0){openIcsModal(a.slice(4));
+ }else if(a==='importclass'){openImportModal('');
+ }else if(a==='instdismiss'){
+  try{localStorage.setItem('hub:instdismiss','1')}catch(err){}
+  render();
+ }
+});
+
 /* ---------- first-run welcome: about the app, make an account, put it on your phone ---------- */
 var onb=null;
 function isInstalledApp(){try{return window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches}catch(e){return false}}
@@ -1434,7 +1538,8 @@ function onbPlatform(){
 }
 function onbFlag(){try{return localStorage.getItem('hub:onb')}catch(e){return null}}
 function maybeOnboard(){
- if(sbUser||onbFlag()||(S.classes&&S.classes.length)||document.getElementById('onb'))return;
+ if(sbUser||document.getElementById('onb'))return;
+ if(!pendingShare&&(onbFlag()||(S.classes&&S.classes.length)))return;
  onb={step:0,mode:'up',plat:onbPlatform(),msg:'',busy:false,email:'',name:'',pass:''};
  buildOnb();
 }
@@ -1442,6 +1547,7 @@ function onbClose(flag){
  try{localStorage.setItem('hub:onb',flag||'done')}catch(e){}
  var el=document.getElementById('onb');if(el)el.remove();
  onb=null;render();window.scrollTo(0,0);
+ if(sbUser)setTimeout(openPendingImport,400);
 }
 function onbCss(){
  if(document.getElementById('onbcss'))return;
@@ -1475,11 +1581,12 @@ function buildOnb(){
  var stepNo=onb.step===0?0:(onb.step===3?2:1);
  var h='<div class="onbcard"><div class="onbdots">'+dot(0)+(stepNo>=1?'<i class="on"></i>':'<i></i>')+(stepNo>=2?'<i class="on"></i>':'<i></i>')+'</div>';
  if(onb.step===0){
-  h+='<h2>Welcome to your hub</h2><p>One calm place for school. Here is how it works.</p>'
+  h+='<h2>Welcome to Doable</h2><p>One calm place for school. Here is how it works.</p>'
+   +(pendingShare?'<div class="onbfeat" style="background:var(--paper,#FBFAF8);border:1px solid var(--line,#E4E0D7);border-radius:12px;padding:10px 12px"><div class="onbico">\u{1F381}</div><div><b>A friend shared a class with you</b><span>Make an account or sign in and it will be ready to import.</span></div></div>':'')
    +'<div class="onbfeat"><div class="onbico">\u{1F4DA}</div><div><b>Add your classes</b><span>Give each class its own page for assignments, to-dos, links, files, notes and contacts.</span></div></div>'
    +'<div class="onbfeat"><div class="onbico">✅</div><div><b>Tick things off</b><span>Add due dates and tick tasks as you finish them. Home shows what is due this week and next.</span></div></div>'
    +'<div class="onbfeat"><div class="onbico">\u{1F4C5}</div><div><b>See it on a calendar</b><span>Everything with a due date shows up in the calendar view.</span></div></div>'
-   +'<div class="onbfeat"><div class="onbico">\u{1F3A8}</div><div><b>Make it yours</b><span>Change the colours, add your own picture, and pin shortcuts to the apps you use. Open Settings.</span></div></div>'
+   +'<div class="onbfeat"><div class="onbico">\u{1F3A8}</div><div><b>Make it yours</b><span>Tap the round paint button at the bottom right of any page to change its colours, or use Settings, Change colours. Each class also has its own colour under Edit class.</span></div></div>'
    +'<div class="onbfeat"><div class="onbico">\u{1F504}</div><div><b>It follows you</b><span>With a free account, everything you add, including files, shows up on your phone and computer within seconds. Your data is private to you.</span></div></div>'
    +'<button class="onbbtn" data-onb="next">Get started</button>'
    +'<div class="onbrow"><button class="onblink" data-onb="signin">I already have an account</button><button class="onblink" data-onb="skip">Skip for now</button></div>';
@@ -1500,19 +1607,13 @@ function buildOnb(){
    +'<button class="onbbtn" id="onbGo" data-onb="confirmed">I have confirmed my email</button>'
    +'<div class="onbrow"><button class="onblink" data-onb="resend">Send it again</button><button class="onblink" data-onb="back">Use a different email</button></div>';
  }else{
-  var pl=onb.plat;
-  var steps={
-   ios:'<ol><li>Open this page in <b>Safari</b> (not inside another app).</li><li>Tap the <b>Share</b> button, the square with an arrow pointing up.</li><li>Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>Open the new icon and <b>sign in once</b> with the same email and password. The icon keeps its own storage, so this one sign-in brings everything across.</li></ol>',
-   android:'<ol><li>Open this page in <b>Chrome</b>.</li><li>Tap the <b>⋮</b> menu at the top right.</li><li>Tap <b>Install app</b> or <b>Add to Home screen</b>.</li><li>Open the new icon and <b>sign in once</b> with the same email and password.</li></ol>',
-   desktop:'<ol><li>You can keep using it right here in your browser.</li><li>To make it feel like an app, look for the <b>install</b> icon at the right end of the address bar in Chrome or Edge, and click it.</li><li>To use it on your phone, open this same address on your phone and follow the steps for iPhone or Android above.</li></ol>'
-  };
-  h+='<h2>Put it on your phone</h2><p>It works like an app once it is on your home screen, and it stays in sync.</p>'
-   +'<div class="onbtabs">'+[['ios','iPhone'],['android','Android'],['desktop','Computer']].map(function(t){return '<button data-onb="plat:'+t[0]+'" class="'+(pl===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>'
-   +steps[pl]
+  h+='<h2>Put it on your phone</h2><p>It works like an app once it is on your home screen, and it stays in sync. You can find these steps again any time under <b>Get the app</b> in the menu.</p>'
+   +installGuideHtml(onb.plat)
    +'<button class="onbbtn" data-onb="finish">Take me to my hub</button>';
  }
  h+='</div>';
  el.innerHTML=h;
+ fillQr();
  var first=el.querySelector('#onbName')||el.querySelector('#onbEmail');
  if(first&&onb.step===1&&window.innerWidth>700)first.focus();
 }
@@ -1586,6 +1687,424 @@ async function onbClick(e){
 }
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='onbShow'){var p=document.getElementById('onbPass');if(p)p.type=e.target.checked?'text':'password'}});
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&onb&&onb.step===1&&e.target&&/^onb/.test(e.target.id||'')){e.preventDefault();onbSubmit()}});
+
+
+/* ---------- share a class with friends + import due dates from a calendar file ---------- */
+var pendingShare=null;
+function cleanCode(s){return String(s||'').replace(/[^A-Za-z0-9]/g,'').toUpperCase().slice(0,16)}
+function codeFromInput(t){t=String(t||'').trim();var m=/[?&]class=([A-Za-z0-9\-]+)/.exec(t);return cleanCode(m?m[1]:t)}
+function fmtCode(c){c=cleanCode(c);return c.length>5?c.slice(0,5)+'-'+c.slice(5):c}
+function genShareCode(){
+ var A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',out='',b=new Uint8Array(10);
+ (window.crypto||window.msCrypto).getRandomValues(b);
+ for(var i=0;i<10;i++)out+=A[b[i]%A.length];
+ return out;
+}
+(function(){
+ try{
+  var q=new URLSearchParams(location.search).get('class');
+  if(q){pendingShare=cleanCode(q);localStorage.setItem('hub:pendingClass',pendingShare);history.replaceState(null,'',location.pathname)}
+  else pendingShare=localStorage.getItem('hub:pendingClass')||null;
+ }catch(e){}
+})();
+var XM={};
+function xmCss(){
+ if(document.getElementById('xmcss'))return;
+ var st=document.createElement('style');st.id='xmcss';
+ st.textContent='#xm{position:fixed;inset:0;z-index:250;background:rgba(35,32,27,.55);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto}'
+ +'#xm .xmcard{background:var(--card,#fff);color:var(--ink,#33312C);width:100%;max-width:520px;border-radius:20px;padding:24px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);overflow:auto}'
+ +'#xm h2{font-size:20px;margin:0 0 6px}#xm p{margin:0 0 12px;color:var(--ink2,#6B675F);font-size:14px;line-height:1.5}'
+ +'#xm label{display:block;font-size:12.5px;color:var(--ink2,#6B675F);margin:0 0 5px}'
+ +'#xm input[type=text],#xm select{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line2,#D4CFC4);border-radius:10px;font-size:16px;background:#fff;color:#33312C;margin-bottom:12px}'
+ +'#xm .xbtn{padding:11px 16px;border-radius:11px;border:1px solid var(--line2,#D4CFC4);background:#fff;font-size:14.5px;cursor:pointer;color:#33312C}#xm .xbtn.primary{background:#33312C;color:#fff;border-color:#33312C;font-weight:600}#xm .xbtn[disabled]{opacity:.55}#xm .xbtn.danger{color:#A34A3F}'
+ +'#xm .xacts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}'
+ +'#xm .xmsg{color:#A34A3F;font-size:13px;margin:0 0 10px}#xm .xmsg.ok{color:#4C6F55}'
+ +'#xm .xbox{background:var(--paper,#FBFAF8);border:1px solid var(--line,#E4E0D7);border-radius:12px;padding:11px 13px;margin:0 0 12px;font-size:14px;word-break:break-word}'
+ +'#xm .xcode{font-size:24px;letter-spacing:.14em;font-weight:700;margin:2px 0 6px}'
+ +'#xm .xlist{max-height:38vh;overflow:auto;border:1px solid var(--line,#E4E0D7);border-radius:12px;margin:0 0 12px}#xm .xrow{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-bottom:1px solid var(--line,#E4E0D7);font-size:14px;cursor:pointer}#xm .xrow:last-child{border-bottom:none}#xm .xrow input{margin-top:3px;width:auto;flex:none}#xm .xrow small{display:block;color:var(--ink3,#A29D93);font-size:12px}#xm .xrow.dim{opacity:.5}'
+ +'#xm details{margin:0 0 12px;font-size:13.5px;color:var(--ink2,#6B675F)}#xm summary{cursor:pointer;margin-bottom:6px}#xm details p{font-size:13px}';
+ document.head.appendChild(st);
+}
+function xmOpen(html){
+ xmCss();
+ var el=document.getElementById('xm');
+ if(!el){el=document.createElement('div');el.id='xm';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.addEventListener('click',xmClick);document.body.appendChild(el)}
+ el.innerHTML='<div class="xmcard">'+html+'</div>';
+}
+function xmClose(){var el=document.getElementById('xm');if(el)el.remove()}
+function xmMsg(t,ok){var m=document.getElementById('xmMsg');if(m){m.textContent=t||'';m.className='xmsg'+(ok?' ok':'')}}
+function xmClick(e){
+ var el=document.getElementById('xm');
+ if(e.target===el){xmClose();return}
+ var b=e.target.closest('[data-xm]');if(!b)return;
+ var a=b.getAttribute('data-xm'),arg='',i=a.indexOf(':');
+ if(i>-1){arg=a.slice(i+1);a=a.slice(0,i)}
+ if(XM[a])XM[a](arg,b);
+}
+function xmCopy(text,btn){
+ (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){if(btn){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o},1500)}},function(){window.prompt('Copy this',text)});
+}
+XM.close=function(){xmClose()};
+XM.copy=function(arg,btn){xmCopy(btn.getAttribute('data-text'),btn)};
+
+/* ---- what a friend is allowed to receive ---- */
+var ISO_D=/^\d{4}-\d{2}-\d{2}$/,ISO_T=/^\d{2}:\d{2}$/;
+function s2(v,n){return typeof v==='string'?v.slice(0,n):''}
+function cleanShare(p){
+ if(!p||typeof p!=='object'||typeof p.name!=='string'||!p.name.trim())return null;
+ var ids=PALETTES.map(function(x){return x.id});
+ var out={name:s2(p.name,120).trim(),code:s2(p.code,40),short:s2(p.short,40),day:s2(p.day,80),room:s2(p.room,60),
+  color:ids.indexOf(p.color)>-1?p.color:PALETTES[0].id,by:s2(p.by,60),updated_at:s2(p.updated_at,40),teachers:[],assignments:[]};
+ (Array.isArray(p.teachers)?p.teachers:[]).slice(0,10).forEach(function(t){
+  if(!t||typeof t!=='object')return;
+  var o={name:s2(t.name,80),role:s2(t.role,60),email:s2(t.email,120),office:s2(t.office,60),hours:s2(t.hours,120)};
+  if(o.name||o.email)out.teachers.push(o);
+ });
+ (Array.isArray(p.assignments)?p.assignments:[]).slice(0,300).forEach(function(a){
+  if(!a||typeof a!=='object'||typeof a.title!=='string'||!a.title.trim())return;
+  var w=typeof a.weight==='number'&&isFinite(a.weight)&&a.weight>=0&&a.weight<=100?a.weight:'';
+  out.assignments.push({sid:s2(a.sid,40),title:s2(a.title,200).trim(),due:ISO_D.test(a.due||'')?a.due:'',time:ISO_T.test(a.time||'')?a.time:'',
+   weight:w,priority:['High','Medium','Low'].indexOf(a.priority)>-1?a.priority:'',notes:s2(a.notes,600)});
+ });
+ return out;
+}
+function buildSharePayload(c,withNotes){
+ return {v:1,name:c.name,code:c.code||'',short:c.short||'',day:c.day||'',room:c.room||'',color:c.color||'',
+  by:(S.owner&&S.owner!=='My hub')?S.owner:'',
+  teachers:(c.contacts||[]).map(function(t){return {name:t.name||'',role:t.role||'',email:t.email||'',office:t.office||'',hours:t.hours||''}}),
+  assignments:(c.assignments||[]).filter(function(a){return a.title}).map(function(a){
+   var o={sid:a.id,title:a.title,due:a.due||'',time:a.time||'',weight:(a.weight===''||a.weight==null)?'':+a.weight,priority:a.priority||''};
+   if(withNotes&&a.notes)o.notes=a.notes;return o})};
+}
+function classBySrc(code){for(var i=0;i<S.classes.length;i++){if(S.classes[i].srcCode===code)return S.classes[i]}return null}
+function shareDiff(p,code){
+ var c=classBySrc(code),added=0,changed=0;
+ p.assignments.forEach(function(a){
+  var ex=c&&(c.assignments||[]).filter(function(x){return x.srcId===a.sid})[0];
+  if(!ex)added++;
+  else if(!ex.done&&(ex.title!==a.title||ex.due!==a.due||(ex.time||'')!==a.time))changed++;
+ });
+ return {existing:!!c,added:added,changed:changed};
+}
+function applyShare(p,code){
+ var c=classBySrc(code),added=0,changed=0;
+ if(!c){
+  c={id:uid(),name:p.name,code:p.code,short:p.short,day:p.day,room:p.room,color:p.color,srcCode:code,contacts:[],assignments:[],tasks:[],links:[],sections:[],files:[]};
+  S.classes.push(c);
+ }
+ p.teachers.forEach(function(t){
+  var dup=c.contacts.some(function(x){return (x.name||'').toLowerCase()===t.name.toLowerCase()&&(x.email||'')===t.email});
+  if(!dup)c.contacts.push({id:uid(),name:t.name,role:t.role,email:t.email,office:t.office,hours:t.hours,photo:''});
+ });
+ p.assignments.forEach(function(a){
+  var ex=(c.assignments||[]).filter(function(x){return x.srcId===a.sid})[0];
+  if(ex){
+   if(!ex.done&&(ex.title!==a.title||ex.due!==a.due||(ex.time||'')!==a.time)){ex.title=a.title;ex.due=a.due;ex.time=a.time;ex.weight=a.weight;ex.priority=a.priority;if(a.notes)ex.notes=a.notes;changed++}
+  }else{
+   c.assignments.push({id:uid(),srcId:a.sid,title:a.title,due:a.due,time:a.time,notes:a.notes||'',priority:a.priority,weight:a.weight,done:false});added++;
+  }
+ });
+ save();
+ return {c:c,added:added,changed:changed};
+}
+
+/* ---- owner: create / update / stop a share ---- */
+function shareUrl(code){return siteUrl()+'?class='+cleanCode(code)}
+function shareHtml(c,msg,ok){
+ var code=c.shareCode,h='<h2>Share “'+esc(c.name)+'”</h2>'
+  +'<p>Friends who open your link get the class name, code, meeting time, room, teachers and every assignment with its due date. They do <b>not</b> get your files, links, marks, to-dos or ticks.</p>'
+  +'<label class="xrow" style="border:none;padding:0 0 12px"><input type="checkbox" id="xmNotes"> <span>Also include my notes on each assignment</span></label>';
+ if(code){
+  h+='<div class="xbox"><div style="font-size:12.5px;color:var(--ink2)">Share code</div><div class="xcode">'+esc(fmtCode(code))+'</div>'
+   +'<div style="font-size:13px;color:var(--ink2);word-break:break-all">'+esc(shareUrl(code))+'</div></div>'
+   +'<div class="xacts" style="justify-content:flex-start;margin:0 0 6px">'
+   +'<button class="xbtn primary" data-xm="copy" data-text="'+esc(shareUrl(code))+'">Copy link</button>'
+   +'<button class="xbtn" data-xm="copy" data-text="'+esc(fmtCode(code))+'">Copy code</button>'
+   +(navigator.share?'<button class="xbtn" data-xm="nativeshare">Send…</button>':'')+'</div>'
+   +'<p style="font-size:13px;margin-top:10px">Changed a due date? Tap <b>Update shared copy</b> and friends can import again to get the changes.</p>';
+ }
+ h+='<p class="xmsg'+(ok?' ok':'')+'" id="xmMsg">'+esc(msg||'')+'</p><div class="xacts">'
+  +(code?'<button class="xbtn danger" data-xm="unshare" style="margin-right:auto">Stop sharing</button>':'')
+  +'<button class="xbtn" data-xm="close">Close</button>'
+  +'<button class="xbtn primary" data-xm="publish" id="xmGo">'+(code?'Update shared copy':'Create share link')+'</button></div>';
+ return h;
+}
+function openShareModal(cid){
+ var c=classById(cid);if(!c)return;
+ if(!sbUser){
+  xmOpen('<h2>Sign in to share</h2><p>Sharing uses your account, so your friends can import straight from a link. Sign in first, then come back.</p><div class="xacts"><button class="xbtn" data-xm="close">Close</button><button class="xbtn primary" data-xm="settings">Open Settings</button></div>');
+  return;
+ }
+ xmOpen(shareHtml(c));
+ xm_cid=cid;
+}
+var xm_cid=null;
+XM.settings=function(){xmClose();view.modal={kind:'settings'};render()};
+XM.publish=async function(){
+ var c=classById(xm_cid);if(!c)return;
+ var withNotes=!!(document.getElementById('xmNotes')||{}).checked;
+ var pbtn=document.getElementById('xmGo');if(pbtn)pbtn.disabled=true;xmMsg('');
+ try{
+  var cl=await ensureSb();
+  var payload=buildSharePayload(c,withNotes),code=c.shareCode||genShareCode(),r;
+  for(var tries=0;tries<3;tries++){
+   r=await cl.from('class_shares').upsert({code:code,owner:sbUser.id,payload:payload,updated_at:new Date().toISOString()},{onConflict:'code'});
+   if(!r.error)break;
+   if(c.shareCode)break;
+   code=genShareCode();
+  }
+  if(r.error)throw r.error;
+  var was=c.shareCode;
+  if(c.shareCode!==code){c.shareCode=code;save()}
+  xmOpen(shareHtml(c,was?'Updated. Friends can import again to get the changes.':'Done. Send the link or code to a friend.',true));
+ }catch(e){
+  var g=document.getElementById('xmGo');if(g)g.disabled=false;
+  xmMsg(/relation|does not exist|schema cache/i.test(String(e&&e.message))?'Sharing is not switched on for this hub yet. The database setup for sharing still needs to be run.':('Could not share: '+String(e&&e.message||e)));
+ }
+};
+XM.unshare=async function(){
+ var c=classById(xm_cid);if(!c||!c.shareCode)return;
+ if(!confirm('Stop sharing this class? The link and code will stop working. Friends who already imported it keep their copy.'))return;
+ try{
+  var cl=await ensureSb();
+  var r=await cl.from('class_shares').delete().eq('code',c.shareCode);
+  if(r.error)throw r.error;
+  c.shareCode='';save();
+  xmOpen(shareHtml(c,'Sharing stopped.',true));
+ }catch(e){xmMsg('Could not stop sharing: '+String(e&&e.message||e))}
+};
+XM.nativeshare=function(){var c=classById(xm_cid);try{navigator.share({title:c.name,text:'Import my '+c.name+' due dates',url:shareUrl(c.shareCode)})}catch(e){}};
+
+/* ---- friend: import from a code or link ---- */
+var xm_share=null,xm_code='';
+function importFormHtml(prefill,msg){
+ return '<h2>Import a shared class</h2><p>Paste the link or code a friend sent you. You will get the class, teacher and due dates only.</p>'
+  +'<label for="xmCode">Link or code</label><input id="xmCode" type="text" autocapitalize="characters" autocomplete="off" placeholder="e.g. K7QXM-2PDRT" value="'+esc(prefill||'')+'">'
+  +'<p class="xmsg" id="xmMsg">'+esc(msg||'')+'</p><div class="xacts"><button class="xbtn" data-xm="close">Cancel</button><button class="xbtn primary" data-xm="lookup" id="xmGo">Look it up</button></div>';
+}
+function openImportModal(prefill,auto){
+ if(!sbUser){
+  xmOpen('<h2>Sign in to import</h2><p>Importing uses your account. Sign in first, then open the link again or paste the code here.</p><div class="xacts"><button class="xbtn" data-xm="close">Close</button><button class="xbtn primary" data-xm="settings">Open Settings</button></div>');
+  return;
+ }
+ xmOpen(importFormHtml(prefill));
+ if(auto&&prefill)XM.lookup();
+}
+function importPreviewHtml(p,code){
+ var d=shareDiff(p,code),h='<h2>'+esc(p.name)+'</h2>'
+  +'<p>'+esc([p.code,p.day,p.room].filter(Boolean).join(' · ')||'Shared class')+(p.by?'<br>Shared by '+esc(p.by):'')+'</p>';
+ if(p.teachers.length)h+='<div class="xbox"><b>Teacher'+(p.teachers.length>1?'s':'')+':</b> '+p.teachers.map(function(t){return esc(t.name||t.email)}).join(', ')+'</div>';
+ var list=p.assignments.slice().sort(function(a,b){return (a.due||'9999')<(b.due||'9999')?-1:1});
+ h+='<div class="xlist">'+list.slice(0,40).map(function(a){return '<div class="xrow" style="cursor:default"><div>'+esc(a.title)+'<small>'+esc(a.due?parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})+(a.time?' · '+fmtTime(a.time):''):'No due date')+(a.weight!==''?' · '+a.weight+'%':'')+'</small></div></div>'}).join('')
+  +(list.length>40?'<div class="xrow" style="cursor:default"><small>and '+(list.length-40)+' more</small></div>':'')+(list.length?'':'<div class="xrow" style="cursor:default"><small>No assignments in this class yet.</small></div>')+'</div>';
+ h+='<p class="xmsg" id="xmMsg"></p>';
+ if(d.existing)h+='<p>You already have this class. Importing again adds <b>'+d.added+'</b> new and updates <b>'+d.changed+'</b> changed due date'+(d.changed===1?'':'s')+'. Your ticks and notes stay.</p>';
+ else h+='<p>This will add <b>'+p.assignments.length+'</b> assignment'+(p.assignments.length===1?'':'s')+' with due dates to a new class in your hub.</p>';
+ return h+'<div class="xacts"><button class="xbtn" data-xm="close">Cancel</button><button class="xbtn primary" data-xm="doimport" id="xmGo">'+(d.existing?'Update my class':'Import class')+'</button></div>';
+}
+XM.lookup=async function(){
+ var inp=document.getElementById('xmCode'),code=codeFromInput(inp?inp.value:xm_code);
+ if(code.length<6){xmMsg('Enter the code your friend sent you.');return}
+ var g=document.getElementById('xmGo');if(g)g.disabled=true;xmMsg('');
+ try{
+  var cl=await ensureSb();if(!cl||!sbUser)throw new Error('Sign in first.');
+  var r=await cl.rpc('get_class_share',{p_code:code});
+  if(r.error)throw r.error;
+  var p=cleanShare(r.data);
+  if(!p){var g2=document.getElementById('xmGo');if(g2)g2.disabled=false;xmMsg('No shared class found for that code. Check it and try again.');return}
+  xm_share=p;xm_code=code;
+  xmOpen(importPreviewHtml(p,code));
+ }catch(e){
+  var g3=document.getElementById('xmGo');if(g3)g3.disabled=false;
+  if(!document.getElementById('xmMsg'))xmOpen(importFormHtml(code));
+  xmMsg(/function|schema cache/i.test(String(e&&e.message))?'Sharing is not switched on for this hub yet.':('Could not look that up: '+String(e&&e.message||e)));
+ }
+};
+XM.doimport=function(){
+ if(!xm_share)return;
+ var r=applyShare(xm_share,xm_code);
+ xmOpen('<h2>Done</h2><p><b>'+esc(r.c.name)+'</b>: '+r.added+' assignment'+(r.added===1?'':'s')+' added'+(r.changed?', '+r.changed+' updated':'')+'.</p><div class="xacts"><button class="xbtn primary" data-xm="openclass:'+r.c.id+'">Open class</button></div>');
+ render();
+};
+XM.openclass=function(cid){xmClose();go('class',cid)};
+function openPendingImport(){
+ if(!pendingShare||!sbUser||document.getElementById('xm')||document.getElementById('onb'))return;
+ var code=pendingShare;pendingShare=null;
+ try{localStorage.removeItem('hub:pendingClass')}catch(e){}
+ openImportModal(code,true);
+}
+
+/* ---- calendar file (.ics) import: Google Calendar, Outlook, Apple, most school calendars ---- */
+function icsTzInstant(y,mo,d,h,mi,tz){
+ try{
+  var f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'});
+  var want=Date.UTC(y,mo-1,d,h,mi),guess=want;
+  for(var i=0;i<2;i++){
+   var parts={};f.formatToParts(new Date(guess)).forEach(function(p){parts[p.type]=+p.value});
+   guess+=want-Date.UTC(parts.year,parts.month-1,parts.day,parts.hour%24,parts.minute);
+  }
+  return new Date(guess);
+ }catch(e){return null}
+}
+function icsDt(v,params){
+ var m=/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})?(Z)?)?$/.exec(String(v||'').trim());
+ if(!m)return null;
+ var y=+m[1],mo=+m[2],d=+m[3];
+ if(m[4]===undefined)return {y:y,m:mo,d:d,h:0,mi:0,allDay:true};
+ var h=+m[4],mi=+m[5],dt=null;
+ if(m[7]==='Z')dt=new Date(Date.UTC(y,mo-1,d,h,mi));
+ else if(params&&params.TZID)dt=icsTzInstant(y,mo,d,h,mi,params.TZID);
+ if(dt)return {y:dt.getFullYear(),m:dt.getMonth()+1,d:dt.getDate(),h:dt.getHours(),mi:dt.getMinutes(),allDay:false};
+ return {y:y,m:mo,d:d,h:h,mi:mi,allDay:false};
+}
+function icsText(s){return String(s||'').replace(/\\[nN]/g,'\n').replace(/\\([,;\\])/g,'$1')}
+function icsKey(o){return o.y+'-'+(o.m<10?'0':'')+o.m+'-'+(o.d<10?'0':'')+o.d}
+function icsExpand(ev,winStart,winEnd){
+ var st=ev.start;
+ if(!ev.rrule)return [st];
+ var r={};ev.rrule.split(';').forEach(function(kv){var i=kv.indexOf('=');if(i>0)r[kv.slice(0,i).toUpperCase()]=kv.slice(i+1)});
+ var freq=r.FREQ,interval=Math.max(1,+r.INTERVAL||1),count=r.COUNT?+r.COUNT:Infinity,until=null;
+ if(r.UNTIL){var u=icsDt(r.UNTIL,{});if(u)until=new Date(u.y,u.m-1,u.d,23,59,59)}
+ var start=new Date(st.y,st.m-1,st.d),out=[],n=0,guard=0;
+ var WD={SU:0,MO:1,TU:2,WE:3,TH:4,FR:5,SA:6};
+ var byday=(r.BYDAY||'').split(',').map(function(x){return WD[x.slice(-2)]}).filter(function(x){return x!==undefined}).sort();
+ if(!byday.length)byday=[start.getDay()];
+ function push(d){
+  if(d<start)return true;
+  if(until&&d>until)return false;
+  if(n>=count)return false;
+  n++;
+  if(d>winEnd)return false;
+  var ex=(ev.ex||[]).indexOf(icsKey({y:d.getFullYear(),m:d.getMonth()+1,d:d.getDate()}))>-1;
+  if(d>=winStart&&!ex)out.push({y:d.getFullYear(),m:d.getMonth()+1,d:d.getDate(),h:st.h,mi:st.mi,allDay:st.allDay});
+  return out.length<150;
+ }
+ if(freq==='DAILY'){for(var k=0;guard++<4000;k++){if(!push(new Date(start.getFullYear(),start.getMonth(),start.getDate()+k*interval)))break}}
+ else if(freq==='WEEKLY'){
+  var ws=new Date(start.getFullYear(),start.getMonth(),start.getDate()-start.getDay());
+  outer:for(var w=0;guard++<2000;w++){
+   for(var j=0;j<byday.length;j++){if(!push(new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+7*interval*w+byday[j])))break outer}
+  }
+ }else if(freq==='MONTHLY'){
+  for(var m2=0;guard++<600;m2++){
+   var d2=new Date(start.getFullYear(),start.getMonth()+m2*interval,start.getDate());
+   if(d2.getDate()!==start.getDate())continue;
+   if(!push(d2))break;
+  }
+ }else if(freq==='YEARLY'){
+  for(var y2=0;guard++<100;y2++){
+   var d3=new Date(start.getFullYear()+y2*interval,start.getMonth(),start.getDate());
+   if(d3.getDate()!==start.getDate())continue;
+   if(!push(d3))break;
+  }
+ }else return [st];
+ return out;
+}
+function icsParse(text){
+ var lines=String(text||'').replace(/\r\n?/g,'\n').replace(/\n[ \t]/g,'').split('\n'),raw=[],cur=null;
+ lines.forEach(function(ln){
+  if(ln==='BEGIN:VEVENT'){cur={ex:[]};return}
+  if(ln==='END:VEVENT'){if(cur)raw.push(cur);cur=null;return}
+  if(!cur)return;
+  var m=/^([A-Za-z0-9-]+)((?:;[^:]*)*):(.*)$/.exec(ln);if(!m)return;
+  var name=m[1].toUpperCase(),params={};
+  m[2].split(';').filter(Boolean).forEach(function(p){var i=p.indexOf('=');if(i>0)params[p.slice(0,i).toUpperCase()]=p.slice(i+1).replace(/^"|"$/g,'')});
+  var v=m[3];
+  if(name==='SUMMARY')cur.title=icsText(v).trim();
+  else if(name==='DESCRIPTION')cur.notes=icsText(v).trim();
+  else if(name==='UID')cur.uid=v.trim();
+  else if(name==='STATUS')cur.status=v.trim().toUpperCase();
+  else if(name==='RRULE')cur.rrule=v.trim();
+  else if(name==='DTSTART')cur.start=icsDt(v,params);
+  else if(name==='RECURRENCE-ID'){var rd=icsDt(v,params);if(rd)cur.recId=icsKey(rd)}
+  else if(name==='EXDATE'){v.split(',').forEach(function(x){var e=icsDt(x,params);if(e)cur.ex.push(icsKey(e))})}
+ });
+ var t0=new Date();t0.setHours(0,0,0,0);
+ var winStart=new Date(t0.getFullYear(),t0.getMonth(),t0.getDate()-45),winEnd=new Date(t0.getFullYear(),t0.getMonth(),t0.getDate()+400);
+ var overrides={};raw.forEach(function(e){if(e.recId&&e.uid)overrides[e.uid+'|'+e.recId]=1});
+ var out=[];
+ raw.forEach(function(e){
+  if(!e.start||e.status==='CANCELLED')return;
+  var occ=icsExpand(e,winStart,winEnd),rep=!!e.rrule&&occ.length>1;
+  occ.forEach(function(o){
+   if(e.rrule&&!e.recId&&e.uid&&overrides[e.uid+'|'+icsKey(o)])return;
+   out.push({title:e.title||'Untitled',due:icsKey(o),time:o.allDay?'':(o.h<10?'0':'')+o.h+':'+(o.mi<10?'0':'')+o.mi,notes:(e.notes||'').slice(0,300),rep:rep});
+  });
+ });
+ out.sort(function(a,b){return a.due===b.due?(a.time<b.time?-1:1):(a.due<b.due?-1:1)});
+ return out;
+}
+var ics=null;
+function icsDup(cid,ev){
+ var c=classById(cid);if(!c)return false;
+ var t=ev.title.toLowerCase();
+ return (c.assignments||[]).some(function(a){return (a.title||'').toLowerCase()===t&&(a.due||'')===ev.due});
+}
+function icsPickHtml(msg){
+ return '<h2>Import from a calendar</h2><p>Bring due dates in from Google Calendar or any calendar that can export an <b>.ics</b> file. You pick which events to keep.</p>'
+  +'<details><summary>How do I get the file?</summary><p><b>Google Calendar:</b> on a computer, open calendar.google.com, click the gear, then <b>Settings</b>, then <b>Import &amp; export</b>, then <b>Export</b>. Unzip the download and choose the .ics file for the calendar you want.</p><p><b>School calendars</b> (like D2L or Brightspace), <b>Outlook</b> and <b>Apple Calendar</b> all have an export or download option that produces an .ics file.</p></details>'
+  +'<input type="file" id="xmIcs" accept=".ics,text/calendar" style="margin-bottom:8px">'
+  +'<p class="xmsg" id="xmMsg">'+esc(msg||'')+'</p><div class="xacts"><button class="xbtn" data-xm="close">Cancel</button></div>';
+}
+function icsListHtml(){
+ var t0=iso(today()),rows=ics.events.map(function(ev,i){
+  if(!ics.showPast&&ev.due<t0)return '';
+  var dup=ics.target&&ics.target!=='__new'&&icsDup(ics.target,ev);
+  return '<label class="xrow'+(dup?' dim':'')+'"><input type="checkbox" data-i="'+i+'"'+(ev.sel&&!dup?' checked':'')+(dup?' disabled':'')+'><div>'+esc(ev.title)+'<small>'+esc(parseISO(ev.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric',year:'numeric'})+(ev.time?' · '+fmtTime(ev.time):'')+(ev.rep?' · repeats':'')+(dup?' · already in this class':''))+'</small></div></label>';
+ }).join('');
+ var opts=S.classes.map(function(c){return '<option value="'+c.id+'"'+(ics.target===c.id?' selected':'')+'>'+esc(c.name)+'</option>'}).join('')+'<option value="__new"'+(ics.target==='__new'?' selected':'')+'>A new class…</option>';
+ return '<h2>Choose what to import</h2>'
+  +'<label for="xmTarget">Add to</label><select id="xmTarget">'+opts+'</select>'
+  +(ics.target==='__new'?'<input id="xmNew" type="text" placeholder="Name of the new class" maxlength="80" value="'+esc(ics.newName||'')+'">':'')
+  +'<div style="display:flex;gap:14px;flex-wrap:wrap;margin:0 0 8px;font-size:13.5px"><label class="xrow" style="border:none;padding:0;margin:0"><input type="checkbox" id="xmPast"'+(ics.showPast?' checked':'')+'> Show past events</label><button class="xbtn" data-xm="all:1" style="padding:5px 10px;font-size:13px">Select all</button><button class="xbtn" data-xm="all:0" style="padding:5px 10px;font-size:13px">Select none</button></div>'
+  +'<div class="xlist">'+(rows||'<div class="xrow" style="cursor:default"><small>Nothing to show. Try “Show past events”.</small></div>')+'</div>'
+  +'<p class="xmsg" id="xmMsg"></p><div class="xacts"><button class="xbtn" data-xm="close">Cancel</button><button class="xbtn primary" data-xm="icsgo" id="xmGo">Import <span id="xmCount"></span></button></div>';
+}
+function icsCount(){
+ var n=0;ics.events.forEach(function(ev){var dup=ics.target&&ics.target!=='__new'&&icsDup(ics.target,ev);if(ev.sel&&!dup&&(ics.showPast||ev.due>=iso(today())))n++});
+ var el=document.getElementById('xmCount');if(el)el.textContent=n?'('+n+')':'';
+ var g=document.getElementById('xmGo');if(g)g.disabled=!n;
+ return n;
+}
+function openIcsModal(cid){
+ ics={events:[],target:cid||(S.classes[0]&&S.classes[0].id)||'__new',showPast:false,newName:''};
+ xmOpen(icsPickHtml());
+}
+function icsRender(){xmOpen(icsListHtml());icsCount()}
+document.addEventListener('change',async function(e){
+ var t=e.target;
+ if(!document.getElementById('xm')||!ics)return;
+ if(t.id==='xmIcs'&&t.files&&t.files[0]){
+  var text='';try{text=await t.files[0].text()}catch(err){}
+  var evs=icsParse(text);
+  if(!evs.length){xmMsg('No events found in that file. Make sure it is an .ics calendar file.');return}
+  var t0=iso(today());
+  evs.forEach(function(ev){ev.sel=ev.due>=t0});
+  ics.events=evs;icsRender();
+ }else if(t.id==='xmTarget'){ics.target=t.value;icsRender()}
+ else if(t.id==='xmPast'){ics.showPast=t.checked;if(ics.showPast)ics.events.forEach(function(ev){if(ev.sel===undefined)ev.sel=false});icsRender()}
+ else if(t.hasAttribute&&t.hasAttribute('data-i')){ics.events[+t.getAttribute('data-i')].sel=t.checked;icsCount()}
+});
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='xmNew'&&ics)ics.newName=e.target.value});
+XM.all=function(v){var t0=iso(today());ics.events.forEach(function(ev){ev.sel=v==='1'&&(ics.showPast||ev.due>=t0)});icsRender()};
+XM.icsgo=function(){
+ var t0=iso(today()),pick=ics.events.filter(function(ev){return ev.sel&&(ics.showPast||ev.due>=t0)});
+ var c;
+ if(ics.target==='__new'){
+  var nm=(ics.newName||'').trim();if(!nm){xmMsg('Give the new class a name.');return}
+  c={id:uid(),name:nm,code:'',day:'',color:PALETTES[0].id,contacts:[],assignments:[],tasks:[],links:[],sections:[],files:[]};
+  S.classes.push(c);
+ }else c=classById(ics.target);
+ if(!c)return;
+ var added=0;
+ pick.forEach(function(ev){
+  if(icsDup(c.id,ev))return;
+  c.assignments.push({id:uid(),title:ev.title,due:ev.due,time:ev.time,notes:ev.notes,done:false});added++;
+ });
+ save();
+ xmOpen('<h2>Done</h2><p>Added <b>'+added+'</b> due date'+(added===1?'':'s')+' to <b>'+esc(c.name)+'</b>.</p><div class="xacts"><button class="xbtn primary" data-xm="openclass:'+c.id+'">Open class</button></div>');
+ ics=null;render();
+};
 
 /* ---------- new-version banner ---------- */
 var updChecking=false,updLast=0;
@@ -1774,7 +2293,7 @@ function mergeList(localList,remoteList,key){
 function mergeClass(lc,rc){
  if(classWins(rc,lc)){
   lc.savedAt=rc.savedAt;
-  ['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook'].forEach(function(k){
+  CLASS_KEYS.forEach(function(k){
    if(rc[k]!==undefined)lc[k]=rc[k];
   });
  }
@@ -1951,6 +2470,7 @@ async function cloudSync(force){
  if(result.ok){
   S.lastSync=new Date().toISOString();view.driveError=null;persistLocal();
   try{fr=await syncFiles()}catch(e){fr.errs++}
+  setTimeout(openPendingImport,300);
  }else view.driveError=result.error;
  view.syncInfo='build '+BUILD+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
  if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
@@ -1968,7 +2488,7 @@ function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view
 function render(){
  var c=view.page==='class'?classById(view.classId):null;
  var head=c?pal(c.color):{bg:'var(--hdr)',ink:'var(--hdrInk)',ink2:'var(--hdrInk2)',bar:'var(--hdrBar)'};
- var title=c?c.name:(view.page==='apps'?'Applications':S.owner);
+ var title=c?c.name:(view.page==='apps'?'Applications':(view.page==='install'?'Get the app':S.owner));
  var eyebrow=c?[c.code,c.day,c.room].filter(Boolean).join(' \u00b7 '):S.term;
  var sub='';
 
@@ -1978,6 +2498,7 @@ function render(){
  else if(view.page==='calendar')body=viewCalendar();
  else if(view.page==='professors')body=viewProfessors();
  else if(view.page==='apps')body=viewApps();
+ else if(view.page==='install')body=viewInstall();
  else if(view.page==='class')body=viewClass(c);
 
  app.innerHTML='<div class="wrap">'
@@ -2163,6 +2684,7 @@ function sidebar(c){
   +sideItem('data-go','calendar','Calendar',view.page==='calendar')
   +sideItem('data-go','professors','People',view.page==='professors')
   +sideItem('data-go','apps','Applications',view.page==='apps')
+  +(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))
   +'<p class="slabel">Classes</p>';
  S.classes.forEach(function(cl){
   var p=pal(cl.color),on=c&&c.id===cl.id;
@@ -2241,8 +2763,9 @@ function viewHome(){
    +'<p style="color:var(--ink2);margin-bottom:14px">Load your backup to bring everything in, or start fresh by adding a class.</p>'
    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
    +'<label class="fakebtn" style="background:#33312C;color:#fff;border-color:#33312C"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
-   +'<button data-add="class">Add a class</button></div></div>';
+   +'<button data-add="class">Add a class</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
  }
+ h+=homeInstallCard();
  h+='<div class="hero"><div style="display:flex;align-items:center;gap:16px">'
   +'<label class="hero-av" title="Click to change your picture">'
   +'<input type="file" accept="image/*" data-photo="me" style="display:none">'
@@ -2270,7 +2793,7 @@ function viewHome(){
  else if(!list.length){h+='<p class="empty">Nothing due in this stretch. Add an assignment from a class page.</p>'}
  else{h+='<div class="cards">'+list.map(function(x){return dueCard(x.t,x.c,x.kind)}).join('')+'</div>'}
 
- h+='<div class="rowhead" style="margin-top:30px"><h2 style="font-size:20px">Your classes</h2><button data-add="class">Add class</button></div>'
+ h+='<div class="rowhead" style="margin-top:30px"><h2 style="font-size:20px">Your classes</h2><span style="display:flex;gap:8px;flex-wrap:wrap"><button data-xact="importclass">Import a shared class</button><button data-add="class">Add class</button></span></div>'
   +'<div class="classcards">'+S.classes.map(classCard).join('')+'</div>';
  h+='<div style="margin-top:26px;display:flex;gap:8px;flex-wrap:wrap">'+coverControls('home',S)+'</div>';
  return h;
@@ -2339,7 +2862,7 @@ function classCard(c){
 }
 
 function viewClasses(){
- return '<div class="rowhead"><h2 style="font-size:20px">All classes</h2><button data-add="class">Add class</button></div>'
+ return '<div class="rowhead"><h2 style="font-size:20px">All classes</h2><span style="display:flex;gap:8px;flex-wrap:wrap"><button data-xact="importclass">Import a shared class</button><button data-add="class">Add class</button></span></div>'
  +'<div class="classcards">'+S.classes.map(classCard).join('')+'</div>';
 }
 
@@ -2375,7 +2898,7 @@ function viewCalendar(){
  var h=calendarGrid();
  var t=today(),end=new Date(t);end.setDate(t.getDate()+7);
  var wk=allTasks().filter(function(x){var d=parseISO(x.t.due);return d&&d>=t&&d<end}).sort(function(a,b){return a.t.due<b.t.due?-1:1});
- h+='<div class="rowhead" style="margin-top:26px"><h2>Next seven days</h2></div>';
+ h+='<div class="rowhead" style="margin-top:26px"><h2>Next seven days</h2><button data-xact="ics:">Import from a calendar</button></div>';
  if(!wk.length)h+='<p class="empty">Clear week ahead.</p>';
  else{
   var days={};wk.forEach(function(x){(days[x.t.due]=days[x.t.due]||[]).push(x)});
@@ -2604,6 +3127,8 @@ function viewClass(c){
 
  m+='<div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">'
   +'<button data-edit="class" data-c="'+c.id+'">Edit class</button>'
+  +'<button data-xact="shareclass:'+c.id+'">Share this class</button>'
+  +'<button data-xact="ics:'+c.id+'">Import from a calendar</button>'
   +coverControls(c.id,c)
   +'</div>';
  m+='<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">'

@@ -1,14 +1,30 @@
 {
-  "name": "Jae's hub",
-  "short_name": "Hub",
+  "name": "Doable",
+  "short_name": "Doable",
+  "description": "Classes, due dates and to-dos that follow you from your phone to your computer.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#FBFAF8",
+  "background_color": "#F7F3EA",
   "theme_color": "#23201B",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
