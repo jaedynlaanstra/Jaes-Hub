@@ -1524,6 +1524,7 @@ async function syncOnce(tok){
   var r=await driveApi('files/'+id+'?alt=media',{},tok);
   var remote=null;
   if(r.ok){try{remote=await r.json()}catch(e){}}
+  view.syncInfo='build v21 · this device settings: '+(S.settingsSavedAt||'none')+' · cloud settings: '+((remote&&remote.state&&remote.state.settingsSavedAt)||'none')+' · cloud saved: '+((remote&&remote.savedAt)||'none');
   if(remote&&remote.state){
    if(!S.everSynced&&remote.state.classes&&remote.state.classes.length&&(!S.classes||!S.classes.length)){
     // this device has nothing of its own yet: take the cloud copy as-is, no merge needed
@@ -2458,6 +2459,7 @@ function modalHtml(){
    +(S.driveOn
      ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
        +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
+       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build v21')+'</p>'
        +'<button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
        +'<button data-drivesignout="1" style="color:#A34A3F">Disconnect Google Drive</button>'
      : '<button data-driveconnect="1">Sign in with Google to sync</button>'
