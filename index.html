@@ -37,21 +37,21 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .wrap{width:100%;margin:0;padding:0}
 .layout{display:flex;min-height:100vh;align-items:stretch}
 .side{width:242px;flex:0 0 242px;background:var(--sideBg);color:#EAE6DC;position:sticky;top:0;align-self:flex-start;height:100vh;min-height:100vh;overflow:hidden;padding:26px 14px 18px;display:flex;flex-direction:column}
-.sidehide{position:absolute;right:10px;top:26px;background:rgba(255,255,255,.08);border:none;color:#C6C0B4;border-radius:7px;padding:5px 8px;cursor:pointer;line-height:1;font-size:13px}
-.sidehide:hover{background:rgba(255,255,255,.16);color:#FFFDF8}
-.sideshow{position:fixed;left:16px;top:16px;z-index:65;width:38px;height:38px;border-radius:10px;background:var(--sideBg);border:none;color:#EAE6DC;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;padding:0}
+.sidehide{position:absolute;right:10px;top:26px;background:rgba(255,255,255,.08);border:none;color:var(--sideInk,#C6C0B4);border-radius:7px;padding:5px 8px;cursor:pointer;line-height:1;font-size:13px}
+.sidehide:hover{background:rgba(255,255,255,.16);color:var(--sideBright,#FFFDF8)}
+.sideshow{position:fixed;left:16px;top:16px;z-index:65;width:38px;height:38px;border-radius:10px;background:var(--sideBg);border:none;color:var(--sideBright,#EAE6DC);cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;padding:0}
 .sideshow svg{width:17px;height:17px;fill:#EAE6DC}
 .sideshow:hover{filter:brightness(1.2)}
 .me{display:flex;align-items:center;gap:11px;padding:0 10px 20px}
 .me .avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 .me .avatarempty{width:42px;height:42px;border-radius:50%;flex-shrink:0;cursor:pointer;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center}
-.me .avatarempty svg{width:22px;height:22px;fill:#8E877A}
+.me .avatarempty svg{width:22px;height:22px;fill:#8E877A;fill:color-mix(in srgb,var(--sideInk,#C6C0B4) 62%,var(--sideBg,#23201B))}
 .me .avatarempty:hover,.me .avatar:hover{opacity:.85}
-.brand{font-size:16.5px;font-weight:500;color:#FFFDF8}
-.brandsub{font-size:12px;color:#948D80}
-.sitem{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:14px;color:#C6C0B4;cursor:pointer;line-height:1.35}
-.sitem:hover{background:rgba(255,255,255,.07);color:#FFFDF8}
-.sitem.on{background:rgba(255,255,255,.11);color:#FFFDF8}
+.brand{font-size:16.5px;font-weight:500;color:var(--sideBright,#FFFDF8)}
+.brandsub{font-size:12px;color:var(--sideSoft,#A49D90)}
+.sitem{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:14px;color:var(--sideInk,#C6C0B4);cursor:pointer;line-height:1.35}
+.sitem:hover{background:rgba(255,255,255,.07);color:var(--sideBright,#FFFDF8)}
+.sitem.on{background:rgba(255,255,255,.11);color:var(--sideBright,#FFFDF8)}
 .sitem .nm2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pickpanel,.modal,.appgrid,.tbl{scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.14) transparent}
 .pickpanel::-webkit-scrollbar,.modal::-webkit-scrollbar{width:7px}
@@ -69,10 +69,11 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .side::-webkit-scrollbar{width:0;height:0}
 .side{scrollbar-width:none}
 .sidefoot{border-top:1px solid rgba(255,255,255,.13);padding-top:10px;margin-top:10px;flex-shrink:0}
-.slabel{font-size:11px;color:#7C7568;padding:22px 10px 7px;letter-spacing:.05em}
+.slabel{font-size:11px;color:var(--sideSoft,#A49D90);opacity:.8;padding:22px 10px 7px;letter-spacing:.05em}
 .sdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .ssub{margin:3px 0 8px 19px;padding-left:12px;border-left:1px solid rgba(255,255,255,.15)}
-.ssub .sitem{font-size:13px;padding:6px 10px;color:#A49D90}
+.ssub .sitem{font-size:13px;padding:6px 10px;color:var(--sideSoft,#A49D90)}
+.ssub .sitem:hover{color:var(--sideBright,#FFFDF8)}
 .main{flex:1;min-width:0;background:var(--card)}
 .menubtn{display:none;background:rgba(0,0,0,.06);border:none;border-radius:8px;padding:7px 11px;margin-bottom:14px;font-size:13px}
 .backdrop{position:fixed;inset:0;background:rgba(28,26,22,.42);z-index:55}
@@ -105,7 +106,7 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .hero-av:hover .avatar-lg{opacity:.88}
 .hero .day{font-size:34px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
 .hero .date{font-size:15px;color:var(--ink2);margin-top:4px}
-.wx{position:relative;overflow:hidden;display:flex;align-items:center;gap:13px;border-radius:14px;padding:10px 18px 10px 12px;min-width:250px;background:var(--sideBg);color:#EAE6DC;isolation:isolate}
+.wx{position:relative;overflow:hidden;display:flex;align-items:center;gap:13px;border-radius:14px;padding:10px 18px 10px 12px;min-width:250px;background:var(--sideBg);color:var(--sideBright,#EAE6DC);isolation:isolate}
 .wx .wxicon{width:48px;height:48px;flex-shrink:0;display:block}
 .wx::before,.wx::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none}
 .wx .temp{font-size:28px;font-weight:500;line-height:1}
@@ -322,14 +323,14 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .pickhead:active{cursor:grabbing}
 .pickgrip{width:26px;height:4px;border-radius:3px;background:var(--line2)}
 .pickbtn{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;background:var(--sideBg);border:none;box-shadow:0 4px 16px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:70;padding:0}
-.pickbtn svg{width:21px;height:21px;fill:#EAE6DC}
+.pickbtn svg{width:21px;height:21px;fill:var(--sideBright,#EAE6DC)}
 .pickbtn:hover{filter:brightness(1.15)}
 .pickpanel{overscroll-behavior:contain;position:fixed;right:22px;bottom:80px;width:330px;max-height:76vh;overflow-y:auto;background:var(--card);border:1px solid var(--line2);border-radius:16px;box-shadow:0 12px 44px rgba(0,0,0,.18);padding:18px;z-index:71}
 .pickpanel h3{font-size:15px;margin-bottom:4px}
 .pickpanel .sub2{font-size:12px;color:var(--ink2);margin-bottom:14px}
 .pickpanel .lab{font-size:11px;color:var(--ink3);letter-spacing:.05em;margin:16px 0 8px}
 .crow{display:flex;align-items:center;gap:9px;padding:5px 0}
-.crow .cname{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crow .cname{flex:1;min-width:0;font-size:13px;line-height:1.25}.crow .chint{display:block;font-size:11px;color:var(--ink3);margin-top:1px}
 .crow input[type=color]{width:30px;height:30px;padding:0;border:1px solid var(--line2);border-radius:8px;background:none;cursor:pointer;flex-shrink:0}
 .crow input[type=text]{width:90px;font-size:12px;padding:6px 8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .preset{display:flex;align-items:center;gap:8px;width:100%;text-align:left;margin-bottom:6px}
@@ -746,16 +747,16 @@ function lum(hx){
 }
 function contrast(a,b){var l1=lum(a),l2=lum(b);if(l1<l2){var t=l1;l1=l2;l2=t}return (l1+0.05)/(l2+0.05)}
 var SURFACES=[
- {key:'banner',label:'Header band'},
- {key:'when',label:'When and where card'},
- {key:'prof',label:'Professor card'},
- {key:'next',label:'Upcoming card'},
- {key:'rail',label:'Panel behind the cards'},
- {key:'mini',label:'Checklist strip'},
- {key:'files',label:'Files card'},
- {key:'links',label:'Links card'},
- {key:'done',label:'Previously completed'},
- {key:'asg',label:'Assignments table'}
+ {key:'banner',label:'Page header (top band)'},
+ {key:'when',label:'Class time and place box'},
+ {key:'prof',label:'Teacher box'},
+ {key:'next',label:'Coming up box'},
+ {key:'rail',label:'Background behind the boxes'},
+ {key:'mini',label:'Checklist bar'},
+ {key:'files',label:'Files box'},
+ {key:'links',label:'Links box'},
+ {key:'done',label:'Finished assignments box'},
+ {key:'asg',label:'Assignments list'}
 ];
 function surfLabel(key){for(var i=0;i<SURFACES.length;i++){if(SURFACES[i].key===key)return SURFACES[i].label}return key}
 function surfGet(key,part){
@@ -780,15 +781,18 @@ function pencil(key){
   +'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17.2V21h3.8L17.8 10 14 6.2 3 17.2zM20.7 7.1a1 1 0 0 0 0-1.4l-2.4-2.4a1 1 0 0 0-1.4 0L15 5.2 18.8 9l1.9-1.9z"/></svg></button>';
 }
 var CHROME=[
- {key:'sideBg',label:'Sidebar',def:'#23201B'},
- {key:'paper',label:'Page background',def:'#FBFAF8'},
- {key:'card',label:'Card background',def:'#FFFFFF'},
- {key:'doneBg',label:'Completed box',def:'#FAF0EF'},
- {key:'ink',label:'Main text',def:'#33312C'},
- {key:'head',label:'Headings',def:'#33312C'},
- {key:'ink2',label:'Secondary text',def:'#6B675F'},
- {key:'ink3',label:'Faint text and hints',def:'#A29D93'},
- {key:'link',label:'Links',def:'#33312C'}
+ {key:'sideBg',label:'Menu background',hint:'The dark bar on the left, or the menu on your phone',def:'#23201B'},
+ {key:'sideInk',label:'Menu text',hint:'The page names in the menu',def:'#C6C0B4'},
+ {key:'sideBright',label:'Menu highlight text',hint:'Your name, the page you are on, and the weather box',def:'#FFFDF8'},
+ {key:'sideSoft',label:'Menu small text',hint:'Pages under a class (Assignments, Files), the Classes label, and the term under your name',def:'#A49D90'},
+ {key:'paper',label:'Page background',hint:'The colour behind everything',def:'#FBFAF8'},
+ {key:'card',label:'Boxes and popups',hint:'The white areas: cards, popups and text boxes',def:'#FFFFFF'},
+ {key:'doneBg',label:'Finished items background',hint:'The box behind things you have completed',def:'#FAF0EF'},
+ {key:'ink',label:'Main text',hint:'Most of the writing on the page',def:'#33312C'},
+ {key:'head',label:'Titles and headings',hint:'Big titles like your class names',def:'#33312C'},
+ {key:'ink2',label:'Softer text',hint:'Dates, labels and less important writing',def:'#6B675F'},
+ {key:'ink3',label:'Faintest text',hint:'Hints and placeholder text',def:'#A29D93'},
+ {key:'link',label:'Links',hint:'The colour of clickable links',def:'#33312C'}
 ];
 function chromeHex(key){
  var o=S.theme&&S.theme.chrome&&S.theme.chrome[key];
@@ -895,7 +899,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v35';
+var BUILD='v37';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2792,11 +2796,14 @@ function pickerHtml(){
  h+='<p class="lab">THE REST OF THE SITE</p>';
  h+=CHROME.map(function(ch){
   var hx=chromeHex(ch.key);
-  return '<div class="crow"><span class="cname">'+esc(ch.label)+'</span>'
+  return '<div class="crow"><span class="cname">'+esc(ch.label)+(ch.hint?'<small class="chint">'+esc(ch.hint)+'</small>':'')+'</span>'
    +'<input type="color" value="'+hx+'" data-themechrome="'+ch.key+'" aria-label="'+esc(ch.label)+'">'
    +'<input type="text" value="'+hx+'" data-themechromehex="'+ch.key+'" spellcheck="false"></div>';
  }).join('');
 
+ if(contrast(chromeHex('sideInk'),chromeHex('sideBg'))<3||contrast(chromeHex('sideBright'),chromeHex('sideBg'))<3||contrast(chromeHex('sideSoft'),chromeHex('sideBg'))<2.5){
+  h+='<p class="hint" style="color:#A34A3F;margin:6px 0">Some menu text is hard to read on the menu background. Try a lighter or darker text colour.</p>';
+ }
  var bad=[];
  S.classes.forEach(function(c){
   var set=deriveSet(palHex(c.color));
