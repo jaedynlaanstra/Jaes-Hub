@@ -895,7 +895,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v34';
+var BUILD='v35';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1369,6 +1369,7 @@ async function importAll(file){
  var d=JSON.parse(text);
  if(!d||!d.state||!d.state.classes)throw new Error('not a backup');
  S=d.state;
+ syncVer=null;
  FILES={};
  for(var k in (d.files||{})){FILES[k]=d.files[k].map(function(f){f.saved=false;f.chunks=0;return f})}
  normalize();
@@ -2299,6 +2300,7 @@ async function initCloud(){
 }
 function handleSession(session){
  var u=(session&&session.user)||null;
+ if(!u||!sbUser||sbUser.id!==u.id){syncVer=null;syncedCanon=null}
  if(u&&onb&&onb.step===0)onbClose('done');
  if(u&&sbUser&&sbUser.id===u.id){sbUser=u;return}
  if(!u&&!sbUser)return;
@@ -2453,15 +2455,29 @@ function mergeRemote(rs,force){
  normalize();ensureIds();rebaseline();applyTheme();reconcileFiles();
  return true;
 }
+var syncVer=null,syncedCanon=null;   // the cloud version we last matched, and what the cloud held at that version
 async function syncOnce(force){
  var uid=sbUser.id,changed=false;
+ // Cheap check first: fetch just the version number (a few bytes). If nobody else changed the cloud copy since our
+ // last sync there is nothing to download, and we only need to upload if this device changed something.
+ if(syncVer!==null&&!force){
+  var q0=await sb.from('hub_state').select('version').eq('user_id',uid).maybeSingle();
+  if(q0.error)return{ok:false,error:q0.error.message};
+  if(q0.data&&q0.data.version===syncVer){
+   var mine0=payloadOf(S),c0=canon(mine0);
+   if(c0===syncedCanon)return{ok:true,changed:false};
+   var up0=await sb.from('hub_state').update({state:mine0,version:syncVer+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',syncVer).select('version');
+   if(up0.error)return{ok:false,error:up0.error.message};
+   if(up0.data&&up0.data.length){syncVer=syncVer+1;syncedCanon=c0;return{ok:true,changed:false}}
+  }
+ }
  for(var attempt=0;attempt<5;attempt++){
   var q=await sb.from('hub_state').select('state,version').eq('user_id',uid).maybeSingle();
   if(q.error)return{ok:false,error:q.error.message};
   var row=q.data;
   if(!row){
    var ins=await sb.from('hub_state').insert({user_id:uid,state:payloadOf(S),version:1});
-   if(!ins.error){S.everSynced=true;return{ok:true,changed:changed}}
+   if(!ins.error){S.everSynced=true;syncVer=1;syncedCanon=canon(payloadOf(S));return{ok:true,changed:changed}}
    if(ins.error.code==='23505')continue;
    return{ok:false,error:ins.error.message};
   }
@@ -2469,10 +2485,11 @@ async function syncOnce(force){
   if(!mergeRemote(row.state,force))return{ok:false,error:'This device already has different data than your cloud account. Press Sync now to choose which to keep.'};
   var mine=payloadOf(S);
   if(canon(mine)!==before)changed=true;
-  if(canon(mine)===canon(row.state||{}))return{ok:true,changed:changed};
+  var cm=canon(mine);
+  if(cm===canon(row.state||{})){syncVer=row.version;syncedCanon=cm;return{ok:true,changed:changed}}
   var up=await sb.from('hub_state').update({state:mine,version:row.version+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',row.version).select('version');
   if(up.error)return{ok:false,error:up.error.message};
-  if(up.data&&up.data.length)return{ok:true,changed:changed};
+  if(up.data&&up.data.length){syncVer=row.version+1;syncedCanon=cm;return{ok:true,changed:changed}}
  }
  return{ok:false,error:'Sync is busy right now, it will retry.'};
 }
