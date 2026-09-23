@@ -211,7 +211,7 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
   .tbl td:nth-child(3),.tbl td:nth-child(4),.tbl td:nth-child(5),.tbl td:nth-child(6){order:2;font-size:12.5px;color:var(--ink2)}
   .tbl td:nth-child(3){margin-left:32px}
   .modalbg{align-items:flex-end;padding:0}
-  .modal{max-width:none;width:100%;border-radius:18px 18px 0 0;max-height:90vh;overflow-y:auto;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
+  .modal{max-width:none;width:100%;border-radius:18px 18px 0 0;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
   .pickpanel{left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;max-height:72vh;border-radius:18px 18px 0 0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
   .pickbtn{right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
   .coverwrap{max-height:190px}
@@ -374,7 +374,9 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .daylist:last-child{border-bottom:none}
 .daylist .dh{font-size:12px;color:var(--ink3);margin-bottom:6px}
 .modalbg{position:fixed;inset:0;background:rgba(40,38,34,.35);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
-.modal{background:var(--card);border-radius:14px;padding:20px 22px;width:100%;max-width:400px}
+.modal{background:var(--card);border-radius:14px;padding:20px 22px;width:100%;max-width:400px;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;position:relative}
+.modal .acts{position:sticky;bottom:-20px;background:var(--card);padding:12px 0 4px;margin-top:12px;z-index:1}
+.modalx{float:right;position:sticky;top:-8px;margin:-8px -10px 0 8px;width:34px;height:34px;border-radius:50%;border:none;background:var(--paper);font-size:22px;line-height:1;cursor:pointer;color:var(--ink2);z-index:2;padding:0}
 .modal h3{font-size:16px;margin-bottom:14px}
 .field{margin-bottom:11px}
 .field label{display:block;font-size:12px;color:var(--ink2);margin-bottom:5px}
@@ -421,7 +423,7 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
   .tbl td:nth-child(3),.tbl td:nth-child(4),.tbl td:nth-child(5),.tbl td:nth-child(6){order:2;font-size:12.5px;color:var(--ink2)}
   .tbl td:nth-child(3){margin-left:32px}
   .modalbg{align-items:flex-end;padding:0}
-  .modal{max-width:none;width:100%;border-radius:18px 18px 0 0;max-height:90vh;overflow-y:auto;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
+  .modal{max-width:none;width:100%;border-radius:18px 18px 0 0;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
   .pickpanel{left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;max-height:72vh;border-radius:18px 18px 0 0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
   .pickbtn{right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
   .coverwrap{max-height:190px}
@@ -885,7 +887,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v28';
+var BUILD='v30';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1521,6 +1523,8 @@ document.addEventListener('click',function(e){
  }else if(a.indexOf('shareclass:')===0){openShareModal(a.slice(11));
  }else if(a.indexOf('ics:')===0){openIcsModal(a.slice(4));
  }else if(a==='importclass'){openImportModal('');
+ }else if(a==='openinstall'){view.modal=null;go('install');
+ }else if(a==='togglephoneapps'){try{localStorage.setItem('hub:phoneapps',phoneAppsOn()?'off':'on')}catch(err){}render();
  }else if(a==='instdismiss'){
   try{localStorage.setItem('hub:instdismiss','1')}catch(err){}
   render();
@@ -2106,6 +2110,71 @@ XM.icsgo=function(){
  ics=null;render();
 };
 
+
+/* ---------- on a phone, open the real app instead of the website ---------- */
+var PHONE_APPS=[
+ [/^https:\/\/outlook\.office\.com\/mail\/deeplink\/compose\?(.*)$/i,function(m){return 'ms-outlook://compose?'+m[1]}],
+ [/^https?:\/\/(outlook\.office(365)?\.com|outlook\.live\.com)/i,function(){return 'ms-outlook://'}],
+ [/^https?:\/\/mail\.google\.com/i,function(){return 'googlegmail://'}],
+ [/^https?:\/\/docs\.google\.com\/spreadsheets/i,function(){return 'googlesheets://'}],
+ [/^https?:\/\/docs\.google\.com\/presentation/i,function(){return 'googleslides://'}],
+ [/^https?:\/\/docs\.google\.com/i,function(){return 'googledocs://'}],
+ [/^https?:\/\/drive\.google\.com/i,function(){return 'googledrive://'}],
+ [/^https?:\/\/(www\.)?office\.com\/launch\/word/i,function(){return 'ms-word://'}],
+ [/^https?:\/\/(www\.)?office\.com\/launch\/excel/i,function(){return 'ms-excel://'}],
+ [/^https?:\/\/(www\.)?office\.com\/launch\/powerpoint/i,function(){return 'ms-powerpoint://'}],
+ [/^https?:\/\/teams\.microsoft\.com/i,function(){return 'msteams://'}],
+ [/^https?:\/\/(www\.)?canva\.com/i,function(){return 'canva://'}],
+ [/^https?:\/\/(www\.)?notion\.so/i,function(){return 'notion://'}],
+ [/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)/i,function(){return 'youtube://'}],
+ [/^https?:\/\/open\.spotify\.com/i,function(){return 'spotify://'}],
+ [/^https?:\/\/([a-z0-9-]+\.)?slack\.com/i,function(){return 'slack://'}]
+];
+function phoneAppsOn(){try{return localStorage.getItem('hub:phoneapps')!=='off'}catch(e){return true}}
+function phoneSchemeFor(url){
+ for(var i=0;i<PHONE_APPS.length;i++){var m=PHONE_APPS[i][0].exec(url);if(m)return PHONE_APPS[i][1](m)}
+ return null;
+}
+var phoneLaunch=function(scheme){location.href=scheme};
+function openPhoneApp(scheme,web){
+ var left=false;
+ function vis(){if(document.hidden)left=true}
+ function gone(){left=true}
+ document.addEventListener('visibilitychange',vis);window.addEventListener('pagehide',gone);window.addEventListener('blur',gone);
+ phoneLaunch(scheme);
+ // if the phone app is not installed nothing happens, so open the website instead
+ setTimeout(function(){
+  document.removeEventListener('visibilitychange',vis);window.removeEventListener('pagehide',gone);window.removeEventListener('blur',gone);
+  if(left||document.hidden)return;
+  var w=null;
+  try{w=window.open(web,'_blank')}catch(e){}
+  if(w){try{w.opener=null}catch(e){}}
+  else showOpenLink(web);   // the phone refused to open it on its own: offer a tap instead
+ },900);
+}
+function showOpenLink(url){
+ var old=document.getElementById('openlink');if(old)old.remove();
+ var b=document.createElement('div');b.id='openlink';
+ b.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:200;background:#33312C;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 24px rgba(0,0,0,.28);font-size:13.5px;max-width:calc(100vw - 24px)');
+ b.innerHTML='<span>That app did not open.</span><a href="" target="_blank" rel="noopener" style="background:#fff;color:#33312C;border-radius:9px;padding:7px 12px;font-weight:600;text-decoration:none">Open the website</a><button style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 4px" aria-label="Dismiss">\u00d7</button>';
+ b.querySelector('a').href=url;
+ b.querySelector('a').onclick=function(){setTimeout(function(){b.remove()},300)};
+ b.querySelector('button').onclick=function(){b.remove()};
+ document.body.appendChild(b);
+ setTimeout(function(){if(b.parentNode)b.remove()},12000);
+}
+document.addEventListener('click',function(e){
+ var a=e.target.closest&&e.target.closest('a[data-phoneapp]');
+ if(!a||onbPlatform()==='desktop'||!phoneAppsOn())return;
+ var scheme=phoneSchemeFor(a.href);
+ if(!scheme)return;
+ e.preventDefault();
+ openPhoneApp(scheme,a.href);
+},true);
+document.addEventListener('keydown',function(e){
+ if(e.key==='Escape'&&view.modal&&!document.getElementById('xm')&&!document.getElementById('onb'))closeModal();
+});
+
 /* ---------- new-version banner ---------- */
 var updChecking=false,updLast=0;
 function showUpdateBanner(){
@@ -2684,7 +2753,6 @@ function sidebar(c){
   +sideItem('data-go','calendar','Calendar',view.page==='calendar')
   +sideItem('data-go','professors','People',view.page==='professors')
   +sideItem('data-go','apps','Applications',view.page==='apps')
-  +(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))
   +'<p class="slabel">Classes</p>';
  S.classes.forEach(function(cl){
   var p=pal(cl.color),on=c&&c.id===cl.id;
@@ -3182,7 +3250,7 @@ function viewClass(c){
     +(ct.hours?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+'">'+esc(ct.hours)+'</p>':'')
     +(ct.email?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(ct.email)+'</p>':'')
     +'<div class="pbtns">'
-    +(ct.email?'<a href="'+mailto(ct,c)+'" target="_blank" rel="noopener"><button>Email</button></a>':'')
+    +(ct.email?'<a data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener"><button>Email</button></a>':'')
     +'<button data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button>'
     +'<label class="fakebtn"><input type="file" accept="image/*" data-photo="'+c.id+':'+ct.id+'" style="display:none">'+(ct.photo?'Photo':'Photo')+'</label>'
     +'<button data-paste="'+c.id+':'+ct.id+'">'+(view.paste===c.id+':'+ct.id?'Waiting':'Paste')+'</button>'
@@ -3256,7 +3324,7 @@ function viewApps(){
   if(view.appEdit){
    return '<button class="appcard editing" data-editapp="'+a.id+'">'+ic+'<span class="nm3">'+esc(a.title)+'</span></button>';
   }
-  return '<a class="appcard" href="'+esc(a.url)+'" target="_blank" rel="noopener">'+ic+'<span class="nm3">'+esc(a.title)+'</span></a>';
+  return '<a class="appcard" data-phoneapp="1" href="'+esc(a.url)+'" target="_blank" rel="noopener">'+ic+'<span class="nm3">'+esc(a.title)+'</span></a>';
  }).join('')+'</div>';
  return h;
 }
@@ -3274,7 +3342,7 @@ function viewProfessors(){
      +(ct.role?'<p style="font-size:11.5px;color:var(--ink2)">'+esc(ct.role)+'</p>':'')
      +(ct.office?'<p style="font-size:11.5px;color:var(--ink2)">'+esc(ct.office)+'</p>':'')
      +'<div style="display:flex;gap:6px;margin-top:7px">'
-     +(ct.email?'<a href="'+mailto(ct,c)+'" target="_blank" rel="noopener"><button>Email</button></a>':'')
+     +(ct.email?'<a data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener"><button>Email</button></a>':'')
      +'<button data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button></div></div></div>';
    }).join('')+'</div>';
  }).join('')+'</div>';
@@ -3352,6 +3420,8 @@ function modalHtml(){
        +'<button data-sbsignin="1">Sign in</button>'
        +'<button data-sbsignup="1">Create account</button>')
    +'<div class="synclab" style="margin-top:14px">MORE</div>'
+   +(isInstalledApp()?'':'<button data-xact="openinstall">Get the app on your phone</button>')
+   +(onbPlatform()!=='desktop'?'<button data-xact="togglephoneapps">Open apps in their phone apps: '+(phoneAppsOn()?'On':'Off')+'</button>':'')
    +'<button data-opencolours="1">Change colours</button>'
    +(remindersOn()
      ?'<button data-remindoff="1">Turn reminders off</button>'
@@ -3417,7 +3487,7 @@ function modalHtml(){
    +PALETTES.map(function(pp){return '<button class="sw '+(m.color===pp.id?'on':'')+'" style="background:'+pp.bg+'" data-sw="'+pp.id+'" aria-label="'+pp.name+'"></button>'}).join('')
    +'</div></div>';
  }
- return '<div class="modalbg" data-close="1"><div class="modal">'+h
+ return '<div class="modalbg" data-close="1"><div class="modal"><button class="modalx" data-close="1" aria-label="Close">\u00d7</button>'+h
   +'<div class="acts">'
   +(m.kind==='class'&&m.classId?'<button data-delclass="'+m.classId+'" style="margin-right:auto;color:#A34A3F">Delete class</button>':'')
   +(m.kind==='app'&&m.id?'<button data-delapp="'+m.id+'" style="margin-right:auto;color:#A34A3F">Remove app</button>':'')
