@@ -887,7 +887,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v30';
+var BUILD='v31';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2135,13 +2135,11 @@ function phoneSchemeFor(url){
  for(var i=0;i<PHONE_APPS.length;i++){var m=PHONE_APPS[i][0].exec(url);if(m)return PHONE_APPS[i][1](m)}
  return null;
 }
-var phoneLaunch=function(scheme){location.href=scheme};
-function openPhoneApp(scheme,web){
+function watchAppOpen(web){
  var left=false;
  function vis(){if(document.hidden)left=true}
  function gone(){left=true}
  document.addEventListener('visibilitychange',vis);window.addEventListener('pagehide',gone);window.addEventListener('blur',gone);
- phoneLaunch(scheme);
  // if the phone app is not installed nothing happens, so open the website instead
  setTimeout(function(){
   document.removeEventListener('visibilitychange',vis);window.removeEventListener('pagehide',gone);window.removeEventListener('blur',gone);
@@ -2156,20 +2154,24 @@ function showOpenLink(url){
  var old=document.getElementById('openlink');if(old)old.remove();
  var b=document.createElement('div');b.id='openlink';
  b.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:200;background:#33312C;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 24px rgba(0,0,0,.28);font-size:13.5px;max-width:calc(100vw - 24px)');
- b.innerHTML='<span>That app did not open.</span><a href="" target="_blank" rel="noopener" style="background:#fff;color:#33312C;border-radius:9px;padding:7px 12px;font-weight:600;text-decoration:none">Open the website</a><button style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 4px" aria-label="Dismiss">\u00d7</button>';
+ b.innerHTML='<span>That app did not open.</span><a href="" target="_blank" rel="noopener" style="background:#fff;color:#33312C;border-radius:9px;padding:7px 12px;font-weight:600;text-decoration:none">Open the website</a><button style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 4px" aria-label="Dismiss">×</button>';
  b.querySelector('a').href=url;
  b.querySelector('a').onclick=function(){setTimeout(function(){b.remove()},300)};
  b.querySelector('button').onclick=function(){b.remove()};
  document.body.appendChild(b);
  setTimeout(function(){if(b.parentNode)b.remove()},12000);
 }
+// The tap itself follows the app link. That is the one thing iPhones reliably accept from a Home Screen app,
+// so the link is swapped for the app address for the instant of the tap and put straight back.
 document.addEventListener('click',function(e){
  var a=e.target.closest&&e.target.closest('a[data-phoneapp]');
  if(!a||onbPlatform()==='desktop'||!phoneAppsOn())return;
- var scheme=phoneSchemeFor(a.href);
+ var web=a.href,scheme=phoneSchemeFor(web);
  if(!scheme)return;
- e.preventDefault();
- openPhoneApp(scheme,a.href);
+ var orig=a.getAttribute('href'),tgt=a.getAttribute('target');
+ a.setAttribute('href',scheme);a.removeAttribute('target');
+ setTimeout(function(){a.setAttribute('href',orig);if(tgt)a.setAttribute('target',tgt)},60);
+ watchAppOpen(web);
 },true);
 document.addEventListener('keydown',function(e){
  if(e.key==='Escape'&&view.modal&&!document.getElementById('xm')&&!document.getElementById('onb'))closeModal();
@@ -3250,7 +3252,7 @@ function viewClass(c){
     +(ct.hours?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+'">'+esc(ct.hours)+'</p>':'')
     +(ct.email?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(ct.email)+'</p>':'')
     +'<div class="pbtns">'
-    +(ct.email?'<a data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener"><button>Email</button></a>':'')
+    +(ct.email?'<a class="fakebtn" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener" style="text-decoration:none">Email</a>':'')
     +'<button data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button>'
     +'<label class="fakebtn"><input type="file" accept="image/*" data-photo="'+c.id+':'+ct.id+'" style="display:none">'+(ct.photo?'Photo':'Photo')+'</label>'
     +'<button data-paste="'+c.id+':'+ct.id+'">'+(view.paste===c.id+':'+ct.id?'Waiting':'Paste')+'</button>'
@@ -3342,7 +3344,7 @@ function viewProfessors(){
      +(ct.role?'<p style="font-size:11.5px;color:var(--ink2)">'+esc(ct.role)+'</p>':'')
      +(ct.office?'<p style="font-size:11.5px;color:var(--ink2)">'+esc(ct.office)+'</p>':'')
      +'<div style="display:flex;gap:6px;margin-top:7px">'
-     +(ct.email?'<a data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener"><button>Email</button></a>':'')
+     +(ct.email?'<a class="fakebtn" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener" style="text-decoration:none">Email</a>':'')
      +'<button data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button></div></div></div>';
    }).join('')+'</div>';
  }).join('')+'</div>';
