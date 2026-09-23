@@ -1040,10 +1040,25 @@ function seedScratch(){
   c.links.push({title:'Go to Scratch',url:'https://scratch.mit.edu/',pinned:true});
  }
 }
+// items that were seeded without an id get a deterministic one (same content => same id on every device),
+// so two devices never end up with duplicates of the same seeded item
+function detId(o){
+ var s=(o.title||o.name||'')+'|'+(o.url||o.due||'')+'|'+(o.email||'');
+ var h=5381;for(var i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))|0}
+ return 'g'+(h>>>0).toString(36);
+}
 function ensureIds(){
  S.classes.forEach(function(c){
-  (c.links||[]).forEach(function(l){if(!l.id)l.id=uid()});
-  (c.sections||[]).forEach(function(sc){if(!sc.id)sc.id=uid()});
+  ['assignments','tasks','contacts','links','sections'].forEach(function(l){
+   var used={};
+   (c[l]||[]).forEach(function(x){if(x.id)used[x.id]=1});
+   (c[l]||[]).forEach(function(x){
+    if(x.id)return;
+    var id=detId(x),n=1;
+    while(used[id]){n++;id=detId(x)+'-'+n}
+    used[id]=1;x.id=id;
+   });
+  });
  });
 }
 function normalize(){
@@ -1109,8 +1124,43 @@ function persistLocal(){
  try{sset('hub:state',JSON.stringify(S)).catch(function(){view.storageOk=false})}
  catch(e){view.storageOk=false}
 }
+/* ---------- change tracking: stamps edits and records deletions so both sync ---------- */
+var LISTS=['assignments','tasks','contacts','links','sections'];
+var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook'];
+var SEEN=null;
+var TOMB_DAYS=180;
+function fp(o){return JSON.stringify(o,function(k,v){return k==='savedAt'?undefined:v})}
+function walkState(cb){
+ (S.classes||[]).forEach(function(c){
+  var o={};CLASS_KEYS.forEach(function(k){o[k]=c[k]});
+  cb('c:'+c.id,c,fp(o));
+  LISTS.forEach(function(l){(c[l]||[]).forEach(function(x){if(x.id)cb('i:'+c.id+':'+l+':'+x.id,x,fp(x))})});
+ });
+}
+var SETTINGS_SEEN=null;
+function settingsFp(){var o={};SETTINGS_KEYS.forEach(function(k){o[k]=S[k]});return JSON.stringify(o)}
+function rebaseline(){SEEN={};walkState(function(k,o,j){SEEN[k]=j});SETTINGS_SEEN=settingsFp()}
+function trackChanges(){
+ if(!SEEN){rebaseline();return}
+ var now=new Date().toISOString(),cur={};
+ S.deleted=S.deleted||{};
+ var sf=settingsFp();
+ if(sf!==SETTINGS_SEEN){S.settingsSavedAt=now;SETTINGS_SEEN=sf}
+ walkState(function(k,o,j){
+  cur[k]=1;
+  if(!(k in SEEN)){if(!o.savedAt)o.savedAt=now}
+  else if(SEEN[k]!==j)o.savedAt=now;
+  SEEN[k]=j;
+ });
+ Object.keys(SEEN).forEach(function(k){
+  if(cur[k])return;
+  delete SEEN[k];
+  if(k.charAt(0)==='i'&&!classById(k.split(':')[1]))return; // whole class deleted: its own record covers the items
+  S.deleted[k]=now;
+ });
+}
 function save(){
- S.settingsSavedAt=new Date().toISOString();
+ trackChanges();
  scheduleDriveSync();
  persistLocal();
 }
@@ -1175,6 +1225,7 @@ async function load(){
  }catch(e){}
  normalize();
  ensureIds();
+ rebaseline();
  if(!S.seeded){seedDueDates();S.seeded=true;save()}
  if(!S.seededProfs){seedProfs();S.seededProfs=true;save()}
  if(!S.timesParsed){addTimes();S.timesParsed=true;save()}
@@ -1303,6 +1354,8 @@ async function importAll(file){
  FILES={};
  for(var k in (d.files||{})){FILES[k]=d.files[k].map(function(f){f.saved=false;f.chunks=0;return f})}
  normalize();
+ ensureIds();
+ rebaseline();
  save();
  for(var cid in FILES){await saveFiles(cid)}
  view.page='home';render();
@@ -1492,6 +1545,30 @@ function mergeState(local,remote){
   });
   out.settingsSavedAt=remote.settingsSavedAt;
  }
+ // deletions: a deletion wins unless the item was edited after it was deleted
+ var del={};
+ [local.deleted,remote.deleted].forEach(function(m){
+  Object.keys(m||{}).forEach(function(k){if(!del[k]||newer(m[k],del[k]))del[k]=m[k]});
+ });
+ var cutoff=new Date(Date.now()-TOMB_DAYS*864e5).toISOString();
+ out.classes=out.classes.filter(function(c){
+  var t=del['c:'+c.id];
+  if(t&&!newer(c.savedAt,t))return false;
+  if(t)delete del['c:'+c.id];
+  return true;
+ });
+ out.classes.forEach(function(c){
+  LISTS.forEach(function(l){
+   c[l]=(c[l]||[]).filter(function(x){
+    var k='i:'+c.id+':'+l+':'+x.id,t=del[k];
+    if(t&&!newer(x.savedAt,t))return false;
+    if(t)delete del[k];
+    return true;
+   });
+  });
+ });
+ Object.keys(del).forEach(function(k){if(del[k]<cutoff)delete del[k]});
+ out.deleted=del;
  return out;
 }
 function newer(a,b){return (a||'')>(b||'')}
@@ -1524,7 +1601,7 @@ async function syncOnce(tok){
   var r=await driveApi('files/'+id+'?alt=media',{},tok);
   var remote=null;
   if(r.ok){try{remote=await r.json()}catch(e){}}
-  view.syncInfo='build v21 · this device settings: '+(S.settingsSavedAt||'none')+' · cloud settings: '+((remote&&remote.state&&remote.state.settingsSavedAt)||'none')+' · cloud saved: '+((remote&&remote.savedAt)||'none');
+  view.syncInfo='build v22 · this device settings: '+(S.settingsSavedAt||'none')+' · cloud settings: '+((remote&&remote.state&&remote.state.settingsSavedAt)||'none')+' · cloud saved: '+((remote&&remote.savedAt)||'none');
   if(remote&&remote.state){
    if(!S.everSynced&&remote.state.classes&&remote.state.classes.length&&(!S.classes||!S.classes.length)){
     // this device has nothing of its own yet: take the cloud copy as-is, no merge needed
@@ -1542,6 +1619,8 @@ async function syncOnce(tok){
     S=mergeState(S,remote.state);
    }
    S.everSynced=true;
+   S.deleted=S.deleted||{};
+   normalize();ensureIds();rebaseline();
    applyTheme();
   }else{
    S.everSynced=true;
@@ -2459,7 +2538,7 @@ function modalHtml(){
    +(S.driveOn
      ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
        +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
-       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build v21')+'</p>'
+       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build v22')+'</p>'
        +'<button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
        +'<button data-drivesignout="1" style="color:#A34A3F">Disconnect Google Drive</button>'
      : '<button data-driveconnect="1">Sign in with Google to sync</button>'
