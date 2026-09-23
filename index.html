@@ -895,7 +895,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v33';
+var BUILD='v34';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1531,6 +1531,11 @@ document.addEventListener('click',function(e){
  }else if(a.indexOf('shareclass:')===0){openShareModal(a.slice(11));
  }else if(a.indexOf('ics:')===0){openIcsModal(a.slice(4));
  }else if(a==='importclass'){openImportModal('');
+ }else if(a==='forgotpw'){
+  var fe2=(document.getElementById('sbEmail')||{}).value||'';fe2=fe2.trim();view.authEmail=fe2;
+  if(fe2.indexOf('@')<1){view.authNote=null;view.driveError='Type your email above first, then tap Forgot password.';render();return}
+  view.driveError=null;view.authNote='Sending\u2026';render();
+  sbForgot(fe2).then(function(err){if(err){view.driveError=err;view.authNote=null}else view.authNote=RESET_SENT;render()});
  }else if(a==='openinstall'){view.modal=null;go('install');
  }else if(a==='togglephoneapps'){try{localStorage.setItem('hub:phoneapps',phoneAppsOn()?'off':'on')}catch(err){}render();
  }else if(a==='instdismiss'){
@@ -1538,6 +1543,7 @@ document.addEventListener('click',function(e){
   render();
  }
 });
+
 
 /* ---------- first-run welcome: about the app, make an account, put it on your phone ---------- */
 var onb=null;
@@ -1610,9 +1616,10 @@ function buildOnb(){
    +'<label for="onbEmail">Email</label><input id="onbEmail" type="email" autocomplete="email" autocapitalize="none" value="'+esc(onb.email)+'">'
    +'<label for="onbPass">Password'+(up?' (at least 8 characters)':'')+'</label><input id="onbPass" type="password" autocomplete="'+(up?'new-password':'current-password')+'">'
    +'<label style="display:flex;gap:7px;align-items:center;margin:-4px 0 10px"><input type="checkbox" id="onbShow" style="width:auto;margin:0"> Show password</label>'
+   +(up?'<p style="font-size:12.5px;color:var(--ink3,#A29D93);margin:0 0 10px;line-height:1.45">Doable is a small independent project. Your hub is kept in its account, and the person who runs Doable could technically see it, so please do not store anything sensitive here.</p>':'')
    +'<p class="onbmsg" id="onbMsg"></p>'
    +'<button class="onbbtn" id="onbGo" data-onb="submit">'+(up?'Create account':'Sign in')+'</button>'
-   +'<div class="onbrow"><button class="onblink" data-onb="mode">'+(up?'I already have an account':'New here? Create an account')+'</button><button class="onblink" data-onb="skip">Skip for now</button></div>';
+   +'<div class="onbrow"><button class="onblink" data-onb="mode">'+(up?'I already have an account':'New here? Create an account')+'</button>'+(up?'':'<button class="onblink" data-onb="forgot">Forgot password?</button>')+'<button class="onblink" data-onb="skip">Skip for now</button></div>';
  }else if(onb.step===2){
   h+='<h2>Check your email</h2><p>We sent a confirmation link to <b>'+esc(onb.email)+'</b>. Open it, then come back to this page.</p>'
    +'<p class="onbmsg" id="onbMsg"></p>'
@@ -1677,6 +1684,13 @@ async function onbClick(e){
  else if(a==='signin'){onb.mode='in';onb.step=1;buildOnb()}
  else if(a==='mode'){onbRead();onb.mode=onb.mode==='up'?'in':'up';buildOnb()}
  else if(a==='skip'){onbClose('skipped')}
+ else if(a==='forgot'){
+  onbRead();
+  if(!onb.email||onb.email.indexOf('@')<1){onbMsg('Type your email above first, then tap Forgot password.');return}
+  onbMsg('Sending\u2026',true);
+  var fe=await sbForgot(onb.email);
+  onbMsg(fe||RESET_SENT,!fe);
+ }
  else if(a==='submit'){onbSubmit()}
  else if(a==='back'){onb.step=1;onb.mode='up';buildOnb()}
  else if(a==='resend'){
@@ -2185,6 +2199,38 @@ document.addEventListener('keydown',function(e){
  if(e.key==='Escape'&&view.modal&&!document.getElementById('xm')&&!document.getElementById('onb'))closeModal();
 });
 
+/* ---------- forgot password ---------- */
+async function sbForgot(email){
+ var c=await ensureSb();
+ if(!c)return 'Could not reach the sign-in service. Check your connection.';
+ var r=await c.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+ if(!r.error)return null;
+ return /rate limit|too many|seconds/i.test(r.error.message)?'Too many emails have been sent just now. Wait a few minutes and try again.':r.error.message;
+}
+var RESET_SENT='If that email has an account, a link to reset the password is on its way. Open it, then come back and sign in.';
+function openResetModal(){
+ xmOpen('<h2>Choose a new password</h2><p>Pick something you will remember, at least 8 characters.</p>'
+  +'<label for="xmPw1">New password</label><input id="xmPw1" type="password" autocomplete="new-password">'
+  +'<label for="xmPw2">Type it again</label><input id="xmPw2" type="password" autocomplete="new-password">'
+  +'<p class="xmsg" id="xmMsg"></p><div class="xacts"><button class="xbtn" data-xm="close">Cancel</button><button class="xbtn primary" data-xm="setpw" id="xmGo">Save new password</button></div>');
+}
+XM.setpw=async function(){
+ var a=(document.getElementById('xmPw1')||{}).value||'',b=(document.getElementById('xmPw2')||{}).value||'';
+ if(a.length<8){xmMsg('Use at least 8 characters.');return}
+ if(a!==b){xmMsg('The two passwords do not match.');return}
+ var g=document.getElementById('xmGo');if(g)g.disabled=true;
+ try{
+  var c=await ensureSb();
+  var r=await c.auth.updateUser({password:a});
+  if(r.error)throw r.error;
+  xmOpen('<h2>Password updated</h2><p>You are signed in with your new password. If you use Doable from your home screen, open it and sign in there with the new password.</p><div class="xacts"><button class="xbtn primary" data-xm="close">Done</button></div>');
+ }catch(e){
+  var g2=document.getElementById('xmGo');if(g2)g2.disabled=false;
+  xmMsg(/same/i.test(String(e&&e.message))?'Choose a password you have not used before.':String(e&&e.message||e));
+ }
+};
+
+
 /* ---------- new-version banner ---------- */
 var updChecking=false,updLast=0;
 function showUpdateBanner(){
@@ -2240,8 +2286,8 @@ function loadSupabaseLib(){
 async function ensureSb(){
  if(sb)return sb;
  if(!(await loadSupabaseLib()))return null;
- sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
- sb.auth.onAuthStateChange(function(ev,session){setTimeout(function(){handleSession(session)},0)});
+ sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{flowType:'implicit',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ sb.auth.onAuthStateChange(function(ev,session){setTimeout(function(){handleSession(session);if(ev==='PASSWORD_RECOVERY')openResetModal()},0)});
  return sb;
 }
 async function initCloud(){
@@ -3426,7 +3472,10 @@ function modalHtml(){
      +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0">'+esc(view.driveError)+'</p>':'')
      +'<div class="field" style="margin:0"><label for="sbEmail">Email</label><input id="sbEmail" type="email" autocomplete="email" autocapitalize="none" value="'+esc(view.authEmail||'')+'"></div>'
      +'<div class="field" style="margin:0"><label for="sbPass">Password</label><input id="sbPass" type="password" autocomplete="current-password"></div>'
-     +'<div class="sgrow"><button data-sbsignin="1">Sign in</button><button data-sbsignup="1">Create account</button></div>';
+     +'<div class="sgrow"><button data-sbsignin="1">Sign in</button><button data-sbsignup="1">Create account</button></div>'
+     +'<button class="ghost" data-xact="forgotpw" style="align-self:flex-start;font-size:13px">Forgot password?</button>'
+     +(view.authNote?'<p class="hint" style="color:#4C6F55;margin:0">'+esc(view.authNote)+'</p>':'')
+     +'<p class="hint" style="font-size:11.5px;margin:0">Doable is a small independent project. The person who runs it could technically see stored data, so please do not keep anything sensitive here.</p>';
   h='<h3>Settings</h3>'
    +sg('sync','Account and sync',syncRight,syncBody,!sbUser||!!view.driveError)
    +sg('hub','Your hub',S.owner,
