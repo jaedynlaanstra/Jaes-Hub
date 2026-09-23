@@ -1105,10 +1105,14 @@ function idbDo(mode,fn){
   r.onerror=function(){rej(r.error)};
  });
 }
-function save(){
- scheduleDriveSync();
+function persistLocal(){
  try{sset('hub:state',JSON.stringify(S)).catch(function(){view.storageOk=false})}
  catch(e){view.storageOk=false}
+}
+function save(){
+ S.settingsSavedAt=new Date().toISOString();
+ scheduleDriveSync();
+ persistLocal();
 }
 async function saveFiles(cid){
  var list=FILES[cid]||[];
@@ -1435,6 +1439,7 @@ function driveDisconnect(){
 async function driveApi(path,opts,tok){
  opts=opts||{};
  var r=await fetch('https://www.googleapis.com/drive/v3/'+path,Object.assign({},opts,{
+  cache:'no-store',
   headers:Object.assign({'Authorization':'Bearer '+tok},opts.headers||{})
  }));
  return r;
@@ -1467,6 +1472,7 @@ function sameData(local,remote){
  var total=Math.max(a.length,b.length,1);
  return (shared/total)>=0.8;
 }
+var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar'];
 function mergeState(local,remote){
  // field-by-field, most recently touched item wins, using each item's own savedAt
  if(!remote)return local;
@@ -1478,6 +1484,14 @@ function mergeState(local,remote){
   if(!lc){out.classes.push(rc);return}
   mergeClass(lc,rc);
  });
+ // whole-site settings (quick links, theme/colours, apps, banners, reminders, home cover, avatar):
+ // whichever device touched its settings more recently wins, as a set
+ if(newer(remote.settingsSavedAt,local.settingsSavedAt)){
+  SETTINGS_KEYS.forEach(function(k){
+   if(remote[k]!==undefined)out[k]=JSON.parse(JSON.stringify(remote[k]));
+  });
+  out.settingsSavedAt=remote.settingsSavedAt;
+ }
  return out;
 }
 function newer(a,b){return (a||'')>(b||'')}
@@ -1553,6 +1567,7 @@ function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
 async function driveSyncNow(isFirst,allowInteractive){
  if(!S.driveOn||driveSyncing)return;
  driveSyncing=true;
+ var startedAt=Date.now();
  if(view.modal&&view.modal.kind==='settings')render();
  var timedOut=false;
  var watchdog=setTimeout(function(){
@@ -1574,8 +1589,10 @@ async function driveSyncNow(isFirst,allowInteractive){
    if(timedOut)return;
   }
   view.driveError=result.ok?null:result.error;
-  save();
+  persistLocal();
  }catch(e){if(!timedOut)view.driveError=String(e&&e.message||e)}
+ var elapsed=Date.now()-startedAt;
+ if(elapsed<500)await wait(500-elapsed);
  clearTimeout(watchdog);
  if(timedOut)return;
  driveSyncing=false;
@@ -2441,7 +2458,7 @@ function modalHtml(){
    +(S.driveOn
      ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
        +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
-       +'<button data-syncnow="1">Sync now</button>'
+       +'<button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
        +'<button data-drivesignout="1" style="color:#A34A3F">Disconnect Google Drive</button>'
      : '<button data-driveconnect="1">Sign in with Google to sync</button>'
        +'<p class="hint" style="margin-top:6px">Keeps your phone and computer matched automatically.</p>')
