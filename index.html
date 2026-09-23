@@ -1067,6 +1067,7 @@ function normalize(){
   if(!c.sections)c.sections=[];
   if(!c.tasks)c.tasks=[];
   if(!c.links)c.links=[];
+  if(!c.files)c.files=[];
   if(!c.contacts){
    c.contacts=[];
    if(c.prof&&(c.prof.name||c.prof.email||c.prof.photo)){
@@ -1125,7 +1126,7 @@ function persistLocal(){
  catch(e){view.storageOk=false}
 }
 /* ---------- change tracking: stamps edits and records deletions so both sync ---------- */
-var LISTS=['assignments','tasks','contacts','links','sections'];
+var LISTS=['assignments','tasks','contacts','links','sections','files'];
 var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook'];
 var SEEN=null;
 var TOMB_DAYS=180;
@@ -1161,10 +1162,11 @@ function trackChanges(){
 }
 function save(){
  trackChanges();
- scheduleDriveSync();
+ scheduleCloudSync();
  persistLocal();
 }
-async function saveFiles(cid){
+async function saveFiles(cid,quiet){
+ if(!quiet&&mirrorFiles(cid))save();
  var list=FILES[cid]||[];
  for(var i=0;i<list.length;i++){
   var f=list[i];
@@ -1186,7 +1188,7 @@ async function saveFiles(cid){
    for(var k=0;k<n;k++)sdel('hub:fd:'+f.id+':'+k);
   }
  }
- var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,text:f.text,text:f.text,chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved}});
+ var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,text:f.text,text:f.text,chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
  try{await sset('hub:files:'+cid,JSON.stringify(index))}catch(e){}
  render();
 }
@@ -1213,10 +1215,10 @@ async function loadFiles(cid){
 }
 async function dropFile(cid,i){
  var f=FILES[cid][i];
- if(f.store==='idb'){await idbReady;try{await idbDo('readwrite',function(st){return st.delete(f.id)})}catch(e){}}
- for(var n=0;n<(f.chunks||0);n++)await sdel('hub:fd:'+f.id+':'+n);
+ await purgeFileData(f);
  FILES[cid].splice(i,1);
  saveFiles(cid);
+ cloudRemoveFile(f);
 }
 async function load(){
  try{
@@ -1236,12 +1238,16 @@ async function load(){
  if(!S.shorts){seedShorts();S.shorts=true;save()}
  if(!S.weights){seedWeights();S.weights=true;save()}
  setTimeout(checkReminders,1500);
- if(S.driveOn)ensureTokenClient().then(function(){driveSyncNow(false)});
  for(var i=0;i<S.classes.length;i++){
   var cid=S.classes[i].id;
   await loadFiles(cid);
  }
+ var mc=false;
+ S.classes.forEach(function(c){if(mirrorFiles(c.id))mc=true});
+ if(mc)save();
+ filesReady=true;
  render();
+ initCloud();
 }
 
 var WMO={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Cloudy',45:'Fog',48:'Freezing fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',56:'Freezing drizzle',57:'Freezing drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Showers',82:'Heavy showers',85:'Snow showers',86:'Snow showers',95:'Thunderstorms',96:'Thunderstorms',99:'Thunderstorms'};
@@ -1415,98 +1421,76 @@ async function enableReminders(){
  render();
 }
 setInterval(checkReminders,15*60*1000);
-var GCLIENT='176606967492-rf5812hmlduq3n7rqaj0up5g1461i99h.apps.googleusercontent.com';
-var DRIVE_SCOPE='https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
-var driveTok=null,driveTokenClient=null,driveReady=false,driveFileId=null,driveSyncing=false,driveDirty=false,driveTimer=null;
-function loadGis(){
- return new Promise(function(res){
-  if(window.google&&google.accounts)return res();
-  var s=document.createElement('script');
-  s.src='https://accounts.google.com/gsi/client';
-  s.onload=function(){res()};s.onerror=function(){res()};
-  document.head.appendChild(s);
- });
-}
-function isStandaloneApp(){
- try{return window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches}catch(e){return false}
-}
+/* ---------- cloud sync (Supabase): accounts, live updates, files ---------- */
+var SB_URL='https://sdmkflmnemxfaidlkdkv.supabase.co';
+var SB_KEY='sb_publishable_iVqy6dQhWkF_AA64xfdcKA_JdiKPV_m';
+var sb=null,sbUser=null,driveSyncing=false,cloudTimer=null,cloudAgain=false,rtChannel=null,filesReady=false;
+var DEVICE_KEYS=['lastSync','everSynced','driveOn'];
 function withTimeout(promise,ms,timeoutValue){
  return new Promise(function(res){
   var done=false;
   var t=setTimeout(function(){if(!done){done=true;res(timeoutValue)}},ms);
-  promise.then(function(v){if(!done){done=true;clearTimeout(t);res(v)}});
+  promise.then(function(v){if(!done){done=true;clearTimeout(t);res(v)}},function(){if(!done){done=true;clearTimeout(t);res(timeoutValue)}});
  });
 }
-async function ensureTokenClient(){
- if(driveTokenClient)return driveTokenClient;
- await loadGis();
- if(!window.google||!google.accounts)return null;
- driveTokenClient=google.accounts.oauth2.initTokenClient({client_id:GCLIENT,scope:DRIVE_SCOPE,callback:function(){}});
- return driveTokenClient;
-}
-async function driveConnect(){
- if(isStandaloneApp()){
-  alert('Google sign-in can\'t finish from this Home Screen app. Open this site in Safari directly (not the Home Screen icon) to sign in the first time, then you can go back to using the Home Screen icon.');
-  return;
- }
- var tc=await ensureTokenClient();
- if(!tc){alert('Could not reach Google. Check your connection and try again.');return}
- var signInPromise=new Promise(function(res){
-  tc.callback=function(resp){res(resp)};
-  tc.requestAccessToken({prompt:S.driveOn?'':'consent'});
+function loadSupabaseLib(){
+ return new Promise(function(res){
+  if(window.supabase)return res(true);
+  var s=document.createElement('script');
+  s.src='supabase.js';
+  s.onload=function(){res(!!window.supabase)};s.onerror=function(){res(false)};
+  document.head.appendChild(s);
  });
- var resp=await withTimeout(signInPromise,20000,null);
- if(resp&&resp.access_token){
-  driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};
-  S.driveOn=true;save();
-  driveSyncNow(true);
- }else{
-  alert(resp===null?'Google sign-in timed out. If you opened this from your phone\'s Home Screen icon, try opening it in Safari directly instead.':'Google sign-in was cancelled or blocked.');
- }
 }
-function requestToken(tc,prompt,ms){
- return withTimeout(new Promise(function(res){
-  tc.callback=function(resp){
-   if(resp&&resp.access_token){driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};res(driveTok.token)}
-   else res(null);
-  };
-  tc.requestAccessToken({prompt:prompt});
- }),ms,null);
+async function ensureSb(){
+ if(sb)return sb;
+ if(!(await loadSupabaseLib()))return null;
+ sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ sb.auth.onAuthStateChange(function(ev,session){setTimeout(function(){handleSession(session)},0)});
+ return sb;
 }
-async function driveToken(allowInteractive){
- if(driveTok&&driveTok.exp>Date.now()+30000)return driveTok.token;
- var tc=await ensureTokenClient();
- if(!tc)return null;
- if(allowInteractive){
-  // Home Screen apps on iOS can't do a quiet background refresh, and waiting on one
-  // first burns the tap's "this came from a real click" window, so the popup after it
-  // gets silently blocked too. Show the popup immediately instead, while it's still
-  // clearly tied to the tap.
-  return requestToken(tc,'consent',20000);
- }
- return requestToken(tc,'',8000);
+async function initCloud(){
+ var c=await ensureSb();
+ if(!c){view.driveError='Could not load the sync library. Check your connection.';return}
+ var r=await c.auth.getSession();
+ handleSession(r&&r.data&&r.data.session);
 }
-function driveDisconnect(){
- S.driveOn=false;driveTok=null;driveFileId=null;save();render();
+function handleSession(session){
+ var u=(session&&session.user)||null;
+ if(u&&sbUser&&sbUser.id===u.id){sbUser=u;return}
+ if(!u&&!sbUser)return;
+ sbUser=u;
+ if(u){startRealtime();scheduleCloudSync(50)}else{stopRealtime();driveSyncing=false}
+ if(!view.modal||view.modal.kind==='settings')render();
 }
-async function driveApi(path,opts,tok){
- opts=opts||{};
- var r=await fetch('https://www.googleapis.com/drive/v3/'+path,Object.assign({},opts,{
-  cache:'no-store',
-  headers:Object.assign({'Authorization':'Bearer '+tok},opts.headers||{})
- }));
- return r;
+function startRealtime(){
+ stopRealtime();
+ rtChannel=sb.channel('hub-'+sbUser.id)
+  .on('postgres_changes',{event:'*',schema:'public',table:'hub_state',filter:'user_id=eq.'+sbUser.id},function(){scheduleCloudSync(300)})
+  .subscribe();
 }
-async function driveFindOrCreate(tok){
- if(driveFileId)return driveFileId;
- var q=encodeURIComponent("name='hub-data.json' and 'appDataFolder' in parents and trashed=false");
- var r=await driveApi('files?q='+q+'&spaces=appDataFolder&fields=files(id)',{},tok);
- var d=await r.json();
- if(d.files&&d.files.length){driveFileId=d.files[0].id;return driveFileId}
- var cr=await driveApi('files',{method:'POST',headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({name:'hub-data.json',parents:['appDataFolder']})},tok);
- var cd=await cr.json();
- driveFileId=cd.id;return driveFileId;
+function stopRealtime(){
+ if(rtChannel&&sb){try{sb.removeChannel(rtChannel)}catch(e){}}
+ rtChannel=null;
+}
+async function sbAuth(mode){
+ var email=val('sbEmail'),pass=(document.getElementById('sbPass')||{}).value||'';
+ view.authEmail=email;
+ if(!email||!pass){view.driveError='Enter your email and a password.';render();return}
+ if(pass.length<6){view.driveError='Use a password of at least 6 characters.';render();return}
+ var c=await ensureSb();
+ if(!c){view.driveError='Could not load the sync library. Check your connection.';render();return}
+ view.driveError=null;
+ var r=mode==='up'?await c.auth.signUp({email:email,password:pass}):await c.auth.signInWithPassword({email:email,password:pass});
+ if(r.error)view.driveError=r.error.message;
+ else if(mode==='up'&&!(r.data&&r.data.session))view.driveError='Account created. Check your email to confirm it, then sign in.';
+ render();
+}
+async function sbSignOut(){
+ if(!confirm('Sign out of sync? Your data stays on this device, it just stops matching your other devices.'))return;
+ var c=await ensureSb();
+ if(c)await c.auth.signOut();
+ render();
 }
 function childIds(state){
  var out=[];
@@ -1539,7 +1523,7 @@ function mergeState(local,remote){
  });
  // whole-site settings (quick links, theme/colours, apps, banners, reminders, home cover, avatar):
  // whichever device touched its settings more recently wins, as a set
- if(newer(remote.settingsSavedAt,local.settingsSavedAt)){
+ if(settingsWin(remote,local)){
   SETTINGS_KEYS.forEach(function(k){
    if(remote[k]!==undefined)out[k]=JSON.parse(JSON.stringify(remote[k]));
   });
@@ -1561,7 +1545,7 @@ function mergeState(local,remote){
   LISTS.forEach(function(l){
    c[l]=(c[l]||[]).filter(function(x){
     var k='i:'+c.id+':'+l+':'+x.id,t=del[k];
-    if(t&&!newer(x.savedAt,t))return false;
+    if(t&&(l==='files'||!newer(x.savedAt,t)))return false;
     if(t)delete del[k];
     return true;
    });
@@ -1572,120 +1556,212 @@ function mergeState(local,remote){
  return out;
 }
 function newer(a,b){return (a||'')>(b||'')}
+// when two edits carry the exact same timestamp, pick the same winner on every device
+function classScalars(c){var o={};CLASS_KEYS.forEach(function(k){o[k]=c[k]});return o}
+function itemWins(rx,lx){if(rx.savedAt!==lx.savedAt)return newer(rx.savedAt,lx.savedAt);return canon(rx)>canon(lx)}
+function classWins(rc,lc){if(rc.savedAt!==lc.savedAt)return newer(rc.savedAt,lc.savedAt);return canon(classScalars(rc))>canon(classScalars(lc))}
+function settingsOf(st){var o={};SETTINGS_KEYS.forEach(function(k){o[k]=st[k]});return o}
+function settingsWin(r,l){if(r.settingsSavedAt!==l.settingsSavedAt)return newer(r.settingsSavedAt,l.settingsSavedAt);return canon(settingsOf(r))>canon(settingsOf(l))}
 function mergeList(localList,remoteList,key){
  localList=localList||[];remoteList=remoteList||[];
  var byKey={};localList.forEach(function(x){byKey[x[key]]=x});
  remoteList.forEach(function(rx){
   var lx=byKey[rx[key]];
   if(!lx){localList.push(rx);byKey[rx[key]]=rx;return}
-  if(newer(rx.savedAt,lx.savedAt))Object.assign(lx,rx);
+  if(itemWins(rx,lx))Object.assign(lx,rx);
  });
  return localList;
 }
 function mergeClass(lc,rc){
- if(newer(rc.savedAt,lc.savedAt)){
+ if(classWins(rc,lc)){
+  lc.savedAt=rc.savedAt;
   ['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook'].forEach(function(k){
    if(rc[k]!==undefined)lc[k]=rc[k];
   });
  }
- lc.assignments=mergeList(lc.assignments,rc.assignments,'id');
- lc.tasks=mergeList(lc.tasks,rc.tasks,'id');
- lc.contacts=mergeList(lc.contacts,rc.contacts,'id');
- lc.links=mergeList(lc.links,rc.links,'id');
- lc.sections=mergeList(lc.sections,rc.sections,'id');
+ LISTS.forEach(function(l){lc[l]=mergeList(lc[l],rc[l],'id')});
 }
 function touch(obj){obj.savedAt=new Date().toISOString();return obj}
-async function syncOnce(tok){
- try{
-  var id=await driveFindOrCreate(tok);
-  var r=await driveApi('files/'+id+'?alt=media',{},tok);
-  var remote=null;
-  if(r.ok){try{remote=await r.json()}catch(e){}}
-  view.syncInfo='build v22 · this device settings: '+(S.settingsSavedAt||'none')+' · cloud settings: '+((remote&&remote.state&&remote.state.settingsSavedAt)||'none')+' · cloud saved: '+((remote&&remote.savedAt)||'none');
-  if(remote&&remote.state){
-   if(!S.everSynced&&remote.state.classes&&remote.state.classes.length&&(!S.classes||!S.classes.length)){
-    // this device has nothing of its own yet: take the cloud copy as-is, no merge needed
-    S=remote.state;
-   }else if(!S.everSynced&&remote.state.classes&&remote.state.classes.length&&S.classes&&S.classes.length){
-    // both sides already have data and this is the first ever sync: only safe to combine them
-    // automatically if they were seeded from the same source, which shared IDs prove.
-    if(sameData(S,remote.state)){
-     S=mergeState(S,remote.state);
-    }else{
-     var keepLocal=confirm('This device already has its own data that does not match what is in Drive yet. Click OK to keep what is on THIS device and upload it, replacing the cloud copy. Click Cancel to throw away this device\'s data and use the cloud copy instead.');
-     if(!keepLocal)S=remote.state;
-    }
-   }else{
-    S=mergeState(S,remote.state);
-   }
-   S.everSynced=true;
-   S.deleted=S.deleted||{};
-   normalize();ensureIds();rebaseline();
-   applyTheme();
-  }else{
-   S.everSynced=true;
-  }
-  var payload=JSON.stringify({state:S,savedAt:new Date().toISOString()});
-  var initRes=await fetch('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=resumable',{
-   method:'PATCH',
-   headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json; charset=UTF-8','X-Upload-Content-Type':'application/json'},
-   body:'{}'
-  });
-  var up={ok:false};
-  if(initRes.ok){
-   var sessionUrl=initRes.headers.get('Location');
-   if(sessionUrl){
-    var putRes=await fetch(sessionUrl,{method:'PUT',headers:{'Content-Type':'application/json'},body:payload});
-    up={ok:putRes.ok};
-   }
-  }
-  if(up.ok){S.lastSync=new Date().toISOString();driveDirty=false;return{ok:true}}
-  return{ok:false,error:'save failed ('+(initRes?initRes.status:'no response')+')'};
- }catch(e){return{ok:false,error:String(e&&e.message||e)}}
+function normalizeForCompare(v){
+ if(Array.isArray(v)){
+  var a=v.map(normalizeForCompare);
+  var ids=v.length&&v.every(function(x){return x&&typeof x==='object'&&typeof x.id==='string'});
+  if(ids)a.sort(function(p,q){return p.id<q.id?-1:(p.id>q.id?1:0)});
+  return a;
+ }
+ if(v&&typeof v==='object'){var o={};Object.keys(v).sort().forEach(function(k){if(v[k]!==undefined)o[k]=normalizeForCompare(v[k])});return o}
+ return v;
 }
-function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
-async function driveSyncNow(isFirst,allowInteractive){
- if(!S.driveOn||driveSyncing)return;
+function canon(v){return JSON.stringify(normalizeForCompare(v))}
+function payloadOf(state){var o=JSON.parse(JSON.stringify(state));DEVICE_KEYS.forEach(function(k){delete o[k]});return o}
+function mergeRemote(rs,force){
+ if(!rs||!rs.classes)return true;
+ var mineHad=S.classes&&S.classes.length,ls=S.lastSync;
+ if(!S.everSynced&&rs.classes.length&&!mineHad){S=JSON.parse(JSON.stringify(rs))}
+ else if(!S.everSynced&&rs.classes.length&&mineHad){
+  if(sameData(S,rs))S=mergeState(S,rs);
+  else{
+   if(!force)return false;
+   var keepLocal=confirm('This device already has its own data that does not match your cloud account yet. Click OK to keep what is on THIS device and upload it, replacing the cloud copy. Click Cancel to throw away this device\'s data and use the cloud copy instead.');
+   if(!keepLocal)S=JSON.parse(JSON.stringify(rs));
+  }
+ }else S=mergeState(S,rs);
+ S.lastSync=ls;S.everSynced=true;S.deleted=S.deleted||{};
+ normalize();ensureIds();rebaseline();applyTheme();reconcileFiles();
+ return true;
+}
+async function syncOnce(force){
+ var uid=sbUser.id,changed=false;
+ for(var attempt=0;attempt<5;attempt++){
+  var q=await sb.from('hub_state').select('state,version').eq('user_id',uid).maybeSingle();
+  if(q.error)return{ok:false,error:q.error.message};
+  var row=q.data;
+  if(!row){
+   var ins=await sb.from('hub_state').insert({user_id:uid,state:payloadOf(S),version:1});
+   if(!ins.error){S.everSynced=true;return{ok:true,changed:changed}}
+   if(ins.error.code==='23505')continue;
+   return{ok:false,error:ins.error.message};
+  }
+  var before=canon(payloadOf(S));
+  if(!mergeRemote(row.state,force))return{ok:false,error:'This device already has different data than your cloud account. Press Sync now to choose which to keep.'};
+  var mine=payloadOf(S);
+  if(canon(mine)!==before)changed=true;
+  if(canon(mine)===canon(row.state||{}))return{ok:true,changed:changed};
+  var up=await sb.from('hub_state').update({state:mine,version:row.version+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',row.version).select('version');
+  if(up.error)return{ok:false,error:up.error.message};
+  if(up.data&&up.data.length)return{ok:true,changed:changed};
+ }
+ return{ok:false,error:'Sync is busy right now, it will retry.'};
+}
+/* ---- files: contents live in private cloud storage, the list of files lives in the synced data ---- */
+function b64ToBlob(b64,type){var bin=atob(b64),n=bin.length,arr=new Uint8Array(n);for(var i=0;i<n;i++)arr[i]=bin.charCodeAt(i);return new Blob([arr],{type:type||'application/octet-stream'})}
+function blobToB64(blob){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(',')[1]||'')};r.onerror=rej;r.readAsDataURL(blob)})}
+function mirrorFiles(cid){
+ var c=classById(cid);if(!c)return false;
+ var list=FILES[cid]||[],old=c.files||(c.files=[]),byId={},changed=false,next=[];
+ old.forEach(function(o){byId[o.id]=o});
+ list.forEach(function(f){
+  var meta={id:f.id,name:f.name,kind:f.kind,ext:f.ext||'',mime:f.mime||'',section:f.section||''};
+  var o=byId[f.id];
+  if(o){Object.keys(meta).forEach(function(k){if(o[k]!==meta[k]){o[k]=meta[k];changed=true}});next.push(o)}
+  else{next.push(meta);changed=true}
+ });
+ if(next.length!==old.length)changed=true;
+ c.files=next;
+ return changed;
+}
+async function purgeFileData(f){
+ if(f.store==='idb'){await idbReady;try{await idbDo('readwrite',function(st){return st.delete(f.id)})}catch(e){}}
+ for(var n=0;n<(f.chunks||0);n++)await sdel('hub:fd:'+f.id+':'+n);
+}
+function reconcileFiles(){
+ if(!filesReady)return;
+ S.classes.forEach(function(c){
+  var list=FILES[c.id]=FILES[c.id]||[],metaById={},changed=false;
+  (c.files||[]).forEach(function(m){metaById[m.id]=m});
+  (c.files||[]).forEach(function(m){
+   var f=null;for(var i=0;i<list.length;i++){if(list[i].id===m.id){f=list[i];break}}
+   if(!f){list.push({id:m.id,name:m.name,kind:m.kind,ext:m.ext,mime:m.mime,section:m.section||'',data:'',cloud:true});changed=true}
+   else{['name','kind','ext','mime','section'].forEach(function(k){if((f[k]||'')!==(m[k]||'')){f[k]=m[k];changed=true}})}
+  });
+  for(var i=list.length-1;i>=0;i--){
+   var f=list[i];
+   if(!metaById[f.id]&&f.cloud){purgeFileData(f);list.splice(i,1);changed=true}
+  }
+  if(changed)saveFiles(c.id,true);
+ });
+ purgeOrphanFiles();
+}
+function purgeOrphanFiles(){
+ if(!filesReady)return;
+ Object.keys(FILES).forEach(function(cid){
+  if(classById(cid))return;
+  (FILES[cid]||[]).forEach(function(f){purgeFileData(f);cloudRemoveFile(f)});
+  delete FILES[cid];
+  sdel('hub:files:'+cid);
+ });
+}
+async function cloudRemoveFile(f){
+ if(!sb||!sbUser||!f.cloud)return;
+ try{await sb.storage.from('hub-files').remove([sbUser.id+'/'+f.id,sbUser.id+'/'+f.id+'.txt'])}catch(e){}
+}
+function hasContent(f){return f.kind==='text'?(f.text!==undefined&&f.text!==''):!!f.data}
+async function listCloudNames(bucket,uid){
+ var names={},offset=0;
+ for(var page=0;page<50;page++){
+  var r=await withTimeout(bucket.list(uid,{limit:1000,offset:offset}),60000,null);
+  if(!r||r.error)throw new Error('could not list files');
+  (r.data||[]).forEach(function(o){names[o.name]=1});
+  if((r.data||[]).length<1000)break;
+  offset+=1000;
+ }
+ return names;
+}
+async function syncFiles(){
+ var bucket=sb.storage.from('hub-files'),uid=sbUser.id,dirty={},errs=0,moved=0;
+ var names=await listCloudNames(bucket,uid);
+ var cids=Object.keys(FILES);
+ for(var a=0;a<cids.length;a++){
+  var cid=cids[a],list=FILES[cid]||[];
+  for(var b=0;b<list.length;b++){
+   var f=list[b],path=uid+'/'+f.id,exists=!!names[f.id];
+   try{
+    var needUpload=(!f.cloud&&(f.data||f.kind==='text'))||(f.cloud&&!exists&&hasContent(f));
+    if(needUpload){
+     var blob=f.kind==='text'?new Blob([f.text||''],{type:'text/plain'}):b64ToBlob(f.data,f.mime);
+     var up=await withTimeout(bucket.upload(path,blob,{upsert:true,contentType:blob.type||'application/octet-stream'}),180000,{error:{message:'timeout'}});
+     if(up.error)throw up.error;
+     if(f.kind==='pdf'&&f.text){await withTimeout(bucket.upload(path+'.txt',new Blob([f.text],{type:'text/plain'}),{upsert:true,contentType:'text/plain'}),60000,null)}
+     f.cloud=true;dirty[cid]=1;moved++;
+    }else if(f.cloud&&!hasContent(f)&&exists){
+     var dl=await withTimeout(bucket.download(path),180000,{error:{message:'timeout'}});
+     if(dl.error)throw dl.error;
+     if(f.kind==='text'){f.text=await dl.data.text()}
+     else{
+      f.data=await blobToB64(dl.data);f.saved=false;
+      if(f.kind==='pdf'&&!f.text&&names[f.id+'.txt']){var tx=await withTimeout(bucket.download(path+'.txt'),60000,null);if(tx&&!tx.error&&tx.data)f.text=await tx.data.text()}
+     }
+     dirty[cid]=1;moved++;
+    }
+   }catch(e){errs++}
+  }
+ }
+ for(var k in dirty)await saveFiles(k,true);
+ return{errs:errs,moved:moved};
+}
+/* ---- the sync loop ---- */
+function scheduleCloudSync(ms){
+ if(!sbUser)return;
+ clearTimeout(cloudTimer);
+ cloudTimer=setTimeout(function(){cloudSync(false)},ms===undefined?1500:ms);
+}
+async function cloudSync(force){
+ if(!sbUser||!sb)return;
+ if(driveSyncing){cloudAgain=true;return}
  driveSyncing=true;
- var startedAt=Date.now();
+ var startedAt=Date.now(),timedOut=false,result,fr={errs:0,moved:0};
  if(view.modal&&view.modal.kind==='settings')render();
- var timedOut=false;
  var watchdog=setTimeout(function(){
   timedOut=true;driveSyncing=false;
-  view.driveError='Sync timed out (a network request never finished). Check your connection and try again.';
+  view.driveError='Sync timed out (a request never finished). Check your connection and try again.';
   render();
- },35000);
- try{
-  var tok=await driveToken(allowInteractive);
-  if(timedOut)return;
-  if(!tok){clearTimeout(watchdog);view.driveError=isStandaloneApp()?'Sign-in timed out from the Home Screen app. Open this site in Safari directly and try again.':'Could not get a token from Google. Try Sync now again.';driveSyncing=false;render();return}
-  var result=await syncOnce(tok);
-  if(timedOut)return;
-  if(!result.ok){
-   // mobile networks hiccup sometimes: quietly try once more before bothering the user
-   await wait(1200);
-   if(timedOut)return;
-   result=await syncOnce(tok);
-   if(timedOut)return;
-  }
-  view.driveError=result.ok?null:result.error;
-  persistLocal();
- }catch(e){if(!timedOut)view.driveError=String(e&&e.message||e)}
- var elapsed=Date.now()-startedAt;
- if(elapsed<500)await wait(500-elapsed);
+ },40000);
+ try{result=await syncOnce(force)}catch(e){result={ok:false,error:String(e&&e.message||e)}}
  clearTimeout(watchdog);
  if(timedOut)return;
+ if(result.ok){
+  S.lastSync=new Date().toISOString();view.driveError=null;persistLocal();
+  try{fr=await syncFiles()}catch(e){fr.errs++}
+ }else view.driveError=result.error;
+ view.syncInfo='build v23 · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
+ if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
  driveSyncing=false;
- if(view.modal&&view.modal.kind==='settings')render();
+ if(force||(result&&result.changed)||fr.moved||!view.modal||view.modal.kind==='settings')render();
+ if(cloudAgain){cloudAgain=false;scheduleCloudSync(200)}
 }
-function scheduleDriveSync(){
- if(!S.driveOn)return;
- driveDirty=true;
- clearTimeout(driveTimer);
- driveTimer=setTimeout(function(){driveSyncNow(false)},2500);
-}
-window.addEventListener('online',function(){if(S.driveOn)driveSyncNow(false)});
-setInterval(function(){if(S.driveOn&&!driveSyncing)driveSyncNow(false)},5*60*1000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)scheduleCloudSync(200)});
+window.addEventListener('online',function(){scheduleCloudSync(200)});
+setInterval(function(){if(!document.hidden)scheduleCloudSync(0)},90000);
 
 function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view.fileQ='';view.appQ='';view.appEdit=false;window.scrollTo(0,0);render()}
 
@@ -2535,14 +2611,19 @@ function modalHtml(){
    +'<button data-export="1">Export everything</button>'
    +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
    +'<div class="synclab">SYNC</div>'
-   +(S.driveOn
+   +(sbUser
      ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
+       +'<p class="hint" style="margin:0 0 8px">Signed in as '+esc(sbUser.email||'your account')+'. Every change syncs automatically, including files.</p>'
        +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
-       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build v22')+'</p>'
-       +'<button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
-       +'<button data-drivesignout="1" style="color:#A34A3F">Disconnect Google Drive</button>'
-     : '<button data-driveconnect="1">Sign in with Google to sync</button>'
-       +'<p class="hint" style="margin-top:6px">Keeps your phone and computer matched automatically.</p>')
+       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build v23')+'</p>'
+       +'<button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing\u2026':'Sync now')+'</button>'
+       +'<button data-sbsignout="1" style="color:#A34A3F">Sign out of sync</button>'
+     : '<p class="hint" style="margin:0 0 8px">Sign in to keep your phone and computer matched, files included.</p>'
+       +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
+       +'<div class="field"><label for="sbEmail">Email</label><input id="sbEmail" type="email" autocomplete="email" autocapitalize="none" value="'+esc(view.authEmail||'')+'"></div>'
+       +'<div class="field"><label for="sbPass">Password</label><input id="sbPass" type="password" autocomplete="current-password"></div>'
+       +'<button data-sbsignin="1">Sign in</button>'
+       +'<button data-sbsignup="1">Create account</button>')
    +'<div class="synclab" style="margin-top:14px">MORE</div>'
    +'<button data-opencolours="1">Change colours</button>'
    +(remindersOn()
@@ -2709,7 +2790,7 @@ function openFile(cid,i){
  var url;
  if(f.kind==='text'){url=URL.createObjectURL(new Blob([f.text||''],{type:'text/plain'}))}
  else{
-  if(!f.data){alert('This file is not saved, so there is nothing to open.');return}
+  if(!f.data){alert(f.cloud?'This file is still downloading from your account. Give it a moment, then try again (Settings > Sync now).':'This file is not saved, so there is nothing to open.');return}
   var bin=atob(f.data),arr=new Uint8Array(bin.length);
   for(var j=0;j<bin.length;j++)arr[j]=bin.charCodeAt(j);
   url=URL.createObjectURL(new Blob([arr],{type:f.mime||'application/octet-stream'}));
@@ -2997,7 +3078,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-driveconnect],[data-drivesignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -3007,7 +3088,7 @@ document.addEventListener('click',function(e){
  if(d.paste){view.paste=view.paste===d.paste?null:d.paste;render();return}
  if(d.export){exportAll();return}
  if(d.sw){view.modal.color=d.sw;render();return}
- if(d.delclass){if(confirm('Delete this class and everything in it?')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();view.modal=null;go('home')}return}
+ if(d.delclass){if(confirm('Delete this class and everything in it?')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
  if(d.go){go(d.go);return}
  if(d.open){go('class',d.open);return}
  if(d.scroll){view.menu=false;render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
@@ -3114,15 +3195,10 @@ document.addEventListener('click',function(e){
   if(S.theme&&S.theme.surfaces)delete S.theme.surfaces[d.surfreset];
   save();render();return;
  }
- if(d.driveconnect!==undefined){driveConnect();return}
- if(d.drivesignout!==undefined){
-  if(confirm('Disconnect Google Drive? Your data stays on this device and in Drive, you just stop syncing new changes.')){driveDisconnect()}
-  return;
- }
- if(d.syncnow!==undefined){
-  driveSyncNow(false,true);
-  return;
- }
+ if(d.sbsignin!==undefined){sbAuth('in');return}
+ if(d.sbsignup!==undefined){sbAuth('up');return}
+ if(d.sbsignout!==undefined){sbSignOut();return}
+ if(d.syncnow!==undefined){cloudSync(true);return}
  if(d.remindon!==undefined){enableReminders();return}
  if(d.remindoff!==undefined){S.remind=false;save();render();return}
  if(d.studygo){makeStudy(d.studygo);return}
