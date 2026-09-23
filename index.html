@@ -884,6 +884,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
+var BUILD='v25';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1421,6 +1422,202 @@ async function enableReminders(){
  render();
 }
 setInterval(checkReminders,15*60*1000);
+
+/* ---------- first-run welcome: about the app, make an account, put it on your phone ---------- */
+var onb=null;
+function isInstalledApp(){try{return window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches}catch(e){return false}}
+function onbPlatform(){
+ var ua=navigator.userAgent||'';
+ if(/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1))return 'ios';
+ if(/Android/.test(ua))return 'android';
+ return 'desktop';
+}
+function onbFlag(){try{return localStorage.getItem('hub:onb')}catch(e){return null}}
+function maybeOnboard(){
+ if(sbUser||onbFlag()||(S.classes&&S.classes.length)||document.getElementById('onb'))return;
+ onb={step:0,mode:'up',plat:onbPlatform(),msg:'',busy:false,email:'',name:'',pass:''};
+ buildOnb();
+}
+function onbClose(flag){
+ try{localStorage.setItem('hub:onb',flag||'done')}catch(e){}
+ var el=document.getElementById('onb');if(el)el.remove();
+ onb=null;render();window.scrollTo(0,0);
+}
+function onbCss(){
+ if(document.getElementById('onbcss'))return;
+ var st=document.createElement('style');st.id='onbcss';
+ st.textContent='#onb{position:fixed;inset:0;z-index:300;background:rgba(35,32,27,.6);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto}'
+ +'#onb .onbcard{background:var(--card,#fff);color:var(--ink,#33312C);width:100%;max-width:480px;border-radius:20px;padding:26px 24px 20px;box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);overflow:auto}'
+ +'#onb h2{font-size:22px;margin:0 0 6px}#onb p{margin:0 0 12px;color:var(--ink2,#6B675F);font-size:14.5px;line-height:1.5}'
+ +'#onb .onbdots{display:flex;gap:6px;margin-bottom:16px}#onb .onbdots i{width:7px;height:7px;border-radius:50%;background:var(--line2,#D4CFC4)}#onb .onbdots i.on{background:#33312C}'
+ +'#onb .onbfeat{display:flex;gap:12px;margin:0 0 11px}#onb .onbfeat b{display:block;font-size:14px;color:var(--ink,#33312C);margin-bottom:1px}#onb .onbfeat span{font-size:13.5px;color:var(--ink2,#6B675F);line-height:1.45}'
+ +'#onb .onbico{flex:0 0 32px;height:32px;border-radius:9px;background:var(--paper,#FBFAF8);border:1px solid var(--line,#E4E0D7);display:flex;align-items:center;justify-content:center;font-size:15px}'
+ +'#onb label{display:block;font-size:12.5px;color:var(--ink2,#6B675F);margin:0 0 5px}'
+ +'#onb input[type=text],#onb input[type=email],#onb input[type=password]{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line2,#D4CFC4);border-radius:10px;font-size:16px;background:#fff;color:#33312C;margin-bottom:12px}'
+ +'#onb .onbbtn{display:block;width:100%;padding:13px;border-radius:12px;border:none;background:#33312C;color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px}'
+ +'#onb .onbbtn[disabled]{opacity:.6}#onb .onbbtn.alt{background:transparent;color:#33312C;border:1px solid var(--line2,#D4CFC4)}'
+ +'#onb .onblink{background:none;border:none;color:var(--ink2,#6B675F);font-size:13px;text-decoration:underline;cursor:pointer;padding:8px 4px}'
+ +'#onb .onbrow{display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:8px}'
+ +'#onb .onbmsg{color:#A34A3F;font-size:13px;margin:0 0 10px;min-height:0}#onb .onbmsg.ok{color:#4C6F55}'
+ +'#onb ol{margin:0 0 12px;padding-left:20px;color:var(--ink2,#6B675F);font-size:14px;line-height:1.55}#onb ol li{margin-bottom:6px}#onb ol b{color:var(--ink,#33312C)}'
+ +'#onb .onbtabs{display:flex;gap:6px;margin-bottom:12px}#onb .onbtabs button{flex:1;padding:8px 6px;border-radius:9px;border:1px solid var(--line2,#D4CFC4);background:#fff;font-size:13px;cursor:pointer;color:#33312C}#onb .onbtabs button.on{background:#33312C;color:#fff;border-color:#33312C}';
+ document.head.appendChild(st);
+}
+function buildOnb(){
+ onbCss();
+ var el=document.getElementById('onb');
+ if(!el){
+  el=document.createElement('div');el.id='onb';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
+  el.addEventListener('click',onbClick);
+  document.body.appendChild(el);
+ }
+ var dot=function(n){return '<i class="'+(onb.step>=n?'on':'')+'"></i>'};
+ var stepNo=onb.step===0?0:(onb.step===3?2:1);
+ var h='<div class="onbcard"><div class="onbdots">'+dot(0)+(stepNo>=1?'<i class="on"></i>':'<i></i>')+(stepNo>=2?'<i class="on"></i>':'<i></i>')+'</div>';
+ if(onb.step===0){
+  h+='<h2>Welcome to your hub</h2><p>One calm place for school. Here is how it works.</p>'
+   +'<div class="onbfeat"><div class="onbico">\u{1F4DA}</div><div><b>Add your classes</b><span>Give each class its own page for assignments, to-dos, links, files, notes and contacts.</span></div></div>'
+   +'<div class="onbfeat"><div class="onbico">✅</div><div><b>Tick things off</b><span>Add due dates and tick tasks as you finish them. Home shows what is due this week and next.</span></div></div>'
+   +'<div class="onbfeat"><div class="onbico">\u{1F4C5}</div><div><b>See it on a calendar</b><span>Everything with a due date shows up in the calendar view.</span></div></div>'
+   +'<div class="onbfeat"><div class="onbico">\u{1F3A8}</div><div><b>Make it yours</b><span>Change the colours, add your own picture, and pin shortcuts to the apps you use. Open Settings.</span></div></div>'
+   +'<div class="onbfeat"><div class="onbico">\u{1F504}</div><div><b>It follows you</b><span>With a free account, everything you add, including files, shows up on your phone and computer within seconds. Your data is private to you.</span></div></div>'
+   +'<button class="onbbtn" data-onb="next">Get started</button>'
+   +'<div class="onbrow"><button class="onblink" data-onb="signin">I already have an account</button><button class="onblink" data-onb="skip">Skip for now</button></div>';
+ }else if(onb.step===1){
+  var up=onb.mode==='up';
+  h+='<h2>'+(up?'Create your account':'Welcome back')+'</h2>'
+   +'<p>'+(up?'This keeps your hub safe and lets it appear on all your devices.':'Sign in with the email and password you used before.')+'</p>'
+   +(up?'<label for="onbName">Your name</label><input id="onbName" type="text" autocomplete="given-name" maxlength="30" placeholder="e.g. Sam" value="'+esc(onb.name)+'">':'')
+   +'<label for="onbEmail">Email</label><input id="onbEmail" type="email" autocomplete="email" autocapitalize="none" value="'+esc(onb.email)+'">'
+   +'<label for="onbPass">Password'+(up?' (at least 8 characters)':'')+'</label><input id="onbPass" type="password" autocomplete="'+(up?'new-password':'current-password')+'">'
+   +'<label style="display:flex;gap:7px;align-items:center;margin:-4px 0 10px"><input type="checkbox" id="onbShow" style="width:auto;margin:0"> Show password</label>'
+   +'<p class="onbmsg" id="onbMsg"></p>'
+   +'<button class="onbbtn" id="onbGo" data-onb="submit">'+(up?'Create account':'Sign in')+'</button>'
+   +'<div class="onbrow"><button class="onblink" data-onb="mode">'+(up?'I already have an account':'New here? Create an account')+'</button><button class="onblink" data-onb="skip">Skip for now</button></div>';
+ }else if(onb.step===2){
+  h+='<h2>Check your email</h2><p>We sent a confirmation link to <b>'+esc(onb.email)+'</b>. Open it, then come back to this page.</p>'
+   +'<p class="onbmsg" id="onbMsg"></p>'
+   +'<button class="onbbtn" id="onbGo" data-onb="confirmed">I have confirmed my email</button>'
+   +'<div class="onbrow"><button class="onblink" data-onb="resend">Send it again</button><button class="onblink" data-onb="back">Use a different email</button></div>';
+ }else{
+  var pl=onb.plat;
+  var steps={
+   ios:'<ol><li>Open this page in <b>Safari</b> (not inside another app).</li><li>Tap the <b>Share</b> button, the square with an arrow pointing up.</li><li>Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>Open the new icon and <b>sign in once</b> with the same email and password. The icon keeps its own storage, so this one sign-in brings everything across.</li></ol>',
+   android:'<ol><li>Open this page in <b>Chrome</b>.</li><li>Tap the <b>⋮</b> menu at the top right.</li><li>Tap <b>Install app</b> or <b>Add to Home screen</b>.</li><li>Open the new icon and <b>sign in once</b> with the same email and password.</li></ol>',
+   desktop:'<ol><li>You can keep using it right here in your browser.</li><li>To make it feel like an app, look for the <b>install</b> icon at the right end of the address bar in Chrome or Edge, and click it.</li><li>To use it on your phone, open this same address on your phone and follow the steps for iPhone or Android above.</li></ol>'
+  };
+  h+='<h2>Put it on your phone</h2><p>It works like an app once it is on your home screen, and it stays in sync.</p>'
+   +'<div class="onbtabs">'+[['ios','iPhone'],['android','Android'],['desktop','Computer']].map(function(t){return '<button data-onb="plat:'+t[0]+'" class="'+(pl===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>'
+   +steps[pl]
+   +'<button class="onbbtn" data-onb="finish">Take me to my hub</button>';
+ }
+ h+='</div>';
+ el.innerHTML=h;
+ var first=el.querySelector('#onbName')||el.querySelector('#onbEmail');
+ if(first&&onb.step===1&&window.innerWidth>700)first.focus();
+}
+function onbMsg(text,ok){var m=document.getElementById('onbMsg');if(m){m.textContent=text||'';m.className='onbmsg'+(ok?' ok':'')}}
+function onbBusy(b){onb.busy=b;var g=document.getElementById('onbGo');if(g)g.disabled=b}
+function onbRead(){
+ var g=function(id){var e=document.getElementById(id);return e?e.value:''};
+ if(document.getElementById('onbEmail'))onb.email=g('onbEmail').trim();
+ if(document.getElementById('onbName'))onb.name=g('onbName').trim();
+ if(document.getElementById('onbPass'))onb.pass=g('onbPass');
+}
+function onbAfterSignedIn(){
+ if(isInstalledApp())onbClose('done');
+ else{onb.step=3;buildOnb()}
+}
+async function onbSubmit(){
+ if(onb.busy)return;
+ onbRead();
+ var up=onb.mode==='up';
+ if(!onb.email||onb.email.indexOf('@')<1){onbMsg('Enter a valid email address.');return}
+ if(up&&onb.pass.length<8){onbMsg('Use a password of at least 8 characters.');return}
+ if(!up&&!onb.pass){onbMsg('Enter your password.');return}
+ onbBusy(true);onbMsg('');
+ var c=await ensureSb();
+ if(!c){onbBusy(false);onbMsg('Could not reach the sign-in service. Check your connection and try again.');return}
+ var redirect=location.origin+location.pathname;
+ if(up&&onb.name){S.owner=onb.name+"'s hub";save()}
+ var r;
+ try{
+  r=up?await c.auth.signUp({email:onb.email,password:onb.pass,options:{emailRedirectTo:redirect,data:{name:onb.name}}})
+      :await c.auth.signInWithPassword({email:onb.email,password:onb.pass});
+ }catch(e){r={error:{message:String(e&&e.message||e)}}}
+ onbBusy(false);
+ if(r.error){
+  var m=r.error.message||'Something went wrong.';
+  if(/already registered/i.test(m))m='That email already has an account. Tap "I already have an account" to sign in.';
+  else if(/invalid login/i.test(m))m='That email and password do not match. Check them and try again.';
+  else if(/not confirmed/i.test(m)){onb.step=2;buildOnb();return}
+  onbMsg(m);return;
+ }
+ if(r.data&&r.data.session){onbAfterSignedIn();return}
+ onb.step=2;buildOnb();
+}
+async function onbClick(e){
+ var b=e.target.closest('[data-onb]');
+ if(!b||!onb)return;
+ var a=b.dataset.onb;
+ if(a==='next'){onb.step=1;buildOnb()}
+ else if(a==='signin'){onb.mode='in';onb.step=1;buildOnb()}
+ else if(a==='mode'){onbRead();onb.mode=onb.mode==='up'?'in':'up';buildOnb()}
+ else if(a==='skip'){onbClose('skipped')}
+ else if(a==='submit'){onbSubmit()}
+ else if(a==='back'){onb.step=1;onb.mode='up';buildOnb()}
+ else if(a==='resend'){
+  var c=await ensureSb();
+  if(!c)return onbMsg('Could not reach the sign-in service.');
+  var rr=await c.auth.resend({type:'signup',email:onb.email,options:{emailRedirectTo:location.origin+location.pathname}});
+  onbMsg(rr.error?rr.error.message:'Sent again. It can take a minute to arrive.',!rr.error);
+ }
+ else if(a==='confirmed'){
+  if(onb.busy)return;
+  onbBusy(true);
+  var c2=await ensureSb();
+  var rs=c2?await c2.auth.signInWithPassword({email:onb.email,password:onb.pass}):{error:{message:'offline'}};
+  onbBusy(false);
+  if(rs.error)onbMsg(/not confirmed/i.test(rs.error.message)?'Not confirmed yet. Open the link in the email first.':rs.error.message);
+  else onbAfterSignedIn();
+ }
+ else if(a.indexOf('plat:')===0){onb.plat=a.slice(5);buildOnb()}
+ else if(a==='finish'){onbClose('done')}
+}
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='onbShow'){var p=document.getElementById('onbPass');if(p)p.type=e.target.checked?'text':'password'}});
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&onb&&onb.step===1&&e.target&&/^onb/.test(e.target.id||'')){e.preventDefault();onbSubmit()}});
+
+/* ---------- new-version banner ---------- */
+var updChecking=false,updLast=0;
+function showUpdateBanner(){
+ if(document.getElementById('updbar'))return;
+ var b=document.createElement('div');
+ b.id='updbar';
+ b.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:200;background:#33312C;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 24px rgba(0,0,0,.28);font-size:13.5px;max-width:calc(100vw - 24px)');
+ b.innerHTML='<span>A new version is available.</span><button id="updgo" style="background:#fff;color:#33312C;border:none;border-radius:9px;padding:7px 12px;font-weight:600;cursor:pointer">Update</button>';
+ document.body.appendChild(b);
+ document.getElementById('updgo').onclick=async function(){
+  this.textContent='Updating\u2026';
+  try{var reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update()}catch(e){}
+  location.reload();
+ };
+}
+async function checkForUpdate(){
+ if(updChecking||Date.now()-updLast<60000)return;
+ updChecking=true;updLast=Date.now();
+ try{
+  var r=await fetch('index.html?chk='+Date.now(),{cache:'no-store'});
+  if(r.ok){
+   var m=/var BUILD='([^']+)'/.exec(await r.text());
+   if(m&&m[1]!==BUILD)showUpdateBanner();
+  }
+ }catch(e){}
+ updChecking=false;
+}
+setTimeout(checkForUpdate,6000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)checkForUpdate()});
+setInterval(checkForUpdate,30*60*1000);
+
 /* ---------- cloud sync (Supabase): accounts, live updates, files ---------- */
 var SB_URL='https://sdmkflmnemxfaidlkdkv.supabase.co';
 var SB_KEY='sb_publishable_iVqy6dQhWkF_AA64xfdcKA_JdiKPV_m';
@@ -1451,12 +1648,14 @@ async function ensureSb(){
 }
 async function initCloud(){
  var c=await ensureSb();
- if(!c){view.driveError='Could not load the sync library. Check your connection.';return}
+ if(!c){view.driveError='Could not load the sync library. Check your connection.';maybeOnboard();return}
  var r=await c.auth.getSession();
  handleSession(r&&r.data&&r.data.session);
+ if(!sbUser)maybeOnboard();
 }
 function handleSession(session){
  var u=(session&&session.user)||null;
+ if(u&&onb&&onb.step===0)onbClose('done');
  if(u&&sbUser&&sbUser.id===u.id){sbUser=u;return}
  if(!u&&!sbUser)return;
  sbUser=u;
@@ -1481,7 +1680,7 @@ async function sbAuth(mode){
  var c=await ensureSb();
  if(!c){view.driveError='Could not load the sync library. Check your connection.';render();return}
  view.driveError=null;
- var r=mode==='up'?await c.auth.signUp({email:email,password:pass}):await c.auth.signInWithPassword({email:email,password:pass});
+ var r=mode==='up'?await c.auth.signUp({email:email,password:pass,options:{emailRedirectTo:location.origin+location.pathname}}):await c.auth.signInWithPassword({email:email,password:pass});
  if(r.error)view.driveError=r.error.message;
  else if(mode==='up'&&!(r.data&&r.data.session))view.driveError='Account created. Check your email to confirm it, then sign in.';
  render();
@@ -1509,7 +1708,7 @@ function sameData(local,remote){
  var total=Math.max(a.length,b.length,1);
  return (shared/total)>=0.8;
 }
-var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar'];
+var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term'];
 function mergeState(local,remote){
  // field-by-field, most recently touched item wins, using each item's own savedAt
  if(!remote)return local;
@@ -1753,7 +1952,7 @@ async function cloudSync(force){
   S.lastSync=new Date().toISOString();view.driveError=null;persistLocal();
   try{fr=await syncFiles()}catch(e){fr.errs++}
  }else view.driveError=result.error;
- view.syncInfo='build v23 · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
+ view.syncInfo='build '+BUILD+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
  if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
  driveSyncing=false;
  if(force||(result&&result.changed)||fr.moved||!view.modal||view.modal.kind==='settings')render();
@@ -2038,6 +2237,7 @@ function viewHome(){
  if(!S.classes.length){
   h+='<div class="panel" style="margin-bottom:22px;padding:22px 24px">'
    +'<h2 style="font-size:20px;margin-bottom:6px">Welcome</h2>'
+   +'<div class="field" style="max-width:340px;margin:12px 0 16px"><label for="hubName">What should this hub be called?</label><input id="hubName" data-setname="owner" maxlength="40" placeholder="e.g. Sam\'s hub" value="'+esc(S.owner==='My hub'?'':S.owner)+'"></div>'
    +'<p style="color:var(--ink2);margin-bottom:14px">Load your backup to bring everything in, or start fresh by adding a class.</p>'
    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
    +'<label class="fakebtn" style="background:#33312C;color:#fff;border-color:#33312C"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
@@ -2608,6 +2808,8 @@ function modalHtml(){
   h='<h3>Settings</h3>'
    +'<p class="hint" style="margin:0 0 14px">Your backup holds everything: ticks, files, photos, colours.</p>'
    +'<div style="display:flex;flex-direction:column;gap:8px">'
+   +'<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
+   +'<div class="field" style="margin:0 0 6px"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>'
    +'<button data-export="1">Export everything</button>'
    +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
    +'<div class="synclab">SYNC</div>'
@@ -2615,7 +2817,7 @@ function modalHtml(){
      ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing\u2026':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
        +'<p class="hint" style="margin:0 0 8px">Signed in as '+esc(sbUser.email||'your account')+'. Every change syncs automatically, including files.</p>'
        +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0 0 8px">'+esc(view.driveError)+'</p>':'')
-       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build v23')+'</p>'
+       +'<p class="hint" style="font-size:10.5px;margin:0 0 8px;word-break:break-all">'+esc(view.syncInfo||'build '+BUILD)+'</p>'
        +'<button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing\u2026':'Sync now')+'</button>'
        +'<button data-sbsignout="1" style="color:#A34A3F">Sign out of sync</button>'
      : '<p class="hint" style="margin:0 0 8px">Sign in to keep your phone and computer matched, files included.</p>'
@@ -3257,6 +3459,12 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('change',function(e){
  var t=e.target;
+ if(t.dataset&&t.dataset.setname){
+  var nm=t.value.trim().slice(0,40),key=t.dataset.setname;
+  S[key]=nm||(key==='owner'?'My hub':'');
+  save();render();
+  return;
+ }
  if(t.dataset&&t.dataset.sheetmove&&view.modal&&view.modal.kind==='sheet'){
   var mm=view.modal;
   if(mm.what==='file'){var ff=(FILES[mm.classId]||[])[mm.i];if(ff){ff.section=t.value;saveFiles(mm.classId)}}
