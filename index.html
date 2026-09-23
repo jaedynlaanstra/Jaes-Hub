@@ -324,7 +324,7 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .pickbtn{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;background:var(--sideBg);border:none;box-shadow:0 4px 16px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:70;padding:0}
 .pickbtn svg{width:21px;height:21px;fill:#EAE6DC}
 .pickbtn:hover{filter:brightness(1.15)}
-.pickpanel{position:fixed;right:22px;bottom:80px;width:330px;max-height:76vh;overflow-y:auto;background:var(--card);border:1px solid var(--line2);border-radius:16px;box-shadow:0 12px 44px rgba(0,0,0,.18);padding:18px;z-index:71}
+.pickpanel{overscroll-behavior:contain;position:fixed;right:22px;bottom:80px;width:330px;max-height:76vh;overflow-y:auto;background:var(--card);border:1px solid var(--line2);border-radius:16px;box-shadow:0 12px 44px rgba(0,0,0,.18);padding:18px;z-index:71}
 .pickpanel h3{font-size:15px;margin-bottom:4px}
 .pickpanel .sub2{font-size:12px;color:var(--ink2);margin-bottom:14px}
 .pickpanel .lab{font-size:11px;color:var(--ink3);letter-spacing:.05em;margin:16px 0 8px}
@@ -374,7 +374,7 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .daylist:last-child{border-bottom:none}
 .daylist .dh{font-size:12px;color:var(--ink3);margin-bottom:6px}
 .modalbg{position:fixed;inset:0;background:rgba(40,38,34,.35);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
-.modal{background:var(--card);border-radius:14px;padding:20px 22px;width:100%;max-width:400px;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;position:relative}
+.modal{overscroll-behavior:contain;background:var(--card);border-radius:14px;padding:20px 22px;width:100%;max-width:400px;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;position:relative}
 .modal .acts{position:sticky;bottom:-20px;background:var(--card);padding:12px 0 4px;margin-top:12px;z-index:1}
 .modalx{float:right;position:sticky;top:-8px;margin:-8px -10px 0 8px;width:34px;height:34px;border-radius:50%;border:none;background:var(--paper);font-size:22px;line-height:1;cursor:pointer;color:var(--ink2);z-index:2;padding:0}
 .modal h3{font-size:16px;margin-bottom:14px}
@@ -887,7 +887,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v31';
+var BUILD='v32';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2535,7 +2535,9 @@ async function cloudSync(force){
   view.driveError='Sync timed out (a request never finished). Check your connection and try again.';
   render();
  },40000);
+ var pre=canon(payloadOf(S));
  try{result=await syncOnce(force)}catch(e){result={ok:false,error:String(e&&e.message||e)}}
+ if(canon(payloadOf(S))!==pre)result.changed=true;
  clearTimeout(watchdog);
  if(timedOut)return;
  if(result.ok){
@@ -2546,7 +2548,7 @@ async function cloudSync(force){
  view.syncInfo='build '+BUILD+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
  if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
  driveSyncing=false;
- if(force||(result&&result.changed)||fr.moved||!view.modal||view.modal.kind==='settings')render();
+ if(force||(result&&result.changed)||fr.moved||(view.modal&&view.modal.kind==='settings'))render();
  if(cloudAgain){cloudAgain=false;scheduleCloudSync(200)}
 }
 document.addEventListener('visibilitychange',function(){if(!document.hidden)scheduleCloudSync(200)});
@@ -3500,6 +3502,7 @@ function modalHtml(){
 }
 function findAsg(cid,id){var c=classById(cid);for(var i=0;i<c.assignments.length;i++){if(c.assignments[i].id===id)return c.assignments[i]}return null}
 function openModal(kind,classId,id){
+ view.menu=false;
  view.modal={kind:kind,classId:classId,id:id||null,color:classId&&kind==='class'?classById(classId).color:'lavender'};
  render();
  setTimeout(function(){var el=document.getElementById('m1');if(el)el.focus()},30);
@@ -4002,7 +4005,7 @@ document.addEventListener('click',function(e){
  if(d.remindoff!==undefined){S.remind=false;save();render();return}
  if(d.studygo){makeStudy(d.studygo);return}
  if(d.studyclose!==undefined){view.study=null;render();return}
- if(d.opencolours!==undefined){view.modal=null;view.picker=true;render();return}
+ if(d.opencolours!==undefined){view.modal=null;view.menu=false;view.picker=true;render();return}
  if(d.picker!==undefined){view.picker=d.picker==='1';render();return}
  if(d.preset!==undefined&&d.preset!==''){
   var pr=PRESETS[+d.preset];
@@ -4353,6 +4356,26 @@ document.addEventListener('keydown',function(e){
  if(e.key==='Enter'&&view.modal&&e.target.tagName==='INPUT'){saveModal()}
  if(e.key==='Enter'&&!view.modal&&e.target.id==='q'){ask(view.classId)}
 });
+
+/* ---------- redraws keep your place: panel scroll, popup scroll and the field you are typing in ---------- */
+(function(){
+ var raw=render;
+ render=function(){
+  var keep=[];
+  ['.pickpanel','.modal'].forEach(function(sel){var el=document.querySelector(sel);if(el&&el.scrollTop)keep.push([sel,el.scrollTop])});
+  var ae=document.activeElement,field=null;
+  if(ae&&ae.id&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)){
+   field={id:ae.id};try{field.s=ae.selectionStart;field.e=ae.selectionEnd}catch(e){}
+  }
+  raw.apply(this,arguments);
+  keep.forEach(function(k){var el=document.querySelector(k[0]);if(el)el.scrollTop=k[1]});
+  if(field){
+   var el=document.getElementById(field.id);
+   if(el&&el!==document.activeElement){try{el.focus({preventScroll:true});if(field.s!=null)el.setSelectionRange(field.s,field.e)}catch(e){}}
+  }
+ };
+})();
+
 window.addEventListener('scroll',function(){
  var on=window.scrollY>110;
  if(on===!!view.scrolled)return;

@@ -1,5 +1,5 @@
 // Keeps the hub opening even with no signal, and picks up new versions when online.
-var CACHE='hub-v31';
+var CACHE='hub-v32';
 var CORE=['./','./index.html','./manifest.webmanifest','./supabase.js','./qrcode.js','./favicon-16.png','./favicon-32.png','./icon-maskable-512.png','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',function(e){
