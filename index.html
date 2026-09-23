@@ -1505,11 +1505,20 @@ async function driveSyncNow(isFirst,allowInteractive){
  if(!S.driveOn||driveSyncing)return;
  driveSyncing=true;
  if(view.modal&&view.modal.kind==='settings')render();
+ var timedOut=false;
+ var watchdog=setTimeout(function(){
+  timedOut=true;driveSyncing=false;
+  view.driveError='Sync timed out (a network request never finished). Check your connection and try again.';
+  render();
+ },25000);
  try{
   var tok=await driveToken(allowInteractive);
-  if(!tok){view.driveError=isStandaloneApp()?'Sign-in timed out from the Home Screen app. Open this site in Safari directly and try again.':'Could not get a token from Google. Try Sync now again.';driveSyncing=false;render();return}
+  if(timedOut)return;
+  if(!tok){clearTimeout(watchdog);view.driveError=isStandaloneApp()?'Sign-in timed out from the Home Screen app. Open this site in Safari directly and try again.':'Could not get a token from Google. Try Sync now again.';driveSyncing=false;render();return}
   var id=await driveFindOrCreate(tok);
+  if(timedOut)return;
   var r=await driveApi('files/'+id+'?alt=media',{},tok);
+  if(timedOut)return;
   var remote=null;
   if(r.ok){try{remote=await r.json()}catch(e){}}
   if(remote&&remote.state){
@@ -1539,18 +1548,22 @@ async function driveSyncNow(isFirst,allowInteractive){
    headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json; charset=UTF-8','X-Upload-Content-Type':'application/json'},
    body:'{}'
   });
+  if(timedOut)return;
   var up={ok:false};
   if(initRes.ok){
    var sessionUrl=initRes.headers.get('Location');
    if(sessionUrl){
     var putRes=await fetch(sessionUrl,{method:'PUT',headers:{'Content-Type':'application/json'},body:payload});
+    if(timedOut)return;
     up={ok:putRes.ok};
    }
   }
   if(up.ok){S.lastSync=new Date().toISOString();driveDirty=false;view.driveError=null}
   else{view.driveError='save failed ('+(initRes?initRes.status:'no response')+')'}
   save();
- }catch(e){view.driveError=String(e&&e.message||e)}
+ }catch(e){if(!timedOut)view.driveError=String(e&&e.message||e)}
+ clearTimeout(watchdog);
+ if(timedOut)return;
  driveSyncing=false;
  if(view.modal&&view.modal.kind==='settings')render();
 }
