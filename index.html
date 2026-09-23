@@ -1407,18 +1407,24 @@ async function driveConnect(){
   alert(resp===null?'Google sign-in timed out. If you opened this from your phone\'s Home Screen icon, try opening it in Safari directly instead.':'Google sign-in was cancelled or blocked.');
  }
 }
-async function driveToken(){
- if(driveTok&&driveTok.exp>Date.now()+30000)return driveTok.token;
- var tc=await ensureTokenClient();
- if(!tc)return null;
- var tokenPromise=new Promise(function(res){
+function requestToken(tc,prompt,ms){
+ return withTimeout(new Promise(function(res){
   tc.callback=function(resp){
    if(resp&&resp.access_token){driveTok={token:resp.access_token,exp:Date.now()+(resp.expires_in||3300)*1000};res(driveTok.token)}
    else res(null);
   };
-  tc.requestAccessToken({prompt:''});
- });
- return withTimeout(tokenPromise,20000,null);
+  tc.requestAccessToken({prompt:prompt});
+ }),ms,null);
+}
+async function driveToken(allowInteractive){
+ if(driveTok&&driveTok.exp>Date.now()+30000)return driveTok.token;
+ var tc=await ensureTokenClient();
+ if(!tc)return null;
+ var tok=await requestToken(tc,'',8000);
+ if(tok||!allowInteractive)return tok;
+ // the quiet refresh didn't come back (known issue inside iOS Home Screen apps):
+ // fall back to the full consent popup, which we know can complete from a direct tap
+ return requestToken(tc,'consent',20000);
 }
 function driveDisconnect(){
  S.driveOn=false;driveTok=null;driveFileId=null;save();render();
@@ -1495,12 +1501,12 @@ function mergeClass(lc,rc){
  lc.sections=mergeList(lc.sections,rc.sections,'id');
 }
 function touch(obj){obj.savedAt=new Date().toISOString();return obj}
-async function driveSyncNow(isFirst){
+async function driveSyncNow(isFirst,allowInteractive){
  if(!S.driveOn||driveSyncing)return;
  driveSyncing=true;
  if(view.modal&&view.modal.kind==='settings')render();
  try{
-  var tok=await driveToken();
+  var tok=await driveToken(allowInteractive);
   if(!tok){view.driveError=isStandaloneApp()?'Sign-in timed out from the Home Screen app. Open this site in Safari directly and try again.':'Could not get a token from Google. Try Sync now again.';driveSyncing=false;render();return}
   var id=await driveFindOrCreate(tok);
   var r=await driveApi('files/'+id+'?alt=media',{},tok);
@@ -2989,7 +2995,7 @@ document.addEventListener('click',function(e){
   return;
  }
  if(d.syncnow!==undefined){
-  driveSyncNow(false);
+  driveSyncNow(false,true);
   return;
  }
  if(d.remindon!==undefined){enableReminders();return}
