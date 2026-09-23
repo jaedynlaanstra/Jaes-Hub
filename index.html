@@ -1420,11 +1420,14 @@ async function driveToken(allowInteractive){
  if(driveTok&&driveTok.exp>Date.now()+30000)return driveTok.token;
  var tc=await ensureTokenClient();
  if(!tc)return null;
- var tok=await requestToken(tc,'',8000);
- if(tok||!allowInteractive)return tok;
- // the quiet refresh didn't come back (known issue inside iOS Home Screen apps):
- // fall back to the full consent popup, which we know can complete from a direct tap
- return requestToken(tc,'consent',20000);
+ if(allowInteractive){
+  // Home Screen apps on iOS can't do a quiet background refresh, and waiting on one
+  // first burns the tap's "this came from a real click" window, so the popup after it
+  // gets silently blocked too. Show the popup immediately instead, while it's still
+  // clearly tied to the tap.
+  return requestToken(tc,'consent',20000);
+ }
+ return requestToken(tc,'',8000);
 }
 function driveDisconnect(){
  S.driveOn=false;driveTok=null;driveFileId=null;save();render();
