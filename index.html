@@ -28,23 +28,13 @@
 })();
 </script>
 <style>
-#splash{display:none;position:fixed;inset:0;z-index:600;align-items:center;justify-content:center;background:#F6F1E7;pointer-events:auto}
-.splash-on #splash{display:flex;animation:spBg .5s ease both,spOut .5s ease 3s forwards}
-#splash.skip{animation:spOut .25s ease forwards!important}
-#splash svg{width:min(76vmin,520px);height:auto;overflow:visible;margin-top:-5vmin}
-#splash .t{transform-box:fill-box;transform-origin:center;opacity:0}
-.splash-on #splash .t1{animation:spDrop .55s cubic-bezier(.2,.9,.3,1.25) .55s forwards}
-.splash-on #splash .t2{animation:spDrop .55s cubic-bezier(.2,.9,.3,1.25) .8s forwards}
-.splash-on #splash .t3{animation:spDrop .55s cubic-bezier(.2,.9,.3,1.25) 1.05s forwards}
-#splash .chk{stroke-dasharray:90;stroke-dashoffset:90}
-.splash-on #splash .chk{animation:spDraw .6s cubic-bezier(.5,.1,.3,1) 1.5s forwards}
-#splash .sk{opacity:0;transform-box:fill-box;transform-origin:right bottom}
-.splash-on #splash .sk1{animation:spPop .35s ease 2.1s forwards}.splash-on #splash .sk2{animation:spPop .35s ease 2.2s forwards}.splash-on #splash .sk3{animation:spPop .35s ease 2.3s forwards}
-@keyframes spBg{from{background:#D8D4CB}to{background:#F6F1E7}}
-@keyframes spOut{to{opacity:0;visibility:hidden}}
-@keyframes spDrop{from{opacity:0;transform:translateY(-46px) scale(.92)}to{opacity:1;transform:none}}
-@keyframes spDraw{to{stroke-dashoffset:0}}
-@keyframes spPop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+#splash{display:none;position:fixed;inset:0;z-index:600;background:#d9d3c8;overflow:hidden}
+.splash-on #splash{display:block}
+#splash .sp-cream{position:absolute;inset:0;background:#f5f1e9;opacity:0}
+#splash .sp-mark{position:absolute;left:50%;top:50%;width:min(72vmin,660px);height:min(72vmin,660px);margin-left:calc(min(72vmin,660px)/-2);margin-top:calc(min(72vmin,660px)/-2 - 2vh)}
+#splash svg{width:100%;height:100%;overflow:visible;transform-origin:center;opacity:0}
+#splash .sc{transform-box:fill-box;transform-origin:center;opacity:0}
+#splash .sb{transform-box:fill-box;transform-origin:center}
 .pull-ring{position:fixed;left:50%;top:0;width:30px;height:30px;margin-left:-15px;z-index:180;pointer-events:none;opacity:0;transform:translateY(-40px);display:flex;align-items:center;justify-content:center;background:var(--card,#fff);border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.14)}
 .pull-ring i{width:16px;height:16px;border-radius:50%;border:2px solid #D8D2C6;border-top-color:#5C7A66;display:block}
 .pull-ring.spin i{animation:spRot .7s linear infinite}
@@ -728,7 +718,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 </style>
 </head>
 <body>
-<div id="splash" aria-hidden="true"><svg viewBox="-12 -16 240 240"><g class="t t1"><rect x="76" y="70" width="112" height="112" rx="22" fill="#B8ADC9"/></g><g class="t t2"><rect x="56" y="52" width="112" height="112" rx="22" fill="#EBCDA9"/></g><g class="t t3"><rect x="36" y="34" width="112" height="112" rx="22" fill="#8FA08C"/></g><path class="chk" d="M66 92 L86 112 L120 68" stroke="#F6F1E7" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/><g stroke="#8FA08C" stroke-width="8" stroke-linecap="round"><path class="sk sk1" d="M22 58 L4 54"/><path class="sk sk2" d="M28 26 L14 12"/><path class="sk sk3" d="M58 12 L60 -6"/></g></svg></div>
+<div id="splash" aria-hidden="true"><div class="sp-cream" id="spCream"></div><div class="sp-mark"><svg id="spSvg" viewBox="190 160 600 600"><defs><linearGradient id="spSageG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#91a28d"/><stop offset="1" stop-color="#7d917c"/></linearGradient><filter id="spSoft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#5a4f3c" flood-opacity="0.14"/></filter></defs><g class="sc" id="spC1"><rect x="412" y="385" width="344" height="344" rx="40" fill="#b8abca" filter="url(#spSoft)"/></g><g class="sc" id="spC2"><rect x="368" y="335" width="344" height="344" rx="40" fill="#ecca9f" filter="url(#spSoft)"/></g><g class="sb" id="spBump"><g class="sc" id="spC3"><rect x="321" y="285" width="344" height="344" rx="40" fill="url(#spSageG)" filter="url(#spSoft)"/></g><path id="spChk" d="M412 466 L462 520 L577 397" pathLength="1" fill="none" stroke="#f7f2ea" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></g><path class="spk" d="M305 265 L268 228" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M368 238 L358 195" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M280 326 L232 316" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></svg></div></div>
 <div id="app"></div>
 <script>
 var PALETTES=[
@@ -937,7 +927,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v39';
+var BUILD='v40';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2293,13 +2283,62 @@ function openAccountFlow(mode){
 }
 
 
-/* ---------- opening animation: goes away after 3.5s or on a tap ---------- */
+/* ---------- opening animation: the Claude Design "App Opening" sequence, same timing and easing (3.5s, tap to skip) ---------- */
 (function(){
  var sp=document.getElementById('splash');
  if(!sp||!/splash-on/.test(document.documentElement.className)){if(sp)sp.remove();return}
- function done(){if(!sp)return;sp.remove();sp=null;document.documentElement.className=document.documentElement.className.replace(' splash-on','')}
- var t=setTimeout(done,3600);
- sp.addEventListener('click',function(){if(!sp)return;clearTimeout(t);sp.classList.add('skip');setTimeout(done,260)});
+ var E={
+  outCubic:function(t){t--;return t*t*t+1},
+  outBack:function(t){var c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)},
+  inOutCubic:function(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1}
+ };
+ function an(from,to,s0,e0,ease){return function(T){if(T<=s0)return from;if(T>=e0)return to;return from+(to-from)*ease((T-s0)/(e0-s0))}}
+ function enter(a,b,s0,e0){return an(a,b,s0,e0,E.outCubic)}
+ function pop(a,b,s0,e0){return an(a,b,s0,e0,E.outBack)}
+ function draw(a,b,s0,e0){return an(a,b,s0,e0,E.inOutCubic)}
+ var L=0,S=.5,K=1.5,P=2.1,Hd=2.6,X=3.0,END=3.5;
+ var $=function(id){return document.getElementById(id)};
+ var cream=$('spCream'),svg=$('spSvg'),bump=$('spBump'),chk=$('spChk'),sparks=[].slice.call(sp.querySelectorAll('.spk'));
+ var cards=[{el:$('spC1'),start:S,fromY:90,fromS:.5},{el:$('spC2'),start:S+.16,fromY:90,fromS:.5},{el:$('spC3'),start:S+.34,fromY:-140,fromS:.7}];
+ var vecs=[[305,265,268,228,0],[368,238,358,195,.06],[280,326,232,316,.12]];
+ var t0=null,raf=0,finished=false;
+ function render(T){
+  var exitO=enter(1,0,X+.15,X+.5)(T);
+  sp.style.opacity=exitO;
+  cream.style.opacity=enter(0,1,L,S)(T);
+  cards.forEach(function(c){
+   var p=pop(0,1,c.start,c.start+.5)(T),o=enter(0,1,c.start,c.start+.2)(T);
+   c.el.style.opacity=o;
+   c.el.style.transform='translate(0px,'+(c.fromY*(1-p))+'px) scale('+(c.fromS+(1-c.fromS)*p)+')';
+  });
+  var check=draw(0,1,K,K+.45)(T);
+  var b=T<P?pop(1,1.05,K+.35,P+.05)(T):enter(1.05,1,P+.05,P+.45)(T);
+  bump.style.transform='scale('+b+')';
+  chk.style.strokeDashoffset=1-check;chk.style.opacity=check>0?1:0;
+  sparks.forEach(function(el,i){
+   var v=vecs[i],d=v[4],k=enter(0,1,P+d,P+d+.3)(T),kick=T<P+d+.3?0:pop(0,1,P+d+.3,P+d+.55)(T);
+   var dx=(v[2]-v[0])*.35*(k-kick),dy=(v[3]-v[1])*.35*(k-kick);
+   el.style.strokeDashoffset=1-k;el.style.opacity=k>0?1:0;el.style.transform='translate('+dx+'px,'+dy+'px)';
+  });
+  var breathe=draw(1,1.025,Hd,X)(T),exitS=enter(1,1.12,X,X+.5)(T);
+  svg.style.opacity=enter(1,0,X,X+.4)(T);
+  svg.style.transform='scale('+(breathe*exitS)+')';
+ }
+ function done(){if(finished)return;finished=true;cancelAnimationFrame(raf);sp.remove();document.documentElement.className=document.documentElement.className.replace(' splash-on','')}
+ function frame(now){
+  if(finished)return;
+  if(t0===null)t0=now;
+  var T=(now-t0)/1000;
+  if(T>=END){done();return}
+  render(T);
+  raf=requestAnimationFrame(frame);
+ }
+ render(0);
+ raf=requestAnimationFrame(frame);
+ sp.addEventListener('click',function(){
+  if(finished)return;
+  cancelAnimationFrame(raf);sp.style.transition='opacity .25s ease';sp.style.opacity='0';setTimeout(done,270);
+ });
 })();
 
 /* ---------- pull down at the top of a page to sync (phones and tablets) ---------- */
