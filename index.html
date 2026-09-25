@@ -927,7 +927,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v41';
+var BUILD='v42';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1434,7 +1434,7 @@ function celebrate(x,y){
 }
 function remindersOn(){return S.remind&&typeof Notification!=='undefined'&&Notification.permission==='granted'}
 function checkReminders(){
- if(!remindersOn())return;
+ if(!remindersOn()||pushOn())return;
  S.notified=S.notified||{};
  var t=today(),tm=new Date(t);tm.setDate(t.getDate()+1);
  var tIso=iso(t),tmIso=iso(tm),changed=false;
@@ -1573,6 +1573,14 @@ document.addEventListener('click',function(e){
  }else if(a==='acctdismiss'){try{localStorage.setItem('hub:acctdismiss','1')}catch(err){}render();
  }else if(a==='openinstall'){view.modal=null;go('install');
  }else if(a==='togglephoneapps'){try{localStorage.setItem('hub:phoneapps',phoneAppsOn()?'off':'on')}catch(err){}render();
+ }else if(a==='pushon'){
+  view.pushMsg='';
+  enablePush().then(function(err){view.pushMsg=err||'Notifications are on. A test notification just arrived.';render()});
+ }else if(a==='pushoff'){
+  disablePush().then(function(){view.pushMsg='Lock-screen reminders are off for this device.';render()});
+ }else if(a==='pushtest'){
+  view.pushMsg='Sending\u2026';render();
+  pushTest().then(function(m){view.pushMsg=m;render()});
  }else if(a==='instdismiss'){
   try{localStorage.setItem('hub:instdismiss','1')}catch(err){}
   render();
@@ -1807,6 +1815,85 @@ function xmCopy(text,btn){
 }
 XM.close=function(){xmClose()};
 XM.copy=function(arg,btn){xmCopy(btn.getAttribute('data-text'),btn)};
+
+/* ---- lock-screen reminders (web push): a server sends "Due today" each morning, even when the app is closed ---- */
+var PUSH_KEY="BG5h9TCBpvjc67od7SIc9yIHyzLTFJaRCKwawtUUuSGFSFwjV3rRk8qNps0nLyvQ82uvOSalLtyRQOLfwQi01m0";
+function pushSupported(){return location.protocol==='https:'&&'serviceWorker' in navigator&&'PushManager' in window&&typeof Notification!=='undefined'}
+function pushFlag(){try{return localStorage.getItem('hub:push')==='1'}catch(e){return false}}
+function pushOn(){return pushSupported()&&pushFlag()&&Notification.permission==='granted'}
+function pushKeyBytes(){var s=PUSH_KEY,r=atob((s+'='.repeat((4-s.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/')),o=new Uint8Array(r.length);for(var i=0;i<r.length;i++)o[i]=r.charCodeAt(i);return o}
+async function pushSave(sub){
+ var j=sub.toJSON(),k=j.keys||{},tz='UTC';
+ try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC'}catch(e){}
+ var cl=await ensureSb();
+ var r=await cl.from('push_subs').upsert({endpoint:j.endpoint,user_id:sbUser.id,p256dh:k.p256dh,auth:k.auth,tz:tz},{onConflict:'endpoint'});
+ return r.error;
+}
+function pushErrText(e){
+ var m=String(e&&e.message||e);
+ if(/relation|does not exist|schema cache/i.test(m))return 'Notifications are not switched on for this hub yet. The database setup for them still needs to be run.';
+ if(/DEVICE_LIMIT/.test(m))return 'This account already has 10 devices with notifications on. Turn them off on one, then try again.';
+ return 'Could not switch on notifications: '+m;
+}
+/* must be called straight from a tap: iPhone only shows its Allow prompt for a real tap */
+async function enablePush(){
+ if(!pushSupported())return 'This device cannot show lock-screen notifications. On iPhone, add Doable to your Home Screen and open it from there.';
+ if(!sbUser)return 'Sign in first, so your reminders can find you.';
+ var perm=await Notification.requestPermission();
+ if(perm!=='granted')return 'Notifications were not allowed. To allow them later, open your phone Settings, then Notifications, then Doable.';
+ try{
+  var reg=await navigator.serviceWorker.ready;
+  var sub=(await reg.pushManager.getSubscription())||(await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:pushKeyBytes()}));
+  var err=await pushSave(sub);
+  if(err)throw err;
+  try{localStorage.setItem('hub:push','1')}catch(e){}
+  try{await reg.showNotification('Notifications are on',{body:'Doable will tell you each morning at 8:00 what is due today.',icon:'icon-192.png',tag:'push-on'})}catch(e){}
+  return '';
+ }catch(e){return pushErrText(e)}
+}
+async function disablePush(){
+ try{
+  var reg=await navigator.serviceWorker.getRegistration(),sub=reg&&await reg.pushManager.getSubscription();
+  if(sub){var ep=sub.endpoint;await sub.unsubscribe();if(sbUser&&sb)await sb.from('push_subs').delete().eq('endpoint',ep)}
+ }catch(e){}
+ try{localStorage.removeItem('hub:push')}catch(e){}
+}
+async function pushTest(){
+ try{
+  var cl=await ensureSb(),r=await cl.functions.invoke('dynamic-responder',{body:{test:true}});
+  if(r.error)return 'The test could not be sent: '+String(r.error.message||r.error);
+  if(r.data&&r.data.sent>0)return 'Sent. It should appear on your lock screen in a few seconds.';
+  return 'No device is registered for reminders yet. Turn them off and on again.';
+ }catch(e){return 'The test could not be sent: '+String(e&&e.message||e)}
+}
+var pushChecked=false;
+async function pushRefresh(){   // once per app open: keep this device's address and time zone up to date
+ if(pushChecked||!pushOn()||!sbUser)return;
+ pushChecked=true;
+ try{
+  var reg=await navigator.serviceWorker.ready;
+  var sub=(await reg.pushManager.getSubscription())||(await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:pushKeyBytes()}));
+  await pushSave(sub);
+ }catch(e){}
+}
+function maybePushPrompt(){   // shown once per device, the first time the app opens with this feature
+ if(!sbUser||!pushSupported()||Notification.permission!=='default')return;
+ try{if(localStorage.getItem('hub:pushask'))return;localStorage.setItem('hub:pushask','1')}catch(e){return}
+ setTimeout(function(){
+  if(document.getElementById('xm')||document.getElementById('onb')||view.modal)return;
+  xmOpen('<h2>Notifications are here</h2><p>Doable can now tell you each morning what is due today, even when the app is closed. It shows up on your lock screen.</p>'
+   +'<div class="xbox">Tap <b>Turn on</b>, then tap <b>Allow</b> when your phone asks.</div><p class="xmsg" id="xmMsg"></p>'
+   +'<div class="xacts"><button class="xbtn" data-xm="close">Not now</button><button class="xbtn primary" data-xm="pushon" id="xmGo">Turn on</button></div>');
+ },4000);
+}
+XM.pushon=function(arg,btn){
+ if(btn)btn.disabled=true;
+ enablePush().then(function(err){
+  if(err){xmMsg(err);if(btn)btn.disabled=false;return}
+  xmOpen('<h2>Notifications are on</h2><p>You will get a reminder at 8:00 each morning when something is due. A test notification just arrived on your phone.</p><div class="xacts"><button class="xbtn primary" data-xm="close">Done</button></div>');
+  render();
+ });
+};
 
 /* ---- what a friend is allowed to receive ---- */
 var ISO_D=/^\d{4}-\d{2}-\d{2}$/,ISO_T=/^\d{2}:\d{2}$/;
@@ -2501,7 +2588,7 @@ async function sbAuth(mode){
  else if(mode==='up'&&!(r.data&&r.data.session))view.driveError='Account created. Check your email to confirm it, then sign in.';
  render();
 }
-async function sbSignOut(){view.usage=null;
+async function sbSignOut(){view.usage=null;try{await disablePush()}catch(e){}pushChecked=false;
  if(!confirm('Sign out of sync? Your data stays on this device, it just stops matching your other devices.'))return;
  var c=await ensureSb();
  if(c)await c.auth.signOut();
@@ -2810,7 +2897,7 @@ async function cloudSync(force){
  }else view.driveError=result.error;
  if(fr.limitName)view.driveError='"'+fr.limitName+'" is not syncing because you are over your file storage allowance (or the file is over 25 MB). It stays on this device. Delete some files to make room, and it will sync on its own.';
  view.syncInfo='build '+BUILD+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
- if(result&&result.ok)refreshUsage(!!(fr.moved||fr.limitName));
+ if(result&&result.ok){refreshUsage(!!(fr.moved||fr.limitName));pushRefresh();maybePushPrompt()}
  if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
  driveSyncing=false;
  if(force||(result&&result.changed)||fr.moved||(view.modal&&view.modal.kind==='settings'))render();
@@ -3700,9 +3787,16 @@ function modalHtml(){
    +sg('look','Look and feel','',
      '<button data-opencolours="1">Change colours</button>'
      +(onbPlatform()!=='desktop'?'<button data-xact="togglephoneapps">Open apps in their phone apps: '+(phoneAppsOn()?'On':'Off')+'</button>':''),false)
-   +sg('remind','Reminders',remindersOn()?'On':'Off',
-     (remindersOn()?'<button data-remindoff="1">Turn reminders off</button>':'<button data-remindon="1">Turn on reminders</button>')
-     +'<p class="hint" style="margin:0">Reminders arrive the day before and the morning something is due, while the hub is open in a tab.</p>',false)
+   +sg('remind','Reminders',(pushOn()||remindersOn())?'On':'Off',
+     (pushSupported()
+      ?(pushOn()
+        ?'<p class="hint" style="margin:0">Lock-screen reminders are on for this device. Each morning at 8:00 you get a list of what is due today, even when the app is closed.</p>'
+         +'<div class="sgrow"><button data-xact="pushtest">Send me a test</button><button data-xact="pushoff">Turn off</button></div>'
+        :'<button data-xact="pushon">Turn on lock-screen reminders</button><p class="hint" style="margin:0">Each morning at 8:00 you get a list of what is due today, even when the app is closed.</p>')
+      :(remindersOn()?'<button data-remindoff="1">Turn reminders off</button>':'<button data-remindon="1">Turn on reminders</button>')
+       +'<p class="hint" style="margin:0">Reminders arrive the day before and the morning something is due, while the hub is open in a tab.</p>'
+       +(onbPlatform()==='ios'?'<p class="hint" style="margin:0">To get reminders when the app is closed, add Doable to your Home Screen (Share, then Add to Home Screen) and open it from there.</p>':''))
+     +(view.pushMsg?'<p class="hint" style="margin:0;color:#4C6F55">'+esc(view.pushMsg)+'</p>':''),false)
    +sg('backup','Backup','',
      '<p class="hint" style="margin:0">A backup holds everything: ticks, files, photos, colours.</p>'
      +'<button data-export="1">Export everything</button>'

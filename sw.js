@@ -1,5 +1,5 @@
 // Keeps the hub opening even with no signal, and picks up new versions when online.
-var CACHE='hub-v41';
+var CACHE='hub-v42';
 var CORE=['./','./index.html','./manifest.webmanifest','./supabase.js','./qrcode.js','./favicon-16.png','./favicon-32.png','./icon-maskable-512.png','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',function(e){
@@ -27,4 +27,20 @@ self.addEventListener('fetch',function(e){
   }
   // icons and the manifest: saved copy first
   e.respondWith(caches.match(req).then(function(hit){return hit||fetch(req)}));
+});
+
+// lock-screen reminders: the server pushes a message, and we must always show it
+self.addEventListener('push',function(e){
+  var d={};
+  try{d=e.data?e.data.json():{}}catch(x){}
+  e.waitUntil(self.registration.showNotification(d.title||'Doable',{
+    body:d.body||'',icon:'./icon-192.png',badge:'./favicon-32.png',tag:d.tag||'doable',data:{url:'./'}
+  }));
+});
+self.addEventListener('notificationclick',function(e){
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(function(list){
+    for(var i=0;i<list.length;i++){if('focus' in list[i])return list[i].focus()}
+    return self.clients.openWindow('./');
+  }));
 });
