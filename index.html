@@ -927,7 +927,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v40';
+var BUILD='v41';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2501,7 +2501,7 @@ async function sbAuth(mode){
  else if(mode==='up'&&!(r.data&&r.data.session))view.driveError='Account created. Check your email to confirm it, then sign in.';
  render();
 }
-async function sbSignOut(){
+async function sbSignOut(){view.usage=null;
  if(!confirm('Sign out of sync? Your data stays on this device, it just stops matching your other devices.'))return;
  var c=await ensureSb();
  if(c)await c.auth.signOut();
@@ -2625,6 +2625,14 @@ function mergeRemote(rs,force){
  normalize();ensureIds();rebaseline();applyTheme();reconcileFiles();
  return true;
 }
+/* safety limits enforced in Supabase (supabase-safety.sql): turn its raw errors into plain sentences */
+function friendlyErr(m){
+ m=String(m||'');
+ if(/ROW_TOO_BIG/.test(m))return 'Your synced data is over the 8 MB limit, so new changes are not saving to the cloud. The usual cause is large cover images. Remove or shrink a few, then sync again.';
+ if(/RATE_LIMIT/.test(m))return 'Too many saves in a short time. Sync will retry in a minute.';
+ return m;
+}
+function isFileLimitErr(e){return /STORAGE_QUOTA|maximum allowed size|Payload too large|exceeded/i.test(String(e&&(e.message||e)||''))}
 var syncVer=null,syncedCanon=null;   // the cloud version we last matched, and what the cloud held at that version
 async function syncOnce(force){
  var uid=sbUser.id,changed=false;
@@ -2637,7 +2645,7 @@ async function syncOnce(force){
    var mine0=payloadOf(S),c0=canon(mine0);
    if(c0===syncedCanon)return{ok:true,changed:false};
    var up0=await sb.from('hub_state').update({state:mine0,version:syncVer+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',syncVer).select('version');
-   if(up0.error)return{ok:false,error:up0.error.message};
+   if(up0.error)return{ok:false,error:friendlyErr(up0.error.message)};
    if(up0.data&&up0.data.length){syncVer=syncVer+1;syncedCanon=c0;return{ok:true,changed:false}}
   }
  }
@@ -2649,7 +2657,7 @@ async function syncOnce(force){
    var ins=await sb.from('hub_state').insert({user_id:uid,state:payloadOf(S),version:1});
    if(!ins.error){S.everSynced=true;syncVer=1;syncedCanon=canon(payloadOf(S));return{ok:true,changed:changed}}
    if(ins.error.code==='23505')continue;
-   return{ok:false,error:ins.error.message};
+   return{ok:false,error:friendlyErr(ins.error.message)};
   }
   var before=canon(payloadOf(S));
   if(!mergeRemote(row.state,force))return{ok:false,error:'This device already has different data than your cloud account. Press Sync now to choose which to keep.'};
@@ -2658,7 +2666,7 @@ async function syncOnce(force){
   var cm=canon(mine);
   if(cm===canon(row.state||{})){syncVer=row.version;syncedCanon=cm;return{ok:true,changed:changed}}
   var up=await sb.from('hub_state').update({state:mine,version:row.version+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',row.version).select('version');
-  if(up.error)return{ok:false,error:up.error.message};
+  if(up.error)return{ok:false,error:friendlyErr(up.error.message)};
   if(up.data&&up.data.length){syncVer=row.version+1;syncedCanon=cm;return{ok:true,changed:changed}}
  }
  return{ok:false,error:'Sync is busy right now, it will retry.'};
@@ -2728,13 +2736,14 @@ async function listCloudNames(bucket,uid){
  return names;
 }
 async function syncFiles(){
- var bucket=sb.storage.from('hub-files'),uid=sbUser.id,dirty={},errs=0,moved=0;
+ var bucket=sb.storage.from('hub-files'),uid=sbUser.id,dirty={},errs=0,moved=0,limitName='';
  var names=await listCloudNames(bucket,uid);
  var cids=Object.keys(FILES);
  for(var a=0;a<cids.length;a++){
   var cid=cids[a],list=FILES[cid]||[];
   for(var b=0;b<list.length;b++){
    var f=list[b],path=uid+'/'+f.id,exists=!!names[f.id];
+   if(f.holdUntil&&f.holdUntil>Date.now()){limitName=limitName||f.name;continue}
    try{
     var needUpload=(!f.cloud&&(f.data||f.kind==='text'))||(f.cloud&&!exists&&hasContent(f));
     if(needUpload){
@@ -2753,13 +2762,26 @@ async function syncFiles(){
      }
      dirty[cid]=1;moved++;
     }
-   }catch(e){errs++}
+   }catch(e){if(isFileLimitErr(e)){f.holdUntil=Date.now()+30*60000;limitName=limitName||f.name}else errs++}
   }
  }
  for(var k in dirty)await saveFiles(k,true);
- return{errs:errs,moved:moved};
+ return{errs:errs,moved:moved,limitName:limitName};
 }
 /* ---- the sync loop ---- */
+var usageAt=0;
+async function refreshUsage(force){
+ if(!sb||typeof sb.rpc!=='function'||(!force&&Date.now()-usageAt<300000))return;
+ usageAt=Date.now();
+ try{var r=await sb.rpc('my_usage');if(!r.error&&r.data&&r.data.quota)view.usage={used:+r.data.used||0,quota:+r.data.quota}}catch(e){}
+}
+function usageLine(){
+ var u=view.usage;if(!u)return '';
+ var mb=function(n){return (n/1048576).toFixed(n<10485760?1:0)},pct=Math.min(100,Math.round(u.used/u.quota*100));
+ var col=pct>=100?'#A34A3F':(pct>=80?'#B7791F':'#4C6F55');
+ return '<div style="margin:2px 0"><div class="hint" style="margin:0 0 4px">File storage: '+mb(u.used)+' MB of '+mb(u.quota)+' MB used'+(pct>=80?(pct>=100?'. Full: new files will not sync until you delete some.':'. Getting full.'):'')+'</div>'
+  +'<div style="height:6px;border-radius:3px;background:rgba(128,128,128,.25);overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+col+'"></div></div></div>';
+}
 function scheduleCloudSync(ms){
  if(!sbUser)return;
  clearTimeout(cloudTimer);
@@ -2786,7 +2808,9 @@ async function cloudSync(force){
   try{fr=await syncFiles()}catch(e){fr.errs++}
   setTimeout(openPendingImport,300);
  }else view.driveError=result.error;
+ if(fr.limitName)view.driveError='"'+fr.limitName+'" is not syncing because you are over your file storage allowance (or the file is over 25 MB). It stays on this device. Delete some files to make room, and it will sync on its own.';
  view.syncInfo='build '+BUILD+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
+ if(result&&result.ok)refreshUsage(!!(fr.moved||fr.limitName));
  if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
  driveSyncing=false;
  if(force||(result&&result.changed)||fr.moved||(view.modal&&view.modal.kind==='settings'))render();
@@ -3656,6 +3680,7 @@ function modalHtml(){
    ? '<div class="syncrow">'+(driveSyncing?'<span class="spin"></span> Syncing…':(S.lastSync?'Last synced '+timeAgo(S.lastSync):'Not synced yet'))+'</div>'
      +'<p class="hint" style="margin:0">Signed in as '+esc(sbUser.email||'your account')+'. Every change syncs automatically, including files.</p>'
      +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0">'+esc(view.driveError)+'</p>':'')
+     +usageLine()
      +'<p class="hint" style="font-size:10.5px;margin:0;word-break:break-all">'+esc(view.syncInfo||'build '+BUILD)+'</p>'
      +'<div class="sgrow"><button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
      +'<button data-sbsignout="1" style="color:#A34A3F">Sign out</button></div>'
@@ -4022,7 +4047,7 @@ async function addFiles(cid,list){
  FILES[cid]=FILES[cid]||[];
  for(var i=0;i<list.length;i++){
   var f=list[i];
-  if(f.size>40000000){alert(f.name+' is over 40 MB, which is too big to keep. Try splitting it or exporting a smaller version.');continue}
+  if(f.size>25000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file. Try splitting it or exporting a smaller version.');continue}
   try{FILES[cid].push(await readFile(f))}catch(e){}
  }
  render();
