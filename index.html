@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#23201B">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -567,7 +567,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 
 /* ---------- phones, round two ---------- */
 @media(max-width:700px){
-  html,body{max-width:100%;overflow-x:hidden}
+  html,body{width:100%;max-width:100%;overflow-x:hidden;overflow-x:clip}
   .wrap,.layout,.main{max-width:100vw;overflow-x:hidden}
   .split>div,.two>*,.two2>*,.rail>*{min-width:0}
 
@@ -927,7 +927,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v44';
+var BUILD='v45';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
