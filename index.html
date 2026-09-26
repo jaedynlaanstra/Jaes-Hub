@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#23201B">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,6 +50,8 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--fb,'DM Sans',-apple-system,Segoe UI,sans-serif);font-weight:var(--wb,400);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .main{zoom:var(--fscale,1)}
+/* the Size slider is for computers: on phones and small tablets the page always fills the screen, even though the setting syncs */
+@media(max-width:900px){.main{zoom:1!important}}
 h1,h2,h3,.brand,.hero .day,.due .what,.classcard .nm,.appcard .nm3,.qlink span{font-family:var(--fh,inherit);font-weight:var(--wh,500);font-style:var(--hs,normal)}
 button,input,select,textarea{font-family:var(--fb,inherit)}
 h1,h2,h3{font-weight:500;margin:0}
@@ -927,7 +929,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v45';
+var BUILD='v46';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
