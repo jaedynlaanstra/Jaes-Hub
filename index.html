@@ -180,7 +180,7 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .srow:hover{color:var(--ink)}
 .srow .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;align-self:center}
 .srow .sd{font-size:12px;color:var(--ink2);flex-shrink:0;min-width:82px}
-.srow .grow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .grow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .srow .pill{align-self:center}
 .stat{background:#F6F4F0;border-radius:12px;padding:16px 18px}
 .stat p:first-child{font-size:13px;color:var(--ink2)}
@@ -927,7 +927,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v43';
+var BUILD='v44';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
