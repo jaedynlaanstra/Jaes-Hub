@@ -927,7 +927,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v42';
+var BUILD='v43';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3545,8 +3545,8 @@ function viewClass(c){
   m+=firstThree(finished.map(function(a){
    return '<div class="item"><span class="grow done">'+esc(a.title)+'</span>'
     +(a.mark!==''&&a.mark!=null
-      ?'<span class="pill" style="background:var(--card);color:var(--doneInk)">'+a.mark+'%</span>'
-      :(a.weight?'<button class="ghost" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" style="font-size:11.5px;color:var(--doneInk)">Add mark</button>':''))
+      ?'<button class="pill" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" title="Change the mark" style="background:var(--card);color:var(--doneInk);border:none;cursor:pointer">'+a.mark+'%</button>'
+      :'<button class="ghost" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" style="font-size:11.5px;color:var(--doneInk)">Add mark</button>')
     +'<span class="when2">'+esc(a.doneAt?'done '+parseISO(a.doneAt).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):(a.due?'was due '+parseISO(a.due).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):''))+'</span>'
     +'<button class="ghost" data-undo="'+a.id+'" data-c="'+c.id+'" style="font-size:11.5px;color:var(--doneInk)">Put back</button></div>';
   }),'finished');
