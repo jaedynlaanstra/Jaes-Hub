@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v62';
+var BUILD='v63';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4512,6 +4512,7 @@ function mkTouchMove(e){
  if(MK.touch.mode!=='pan'||e.touches.length<2)return;
  e.preventDefault();
  var body=document.getElementById('mkbody'),c=mkCenter(e.touches),d=mkDist(e.touches);
+ MK.touch.lastC=c;
  if(!MK.touch.zoomMode){
   if(Math.abs(d/MK.touch.d0-1)>MK_ZOOM_DEADZONE){
    MK.touch.zoomMode=true;MK.touch.d0=d;
@@ -4535,8 +4536,14 @@ function mkTouchEnd(e){
   var pages=document.getElementById('mkpages'),ratio=MK.touch.liveRatio||1;
   pages.style.transform='none';pages.style.willChange='';
   var newZoom=Math.max(.5,Math.min(4,MK.touch.z0*ratio)),oldZoom=MK.zoom;
+  var body=document.getElementById('mkbody'),rect=body.getBoundingClientRect();
+  var O=MK.touch.contentY,scrollTop0=MK.touch.scrollTop0;
+  var c=MK.touch.lastC||MK.touch.c0;
+  // undo the live preview's own scaling to find the true page point sitting under your fingers now
+  var trueY=O+(c.y-rect.top-O+scrollTop0)/ratio;
+  var trueOriginY=c.y-rect.top;
   MK.zoom=newZoom;
-  mkApplyZoomKeepingPoint(MK.touch.contentY,oldZoom,MK.touch.originY);
+  mkApplyZoomKeepingPoint(trueY,oldZoom,trueOriginY);
  }
  if(e.touches.length<(MK.touch.mode==='pan'?2:1))MK.touch=null;
 }
