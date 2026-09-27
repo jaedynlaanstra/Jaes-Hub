@@ -682,7 +682,6 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   /* file and link rows: name on the left, one "more" button on the right */
   #c-files .item,#c-links .item{display:flex!important;gap:12px;align-items:center}
   #c-files .item .grow,#c-links .item .grow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14.5px}
-  #c-files .item [data-renamefile],#c-files .item select,#c-files .item [data-savefile],#c-files .item [data-delfile],
   #c-links .item select,#c-links .item [data-pin],#c-links .item [data-dellink]{display:none!important}
   .rowmore{display:flex;align-items:center;justify-content:center;width:36px;height:36px;min-height:0!important;border:none;background:transparent;color:var(--ink2);font-size:20px;padding:0;flex-shrink:0;border-radius:8px}
   .rowmore:active{background:#F1EFEA}
@@ -929,7 +928,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v46';
+var BUILD='v49';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3445,13 +3444,8 @@ function viewClass(c){
   return '<div class="item">'+fileIcon(f)+'<span class="grow">'
    +(canOpen?'<a href="#" data-openfile="'+i+'" data-c="'+c.id+'" title="Open in a new tab">'+esc(f.name)+'</a>':esc(f.name))
    +'</span>'
-   +'<button class="ghost" data-renamefile="'+i+'" data-c="'+c.id+'" style="font-size:11px;padding:4px 6px">Rename</button>'
-   +((c.sections||[]).length?'<select data-movefile="'+i+'" data-c="'+c.id+'" style="width:auto;font-size:11.5px;padding:4px 6px">'+sectionOptions(c,f.section||'')+'</select>':'')
-   +(canOpen?'':'<button class="x" data-savefile="'+i+'" data-c="'+c.id+'" title="Download a copy" aria-label="Download a copy">\u2913</button>')
-
    +(f.saved===false&&f.data?'<span class="tag">too big to keep</span>':'')
-   +'<button class="x" data-delfile="'+i+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button>'
-   +'<button class="rowmore" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">\u22ef</button></div>';
+   +'<button class="ghost" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" style="font-size:11px;padding:4px 6px">Edit</button></div>';
  }
  function linkRow(l,i){
   return '<div class="item">'+linkIcon(l.url,l.title)+'<span class="grow"><a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a></span>'
@@ -3746,7 +3740,8 @@ function modalHtml(){
    var sf=(FILES[m.classId]||[])[m.i];
    if(!sf)return '';
    h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sf.name)+'</h3><div class="sheetlist">'
-    +(READABLE[sf.kind]?'<button data-sheetdo="open">Open</button>':'<button data-sheetdo="download">Download a copy</button>')
+    +'<button data-sheetdo="'+(READABLE[sf.kind]?'open':'download')+'">'+(READABLE[sf.kind]?'Open':'Download a copy')+'</button>'
+    +(READABLE[sf.kind]?'<button data-sheetdo="replace">Replace with an edited copy</button>':'')
     +'<button data-sheetdo="rename">Rename</button>'
     +((sc.sections||[]).length?'<label class="sheetmove">Section<select data-sheetmove="1">'+sectionOptions(sc,sf.section||'')+'</select></label>':'')
     +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
@@ -4149,6 +4144,34 @@ async function addFiles(cid,list){
  render();
  saveFiles(cid);
 }
+/* "Replace with an edited copy": mark up a PDF (or image) outside Doable -- Markup on iPad/iPhone, Preview on a Mac, Adobe -- then
+   bring the marked-up file back in under the SAME file entry, so it stays one file (no duplicate, no extra storage: the old
+   content is overwritten at the same cloud path) and the same class, section and position in the list. */
+function replaceFilePick(cid,i){
+ var f=(FILES[cid]||[])[i];if(!f)return;
+ var inp=document.createElement('input');
+ inp.type='file';inp.accept=f.kind==='image'?'image/*':(f.kind==='pdf'?'application/pdf':'*/*');
+ inp.style.display='none';document.body.appendChild(inp);
+ inp.addEventListener('change',function(){
+  var file=inp.files&&inp.files[0];inp.remove();
+  if(file)replaceFile(cid,i,file);
+ });
+ inp.click();
+}
+async function replaceFile(cid,i,file){
+ var list=FILES[cid]||[],old=list[i];if(!old)return;
+ if(file.size>25000000){alert(file.name+' is '+(file.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');return}
+ var fresh;
+ try{fresh=await readFile(file)}catch(e){alert('Could not read that file.');return}
+ fresh.id=old.id;
+ fresh.name=old.name;
+ fresh.section=old.section;
+ fresh.cloud=false;
+ list[i]=fresh;
+ render();
+ await saveFiles(cid);
+ if(sbUser)cloudSync(true);
+}
 function setPhoto(key,file){
  if(key.indexOf('bookicon:')===0){
   var bc=classById(key.split(':')[1]);
@@ -4252,7 +4275,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -4303,6 +4326,7 @@ document.addEventListener('click',function(e){
  if(d.del==='assign'){var c4=classById(d.c);c4.assignments=c4.assignments.filter(function(a){return a.id!==d.id});save();render();return}
  if(d.delcontact){var c5=classById(d.c);c5.contacts=c5.contacts.filter(function(x){return x.id!==d.delcontact});save();render();return}
  if(d.openfile!==undefined&&d.openfile!==''){e.preventDefault();openFile(d.c,+d.openfile);return}
+ if(d.replacefile!==undefined&&d.replacefile!==''){replaceFilePick(d.c,+d.replacefile);return}
  if(d.savefile!==undefined&&d.savefile!==''){openFile(d.c,+d.savefile);return}
  if(d.renamefile!==undefined&&d.renamefile!==''){
   var rf=(FILES[d.c]||[])[+d.renamefile];
@@ -4346,6 +4370,7 @@ document.addEventListener('click',function(e){
    var fi=sm.i,fl=(FILES[sm.classId]||[])[fi];
    if(act==='open'||act==='download'){render();openFile(sm.classId,fi);return}
    if(act==='rename'){render();var nn=prompt('Name this file',fl.name);if(nn&&nn.trim()){fl.name=nn.trim();saveFiles(sm.classId)}return}
+   if(act==='replace'){render();replaceFilePick(sm.classId,fi);return}
    if(act==='delete'){if(confirm('Delete '+fl.name+'?')){dropFile(sm.classId,fi)}render();return}
   }else{
    var lk=scc.links[sm.i];
