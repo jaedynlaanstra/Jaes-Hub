@@ -930,7 +930,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v54';
+var BUILD='v56';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4071,27 +4071,33 @@ async function indexPdfs(cid){
 }
 
 
+
 /* ---------- PDF markup: read a PDF inside Doable and mark it up (highlighter, pen, eraser) ----------
    Your marks are stored apart from the PDF itself (a small file next to it), so they weigh almost
    nothing; a small timestamp travels with the ordinary synced data so other devices know to fetch them.
    Pages scroll continuously, like a normal PDF reader; only the pages near view are actually drawn,
    so long PDFs do not have to render all at once.
-   Touch: one finger draws (in Markup mode) or scrolls (in Reading mode); two fingers always scroll and
-   pinch-zoom, on either mode, so drawing and moving around never fight over the same gesture.
+   Touch: one finger draws (in Markup mode) or scrolls (in Reading mode). Two fingers always pan; a
+   deliberate pinch (past a small dead zone, so an ordinary two-finger scroll never wobbles the zoom)
+   previews the new size instantly with a plain CSS scale, anchored under your fingers, and only asks
+   the PDF reader to redraw once, when you lift off -- that one real redraw is what was making zooming
+   feel glitchy before, since asking it to redraw on every tiny finger movement is too slow to keep up.
    A mouse or an Apple Pencil always draws in Markup mode, since neither is ambiguous the way a finger is. */
 var MK=null;
 var MK_SIZES={hi:{s:8,m:14,l:22},pen:{s:1,m:2,l:3.5},eraser:{s:10,m:16,l:24}};
 var MK_COLORS={hi:['#F5D949','#F5A0B5','#8FD19E','#7FB8E0','#D9A8F0','#F2B26B'],pen:['#26241F','#D9534F','#3B82F6','#1F9D6B','#8B5CF6','#E67E22']};
+function mkIco(inner,sz){return '<svg viewBox="0 0 24 24" width="'+(sz||19)+'" height="'+(sz||19)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>'}
 var MK_ICO={
- close:'<svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
- undo:'<svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 7H4V4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.6 7.4A8 8 0 1 1 4 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
- redo:'<svg viewBox="0 0 24 24" width="18" height="18"><g transform="scale(-1,1) translate(-24,0)"><path d="M7 7H4V4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.6 7.4A8 8 0 1 1 4 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></g></svg>',
- hi:'<svg viewBox="0 0 24 24" width="19" height="19"><path d="M17.5 3.5l3 3-9.6 9.6-4-1 1-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5 21h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M9.3 15.7l-3-3" stroke="currentColor" stroke-width="1.6"/></svg>',
- pen:'<svg viewBox="0 0 24 24" width="19" height="19"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13.5 6.5l4 4" stroke="currentColor" stroke-width="1.6"/></svg>',
- eraser:'<svg viewBox="0 0 24 24" width="19" height="19"><path d="M17 3l4 4-9 9H8l-4-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 21h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M11.5 6.5l4 4" stroke="currentColor" stroke-width="1.6"/></svg>',
- sun:'<svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2.5v2.3M12 19.2v2.3M21.5 12h-2.3M4.8 12H2.5M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6M18.4 18.4l-1.6-1.6M7.2 7.2L5.6 5.6"/></g></svg>',
- moon:'<svg viewBox="0 0 24 24" width="17" height="17"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
- ext:'<svg viewBox="0 0 24 24" width="16" height="16"><path d="M9 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 4h6v6M20 4l-9 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+ close:mkIco('<path d="M5 5l14 14M19 5L5 19"/>',17),
+ menu:mkIco('<path d="M4 6h16M4 12h16M4 18h16"/>',18),
+ undo:mkIco('<path d="M7 7H4V4"/><path d="M4.6 7.4A8 8 0 1 1 4 12"/>',18),
+ redo:mkIco('<g transform="scale(-1,1) translate(-24,0)"><path d="M7 7H4V4"/><path d="M4.6 7.4A8 8 0 1 1 4 12"/></g>',18),
+ hi:mkIco('<path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>'),
+ pen:mkIco('<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>'),
+ eraser:mkIco('<path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.828 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/>'),
+ sun:mkIco('<circle cx="12" cy="12" r="4.2" stroke-width="1.6"/><g stroke-width="1.6"><path d="M12 2.5v2.3M12 19.2v2.3M21.5 12h-2.3M4.8 12H2.5M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6M18.4 18.4l-1.6-1.6M7.2 7.2L5.6 5.6"/></g>',17),
+ moon:mkIco('<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" stroke-width="1.6"/>',17),
+ ext:mkIco('<path d="M9 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-width="1.6"/><path d="M14 4h6v6M20 4l-9 9" stroke-width="1.6"/>',16)
 };
 function mkCss(){
  if(document.getElementById('mkcss'))return;
@@ -4101,16 +4107,27 @@ function mkCss(){
   +'#mk .mktop{display:flex;align-items:center;gap:6px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;flex-wrap:wrap}'
   +'#mk .mkicon{background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}'
   +'#mk .mkicon:disabled{opacity:.3}'
-  +'#mk .mkpage{font-size:12.5px;color:#C9C3B4;flex:1;text-align:center;min-width:70px}'
+  +'#mk .mkname{font-size:12.5px;color:#C9C3B4;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1}'
+  +'#mk .mkgrow{flex:1}'
+  +'#mk .mkpage{font-size:12.5px;color:#C9C3B4;flex-shrink:0}'
+  +'#mk .mkzoompill{display:flex;align-items:center;background:rgba(255,255,255,.08);border-radius:9px;overflow:hidden;flex-shrink:0}'
+  +'#mk .mkzoompill button{background:none;border:none;color:#fff;width:30px;height:34px;font-size:16px;cursor:pointer}'
+  +'#mk .mkzoomval{width:46px;height:34px;background:none;border:none;color:#EFEAE0;font-size:12.5px;text-align:center;-moz-appearance:textfield}'
   +'#mk .mkmode{display:flex;background:rgba(255,255,255,.08);border-radius:10px;padding:2px;flex-shrink:0}'
   +'#mk .mkmode button{background:none;border:none;color:#C9C3B4;padding:6px 11px;border-radius:8px;font-size:12.5px;cursor:pointer}'
   +'#mk .mkmode button.on{background:#EFEAE0;color:#1c1a17;font-weight:600}'
+  +'#mk .mkmain{flex:1;display:flex;min-height:0}'
+  +'#mk .mkthumbs{width:96px;flex-shrink:0;overflow-y:auto;background:rgba(0,0,0,.25);padding:8px;display:none}'
+  +'#mk .mkthumbs.on{display:block}'
+  +'#mk .mkthumb{display:block;width:100%;margin-bottom:10px;border-radius:6px;overflow:hidden;border:2px solid transparent;background:#000;cursor:pointer;padding:0}'
+  +'#mk .mkthumb.cur{border-color:#EFEAE0}'
+  +'#mk .mkthumb img{display:block;width:100%}'
+  +'#mk .mkthumb span{display:block;text-align:center;font-size:10.5px;color:#C9C3B4;padding:2px 0}'
   +'#mk .mkbody{flex:1;position:relative;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}'
+  +'#mk .mkpages{will-change:auto}'
   +'#mk .mkpagebox{display:flex;justify-content:center}'
   +'#mk .mkpagewrap{position:relative;margin:12px auto;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease}'
   +'#mk .mkpagewrap canvas{display:block;position:absolute;left:0;top:0;width:100%;height:100%}'
-  +'#mk .mkzoom{position:sticky;float:right;bottom:14px;margin:0 14px -34px 0;display:flex;gap:6px;z-index:2}'
-  +'#mk .mkzoom button{background:rgba(28,26,23,.82);border:1px solid rgba(255,255,255,.15);color:#fff;width:34px;height:34px;border-radius:50%;font-size:17px;cursor:pointer;backdrop-filter:blur(6px)}'
   +'#mk .mktools{padding:8px 10px 10px;background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.08)}'
   +'#mk .mkrow{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}'
   +'#mk .mkrow+.mkrow{margin-top:7px}'
@@ -4119,9 +4136,9 @@ function mkCss(){
   +'#mk .mksep{width:1px;height:22px;background:rgba(255,255,255,.15);margin:0 3px;flex-shrink:0}'
   +'#mk .mksizebtn{width:34px;height:34px;padding:0!important}'
   +'#mk .mksizebtn i{display:block;border-radius:50%;background:currentColor}'
-  +'#mk .mkswatch{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.35);padding:0;min-width:0;flex-shrink:0;position:relative;overflow:hidden}'
-  +'#mk .mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #1c1a17,0 0 0 3px #fff}'
-  +'#mk .mkswatch input[type=color]{position:absolute;inset:0;width:100%;height:100%;border:none;padding:0;opacity:0;cursor:pointer}'
+  +'#mk .mkrow button.mkswatch,#mk .mkrow label.mkswatch{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;min-width:28px;min-height:0;max-width:28px;border-radius:50%;border:2px solid rgba(255,255,255,.35);padding:0;margin:0;flex-shrink:0;position:relative;overflow:hidden;box-sizing:border-box}'
+  +'#mk .mkrow button.mkswatch.on,#mk .mkrow label.mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #1c1a17,0 0 0 3px #fff}'
+  +'#mk .mkswatch input[type=color]{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);border:none;padding:0;margin:0;opacity:0;cursor:pointer}'
   +'#mk .mkswatch.mkcustom{background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)}';
  document.head.appendChild(st);
 }
@@ -4137,13 +4154,17 @@ async function mkOpen(cid,i){
  var doc;
  try{doc=await lib.getDocument({data:b64ToBytes(f.data)}).promise}catch(e){alert('Could not open this PDF.');return}
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},curPage:1,zoom:1,mode:'read',
-     tool:'hi',color:MK_COLORS.hi[0],size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null};
+     tool:'hi',color:MK_COLORS.hi[0],size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
  mkCss();
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
  document.body.appendChild(el);
- el.innerHTML='<div class="mktop" id="mktop"></div><div class="mkbody" id="mkbody"><div class="mkzoom"><button data-mk="zoomout" aria-label="Zoom out">−</button><button data-mk="zoomin" aria-label="Zoom in">+</button></div></div><div class="mktools" id="mktoolbar"></div>';
+ el.innerHTML='<div class="mktop" id="mktop"></div>'
+  +'<div class="mkmain"><div class="mkthumbs" id="mkthumbs"></div><div class="mkbody" id="mkbody"><div class="mkpages" id="mkpages"></div></div></div>'
+  +'<div class="mktools" id="mktoolbar"></div>';
  el.addEventListener('click',mkClick);
  el.addEventListener('input',mkColorInput);
+ el.addEventListener('keydown',mkZoomKey);
+ el.addEventListener('blur',mkZoomBlur,true);
  el.addEventListener('pointerdown',mkPointerDown);
  el.addEventListener('pointermove',mkPointerMove);
  el.addEventListener('pointerup',mkPointerUp);
@@ -4164,7 +4185,7 @@ async function mkOpen(cid,i){
  if(!MK)return;
  var frag='';
  for(var n2=1;n2<=MK.pageCount;n2++)frag+=mkPageHtml(n2);
- body.insertAdjacentHTML('beforeend',frag);
+ document.getElementById('mkpages').innerHTML=frag;
  body.addEventListener('scroll',mkOnScrollThrottled,{passive:true});
  mkOnScroll();
 }
@@ -4214,13 +4235,15 @@ function mkOnScroll(){
  });
  if(best!==MK.curPage){
   MK.curPage=best;
-  var el=document.getElementById('mkpageno');if(el)el.textContent=best;
+  var el=document.getElementById('mkpageline');if(el)el.textContent=best+' / '+MK.pageCount;
+  mkThumbHighlight();
  }
 }
 var mkScrollTimer=null;
 function mkOnScrollThrottled(){clearTimeout(mkScrollTimer);mkScrollTimer=setTimeout(mkOnScroll,80)}
 function mkApplyZoom(){
  if(!MK)return;
+ var zval=document.getElementById('mkzoomval');if(zval)zval.value=Math.round(MK.zoom*100)+'%';
  for(var n=1;n<=MK.pageCount;n++){
   var info=MK.pageInfo[n],w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
   var wrap=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .mkpagewrap');
@@ -4228,6 +4251,14 @@ function mkApplyZoom(){
   MK.rendered[n]=false;
  }
  mkOnScroll();
+}
+/* used after a pinch gesture: re-render at the new size, then scroll so the content that was under
+   your fingers stays under your fingers, instead of the page jumping to some other spot */
+function mkApplyZoomKeepingPoint(oldContentY,oldZoom,originY){
+ mkApplyZoom();
+ var body=document.getElementById('mkbody');
+ var ratio=MK.zoom/oldZoom;
+ body.scrollTop=Math.max(0,oldContentY*ratio-originY);
 }
 
 /* ---------- drawing on the annotation layer ---------- */
@@ -4239,6 +4270,53 @@ function mkDrawAnnoForPage(n){
  mkStrokesForPage(n).forEach(function(s){mkPaintStroke(ctx,s,scale)});
  if(MK.drawing&&MK.drawing.page===n)mkPaintStroke(ctx,MK.drawing,scale);
 }
+/* our own version of the "perfect-freehand" idea (github.com/steveruizok/perfect-freehand), written
+   from scratch rather than installing it: pressure sets each point's radius (eased, and never quite
+   down to a hairline), both ends taper to a point, and the two offset rails are filled as one solid
+   shape instead of stroking a fixed-width line -- that is what gives real ink its tapered look. */
+function mkStrokeOutline(pts,baseWidth){
+ var n=pts.length;
+ if(n<2)return null;
+ var lead=Math.min(10,n),avgStart=0;
+ for(var k=0;k<lead;k++)avgStart+=(pts[k][2]===undefined?.5:pts[k][2]);
+ avgStart/=lead;
+ var radii=[];
+ for(var i=0;i<n;i++){
+  var pr=pts[i][2]===undefined?.5:pts[i][2];
+  if(i<lead)pr=(pr+avgStart)/2; // averages into the true reading for the first few points, so a stroke never starts fat
+  var eased=Math.pow(Math.max(0,Math.min(1,pr)),0.7);
+  var full=baseWidth*(0.22+0.78*eased)/2;
+  var tIn=Math.min(1,i/8),tOut=Math.min(1,(n-1-i)/8);          // taper the very start and end down to a fine point
+  var taper=Math.max(0.06,Math.min(tIn,tOut));
+  radii.push(Math.max(0.4,full*taper));
+ }
+ var left=[],right=[];
+ for(var j=0;j<n;j++){
+  var p0=pts[Math.max(0,j-1)],p1=pts[Math.min(n-1,j+1)];
+  var dx=p1[0]-p0[0],dy=p1[1]-p0[1],len=Math.hypot(dx,dy)||1;
+  var nx=-dy/len,ny=dx/len,r2=radii[j];
+  left.push([pts[j][0]+nx*r2,pts[j][1]+ny*r2]);
+  right.push([pts[j][0]-nx*r2,pts[j][1]-ny*r2]);
+ }
+ function cap(center,r,a0,a1){
+  var out=[],steps=8;
+  for(var s2=0;s2<=steps;s2++){var a=a0+(a1-a0)*(s2/steps);out.push([center[0]+Math.cos(a)*r,center[1]+Math.sin(a)*r])}
+  return out;
+ }
+ var d0=Math.atan2(pts[1][1]-pts[0][1],pts[1][0]-pts[0][0]);
+ var d1=Math.atan2(pts[n-1][1]-pts[n-2][1],pts[n-1][0]-pts[n-2][0]);
+ var startCap=cap(pts[0],radii[0],d0+Math.PI/2,d0+Math.PI*1.5);
+ var endCap=cap(pts[n-1],radii[n-1],d1-Math.PI/2,d1+Math.PI/2);
+ return left.concat(endCap,right.reverse(),startCap);
+}
+function mkSmoothPath(ctx,pts){
+ if(pts.length<3){ctx.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);return}
+ ctx.moveTo(pts[0][0],pts[0][1]);
+ for(var j=0;j<pts.length;j++){
+  var a=pts[j],b=pts[(j+1)%pts.length];
+  ctx.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2);
+ }
+}
 function mkPaintStroke(ctx,s,scale){
  ctx.save();
  if(s.tool==='hi'){
@@ -4246,10 +4324,14 @@ function mkPaintStroke(ctx,s,scale){
   ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='butt';
   ctx.beginPath();ctx.moveTo(s.x0*scale,s.y0*scale);ctx.lineTo(s.x1*scale,s.y1*scale);ctx.stroke();
  }else{
-  ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
-  ctx.beginPath();
-  (s.pts||[]).forEach(function(p,idx){var x=p[0]*scale,y=p[1]*scale;if(idx===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});
-  ctx.stroke();
+  var pts=(s.pts||[]).map(function(p){return [p[0]*scale,p[1]*scale,p[2]]});
+  ctx.globalAlpha=1;ctx.fillStyle=s.color;
+  if(pts.length===1){
+   ctx.beginPath();ctx.arc(pts[0][0],pts[0][1],Math.max(1,s.width*scale)/2,0,Math.PI*2);ctx.fill();
+  }else{
+   var outline=mkStrokeOutline(pts,Math.max(1,s.width*scale));
+   if(outline&&outline.length>2){ctx.beginPath();mkSmoothPath(ctx,outline);ctx.closePath();ctx.fill()}
+  }
  }
  ctx.restore();
 }
@@ -4274,17 +4356,17 @@ function mkEraseAt(page,p){
  var list=mkStrokesForPage(page);
  for(var k=0;k<list.length;k++){if(mkHit(list[k],p)){mkRemoveStroke(list[k]);break}}
 }
-function mkBeginStroke(anno,page,clientX,clientY){
+function mkBeginStroke(anno,page,clientX,clientY,pressure){
  var p=mkAnnoPoint(anno,clientX,clientY,page);
  if(MK.tool==='eraser'){MK.erasing=true;mkEraseAt(page,p);return}
- var sz=MK_SIZES[MK.tool][MK.size];
+ var sz=MK_SIZES[MK.tool][MK.size],pr=(pressure===undefined||!pressure)?.5:pressure;
  MK.drawing=MK.tool==='hi'
   ?{id:uid(),tool:'hi',color:MK.color,width:sz,page:page,x0:p[0],y0:p[1],x1:p[0],y1:p[1]}
-  :{id:uid(),tool:'pen',color:MK.color,width:sz,page:page,pts:[p]};
+  :{id:uid(),tool:'pen',color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]]};
  MK.drawingAnno=anno;
  mkDrawAnnoForPage(page);
 }
-function mkExtendStroke(clientX,clientY){
+function mkExtendStroke(clientX,clientY,pressure){
  if(MK.erasing){
   if(!MK.drawingAnno)return;
   var pg=+MK.drawingAnno.getAttribute('data-mkpage');
@@ -4292,8 +4374,8 @@ function mkExtendStroke(clientX,clientY){
   return;
  }
  if(!MK.drawing||!MK.drawingAnno)return;
- var pg2=MK.drawing.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg2);
- if(MK.drawing.tool==='hi'){MK.drawing.x1=p[0];MK.drawing.y1=p[1]}else{MK.drawing.pts.push(p)}
+ var pg2=MK.drawing.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg2),pr=(pressure===undefined||!pressure)?.5:pressure;
+ if(MK.drawing.tool==='hi'){MK.drawing.x1=p[0];MK.drawing.y1=p[1]}else{MK.drawing.pts.push([p[0],p[1],pr])}
  mkDrawAnnoForPage(pg2);
 }
 function mkFinishStroke(){
@@ -4310,12 +4392,15 @@ function mkCancelStroke(){
  if(page)mkDrawAnnoForPage(page);
 }
 
-/* ---------- touch: one finger draws (Markup) or scrolls (Reading); two fingers always pan and pinch-zoom ---------- */
+/* ---------- touch: one finger draws (Markup) or scrolls (Reading); two fingers pan; a deliberate
+   pinch, past a small dead zone, zooms with a live preview and one real redraw when you let go ---------- */
+var MK_ZOOM_DEADZONE=.08;
 function mkDist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.hypot(dx,dy)}
 function mkCenter(t){return {x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
 function mkTouchStart(e){
  if(!MK)return;
  if(e.touches.length===1){
+  if(e.touches[0].touchType==='stylus')return;
   if(MK.mode!=='edit')return;
   var t=e.touches[0],target=document.elementFromPoint(t.clientX,t.clientY),anno=target&&target.closest&&target.closest('.mkanno');
   if(!anno)return;
@@ -4325,41 +4410,58 @@ function mkTouchStart(e){
  }else if(e.touches.length===2){
   e.preventDefault();
   if(MK.drawing||MK.erasing)mkCancelStroke();
-  var body=document.getElementById('mkbody');
-  MK.touch={mode:'pan',d0:mkDist(e.touches),z0:MK.zoom,c0:mkCenter(e.touches),scrollTop0:body.scrollTop};
+  var body=document.getElementById('mkbody'),rect=body.getBoundingClientRect(),c=mkCenter(e.touches);
+  MK.touch={mode:'pan',d0:mkDist(e.touches),z0:MK.zoom,c0:c,scrollTop0:body.scrollTop,zoomMode:false,
+   originX:c.x-rect.left,originY:c.y-rect.top,contentY:body.scrollTop+(c.y-rect.top)};
  }
 }
 function mkTouchMove(e){
  if(!MK||!MK.touch)return;
- if(MK.touch.mode==='draw'&&e.touches.length===1){
-  e.preventDefault();
-  mkExtendStroke(e.touches[0].clientX,e.touches[0].clientY);
- }else if(MK.touch.mode==='pan'&&e.touches.length>=2){
-  e.preventDefault();
-  var body=document.getElementById('mkbody');
-  var c=mkCenter(e.touches),d=mkDist(e.touches);
-  body.scrollTop=MK.touch.scrollTop0-(c.y-MK.touch.c0.y);
-  var newZoom=Math.max(.5,Math.min(4,MK.touch.z0*(d/MK.touch.d0)));
-  if(Math.abs(newZoom-MK.zoom)>.02){MK.zoom=newZoom;mkApplyZoom()}
+ if(MK.touch.mode==='draw'&&e.touches.length===1){e.preventDefault();mkExtendStroke(e.touches[0].clientX,e.touches[0].clientY);return}
+ if(MK.touch.mode!=='pan'||e.touches.length<2)return;
+ e.preventDefault();
+ var body=document.getElementById('mkbody'),c=mkCenter(e.touches),d=mkDist(e.touches);
+ if(!MK.touch.zoomMode){
+  if(Math.abs(d/MK.touch.d0-1)>MK_ZOOM_DEADZONE){
+   MK.touch.zoomMode=true;MK.touch.d0=d;
+   var pages=document.getElementById('mkpages');
+   pages.style.transformOrigin=MK.touch.originX+'px '+MK.touch.originY+'px';
+   pages.style.willChange='transform';
+  }else{
+   body.scrollTop=MK.touch.scrollTop0-(c.y-MK.touch.c0.y);
+   return;
+  }
  }
+ var ratio=d/MK.touch.d0;
+ ratio=Math.max(.5/MK.touch.z0,Math.min(4/MK.touch.z0,ratio));
+ document.getElementById('mkpages').style.transform='scale('+ratio+')';
+ MK.touch.liveRatio=ratio;
 }
 function mkTouchEnd(e){
  if(!MK||!MK.touch)return;
  if(MK.touch.mode==='draw'&&e.touches.length===0)mkFinishStroke();
+ if(MK.touch.mode==='pan'&&MK.touch.zoomMode&&e.touches.length<2){
+  var pages=document.getElementById('mkpages'),ratio=MK.touch.liveRatio||1;
+  pages.style.transform='none';pages.style.willChange='';
+  var newZoom=Math.max(.5,Math.min(4,MK.touch.z0*ratio)),oldZoom=MK.zoom;
+  MK.zoom=newZoom;
+  mkApplyZoomKeepingPoint(MK.touch.contentY,oldZoom,MK.touch.originY);
+ }
  if(e.touches.length<(MK.touch.mode==='pan'?2:1))MK.touch=null;
 }
 
 /* ---------- mouse and Apple Pencil: always via Pointer Events, never ambiguous like a finger ---------- */
+function mkPressureOf(e){return e.pointerType==='pen'&&e.pressure?e.pressure:.5}
 function mkPointerDown(e){
  if(!MK||MK.mode!=='edit'||e.pointerType==='touch')return;
  var anno=e.target.closest&&e.target.closest('.mkanno');if(!anno)return;
  e.preventDefault();
- mkBeginStroke(anno,+anno.getAttribute('data-mkpage'),e.clientX,e.clientY);
+ mkBeginStroke(anno,+anno.getAttribute('data-mkpage'),e.clientX,e.clientY,mkPressureOf(e));
 }
 function mkPointerMove(e){
  if(!MK||e.pointerType==='touch'||MK.mode!=='edit'||(!MK.drawing&&!MK.erasing))return;
  e.preventDefault();
- mkExtendStroke(e.clientX,e.clientY);
+ mkExtendStroke(e.clientX,e.clientY,mkPressureOf(e));
 }
 function mkPointerUp(e){
  if(!MK||e.pointerType==='touch')return;
@@ -4407,6 +4509,33 @@ function mkCommit(){
  },600);
 }
 
+/* ---------- page thumbnails (the hamburger toggle on the left) ---------- */
+async function mkToggleThumbs(){
+ MK.thumbsOpen=!MK.thumbsOpen;
+ var el=document.getElementById('mkthumbs');
+ el.className='mkthumbs'+(MK.thumbsOpen?' on':'');
+ if(MK.thumbsOpen&&!MK.thumbsBuilt){
+  MK.thumbsBuilt=true;
+  var frag='';
+  for(var n=1;n<=MK.pageCount;n++)frag+='<button class="mkthumb" data-mk="thumb:'+n+'"><span class="mkph" data-mkph="'+n+'"></span><span>'+n+'</span></button>';
+  el.innerHTML=frag;
+  for(var n2=1;n2<=MK.pageCount;n2++){
+   if(!MK)return;
+   try{
+    var page=await MK.doc.getPage(n2),vp=page.getViewport({scale:80/page.getViewport({scale:1}).width});
+    var cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;
+    await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
+    var holder=el.querySelector('[data-mkph="'+n2+'"]');if(holder)holder.appendChild(cv);
+   }catch(e){}
+  }
+  mkThumbHighlight();
+ }
+}
+function mkThumbHighlight(){
+ if(!MK||!MK.thumbsBuilt)return;
+ document.querySelectorAll('.mkthumb').forEach(function(b){b.className='mkthumb'+(+b.getAttribute('data-mk').split(':')[1]===MK.curPage?' cur':'')});
+}
+
 /* ---------- toolbar and top bar ---------- */
 function mkRerenderChrome(){
  var top=document.getElementById('mktop'),tools=document.getElementById('mktoolbar');
@@ -4414,10 +4543,16 @@ function mkRerenderChrome(){
  if(tools)tools.innerHTML=MK.mode==='edit'?mkToolbarHtml():'';
 }
 function mkTopHtml(){
- return '<button class="mkicon" data-mk="close" aria-label="Close">'+MK_ICO.close+'</button>'
+ return '<button class="mkicon" data-mk="thumbs" aria-label="Show pages">'+MK_ICO.menu+'</button>'
+  +'<button class="mkicon" data-mk="close" aria-label="Close">'+MK_ICO.close+'</button>'
   +(MK.mode==='edit'?'<button class="mkicon" data-mk="undo" aria-label="Undo"'+(MK.history.length?'':' disabled')+'>'+MK_ICO.undo+'</button>'
     +'<button class="mkicon" data-mk="redo" aria-label="Redo"'+(MK.future.length?'':' disabled')+'>'+MK_ICO.redo+'</button>':'')
-  +'<span class="mkpage">Page <span id="mkpageno">'+MK.curPage+'</span> of '+MK.pageCount+'</span>'
+  +'<span class="mkname" title="'+esc(MK.f.name)+'">'+esc(MK.f.name)+'</span>'
+  +'<span class="mkgrow"></span>'
+  +'<span class="mkpage" id="mkpageline">'+MK.curPage+' / '+MK.pageCount+'</span>'
+  +'<div class="mkzoompill"><button data-mk="zoomout" aria-label="Zoom out">−</button>'
+  +'<input id="mkzoomval" class="mkzoomval" value="'+Math.round(MK.zoom*100)+'%" inputmode="numeric">'
+  +'<button data-mk="zoomin" aria-label="Zoom in">+</button></div>'
   +'<div class="mkmode"><button class="'+(MK.mode==='read'?'on':'')+'" data-mk="mode:read">Reading</button>'
   +'<button class="'+(MK.mode==='edit'?'on':'')+'" data-mk="mode:edit">Markup</button></div>'
   +'<button class="mkicon" data-mk="openext" aria-label="Open in your browser">'+MK_ICO.ext+'</button>'
@@ -4442,10 +4577,23 @@ function mkColorInput(e){
  if(!e.target.matches||!e.target.matches('[data-mkcustom]'))return;
  MK.color=e.target.value;mkRerenderChrome();
 }
+function mkApplyZoomValue(raw){
+ var n=parseInt(String(raw).replace(/[^0-9]/g,''),10);
+ if(isNaN(n))n=Math.round(MK.zoom*100);
+ n=Math.max(50,Math.min(400,n));
+ MK.zoom=n/100;mkApplyZoom();
+}
+function mkZoomKey(e){
+ if(e.target&&e.target.id==='mkzoomval'&&(e.key==='Enter')){e.preventDefault();mkApplyZoomValue(e.target.value);e.target.blur()}
+}
+function mkZoomBlur(e){
+ if(e.target&&e.target.id==='mkzoomval')mkApplyZoomValue(e.target.value);
+}
 function mkClick(e){
  var b=e.target.closest('[data-mk]');if(!b)return;
  var a=b.getAttribute('data-mk'),arg='',i=a.indexOf(':');if(i>-1){arg=a.slice(i+1);a=a.slice(0,i)}
  if(a==='close'){mkClose();return}
+ if(a==='thumbs'){mkToggleThumbs();return}
  if(a==='mode'){MK.mode=arg;mkRerenderChrome();return}
  if(a==='dark'){MK.dark=!MK.dark;document.querySelectorAll('.mkpagewrap').forEach(function(w){w.style.filter=MK.dark?'invert(1) hue-rotate(180deg)':''});mkRerenderChrome();return}
  if(a==='openext'){openFile(MK.cid,MK.i);return}
@@ -4456,6 +4604,10 @@ function mkClick(e){
  if(a==='redo'){mkRedo();return}
  if(a==='zoomin'){MK.zoom=Math.min(4,MK.zoom+.25);mkApplyZoom();return}
  if(a==='zoomout'){MK.zoom=Math.max(.5,MK.zoom-.25);mkApplyZoom();return}
+ if(a==='thumb'){
+  var n=+arg,box=document.querySelector('.mkpagebox[data-mkpage="'+n+'"]');
+  if(box)document.getElementById('mkbody').scrollTop=box.offsetTop;
+ }
 }
 
 async function inflateRaw(bytes){
