@@ -734,6 +734,40 @@ var PALETTES=[
  {id:'moss',name:'Moss',bg:'#EFF1E9',ink:'#454A36',ink2:'#767C63',bar:'#B2B995'}
 ];
 function defPal(id){for(var i=0;i<PALETTES.length;i++){if(PALETTES[i].id===id)return PALETTES[i]}return PALETTES[5]}
+var REF_CID='__ref__';
+function isRefClass(c){return c&&c.id===REF_CID}
+function ensureRefClass(){
+ var c=classById(REF_CID);
+ if(!c){
+  c={id:REF_CID,name:'Reference files',code:'',day:'',room:'',color:'mist',contacts:[],links:[],tasks:[],sections:[],files:[],assignments:[]};
+  S.classes.push(c);save();
+ }
+ return c;
+}
+function refAddPick(){
+ ensureRefClass();
+ var inp=document.createElement('input');
+ inp.type='file';inp.multiple=true;inp.style.display='none';document.body.appendChild(inp);
+ inp.addEventListener('change',function(){
+  var list=inp.files;inp.remove();
+  if(list&&list.length)addFiles(REF_CID,list);
+ });
+ inp.click();
+}
+function refFilesRail(){
+ var files=FILES[REF_CID]||[];
+ var h='<div class="railcard" id="c-ref"><div class="rowhead" style="margin-bottom:6px"><h3>Reference files</h3>'
+  +'<button class="ghost" data-xact="refadd" style="font-size:12px">Add</button></div>';
+ if(!files.length)h+='<p class="empty">A formatting guide or template you want handy on every class page.</p>';
+ else h+=files.map(function(f,i){
+   var link=f.kind==='pdf'
+    ?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
+    :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
+   return '<div class="item"><span class="grow">'+link+'</span><button class="x" data-delfile="'+i+'" data-c="'+REF_CID+'" aria-label="Delete">\u00d7</button></div>';
+  }).join('');
+ h+='</div>';
+ return h;
+}
 function pal(id){
  var d=defPal(id);
  return {id:d.id,name:d.name,bg:'var(--'+d.id+'-bg)',ink:'var(--'+d.id+'-ink)',ink2:'var(--'+d.id+'-ink2)',bar:'var(--'+d.id+'-bar)'};
@@ -930,7 +964,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v57';
+var BUILD='v58';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1574,6 +1608,7 @@ document.addEventListener('click',function(e){
   sbForgot(fe2).then(function(err){if(err){view.driveError=err;view.authNote=null}else view.authNote=RESET_SENT;render()});
  }else if(a.indexOf('acct:')===0){openAccountFlow(a.slice(5)==='in'?'in':'up');
  }else if(a==='acctdismiss'){try{localStorage.setItem('hub:acctdismiss','1')}catch(err){}render();
+ }else if(a==='refadd'){refAddPick();
  }else if(a==='openinstall'){view.modal=null;go('install');
  }else if(a==='togglephoneapps'){try{localStorage.setItem('hub:phoneapps',phoneAppsOn()?'off':'on')}catch(err){}render();
  }else if(a==='pushon'){
@@ -2203,7 +2238,7 @@ function icsListHtml(){
   var dup=ics.target&&ics.target!=='__new'&&icsDup(ics.target,ev);
   return '<label class="xrow'+(dup?' dim':'')+'"><input type="checkbox" data-i="'+i+'"'+(ev.sel&&!dup?' checked':'')+(dup?' disabled':'')+'><div>'+esc(ev.title)+'<small>'+esc(parseISO(ev.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric',year:'numeric'})+(ev.time?' · '+fmtTime(ev.time):'')+(ev.rep?' · repeats':'')+(dup?' · already in this class':''))+'</small></div></label>';
  }).join('');
- var opts=S.classes.map(function(c){return '<option value="'+c.id+'"'+(ics.target===c.id?' selected':'')+'>'+esc(c.name)+'</option>'}).join('')+'<option value="__new"'+(ics.target==='__new'?' selected':'')+'>A new class…</option>';
+ var opts=S.classes.filter(function(c){return !isRefClass(c)}).map(function(c){return '<option value="'+c.id+'"'+(ics.target===c.id?' selected':'')+'>'+esc(c.name)+'</option>'}).join('')+'<option value="__new"'+(ics.target==='__new'?' selected':'')+'>A new class…</option>';
  return '<h2>Choose what to import</h2>'
   +'<label for="xmTarget">Add to</label><select id="xmTarget">'+opts+'</select>'
   +(ics.target==='__new'?'<input id="xmNew" type="text" placeholder="Name of the new class" maxlength="80" value="'+esc(ics.newName||'')+'">':'')
@@ -3128,7 +3163,7 @@ function sidebar(c){
   +sideItem('data-go','professors','People',view.page==='professors')
   +sideItem('data-go','apps','Applications',view.page==='apps')
   +'<p class="slabel">Classes</p>';
- S.classes.forEach(function(cl){
+ S.classes.filter(function(cl){return !isRefClass(cl)}).forEach(function(cl){
   var p=pal(cl.color),on=c&&c.id===cl.id;
   h+='<div class="sitem'+(on?' on':'')+'" data-open="'+cl.id+'"><span class="sdot" style="background:'+p.bar+'"></span>'
    +'<span class="nm2">'+esc(cl.name)+'</span></div>';
@@ -3237,7 +3272,7 @@ function viewHome(){
  else{h+='<div class="cards">'+list.map(function(x){return dueCard(x.t,x.c,x.kind)}).join('')+'</div>'}
 
  h+='<div class="rowhead" style="margin-top:30px"><h2 style="font-size:20px">Your classes</h2><span style="display:flex;gap:8px;flex-wrap:wrap"><button data-xact="importclass">Import a shared class</button><button data-add="class">Add class</button></span></div>'
-  +'<div class="classcards">'+S.classes.map(classCard).join('')+'</div>';
+  +'<div class="classcards">'+S.classes.filter(function(c){return !isRefClass(c)}).map(classCard).join('')+'</div>';
  h+='<div style="margin-top:26px;display:flex;gap:8px;flex-wrap:wrap">'+coverControls('home',S)+'</div>';
  return h;
 }
@@ -3306,7 +3341,7 @@ function classCard(c){
 
 function viewClasses(){
  return '<div class="rowhead"><h2 style="font-size:20px">All classes</h2><span style="display:flex;gap:8px;flex-wrap:wrap"><button data-xact="importclass">Import a shared class</button><button data-add="class">Add class</button></span></div>'
- +'<div class="classcards">'+S.classes.map(classCard).join('')+'</div>';
+ +'<div class="classcards">'+S.classes.filter(function(c){return !isRefClass(c)}).map(classCard).join('')+'</div>';
 }
 
 function calendarGrid(){
@@ -3606,6 +3641,7 @@ function viewClass(c){
   }
   r+='<div class="railcard" id="c-grade"><h3 style="margin-bottom:8px">Grade</h3>'+gtxt+'</div>';
  }
+ r+=refFilesRail();
  r+='<div class="railcard" id="c-prof" style="'+surfStyle('prof','','','')+'">'+pencil('prof')+'<div class="rowhead" style="margin-bottom:8px"><h3 style="color:'+surfHead('prof')+'">Professor information</h3>'
   +'<button class="ghost" data-add="contact" data-c="'+c.id+'" style="font-size:12px">Add</button></div>';
  if(!c.contacts.length)r+='<p class="empty">Add your professor, and anyone else worth keeping handy.</p>';
@@ -3667,7 +3703,7 @@ function coverControls(id,owner){
 
 function viewResources(){
  var h='<div class="rowhead"><h2>Everything you have saved</h2></div><div class="two2">';
- S.classes.forEach(function(c){
+ S.classes.filter(function(c){return !isRefClass(c)}).forEach(function(c){
   var p=pal(c.color),files=FILES[c.id]||[];
   if(!files.length&&!c.links.length)return;
   h+='<div class="panel"><div class="rowhead"><h3 style="color:'+p.ink+'">'+esc(c.name)+'</h3><button class="ghost" data-open="'+c.id+'">Open</button></div>';
@@ -3854,7 +3890,7 @@ function modalHtml(){
   var c=m.classId?classById(m.classId):null,ct=(c&&m.id)?contactById(c,m.id):null;
   h='<h3>'+(ct?'Edit person':'Add a person')+'</h3>'
    +(c?'':'<div class="field"><label for="m8">Which class</label><select id="m8">'
-     +S.classes.map(function(cl){return '<option value="'+cl.id+'">'+esc(cl.name)+'</option>'}).join('')+'</select></div>')
+     +S.classes.filter(function(cl){return !isRefClass(cl)}).map(function(cl){return '<option value="'+cl.id+'">'+esc(cl.name)+'</option>'}).join('')+'</select></div>')
    +'<div class="field"><label for="m1">Name</label><input id="m1" value="'+esc(ct?ct.name:'')+'" placeholder="Dr. Casey Boyle"></div>'
    +'<div class="field"><label for="m5">Role</label><input id="m5" value="'+esc(ct?ct.role:'Professor')+'" placeholder="Professor, dean, tutor"></div>'
    +'<div class="field"><label for="m2">Email</label><input id="m2" value="'+esc(ct?ct.email:'')+'" placeholder="name@fanshawec.ca"></div>'
