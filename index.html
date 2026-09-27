@@ -930,7 +930,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v56';
+var BUILD='v57';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4103,7 +4103,7 @@ function mkCss(){
  if(document.getElementById('mkcss'))return;
  var st=document.createElement('style');st.id='mkcss';
  st.textContent=''
-  +'#mk{position:fixed;inset:0;z-index:260;background:#1c1a17;display:flex;flex-direction:column;color:#EFEAE0}'
+  +'#mk{position:fixed;inset:0;z-index:260;background:#1c1a17;display:flex;flex-direction:column;color:#EFEAE0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}'
   +'#mk .mktop{display:flex;align-items:center;gap:6px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;flex-wrap:wrap}'
   +'#mk .mkicon{background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}'
   +'#mk .mkicon:disabled{opacity:.3}'
@@ -4112,7 +4112,7 @@ function mkCss(){
   +'#mk .mkpage{font-size:12.5px;color:#C9C3B4;flex-shrink:0}'
   +'#mk .mkzoompill{display:flex;align-items:center;background:rgba(255,255,255,.08);border-radius:9px;overflow:hidden;flex-shrink:0}'
   +'#mk .mkzoompill button{background:none;border:none;color:#fff;width:30px;height:34px;font-size:16px;cursor:pointer}'
-  +'#mk .mkzoomval{width:46px;height:34px;background:none;border:none;color:#EFEAE0;font-size:12.5px;text-align:center;-moz-appearance:textfield}'
+  +'#mk .mkzoomval{width:52px;min-width:52px;flex:none;box-sizing:border-box;height:34px;background:none;border:none;color:#EFEAE0;font-size:12.5px;text-align:center;-moz-appearance:textfield}'
   +'#mk .mkmode{display:flex;background:rgba(255,255,255,.08);border-radius:10px;padding:2px;flex-shrink:0}'
   +'#mk .mkmode button{background:none;border:none;color:#C9C3B4;padding:6px 11px;border-radius:8px;font-size:12.5px;cursor:pointer}'
   +'#mk .mkmode button.on{background:#EFEAE0;color:#1c1a17;font-weight:600}'
@@ -4123,13 +4123,14 @@ function mkCss(){
   +'#mk .mkthumb.cur{border-color:#EFEAE0}'
   +'#mk .mkthumb img{display:block;width:100%}'
   +'#mk .mkthumb span{display:block;text-align:center;font-size:10.5px;color:#C9C3B4;padding:2px 0}'
-  +'#mk .mkbody{flex:1;position:relative;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}'
+  +'#mk .mkbody{flex:1;position:relative;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}'
   +'#mk .mkpages{will-change:auto}'
   +'#mk .mkpagebox{display:flex;justify-content:center}'
   +'#mk .mkpagewrap{position:relative;margin:12px auto;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease}'
   +'#mk .mkpagewrap canvas{display:block;position:absolute;left:0;top:0;width:100%;height:100%}'
+  +'#mk .mkanno{touch-action:none}'
   +'#mk .mktools{padding:8px 10px 10px;background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.08)}'
-  +'#mk .mkrow{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}'
+  +'#mk .mkrow{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding:6px 5px}'
   +'#mk .mkrow+.mkrow{margin-top:7px}'
   +'#mk .mkrow button{background:rgba(255,255,255,.08);border:none;color:#EFEAE0;min-width:34px;height:34px;border-radius:9px;font-size:12.5px;cursor:pointer;padding:0 8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}'
   +'#mk .mkrow button.on{background:#EFEAE0;color:#1c1a17}'
@@ -4146,6 +4147,17 @@ function mkStrokesForPage(page){return ((MK.f.marks&&MK.f.marks.strokes)||[]).fi
 function mkScaleFor(page){return MK.pageInfo[page].fitScale*MK.zoom}
 
 /* ---------- opening and closing ---------- */
+var mkViewportSaved=null;
+function mkLockViewportZoom(){
+ var m=document.querySelector('meta[name=viewport]');if(!m)return;
+ mkViewportSaved=m.getAttribute('content');
+ m.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover');
+}
+function mkRestoreViewportZoom(){
+ var m=document.querySelector('meta[name=viewport]');
+ if(m&&mkViewportSaved!=null)m.setAttribute('content',mkViewportSaved);
+ mkViewportSaved=null;
+}
 async function mkOpen(cid,i){
  var f=(FILES[cid]||[])[i];if(!f||f.kind!=='pdf')return;
  if(!f.data){alert(f.cloud?'This file is still downloading from your account. Give it a moment, then try again (Settings > Sync now).':'This file is not saved, so there is nothing to open.');return}
@@ -4156,6 +4168,7 @@ async function mkOpen(cid,i){
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},curPage:1,zoom:1,mode:'read',
      tool:'hi',color:MK_COLORS.hi[0],size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
  mkCss();
+ mkLockViewportZoom();
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
  document.body.appendChild(el);
  el.innerHTML='<div class="mktop" id="mktop"></div>'
@@ -4192,6 +4205,7 @@ async function mkOpen(cid,i){
 function mkClose(){
  var el=document.getElementById('mk');if(el)el.remove();
  window.removeEventListener('resize',mkOnResize);
+ mkRestoreViewportZoom();
  MK=null;
 }
 var mkResizeTimer=null;
@@ -4270,53 +4284,9 @@ function mkDrawAnnoForPage(n){
  mkStrokesForPage(n).forEach(function(s){mkPaintStroke(ctx,s,scale)});
  if(MK.drawing&&MK.drawing.page===n)mkPaintStroke(ctx,MK.drawing,scale);
 }
-/* our own version of the "perfect-freehand" idea (github.com/steveruizok/perfect-freehand), written
-   from scratch rather than installing it: pressure sets each point's radius (eased, and never quite
-   down to a hairline), both ends taper to a point, and the two offset rails are filled as one solid
-   shape instead of stroking a fixed-width line -- that is what gives real ink its tapered look. */
-function mkStrokeOutline(pts,baseWidth){
- var n=pts.length;
- if(n<2)return null;
- var lead=Math.min(10,n),avgStart=0;
- for(var k=0;k<lead;k++)avgStart+=(pts[k][2]===undefined?.5:pts[k][2]);
- avgStart/=lead;
- var radii=[];
- for(var i=0;i<n;i++){
-  var pr=pts[i][2]===undefined?.5:pts[i][2];
-  if(i<lead)pr=(pr+avgStart)/2; // averages into the true reading for the first few points, so a stroke never starts fat
-  var eased=Math.pow(Math.max(0,Math.min(1,pr)),0.7);
-  var full=baseWidth*(0.22+0.78*eased)/2;
-  var tIn=Math.min(1,i/8),tOut=Math.min(1,(n-1-i)/8);          // taper the very start and end down to a fine point
-  var taper=Math.max(0.06,Math.min(tIn,tOut));
-  radii.push(Math.max(0.4,full*taper));
- }
- var left=[],right=[];
- for(var j=0;j<n;j++){
-  var p0=pts[Math.max(0,j-1)],p1=pts[Math.min(n-1,j+1)];
-  var dx=p1[0]-p0[0],dy=p1[1]-p0[1],len=Math.hypot(dx,dy)||1;
-  var nx=-dy/len,ny=dx/len,r2=radii[j];
-  left.push([pts[j][0]+nx*r2,pts[j][1]+ny*r2]);
-  right.push([pts[j][0]-nx*r2,pts[j][1]-ny*r2]);
- }
- function cap(center,r,a0,a1){
-  var out=[],steps=8;
-  for(var s2=0;s2<=steps;s2++){var a=a0+(a1-a0)*(s2/steps);out.push([center[0]+Math.cos(a)*r,center[1]+Math.sin(a)*r])}
-  return out;
- }
- var d0=Math.atan2(pts[1][1]-pts[0][1],pts[1][0]-pts[0][0]);
- var d1=Math.atan2(pts[n-1][1]-pts[n-2][1],pts[n-1][0]-pts[n-2][0]);
- var startCap=cap(pts[0],radii[0],d0+Math.PI/2,d0+Math.PI*1.5);
- var endCap=cap(pts[n-1],radii[n-1],d1-Math.PI/2,d1+Math.PI/2);
- return left.concat(endCap,right.reverse(),startCap);
-}
-function mkSmoothPath(ctx,pts){
- if(pts.length<3){ctx.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);return}
- ctx.moveTo(pts[0][0],pts[0][1]);
- for(var j=0;j<pts.length;j++){
-  var a=pts[j],b=pts[(j+1)%pts.length];
-  ctx.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2);
- }
-}
+/* the pen: a plain, steady line. A tapered pressure-sensitive version was tried and rolled back --
+   it read as inconsistent rather than natural on a real iPad, so the pen is always the same
+   thickness now, however hard you press, matching the highlighter's own flat, predictable feel. */
 function mkPaintStroke(ctx,s,scale){
  ctx.save();
  if(s.tool==='hi'){
@@ -4324,14 +4294,10 @@ function mkPaintStroke(ctx,s,scale){
   ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='butt';
   ctx.beginPath();ctx.moveTo(s.x0*scale,s.y0*scale);ctx.lineTo(s.x1*scale,s.y1*scale);ctx.stroke();
  }else{
-  var pts=(s.pts||[]).map(function(p){return [p[0]*scale,p[1]*scale,p[2]]});
-  ctx.globalAlpha=1;ctx.fillStyle=s.color;
-  if(pts.length===1){
-   ctx.beginPath();ctx.arc(pts[0][0],pts[0][1],Math.max(1,s.width*scale)/2,0,Math.PI*2);ctx.fill();
-  }else{
-   var outline=mkStrokeOutline(pts,Math.max(1,s.width*scale));
-   if(outline&&outline.length>2){ctx.beginPath();mkSmoothPath(ctx,outline);ctx.closePath();ctx.fill()}
-  }
+  ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  (s.pts||[]).forEach(function(p,idx){var x=p[0]*scale,y=p[1]*scale;if(idx===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});
+  ctx.stroke();
  }
  ctx.restore();
 }
@@ -4399,6 +4365,7 @@ function mkDist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY
 function mkCenter(t){return {x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
 function mkTouchStart(e){
  if(!MK)return;
+ if(MK.activePointerType==='pen')return; // a resting palm while the pencil is actively drawing
  if(e.touches.length===1){
   if(e.touches[0].touchType==='stylus')return;
   if(MK.mode!=='edit')return;
@@ -4425,7 +4392,7 @@ function mkTouchMove(e){
   if(Math.abs(d/MK.touch.d0-1)>MK_ZOOM_DEADZONE){
    MK.touch.zoomMode=true;MK.touch.d0=d;
    var pages=document.getElementById('mkpages');
-   pages.style.transformOrigin=MK.touch.originX+'px '+MK.touch.originY+'px';
+   pages.style.transformOrigin=MK.touch.originX+'px '+MK.touch.contentY+'px';
    pages.style.willChange='transform';
   }else{
    body.scrollTop=MK.touch.scrollTop0-(c.y-MK.touch.c0.y);
@@ -4456,6 +4423,7 @@ function mkPointerDown(e){
  if(!MK||MK.mode!=='edit'||e.pointerType==='touch')return;
  var anno=e.target.closest&&e.target.closest('.mkanno');if(!anno)return;
  e.preventDefault();
+ if(e.pointerType==='pen')MK.activePointerType='pen';
  mkBeginStroke(anno,+anno.getAttribute('data-mkpage'),e.clientX,e.clientY,mkPressureOf(e));
 }
 function mkPointerMove(e){
@@ -4465,6 +4433,7 @@ function mkPointerMove(e){
 }
 function mkPointerUp(e){
  if(!MK||e.pointerType==='touch')return;
+ MK.activePointerType=null;
  mkFinishStroke();
 }
 
