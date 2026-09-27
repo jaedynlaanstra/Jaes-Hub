@@ -104,7 +104,7 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .ssub .sitem{font-size:13px;padding:6px 10px;color:var(--sideSoft,#A49D90)}
 .ssub .sitem:hover{color:var(--sideBright,#FFFDF8)}
 .main{flex:1;min-width:0;background:var(--card)}
-.menubtn{display:none;background:rgba(0,0,0,.06);border:none;border-radius:8px;padding:7px 11px;margin-bottom:14px;font-size:13px}
+.menubtn,.homebtn{display:none;background:rgba(0,0,0,.06);border:none;border-radius:8px;padding:7px 11px;margin-bottom:14px;font-size:13px}
 .backdrop{position:fixed;inset:0;background:rgba(28,26,22,.42);z-index:55}
 .banner{padding:64px 40px 28px;position:relative}
 .banner.sz-medium{padding:38px 40px 22px}
@@ -428,7 +428,7 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 @media(max-width:900px){
   .side{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .22s ease;z-index:60;box-shadow:0 10px 40px rgba(0,0,0,.3)}
   .side.open{transform:none}
-  .menubtn{display:inline-block}
+  .menubtn,.homebtn{display:inline-block}
 }
 @media (prefers-reduced-motion:reduce){.side{transition:none}}
 @media(max-width:700px){
@@ -486,10 +486,11 @@ button.tick{min-height:0!important;min-width:0;padding:0;flex:0 0 auto;aspect-ra
 .fakebtn{display:inline-flex;align-items:center;justify-content:center}
 html{scrollbar-width:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
-.menubtn{display:none;position:fixed;left:12px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:58;width:40px;height:40px;border-radius:12px;border:none;padding:0;background:rgba(35,32,27,.55);color:#fff;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 2px 10px rgba(0,0,0,.18);align-items:center;justify-content:center;min-height:0!important}
-.menubtn svg{width:20px;height:20px}
+.menubtn,.homebtn{display:none;position:fixed;left:12px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:58;width:40px;height:40px;border-radius:12px;border:none;padding:0;background:rgba(35,32,27,.55);color:#fff;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 2px 10px rgba(0,0,0,.18);align-items:center;justify-content:center;min-height:0!important}
+.menubtn svg,.homebtn svg{width:20px;height:20px}
+.homebtn{left:60px}
 @media(max-width:900px){
-  .menubtn{display:flex}
+  .menubtn,.homebtn{display:flex}
   .side{padding-top:calc(env(safe-area-inset-top,0px) + 22px)!important;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)!important}
   .sidehide,.sideshow{display:none!important}
   .main.nohead .body{padding-top:calc(env(safe-area-inset-top,0px) + 62px)}
@@ -652,10 +653,10 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   .mbar-btn{width:36px;height:36px;border:none;background:transparent;color:var(--ink);padding:0;display:flex;align-items:center;justify-content:center;min-height:0!important}
   .mbar-btn svg{width:22px;height:22px}
   .mbar-title{flex:1;text-align:center;font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fb,inherit)}
-  body.scrolled .menubtn{opacity:0;pointer-events:none}
-  .menubtn{transition:opacity .15s ease}
+  body.scrolled .menubtn,body.scrolled .homebtn{opacity:0;pointer-events:none}
+  .menubtn,.homebtn{transition:opacity .15s ease}
 }
-@media (prefers-reduced-motion:reduce){.mbar,.menubtn{transition:none}}
+@media (prefers-reduced-motion:reduce){.mbar,.menubtn,.homebtn{transition:none}}
 
 /* ---------- phones, a proper pass ---------- */
 @media(max-width:700px){
@@ -928,7 +929,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v49';
+var BUILD='v50';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2929,7 +2930,7 @@ function render(){
 
  app.innerHTML='<div class="wrap">'
   +'<div class="mbar'+(view.scrolled?' show':'')+'" id="mbar"><button class="mbar-btn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
-  +'<span class="mbar-title">'+esc(title)+'</span><span style="width:36px"></span></div>'
+  +'<span class="mbar-title">'+esc(title)+'</span>'+(view.page==='home'?'<span style="width:36px"></span>':'<button class="mbar-btn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')+'</div>'
   +'<div class="layout">'
   +(S.sideHidden?'':sidebar(c))
   +(S.sideHidden?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
@@ -2937,6 +2938,7 @@ function render(){
   +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?S.cover:''));
      return '<main class="main'+(hasCov?' hascover':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
   +'<button class="menubtn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
+  +(view.page==='home'?'':'<button class="homebtn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')
   +coverBlock(c)
   +'<div class="banner sz-'+bannerSize()+(view.picker&&bannerSize()==='hidden'?' editing':'')+'" style="background:var(--s-banner-bg,'+head.bg+')">'+pencil('banner')
   +(view.picker&&bannerSize()==='hidden'?'<span class="hiddennote">Header hidden on this page. Use the pencil to bring it back.</span>':'')
@@ -3798,7 +3800,8 @@ function modalHtml(){
      '<p class="hint" style="margin:0">A backup holds everything: ticks, files, photos, colours.</p>'
      +'<button data-export="1">Export everything</button>'
      +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>',false)
-   +(isInstalledApp()?'':'<div class="sgroup" style="padding:6px 0 2px"><button data-xact="openinstall" style="width:100%">Get the app on your phone</button></div>');
+   +(isInstalledApp()?'':'<div class="sgroup" style="padding:6px 0 2px"><button data-xact="openinstall" style="width:100%">Get the app on your phone</button></div>')
+   +'<p class="hint" style="text-align:center;margin-top:10px;opacity:.6">Doable, build '+esc(BUILD)+'</p>';
  }else if(m.kind==='app'){
   var ap=m.id?appById(m.id):null;
   h='<h3>'+(ap?'Edit app':'Add an app')+'</h3>'
