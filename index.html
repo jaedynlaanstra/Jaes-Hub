@@ -763,7 +763,10 @@ function refFilesRail(){
    var link=f.kind==='pdf'
     ?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
     :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
-   return '<div class="item"><span class="grow">'+link+'</span><button class="x" data-delfile="'+i+'" data-c="'+REF_CID+'" aria-label="Delete">\u00d7</button></div>';
+   var ic=f.icon?'<img src="'+f.icon+'" alt="" style="width:16px;height:16px;object-fit:contain;flex-shrink:0">':fileIcon(f);
+   return '<div class="item">'+ic+'<span class="grow">'+link+'</span>'
+    +'<button class="ghost" data-refedit="'+i+'" style="font-size:11px;padding:3px 5px" aria-label="Rename or change the picture"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>'
+    +'<button class="x" data-delfile="'+i+'" data-c="'+REF_CID+'" aria-label="Delete">\u00d7</button></div>';
   }).join('');
  h+='</div>';
  return h;
@@ -964,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v58';
+var BUILD='v59';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2804,7 +2807,7 @@ function mirrorFiles(cid){
  var list=FILES[cid]||[],old=c.files||(c.files=[]),byId={},changed=false,next=[];
  old.forEach(function(o){byId[o.id]=o});
  list.forEach(function(f){
-  var meta={id:f.id,name:f.name,kind:f.kind,ext:f.ext||'',mime:f.mime||'',section:f.section||'',marksAt:(f.marks&&f.marks.savedAt)||''};
+  var meta={id:f.id,name:f.name,kind:f.kind,ext:f.ext||'',mime:f.mime||'',section:f.section||'',icon:f.icon||'',marksAt:(f.marks&&f.marks.savedAt)||''};
   var o=byId[f.id];
   if(o){Object.keys(meta).forEach(function(k){if(o[k]!==meta[k]){o[k]=meta[k];changed=true}});next.push(o)}
   else{next.push(meta);changed=true}
@@ -3896,6 +3899,18 @@ function modalHtml(){
    +'<div class="field"><label for="m2">Email</label><input id="m2" value="'+esc(ct?ct.email:'')+'" placeholder="name@fanshawec.ca"></div>'
    +'<div class="field"><label for="m3">Office</label><input id="m3" value="'+esc(ct?ct.office:'')+'" placeholder="B2043"></div>'
    +'<div class="field"><label for="m4">Office hours</label><input id="m4" value="'+esc(ct?ct.hours:'')+'" placeholder="Tuesdays 1 to 3 pm"></div>';
+ }else if(m.kind==='refedit'){
+  var rf=(FILES[REF_CID]||[])[m.i];
+  if(!rf)return '';
+  var rcur=view.modal.pendingIcon!==undefined?view.modal.pendingIcon:(rf.icon||'');
+  h='<h3>Edit this file</h3>'
+   +'<div class="field"><label for="m1">Name</label><input id="m1" value="'+esc(rf.name)+'"></div>'
+   +'<div class="field"><label>Picture</label><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+   +'<span id="refprev" style="width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#F1EFEA">'
+   +(rcur?'<img src="'+rcur+'" alt="" style="max-width:32px;max-height:32px;object-fit:contain">':fileIcon(rf))+'</span>'
+   +'<label class="fakebtn"><input type="file" accept="image/*" data-reficonpick="1" style="display:none">Choose a picture</label>'
+   +(rcur?'<button class="ghost" data-refreset="1">Use the file icon</button>':'')
+   +'</div></div>';
  }else if(m.kind==='class'){
   var c2=m.classId?classById(m.classId):null;
   h='<h3>'+(c2?'Edit class':'Add a class')+'</h3>'
@@ -3974,6 +3989,11 @@ function saveModal(){
    var nm=val('m1');if(!nm&&!val('m2'))return;
    c.contacts.push(touch({id:uid(),name:nm,role:val('m5'),email:val('m2'),office:val('m3'),hours:val('m4'),photo:''}));
   }
+ }else if(m.kind==='refedit'){
+  var rf2=(FILES[REF_CID]||[])[m.i];if(!rf2)return;
+  var rn=val('m1');if(rn)rf2.name=rn.trim();
+  if(view.modal.pendingIcon!==undefined)rf2.icon=view.modal.pendingIcon;
+  mirrorFiles(REF_CID);saveFiles(REF_CID,true);
  }else if(m.kind==='class'){
   var cn=val('m1');if(!cn)return;
   if(m.classId){var cc=classById(m.classId);cc.name=cn;cc.code=val('m2');cc.day=val('m3');cc.room=val('m9');cc.claude=val('m11');cc.short=val('m12');cc.target=val('m13')?+val('m13'):'';cc.color=m.color}
@@ -4837,7 +4857,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -4890,6 +4910,7 @@ document.addEventListener('click',function(e){
  if(d.openfile!==undefined&&d.openfile!==''){e.preventDefault();openFile(d.c,+d.openfile);return}
  if(d.replacefile!==undefined&&d.replacefile!==''){replaceFilePick(d.c,+d.replacefile);return}
  if(d.mkopen!==undefined&&d.mkopen!==''){mkOpen(d.c,+d.mkopen);return}
+ if(d.refedit!==undefined&&d.refedit!==''){view.modal={kind:'refedit',i:+d.refedit};render();return}
  if(d.savefile!==undefined&&d.savefile!==''){openFile(d.c,+d.savefile);return}
  if(d.renamefile!==undefined&&d.renamefile!==''){
   var rf=(FILES[d.c]||[])[+d.renamefile];
@@ -4911,6 +4932,13 @@ document.addEventListener('click',function(e){
   view.modal.pendingIcon='';
   var pv=document.getElementById('appprev');
   if(pv)pv.innerHTML='<span style="font-size:11px;color:var(--ink3)">site</span>';
+  return;
+ }
+ if(d.refreset!==undefined){
+  view.modal.pendingIcon='';
+  var rf3=(FILES[REF_CID]||[])[view.modal.i];
+  var pv2=document.getElementById('refprev');
+  if(pv2&&rf3)pv2.innerHTML=fileIcon(rf3);
   return;
  }
  if(d.editapp){openModal('app',null,d.editapp);return}
@@ -5049,6 +5077,13 @@ document.addEventListener('change',function(e){
    view.modal.pendingIcon=url;
    var pv=document.getElementById('appprev');
    if(pv)pv.innerHTML='<img src="'+url+'" alt="" style="max-width:40px;max-height:40px;object-fit:contain">';
+  },true);
+ }
+ if(t.dataset&&t.dataset.reficonpick&&t.files[0]&&view.modal){
+  shrinkImage(t.files[0],160,function(url){
+   view.modal.pendingIcon=url;
+   var pv=document.getElementById('refprev');
+   if(pv)pv.innerHTML='<img src="'+url+'" alt="" style="max-width:32px;max-height:32px;object-fit:contain">';
   },true);
  }
  if(t.dataset&&t.dataset.bookcover&&t.files[0]&&view.modal){
