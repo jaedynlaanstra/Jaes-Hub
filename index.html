@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v64';
+var BUILD='v65';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4538,6 +4538,7 @@ function mkTouchEnd(e){
   mkApplyZoom();
   body.scrollLeft=Math.max(0,t.scrollLeft0-t.tx);
   body.scrollTop=Math.max(0,t.scrollTop0-t.ty);
+  mkOnScroll();
  }
  if(e.touches.length<(MK.touch.mode==='pan'?2:1))MK.touch=null;
 }
