@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v67';
+var BUILD='v68';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1164,6 +1164,7 @@ function normalize(){
 var PRIOS={High:{bg:'#F7ECEA',ink:'#A34A3F'},Medium:{bg:'#F5F1E8',ink:'#7A6543'},Low:{bg:'#EAF0F3',ink:'#4C6274'}};
 function prioPill(v){if(!v||!PRIOS[v])return '';var q=PRIOS[v];return '<span class="prio" style="background:'+q.bg+';color:'+q.ink+'">'+v+'</span>'}
 function contactById(c,id){for(var i=0;i<c.contacts.length;i++){if(c.contacts[i].id===id)return c.contacts[i]}return null}
+function linkById(c,id){for(var i=0;i<c.links.length;i++){if(c.links[i].id===id)return c.links[i]}return null}
 function mailto(ct,c){return 'https://outlook.office.com/mail/deeplink/compose?to='+encodeURIComponent(ct.email)+'&subject='+encodeURIComponent(c.code||c.name)}
 function classById(id){for(var i=0;i<S.classes.length;i++){if(S.classes[i].id===id)return S.classes[i]}return null}
 
@@ -3502,7 +3503,7 @@ function viewClass(c){
    +'<button class="ghost" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" style="font-size:11px;padding:4px 6px">Edit</button></div>';
  }
  function linkRow(l,i){
-  return '<div class="item">'+linkIcon(l.url,l.title)+'<span class="grow"><a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a></span>'
+  return '<div class="item">'+linkIcon(l.url,l.title,l.icon)+'<span class="grow"><a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a></span>'
    +((c.sections||[]).length?'<select data-movelink="'+i+'" data-c="'+c.id+'" style="width:auto;font-size:11.5px;padding:4px 6px">'+sectionOptions(c,l.section||'')+'</select>':'')
    +'<button class="ghost" data-pin="'+i+'" data-c="'+c.id+'" style="font-size:11px;padding:4px 6px">'+(l.pinned?'Unpin':'Pin')+'</button>'
    +'<button class="x" data-dellink="'+i+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button>'
@@ -3804,6 +3805,7 @@ function modalHtml(){
    if(!sl)return '';
    h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sl.title)+'</h3><div class="sheetlist">'
     +'<button data-sheetdo="openlink">Open</button>'
+    +'<button data-sheetdo="edit">Edit</button>'
     +'<button data-sheetdo="pin">'+(sl.pinned?'Unpin from the top':'Pin to the top')+'</button>'
     +((sc.sections||[]).length?'<label class="sheetmove">Section<select data-sheetmove="1">'+sectionOptions(sc,sl.section||'')+'</select></label>':'')
     +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
@@ -3888,8 +3890,16 @@ function modalHtml(){
    +'<label class="fakebtn"><input type="file" accept="image/*" data-bookcover="1" style="display:none">Choose a picture</label>'
    +'<span class="hint" style="margin:0">or press Ctrl and V</span></div></div>';
  }else if(m.kind==='link'){
-  h='<h3>Add a link</h3><div class="field"><label for="m1">Name</label><input id="m1" placeholder="FOL course shell"></div>'
-   +'<div class="field"><label for="m2">Address</label><input id="m2" placeholder="https://"></div>';
+  var elk=m.id?linkById(classById(m.classId),m.id):null;
+  var lcur=view.modal.pendingIcon!==undefined?view.modal.pendingIcon:(elk?(elk.icon||''):'');
+  h='<h3>'+(elk?'Edit link':'Add a link')+'</h3><div class="field"><label for="m1">Name</label><input id="m1" value="'+esc(elk?elk.title:'')+'" placeholder="FOL course shell"></div>'
+   +'<div class="field"><label for="m2">Address</label><input id="m2" value="'+esc(elk?elk.url:'')+'" placeholder="https://"></div>'
+   +'<div class="field"><label>Picture</label><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+   +'<span id="linkiconprev" style="width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#F1EFEA">'
+   +(lcur?'<img src="'+lcur+'" alt="" style="max-width:32px;max-height:32px;object-fit:contain">':linkIcon(elk?elk.url:'',elk?elk.title:''))+'</span>'
+   +'<label class="fakebtn"><input type="file" accept="image/*" data-linkiconpick="1" style="display:none">Choose a picture</label>'
+   +(lcur?'<button class="ghost" data-linkiconreset="1">Use the automatic icon</button>':'')
+   +'<span class="hint" style="margin:0;flex-basis:100%">Use this for a logo that is not detected automatically, like an Excel or Word file link.</span></div></div>';
  }else if(m.kind==='contact'){
   var c=m.classId?classById(m.classId):null,ct=(c&&m.id)?contactById(c,m.id):null;
   h='<h3>'+(ct?'Edit person':'Add a person')+'</h3>'
@@ -3982,7 +3992,15 @@ function saveModal(){
  }else if(m.kind==='link'){
   var n=val('m1'),u=val('m2');if(!n||!u)return;
   if(!/^https?:\/\//i.test(u))u='https://'+u;
-  classById(m.classId).links.push(touch({id:uid(),title:n,url:u}));
+  var lcls=classById(m.classId);
+  if(m.id){
+   var elk2=linkById(lcls,m.id);
+   if(elk2){elk2.title=n;elk2.url=u;if(view.modal.pendingIcon!==undefined)elk2.icon=view.modal.pendingIcon;touch(elk2)}
+  }else{
+   var nlk={id:uid(),title:n,url:u};
+   if(view.modal.pendingIcon)nlk.icon=view.modal.pendingIcon;
+   lcls.links.push(touch(nlk));
+  }
  }else if(m.kind==='contact'){
   var c=classById(m.classId||val('m8'));
   if(!c)return;
@@ -4050,16 +4068,50 @@ var FILEICONS={
  pptx:{c:'#C0997E',t:'PPT'},ppt:{c:'#C0997E',t:'PPT'},docx:{c:'#8296AC',t:'DOC'},doc:{c:'#8296AC',t:'DOC'},
  xlsx:{c:'#8BA48F',t:'XLS'},csv:{c:'#8BA48F',t:'CSV'},zip:{c:'#A09A8C',t:'ZIP'}
 };
-function fileIcon(f){
- var key=(f.ext&&FILEICONS[f.ext])?f.ext:(FILEICONS[f.kind]?f.kind:null);
- var d=key?FILEICONS[key]:{c:'#A09A8C',t:'FILE'};
+function fileTypeSvg(key){
+ var d=key&&FILEICONS[key]?FILEICONS[key]:{c:'#A09A8C',t:'FILE'};
  return '<svg class="fi" viewBox="0 0 24 28" aria-hidden="true">'
   +'<path d="M3 2h12l6 6v18a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" fill="'+d.c+'" opacity=".22"/>'
   +'<path d="M15 2l6 6h-6z" fill="'+d.c+'" opacity=".45"/>'
   +'<text x="12" y="21" text-anchor="middle" font-size="8" font-family="DM Sans, sans-serif" fill="'+d.c+'">'+d.t+'</text></svg>';
 }
+function fileIcon(f){
+ var key=(f.ext&&FILEICONS[f.ext])?f.ext:(FILEICONS[f.kind]?f.kind:null);
+ return fileTypeSvg(key);
+}
+/* guesses Excel/Word/PowerPoint/PDF/CSV/ZIP from a link's address, including OneDrive/SharePoint
+   share links (which mark the file type as /:x:/ /:w:/ /:p:/ /:b:/ rather than a plain extension) */
+function urlFileKind(url){
+ var host='',path='';
+ try{var u=new URL(url);host=u.hostname.toLowerCase();path=u.pathname.toLowerCase()}catch(e){return null}
+ if(/(^|\.)sharepoint\.com$|(^|\.)1drv\.ms$|(^|\.)onedrive\.live\.com$/.test(host)){
+  var sp=/\/:([xwpb]):\//.exec(path);
+  if(sp)return {x:'xlsx',w:'docx',p:'pptx',b:'pdf'}[sp[1]];
+ }
+ if(host==='docs.google.com'){
+  if(path.indexOf('/spreadsheets')===0)return 'xlsx';
+  if(path.indexOf('/presentation')===0)return 'pptx';
+  if(path.indexOf('/document')===0)return 'docx';
+ }
+ if(/(^|\.)office\.com$/.test(host)&&path.indexOf('/launch/')===0){
+  if(path.indexOf('/launch/excel')===0)return 'xlsx';
+  if(path.indexOf('/launch/word')===0)return 'docx';
+  if(path.indexOf('/launch/powerpoint')===0)return 'pptx';
+ }
+ var m=/\.([a-z0-9]{2,5})(?:$|[?#])/.exec(path);
+ if(m){
+  var e=m[1];
+  if(e==='xls')return 'xlsx';
+  if(e==='ppt')return 'pptx';
+  if(e==='doc')return 'docx';
+  if(FILEICONS[e])return e;
+ }
+ return null;
+}
 function linkIcon(url,title,custom,mono){
  if(custom)return '<img class="fi round'+(mono?' mono':'')+'" src="'+custom+'" alt="">';
+ var fk=urlFileKind(url);
+ if(fk)return fileTypeSvg(fk);
  var host='';try{host=new URL(url).hostname}catch(e){}
  var letter=esc((title||host||'?').trim().charAt(0).toUpperCase());
  if(!host)return '<span class="favtile">'+letter+'</span>';
@@ -4951,7 +5003,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -5035,6 +5087,13 @@ document.addEventListener('click',function(e){
   if(pv2&&rf3)pv2.innerHTML=fileIcon(rf3);
   return;
  }
+ if(d.linkiconreset!==undefined){
+  view.modal.pendingIcon='';
+  var lk4=view.modal.id?linkById(classById(view.modal.classId),view.modal.id):null;
+  var pv5=document.getElementById('linkiconprev');
+  if(pv5)pv5.innerHTML=linkIcon(lk4?lk4.url:'',lk4?lk4.title:'');
+  return;
+ }
  if(d.editapp){openModal('app',null,d.editapp);return}
  if(d.delapp){
   if(confirm('Remove this app?')){S.apps=S.apps.filter(function(x){return x.id!==d.delapp});view.modal=null;save();render()}
@@ -5060,6 +5119,7 @@ document.addEventListener('click',function(e){
   }else{
    var lk=scc.links[sm.i];
    if(act==='openlink'){render();window.open(lk.url,'_blank','noopener');return}
+   if(act==='edit'){openModal('link',sm.classId,lk.id);return}
    if(act==='pin'){lk.pinned=!lk.pinned;save();render();return}
    if(act==='delete'){if(confirm('Delete '+lk.title+'?')){scc.links.splice(sm.i,1);save()}render();return}
   }
@@ -5177,6 +5237,13 @@ document.addEventListener('change',function(e){
   shrinkImage(t.files[0],160,function(url){
    view.modal.pendingIcon=url;
    var pv=document.getElementById('refprev');
+   if(pv)pv.innerHTML='<img src="'+url+'" alt="" style="max-width:32px;max-height:32px;object-fit:contain">';
+  },true);
+ }
+ if(t.dataset&&t.dataset.linkiconpick&&t.files[0]&&view.modal){
+  shrinkImage(t.files[0],160,function(url){
+   view.modal.pendingIcon=url;
+   var pv=document.getElementById('linkiconprev');
    if(pv)pv.innerHTML='<img src="'+url+'" alt="" style="max-width:32px;max-height:32px;object-fit:contain">';
   },true);
  }
