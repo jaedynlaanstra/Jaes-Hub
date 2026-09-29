@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v65';
+var BUILD='v67';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3536,7 +3536,7 @@ function viewClass(c){
    groups.forEach(function(g){
     var rows=fIdx.filter(function(x){return (x.f.section||'')===g.id});
     if(!rows.length)return;
-    m+='<p class="lab2">'+esc(g.name)+(g.id?'<button class="ghost" data-delsection="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:6px">remove</button>':'')+'</p>'
+    m+='<p class="lab2">'+esc(g.name)+(g.id?'<button class="ghost" data-edit="section" data-id="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:6px">rename</button><button class="ghost" data-delsection="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:4px">remove</button>':'')+'</p>'
      +firstThree(rows.map(function(x){return fileRow(x.f,x.i)}),'files');
    });
   }
@@ -3549,7 +3549,7 @@ function viewClass(c){
    groups.forEach(function(g){
     var rows=lIdx.filter(function(x){return (x.l.section||'')===g.id});
     if(!rows.length)return;
-    m+='<p class="lab2">'+esc(g.name)+'</p>'+firstThree(rows.map(function(x){return linkRow(x.l,x.i)}),'links');
+    m+='<p class="lab2">'+esc(g.name)+(g.id?'<button class="ghost" data-edit="section" data-id="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:6px">rename</button><button class="ghost" data-delsection="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:4px">remove</button>':'')+'</p>'+firstThree(rows.map(function(x){return linkRow(x.l,x.i)}),'links');
    });
   }
   m+='</div></div>';
@@ -3869,8 +3869,9 @@ function modalHtml(){
       +'<span class="hint" style="margin:0;flex-basis:100%">Or copy a picture and press Ctrl and V.</span></div></div>';
     })();
  }else if(m.kind==='section'){
-  h='<h3>New section</h3><div class="field"><label for="m1">Name</label>'
-   +'<input id="m1" placeholder="Week 3, Module 2, Readings"></div>';
+  var esec=m.id?(function(){var cc=classById(m.classId);for(var k=0;k<(cc.sections||[]).length;k++){if(cc.sections[k].id===m.id)return cc.sections[k]}return null})():null;
+  h='<h3>'+(esec?'Rename section':'New section')+'</h3><div class="field"><label for="m1">Name</label>'
+   +'<input id="m1" value="'+esc(esec?esec.name:'')+'" placeholder="Week 3, Module 2, Readings"></div>';
  }else if(m.kind==='book'){
   var cb=classById(m.classId),tb=cb.textbook||null;
   var cover=view.modal.pendingCover!==undefined?view.modal.pendingCover:(tb?(tb.icon||''):'');
@@ -3965,7 +3966,8 @@ function saveModal(){
   var sn=val('m1');if(!sn)return;
   var sc=classById(m.classId);
   sc.sections=sc.sections||[];
-  sc.sections.push(touch({id:uid(),name:sn}));
+  if(m.id){var esec2=sc.sections.filter(function(x){return x.id===m.id})[0];if(esec2){esec2.name=sn;touch(esec2)}}
+  else sc.sections.push(touch({id:uid(),name:sn}));
  }else if(m.kind==='book'){
   var cbx=classById(m.classId),bn=val('m1'),bu=val('m2');
   var existing=cbx.textbook||null;
@@ -4410,10 +4412,10 @@ function mkEraseSplit(pts,cx,cy,r){
  return pieces;
 }
 function mkEraseAt(page,p){
- var mk=mkMarks(),r=MK_SIZES.eraser[MK.size],list=mk.strokes,next=[],changed=false;
+ var r=MK_SIZES.eraser[MK.size],list=MK.eraseCur,next=[],changed=false;
+ if(!list)return false;
  for(var i=0;i<list.length;i++){
   var s=list[i];
-  if(s.page!==page){next.push(s);continue}
   var pts=mkStrokePts(s);
   if(!pts||pts.length<2||!mkBoundsNear(pts,p,r)){next.push(s);continue}
   var pieces=mkEraseSplit(pts,p[0],p[1],r);
@@ -4425,18 +4427,35 @@ function mkEraseAt(page,p){
     :{id:uid(),tool:'pen',color:s.color,width:s.width,page:page,pts:seg});
   });
  }
- if(changed){mk.strokes=next;mkDrawAnnoForPage(page)}
+ if(changed){MK.eraseCur=next;mkMarks().strokes=MK.eraseOther.concat(next);mkDrawAnnoForPage(page)}
  return changed;
 }
 function mkBeginStroke(anno,page,clientX,clientY,pressure){
  var p=mkAnnoPoint(anno,clientX,clientY,page);
- if(MK.tool==='eraser'){MK.erasing=true;MK.erasePage=page;MK.eraseBefore=JSON.parse(JSON.stringify(mkStrokesForPage(page)));mkEraseAt(page,p);return}
+ if(MK.tool==='eraser'){
+  MK.erasing=true;MK.erasePage=page;MK.eraseBefore=JSON.parse(JSON.stringify(mkStrokesForPage(page)));
+  var all=mkMarks().strokes;
+  MK.eraseOther=all.filter(function(s){return s.page!==page});
+  MK.eraseCur=all.filter(function(s){return s.page===page});
+  mkEraseAt(page,p);return;
+ }
  var sz=MK_SIZES[MK.tool][MK.size],pr=(pressure===undefined||!pressure)?.5:pressure;
  MK.drawing=MK.tool==='hi'
   ?{id:uid(),tool:'hi',color:MK.color,width:sz,page:page,x0:p[0],y0:p[1],x1:p[0],y1:p[1]}
   :{id:uid(),tool:'pen',color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]]};
  MK.drawingAnno=anno;
  mkDrawAnnoForPage(page);
+}
+var mkMoveScheduled=false,mkPendingMove=null;
+function mkScheduleMove(x,y,pressure){
+ mkPendingMove={x:x,y:y,pressure:pressure};
+ if(mkMoveScheduled)return;
+ mkMoveScheduled=true;
+ requestAnimationFrame(function(){
+  mkMoveScheduled=false;
+  var p=mkPendingMove;mkPendingMove=null;
+  if(p&&MK)mkExtendStroke(p.x,p.y,p.pressure);
+ });
 }
 function mkExtendStroke(clientX,clientY,pressure){
  if(MK.erasing){
@@ -4452,7 +4471,7 @@ function mkExtendStroke(clientX,clientY,pressure){
 }
 function mkFinishErase(){
  var page=MK.erasePage,before=MK.eraseBefore;
- MK.erasing=false;MK.erasePage=null;MK.eraseBefore=null;
+ MK.erasing=false;MK.erasePage=null;MK.eraseBefore=null;MK.eraseOther=null;MK.eraseCur=null;
  if(!page)return;
  var after=mkStrokesForPage(page);
  if(JSON.stringify(after)!==JSON.stringify(before)){
@@ -4512,7 +4531,7 @@ function mkTouchStart(e){
 }
 function mkTouchMove(e){
  if(!MK||!MK.touch)return;
- if(MK.touch.mode==='draw'&&e.touches.length===1){e.preventDefault();mkExtendStroke(e.touches[0].clientX,e.touches[0].clientY);return}
+ if(MK.touch.mode==='draw'&&e.touches.length===1){e.preventDefault();mkScheduleMove(e.touches[0].clientX,e.touches[0].clientY);return}
  if(MK.touch.mode!=='pan'||e.touches.length<2)return;
  e.preventDefault();
  var t=MK.touch,cRaw=mkCenter(e.touches),dist=mkDist(e.touches);
@@ -4555,7 +4574,7 @@ function mkPointerDown(e){
 function mkPointerMove(e){
  if(!MK||e.pointerType==='touch'||MK.mode!=='edit'||(!MK.drawing&&!MK.erasing))return;
  e.preventDefault();
- mkExtendStroke(e.clientX,e.clientY,mkPressureOf(e));
+ mkScheduleMove(e.clientX,e.clientY,mkPressureOf(e));
 }
 function mkPointerUp(e){
  if(!MK||e.pointerType==='touch')return;
