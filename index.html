@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v78';
+var BUILD='v79';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4239,7 +4239,13 @@ function mkCss(){
   +'#mk .mkthumb span{display:block;text-align:center;font-size:10.5px;color:#C9C3B4;padding:2px 0}'
   +'#mk .mkbody{flex:1;position:relative;overflow-y:auto;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}'
   +'#mk .mkpages{will-change:auto}'
-  +'#mk .mkpagebox{display:flex;justify-content:center}'
+  // NOT flex-centered: a flex item's own auto-margin centering, stacked on top of the parent's
+  // justify-content:center, is exactly the kind of double centering that leaves the browser's own
+  // idea of "how far you can scroll" out of step with where the page is actually drawn once it's
+  // bigger than the viewport (its far edge becomes unreachable on one side, unpredictably, instead
+  // of scrolling to a plain, unambiguous position) -- which is what a zoomed-in view could "jump"
+  // toward. A plain block, centered only by the page's own margin below, has no such ambiguity.
+  +'#mk .mkpagebox{display:block;text-align:initial}'
   +'#mk .mkpagewrap{position:relative;margin:12px auto;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease;flex-shrink:0}'
   +'#mk .mkpagewrap canvas{display:block;position:absolute;left:0;top:0;width:100%;height:100%}'
   +'#mk .mktext{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;line-height:1;-webkit-user-select:text;user-select:text;color:transparent}'
