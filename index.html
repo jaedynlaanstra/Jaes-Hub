@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v79';
+var BUILD='v80';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4226,7 +4226,12 @@ function mkCss(){
   +'#mk .mkpage{font-size:12.5px;color:#C9C3B4;flex-shrink:0}'
   +'#mk .mkzoompill{display:flex;align-items:center;background:rgba(255,255,255,.08);border-radius:9px;overflow:hidden;flex-shrink:0}'
   +'#mk .mkzoompill button{background:none;border:none;color:#fff;width:30px;height:34px;font-size:16px;cursor:pointer}'
-  +'#mk .mkzoomval{width:52px;min-width:52px;flex:none;box-sizing:border-box;height:34px;background:none;border:none;color:#EFEAE0;font-size:12.5px;text-align:center;-moz-appearance:textfield}'
+  // iOS Safari zooms the whole page in when you tap into any text input smaller than 16px, no
+  // matter what the viewport meta tag says -- this one had to look 12.5px to fit the toolbar, so
+  // tapping it to type a zoom percentage was itself triggering exactly the native-zoom problem
+  // the rest of this file works so hard to keep out. A visual scale keeps it small on screen while
+  // the real font-size the OS checks stays 16px.
+  +'#mk .mkzoomval{width:52px;min-width:52px;flex:none;box-sizing:border-box;height:34px;background:none;border:none;color:#EFEAE0;font-size:16px;transform:scale(.78);transform-origin:center;text-align:center;-moz-appearance:textfield}'
   +'#mk .mkmode{display:flex;background:rgba(255,255,255,.08);border-radius:10px;padding:2px;flex-shrink:0}'
   +'#mk .mkmode button{background:none;border:none;color:#C9C3B4;padding:6px 11px;border-radius:8px;font-size:12.5px;cursor:pointer}'
   +'#mk .mkmode button.on{background:#EFEAE0;color:#1c1a17;font-weight:600}'
@@ -4246,7 +4251,12 @@ function mkCss(){
   // of scrolling to a plain, unambiguous position) -- which is what a zoomed-in view could "jump"
   // toward. A plain block, centered only by the page's own margin below, has no such ambiguity.
   +'#mk .mkpagebox{display:block;text-align:initial}'
-  +'#mk .mkpagewrap{position:relative;margin:12px auto;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease;flex-shrink:0}'
+  // the gap between pages must scale with zoom (set inline per page, below) rather than stay a fixed
+  // CSS size -- a live pinch preview is one plain CSS scale over the whole page list, gaps included,
+  // so if the REAL, committed gap never moved with zoom the two would only agree on a single page;
+  // scrolled past several pages, the fixed gaps we'd already passed didn't grow the way the preview
+  // just showed they would, and letting go landed you further off with every extra page in between
+  +'#mk .mkpagewrap{position:relative;margin:0 auto;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease;flex-shrink:0}'
   +'#mk .mkpagewrap canvas{display:block;position:absolute;left:0;top:0;width:100%;height:100%}'
   +'#mk .mktext{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;line-height:1;-webkit-user-select:text;user-select:text;color:transparent}'
   +'#mk .mktext span{position:absolute;white-space:pre;cursor:text;transform-origin:0% 0%}'
@@ -4297,7 +4307,7 @@ async function mkOpen(cid,i){
  if(!lib){alert('Could not load the PDF reader. Check your connection and try again.');return}
  var doc;
  try{doc=await lib.getDocument({data:b64ToBytes(f.data)}).promise}catch(e){alert('Could not open this PDF.');return}
- MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},curPage:1,zoom:1,mode:'read',
+ MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},zoomGen:0,curPage:1,zoom:1,mode:'read',
      tool:'hi',color:MK_COLORS.hi[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
  mkCss();
  mkLockViewportZoom();
@@ -4319,6 +4329,10 @@ async function mkOpen(cid,i){
  el.addEventListener('touchmove',mkTouchMove,{passive:false});
  el.addEventListener('touchend',mkTouchEnd,{passive:false});
  el.addEventListener('touchcancel',mkTouchEnd,{passive:false});
+ // Safari's own pinch-to-zoom-the-page gesture also arrives as these two non-standard events,
+ // separately from the touch events above -- suppressing only those isn't always enough on iOS
+ el.addEventListener('gesturestart',mkPreventGesture);
+ el.addEventListener('gesturechange',mkPreventGesture);
  window.addEventListener('resize',mkOnResize);
  mkRerenderChrome();
  var body=document.getElementById('mkbody');
@@ -4347,20 +4361,24 @@ function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(funct
 /* ---------- building the page list ---------- */
 function mkPageHtml(n){
  var info=MK.pageInfo[n];
- var w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
- return '<div class="mkpagebox" data-mkpage="'+n+'"><div class="mkpagewrap" style="width:'+w+'px;height:'+h+'px;'+(MK.dark?'filter:invert(1) hue-rotate(180deg)':'')+'">'
+ var w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom),gap=Math.round(12*MK.zoom);
+ return '<div class="mkpagebox" data-mkpage="'+n+'"><div class="mkpagewrap" style="width:'+w+'px;height:'+h+'px;margin:'+gap+'px auto;'+(MK.dark?'filter:invert(1) hue-rotate(180deg)':'')+'">'
   +'<canvas class="mkcanvas" data-mkpage="'+n+'"></canvas><div class="mktext" data-mkpage="'+n+'"></div><canvas class="mkanno" data-mkpage="'+n+'"></canvas><canvas class="mklive" data-mkpage="'+n+'"></canvas></div></div>';
 }
 async function mkRenderOnePage(n){
  if(!MK||MK.rendered[n])return;
  MK.rendered[n]=true;
+ // a zoom change while this page is still mid-render must not let this now-outdated render win a
+ // race against the fresh one it just triggered -- without this, a slow render for the OLD zoom
+ // level can finish after the new one and silently paint over it with the wrong-resolution result
+ var myGen=MK.zoomGen;
  var page=await MK.doc.getPage(n);
- if(!MK)return;
+ if(!MK||MK.zoomGen!==myGen){if(MK)MK.rendered[n]=false;return}
  var scale=mkScaleFor(n);
  var viewport=page.getViewport({scale:scale});
  var canvas=document.querySelector('.mkcanvas[data-mkpage="'+n+'"]'),anno=document.querySelector('.mkanno[data-mkpage="'+n+'"]'),live=document.querySelector('.mklive[data-mkpage="'+n+'"]'),textEl=document.querySelector('.mktext[data-mkpage="'+n+'"]');
  if(!canvas||!anno||!live){MK.rendered[n]=false;return}
- var dpr=window.devicePixelRatio||1,MK_MAX_CANVAS_DIM=4096,MK_MAX_CANVAS_AREA=16000000;
+ var dpr=window.devicePixelRatio||1,MK_MAX_CANVAS_DIM=4096,MK_MAX_CANVAS_AREA=10000000;
  dpr=Math.min(dpr,MK_MAX_CANVAS_DIM/viewport.width,MK_MAX_CANVAS_DIM/viewport.height,Math.sqrt(MK_MAX_CANVAS_AREA/(viewport.width*viewport.height)));
  dpr=Math.max(1,dpr);
  var pxW=Math.ceil(viewport.width*dpr),pxH=Math.ceil(viewport.height*dpr);
@@ -4372,6 +4390,7 @@ async function mkRenderOnePage(n){
  var bctx=buf.getContext('2d');bctx.setTransform(dpr,0,0,dpr,0,0);
  try{await page.render({canvasContext:bctx,viewport:viewport}).promise}catch(e){}
  if(!MK)return;
+ if(MK.zoomGen!==myGen){MK.rendered[n]=false;return}
  canvas.width=pxW;canvas.height=pxH;
  canvas.getContext('2d').drawImage(buf,0,0,pxW,pxH);
  anno.width=pxW;anno.height=pxH;
@@ -4409,11 +4428,13 @@ var mkScrollTimer=null;
 function mkOnScrollThrottled(){clearTimeout(mkScrollTimer);mkScrollTimer=setTimeout(mkOnScroll,80)}
 function mkApplyZoomResize(){
  if(!MK)return;
+ MK.zoomGen++; // any render already in flight from before this call is now for a stale zoom level
  var zval=document.getElementById('mkzoomval');if(zval)zval.value=Math.round(MK.zoom*100)+'%';
+ var gap=Math.round(12*MK.zoom);
  for(var n=1;n<=MK.pageCount;n++){
   var info=MK.pageInfo[n],w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
   var wrap=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .mkpagewrap');
-  if(wrap){wrap.style.width=w+'px';wrap.style.height=h+'px'}
+  if(wrap){wrap.style.width=w+'px';wrap.style.height=h+'px';wrap.style.margin=gap+'px auto'}
   MK.rendered[n]=false;
  }
 }
@@ -4616,6 +4637,7 @@ function mkCancelStroke(){
 /* ---------- touch: one finger draws (Markup) or scrolls (Reading); two fingers pan; a deliberate
    pinch, past a small dead zone, zooms with a live preview and one real redraw when you let go ---------- */
 var MK_MAX_ZOOM=3;
+function mkPreventGesture(e){e.preventDefault()}
 function mkDist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.hypot(dx,dy)}
 function mkCenter(t){return {x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
 function mkTouchFind(touches,id){for(var i=0;i<touches.length;i++){if(touches[i].identifier===id)return touches[i]}return null}
@@ -4638,6 +4660,11 @@ function mkStartPan(e){
  var pages=document.getElementById('mkpages');
  pages.style.transformOrigin='0 0';
  pages.style.willChange='transform';
+ // if a one-finger scroll was still gliding to a stop (or actively scrolling) right when the second
+ // finger landed, iOS won't reliably let preventDefault cancel that already-in-flight native scroll --
+ // it can keep drifting underneath our own transform for the rest of the gesture. Freezing the real
+ // scroll for the duration of the pinch (restored the moment it ends) stops the two from stacking.
+ body.style.overflow='hidden';
 }
 function mkCommitPending(useX,useY){
  var p=MK.touch,id=p.id,anno=p.anno,page=p.page;
@@ -4768,6 +4795,7 @@ function mkTouchEnd(e){
   var t=MK.touch,pages=document.getElementById('mkpages');
   pages.style.transform='none';pages.style.willChange='';pages.style.transformOrigin='';
   var body=document.getElementById('mkbody');
+  body.style.overflow='';
   MK.zoom=Math.max(.5,Math.min(MK_MAX_ZOOM,t.z0*t.s));
   mkApplyZoomResize();
   body.scrollLeft=Math.max(0,t.scrollLeft0-t.tx);
