@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v71';
+var BUILD='v72';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4355,10 +4355,19 @@ async function mkRenderOnePage(n){
  var dpr=window.devicePixelRatio||1,MK_MAX_CANVAS_DIM=4096,MK_MAX_CANVAS_AREA=16000000;
  dpr=Math.min(dpr,MK_MAX_CANVAS_DIM/viewport.width,MK_MAX_CANVAS_DIM/viewport.height,Math.sqrt(MK_MAX_CANVAS_AREA/(viewport.width*viewport.height)));
  dpr=Math.max(1,dpr);
- [canvas,anno,live].forEach(function(cv){cv.width=Math.ceil(viewport.width*dpr);cv.height=Math.ceil(viewport.height*dpr)});
- var ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
- try{await page.render({canvasContext:ctx,viewport:viewport}).promise}catch(e){}
+ var pxW=Math.ceil(viewport.width*dpr),pxH=Math.ceil(viewport.height*dpr);
+ // render into an offscreen buffer at the new size first, so the visible canvas is only ever
+ // touched once the fresh page is fully ready -- no hidden/blank gap while it's loading, and no
+ // moment of stale pixels stretched to the wrong size either (which is what "hide until ready" was
+ // trying to dodge in the first place, at the cost of a visible flash to blank)
+ var buf=document.createElement('canvas');buf.width=pxW;buf.height=pxH;
+ var bctx=buf.getContext('2d');bctx.setTransform(dpr,0,0,dpr,0,0);
+ try{await page.render({canvasContext:bctx,viewport:viewport}).promise}catch(e){}
  if(!MK)return;
+ canvas.width=pxW;canvas.height=pxH;
+ canvas.getContext('2d').drawImage(buf,0,0,pxW,pxH);
+ anno.width=pxW;anno.height=pxH;
+ live.width=pxW;live.height=pxH;
  mkDrawAnnoForPage(n);
  if(textEl){
   textEl.innerHTML='';textEl.style.setProperty('--scale-factor',viewport.scale);
@@ -4368,8 +4377,6 @@ async function mkRenderOnePage(n){
    await loadPdfJs().then(function(lib){return lib.renderTextLayer({textContentSource:tc,container:textEl,viewport:viewport}).promise});
   }catch(e){}
  }
- if(!MK)return;
- canvas.style.visibility='';anno.style.visibility='';live.style.visibility='';
 }
 function mkOnScroll(){
  if(!MK)return;
@@ -4392,19 +4399,21 @@ function mkOnScroll(){
 }
 var mkScrollTimer=null;
 function mkOnScrollThrottled(){clearTimeout(mkScrollTimer);mkScrollTimer=setTimeout(mkOnScroll,80)}
-function mkApplyZoom(){
+function mkApplyZoomResize(){
  if(!MK)return;
  var zval=document.getElementById('mkzoomval');if(zval)zval.value=Math.round(MK.zoom*100)+'%';
  for(var n=1;n<=MK.pageCount;n++){
   var info=MK.pageInfo[n],w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
   var wrap=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .mkpagewrap');
   if(wrap){wrap.style.width=w+'px';wrap.style.height=h+'px'}
-  var cv=document.querySelector('.mkcanvas[data-mkpage="'+n+'"]'),an=document.querySelector('.mkanno[data-mkpage="'+n+'"]'),lv=document.querySelector('.mklive[data-mkpage="'+n+'"]');
-  if(cv)cv.style.visibility='hidden';if(an)an.style.visibility='hidden';if(lv)lv.style.visibility='hidden';
   MK.rendered[n]=false;
  }
- mkOnScroll();
 }
+/* resize only touches box sizes (no scroll-dependent reads); mkOnScroll reads the CURRENT scroll
+   position to decide what to render, so a caller that also needs to correct the scroll position
+   (like ending a pinch) must do that in between, or this would paint one frame at the wrong spot
+   first and then visibly snap to the right one -- exactly the "flash then drifts" symptom */
+function mkApplyZoom(){mkApplyZoomResize();if(MK)mkOnScroll()}
 
 /* ---------- drawing on the annotation layer ---------- */
 function mkDrawAnnoForPage(n){
@@ -4428,28 +4437,23 @@ function mkDrawLive(n){
    thickness now, however hard you press, matching the highlighter's own flat, predictable feel. */
 function mkPaintStroke(ctx,s,scale){
  ctx.save();
- if(s.tool==='hi'){
-  ctx.globalAlpha=.38;ctx.globalCompositeOperation='multiply';
-  ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='butt';
-  ctx.beginPath();ctx.moveTo(s.x0*scale,s.y0*scale);ctx.lineTo(s.x1*scale,s.y1*scale);ctx.stroke();
+ if(s.tool==='hi'){ctx.globalAlpha=.38;ctx.globalCompositeOperation='multiply';ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='butt';ctx.lineJoin='round'}
+ else{ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round'}
+ var pts=s.pts||[];
+ ctx.beginPath();
+ if(pts.length<=2){
+  var p0=pts[0]||[0,0];ctx.moveTo(p0[0]*scale,p0[1]*scale);
+  var p1=pts[1]||p0;ctx.lineTo(p1[0]*scale,p1[1]*scale);
  }else{
-  ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
-  var pts=s.pts||[];
-  ctx.beginPath();
-  if(pts.length<=2){
-   var p0=pts[0]||[0,0];ctx.moveTo(p0[0]*scale,p0[1]*scale);
-   var p1=pts[1]||p0;ctx.lineTo(p1[0]*scale,p1[1]*scale);
-  }else{
-   ctx.moveTo(pts[0][0]*scale,pts[0][1]*scale);
-   for(var pi=1;pi<pts.length-1;pi++){
-    var cx=pts[pi][0]*scale,cy=pts[pi][1]*scale;
-    var mx=(pts[pi][0]+pts[pi+1][0])/2*scale,my=(pts[pi][1]+pts[pi+1][1])/2*scale;
-    ctx.quadraticCurveTo(cx,cy,mx,my);
-   }
-   var last=pts[pts.length-1];ctx.lineTo(last[0]*scale,last[1]*scale);
+  ctx.moveTo(pts[0][0]*scale,pts[0][1]*scale);
+  for(var pi=1;pi<pts.length-1;pi++){
+   var cx=pts[pi][0]*scale,cy=pts[pi][1]*scale;
+   var mx=(pts[pi][0]+pts[pi+1][0])/2*scale,my=(pts[pi][1]+pts[pi+1][1])/2*scale;
+   ctx.quadraticCurveTo(cx,cy,mx,my);
   }
-  ctx.stroke();
+  var last=pts[pts.length-1];ctx.lineTo(last[0]*scale,last[1]*scale);
  }
+ ctx.stroke();
  ctx.restore();
 }
 function mkAnnoPoint(anno,clientX,clientY,page){
@@ -4462,7 +4466,7 @@ function mkDistToSeg(p,a,b){
  var cx=a[0]+t*vx,cy=a[1]+t*vy;
  return Math.hypot(p[0]-cx,p[1]-cy);
 }
-function mkStrokePts(s){return s.tool==='hi'?[[s.x0,s.y0],[s.x1,s.y1]]:s.pts}
+function mkStrokePts(s){return s.pts}
 function mkBoundsNear(pts,p,r){
  var minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
  for(var i=0;i<pts.length;i++){var q=pts[i];if(q[0]<minX)minX=q[0];if(q[0]>maxX)maxX=q[0];if(q[1]<minY)minY=q[1];if(q[1]>maxY)maxY=q[1]}
@@ -4477,31 +4481,38 @@ function mkDensify(pts,maxGap){
  }
  return out;
 }
-function mkEraseSplit(pts,cx,cy,r){
+// tests against every centre in the erase path this move covered, not just the one point you are
+// on right now -- a fast swipe only samples a handful of points, and erasing just those single spots
+// leaves untouched streaks of ink behind between them, which is what made the eraser feel like it
+// only worked when you dabbed it slowly rather than dragged it
+function mkEraseSplit(pts,centers,r){
  var dense=mkDensify(pts,Math.max(2,r/3));
  var pieces=[],cur=[];
  dense.forEach(function(p){
-  var hit=Math.hypot(p[0]-cx,p[1]-cy)<=r;
+  var hit=false;
+  for(var i=0;i<centers.length;i++){if(Math.hypot(p[0]-centers[i][0],p[1]-centers[i][1])<=r){hit=true;break}}
   if(hit){if(cur.length>1)pieces.push(cur);cur=[]}
   else cur.push(p);
  });
  if(cur.length>1)pieces.push(cur);
  return pieces;
 }
-function mkEraseAt(page,p){
+function mkBoundsNearAny(pts,centers,r){
+ for(var i=0;i<centers.length;i++)if(mkBoundsNear(pts,centers[i],r))return true;
+ return false;
+}
+function mkEraseAt(page,centers){
  var r=MK_SIZES.eraser[MK.size],list=MK.eraseCur,next=[],changed=false;
  if(!list)return false;
  for(var i=0;i<list.length;i++){
   var s=list[i];
   var pts=mkStrokePts(s);
-  if(!pts||pts.length<2||!mkBoundsNear(pts,p,r)){next.push(s);continue}
-  var pieces=mkEraseSplit(pts,p[0],p[1],r);
+  if(!pts||pts.length<2||!mkBoundsNearAny(pts,centers,r)){next.push(s);continue}
+  var pieces=mkEraseSplit(pts,centers,r);
   if(pieces.length===1&&pieces[0].length>=pts.length){next.push(s);continue}
   changed=true;
   pieces.forEach(function(seg){
-   next.push(s.tool==='hi'
-    ?{id:uid(),tool:'hi',color:s.color,width:s.width,page:page,x0:seg[0][0],y0:seg[0][1],x1:seg[seg.length-1][0],y1:seg[seg.length-1][1]}
-    :{id:uid(),tool:'pen',color:s.color,width:s.width,page:page,pts:seg});
+   next.push({id:uid(),tool:s.tool,color:s.color,width:s.width,page:page,pts:seg});
   });
  }
  if(changed){MK.eraseCur=next;mkMarks().strokes=MK.eraseOther.concat(next);mkDrawAnnoForPage(page)}
@@ -4514,19 +4525,22 @@ function mkBeginStroke(anno,page,clientX,clientY,pressure){
   var all=mkMarks().strokes;
   MK.eraseOther=all.filter(function(s){return s.page!==page});
   MK.eraseCur=all.filter(function(s){return s.page===page});
-  mkEraseAt(page,p);return;
+  MK.eraseLastPt=p;
+  MK.drawingAnno=anno; // needed so every later move while dragging can still find its page/canvas
+  mkEraseAt(page,[p]);return;
  }
  var sz=MK_SIZES[MK.tool][MK.size],pr=(pressure===undefined||!pressure)?.5:pressure;
- MK.drawing=MK.tool==='hi'
-  ?{id:uid(),tool:'hi',color:MK.color,width:sz,page:page,x0:p[0],y0:p[1],x1:p[0],y1:p[1]}
-  :{id:uid(),tool:'pen',color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]]};
+ MK.drawing={id:uid(),tool:MK.tool,color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]],holdPt:[p[0],p[1]],holdAt:Date.now()};
  MK.drawingAnno=anno;
  mkDrawLive(page);
 }
+var MK_HOLD_MS=350,MK_HOLD_EPS=4;
 function mkAppendPoint(clientX,clientY,pressure){
  if(!MK.drawing||!MK.drawingAnno)return;
  var pg=MK.drawing.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
- if(MK.drawing.tool==='hi'){MK.drawing.x1=p[0];MK.drawing.y1=p[1]}else{MK.drawing.pts.push([p[0],p[1],pr])}
+ MK.drawing.pts.push([p[0],p[1],pr]);
+ var hp=MK.drawing.holdPt;
+ if(!hp||Math.hypot(p[0]-hp[0],p[1]-hp[1])>MK_HOLD_EPS){MK.drawing.holdPt=[p[0],p[1]];MK.drawing.holdAt=Date.now()}
 }
 var mkRedrawScheduled=false;
 function mkScheduleRedraw(){
@@ -4537,12 +4551,15 @@ function mkScheduleRedraw(){
   if(MK&&MK.drawing)mkDrawLive(MK.drawing.page);
  });
 }
-function mkScheduleMove(x,y,pressure){mkExtendStroke(x,y,pressure)}
 function mkExtendStroke(clientX,clientY,pressure){
  if(MK.erasing){
   if(!MK.drawingAnno)return;
   var pg=+MK.drawingAnno.getAttribute('data-mkpage');
-  mkEraseAt(pg,mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg));
+  var p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg);
+  var r=MK_SIZES.eraser[MK.size],last=MK.eraseLastPt;
+  var centers=last?mkDensify([last,p],Math.max(2,r/3)):[p];
+  MK.eraseLastPt=p;
+  mkEraseAt(pg,centers);
   return;
  }
  mkAppendPoint(clientX,clientY,pressure);
@@ -4550,7 +4567,7 @@ function mkExtendStroke(clientX,clientY,pressure){
 }
 function mkFinishErase(){
  var page=MK.erasePage,before=MK.eraseBefore;
- MK.erasing=false;MK.erasePage=null;MK.eraseBefore=null;MK.eraseOther=null;MK.eraseCur=null;
+ MK.erasing=false;MK.erasePage=null;MK.eraseBefore=null;MK.eraseOther=null;MK.eraseCur=null;MK.eraseLastPt=null;
  if(!page)return;
  var after=mkStrokesForPage(page);
  if(JSON.stringify(after)!==JSON.stringify(before)){
@@ -4564,8 +4581,14 @@ function mkFinishStroke(){
  if(!MK.drawing)return;
  var s=MK.drawing;MK.drawing=null;MK.drawingAnno=null;
  mkDrawLive(s.page);
- if(s.tool==='pen'&&s.pts.length<2)return;
- if(s.tool==='hi'&&Math.hypot(s.x1-s.x0,s.y1-s.y0)<1)return;
+ if(s.pts.length<2)return;
+ if(s.tool==='hi'&&s.holdAt&&(Date.now()-s.holdAt>=MK_HOLD_MS)){
+  var start=s.pts[0],end=s.holdPt;
+  if(Math.hypot(end[0]-start[0],end[1]-start[1])<1)return;
+  s.pts=[start,[end[0],end[1],.5]];
+ }
+ var total=0;for(var ti=1;ti<s.pts.length;ti++)total+=Math.hypot(s.pts[ti][0]-s.pts[ti-1][0],s.pts[ti][1]-s.pts[ti-1][1]);
+ if(total<1)return;
  mkAddStroke(s);
 }
 function mkCancelStroke(){
@@ -4626,7 +4649,7 @@ function mkTouchMove(e){
  var mid={x:cRaw.x-t.rectLeft+t.scrollLeft0,y:cRaw.y-t.rectTop+t.scrollTop0};
  // an ordinary two-finger scroll never holds its spacing perfectly steady -- so zoom only once the
  // pinch has moved a deliberate amount past where it started; a small drag inside that band pans only
- var raw=dist/t.startDist,DEAD=.08,eff;
+ var raw=dist/t.startDist,DEAD=.025,eff;
  if(raw>1+DEAD)eff=raw-DEAD;else if(raw<1-DEAD)eff=raw+DEAD;else eff=1;
  var maxS=MK_MAX_ZOOM/t.z0,minS=.5/t.z0;
  var targetS=Math.max(minS,Math.min(maxS,eff));
@@ -4648,7 +4671,7 @@ function mkTouchEnd(e){
   pages.style.transform='none';pages.style.willChange='';pages.style.transformOrigin='';
   var body=document.getElementById('mkbody');
   MK.zoom=Math.max(.5,Math.min(MK_MAX_ZOOM,t.z0*t.s));
-  mkApplyZoom();
+  mkApplyZoomResize();
   body.scrollLeft=Math.max(0,t.scrollLeft0-t.tx);
   body.scrollTop=Math.max(0,t.scrollTop0-t.ty);
   mkOnScroll();
@@ -4815,7 +4838,10 @@ function mkClick(e){
  if(a==='mode'){mkSetMode(MK.mode===arg&&arg==='edit'?'read':arg);mkRerenderChrome();return}
  if(a==='dark'){MK.dark=!MK.dark;document.querySelectorAll('.mkpagewrap').forEach(function(w){w.style.filter=MK.dark?'invert(1) hue-rotate(180deg)':''});mkRerenderChrome();return}
  if(a==='openext'){openFile(MK.cid,MK.i);return}
- if(a==='tool'){MK.tool=arg;mkRerenderChrome();return}
+ if(a==='tool'){
+ if(MK.tool===arg){mkSetMode('read');mkRerenderChrome();return}
+ MK.tool=arg;mkRerenderChrome();return;
+}
  if(a==='size'){MK.size=arg;mkRerenderChrome();return}
  if(a==='color'){MK.color=arg;mkRerenderChrome();return}
  if(a==='undo'){mkUndo();return}
