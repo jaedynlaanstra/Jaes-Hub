@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v74';
+var BUILD='v75';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4199,7 +4199,7 @@ async function indexPdfs(cid){
    A mouse or an Apple Pencil always draws in Markup mode, since neither is ambiguous the way a finger is. */
 var MK=null;
 var MK_SIZES={hi:{s:8,m:14,l:22},pen:{s:1,m:2,l:3.5},eraser:{s:10,m:16,l:24}};
-var MK_COLORS={hi:['#F5D949','#F5A0B5','#8FD19E','#7FB8E0','#D9A8F0','#F2B26B'],pen:['#26241F','#D9534F','#3B82F6','#1F9D6B','#8B5CF6','#E67E22']};
+var MK_COLORS={hi:['#F5D949','#F5A0B5','#8FD19E','#7FB8E0','#D9A8F0','#F2B26B'],pen:['#000000','#D9534F','#3B82F6','#1F9D6B','#8B5CF6','#E67E22']};
 function mkIco(inner,sz){return '<svg viewBox="0 0 24 24" width="'+(sz||19)+'" height="'+(sz||19)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>'}
 var MK_ICO={
  close:mkIco('<path d="M5 5l14 14M19 5L5 19"/>',17),
@@ -4290,7 +4290,7 @@ async function mkOpen(cid,i){
  var doc;
  try{doc=await lib.getDocument({data:b64ToBytes(f.data)}).promise}catch(e){alert('Could not open this PDF.');return}
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},curPage:1,zoom:1,mode:'read',
-     tool:'hi',color:MK_COLORS.hi[0],size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
+     tool:'hi',color:MK_COLORS.hi[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
  mkCss();
  mkLockViewportZoom();
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
@@ -4660,15 +4660,15 @@ function mkTouchMove(e){
  t.ty=mid.y-delta*(t.prevMid.y-t.ty);
  t.s=targetS;
  t.prevMid=mid;
- // keep the live preview itself inside the page's real scrollable bounds throughout the gesture --
- // otherwise letting go anywhere past an edge means the final, real scroll position (which cannot go
- // out of bounds) lands somewhere different from what the live preview was just showing, which reads
- // as a jump/snap right when you release rather than one continuous motion
+ // keep the live preview inside the page's real scrollable bounds vertically, so letting go doesn't
+ // jump to a different spot once the real (unable-to-go-out-of-bounds) scroll position takes over.
+ // horizontally each page is CSS-centered in its box, so the browser's own reported scrollWidth does
+ // not describe the true reachable range the same way -- clamping against it here pulled the view
+ // rightward on every pinch and made an ordinary two-finger scroll wander sideways; only the height
+ // is a plain, unambiguous stack, so only that axis gets this treatment.
  var body=document.getElementById('mkbody');
- var maxScrollLeft=Math.max(0,body.scrollWidth*t.s-body.clientWidth);
  var maxScrollTop=Math.max(0,body.scrollHeight*t.s-body.clientHeight);
- var wantLeft=t.scrollLeft0-t.tx,wantTop=t.scrollTop0-t.ty;
- t.tx=t.scrollLeft0-Math.max(0,Math.min(maxScrollLeft,wantLeft));
+ var wantTop=t.scrollTop0-t.ty;
  t.ty=t.scrollTop0-Math.max(0,Math.min(maxScrollTop,wantTop));
  document.getElementById('mkpages').style.transform='translate('+t.tx+'px,'+t.ty+'px) scale('+t.s+')';
 }
@@ -4830,7 +4830,7 @@ function mkToolbarHtml(){
 }
 function mkColorInput(e){
  if(!e.target.matches||!e.target.matches('[data-mkcustom]'))return;
- MK.color=e.target.value;mkRerenderChrome();
+ MK.color=e.target.value;MK.toolColor[MK.tool]=e.target.value;mkRerenderChrome();
 }
 function mkApplyZoomValue(raw){
  var n=parseInt(String(raw).replace(/[^0-9]/g,''),10);
@@ -4854,10 +4854,10 @@ function mkClick(e){
  if(a==='openext'){openFile(MK.cid,MK.i);return}
  if(a==='tool'){
  if(MK.tool===arg){mkSetMode('read');mkRerenderChrome();return}
- MK.tool=arg;mkRerenderChrome();return;
+ MK.tool=arg;if(MK.toolColor[arg])MK.color=MK.toolColor[arg];mkRerenderChrome();return;
 }
  if(a==='size'){MK.size=arg;mkRerenderChrome();return}
- if(a==='color'){MK.color=arg;mkRerenderChrome();return}
+ if(a==='color'){MK.color=arg;MK.toolColor[MK.tool]=arg;mkRerenderChrome();return}
  if(a==='undo'){mkUndo();return}
  if(a==='redo'){mkRedo();return}
  if(a==='zoomin'){MK.zoom=Math.min(MK_MAX_ZOOM,MK.zoom+.1);mkApplyZoom();return}
