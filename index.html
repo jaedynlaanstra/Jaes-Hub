@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v77';
+var BUILD='v78';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4418,20 +4418,30 @@ function mkApplyZoomResize(){
 function mkApplyZoom(){mkApplyZoomResize();if(MK)mkOnScroll()}
 
 /* ---------- drawing on the annotation layer ---------- */
+// the canvas's own pixel width, not a freshly-read window.devicePixelRatio, is what its drawing
+// transform must match -- at high zoom mkRenderOnePage caps the resolution it actually sizes the
+// canvas to (so a giant zoomed page doesn't exceed the browser's canvas size limit), and a fresh
+// device pixel ratio read here can be a different, uncapped number. That mismatch between "the
+// transform we draw through" and "the pixels the canvas actually has" is what was quietly sliding
+// every stroke off of where it was really drawn once you zoomed in far enough to hit the cap.
+function mkCanvasDpr(canvas,n,scale){
+ var cssWidth=MK.pageInfo[n].vp1.width*scale;
+ return cssWidth>0?canvas.width/cssWidth:1;
+}
 function mkDrawAnnoForPage(n){
  var anno=document.querySelector('.mkanno[data-mkpage="'+n+'"]');if(!anno||!MK)return;
- var scale=mkScaleFor(n),dpr=window.devicePixelRatio||1,ctx=anno.getContext('2d');
+ var scale=mkScaleFor(n),dpr=mkCanvasDpr(anno,n,scale),ctx=anno.getContext('2d');
  ctx.setTransform(dpr,0,0,dpr,0,0);
- ctx.clearRect(0,0,anno.width,anno.height);
+ ctx.clearRect(0,0,scale*MK.pageInfo[n].vp1.width,scale*MK.pageInfo[n].vp1.height);
  mkStrokesForPage(n).forEach(function(s){mkPaintStroke(ctx,s,scale)});
 }
 /* the stroke you are actively drawing lives on its own overlay canvas, repainted by itself --
    the committed ink underneath never gets touched while you draw, however much of it there is */
 function mkDrawLive(n){
  var live=document.querySelector('.mklive[data-mkpage="'+n+'"]');if(!live||!MK)return;
- var scale=mkScaleFor(n),dpr=window.devicePixelRatio||1,ctx=live.getContext('2d');
+ var scale=mkScaleFor(n),dpr=mkCanvasDpr(live,n,scale),ctx=live.getContext('2d');
  ctx.setTransform(dpr,0,0,dpr,0,0);
- ctx.clearRect(0,0,live.width,live.height);
+ ctx.clearRect(0,0,scale*MK.pageInfo[n].vp1.width,scale*MK.pageInfo[n].vp1.height);
  if(MK.drawing&&MK.drawing.page===n)mkPaintStroke(ctx,MK.drawing,scale);
 }
 /* the pen: a plain, steady line. A tapered pressure-sensitive version was tried and rolled back --
@@ -4603,6 +4613,32 @@ var MK_MAX_ZOOM=3;
 function mkDist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.hypot(dx,dy)}
 function mkCenter(t){return {x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
 function mkTouchFind(touches,id){for(var i=0;i<touches.length;i++){if(touches[i].identifier===id)return touches[i]}return null}
+// a real second finger landing to start a two-finger scroll almost never touches down in the exact
+// same millisecond as the first -- so committing to "draw" the instant one finger appears meant
+// that the ordinary, staggered start of a two-finger gesture kept getting mistaken for a one-finger
+// draw (with the second finger then wrongly dismissed as an incidental palm to ignore). Real touch
+// UIs solve this the same way: hold off a beat before commtting to a one-finger draw, so a second
+// finger arriving just after the first still reads as the two-finger gesture it actually is.
+var MK_DRAW_GRACE_MS=70,MK_DRAW_MOVE_PX=6;
+function mkStartPan(e){
+ if(MK.drawing||MK.erasing)mkCancelStroke();
+ var body=document.getElementById('mkbody'),rect=body.getBoundingClientRect(),c0=mkCenter(e.touches);
+ // work in the page's own coordinate space throughout (screen position minus the container's own
+ // position, plus the scroll already applied), not raw screen pixels -- mixing the two is what
+ // threw the anchor off by exactly the amount the page had already been scrolled.
+ MK.touch={mode:'pan',z0:MK.zoom,scrollTop0:body.scrollTop,scrollLeft0:body.scrollLeft,
+  rectTop:rect.top,rectLeft:rect.left,
+  startDist:mkDist(e.touches),prevMid:{x:c0.x-rect.left+body.scrollLeft,y:c0.y-rect.top+body.scrollTop},tx:0,ty:0,s:1};
+ var pages=document.getElementById('mkpages');
+ pages.style.transformOrigin='0 0';
+ pages.style.willChange='transform';
+}
+function mkCommitPending(useX,useY){
+ var p=MK.touch,id=p.id,anno=p.anno,page=p.page;
+ clearTimeout(p.timer);
+ MK.touch={mode:'draw',id:id};
+ mkBeginStroke(anno,page,useX,useY);
+}
 function mkTouchStart(e){
  if(!MK)return;
  // Safari fires a duplicate TouchEvent for every Apple Pencil contact alongside the PointerEvent we
@@ -4610,36 +4646,51 @@ function mkTouchStart(e){
  // to treat that same contact as a native gesture, which is what was starting a text selection
  if(MK.activePointerType==='pen'){e.preventDefault();return} // a resting palm while the pencil is actively drawing
  if(MK.touch&&MK.touch.mode==='draw'){e.preventDefault();return} // a stray extra touch (palm) while a finger is already drawing: ignore it, keep drawing with the original finger
+ if(MK.touch&&MK.touch.mode==='pending'){
+  // a second finger joined while we were still waiting to see what the first one was doing --
+  // this is a two-finger gesture, not a draw, no matter how it looked for that first instant
+  if(e.touches.length>=2){e.preventDefault();clearTimeout(MK.touch.timer);mkStartPan(e)}
+  return;
+ }
  if(e.touches.length===1){
   if(e.touches[0].touchType==='stylus'){e.preventDefault();return}
   if(MK.mode!=='edit')return;
   var t=e.touches[0],target=document.elementFromPoint(t.clientX,t.clientY),anno=target&&target.closest&&target.closest('.mkanno');
   if(!anno)return;
   e.preventDefault();
-  MK.touch={mode:'draw',id:t.identifier};
-  mkBeginStroke(anno,+anno.getAttribute('data-mkpage'),t.clientX,t.clientY);
+  var page=+anno.getAttribute('data-mkpage'),id0=t.identifier;
+  MK.touch={mode:'pending',id:id0,anno:anno,page:page,x0:t.clientX,y0:t.clientY,lastX:t.clientX,lastY:t.clientY};
+  MK.touch.timer=setTimeout(function(){
+   if(MK&&MK.touch&&MK.touch.mode==='pending'&&MK.touch.id===id0){
+    var p=MK.touch;mkCommitPending(p.lastX,p.lastY);
+   }
+  },MK_DRAW_GRACE_MS);
  }else if(e.touches.length===2){
   // one combined gesture for two fingers, always: every move updates BOTH the zoom and the pan
   // together from the same two points, the way a real pinch works, instead of guessing which one
   // you meant and making the other one fight it.
   e.preventDefault();
-  if(MK.drawing||MK.erasing)mkCancelStroke();
-  var body=document.getElementById('mkbody'),rect=body.getBoundingClientRect(),c0=mkCenter(e.touches);
-  // work in the page's own coordinate space throughout (screen position minus the container's own
-  // position, plus the scroll already applied), not raw screen pixels -- mixing the two is what
-  // threw the anchor off by exactly the amount the page had already been scrolled.
-  MK.touch={mode:'pan',z0:MK.zoom,scrollTop0:body.scrollTop,scrollLeft0:body.scrollLeft,
-   rectTop:rect.top,rectLeft:rect.left,
-   startDist:mkDist(e.touches),prevMid:{x:c0.x-rect.left+body.scrollLeft,y:c0.y-rect.top+body.scrollTop},tx:0,ty:0,s:1};
-  var pages=document.getElementById('mkpages');
-  pages.style.transformOrigin='0 0';
-  pages.style.willChange='transform';
+  mkStartPan(e);
  }
 }
 function mkTouchMove(e){
  if(!MK)return;
  if(MK.activePointerType==='pen'){e.preventDefault();return} // suppress the pencil's touch-event twin for the whole stroke, not just its start
  if(!MK.touch)return;
+ if(MK.touch.mode==='pending'){
+  e.preventDefault();
+  var dp=mkTouchFind(e.touches,MK.touch.id);
+  if(!dp)return;
+  var mdx=dp.clientX-MK.touch.x0,mdy=dp.clientY-MK.touch.y0;
+  if(Math.hypot(mdx,mdy)>MK_DRAW_MOVE_PX){
+   // moved enough already to be a clear, deliberate stroke -- no reason to make a fast draw wait
+   // out the rest of the grace window just to double-check it isn't secretly a two-finger gesture
+   mkCommitPending(dp.clientX,dp.clientY);
+  }else{
+   MK.touch.lastX=dp.clientX;MK.touch.lastY=dp.clientY;
+  }
+  return;
+ }
  if(MK.touch.mode==='draw'){
   e.preventDefault();
   var dt=mkTouchFind(e.touches,MK.touch.id);
@@ -4692,6 +4743,17 @@ function mkTouchEnd(e){
  if(!MK)return;
  if(MK.activePointerType==='pen'){e.preventDefault();return}
  if(!MK.touch)return;
+ if(MK.touch.mode==='pending'){
+  // lifted before the grace window ran out, and never moved enough to look like a real stroke --
+  // a genuine quick tap (dotting an "i", a period): commit it as the dot it is, then close out
+  if(!mkTouchFind(e.touches,MK.touch.id)){
+   var p=MK.touch;clearTimeout(p.timer);
+   mkBeginStroke(p.anno,p.page,p.lastX,p.lastY);
+   mkFinishStroke();
+   MK.touch=null;
+  }
+  return;
+ }
  if(MK.touch.mode==='draw'){
   if(!mkTouchFind(e.touches,MK.touch.id)){mkFinishStroke();MK.touch=null}
   return;
