@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v68';
+var BUILD='v70';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1167,6 +1167,10 @@ function contactById(c,id){for(var i=0;i<c.contacts.length;i++){if(c.contacts[i]
 function linkById(c,id){for(var i=0;i<c.links.length;i++){if(c.links[i].id===id)return c.links[i]}return null}
 function mailto(ct,c){return 'https://outlook.office.com/mail/deeplink/compose?to='+encodeURIComponent(ct.email)+'&subject='+encodeURIComponent(c.code||c.name)}
 function classById(id){for(var i=0;i<S.classes.length;i++){if(S.classes[i].id===id)return S.classes[i]}return null}
+/* on phone the sidebar is always an off-canvas drawer (opened by the menu button), never an inline
+   column, so the desktop "hide the sidebar to reclaim width" setting must not apply there -- otherwise
+   a sideHidden synced from a computer leaves a phone with no drawer to open and a dead menu button */
+function narrowScreen(){return window.innerWidth<=900}
 
 var LOCAL=!(window.storage&&window.storage.get);
 function sget(k){
@@ -2983,8 +2987,8 @@ function render(){
   +'<div class="mbar'+(view.scrolled?' show':'')+'" id="mbar"><button class="mbar-btn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +'<span class="mbar-title">'+esc(title)+'</span>'+(view.page==='home'?'<span style="width:36px"></span>':'<button class="mbar-btn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')+'</div>'
   +'<div class="layout">'
-  +(S.sideHidden?'':sidebar(c))
-  +(S.sideHidden?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
+  +((S.sideHidden&&!narrowScreen())?'':sidebar(c))
+  +((S.sideHidden&&!narrowScreen())?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
   +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?S.cover:''));
      return '<main class="main'+(hasCov?' hascover':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
@@ -4773,8 +4777,8 @@ function mkClick(e){
  if(a==='color'){MK.color=arg;mkRerenderChrome();return}
  if(a==='undo'){mkUndo();return}
  if(a==='redo'){mkRedo();return}
- if(a==='zoomin'){MK.zoom=Math.min(MK_MAX_ZOOM,MK.zoom+.25);mkApplyZoom();return}
- if(a==='zoomout'){MK.zoom=Math.max(.5,MK.zoom-.25);mkApplyZoom();return}
+ if(a==='zoomin'){MK.zoom=Math.min(MK_MAX_ZOOM,MK.zoom+.1);mkApplyZoom();return}
+ if(a==='zoomout'){MK.zoom=Math.max(.5,MK.zoom-.1);mkApplyZoom();return}
  if(a==='thumb'){
   var n=+arg,box=document.querySelector('.mkpagebox[data-mkpage="'+n+'"]');
   if(box)document.getElementById('mkbody').scrollTop=box.offsetTop;
