@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v70';
+var BUILD='v71';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4247,6 +4247,7 @@ function mkCss(){
   +'#mk.mk-edit .mktext{pointer-events:none}'
   +'#mk .mkanno{touch-action:pan-x pan-y;pointer-events:none}'
   +'#mk.mk-edit .mkanno{touch-action:none;pointer-events:auto}'
+  +'#mk .mklive{pointer-events:none}'
   +'#mk .mktools{padding:8px 10px 10px;background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.08)}'
   +'#mk .mkrow{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding:6px 5px}'
   +'#mk .mkrow+.mkrow{margin-top:7px}'
@@ -4340,7 +4341,7 @@ function mkPageHtml(n){
  var info=MK.pageInfo[n];
  var w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
  return '<div class="mkpagebox" data-mkpage="'+n+'"><div class="mkpagewrap" style="width:'+w+'px;height:'+h+'px;'+(MK.dark?'filter:invert(1) hue-rotate(180deg)':'')+'">'
-  +'<canvas class="mkcanvas" data-mkpage="'+n+'"></canvas><div class="mktext" data-mkpage="'+n+'"></div><canvas class="mkanno" data-mkpage="'+n+'"></canvas></div></div>';
+  +'<canvas class="mkcanvas" data-mkpage="'+n+'"></canvas><div class="mktext" data-mkpage="'+n+'"></div><canvas class="mkanno" data-mkpage="'+n+'"></canvas><canvas class="mklive" data-mkpage="'+n+'"></canvas></div></div>';
 }
 async function mkRenderOnePage(n){
  if(!MK||MK.rendered[n])return;
@@ -4349,12 +4350,12 @@ async function mkRenderOnePage(n){
  if(!MK)return;
  var scale=mkScaleFor(n);
  var viewport=page.getViewport({scale:scale});
- var canvas=document.querySelector('.mkcanvas[data-mkpage="'+n+'"]'),anno=document.querySelector('.mkanno[data-mkpage="'+n+'"]'),textEl=document.querySelector('.mktext[data-mkpage="'+n+'"]');
- if(!canvas||!anno){MK.rendered[n]=false;return}
+ var canvas=document.querySelector('.mkcanvas[data-mkpage="'+n+'"]'),anno=document.querySelector('.mkanno[data-mkpage="'+n+'"]'),live=document.querySelector('.mklive[data-mkpage="'+n+'"]'),textEl=document.querySelector('.mktext[data-mkpage="'+n+'"]');
+ if(!canvas||!anno||!live){MK.rendered[n]=false;return}
  var dpr=window.devicePixelRatio||1,MK_MAX_CANVAS_DIM=4096,MK_MAX_CANVAS_AREA=16000000;
  dpr=Math.min(dpr,MK_MAX_CANVAS_DIM/viewport.width,MK_MAX_CANVAS_DIM/viewport.height,Math.sqrt(MK_MAX_CANVAS_AREA/(viewport.width*viewport.height)));
  dpr=Math.max(1,dpr);
- [canvas,anno].forEach(function(cv){cv.width=Math.ceil(viewport.width*dpr);cv.height=Math.ceil(viewport.height*dpr)});
+ [canvas,anno,live].forEach(function(cv){cv.width=Math.ceil(viewport.width*dpr);cv.height=Math.ceil(viewport.height*dpr)});
  var ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
  try{await page.render({canvasContext:ctx,viewport:viewport}).promise}catch(e){}
  if(!MK)return;
@@ -4368,7 +4369,7 @@ async function mkRenderOnePage(n){
   }catch(e){}
  }
  if(!MK)return;
- canvas.style.visibility='';anno.style.visibility='';
+ canvas.style.visibility='';anno.style.visibility='';live.style.visibility='';
 }
 function mkOnScroll(){
  if(!MK)return;
@@ -4398,8 +4399,8 @@ function mkApplyZoom(){
   var info=MK.pageInfo[n],w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
   var wrap=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .mkpagewrap');
   if(wrap){wrap.style.width=w+'px';wrap.style.height=h+'px'}
-  var cv=document.querySelector('.mkcanvas[data-mkpage="'+n+'"]'),an=document.querySelector('.mkanno[data-mkpage="'+n+'"]');
-  if(cv)cv.style.visibility='hidden';if(an)an.style.visibility='hidden';
+  var cv=document.querySelector('.mkcanvas[data-mkpage="'+n+'"]'),an=document.querySelector('.mkanno[data-mkpage="'+n+'"]'),lv=document.querySelector('.mklive[data-mkpage="'+n+'"]');
+  if(cv)cv.style.visibility='hidden';if(an)an.style.visibility='hidden';if(lv)lv.style.visibility='hidden';
   MK.rendered[n]=false;
  }
  mkOnScroll();
@@ -4412,6 +4413,14 @@ function mkDrawAnnoForPage(n){
  ctx.setTransform(dpr,0,0,dpr,0,0);
  ctx.clearRect(0,0,anno.width,anno.height);
  mkStrokesForPage(n).forEach(function(s){mkPaintStroke(ctx,s,scale)});
+}
+/* the stroke you are actively drawing lives on its own overlay canvas, repainted by itself --
+   the committed ink underneath never gets touched while you draw, however much of it there is */
+function mkDrawLive(n){
+ var live=document.querySelector('.mklive[data-mkpage="'+n+'"]');if(!live||!MK)return;
+ var scale=mkScaleFor(n),dpr=window.devicePixelRatio||1,ctx=live.getContext('2d');
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.clearRect(0,0,live.width,live.height);
  if(MK.drawing&&MK.drawing.page===n)mkPaintStroke(ctx,MK.drawing,scale);
 }
 /* the pen: a plain, steady line. A tapered pressure-sensitive version was tried and rolled back --
@@ -4425,8 +4434,20 @@ function mkPaintStroke(ctx,s,scale){
   ctx.beginPath();ctx.moveTo(s.x0*scale,s.y0*scale);ctx.lineTo(s.x1*scale,s.y1*scale);ctx.stroke();
  }else{
   ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
+  var pts=s.pts||[];
   ctx.beginPath();
-  (s.pts||[]).forEach(function(p,idx){var x=p[0]*scale,y=p[1]*scale;if(idx===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});
+  if(pts.length<=2){
+   var p0=pts[0]||[0,0];ctx.moveTo(p0[0]*scale,p0[1]*scale);
+   var p1=pts[1]||p0;ctx.lineTo(p1[0]*scale,p1[1]*scale);
+  }else{
+   ctx.moveTo(pts[0][0]*scale,pts[0][1]*scale);
+   for(var pi=1;pi<pts.length-1;pi++){
+    var cx=pts[pi][0]*scale,cy=pts[pi][1]*scale;
+    var mx=(pts[pi][0]+pts[pi+1][0])/2*scale,my=(pts[pi][1]+pts[pi+1][1])/2*scale;
+    ctx.quadraticCurveTo(cx,cy,mx,my);
+   }
+   var last=pts[pts.length-1];ctx.lineTo(last[0]*scale,last[1]*scale);
+  }
   ctx.stroke();
  }
  ctx.restore();
@@ -4500,19 +4521,23 @@ function mkBeginStroke(anno,page,clientX,clientY,pressure){
   ?{id:uid(),tool:'hi',color:MK.color,width:sz,page:page,x0:p[0],y0:p[1],x1:p[0],y1:p[1]}
   :{id:uid(),tool:'pen',color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]]};
  MK.drawingAnno=anno;
- mkDrawAnnoForPage(page);
+ mkDrawLive(page);
 }
-var mkMoveScheduled=false,mkPendingMove=null;
-function mkScheduleMove(x,y,pressure){
- mkPendingMove={x:x,y:y,pressure:pressure};
- if(mkMoveScheduled)return;
- mkMoveScheduled=true;
+function mkAppendPoint(clientX,clientY,pressure){
+ if(!MK.drawing||!MK.drawingAnno)return;
+ var pg=MK.drawing.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
+ if(MK.drawing.tool==='hi'){MK.drawing.x1=p[0];MK.drawing.y1=p[1]}else{MK.drawing.pts.push([p[0],p[1],pr])}
+}
+var mkRedrawScheduled=false;
+function mkScheduleRedraw(){
+ if(mkRedrawScheduled)return;
+ mkRedrawScheduled=true;
  requestAnimationFrame(function(){
-  mkMoveScheduled=false;
-  var p=mkPendingMove;mkPendingMove=null;
-  if(p&&MK)mkExtendStroke(p.x,p.y,p.pressure);
+  mkRedrawScheduled=false;
+  if(MK&&MK.drawing)mkDrawLive(MK.drawing.page);
  });
 }
+function mkScheduleMove(x,y,pressure){mkExtendStroke(x,y,pressure)}
 function mkExtendStroke(clientX,clientY,pressure){
  if(MK.erasing){
   if(!MK.drawingAnno)return;
@@ -4520,10 +4545,8 @@ function mkExtendStroke(clientX,clientY,pressure){
   mkEraseAt(pg,mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg));
   return;
  }
- if(!MK.drawing||!MK.drawingAnno)return;
- var pg2=MK.drawing.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg2),pr=(pressure===undefined||!pressure)?.5:pressure;
- if(MK.drawing.tool==='hi'){MK.drawing.x1=p[0];MK.drawing.y1=p[1]}else{MK.drawing.pts.push([p[0],p[1],pr])}
- mkDrawAnnoForPage(pg2);
+ mkAppendPoint(clientX,clientY,pressure);
+ mkScheduleRedraw();
 }
 function mkFinishErase(){
  var page=MK.erasePage,before=MK.eraseBefore;
@@ -4540,6 +4563,7 @@ function mkFinishStroke(){
  if(MK.erasing){mkFinishErase();MK.drawingAnno=null;return}
  if(!MK.drawing)return;
  var s=MK.drawing;MK.drawing=null;MK.drawingAnno=null;
+ mkDrawLive(s.page);
  if(s.tool==='pen'&&s.pts.length<2)return;
  if(s.tool==='hi'&&Math.hypot(s.x1-s.x0,s.y1-s.y0)<1)return;
  mkAddStroke(s);
@@ -4548,7 +4572,7 @@ function mkCancelStroke(){
  var page=MK.drawing&&MK.drawing.page;
  MK.drawing=null;MK.drawingAnno=null;
  if(MK.erasing)mkFinishErase();
- if(page)mkDrawAnnoForPage(page);
+ if(page)mkDrawLive(page);
 }
 
 /* ---------- touch: one finger draws (Markup) or scrolls (Reading); two fingers pan; a deliberate
@@ -4556,16 +4580,18 @@ function mkCancelStroke(){
 var MK_MAX_ZOOM=3;
 function mkDist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.hypot(dx,dy)}
 function mkCenter(t){return {x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
+function mkTouchFind(touches,id){for(var i=0;i<touches.length;i++){if(touches[i].identifier===id)return touches[i]}return null}
 function mkTouchStart(e){
  if(!MK)return;
  if(MK.activePointerType==='pen')return; // a resting palm while the pencil is actively drawing
+ if(MK.touch&&MK.touch.mode==='draw'){e.preventDefault();return} // a stray extra touch (palm) while a finger is already drawing: ignore it, keep drawing with the original finger
  if(e.touches.length===1){
   if(e.touches[0].touchType==='stylus')return;
   if(MK.mode!=='edit')return;
   var t=e.touches[0],target=document.elementFromPoint(t.clientX,t.clientY),anno=target&&target.closest&&target.closest('.mkanno');
   if(!anno)return;
   e.preventDefault();
-  MK.touch={mode:'draw'};
+  MK.touch={mode:'draw',id:t.identifier};
   mkBeginStroke(anno,+anno.getAttribute('data-mkpage'),t.clientX,t.clientY);
  }else if(e.touches.length===2){
   // one combined gesture for two fingers, always: every move updates BOTH the zoom and the pan
@@ -4579,7 +4605,7 @@ function mkTouchStart(e){
   // threw the anchor off by exactly the amount the page had already been scrolled.
   MK.touch={mode:'pan',z0:MK.zoom,scrollTop0:body.scrollTop,scrollLeft0:body.scrollLeft,
    rectTop:rect.top,rectLeft:rect.left,
-   prevDist:mkDist(e.touches),prevMid:{x:c0.x-rect.left+body.scrollLeft,y:c0.y-rect.top+body.scrollTop},tx:0,ty:0,s:1};
+   startDist:mkDist(e.touches),prevMid:{x:c0.x-rect.left+body.scrollLeft,y:c0.y-rect.top+body.scrollTop},tx:0,ty:0,s:1};
   var pages=document.getElementById('mkpages');
   pages.style.transformOrigin='0 0';
   pages.style.willChange='transform';
@@ -4587,24 +4613,36 @@ function mkTouchStart(e){
 }
 function mkTouchMove(e){
  if(!MK||!MK.touch)return;
- if(MK.touch.mode==='draw'&&e.touches.length===1){e.preventDefault();mkScheduleMove(e.touches[0].clientX,e.touches[0].clientY);return}
+ if(MK.touch.mode==='draw'){
+  e.preventDefault();
+  var dt=mkTouchFind(e.touches,MK.touch.id);
+  if(!dt)return; // the drawing finger itself hasn't moved in this batch (only some other touch has) -- ignore
+  mkExtendStroke(dt.clientX,dt.clientY);
+  return;
+ }
  if(MK.touch.mode!=='pan'||e.touches.length<2)return;
  e.preventDefault();
  var t=MK.touch,cRaw=mkCenter(e.touches),dist=mkDist(e.touches);
  var mid={x:cRaw.x-t.rectLeft+t.scrollLeft0,y:cRaw.y-t.rectTop+t.scrollTop0};
- var delta=dist/t.prevDist;
+ // an ordinary two-finger scroll never holds its spacing perfectly steady -- so zoom only once the
+ // pinch has moved a deliberate amount past where it started; a small drag inside that band pans only
+ var raw=dist/t.startDist,DEAD=.08,eff;
+ if(raw>1+DEAD)eff=raw-DEAD;else if(raw<1-DEAD)eff=raw+DEAD;else eff=1;
  var maxS=MK_MAX_ZOOM/t.z0,minS=.5/t.z0;
- var newS=Math.max(minS,Math.min(maxS,t.s*delta));
- delta=newS/t.s; // re-derive the actual applied step, in case the clamp above changed it
+ var targetS=Math.max(minS,Math.min(maxS,eff));
+ var delta=targetS/t.s;
  t.tx=mid.x-delta*(t.prevMid.x-t.tx);
  t.ty=mid.y-delta*(t.prevMid.y-t.ty);
- t.s=newS;
- t.prevDist=dist;t.prevMid=mid;
+ t.s=targetS;
+ t.prevMid=mid;
  document.getElementById('mkpages').style.transform='translate('+t.tx+'px,'+t.ty+'px) scale('+t.s+')';
 }
 function mkTouchEnd(e){
  if(!MK||!MK.touch)return;
- if(MK.touch.mode==='draw'&&e.touches.length===0)mkFinishStroke();
+ if(MK.touch.mode==='draw'){
+  if(!mkTouchFind(e.touches,MK.touch.id)){mkFinishStroke();MK.touch=null}
+  return;
+ }
  if(MK.touch.mode==='pan'&&e.touches.length<2){
   var t=MK.touch,pages=document.getElementById('mkpages');
   pages.style.transform='none';pages.style.willChange='';pages.style.transformOrigin='';
@@ -4614,8 +4652,8 @@ function mkTouchEnd(e){
   body.scrollLeft=Math.max(0,t.scrollLeft0-t.tx);
   body.scrollTop=Math.max(0,t.scrollTop0-t.ty);
   mkOnScroll();
+  MK.touch=null;
  }
- if(e.touches.length<(MK.touch.mode==='pan'?2:1))MK.touch=null;
 }
 
 /* ---------- mouse and Apple Pencil: always via Pointer Events, never ambiguous like a finger ---------- */
@@ -4625,12 +4663,17 @@ function mkPointerDown(e){
  var anno=e.target.closest&&e.target.closest('.mkanno');if(!anno)return;
  e.preventDefault();
  if(e.pointerType==='pen')MK.activePointerType='pen';
+ try{anno.setPointerCapture(e.pointerId)}catch(err){}
  mkBeginStroke(anno,+anno.getAttribute('data-mkpage'),e.clientX,e.clientY,mkPressureOf(e));
 }
 function mkPointerMove(e){
  if(!MK||e.pointerType==='touch'||MK.mode!=='edit'||(!MK.drawing&&!MK.erasing))return;
  e.preventDefault();
- mkScheduleMove(e.clientX,e.clientY,mkPressureOf(e));
+ // Safari bundles several real samples into one event on a fast stroke -- read every one of them
+ // back out, rather than only the latest, so a quick stroke does not lose its in-between points
+ var evs=(e.getCoalescedEvents&&e.getCoalescedEvents())||[];
+ if(!evs.length)evs=[e];
+ for(var i=0;i<evs.length;i++)mkExtendStroke(evs[i].clientX,evs[i].clientY,mkPressureOf(evs[i]));
 }
 function mkPointerUp(e){
  if(!MK||e.pointerType==='touch')return;
