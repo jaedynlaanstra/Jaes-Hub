@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v80';
+var BUILD='v81';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4795,12 +4795,16 @@ function mkTouchEnd(e){
   var t=MK.touch,pages=document.getElementById('mkpages');
   pages.style.transform='none';pages.style.willChange='';pages.style.transformOrigin='';
   var body=document.getElementById('mkbody');
-  body.style.overflow='';
+  // land the real scroll position while native scrolling is STILL frozen, and only then hand
+  // scrolling back -- restoring it first (the bug, until now) reopened the door for any native
+  // momentum still left over from the gesture to shove the page a moment after we set it correctly,
+  // which is exactly "lands right, then gets yanked somewhere else the instant you let go"
   MK.zoom=Math.max(.5,Math.min(MK_MAX_ZOOM,t.z0*t.s));
   mkApplyZoomResize();
   body.scrollLeft=Math.max(0,t.scrollLeft0-t.tx);
   body.scrollTop=Math.max(0,t.scrollTop0-t.ty);
   mkOnScroll();
+  body.style.overflow='';
   MK.touch=null;
  }
 }
