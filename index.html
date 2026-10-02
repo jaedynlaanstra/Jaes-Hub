@@ -1027,7 +1027,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v88';
+var BUILD='v89';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4340,6 +4340,9 @@ function mkCss(){
   +'#mk .mkthumb span{display:block;text-align:center;font-size:10.5px;color:#C9C3B4;padding:2px 0}'
   +'#mk .mkbody{flex:1;position:relative;overflow-y:auto;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}'
   +'#mk .mkpages{will-change:auto}'
+  // holds the scrollable area open while a zoom-out preview shrinks the pages, so the browser never
+  // clamps the scroll position out from under the gesture mid-pinch
+  +'#mk .mkspacer{position:absolute;left:0;top:0;width:1px;height:1px;visibility:hidden;pointer-events:none}'
   // NOT flex-centered: a flex item's own auto-margin centering, stacked on top of the parent's
   // justify-content:center, is exactly the kind of double centering that leaves the browser's own
   // idea of "how far you can scroll" out of step with where the page is actually drawn once it's
@@ -4411,7 +4414,7 @@ async function mkOpen(cid,i){
  document.body.appendChild(el);
  mkSetMode('read');
  el.innerHTML='<div class="mktop" id="mktop"></div>'
-  +'<div class="mkmain"><div class="mkthumbs" id="mkthumbs"></div><div class="mkbody" id="mkbody"><div class="mkpages" id="mkpages"></div></div></div>'
+  +'<div class="mkmain"><div class="mkthumbs" id="mkthumbs"></div><div class="mkbody" id="mkbody"><div class="mkpages" id="mkpages"></div><div class="mkspacer" id="mkspacer"></div></div></div>'
   +'<div class="mktools" id="mktoolbar"></div>';
  el.addEventListener('click',mkClick);
  el.addEventListener('input',mkColorInput);
@@ -4441,7 +4444,8 @@ async function mkOpen(cid,i){
  if(!MK)return;
  var frag='';
  for(var n2=1;n2<=MK.pageCount;n2++)frag+=mkPageHtml(n2);
- document.getElementById('mkpages').innerHTML=frag;
+ var pagesEl=document.getElementById('mkpages');
+ pagesEl.innerHTML=frag;pagesEl.style.paddingBottom=Math.round(12*MK.zoom)+'px';
  body.addEventListener('scroll',mkOnScrollThrottled,{passive:true});
  mkOnScroll();
 }
@@ -4452,10 +4456,18 @@ function mkClose(){
  MK=null;
 }
 var mkResizeTimer=null;
-function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(function(){if(MK){mkRecomputeFitScale();mkApplyZoom()}},200)}
-// fitScale (the "100%" baseline) is a fit-to-container-width number worked out once when the PDF opens --
-// a rotation, the thumbnail rail opening, or anything else that changes the container's width afterward
-// must redo that math too, or "100%" keeps meaning the OLD width and the page runs off the new one
+// a rotation (or anything else that changes the width) re-fits the pages -- keep whatever you were
+// reading at the top-middle of the screen in the same place instead of letting it slide away
+function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(function(){if(MK)mkRefitKeepingPlace()},200)}
+function mkRefitKeepingPlace(){
+ if(MK.touch&&MK.touch.mode!=='draw'&&MK.touch.mode!=='pending')mkSettleFinish();
+ var body=document.getElementById('mkbody');if(!body)return;
+ var cx=body.clientWidth/2,a=mkAnchorAt(mkGeom(MK.zoom),cx,0,body.scrollLeft,body.scrollTop);
+ mkRecomputeFitScale();mkApplyZoomResize();
+ var g=mkGeom(MK.zoom),s=mkScrollFor(g,a,cx,0);
+ body.scrollLeft=Math.max(0,Math.min(g.maxLeft,s.sl));body.scrollTop=Math.max(0,Math.min(g.maxTop,s.st));
+ mkOnScroll();
+}
 function mkRecomputeFitScale(){
  var body=document.getElementById('mkbody');if(!body)return;
  var containerW=Math.max(240,body.clientWidth-24);
@@ -4465,19 +4477,30 @@ function mkRecomputeFitScale(){
 }
 
 /* ---------- building the page list ---------- */
-// centering an element that's sometimes WIDER than its container by leaving it to CSS auto-margins
-// is exactly the kind of thing browsers have not always agreed on when the content overflows --
-// worked out by hand here instead, so there is exactly one answer, the same in every browser: a
-// page narrower than the view sits centered with equal space both sides; once it's wider, it's
-// flush left with nothing left ambiguous about which end of it scrollLeft is measured from
-function mkCenterMargin(w){
- var body=document.getElementById('mkbody');
- return Math.max(0,Math.round(((body?body.clientWidth:w)-w)/2));
+// ONE function decides where every page sits at any zoom, with the exact rounding the real layout
+// uses. The page list, the live pinch preview, the +/- buttons and rotation all ask this same
+// function, so the preview and the final layout can never disagree -- that disagreement (the old
+// preview scaled the grey side margin along with the page, the real layout doesn't) is what made
+// the page "teleport" sideways the instant you lifted your fingers.
+// Spacing is padding (never CSS margins, which collapse into each other in ways that are easy to
+// get wrong): each page box has `gap` above it, the list has `gap` below the last page. A page
+// narrower than the screen is centred; a wider one sits flush left and you scroll across it.
+function mkGeom(z){
+ var body=document.getElementById('mkbody'),cw=body?body.clientWidth:0,ch=body?body.clientHeight:0;
+ var gap=Math.round(12*z),y=0,right=0,pages={};
+ for(var n=1;n<=MK.pageCount;n++){
+  var info=MK.pageInfo[n],w=Math.round(info.vp1.width*info.fitScale*z),h=Math.round(info.vp1.height*info.fitScale*z);
+  y+=gap;
+  var left=Math.max(0,Math.round((cw-w)/2));
+  pages[n]={left:left,top:y,w:w,h:h};
+  y+=h;right=Math.max(right,left+w);
+ }
+ y+=gap;
+ return {pages:pages,gap:gap,cw:cw,ch:ch,maxLeft:Math.max(0,right-cw),maxTop:Math.max(0,y-ch)};
 }
 function mkPageHtml(n){
- var info=MK.pageInfo[n];
- var w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom),gap=Math.round(12*MK.zoom);
- return '<div class="mkpagebox" data-mkpage="'+n+'"><div class="mkpagewrap" style="width:'+w+'px;height:'+h+'px;margin:'+gap+'px 0 '+gap+'px '+mkCenterMargin(w)+'px;'+(MK.dark?'filter:invert(1) hue-rotate(180deg)':'')+'">'
+ var p=mkGeom(MK.zoom).pages[n];
+ return '<div class="mkpagebox" data-mkpage="'+n+'" style="padding-top:'+Math.round(12*MK.zoom)+'px"><div class="mkpagewrap" style="width:'+p.w+'px;height:'+p.h+'px;margin-left:'+p.left+'px;'+(MK.dark?'filter:invert(1) hue-rotate(180deg)':'')+'">'
   +'<canvas class="mkcanvas" data-mkpage="'+n+'"></canvas><div class="mktext" data-mkpage="'+n+'"></div><canvas class="mkanno" data-mkpage="'+n+'"></canvas><canvas class="mklive" data-mkpage="'+n+'"></canvas></div></div>';
 }
 async function mkRenderOnePage(n){
@@ -4545,11 +4568,11 @@ function mkApplyZoomResize(){
  if(!MK)return;
  MK.zoomGen++; // any render already in flight from before this call is now for a stale zoom level
  var zval=document.getElementById('mkzoomval');if(zval)zval.value=Math.round(MK.zoom*100)+'%';
- var gap=Math.round(12*MK.zoom);
+ var g=mkGeom(MK.zoom);
+ var pages=document.getElementById('mkpages');if(pages)pages.style.paddingBottom=g.gap+'px';
  for(var n=1;n<=MK.pageCount;n++){
-  var info=MK.pageInfo[n],w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
-  var wrap=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .mkpagewrap');
-  if(wrap){wrap.style.width=w+'px';wrap.style.height=h+'px';wrap.style.margin=gap+'px 0 '+gap+'px '+mkCenterMargin(w)+'px'}
+  var p=g.pages[n],box=document.querySelector('.mkpagebox[data-mkpage="'+n+'"]'),wrap=box&&box.firstChild;
+  if(wrap){box.style.paddingTop=g.gap+'px';wrap.style.width=p.w+'px';wrap.style.height=p.h+'px';wrap.style.marginLeft=p.left+'px'}
   MK.rendered[n]=false;
  }
 }
@@ -4749,9 +4772,8 @@ function mkCancelStroke(){
  if(page)mkDrawLive(page);
 }
 
-/* ---------- touch: one finger draws (Markup) or scrolls (Reading); two fingers pan; a deliberate
-   pinch, past a small dead zone, zooms with a live preview and one real redraw when you let go ---------- */
-var MK_MAX_ZOOM=3;
+/* ---------- touch: one finger draws (Markup) or scrolls (Reading); two fingers pinch-zoom and pan ---------- */
+var MK_MAX_ZOOM=3,MK_MIN_ZOOM=.5;
 function mkPreventGesture(e){e.preventDefault()}
 function mkDist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.hypot(dx,dy)}
 function mkCenter(t){return {x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
@@ -4763,36 +4785,173 @@ function mkTouchFind(touches,id){for(var i=0;i<touches.length;i++){if(touches[i]
 // UIs solve this the same way: hold off a beat before commtting to a one-finger draw, so a second
 // finger arriving just after the first still reads as the two-finger gesture it actually is.
 var MK_DRAW_GRACE_MS=70,MK_DRAW_MOVE_PX=6;
-function mkCurPageWidth(zoom){
- var info=MK.pageInfo[MK.curPage];if(!info)return 0;
- return info.vp1.width*info.fitScale*zoom;
+
+/* ---------- the zoom engine ----------
+   How it works (the same way Apple's own viewers behave):
+   - A gesture grabs one exact spot on one page (the "anchor": page number + how far across and down
+     that page) and keeps that spot under your fingers, whatever the zoom does.
+   - Every frame works out the REAL final layout for the zoom you're at (mkGeom) and where the scroll
+     would have to be, then shows it with one GPU transform built from that final layout. So the last
+     frame before you lift IS the layout you get after: there is nothing left to jump.
+   - Past an edge, or past the zoom limits, it stretches with resistance (rubber band) and then glides
+     back when you let go, instead of snapping.
+   - It's computed from where the gesture started, not frame-by-frame increments, so tiny errors
+     can't pile up into drift over a long pinch. */
+function mkClampZoom(z){return Math.max(MK_MIN_ZOOM,Math.min(MK_MAX_ZOOM,z))}
+function mkSoftZoom(z){
+ if(z>MK_MAX_ZOOM)return MK_MAX_ZOOM*Math.pow(z/MK_MAX_ZOOM,.3);
+ if(z<MK_MIN_ZOOM)return MK_MIN_ZOOM*Math.pow(z/MK_MIN_ZOOM,.3);
+ return z;
 }
-function mkStartPan(e){
- if(MK.drawing||MK.erasing)mkCancelStroke();
- var body=document.getElementById('mkbody'),rect=body.getBoundingClientRect(),c0=mkCenter(e.touches);
- // the page sits centered (a real margin) when it's narrower than the screen, and flush left once
- // it's wider -- and that margin does NOT shrink in step with zoom the way the page itself grows.
- // the live pinch preview is a single uniform scale, which can only correctly represent a page that
- // scales uniformly -- so a pinch that crosses from "fits on screen" to "wider than the screen"
- // (true on almost every ordinary zoom-in, since you usually start near 100%) made the live preview
- // and the real final layout disagree by exactly however much that margin changed. Freezing the
- // starting margin here and threading it through the math below is what makes them agree again.
- var centerPad0=mkCenterMargin(mkCurPageWidth(MK.zoom));
- // work in the page's own coordinate space throughout (screen position minus the container's own
- // position, plus the scroll already applied), not raw screen pixels -- mixing the two is what
- // threw the anchor off by exactly the amount the page had already been scrolled.
- MK.touch={mode:'pan',z0:MK.zoom,scrollTop0:body.scrollTop,scrollLeft0:body.scrollLeft,
-  rectTop:rect.top,rectLeft:rect.left,centerPad0:centerPad0,
-  startDist:mkDist(e.touches),prevMid:{x:c0.x-rect.left+body.scrollLeft-centerPad0,y:c0.y-rect.top+body.scrollTop},tx:0,ty:0,s:1};
+function mkRubber(d,dim){if(!d)return 0;var a=Math.abs(d);return (d<0?-1:1)*(1-1/(a*.55/Math.max(1,dim)+1))*dim}
+// which spot on which page sits under the point (cx,cy) of the reading area, for scroll (sl,st) at layout g
+function mkAnchorAt(g,cx,cy,sl,st){
+ var x=cx+sl,y=cy+st,n=1;
+ for(var k=2;k<=MK.pageCount;k++){if(g.pages[k].top-g.gap/2<=y)n=k;else break}
+ var p=g.pages[n];
+ return {n:n,u:(x-p.left)/p.w,v:(y-p.top)/p.h};
+}
+// the scroll position that puts anchor a under the point (cx,cy), at layout g (may be out of range)
+function mkScrollFor(g,a,cx,cy){var p=g.pages[a.n];return {sl:p.left+a.u*p.w-cx,st:p.top+a.v*p.h-cy}}
+function mkPrepPreview(){
+ var body=document.getElementById('mkbody'),pages=document.getElementById('mkpages'),sp=document.getElementById('mkspacer');
+ MK.g0=mkGeom(MK.zoom); // the layout that is really on screen right now
+ if(sp){sp.style.width=body.scrollWidth+'px';sp.style.height=body.scrollHeight+'px'}
+ pages.style.transition='';pages.style.transformOrigin='0 0';pages.style.willChange='transform';
+}
+// show view v ({z,sl,st,n,g}: zoom, scroll, anchor page, its layout) as a transform over the real layout
+function mkShowView(v){
+ var body=document.getElementById('mkbody'),g0=MK.g0,p0=g0.pages[v.n],p=v.g.pages[v.n];
+ var kx=p.w/p0.w,ky=p.h/p0.h;
+ var tx=p.left-v.sl+body.scrollLeft-p0.left*kx,ty=p.top-v.st+body.scrollTop-p0.top*ky;
+ document.getElementById('mkpages').style.transform='translate('+tx+'px,'+ty+'px) scale('+kx+','+ky+')';
+ MK.shown=v;
+ var zval=document.getElementById('mkzoomval');if(zval)zval.value=Math.round(mkClampZoom(v.z)*100)+'%';
+}
+// make view v the real layout (v must already be in range), with no transform left over
+function mkCommitView(v){
+ var body=document.getElementById('mkbody'),pages=document.getElementById('mkpages'),sp=document.getElementById('mkspacer');
+ pages.style.transition='';pages.style.transform='';pages.style.willChange='';pages.style.transformOrigin='';
+ body.style.overflow='';
+ if(sp){sp.style.width='1px';sp.style.height='1px'}
+ if(Math.abs(v.z-MK.zoom)>1e-9){MK.zoom=v.z;mkApplyZoomResize()}
+ body.scrollLeft=v.sl;body.scrollTop=v.st;
+ MK.g0=null;MK.shown=null;
+ mkOnScroll();
+}
+// glide from what's on screen now to view `target`, then make it real
+function mkSettleTo(target,ms){
  var pages=document.getElementById('mkpages');
- pages.style.transformOrigin='0 0';
- pages.style.willChange='transform';
- // if a one-finger scroll was still gliding to a stop (or actively scrolling) right when the second
- // finger landed, iOS won't reliably let preventDefault cancel that already-in-flight native scroll --
- // it can keep drifting underneath our own transform for the rest of the gesture. Freezing the real
- // scroll for the duration of the pinch (restored the moment it ends) stops the two from stacking.
- body.style.overflow='hidden';
+ var same=MK.shown&&Math.abs(MK.shown.z-target.z)<1e-6&&Math.abs(MK.shown.sl-target.sl)<.5&&Math.abs(MK.shown.st-target.st)<.5;
+ if(same||!ms){MK.touch=null;mkCommitView(target);return}
+ pages.style.transition='transform '+ms+'ms cubic-bezier(.22,.8,.3,1)';
+ void pages.offsetWidth;
+ mkShowView(target);
+ var done=function(){if(MK&&MK.touch&&MK.touch.mode==='settle'&&MK.touch.target===target)mkSettleFinish()};
+ MK.touch={mode:'settle',target:target,timer:setTimeout(done,ms+40)};
+ pages.addEventListener('transitionend',done,{once:true});
 }
+// if a glide is still running, end it now at its destination (a new touch or button press needs a settled layout)
+function mkSettleFinish(){
+ if(!MK||!MK.touch)return;
+ if(MK.touch.mode==='settle'){var t=MK.touch;clearTimeout(t.timer);MK.touch=null;mkCommitView(t.target)}
+ else if(MK.touch.mode==='pan'){var g=MK.touch;MK.touch=null;mkCommitView(mkGestureTarget(g))}
+}
+// a view's in-range version: zoom inside its limits, scroll inside the page edges
+function mkClampView(z,a,cx,cy){
+ var g=mkGeom(z),s=mkScrollFor(g,a,cx,cy);
+ return {z:z,n:a.n,g:g,sl:Math.max(0,Math.min(g.maxLeft,s.sl)),st:Math.max(0,Math.min(g.maxTop,s.st))};
+}
+// zoom to z keeping the spot at (cx,cy) of the reading area still (+/- buttons, typed %), with a short glide
+function mkZoomTo(z,cx,cy){
+ if(!MK)return;
+ if(MK.touch&&MK.touch.mode!=='draw'&&MK.touch.mode!=='pending')mkSettleFinish();
+ if(MK.touch)return;
+ var body=document.getElementById('mkbody');
+ if(cx==null){cx=body.clientWidth/2;cy=body.clientHeight/2}
+ mkPrepPreview();
+ var a=mkAnchorAt(MK.g0,cx,cy,body.scrollLeft,body.scrollTop);
+ MK.shown={z:MK.zoom,sl:body.scrollLeft,st:body.scrollTop,n:a.n,g:MK.g0};
+ mkSettleTo(mkClampView(mkClampZoom(z),a,cx,cy),220);
+}
+
+/* the two-finger gesture. Points are measured relative to the reading area (body). */
+function mkGesturePoint(t,touches){
+ var c=touches.length>=2?mkCenter(touches):{x:touches[0].clientX,y:touches[0].clientY};
+ return {x:c.x-t.rectL,y:c.y-t.rectT};
+}
+function mkGestureBegin(e){
+ if(MK.drawing||MK.erasing)mkCancelStroke();
+ var body=document.getElementById('mkbody');
+ // freeze native scrolling for the whole gesture: if a one-finger scroll was already moving when the
+ // second finger landed, iOS won't always let us cancel it, and it would carry on under our own
+ // movement (and fling off after you let go). It is unfrozen only once every finger is up.
+ body.style.overflow='hidden';
+ mkPrepPreview();
+ var rect=body.getBoundingClientRect();
+ var t={mode:'pan',rectL:rect.left,rectT:rect.top,zoomOn:false,
+  raw:{z:MK.zoom,sl:body.scrollLeft,st:body.scrollTop}};
+ MK.shown={z:MK.zoom,sl:t.raw.sl,st:t.raw.st,n:1,g:MK.g0};
+ MK.touch=t;
+ mkGestureRebase(t,e.touches);
+}
+// fingers were added or lifted: re-grab whatever is under the fingers now, from the current
+// (unstretched) state, so the change of finger count itself never moves anything
+function mkGestureRebase(t,touches){
+ var m=mkGesturePoint(t,touches),zE=mkSoftZoom(t.raw.z);
+ t.count=Math.min(2,touches.length);
+ t.anchor=mkAnchorAt(mkGeom(zE),m.x,m.y,t.raw.sl,t.raw.st);
+ t.zBase=t.raw.z;t.dist0=t.dist00=t.count>=2?mkDist(touches):0;
+ t.m0=m;t.e={x:m.x,y:m.y};t.off={x:0,y:0};t.lock=null;
+ // one finger left over after a pinch: it has to move a little on purpose before it pans, so the
+ // wobble of lifting your fingers off the glass doesn't nudge the page at the last moment
+ t.hold=t.count===1?8:0;
+}
+function mkGestureMove(t,touches){
+ var m=mkGesturePoint(t,touches);
+ if(t.hold){
+  if(Math.hypot(m.x-t.m0.x,m.y-t.m0.y)<t.hold)return;
+  t.hold=0;t.m0=m;t.off={x:t.e.x-m.x,y:t.e.y-m.y}; // start panning from here, without a jump
+ }
+ var zRaw=t.zBase;
+ if(t.count>=2&&touches.length>=2){
+  var dist=mkDist(touches);
+  // a two-finger scroll never holds its finger spacing perfectly steady, so zooming only switches on
+  // once the spacing has clearly changed; after that it follows your fingers exactly, no dead zone
+  if(!t.zoomOn&&Math.abs(dist-t.dist0)>Math.max(12,.035*t.dist0)){
+   t.zoomOn=true;t.dist0=dist;
+   if(t.lock==='y')t.off.x=t.e.x-m.x;
+   t.lock='free';
+  }
+  // the spacing change spent getting past that threshold isn't thrown away: it's eased back in over
+  // the next bit of pinching, so the page ends up glued to your fingertips exactly, with no jump
+  if(t.zoomOn&&t.dist0>0){
+   var catchUp=Math.min(1,Math.abs(dist-t.dist0)/60);
+   zRaw=t.zBase*dist/t.dist0*Math.pow(t.dist0/t.dist00,catchUp);
+  }
+ }
+ // a plain two-finger drag that's clearly up/down stays perfectly straight (a hand always arcs a
+ // little); a diagonal drag or a pinch moves freely
+ if(!t.lock&&t.count>=2){
+  var ddx=m.x-t.m0.x,ddy=m.y-t.m0.y;
+  if(Math.hypot(ddx,ddy)>10)t.lock=Math.abs(ddy)>2.2*Math.abs(ddx)?'y':'free';
+ }
+ var e={x:t.lock==='y'?t.e.x:m.x+t.off.x,y:m.y+t.off.y};
+ t.e=e;
+ var zE=mkSoftZoom(zRaw),g=mkGeom(zE),s=mkScrollFor(g,t.anchor,e.x,e.y);
+ t.raw={z:zRaw,sl:s.sl,st:s.st};
+ var slC=Math.max(0,Math.min(g.maxLeft,s.sl)),stC=Math.max(0,Math.min(g.maxTop,s.st));
+ mkShowView({z:zE,n:t.anchor.n,g:g,sl:slC+mkRubber(s.sl-slC,g.cw),st:stC+mkRubber(s.st-stC,g.ch)});
+}
+// where a gesture comes to rest: zoom back inside its limits (and onto exactly 100% if you let go
+// very close to it), the grabbed spot still under the last finger position, edges respected
+function mkGestureTarget(t){
+ var z=mkClampZoom(mkSoftZoom(t.raw.z));
+ if(Math.abs(z-1)<.04)z=1;
+ return mkClampView(z,t.anchor,t.e.x,t.e.y);
+}
+function mkGestureEnd(t){mkSettleTo(mkGestureTarget(t),300)}
+
 function mkCommitPending(useX,useY){
  var p=MK.touch,id=p.id,anno=p.anno,page=p.page;
  clearTimeout(p.timer);
@@ -4806,10 +4965,17 @@ function mkTouchStart(e){
  // to treat that same contact as a native gesture, which is what was starting a text selection
  if(MK.activePointerType==='pen'){e.preventDefault();return} // a resting palm while the pencil is actively drawing
  if(MK.touch&&MK.touch.mode==='draw'){e.preventDefault();return} // a stray extra touch (palm) while a finger is already drawing: ignore it, keep drawing with the original finger
+ if(MK.touch&&MK.touch.mode==='pan'){
+  // a finger added mid-gesture (or put back down after lifting): carry on as one continuous gesture
+  var fingers=[];for(var i=0;i<e.touches.length;i++)if(e.touches[i].touchType!=='stylus')fingers.push(e.touches[i]);
+  if(fingers.length){e.preventDefault();mkGestureRebase(MK.touch,fingers)}
+  return;
+ }
+ if(MK.touch&&MK.touch.mode==='settle')mkSettleFinish(); // caught mid-glide: land it, then take the new touch
  if(MK.touch&&MK.touch.mode==='pending'){
   // a second finger joined while we were still waiting to see what the first one was doing --
   // this is a two-finger gesture, not a draw, no matter how it looked for that first instant
-  if(e.touches.length>=2){e.preventDefault();clearTimeout(MK.touch.timer);mkStartPan(e)}
+  if(e.touches.length>=2){e.preventDefault();clearTimeout(MK.touch.timer);MK.touch=null;mkGestureBegin(e)}
   return;
  }
  if(e.touches.length===1){
@@ -4832,12 +4998,9 @@ function mkTouchStart(e){
     var p=MK.touch;mkCommitPending(p.lastX,p.lastY);
    }
   },MK_DRAW_GRACE_MS);
- }else if(e.touches.length===2){
-  // one combined gesture for two fingers, always: every move updates BOTH the zoom and the pan
-  // together from the same two points, the way a real pinch works, instead of guessing which one
-  // you meant and making the other one fight it.
+ }else if(e.touches.length>=2){
   e.preventDefault();
-  mkStartPan(e);
+  mkGestureBegin(e);
  }
 }
 function mkTouchMove(e){
@@ -4865,54 +5028,13 @@ function mkTouchMove(e){
   mkExtendStroke(dt.clientX,dt.clientY);
   return;
  }
+ if(MK.touch.mode==='settle'){e.preventDefault();return}
  if(MK.touch.mode!=='pan')return;
- if(e.touches.length<2){
-  // one finger of the pinch has already lifted but the other hasn't yet -- the real landing spot is
-  // already committed (see touchend below), so there's nothing left to compute here, but this lone
-  // remaining finger must still be kept off native touch-action or its own last bit of motion gets
-  // read as a fresh one-finger pan/fling the instant it lifts, shoving the page right after it just
-  // landed correctly
-  e.preventDefault();return;
- }
  e.preventDefault();
- var t=MK.touch,cRaw=mkCenter(e.touches),dist=mkDist(e.touches);
- var mid={x:cRaw.x-t.rectLeft+t.scrollLeft0-t.centerPad0,y:cRaw.y-t.rectTop+t.scrollTop0};
- // an ordinary two-finger scroll never holds its spacing perfectly steady -- so zoom only once the
- // pinch has moved a deliberate amount past where it started; a small drag inside that band pans only
- var raw=dist/t.startDist,DEAD=.025,eff;
- if(raw>1+DEAD)eff=raw-DEAD;else if(raw<1-DEAD)eff=raw+DEAD;else eff=1;
- var maxS=MK_MAX_ZOOM/t.z0,minS=.5/t.z0;
- var targetS=Math.max(minS,Math.min(maxS,eff));
- if(eff===1){
-  // not a deliberate pinch right now -- a plain two-finger drag never travels in a perfectly
-  // straight line (a real hand arcs a little over the length of a drag), and following that raw
-  // sideways wobble one-to-one is exactly what reads as "won't scroll straight, drifts side to
-  // side." Once a drag is clearly, mostly vertical, smoothly damp its sideways component -- a
-  // genuinely diagonal two-finger drag (meant to move both ways) is left free to move normally.
-  var dx=mid.x-t.prevMid.x,dy=mid.y-t.prevMid.y;
-  t.absDx=(t.absDx||0)+Math.abs(dx);t.absDy=(t.absDy||0)+Math.abs(dy);
-  var vert=t.absDy/(t.absDx+t.absDy+.001);
-  var dampX=1-Math.max(0,Math.min(.85,(vert-.55)/.45));
-  t.tx=t.tx+dx*dampX;
-  t.ty=t.ty+dy;
- }else{
-  var delta=targetS/t.s;
-  t.tx=mid.x-delta*(t.prevMid.x-t.tx);
-  t.ty=mid.y-delta*(t.prevMid.y-t.ty);
- }
- t.s=targetS;
- t.prevMid=mid;
- // keep the live preview inside the page's real scrollable bounds vertically, so letting go doesn't
- // jump to a different spot once the real (unable-to-go-out-of-bounds) scroll position takes over.
- // horizontally each page is CSS-centered in its box, so the browser's own reported scrollWidth does
- // not describe the true reachable range the same way -- clamping against it here pulled the view
- // rightward on every pinch and made an ordinary two-finger scroll wander sideways; only the height
- // is a plain, unambiguous stack, so only that axis gets this treatment.
- var body=document.getElementById('mkbody');
- var maxScrollTop=Math.max(0,body.scrollHeight*t.s-body.clientHeight);
- var wantTop=t.scrollTop0-t.ty;
- t.ty=t.scrollTop0-Math.max(0,Math.min(maxScrollTop,wantTop));
- document.getElementById('mkpages').style.transform='translate('+t.tx+'px,'+t.ty+'px) scale('+t.s+')';
+ if(!e.touches.length)return;
+ // the finger count can change without a touchstart/touchend reaching us (iOS sometimes merges them)
+ if(Math.min(2,e.touches.length)!==MK.touch.count)mkGestureRebase(MK.touch,e.touches);
+ mkGestureMove(MK.touch,e.touches);
 }
 function mkTouchEnd(e){
  if(!MK)return;
@@ -4933,32 +5055,13 @@ function mkTouchEnd(e){
   if(!mkTouchFind(e.touches,MK.touch.id)){mkFinishStroke();MK.touch=null}
   return;
  }
- if(MK.touch.mode==='pan'&&e.touches.length<2){
-  var t=MK.touch,pages=document.getElementById('mkpages');
-  if(!t.committed){
-   t.committed=true;
-   pages.style.transform='none';pages.style.willChange='';pages.style.transformOrigin='';
-   var body0=document.getElementById('mkbody');
-   MK.zoom=Math.max(.5,Math.min(MK_MAX_ZOOM,t.z0*t.s));
-   mkApplyZoomResize();
-   // the centering margin itself changed (or vanished) between the start zoom and this one -- add
-   // back exactly that difference, or the real landing spot is off by however much it changed
-   var centerPadNew=mkCenterMargin(mkCurPageWidth(MK.zoom));
-   body0.scrollLeft=Math.max(0,(t.scrollLeft0-t.tx)+(centerPadNew-t.centerPad0));
-   body0.scrollTop=Math.max(0,t.scrollTop0-t.ty);
-   mkOnScroll();
-  }
-  // a real two-finger lift almost never lands both fingers in the same millisecond -- one of them is
-  // still physically down for a few ms after this fires. Native scrolling must stay frozen for that
-  // whole tail, not just until the first finger lets go, or that still-down finger is free to be read
-  // as the start of a plain one-finger pan/fling the instant it finally lifts too, carrying over
-  // whatever speed it had from the pinch and shoving the page right after it just landed correctly --
-  // exactly "lands right, then gets yanked somewhere else the instant you let go"
-  if(e.touches.length===0){
-   document.getElementById('mkbody').style.overflow='';
-   MK.touch=null;
-  }
- }
+ if(MK.touch.mode!=='pan')return;
+ e.preventDefault();
+ // fingers come off the glass a few milliseconds apart: while any finger is still down the gesture
+ // simply carries on with the fingers that are left (nothing is decided yet, so nothing can jump);
+ // only when the last one lifts does the page come to rest, exactly where it already is on screen
+ if(e.touches.length>0){mkGestureRebase(MK.touch,e.touches);return}
+ mkGestureEnd(MK.touch);
 }
 
 /* ---------- mouse and Apple Pencil: always via Pointer Events, never ambiguous like a finger ---------- */
@@ -5039,7 +5142,7 @@ async function mkToggleThumbs(){
  el.className='mkthumbs'+(MK.thumbsOpen?' on':'');
  // the rail takes 96px out of the row's width without the window itself resizing, so the fit-to-width
  // baseline is just as stale here as it is after a rotation -- same fix applies
- mkRecomputeFitScale();mkApplyZoom();
+ mkRefitKeepingPlace();
  if(MK.thumbsOpen&&!MK.thumbsBuilt){
   MK.thumbsBuilt=true;
   var frag='';
@@ -5103,26 +5206,12 @@ function mkColorInput(e){
  if(!e.target.matches||!e.target.matches('[data-mkcustom]'))return;
  MK.color=e.target.value;MK.toolColor[MK.tool]=e.target.value;mkRerenderChrome();
 }
-// the +/- buttons and typing a percentage in directly have no finger position to anchor to, so
-// (same as every other zoom control anywhere) they keep whatever was in the middle of your screen
-// still in the middle after -- not the fixed page-pixel spot your scroll position used to point at,
-// which is what silently sent you somewhere else entirely every single time you zoomed this way
-function mkZoomAroundCenter(newZoom){
- var body=document.getElementById('mkbody');
- var oldZoom=MK.zoom;
- var centerX=body.scrollLeft+body.clientWidth/2,centerY=body.scrollTop+body.clientHeight/2;
- MK.zoom=newZoom;
- mkApplyZoomResize();
- var ratio=MK.zoom/oldZoom;
- body.scrollLeft=Math.max(0,centerX*ratio-body.clientWidth/2);
- body.scrollTop=Math.max(0,centerY*ratio-body.clientHeight/2);
- mkOnScroll();
-}
+// the +/- buttons and typing a percentage keep whatever is in the middle of the screen in the middle
 function mkApplyZoomValue(raw){
  var n=parseInt(String(raw).replace(/[^0-9]/g,''),10);
  if(isNaN(n))n=Math.round(MK.zoom*100);
- n=Math.max(50,Math.min(MK_MAX_ZOOM*100,n));
- mkZoomAroundCenter(n/100);
+ n=Math.max(MK_MIN_ZOOM*100,Math.min(MK_MAX_ZOOM*100,n));
+ mkZoomTo(n/100);
 }
 function mkZoomKey(e){
  if(e.target&&e.target.id==='mkzoomval'&&(e.key==='Enter')){e.preventDefault();mkApplyZoomValue(e.target.value);e.target.blur()}
@@ -5146,8 +5235,8 @@ function mkClick(e){
  if(a==='color'){MK.color=arg;MK.toolColor[MK.tool]=arg;mkRerenderChrome();return}
  if(a==='undo'){mkUndo();return}
  if(a==='redo'){mkRedo();return}
- if(a==='zoomin'){mkZoomAroundCenter(Math.min(MK_MAX_ZOOM,MK.zoom+.1));return}
- if(a==='zoomout'){mkZoomAroundCenter(Math.max(.5,MK.zoom-.1));return}
+ if(a==='zoomin'){mkSettleFinish();mkZoomTo(MK.zoom+.1);return} // land any glide first, so quick taps all count
+ if(a==='zoomout'){mkSettleFinish();mkZoomTo(MK.zoom-.1);return}
  if(a==='thumb'){
   var n=+arg,box=document.querySelector('.mkpagebox[data-mkpage="'+n+'"]');
   if(box)document.getElementById('mkbody').scrollTop=box.offsetTop;
