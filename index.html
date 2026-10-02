@@ -1027,7 +1027,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v89';
+var BUILD='v90';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4294,7 +4294,8 @@ async function indexPdfs(cid){
    feel glitchy before, since asking it to redraw on every tiny finger movement is too slow to keep up.
    A mouse or an Apple Pencil always draws in Markup mode, since neither is ambiguous the way a finger is. */
 var MK=null;
-var MK_SIZES={hi:{s:8,m:14,l:22},pen:{s:1,m:2,l:3.5},eraser:{s:10,m:16,l:24}};
+var MK_SIZES={hi:{s:8,sm:11,m:14,l:22},pen:{s:1,sm:1.5,m:2,l:3.5},eraser:{s:10,sm:13,m:16,l:24}};
+var MK_SIZE_NAMES={s:'Small',sm:'Small-medium',m:'Medium',l:'Large'};
 var MK_COLORS={hi:['#F5D949','#F5A0B5','#8FD19E','#7FB8E0','#D9A8F0','#F2B26B'],pen:['#000000','#D9534F','#3B82F6','#1F9D6B','#8B5CF6','#E67E22']};
 function mkIco(inner,sz){return '<svg viewBox="0 0 24 24" width="'+(sz||19)+'" height="'+(sz||19)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>'}
 var MK_ICO={
@@ -4365,17 +4366,19 @@ function mkCss(){
   +'#mk .mkanno{touch-action:pan-x pan-y;pointer-events:none}'
   +'#mk.mk-edit .mkanno{touch-action:none;pointer-events:auto}'
   +'#mk .mklive{pointer-events:none}'
-  +'#mk .mktools{padding:8px 10px 10px;background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.08)}'
-  +'#mk .mkrow{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding:6px 5px}'
-  +'#mk .mkrow+.mkrow{margin-top:7px}'
-  +'#mk .mkrow button{background:rgba(255,255,255,.08);border:none;color:#EFEAE0;min-width:34px;height:34px;border-radius:9px;font-size:12.5px;cursor:pointer;padding:0 8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}'
+  +'#mk .mktools{padding:8px 12px calc(env(safe-area-inset-bottom,0px) + 10px);background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.08)}'
+  +'#mk .mkrow{display:flex;gap:9px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding:6px 5px}'
+  +'#mk .mkrow+.mkrow{margin-top:4px}'
+  +'#mk .mkrow button{background:rgba(255,255,255,.08);border:none;color:#EFEAE0;min-width:46px;height:46px;border-radius:12px;font-size:12.5px;cursor:pointer;padding:0 8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}'
   +'#mk .mkrow button.on{background:#EFEAE0;color:#1c1a17}'
-  +'#mk .mksep{width:1px;height:22px;background:rgba(255,255,255,.15);margin:0 3px;flex-shrink:0}'
-  +'#mk .mksizebtn{width:34px;height:34px;padding:0!important}'
+  +'#mk .mkrow button svg{width:23px;height:23px}'
+  +'#mk .mksep{width:1px;height:30px;background:rgba(255,255,255,.15);margin:0 3px;flex-shrink:0}'
+  +'#mk .mksizebtn{width:46px;height:46px;padding:0!important}'
   +'#mk .mksizebtn i{display:block;border-radius:50%;background:currentColor}'
-  +'#mk .mkrow button.mkswatch,#mk .mkrow label.mkswatch{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;min-width:28px;min-height:0;max-width:28px;border-radius:50%;border:2px solid rgba(255,255,255,.35);padding:0;margin:0;flex-shrink:0;position:relative;overflow:hidden;box-sizing:border-box}'
+  +'#mk .mkrow button.mkswatch,#mk .mkrow label.mkswatch{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;min-width:38px;min-height:0;max-width:38px;border-radius:50%;border:2px solid rgba(255,255,255,.35);padding:0;margin:0;flex-shrink:0;position:relative;overflow:hidden;box-sizing:border-box}'
   +'#mk .mkrow button.mkswatch.on,#mk .mkrow label.mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #1c1a17,0 0 0 3px #fff}'
   +'#mk .mkswatch input[type=color]{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);border:none;padding:0;margin:0;opacity:0;cursor:pointer}'
+  +'@media (max-width:420px){#mk .mkrow{gap:6px}#mk .mkrow button,#mk .mksizebtn{min-width:40px;width:auto;height:40px}#mk .mksizebtn{width:40px}#mk .mkrow button.mkswatch,#mk .mkrow label.mkswatch{width:32px;height:32px;min-width:32px;max-width:32px}}'
   +'#mk .mkswatch.mkcustom{background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)}';
  document.head.appendChild(st);
 }
@@ -4407,7 +4410,7 @@ async function mkOpen(cid,i){
  var doc;
  try{doc=await lib.getDocument({data:b64ToBytes(f.data)}).promise}catch(e){alert('Could not open this PDF.');return}
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},zoomGen:0,curPage:1,zoom:1,mode:'read',
-     tool:'hi',color:MK_COLORS.hi[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
+     tool:'pen',color:MK_COLORS.pen[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
  mkCss();
  mkLockViewportZoom();
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
@@ -4607,7 +4610,12 @@ function mkDrawLive(n){
  var scale=mkScaleFor(n),dpr=mkCanvasDpr(live,n,scale),ctx=live.getContext('2d');
  ctx.setTransform(dpr,0,0,dpr,0,0);
  ctx.clearRect(0,0,scale*MK.pageInfo[n].vp1.width,scale*MK.pageInfo[n].vp1.height);
- if(MK.drawing&&MK.drawing.page===n)mkPaintStroke(ctx,MK.drawing,scale);
+ if(MK.drawing&&MK.drawing.page===n){
+  var d=MK.drawing,tail=[];
+  if(d.rawLast)tail.push(d.rawLast);
+  if(d.pred)tail=tail.concat(d.pred);
+  mkPaintStroke(ctx,tail.length?{tool:d.tool,color:d.color,width:d.width,pts:d.pts.concat(tail)}:d,scale);
+ }
 }
 /* the pen: a plain, steady line. A tapered pressure-sensitive version was tried and rolled back --
    it read as inconsistent rather than natural on a real iPad, so the pen is always the same
@@ -4712,11 +4720,22 @@ function mkBeginStroke(anno,page,clientX,clientY,pressure){
  mkDrawLive(page);
 }
 var MK_HOLD_MS=350,MK_HOLD_EPS=4;
+// smoothing the ink as it comes in, the way a good notes app does:
+//  - samples closer together than ~a third of a screen pixel are just sensor jitter: skipped, they
+//    only put tiny zig-zags into the curve's edge at high zoom
+//  - each kept point is eased a little toward the true pen position (a light "streamline"), which
+//    irons out the hand's micro-wobble without making the line feel laggy at the Pencil's 240 Hz
+//  - the true final position is always added when you lift, so the line still ends exactly at the tip
+var MK_STREAMLINE={pen:.62,touch:.5};
 function mkAppendPoint(clientX,clientY,pressure){
  if(!MK.drawing||!MK.drawingAnno)return;
- var pg=MK.drawing.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
- MK.drawing.pts.push([p[0],p[1],pr]);
- var hp=MK.drawing.holdPt;
+ var d=MK.drawing,pg=d.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
+ d.rawLast=[p[0],p[1],pr];
+ var last=d.pts[d.pts.length-1],scale=mkScaleFor(pg);
+ if(Math.hypot(p[0]-last[0],p[1]-last[1])*scale<.35)return;
+ var k=MK.activePointerType==='pen'?MK_STREAMLINE.pen:MK_STREAMLINE.touch;
+ d.pts.push([last[0]+(p[0]-last[0])*k,last[1]+(p[1]-last[1])*k,pr]);
+ var hp=d.holdPt;
  if(!hp||Math.hypot(p[0]-hp[0],p[1]-hp[1])>MK_HOLD_EPS){MK.drawing.holdPt=[p[0],p[1]];MK.drawing.holdAt=Date.now()}
 }
 var mkRedrawScheduled=false;
@@ -4757,6 +4776,9 @@ function mkFinishStroke(){
  if(MK.erasing){mkFinishErase();MK.drawingAnno=null;return}
  if(!MK.drawing)return;
  var s=MK.drawing;MK.drawing=null;MK.drawingAnno=null;
+ var rl=s.rawLast,lp=s.pts[s.pts.length-1];
+ if(rl&&(rl[0]!==lp[0]||rl[1]!==lp[1]))s.pts.push(rl);
+ delete s.rawLast;delete s.pred;
  mkDrawLive(s.page);
  if(s.tool==='hi'&&s.holdAt&&(Date.now()-s.holdAt>=MK_HOLD_MS)){
   var start=s.pts[0],end=s.holdPt;
@@ -5082,6 +5104,12 @@ function mkPointerMove(e){
  var evs=(e.getCoalescedEvents&&e.getCoalescedEvents())||[];
  if(!evs.length)evs=[e];
  for(var i=0;i<evs.length;i++)mkExtendStroke(evs[i].clientX,evs[i].clientY,mkPressureOf(evs[i]));
+ // where the browser can guess the next few millimetres of the stroke, show them on the live layer
+ // only (replaced every move, never saved) -- it makes the ink feel attached to the Pencil tip
+ if(MK.drawing&&MK.drawingAnno&&e.getPredictedEvents){
+  var pe=e.getPredictedEvents()||[],pg=MK.drawing.page;
+  MK.drawing.pred=pe.slice(0,3).map(function(q){var a=mkAnnoPoint(MK.drawingAnno,q.clientX,q.clientY,pg);return [a[0],a[1],.5]});
+ }
 }
 function mkPointerUp(e){
  if(!MK||e.pointerType==='touch')return;
@@ -5189,13 +5217,13 @@ function mkTopHtml(){
 }
 function mkToolbarHtml(){
  var isHi=MK.tool==='hi',isPen=MK.tool==='pen',isEr=MK.tool==='eraser';
- var sizePx={s:9,m:15,l:22};
+ var sizePx={s:8,sm:12,m:16,l:22};
  return '<div class="mkrow">'
   +'<button class="'+(isHi?'on':'')+'" data-mk="tool:hi" title="Highlighter">'+MK_ICO.hi+'</button>'
   +'<button class="'+(isPen?'on':'')+'" data-mk="tool:pen" title="Pen">'+MK_ICO.pen+'</button>'
   +'<button class="'+(isEr?'on':'')+'" data-mk="tool:eraser" title="Eraser">'+MK_ICO.eraser+'</button>'
   +'<span class="mksep"></span>'
-  +['s','m','l'].map(function(sz){return '<button class="mksizebtn '+(MK.size===sz?'on':'')+'" data-mk="size:'+sz+'" aria-label="'+sz.toUpperCase()+'"><i style="width:'+sizePx[sz]+'px;height:'+sizePx[sz]+'px"></i></button>'}).join('')
+  +['s','sm','m','l'].map(function(sz){return '<button class="mksizebtn '+(MK.size===sz?'on':'')+'" data-mk="size:'+sz+'" aria-label="'+MK_SIZE_NAMES[sz]+'" title="'+MK_SIZE_NAMES[sz]+'"><i style="width:'+sizePx[sz]+'px;height:'+sizePx[sz]+'px"></i></button>'}).join('')
   +'</div>'
   +(isEr?'':'<div class="mkrow">'
     +MK_COLORS[MK.tool].map(function(cc){return '<button class="mkswatch'+(MK.color===cc?' on':'')+'" style="background:'+cc+'" data-mk="color:'+cc+'" aria-label="Colour"></button>'}).join('')
