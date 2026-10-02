@@ -997,6 +997,56 @@ a.cpitemname:hover{text-decoration:underline}
 .cpchhead:hover .cpchdots{opacity:1}
 .sechex{width:78px!important;flex:none;font-size:12px!important;padding:5px 7px!important;font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important;text-transform:lowercase}
 @media(max-width:700px){.sechex{font-size:16px!important;width:96px!important}}
+/* calendar, people, applications */
+.cpwide{grid-template-columns:minmax(0,1fr)!important}
+.cpcalwrap{padding:12px 16px 16px;overflow-x:auto}
+.cpcal{min-width:560px}
+.cpcal th{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px 8px}
+.cpcal td{border-color:var(--line);height:96px;padding:5px 6px;border-radius:0}
+.cpcal td.off{background:var(--paper);opacity:.75}
+.cpcal td.today{background:var(--cp-kcal-wash)}
+.cpcal .today .dnum{background:var(--cp-kcal-c);color:var(--cp-kcal-on,#fff)}
+.cpcal .chip{font-size:11px;font-weight:600;border-radius:4px;padding:2px 6px;margin-top:3px}
+.cpday{display:flex;align-items:baseline;gap:8px;padding:14px 0 4px;font-size:13px;font-weight:700;color:var(--head,var(--ink));border-bottom:1px solid var(--line)}
+.cpday:first-child{padding-top:8px}
+.cpday span{font-size:12px;font-weight:400;color:var(--ink3)}
+.cppagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:4px 0 20px}
+.cppagetitle{font-size:24px;line-height:1.2}
+.cppagesub{font-size:13px;color:var(--ink3);margin-top:2px}
+.cppeople{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;padding:16px 18px 18px}
+.cppcard{border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.cppcard+.cppcard{padding-top:12px;border-top:1px solid var(--line)}
+.cppfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.cppclass{border:none;cursor:pointer;min-height:0!important;font-family:inherit}
+.cpapps{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;padding:16px 18px 18px}
+.cpapp{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border:1px solid var(--line);border-radius:12px;padding:16px 10px 12px;background:var(--card);color:var(--ink);text-decoration:none;cursor:pointer;min-width:0;font:inherit;white-space:normal;min-height:0}
+.cpapp:hover{border-color:var(--line2);box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.cpapp.editing{border-style:dashed}
+.cpappic{width:42px;height:42px;display:grid;place-items:center}
+.cpappic img,.cpappic .favtile{width:40px!important;height:40px!important;border-radius:10px;object-fit:contain;font-size:18px}
+.cpappnm{font-size:13.5px;font-weight:600;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cpapphost{font-size:11px;color:var(--ink3);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* settings groups as cards */
+.modal .cpsg{border:1px solid var(--line);border-radius:12px;margin-bottom:9px;overflow:hidden;background:var(--card)}
+.modal .cpsg summary{padding:11px 13px;gap:11px;background:var(--paper);font-size:14.5px}
+.modal .cpsg[open] summary{border-bottom:1px solid var(--line)}
+.modal .cpsg .sgbody{padding:13px 14px 15px}
+.cpsgico{width:30px;height:30px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--sideBg);color:var(--sideBright,#fff)}
+.cpsgico svg{width:16px;height:16px}
+.modal .cpsg summary small{margin-left:auto}
+@media(max-width:700px){
+  .cpcalwrap{padding:8px 6px 10px}
+  .cpcal{min-width:0}
+  .cpcal td{height:64px;padding:3px}
+  .cpcal .chip{font-size:9.5px;padding:1px 3px}
+  .cppeople,.cpapps{padding:11px;gap:9px}
+  .cpapps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cpapp{padding:12px 6px 10px}
+  .cpappic img,.cpappic .favtile{width:34px!important;height:34px!important}
+  .cpappnm{font-size:12px}
+  .cpapphost{display:none}
+  .cppagetitle{font-size:20px}
+}
 /* adding straight into a chapter */
 .cpchadd{display:flex;gap:4px;padding:2px 12px 10px;border-top:1px dashed var(--line)}
 .cpchbody+.cpchadd,.cpchempty+.cpchadd{margin-top:0}
@@ -1318,7 +1368,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v98';
+var BUILD='v99';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3355,7 +3405,7 @@ function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view
 function render(){
  var c=view.page==='class'?classById(view.classId):null;
  var head=c?pal(c.color):{bg:'var(--hdr)',ink:'var(--hdrInk)',ink2:'var(--hdrInk2)',bar:'var(--hdrBar)'};
- var title=c?c.name:(view.page==='apps'?'Applications':(view.page==='install'?'Get the app':S.owner));
+ var title=c?c.name:({apps:'Applications',install:'Get the app',calendar:'Calendar',professors:'People'}[view.page]||S.owner);
  var eyebrow=c?[c.code,c.day,c.room].filter(Boolean).join(' \u00b7 '):S.term;
  var sub='';
 
@@ -3429,14 +3479,14 @@ function pickerHtml(){
  var head='<div class="pickhead" data-pickdrag="1"><span class="pickgrip"></span><span style="font-size:12px;color:var(--ink3)">drag to move</span></div>';
 
  if(view.editSurf==='__sec'){
-  var onHome=view.page==='home',scl=!onHome&&view.page==='class'&&classById(view.classId);
+  var onHome=!!CP_SITE_ROWS[view.page],scl=!onHome&&view.page==='class'&&classById(view.classId);
   if(!onHome&&!scl)return btn;
   var sd=cpSecData(),allScope=onHome||view.secScope==='all';
-  var sreal=onHome?cpHomeColors():cpColors(scl);
-  var rows=onHome?[['hup','Coming up'],['hcls','Your classes']]:CP_SECS;
-  var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>'+(onHome?'Home colours':'Section style')+'</h3>';
+  var sreal=onHome?cpSiteColors(view.page):cpColors(scl);
+  var rows=onHome?CP_SITE_ROWS[view.page]:CP_SECS;
+  var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>'+(onHome?CP_SITE_TITLES[view.page]:'Section style')+'</h3>';
   if(!onHome)sh+='<div class="secscope"><button data-secscope="one" class="'+(allScope?'':'on')+'">This class</button><button data-secscope="all" class="'+(allScope?'on':'')+'">Every class</button></div>';
-  sh+='<p class="sub2">'+(onHome?'Pick a colour for each part of Home.':(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.'))+' B switches a title between bold and regular.</p>';
+  sh+='<p class="sub2">'+(onHome?'Pick a colour for each part of this page.':(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.'))+' B switches a title between bold and regular.</p>';
   rows.forEach(function(k){
    var key=k[0],dark=key==='when'||key==='htoday',cur=dark?sreal.dark:sreal[key].c,site=CP_SITEWIDE[key];
    var own=(allScope||site)?(sd.all&&sd.all[key]):(sd.cls&&sd.cls[scl.id]&&sd.cls[scl.id][key]);
@@ -3690,49 +3740,11 @@ function viewClasses(){
 
 function calendarGrid(){
  var base=view.calMonth?parseISO(view.calMonth+'-01'):new Date(today().getFullYear(),today().getMonth(),1);
- var y=base.getFullYear(),m=base.getMonth();
- var first=new Date(y,m,1),start=new Date(first);start.setDate(1-((first.getDay()+6)%7));
- var label=first.toLocaleDateString('en-CA',{month:'long',year:'numeric'});
- var byDay={};allTasks().forEach(function(x){if(x.t.due){(byDay[x.t.due]=byDay[x.t.due]||[]).push(x)}});
- var h='<div class="rowhead"><h3 style="font-size:15px">'+esc(label)+'</h3><div style="display:flex;gap:6px">'
-  +'<button class="ghost" data-mon="-1">Previous</button><button class="ghost" data-mon="0">Today</button><button class="ghost" data-mon="1">Next</button></div></div>';
- h+='<table class="cal"><thead><tr>'+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
- var cur=new Date(start),tstr=iso(today());
- for(var w=0;w<6;w++){
-  h+='<tr>';
-  for(var d=0;d<7;d++){
-   var k=iso(cur),off=cur.getMonth()!==m;
-   h+='<td class="'+(off?'off':'')+(k===tstr?' today':'')+'"><span class="dnum">'+cur.getDate()+'</span>';
-   (byDay[k]||[]).forEach(function(x){
-    var p=pal(x.c.color);
-    h+='<div class="chip" style="background:'+p.bg+';color:'+p.ink+(x.t.done?';opacity:.5;text-decoration:line-through':'')+'" data-open="'+x.c.id+'">'+esc(x.t.title)+'</div>';
-   });
-   h+='</td>';
-   cur.setDate(cur.getDate()+1);
-  }
-  h+='</tr>';
-  if(cur.getMonth()!==m&&w>=4)break;
- }
- return h+'</tbody></table>';
+ var label=base.toLocaleDateString('en-CA',{month:'long',year:'numeric'});
+ return '<div class="rowhead"><h3 style="font-size:15px">'+esc(label)+'</h3><div style="display:flex;gap:6px">'
+  +'<button class="ghost" data-mon="-1">Previous</button><button class="ghost" data-mon="0">Today</button><button class="ghost" data-mon="1">Next</button></div></div>'+calendarTable();
 }
 
-function viewCalendar(){
- var h=calendarGrid();
- var t=today(),end=new Date(t);end.setDate(t.getDate()+7);
- var wk=allTasks().filter(function(x){var d=parseISO(x.t.due);return d&&d>=t&&d<end}).sort(function(a,b){return a.t.due<b.t.due?-1:1});
- h+='<div class="rowhead" style="margin-top:26px"><h2>Next seven days</h2><button data-xact="ics:">Import from a calendar</button></div>';
- if(!wk.length)h+='<p class="empty">Clear week ahead.</p>';
- else{
-  var days={};wk.forEach(function(x){(days[x.t.due]=days[x.t.due]||[]).push(x)});
-  Object.keys(days).sort().forEach(function(k){
-   h+='<div class="daylist"><p class="dh">'+esc(parseISO(k).toLocaleDateString('en-CA',{weekday:'long',month:'short',day:'numeric'}))+'</p>';
-   days[k].forEach(function(x){var p=pal(x.c.color);
-    h+='<div class="item"><span class="bar" style="width:5px;height:16px;margin:0;background:'+p.bar+'"></span><span class="grow'+(x.t.done?' done':'')+'">'+esc(x.t.title)+'</span><span class="tag">'+esc(x.c.name)+'</span></div>'});
-   h+='</div>';
-  });
- }
- return h;
-}
 
 /* ---------- class page (v92 redesign) ----------
    Clearly separated sections, each a card with a tinted header band. All the colours come from the
@@ -3762,6 +3774,14 @@ function cpColors(c){
  // a colour you picked for a section (Section style) replaces the worked-out one, shades and all
  CP_SECS.forEach(function(k){var ov=cpOverride(c.id,k[0]);if(ov&&k[0]!=='when')out[k[0]]=cpFromHex(ov)});
  cpDarkOver(out,cpOverride(c.id,'when'));
+ return out;
+}
+var CP_SITE_ROWS={home:[['hup','Coming up'],['hcls','Your classes']],calendar:[['kcal','Month'],['kweek','Next seven days']],apps:[['kapp','Applications']],professors:[['kppl','People']]};
+var CP_SITE_TITLES={home:'Home colours',calendar:'Calendar colours',apps:'Applications colours',professors:'People colours'};
+function cpSiteColors(page){
+ if(page==='home')return cpHomeColors();
+ var site=cpMaker(cpSiteBase()),all=cpSecData().all||{},out={dark:site.dark,darkSoft:site.darkSoft,darkInk:site.darkInk,third:site(-3,1,14,44,26)};
+ (CP_SITE_ROWS[page]||[]).forEach(function(r,i){out[r[0]]=all[r[0]]?cpFromHex(all[r[0]]):(i?site(6,1.1,16,48,46):site(0,1.4,20,60,34))});
  return out;
 }
 function cpHomeColors(){
@@ -3802,7 +3822,7 @@ function cpVarRefs(keys){
 // re-colour the page in place (no redraw), e.g. while you drag a colour picker
 function cpLive(){
  var el=document.querySelector('.cpsplit');if(!el)return;
- if(view.page==='home'){el.setAttribute('style',cpVarStyle(cpHomeColors()));return}
+ if(CP_SITE_ROWS[view.page]){el.setAttribute('style',cpVarStyle(cpSiteColors(view.page)));return}
  var c=view.page==='class'&&classById(view.classId);
  if(c)el.setAttribute('style',cpVarStyle(cpColors(c)));
 }
@@ -4310,6 +4330,123 @@ function viewHome(){
  return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+U+C+G+'</div>'+R+'</div>';
 }
 
+/* ---------- Calendar, People and Applications (v99, same style as Home and the class pages) ---------- */
+CP_ICO.kcal='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+CP_ICO.kweek='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>';
+CP_ICO.kapp='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
+CP_ICO.ppl='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+CP_ICO.kppl=CP_ICO.ppl;
+// the month itself, as a table (calendarGrid wraps it with its own heading for older callers)
+function calendarTable(){
+ var base=view.calMonth?parseISO(view.calMonth+'-01'):new Date(today().getFullYear(),today().getMonth(),1);
+ var y=base.getFullYear(),m=base.getMonth();
+ var first=new Date(y,m,1),start=new Date(first);start.setDate(1-((first.getDay()+6)%7));
+ var byDay={};allTasks().forEach(function(x){if(x.t.due&&!isRefClass(x.c)){(byDay[x.t.due]=byDay[x.t.due]||[]).push(x)}});
+ var h='<table class="cal cpcal"><thead><tr>'+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
+ var cur=new Date(start),tstr=iso(today());
+ for(var w=0;w<6;w++){
+  h+='<tr>';
+  for(var d=0;d<7;d++){
+   var k=iso(cur),off=cur.getMonth()!==m;
+   h+='<td class="'+(off?'off':'')+(k===tstr?' today':'')+'"><span class="dnum">'+cur.getDate()+'</span>';
+   (byDay[k]||[]).forEach(function(x){
+    var p=pal(x.c.color);
+    h+='<div class="chip" style="background:'+p.bg+';color:'+p.ink+';border-left:3px solid '+p.bar+(x.t.done?';opacity:.5;text-decoration:line-through':'')+'" data-open="'+x.c.id+'" title="'+esc(x.t.title+' · '+x.c.name)+'">'+esc(x.t.title)+'</div>';
+   });
+   h+='</td>';
+   cur.setDate(cur.getDate()+1);
+  }
+  h+='</tr>';
+  if(cur.getMonth()!==m&&w>=4)break;
+ }
+ return h+'</tbody></table>';
+}
+// one due row, the same on Home and Calendar: tick, name, countdown, date, class tag; tap opens the class
+function cpDueRow(x,highlight){
+ var cd=cpCountdown(x.t.due),lt=cd.n!=null&&cd.n<0,p=pal(x.c.color);
+ return '<div class="cpgrid cprow" data-open="'+x.c.id+'">'
+  +'<span class="c-tick"><button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="'+(x.t.done?'Mark not done':'Mark done')+'"'+(x.t.done?' style="background:'+p.bar+'"':'')+'></button></span>'
+  +'<span class="c-name"><span class="cpnm'+(x.t.done?' done':'')+'">'+esc(x.t.title)+'</span></span>'
+  +'<span class="c-count" style="color:'+(lt?'#A34A3F':(highlight||'var(--ink2)'))+'">'+(x.t.done?'Done':cd.t)+'</span>'
+  +'<i class="c-br"></i>'
+  +'<span class="c-due'+(lt?' late':'')+'">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+'</span>'
+  +'<span class="c-cls"><span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span></span>'
+  +'</div>';
+}
+function viewCalendar(){
+ var col=cpVarRefs(['kcal','kweek']),real=cpSiteColors('calendar'),t=today();
+ var base=view.calMonth?parseISO(view.calMonth+'-01'):new Date(t.getFullYear(),t.getMonth(),1);
+ var label=base.toLocaleDateString('en-CA',{month:'long',year:'numeric'}),ym=iso(base).slice(0,7);
+ var inMonth=allTasks().filter(function(x){return x.t.due&&!isRefClass(x.c)&&x.t.due.slice(0,7)===ym});
+ var openM=inMonth.filter(function(x){return !x.t.done}).length;
+ var M='<section class="cpsec" id="k-cal">'+cpHead('kcal',col.kcal,esc(label),inMonth.length?inMonth.length+' due':'',inMonth.length?(openM?openM+' still to do':'All done this month'):'Nothing due this month',
+   '<div class="cpseg"><button data-mon="-1" aria-label="Previous month">‹ Previous</button><button data-mon="0">Today</button><button data-mon="1" aria-label="Next month">Next ›</button></div>')
+  +'<div class="cpcalwrap">'+calendarTable()+'</div></section>';
+ var end=new Date(t);end.setDate(t.getDate()+7);
+ var wk=allTasks().filter(function(x){var d=parseISO(x.t.due);return d&&d>=t&&d<end&&!isRefClass(x.c)})
+  .sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:((a.t.time||'')<(b.t.time||'')?-1:1)});
+ var openW=wk.filter(function(x){return !x.t.done}).length;
+ var W='<section class="cpsec cphome" id="k-week">'+cpHead('kweek',col.kweek,'Next seven days',openW?openW+' to do':'',wk.length?'Tap a row to open its class':'Clear week ahead','');
+ if(!wk.length)W+='<div class="cpempty">Nothing due in the next seven days.</div>';
+ else{
+  var days={};wk.forEach(function(x){(days[x.t.due]=days[x.t.due]||[]).push(x)});
+  W+='<div class="cpbody">'+Object.keys(days).sort().map(function(k){
+   var dd=parseISO(k),n=daysBetween(t,dd);
+   return '<div class="cpday">'+esc(n===0?'Today':n===1?'Tomorrow':dd.toLocaleDateString('en-CA',{weekday:'long'}))+'<span>'+esc(dd.toLocaleDateString('en-CA',{month:'long',day:'numeric'}))+'</span></div>'
+    +days[k].map(function(x){return cpDueRow(x,col.kweek.c)}).join('');
+  }).join('')+'</div>';
+ }
+ W+='</section>';
+ var G='<div class="cpsettings"><span class="cpsetlab">Calendar settings</span><button data-xact="ics:">Import from a calendar</button><button data-secopen="1">Colours</button></div>';
+ return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+M+W+G+'</div></div>';
+}
+function viewProfessors(){
+ var classes=S.classes.filter(function(c){return !isRefClass(c)}),col=cpVarRefs(['kppl']),real=cpSiteColors('professors');
+ var people=[];classes.forEach(function(c){c.contacts.forEach(function(ct){people.push({ct:ct,c:c})})});
+ var q=(view.pplQ||'').trim().toLowerCase();
+ var shown=people.filter(function(x){return !q||[x.ct.name,x.ct.role,x.ct.email,x.ct.office,x.c.name,x.c.code].join(' ').toLowerCase().indexOf(q)>-1});
+ var P='<section class="cpsec" id="k-ppl">'+cpHead('kppl',col.kppl,'People',people.length?people.length+'':'',people.length?'Professors and contacts from all your classes':'Professors, TAs and anyone else worth keeping handy',
+   (people.length>4?'<label class="cpsearch">'+CP_ICO.search+'<input type="text" id="pplsearch" placeholder="Search people" value="'+esc(view.pplQ||'')+'"></label>':'')
+   +cpBtn(col.kppl,'+ Add','data-add="contact"'));
+ if(!people.length)P+='<div class="cpempty">No one added yet. Add your professors here or from each class page.</div>';
+ else if(!shown.length)P+='<div class="cpempty">No one matches.</div>';
+ else P+='<div class="cppeople">'+shown.map(function(x){
+  var ct=x.ct,c=x.c,p=pal(c.color);
+  return '<div class="cpperson cppcard">'
+   +(ct.photo?'<img class="cpphoto" src="'+ct.photo+'" alt="'+esc(ct.name)+'">':'<div class="cpphoto cpphotoempty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
+   +'<div class="cppersontext"><div class="cpline"><span class="a" style="font-weight:600">'+esc(ct.name||'Unnamed')+'</span></div>'
+   +(ct.role?'<div class="cpmeta">'+esc(ct.role)+'</div>':'')
+   +(ct.office?'<div class="cpmeta">'+esc(ct.office)+'</div>':'')
+   +(ct.hours?'<div class="cpmeta">'+esc(ct.hours)+'</div>':'')
+   +(ct.email?'<a class="cpemail" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener">'+esc(ct.email)+'</a>':'')
+   +'<div class="cppfoot"><button class="cpclspill cppclass" data-open="'+c.id+'" style="background:'+p.bg+';color:'+p.ink2+'" title="Open '+esc(c.name)+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(c))+'</button>'
+   +'<button class="cpghost" data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button></div>'
+   +'</div></div>';
+ }).join('')+'</div>';
+ P+='</section>';
+ var G='<div class="cpsettings"><span class="cpsetlab">People settings</span><button data-secopen="1">Colours</button></div>';
+ return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+P+G+'</div></div>';
+}
+function viewApps(){
+ var apps=S.apps||[],q=(view.appQ||'').trim().toLowerCase(),col=cpVarRefs(['kapp']),real=cpSiteColors('apps');
+ var shown=apps.filter(function(a){return !q||(a.title+' '+a.url).toLowerCase().indexOf(q)>-1});
+ var A='<section class="cpsec" id="k-apps">'+cpHead('kapp',col.kapp,'Applications',apps.length?apps.length+'':'',view.appEdit?'Tap any app to change its name, address or picture':'The sites and apps you open every day',
+   (apps.length?'<label class="cpsearch">'+CP_ICO.search+'<input type="text" id="appsearch" placeholder="Search your apps" value="'+esc(view.appQ||'')+'"></label>':'')
+   +(apps.length?'<button class="cpbtn2" data-appedit="1">'+(view.appEdit?'Done':'Edit')+'</button>':'')
+   +cpBtn(col.kapp,'+ Add','data-add="app"'));
+ if(!apps.length)A+='<div class="cpempty">Nothing here yet. Add the sites you open every day, like your school portal, email or Google Drive.</div>';
+ else if(!shown.length)A+='<div class="cpempty">No apps match.</div>';
+ else A+='<div class="cpapps">'+shown.map(function(a){
+  var ic=a.icon?'<img src="'+a.icon+'" alt="">':linkIcon(a.url,a.title).replace('class="fi round"','');
+  var host=cpHost(a.url);
+  if(view.appEdit)return '<button class="cpapp editing" data-editapp="'+a.id+'"><span class="cpappic">'+ic+'</span><span class="cpappnm">'+esc(a.title)+'</span><span class="cpapphost">Tap to edit</span></button>';
+  return '<a class="cpapp" data-phoneapp="1" href="'+esc(a.url)+'" target="_blank" rel="noopener"><span class="cpappic">'+ic+'</span><span class="cpappnm">'+esc(a.title)+'</span><span class="cpapphost">'+esc(host)+'</span></a>';
+ }).join('')+'</div>';
+ A+='</section>';
+ var G='<div class="cpsettings"><span class="cpsetlab">Applications settings</span><button data-secopen="1">Colours</button></div>';
+ return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+A+G+'</div></div>';
+}
+
 function coverControls(id,owner){
  var key='cover:'+id;
  return '<label class="fakebtn"><input type="file" accept="image/*" data-cover="'+id+'" style="display:none">'+(owner.cover?'Change cover':'Add a cover picture')+'</label>'
@@ -4334,44 +4471,6 @@ function viewResources(){
  return h;
 }
 
-function viewApps(){
- var apps=S.apps||[],q=(view.appQ||'').trim().toLowerCase();
- var h='<div class="rowhead"><h2 style="font-size:20px">Applications</h2><div style="display:flex;gap:8px">'
-  +'<button data-appedit="1">'+(view.appEdit?'Done editing':'Edit apps')+'</button>'
-  +'<button data-add="app">Add an app</button></div></div>'
-  +'<input type="text" id="appsearch" placeholder="Search your apps" value="'+esc(view.appQ||'')+'" style="margin-bottom:16px">';
- if(view.appEdit)h+='<p class="hint" style="margin:-6px 0 14px">Click any app to change its name, address or picture.</p>';
- var shown=apps.filter(function(a){return !q||(a.title+' '+a.url).toLowerCase().indexOf(q)>-1});
- if(!apps.length)return h+'<p class="empty">Nothing here yet. Add the sites you open every day.</p>';
- if(!shown.length)return h+'<p class="empty">No apps match.</p>';
- h+='<div class="appgrid">'+shown.map(function(a){
-  var ic=a.icon?'<img src="'+a.icon+'" alt="">':linkIcon(a.url,a.title).replace('class="fi round"','');
-  if(view.appEdit){
-   return '<button class="appcard editing" data-editapp="'+a.id+'">'+ic+'<span class="nm3">'+esc(a.title)+'</span></button>';
-  }
-  return '<a class="appcard" data-phoneapp="1" href="'+esc(a.url)+'" target="_blank" rel="noopener">'+ic+'<span class="nm3">'+esc(a.title)+'</span></a>';
- }).join('')+'</div>';
- return h;
-}
-function viewProfessors(){
- var any=S.classes.some(function(c){return c.contacts.length});
- var head='<div class="rowhead"><h2 style="font-size:20px">People</h2><button data-add="contact">Add a person</button></div>';
- if(!any)return head+'<p class="empty">No one added yet. Add your first person above.</p>';
- return head+'<div class="two2">'+S.classes.filter(function(c){return c.contacts.length}).map(function(c){
-  var p=pal(c.color);
-  return '<div class="panel"><div class="rowhead"><h3 style="color:'+p.ink+'">'+esc(c.name)+'</h3><button class="ghost" data-open="'+c.id+'">Open</button></div>'
-   +c.contacts.map(function(ct){
-    return '<div class="person">'
-     +(ct.photo?'<img class="photo" src="'+ct.photo+'" alt="'+esc(ct.name)+'">':'<div class="photoempty" title="No photo yet"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
-     +'<div style="flex:1;min-width:0"><p style="font-size:14px">'+esc(ct.name||'Unnamed')+'</p>'
-     +(ct.role?'<p style="font-size:11.5px;color:var(--ink2)">'+esc(ct.role)+'</p>':'')
-     +(ct.office?'<p style="font-size:11.5px;color:var(--ink2)">'+esc(ct.office)+'</p>':'')
-     +'<div style="display:flex;gap:6px;margin-top:7px">'
-     +(ct.email?'<a class="fakebtn" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener" style="text-decoration:none">Email</a>':'')
-     +'<button data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button></div></div></div>';
-   }).join('')+'</div>';
- }).join('')+'</div>';
-}
 
 /* ---------- modals ---------- */
 function modalHtml(){
@@ -4437,8 +4536,9 @@ function modalHtml(){
   }
  }else if(m.kind==='settings'){
   var sgOpen=function(key,def){return view.sgOpen&&view.sgOpen[key]!==undefined?view.sgOpen[key]:def};
+  var SG_ICO={sync:'<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/>',hub:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',look:'<path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2.2a1.8 1.8 0 0 0-1.3 3.1c.4.4.5.9.5 1.4 0 .8-.6 1.5-1.5 1.5Z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="12" cy="7" r="1"/><circle cx="16.5" cy="10.5" r="1"/>',remind:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',backup:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/>'};
   var sg=function(key,title,right,inner,def){
-   return '<details class="sgroup" data-sg="'+key+'"'+(sgOpen(key,def)?' open':'')+'><summary><span>'+title+'</span><small>'+esc(right||'')+'</small></summary><div class="sgbody">'+inner+'</div></details>';
+   return '<details class="sgroup cpsg" data-sg="'+key+'"'+(sgOpen(key,def)?' open':'')+'><summary><i class="cpsgico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(SG_ICO[key]||'')+'</svg></i><span>'+title+'</span><small>'+esc(right||'')+'</small></summary><div class="sgbody">'+inner+'</div></details>';
   };
   var syncRight=sbUser?(driveSyncing?'Syncing…':(S.lastSync?'Synced '+timeAgo(S.lastSync):'Signed in')):'Not signed in';
   var syncBody=sbUser
@@ -6454,7 +6554,7 @@ document.addEventListener('click',function(e){
   S.theme=S.theme||{};var sec=S.theme.sec=S.theme.sec||{},scid=view.classId;
   if(d.secbold){sec.bold=sec.bold||{};if(cpBold(d.secbold))sec.bold[d.secbold]=false;else delete sec.bold[d.secbold]}
   if(d.secreset){
-   if(view.page==='home'||view.secScope==='all'||CP_SITEWIDE[d.secreset]){if(sec.all)delete sec.all[d.secreset]}
+   if(CP_SITE_ROWS[view.page]||view.secScope==='all'||CP_SITEWIDE[d.secreset]){if(sec.all)delete sec.all[d.secreset]}
    else if(sec.cls&&sec.cls[scid])delete sec.cls[scid][d.secreset];
    if(S.theme.surfaces)delete S.theme.surfaces[d.secreset];
    applyTheme();
@@ -6490,7 +6590,7 @@ document.addEventListener('click',function(e){
  if(d.opencolours!==undefined){view.modal=null;view.menu=false;view.picker=true;render();return}
  if(d.picker!==undefined){
   view.picker=d.picker==='1';
-  if(view.picker&&(view.page==='home'||(view.page==='class'&&classById(view.classId))))view.editSurf='__sec'; // on Home and class pages, the corner paint button opens their section colours first
+  if(view.picker&&(CP_SITE_ROWS[view.page]||(view.page==='class'&&classById(view.classId))))view.editSurf='__sec'; // on Home and class pages, the corner paint button opens their section colours first
   render();return;
  }
  if(d.preset!==undefined&&d.preset!==''){
@@ -6738,10 +6838,10 @@ document.addEventListener('input',function(e){
   if(chs){chs.color=t.value;document.querySelectorAll('[data-chapbadge="'+ds.chc+'"]').forEach(function(b){b.style.background=t.value});save()}
   return;
  }
- if(ds.secc&&(view.page==='class'||view.page==='home')){
+ if(ds.secc&&(view.page==='class'||CP_SITE_ROWS[view.page])){
   S.theme=S.theme||{};var sc2=S.theme.sec=S.theme.sec||{};sc2.cls=sc2.cls||{};
   if(view.classId)sc2.cls[view.classId]=sc2.cls[view.classId]||{};
-  if(view.page==='home'||view.secScope==='all'||CP_SITEWIDE[ds.secc]){
+  if(CP_SITE_ROWS[view.page]||view.secScope==='all'||CP_SITEWIDE[ds.secc]){
    // every class: one colour for this section everywhere, so drop any class's own pick for it
    sc2.all=sc2.all||{};sc2.all[ds.secc]=t.value;
    Object.keys(sc2.cls).forEach(function(id){delete sc2.cls[id][ds.secc]});
@@ -6781,6 +6881,11 @@ document.addEventListener('input',function(e){
   S.theme.fonts.size=+t.value;
   var o=document.getElementById('fontsizeout');if(o)o.textContent=t.value+'%';
   applyFonts();save();return;
+ }
+ if(t.id==='pplsearch'){
+  view.pplQ=t.value;var pp=t.selectionStart;render();
+  var pa=document.getElementById('pplsearch');if(pa){pa.focus();try{pa.setSelectionRange(pp,pp)}catch(e4){}}
+  return;
  }
  if(t.id==='appsearch'){
   view.appQ=t.value;
