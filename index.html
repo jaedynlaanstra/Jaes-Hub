@@ -723,7 +723,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 }
 /* ---------- class page, v92 redesign ---------- */
 .cpsplit{display:grid;grid-template-columns:minmax(0,1fr) 292px;gap:22px;align-items:start}
-.cpmain{display:flex;flex-direction:column;gap:22px;min-width:0}
+.cpmain{display:flex;flex-direction:column;gap:36px;min-width:0}
 .cpsec{position:relative;background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;container-type:inline-size;min-width:0}
 .cpanchor{position:absolute;top:0;left:0}
 .cphead{display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;row-gap:10px}
@@ -837,7 +837,7 @@ a.cpitemname:hover{text-decoration:underline}
 }
 
 /* checklist and completed */
-.cppair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:22px;align-items:start}
+.cppair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:28px;align-items:start}
 .cplist{padding:2px 18px 10px}
 .cpli{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;min-width:0}
 .cpli:last-child,.cplist .more .cpli:last-child{border-bottom:none}
@@ -889,14 +889,14 @@ a.cpitemname:hover{text-decoration:underline}
 
 /* narrower screens: one column, the info cards after your work */
 @media(max-width:1199px){
-  .cpsplit{display:flex;flex-direction:column;align-items:stretch;gap:24px}
+  .cpsplit{display:flex;flex-direction:column;align-items:stretch;gap:34px}
   .cpmain{display:contents}
   .cpasg{order:0}.cpfiles{order:1}.cppair{order:2}.cprail{order:3}.studyrow,.cpmain>.panel,.cpmain>.answer{order:4}.cpsettings{order:5}
   .cprail{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));align-items:start}
 }
 @media(max-width:700px){
-  .cpsplit{gap:14px}
-  .cppair{gap:14px}
+  .cpsplit{gap:24px}
+  .cppair{gap:24px}
   .cphead{padding:11px 13px;gap:10px;row-gap:9px}
   .cpico{width:28px;height:28px;border-radius:7px}
   .cpico svg{width:15px;height:15px}
@@ -936,6 +936,10 @@ a.cpitemname:hover{text-decoration:underline}
 .cpaddbtn{background:none;border:none;padding:6px 8px;font-size:12.5px;font-weight:600;cursor:pointer;border-radius:6px;min-height:0;font-family:inherit;display:inline-flex;align-items:center}
 .cpaddbtn:hover{background:var(--paper)}
 /* Section style panel (inside the colour picker) */
+.secscope{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:3px;gap:3px;margin:4px 0 8px}
+.secscope button{flex:1;border:none;background:transparent;font-size:13px;padding:6px 8px;border-radius:7px;color:var(--ink2);min-height:0!important}
+.secscope button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.cpdupbtn{color:#A34A3F!important;margin-left:auto}
 .secrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
 .secrow input[type=color]{width:34px;height:28px;padding:0;border:1px solid var(--line2);border-radius:7px;background:none;flex:none;cursor:pointer}
 .secname{flex:1;font-size:13.5px}
@@ -1246,7 +1250,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v94';
+var BUILD='v95';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3360,16 +3364,20 @@ function pickerHtml(){
   var scl=view.page==='class'&&classById(view.classId);
   if(!scl)return btn;
   var sreal=cpColors(scl),sd=cpSecData();
-  var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>Section style</h3><p class="sub2">Colours here are for '+esc(scl.name)+'. Bold applies on every class.</p>';
+  var allScope=view.secScope==='all';
+  var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>Section style</h3>'
+   +'<div class="secscope"><button data-secscope="one" class="'+(allScope?'':'on')+'">This class</button><button data-secscope="all" class="'+(allScope?'on':'')+'">Every class</button></div>'
+   +'<p class="sub2">'+(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.')+' Each colour sets the whole section: header, icon, buttons and ticks. B switches the title between bold and regular, on every class.</p>';
   CP_SECS.forEach(function(k){
-   var key=k[0],cur=key==='when'?sreal.dark:sreal[key].c,own=sd.cls&&sd.cls[scl.id]&&sd.cls[scl.id][key];
+   var key=k[0],cur=key==='when'?sreal.dark:sreal[key].c,own=allScope?(sd.all&&sd.all[key]):(sd.cls&&sd.cls[scl.id]&&sd.cls[scl.id][key]);
+   own=own||(S.theme&&S.theme.surfaces&&S.theme.surfaces[key]&&Object.keys(S.theme.surfaces[key]).length);
    sh+='<div class="secrow"><input type="color" value="'+cur+'" data-secc="'+key+'" aria-label="'+esc(k[1])+' colour"><span class="secname">'+esc(k[1])+'</span>'
     +(key==='when'?'':'<button class="secbold'+(cpBold(key)?' on':'')+'" data-secbold="'+key+'" title="Bold title" aria-pressed="'+cpBold(key)+'">B</button>')
     +(own?'<button class="ghost" data-secreset="'+key+'" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp"></span>')+'</div>';
   });
   sh+='<div style="display:flex;flex-direction:column;gap:7px;margin-top:14px">'
-   +'<button data-secall="1">Use these colours on every class</button>'
-   +(sd.all&&Object.keys(sd.all).length?'<button class="ghost" data-secallreset="1" style="font-size:12.5px">Stop using them on every class</button>':'')
+   +(allScope?'':'<button data-secall="1">Copy this class\u2019s colours to every class</button>')
+   +(sd.all&&Object.keys(sd.all).length?'<button class="ghost" data-secallreset="1" style="font-size:12.5px">Go back to each class\u2019s own colours</button>':'')
    +'<div style="display:flex;gap:7px"><button data-editsurf="" style="flex:1">All colours</button>'
    +'<button data-picker="0" style="flex:1;background:#33312C;color:#fff;border-color:#33312C">Done</button></div></div>';
   return btn+sh+'</div>';
@@ -3796,7 +3804,7 @@ function cpHead(key,col,title,pill,hint,acts){
   +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:var(--s-'+key+'-ink,'+col.title+');font-weight:var(--cp-'+key+'-w,650)">'+title+'</h2>'
   +(pill?'<span class="cppill" style="color:'+col.c+'">'+pill+'</span>':'')+'</div>'
   +(hint?'<div class="cphint" style="color:'+col.hint+'">'+hint+'</div>':'')+'</div>'
-  +'<div class="cpacts">'+(acts||'')+'<button class="cppal" data-secopen="'+key+'" title="Change this section\u2019s colour" aria-label="Change the colour of this section">'+CP_PAL+'</button></div></div>';
+  +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
 }
 function cpBtn(col,label,attrs){return '<button class="cpbtn" style="background:'+col.c+'" '+attrs+'>'+label+'</button>'}
 function cpBtn2(col,label,attrs){return '<button class="cpbtn2" style="border-color:'+col.line+'" '+attrs+'>'+label+'</button>'}
@@ -3820,6 +3828,16 @@ function cpLinkLabel(l){
  var host='';try{host=new URL(l.url).hostname}catch(e){}
  if(/(^|\.)claude\.(ai|site)$/.test(host))return 'AI';
  var fk=urlFileKind(l.url);return fk?(CP_EXT_LABEL[fk]||'FILE'):'WEB';
+}
+// extra copies of the same link (same name and address) in one class -- the first stays (a pinned copy wins)
+function cpDupLinks(c){
+ var seen={},extra=[];
+ (c.links||[]).forEach(function(l,i){
+  var k=String(l.title||'').trim().toLowerCase()+'|'+String(l.url||'').trim().replace(/\/+$/,'').toLowerCase();
+  if(!(k in seen)){seen[k]=i;return}
+  if(l.pinned&&!c.links[seen[k]].pinned){extra.push(seen[k]);seen[k]=i}else extra.push(i);
+ });
+ return extra;
 }
 function cpHost(url){try{return new URL(url).hostname.replace(/^www\./,'')}catch(e){return ''}}
 // which chapters are folded shut, remembered per class on this device
@@ -3934,6 +3952,7 @@ function viewClass(c){
    +(rows.length?firstN(rows,n||6,label.toLowerCase()):'<div class="cpcolempty">'+empty+'</div>')+'</div>';
  }
  var total=files.length+(c.links||[]).length;
+ var dups=cpDupLinks(c),dupBtn=dups.length?'<button class="cptext cpdupbtn" data-dedupe="'+c.id+'">Remove '+dups.length+' duplicate link'+(dups.length>1?'s':'')+'</button>':'';
  var F='<section class="cpsec cpfiles" id="c-files"><span id="c-links" class="cpanchor"></span>'+pencil('files')
   +cpHead('files',col.files,'Files &amp; links',total?total+' item'+(total>1?'s':''):'',(c.sections||[]).length?'Grouped by chapter, files and links together':'Slides, readings and links for this class',
     '<label class="cpsearch" style="border-color:'+col.files.line+'">'+CP_ICO.search+'<input type="text" id="filesearch" placeholder="Search names, links and PDFs" value="'+esc(view.fileQ||'')+'"></label>'
@@ -3980,8 +3999,9 @@ function viewClass(c){
    F+='</div>';
   });
   F+='<div class="cpffoot" style="color:'+col.files.c+'"><button class="cptext" style="color:inherit" data-add="section" data-c="'+c.id+'">+ New chapter</button>'
-   +'<button class="cptext" style="color:inherit" data-chapall="'+c.id+'">'+(anyOpen?'Collapse all':'Expand all')+'</button></div>';
+   +'<button class="cptext" style="color:inherit" data-chapall="'+c.id+'">'+(anyOpen?'Collapse all':'Expand all')+'</button>'+dupBtn+'</div>';
  }
+ if(dupBtn&&!(c.sections||[]).length&&!q)F+='<div class="cpffoot">'+dupBtn+'</div>';
  F+='</div></section>';
 
  /* ===== Checklist + Completed ===== */
@@ -6082,7 +6102,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-secopen],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-dedupe],[data-secopen],[data-secscope],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -6099,6 +6119,15 @@ document.addEventListener('click',function(e){
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
  if(d.chap){var cpi=d.chap.indexOf(':'),cpc=d.chap.slice(0,cpi),cpk=d.chap.slice(cpi+1),cps=cpShut(cpc);if(cps[cpk])delete cps[cpk];else cps[cpk]=true;cpSetShut(cpc,cps);render();return}
+ if(d.dedupe){
+  var dc2=classById(d.dedupe),dx=dc2?cpDupLinks(dc2):[];
+  if(dx.length&&confirm('Remove '+dx.length+' extra cop'+(dx.length>1?'ies':'y')+' of links that appear more than once? One of each stays, so nothing you need is lost.')){
+   var drop={};dx.forEach(function(i){drop[i]=1});
+   dc2.links=dc2.links.filter(function(l,i){return !drop[i]});
+   save();render();
+  }
+  return;
+ }
  if(d.chapall){var cpcl=classById(d.chapall);if(cpcl){var cpsh=cpShut(d.chapall),keys=(cpcl.sections||[]).map(function(x){return x.id}).concat(['_']);var anyO=keys.some(function(k){return !cpsh[k]});var nx={};if(anyO)keys.forEach(function(k){nx[k]=true});cpSetShut(d.chapall,nx);render()}return}
  if(d.wx){fetchWeather();render();return}
  if(d.mon){
@@ -6207,12 +6236,22 @@ document.addEventListener('click',function(e){
   render();return;
  }
  if(d.side!==undefined){S.sideHidden=d.side==='0';view.menu=false;save();render();return}
- if(d.editsurf!==undefined){view.editSurf=d.editsurf||null;view.picker=true;render();return}
+ if(d.editsurf!==undefined){
+  var es=d.editsurf||null;
+  if(es&&view.page==='class'&&/^(asg|files|mini|done|when)$/.test(es))es='__sec';
+  view.editSurf=es;view.picker=true;render();return;
+ }
  if(d.secopen){view.editSurf='__sec';view.picker=true;render();return}
+ if(d.secscope){view.secScope=d.secscope;render();return}
  if(d.secbold||d.secreset||d.secall||d.secallreset){
   S.theme=S.theme||{};var sec=S.theme.sec=S.theme.sec||{},scid=view.classId;
   if(d.secbold){sec.bold=sec.bold||{};if(cpBold(d.secbold))sec.bold[d.secbold]=false;else delete sec.bold[d.secbold]}
-  if(d.secreset&&sec.cls&&sec.cls[scid])delete sec.cls[scid][d.secreset];
+  if(d.secreset){
+   if(view.secScope==='all'){if(sec.all)delete sec.all[d.secreset]}
+   else if(sec.cls&&sec.cls[scid])delete sec.cls[scid][d.secreset];
+   if(S.theme.surfaces)delete S.theme.surfaces[d.secreset];
+   applyTheme();
+  }
   if(d.secall&&sec.cls&&sec.cls[scid]){
    sec.all=sec.all||{};
    Object.keys(sec.cls[scid]).forEach(function(k){sec.all[k]=sec.cls[scid][k];Object.keys(sec.cls).forEach(function(id){delete sec.cls[id][k]})});
@@ -6242,7 +6281,11 @@ document.addEventListener('click',function(e){
  if(d.studygo){makeStudy(d.studygo);return}
  if(d.studyclose!==undefined){view.study=null;render();return}
  if(d.opencolours!==undefined){view.modal=null;view.menu=false;view.picker=true;render();return}
- if(d.picker!==undefined){view.picker=d.picker==='1';render();return}
+ if(d.picker!==undefined){
+  view.picker=d.picker==='1';
+  if(view.picker&&view.page==='class'&&classById(view.classId))view.editSurf='__sec'; // on a class page, the corner paint button opens the section colours first
+  render();return;
+ }
  if(d.preset!==undefined&&d.preset!==''){
   var pr=PRESETS[+d.preset];
   S.theme=S.theme||{};
@@ -6477,7 +6520,13 @@ document.addEventListener('input',function(e){
  }
  if(ds.secc&&view.page==='class'){
   S.theme=S.theme||{};var sc2=S.theme.sec=S.theme.sec||{};sc2.cls=sc2.cls||{};sc2.cls[view.classId]=sc2.cls[view.classId]||{};
-  sc2.cls[view.classId][ds.secc]=t.value;
+  if(view.secScope==='all'){
+   // every class: one colour for this section everywhere, so drop any class's own pick for it
+   sc2.all=sc2.all||{};sc2.all[ds.secc]=t.value;
+   Object.keys(sc2.cls).forEach(function(id){delete sc2.cls[id][ds.secc]});
+  }else sc2.cls[view.classId][ds.secc]=t.value;
+  // a colour set for this box with the old pencil tool would otherwise keep winning over the new pick
+  if(S.theme.surfaces&&S.theme.surfaces[ds.secc]){delete S.theme.surfaces[ds.secc];applyTheme()}
   cpLive();save(); // live, without a redraw, so the colour picker you're dragging stays open
   return;
  }
