@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v83';
+var BUILD='v84';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2741,9 +2741,92 @@ function normalizeForCompare(v){
  return v;
 }
 function canon(v){return JSON.stringify(normalizeForCompare(v))}
-function payloadOf(state){var o=JSON.parse(JSON.stringify(state));DEVICE_KEYS.forEach(function(k){delete o[k]});return o}
+function payloadOf(state){
+ var o=JSON.parse(JSON.stringify(state));DEVICE_KEYS.forEach(function(k){delete o[k]});
+ // pictures already safe in cloud storage travel as a short token, so the synced row stays small
+ return imgMap(o,function(s){return s.length>=IMG_MIN&&IMG_RE.test(s)&&imgUp[imgToken(s)]?imgToken(s):s});
+}
+/* ---- pictures: covers, avatar and icons live in cloud storage once each, named by a fingerprint of the picture,
+   instead of inside the synced data (which every device re-downloads whenever anything changes) ---- */
+var IMG_RE=/^data:(image\/[a-z0-9.+-]+);base64,/i,IMG_MIN=1500,IMG_TOK=/^img:[0-9a-z]+$/;
+var IMG_HASH=new Map(),imgUp={},imgFail={},imgForce=false;   // imgUp: tokens confirmed in cloud; imgFail: token -> retry time
+function imgToken(s){
+ var t=IMG_HASH.get(s);if(t)return t;
+ var h1=0xdeadbeef^s.length,h2=0x41c6ce57^s.length;
+ for(var i=0;i<s.length;i++){var ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}
+ h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+ h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+ t='img:'+(h1>>>0).toString(36)+(h2>>>0).toString(36)+s.length.toString(36);
+ if(IMG_HASH.size>300)IMG_HASH.clear();
+ IMG_HASH.set(s,t);return t;
+}
+function imgMap(v,fn){
+ if(typeof v==='string')return fn(v);
+ if(Array.isArray(v)){for(var i=0;i<v.length;i++)v[i]=imgMap(v[i],fn);return v}
+ if(v&&typeof v==='object'){for(var k in v)v[k]=imgMap(v[k],fn);return v}
+ return v;
+}
+function imgEach(v,cb){
+ if(typeof v==='string'){cb(v);return}
+ if(Array.isArray(v)){for(var i=0;i<v.length;i++)imgEach(v[i],cb);return}
+ if(v&&typeof v==='object'){for(var k in v)imgEach(v[k],cb)}
+}
+function isImgTok(s){return s.length<40&&IMG_TOK.test(s)}
+function imgState(){   // pictures this device holds, and tokens still waiting for their picture
+ var have={},want={};
+ imgEach(S,function(s){
+  if(s.length>=IMG_MIN&&IMG_RE.test(s))have[imgToken(s)]=s;
+  else if(isImgTok(s))want[s]=1;
+ });
+ return{have:have,want:want};
+}
+// a picture that has not arrived yet shows as blank instead of a broken-image mark
+window.addEventListener('error',function(e){var t=e.target;if(t&&t.tagName==='IMG'&&/^img:/.test(t.getAttribute('src')||''))t.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'},true);
+function imgInflate(rs,have){return imgMap(rs,function(s){return isImgTok(s)&&have[s]?have[s]:s})}
+function imgName(t){return t.replace(':','-')}
+async function imgPush(){   // before the data is saved: make sure every picture the data points to is in cloud storage
+ var st=imgState(),toks=Object.keys(st.have),bad=0;
+ if(!toks.some(function(t){return !imgUp[t]}))return 0;
+ var bucket=sb.storage.from('hub-files'),uid=sbUser.id,names=await listCloudNames(bucket,uid);
+ for(var i=0;i<toks.length;i++){
+  var t=toks[i];
+  if(names[imgName(t)]){imgUp[t]=1;continue}
+  var s=st.have[t],m=IMG_RE.exec(s),blob=b64ToBlob(s.slice(m[0].length),m[1].toLowerCase());
+  var r=await withTimeout(bucket.upload(uid+'/'+imgName(t),blob,{contentType:m[1].toLowerCase(),cacheControl:'31536000',upsert:false}),120000,{error:{message:'timeout'}});
+  if(!r.error||/already exists|Duplicate/i.test(String(r.error.message||'')))imgUp[t]=1;
+  else bad++;
+ }
+ return bad;
+}
+async function imgPull(force){   // after the data is merged: fetch pictures other devices added; on a forced sync also tidy unused ones
+ var st=imgState(),want=Object.keys(st.want),res={got:0,missing:0,have:Object.keys(st.have).length};
+ var due=want.filter(function(t){return force||!(imgFail[t]>Date.now())});
+ if(!due.length&&!force){res.missing=want.length;return res}
+ var bucket=sb.storage.from('hub-files'),uid=sbUser.id,names=await listCloudNames(bucket,uid),got={},any=false;
+ for(var i=0;i<due.length;i++){
+  var t=due[i];
+  if(!names[imgName(t)]){imgFail[t]=Date.now()+10*60000;continue}
+  var dl=await withTimeout(bucket.download(uid+'/'+imgName(t)),120000,{error:{message:'timeout'}});
+  if(dl.error||!dl.data){imgFail[t]=Date.now()+10*60000;continue}
+  var b64=await blobToB64(dl.data);
+  got[t]='data:'+(dl.data.type||'image/jpeg')+';base64,'+b64;any=true;res.got++;
+ }
+ if(any){
+  imgMap(S,function(s){return isImgTok(s)&&got[s]?got[s]:s});
+  Object.keys(got).forEach(function(t){imgUp[t]=1});
+  rebaseline();persistLocal();
+ }
+ res.missing=want.length-res.got;
+ if(force&&!res.missing){   // everything is resolved: remove cloud pictures nothing uses any more
+  var keep={};imgEach(S,function(s){if(s.length>=IMG_MIN&&IMG_RE.test(s))keep[imgName(imgToken(s))]=1});
+  var gone=Object.keys(names).filter(function(n){return /^img-/.test(n)&&!keep[n]}).map(function(n){return uid+'/'+n});
+  if(gone.length)try{await bucket.remove(gone);gone.forEach(function(p){delete imgUp['img:'+p.split('/').pop().slice(4)]})}catch(e){}
+ }
+ return res;
+}
 function mergeRemote(rs,force){
  if(!rs||!rs.classes)return true;
+ rs=imgInflate(JSON.parse(JSON.stringify(rs)),imgState().have);
  var mineHad=S.classes&&S.classes.length,ls=S.lastSync;
  if(!S.everSynced&&rs.classes.length&&!mineHad){S=JSON.parse(JSON.stringify(rs))}
  else if(!S.everSynced&&rs.classes.length&&mineHad){
@@ -2926,6 +3009,12 @@ function usageLine(){
  return '<div style="margin:2px 0"><div class="hint" style="margin:0 0 4px">File storage: '+mb(u.used)+' MB of '+mb(u.quota)+' MB used'+(pct>=80?(pct>=100?'. Full: new files will not sync until you delete some.':'. Getting full.'):'')+'</div>'
   +'<div style="height:6px;border-radius:3px;background:rgba(128,128,128,.25);overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+col+'"></div></div></div>';
 }
+function imgInfoText(r){
+ var n=r.have+r.missing;
+ if(r.missing)return 'Pictures: '+r.missing+' of '+n+' still to arrive from your other device. Press Sync pictures there, then here.';
+ return n?'Pictures: all '+n+' up to date.':'';
+}
+function syncPicturesNow(){imgForce=true;view.imgInfo='Syncing pictures…';render();cloudSync(true)}
 function scheduleCloudSync(ms){
  if(!sbUser)return;
  clearTimeout(cloudTimer);
@@ -2937,6 +3026,8 @@ async function cloudSync(force){
  driveSyncing=true;
  var startedAt=Date.now(),timedOut=false,result,fr={errs:0,moved:0};
  if(view.modal&&view.modal.kind==='settings')render();
+ var forceImg=imgForce;imgForce=false;
+ try{view.imgBad=await imgPush()}catch(e){view.imgBad=1}
  var watchdog=setTimeout(function(){
   timedOut=true;driveSyncing=false;
   view.driveError='Sync timed out (a request never finished). Check your connection and try again.';
@@ -2949,6 +3040,7 @@ async function cloudSync(force){
  if(timedOut)return;
  if(result.ok){
   S.lastSync=new Date().toISOString();view.driveError=null;persistLocal();
+  try{var ir=await imgPull(forceImg);view.imgInfo=imgInfoText(ir);if(ir.got)result.changed=true}catch(e){view.imgInfo='Pictures could not sync just now, it will retry.'}
   try{fr=await syncFiles()}catch(e){fr.errs++}
   setTimeout(openPendingImport,300);
  }else view.driveError=result.error;
@@ -3826,7 +3918,9 @@ function modalHtml(){
      +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0">'+esc(view.driveError)+'</p>':'')
      +usageLine()
      +'<p class="hint" style="font-size:10.5px;margin:0;word-break:break-all">'+esc(view.syncInfo||'build '+BUILD)+'</p>'
+     +(view.imgInfo?'<p class="hint" style="font-size:11.5px;margin:0">'+esc(view.imgInfo)+(view.imgBad?' Some pictures could not upload (storage may be full).':'')+'</p>':'')
      +'<div class="sgrow"><button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
+     +'<button data-syncpics="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>Sync pictures</button>'
      +'<button data-sbsignout="1" style="color:#A34A3F">Sign out</button></div>'
    : '<p class="hint" style="margin:0">Sign in to keep your phone and computer matched, files included.</p>'
      +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0">'+esc(view.driveError)+'</p>':'')
@@ -5230,7 +5324,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -5370,6 +5464,7 @@ document.addEventListener('click',function(e){
  if(d.sbsignup!==undefined){sbAuth('up');return}
  if(d.sbsignout!==undefined){sbSignOut();return}
  if(d.syncnow!==undefined){cloudSync(true);return}
+ if(d.syncpics!==undefined){syncPicturesNow();return}
  if(d.remindon!==undefined){enableReminders();return}
  if(d.remindoff!==undefined){S.remind=false;save();render();return}
  if(d.studygo){makeStudy(d.studygo);return}
