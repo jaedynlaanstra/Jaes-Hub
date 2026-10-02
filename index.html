@@ -1027,7 +1027,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v86';
+var BUILD='v87';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4452,7 +4452,17 @@ function mkClose(){
  MK=null;
 }
 var mkResizeTimer=null;
-function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(function(){if(MK)mkApplyZoom()},200)}
+function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(function(){if(MK){mkRecomputeFitScale();mkApplyZoom()}},200)}
+// fitScale (the "100%" baseline) is a fit-to-container-width number worked out once when the PDF opens --
+// a rotation, the thumbnail rail opening, or anything else that changes the container's width afterward
+// must redo that math too, or "100%" keeps meaning the OLD width and the page runs off the new one
+function mkRecomputeFitScale(){
+ var body=document.getElementById('mkbody');if(!body)return;
+ var containerW=Math.max(240,body.clientWidth-24);
+ for(var n=1;n<=MK.pageCount;n++){
+  var info=MK.pageInfo[n];if(info)info.fitScale=Math.min(containerW/info.vp1.width,1.6);
+ }
+}
 
 /* ---------- building the page list ---------- */
 // centering an element that's sometimes WIDER than its container by leaving it to CSS auto-margins
@@ -4803,7 +4813,14 @@ function mkTouchStart(e){
   return;
  }
  if(e.touches.length===1){
-  if(e.touches[0].touchType==='stylus'){e.preventDefault();return}
+  if(e.touches[0].touchType==='stylus'){
+   // the Pencil's own contact also fires a pointerdown, which is what actually draws -- this touch twin
+   // must be suppressed over the canvas so it can't also start a draw/scroll there, but must be LEFT ALONE
+   // everywhere else (toolbar buttons etc), or iOS Safari skips synthesizing the click the tap needs
+   var st=e.touches[0],stTarget=document.elementFromPoint(st.clientX,st.clientY);
+   if(stTarget&&stTarget.closest&&stTarget.closest('.mkanno'))e.preventDefault();
+   return;
+  }
   if(MK.mode!=='edit')return;
   var t=e.touches[0],target=document.elementFromPoint(t.clientX,t.clientY),anno=target&&target.closest&&target.closest('.mkanno');
   if(!anno)return;
@@ -5005,6 +5022,9 @@ async function mkToggleThumbs(){
  MK.thumbsOpen=!MK.thumbsOpen;
  var el=document.getElementById('mkthumbs');
  el.className='mkthumbs'+(MK.thumbsOpen?' on':'');
+ // the rail takes 96px out of the row's width without the window itself resizing, so the fit-to-width
+ // baseline is just as stale here as it is after a rotation -- same fix applies
+ mkRecomputeFitScale();mkApplyZoom();
  if(MK.thumbsOpen&&!MK.thumbsBuilt){
   MK.thumbsBuilt=true;
   var frag='';
