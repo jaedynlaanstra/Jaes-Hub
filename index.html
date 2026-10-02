@@ -1015,6 +1015,67 @@ a.cpitemname:hover{text-decoration:underline}
 @media(max-width:1199px){.cpinfo{order:1}}
 @media(max-width:900px){.cptabs{position:static}}
 @media(max-width:700px){.cptabs{margin:0 -16px 16px;padding:0 10px}.cptab{padding:10px 11px 9px;font-size:14px;gap:7px}.cptabn{font-size:11px;height:19px;min-width:20px;padding:0 6px}.cpinfo{grid-template-columns:minmax(0,1fr)}}
+/* sub-steps */
+.cpsteps{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;margin-left:8px;font-weight:400}
+.cpstepsbar{display:inline-block;width:34px;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
+.cpstepsbar i{display:block;height:100%;background:var(--ink3);border-radius:99px}
+.cpnextsteps{display:flex;align-items:center;gap:7px;font-size:12px;opacity:.85;margin-top:7px}
+.cpnextsteps .cpstepsbar{background:rgba(255,255,255,.25);width:60px}
+.cpnextsteps .cpstepsbar i{background:currentColor}
+.cpsteplist{display:flex;flex-direction:column;gap:2px;margin:2px 0 10px}
+.cpstep{display:flex;align-items:center;gap:9px;background:none;border:none;padding:4px 2px;font-size:13.5px;color:var(--ink);cursor:pointer;text-align:left;min-height:0!important;white-space:normal;font-family:inherit}
+.cpstep i{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--line2);flex:none;display:grid;place-items:center}
+.cpstep.on i{background:var(--ink3);border-color:var(--ink3)}
+.cpstep.on i::after{content:'';width:7px;height:4px;border:solid #fff;border-width:0 0 1.6px 1.6px;transform:rotate(-45deg) translate(1px,-1px)}
+.cpstep.on span{color:var(--ink3);text-decoration:line-through}
+.steplist{display:flex;flex-direction:column;gap:5px;margin-bottom:6px}
+.steprow{display:flex;align-items:center;gap:8px}
+.steprow .stepin{flex:1;padding:6px 9px;font-size:14px}
+.steprow .tick{width:18px;height:18px}
+/* plan my week */
+.cpweek{display:grid;grid-template-columns:repeat(7,minmax(128px,1fr));gap:8px;padding:14px 16px 16px;overflow-x:auto}
+.cpwday{background:var(--paper);border:1px solid var(--line);border-radius:11px;min-height:180px;display:flex;flex-direction:column;min-width:0;transition:border-color .15s,background .15s}
+.cpwday.today{border-color:var(--cp-kplan-c);background:var(--cp-kplan-wash)}
+.cpwday.past{opacity:.72}
+.cpwday.dropover{border-color:var(--cp-kplan-c);border-style:dashed;background:var(--cp-kplan-wash)}
+.cpwhead{display:flex;align-items:baseline;gap:6px;padding:8px 10px 6px;border-bottom:1px solid var(--line)}
+.cpwname{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.cpwnum{font-size:16px;color:var(--head,var(--ink))}
+.cpwday.today .cpwnum{color:var(--cp-kplan-c)}
+.cpwdue{margin-left:auto;font-size:10.5px;color:#A34A3F;white-space:nowrap}
+.cpwlist{display:flex;flex-direction:column;gap:6px;padding:7px;flex:1}
+.cpwempty{font-size:12px;color:var(--ink3);padding:4px 3px}
+.cpplan{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--pc);border-radius:8px;padding:7px 8px 8px;cursor:grab;min-width:0}
+.cpplan:hover{border-color:var(--line2);border-left-color:var(--pc)}
+.cpplan.dragging{opacity:.4}
+.cpplan.done{opacity:.6}
+.cpplan.done .cpplanname{text-decoration:line-through;color:var(--ink3)}
+.cpplantop{display:flex;align-items:flex-start;gap:7px}
+.cpplantop .tick{width:16px;height:16px;margin-top:1px;flex:none}
+.cpplanname{flex:1;min-width:0;background:none;border:none;padding:0;text-align:left;font-size:13px;line-height:1.35;color:var(--ink);cursor:pointer;white-space:normal;overflow-wrap:anywhere;min-height:0!important;font-family:inherit}
+.cpplanx{background:none;border:none;color:var(--ink3);font-size:15px;line-height:1;padding:0 2px;cursor:pointer;min-height:0!important;opacity:.6}
+.cpplanx:hover{opacity:1;color:var(--ink)}
+.cpplanmeta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin:6px 0 0 23px}
+.cpplanmeta .cpclspill{font-size:10.5px;padding:1px 7px 1px 6px}
+.cpplanmeta .cpsteps{margin-left:0}
+.cpplandue{font-size:10.5px;color:var(--ink3)}
+.cpplandue.hot{color:#A34A3F}
+.cptray{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding:14px 16px 16px}
+.plandays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.planday{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 0 6px;border-radius:9px;min-height:0!important;font-family:inherit;position:relative}
+.planday b{font-size:10.5px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
+.planday span{font-size:15px}
+.planday em{font-style:normal;font-size:9.5px;color:#A34A3F;line-height:1}
+.planday.today{border-color:var(--ink3)}
+.planday.on{background:var(--sideBg);color:var(--sideBright,#fff);border-color:var(--sideBg)}
+.planday.on b,.planday.on em{color:inherit;opacity:.85}
+@media(max-width:700px){
+  .cpweek{grid-template-columns:minmax(0,1fr);padding:10px;gap:7px;overflow:visible}
+  .cpwday{min-height:0}
+  .cpwday.past:not(.today){display:none}
+  .cptray{grid-template-columns:minmax(0,1fr);padding:10px}
+  .cpplan{cursor:pointer}
+}
 /* small, quiet text buttons (same grey as the CLASS SETTINGS label) */
 .cpquiet{background:none;border:none;padding:3px 6px;margin:0 -2px;font-size:12px;color:var(--ink3);cursor:pointer;border-radius:6px;min-height:0!important;font-family:inherit;display:inline-flex;align-items:center}
 .cpquiet:hover{color:var(--ink2);background:var(--paper)}
@@ -1395,7 +1456,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v101';
+var BUILD='v102';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3432,7 +3493,7 @@ function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view
 function render(){
  var c=view.page==='class'?classById(view.classId):null;
  var head=c?pal(c.color):{bg:'var(--hdr)',ink:'var(--hdrInk)',ink2:'var(--hdrInk2)',bar:'var(--hdrBar)'};
- var title=c?c.name:({apps:'Applications',install:'Get the app',calendar:'Calendar',professors:'People'}[view.page]||S.owner);
+ var title=c?c.name:({apps:'Applications',install:'Get the app',calendar:'Calendar',professors:'People',plan:'Plan my week'}[view.page]||S.owner);
  var eyebrow=c?[c.code,c.day,c.room].filter(Boolean).join(' \u00b7 '):S.term;
  var sub='';
 
@@ -3440,6 +3501,7 @@ function render(){
  if(view.page==='home')body=viewHome();
  else if(view.page==='classes')body=viewClasses();
  else if(view.page==='calendar')body=viewCalendar();
+ else if(view.page==='plan')body=viewPlan();
  else if(view.page==='professors')body=viewProfessors();
  else if(view.page==='apps')body=viewApps();
  else if(view.page==='install')body=viewInstall();
@@ -3663,6 +3725,7 @@ function sidebar(c){
   +'<div class="sidescroll">'
   +sideItem('data-go','home','Home',view.page==='home')
   +sideItem('data-go','calendar','Calendar',view.page==='calendar')
+  +sideItem('data-go','plan','Plan my week',view.page==='plan')
   +sideItem('data-go','professors','People',view.page==='professors')
   +sideItem('data-go','apps','Applications',view.page==='apps')
   +'<p class="slabel">Classes</p>';
@@ -3803,8 +3866,8 @@ function cpColors(c){
  cpDarkOver(out,cpOverride(c.id,'when'));
  return out;
 }
-var CP_SITE_ROWS={home:[['hup','Coming up'],['hcls','Your classes']],calendar:[['kcal','Month'],['kweek','Next seven days']],apps:[['kapp','Applications']],professors:[['kppl','People']]};
-var CP_SITE_TITLES={home:'Home colours',calendar:'Calendar colours',apps:'Applications colours',professors:'People colours'};
+var CP_SITE_ROWS={home:[['hup','Coming up'],['hcls','Your classes']],calendar:[['kcal','Month'],['kweek','Next seven days']],apps:[['kapp','Applications']],professors:[['kppl','People']],plan:[['kplan','The week'],['ktray','To plan']]};
+var CP_SITE_TITLES={home:'Home colours',calendar:'Calendar colours',apps:'Applications colours',professors:'People colours',plan:'Planner colours'};
 function cpSiteColors(page){
  if(page==='home')return cpHomeColors();
  var site=cpMaker(cpSiteBase()),all=cpSecData().all||{},out={dark:site.dark,darkSoft:site.darkSoft,darkInk:site.darkInk,third:site(-3,1,14,44,26)};
@@ -3989,6 +4052,7 @@ function viewClass(c){
    +'<div class="cpcardhead"><span class="cpdot" style="background:'+col.asg.c+'"></span><h3 class="cpcardtitle">'+(nl?'Past due':'Next due')+'</h3>'+(tags?'<span class="cpnexttag">'+esc(tags)+'</span>':'')+'</div>'
    +'<div class="cpcardbody"><div class="cpnextbig"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
    +'<div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div>'
+   +(function(){var si=stepInfo(nextA);return si.n?'<div class="cpnextsteps"><span class="cpstepsbar"><i style="width:'+Math.round(si.d/si.n*100)+'%"></i></span>'+si.d+' of '+si.n+' steps</div>':''})()
    +(after.length?'<div class="cpnextafter">'+after.map(function(a){var cc=cpCountdown(a.due);return '<div class="cpline"><span class="a">'+esc(a.title)+'</span><span class="b">'+cc.t+'</span></div>'}).join('')+'</div>':'')
    +'</div></section>';
   // smaller screens (no side column beside your work): one slim row at the top
@@ -4007,9 +4071,9 @@ function viewClass(c){
    var d=parseISO(a.due),late=d&&d<today();
    return '<details class="asg" style="border-left-color:'+col.asg.c+'">'
     +'<summary><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark done"></button>'
-    +'<span class="grow">'+esc(a.title)+asgFileIcon(c,a)+'</span>'+prioPill(a.priority)
+    +'<span class="grow">'+esc(a.title)+asgFileIcon(c,a)+'</span>'+stepChip(a)+prioPill(a.priority)
     +(a.due?'<span class="pill '+(late?'late':'')+'" style="background:'+(late?'#F7ECEA':col.asg.bg)+';color:'+(late?'#A34A3F':col.asg.title)+'">'+esc(withTime(fmtDue(a.due),a.time))+'</span>':'')
-    +'</summary><div class="asgbody">'+(a.notes?esc(a.notes):'No instructions saved yet.')
+    +'</summary><div class="asgbody">'+stepList(c,a)+(a.notes?esc(a.notes):(a.steps&&a.steps.length?'':'No instructions saved yet.'))
     +'<div class="acts2"><button data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'">Edit</button>'
     +'<button data-del="assign" data-id="'+a.id+'" data-c="'+c.id+'">Delete</button></div></div></details>';
   }),5,'assignments')+'</div>';
@@ -4020,7 +4084,7 @@ function viewClass(c){
    var cdColor=late?'#A34A3F':(a.id===nearest?col.asg.c:'var(--ink2)');
    return '<div class="cpgrid cprow" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'">'
     +'<span class="c-tick"><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark done"></button></span>'
-    +'<span class="c-name"><span class="cpnm">'+esc(a.title)+'</span>'+asgFileIcon(c,a)+'</span>'
+    +'<span class="c-name"><span class="cpnm">'+esc(a.title)+'</span>'+asgFileIcon(c,a)+stepChip(a)+'</span>'
     +'<span class="c-count" style="color:'+cdColor+'">'+cd.t+'</span>'
     +'<i class="c-br"></i>'
     +'<span class="c-due'+(late?' late':'')+'">'+(a.due?esc(withTime(parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),a.time)):'')+'</span>'
@@ -4327,7 +4391,7 @@ function viewHome(){
    var cdColor=lt?'#A34A3F':(x===nearest?col.hup.c:'var(--ink2)');
    return '<div class="cpgrid cprow" data-open="'+x.c.id+'">'
     +'<span class="c-tick"><button class="tick" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"></button></span>'
-    +'<span class="c-name"><span class="cpnm">'+esc(x.t.title)+'</span></span>'
+    +'<span class="c-name"><span class="cpnm">'+esc(x.t.title)+'</span>'+stepChip(x.t)+'</span>'
     +'<span class="c-count" style="color:'+cdColor+'">'+cd.t+'</span>'
     +'<i class="c-br"></i>'
     +'<span class="c-due'+(lt?' late':'')+'">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+'</span>'
@@ -4373,7 +4437,7 @@ function viewHome(){
   +'<div class="cpbar" style="background:'+col.hcls.bg+'"><i style="width:'+pct+'%;background:'+col.hcls.c+'"></i></div>');
  R+='</aside>';
 
- return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+U+C+G+'</div>'+R+'</div>';
+ return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+homeTodayPlan(col)+U+C+G+'</div>'+R+'</div>';
 }
 
 /* ---------- Calendar, People and Applications (v99, same style as Home and the class pages) ---------- */
@@ -4412,7 +4476,7 @@ function cpDueRow(x,highlight){
  var cd=cpCountdown(x.t.due),lt=cd.n!=null&&cd.n<0,p=pal(x.c.color);
  return '<div class="cpgrid cprow" data-open="'+x.c.id+'">'
   +'<span class="c-tick"><button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="'+(x.t.done?'Mark not done':'Mark done')+'"'+(x.t.done?' style="background:'+p.bar+'"':'')+'></button></span>'
-  +'<span class="c-name"><span class="cpnm'+(x.t.done?' done':'')+'">'+esc(x.t.title)+'</span></span>'
+  +'<span class="c-name"><span class="cpnm'+(x.t.done?' done':'')+'">'+esc(x.t.title)+'</span>'+stepChip(x.t)+'</span>'
   +'<span class="c-count" style="color:'+(lt?'#A34A3F':(highlight||'var(--ink2)'))+'">'+(x.t.done?'Done':cd.t)+'</span>'
   +'<i class="c-br"></i>'
   +'<span class="c-due'+(lt?' late':'')+'">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+'</span>'
@@ -4493,6 +4557,95 @@ function viewApps(){
  return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+A+G+'</div></div>';
 }
 
+/* ---------- sub-steps on assignments, and Plan my week (v102) ----------
+   Steps: a.steps = [{id,title,done}] on the assignment itself (it syncs like any other field).
+   Plan: x.plan = ['YYYY-MM-DD', ...] on an assignment or a checklist item -- the days you mean to work
+   on it, which can be more than one and are separate from when it's due. */
+function stepInfo(a){var st=(a&&a.steps)||[];var d=0;st.forEach(function(x){if(x.done)d++});return {n:st.length,d:d}}
+function stepChip(a){
+ var si=stepInfo(a);if(!si.n)return '';
+ return '<span class="cpsteps" title="'+si.d+' of '+si.n+' steps done"><span class="cpstepsbar"><i style="width:'+Math.round(si.d/si.n*100)+'%"></i></span>'+si.d+'/'+si.n+'</span>';
+}
+// the steps checklist you can tick straight from a card (Cards view, planner)
+function stepList(c,a){
+ var st=a.steps||[];if(!st.length)return '';
+ return '<div class="cpsteplist">'+st.map(function(s){
+  return '<button class="cpstep'+(s.done?' on':'')+'" data-steptick="'+c.id+':'+a.id+':'+s.id+'"><i></i><span>'+esc(s.title)+'</span></button>';
+ }).join('')+'</div>';
+}
+function planItem(kind,cid,id){
+ var c=classById(cid);if(!c)return null;
+ var list=kind==='assign'?c.assignments:c.tasks;
+ for(var i=0;i<list.length;i++)if(list[i].id===id)return {t:list[i],c:c,kind:kind};
+ return null;
+}
+function planToggle(x,day,on){
+ var p=x.t.plan||[],has=p.indexOf(day)>-1;
+ if(on===undefined)on=!has;
+ if(on&&!has)p=p.concat([day]).sort();
+ if(!on&&has)p=p.filter(function(d){return d!==day});
+ if(p.length)x.t.plan=p;else delete x.t.plan;
+ touch(x.t);
+}
+function planKey(x){return x.kind+':'+x.c.id+':'+x.t.id}
+CP_ICO.kplan='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 18h6"/></svg>';
+CP_ICO.ktray=CP_ICO.kweek;
+function planCard(x,day,dueHint){
+ var p=pal(x.c.color),cd=x.t.due?cpCountdown(x.t.due):null,dueTxt='';
+ if(cd){dueTxt=cd.n<0?cd.t:cd.n===0?'due today':cd.n===1?'due tomorrow':'due '+parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})}
+ var dueOnDay=day&&x.t.due===day;
+ return '<div class="cpplan'+(x.t.done?' done':'')+'" draggable="true" data-plandrag="'+planKey(x)+'"'+(day?' data-planfrom="'+day+'"':'')+' style="--pc:'+p.bar+'">'
+  +'<div class="cpplantop"><button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"'+(x.t.done?' style="background:'+p.bar+'"':'')+'></button>'
+  +'<button class="cpplanname" data-planpick="'+planKey(x)+'">'+esc(x.t.title)+'</button>'
+  +(day?'<button class="cpplanx" data-planoff="'+planKey(x)+'|'+day+'" aria-label="Take off this day">×</button>':'')+'</div>'
+  +'<div class="cpplanmeta"><span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span>'
+  +(dueTxt?'<span class="cpplandue'+(cd.n<0||dueOnDay?' hot':'')+'">'+esc(dueTxt)+'</span>':'')+stepChip(x.t)+'</div></div>';
+}
+function viewPlan(){
+ var col=cpVarRefs(['kplan','ktray']),real=cpSiteColors('plan'),t=today(),off=view.planWeek||0;
+ var ws=weekStart(off),days=[];for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(iso(d))}
+ var we=new Date(ws);we.setDate(ws.getDate()+6);
+ var label=off===0?'This week':off===1?'Next week':off===-1?'Last week':'Week of '+ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+ var range=ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+' – '+we.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+ var all=allTasks().filter(function(x){return !isRefClass(x.c)});
+ var byDay={};days.forEach(function(d){byDay[d]=[]});
+ all.forEach(function(x){(x.t.plan||[]).forEach(function(d){if(byDay[d])byDay[d].push(x)})});
+ var horizon=new Date(we);horizon.setDate(we.getDate()+14);
+ var tray=all.filter(function(x){
+  if(x.t.done)return false;
+  if((x.t.plan||[]).some(function(d){return byDay[d]}))return false; // already planned this week
+  if(!x.t.due)return x.kind==='task';
+  var dd=parseISO(x.t.due);return dd<=horizon;
+ }).sort(function(a,b){return (a.t.due||'9')<(b.t.due||'9')?-1:1});
+ var planned=0;days.forEach(function(d){planned+=byDay[d].length});
+ var W='<section class="cpsec" id="p-week">'+cpHead('kplan',col.kplan,label,planned?planned+' planned':'',esc(range)+(window.matchMedia&&matchMedia('(hover:none)').matches?' · tap any item to choose its days':' · drag work onto a day, or click it to choose days'),
+   '<div class="cpseg"><button data-planwk="-1" aria-label="Previous week">‹</button><button data-planwk="0">This week</button><button data-planwk="1" aria-label="Next week">›</button></div>');
+ W+='<div class="cpweek">'+days.map(function(d){
+  var dd=parseISO(d),isT=d===iso(t),past=dd<t;
+  var dueHere=all.filter(function(x){return x.t.due===d&&!x.t.done}).length;
+  return '<div class="cpwday'+(isT?' today':'')+(past?' past':'')+'" data-planday="'+d+'">'
+   +'<div class="cpwhead"><span class="cpwname">'+esc(dd.toLocaleDateString('en-CA',{weekday:'short'}))+'</span><span class="cpwnum">'+dd.getDate()+'</span>'
+   +(dueHere?'<span class="cpwdue" title="'+dueHere+' due this day">'+dueHere+' due</span>':'')+'</div>'
+   +'<div class="cpwlist">'+(byDay[d].length?byDay[d].map(function(x){return planCard(x,d)}).join(''):'<div class="cpwempty">'+(isT?'Nothing planned today':'Free')+'</div>')+'</div></div>';
+ }).join('')+'</div></section>';
+ var T='<section class="cpsec" id="p-tray">'+cpHead('ktray',col.ktray,'To plan',tray.length?tray.length+'':'',tray.length?'Coming up soon and not on this week yet':'Everything coming up is planned','');
+ T+=tray.length?'<div class="cptray">'+tray.map(function(x){return planCard(x,'')}).join('')+'</div>':'<div class="cpempty">Nice. Everything due in the next few weeks has a day.</div>';
+ T+='</section>';
+ var G='<div class="cpsettings"><span class="cpsetlab">Planner settings</span><button data-secopen="1">Colours</button></div>';
+ return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+W+T+G+'</div></div>';
+}
+// "Today's plan" on Home, once you've started planning
+function homeTodayPlan(col){
+ var all=allTasks().filter(function(x){return !isRefClass(x.c)}),td=iso(today());
+ if(!all.some(function(x){return x.t.plan&&x.t.plan.length}))return '';
+ var list=all.filter(function(x){return (x.t.plan||[]).indexOf(td)>-1});
+ var open=list.filter(function(x){return !x.t.done}).length;
+ var h='<section class="cpsec" id="h-plan">'+cpHead('hup',col.hup,'Today’s plan',list.length?(open?open+' to do':'all done'):'',list.length?'What you planned to work on today':'Nothing planned for today',
+   '<button class="cpbtn2" data-go="plan">Plan my week</button>');
+ h+=list.length?'<div class="cptray cptoday2">'+list.map(function(x){return planCard(x,td)}).join('')+'</div>':'<div class="cpempty">Open Plan my week to pick what you will work on today.</div>';
+ return h+'</section>';
+}
+
 function coverControls(id,owner){
  var key='cover:'+id;
  return '<label class="fakebtn"><input type="file" accept="image/*" data-cover="'+id+'" style="display:none">'+(owner.cover?'Change cover':'Add a cover picture')+'</label>'
@@ -4537,6 +4690,16 @@ function modalHtml(){
    +'<div class="field"><label for="m6">Priority</label><select id="m6">'
    +['','High','Medium','Low'].map(function(o){return '<option value="'+o+'"'+((a&&a.priority)===o||(!a&&!o)?' selected':'')+'>'+(o||'None')+'</option>'}).join('')
    +'</select></div>'
+   +(function(){
+     if(m.steps===undefined)m.steps=JSON.parse(JSON.stringify((a&&a.steps)||[]));
+     return '<div class="field"><label for="stepnew">Steps</label><div class="steplist">'+m.steps.map(function(st){
+       return '<div class="steprow"><button type="button" class="tick'+(st.done?' on':'')+'" data-stepm="toggle:'+st.id+'" aria-label="Done"'+(st.done?' style="background:var(--ink2)"':'')+'></button>'
+        +'<input class="stepin" id="step-'+st.id+'" value="'+esc(st.title)+'" data-stepedit="'+st.id+'" aria-label="Step">'
+        +'<button type="button" class="x" data-stepm="del:'+st.id+'" aria-label="Remove step">\u00d7</button></div>';
+      }).join('')+'</div>'
+      +'<input id="stepnew" data-stepnew="1" placeholder="'+(m.steps.length?'Add another step':'Break it into steps: find sources, outline, draft...')+'" autocomplete="off">'
+      +'<p class="hint" style="margin:4px 0 0">Type a step and press Enter.</p></div>';
+    })()
    +'<div class="field"><label for="m3">Instructions</label><textarea id="m3" rows="6" placeholder="What the prof asked for, word count, format, how it is graded">'+esc(a?a.notes:'')+'</textarea></div>'
    +'<div class="field"><label>Instructions PDF</label>'
    +'<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">'
@@ -4548,6 +4711,20 @@ function modalHtml(){
     }).join('')
    +'</select></div>'
    +'<p class="hint" id="asgfilenote">Uploading puts it in this class\u2019s files too.</p></div>';
+ }else if(m.kind==='plan'){
+  var pkk=m.key.split(':'),pi=planItem(pkk[0],pkk[1],pkk[2]);
+  if(!pi)return '';
+  var ws0=weekStart(view.page==='plan'?(view.planWeek||0):0),chips='';
+  for(var wk=0;wk<2;wk++){
+   chips+='<p class="lab" style="margin:12px 0 6px">'+(wk?'THE WEEK AFTER':'THIS WEEK')+'</p><div class="plandays">';
+   for(var di=0;di<7;di++){
+    var dd2=new Date(ws0);dd2.setDate(ws0.getDate()+wk*7+di);var k2=iso(dd2),onp=(pi.t.plan||[]).indexOf(k2)>-1,isDue=pi.t.due===k2;
+    chips+='<button class="planday'+(onp?' on':'')+(k2===iso(today())?' today':'')+'" data-plantoggle="'+k2+'"><b>'+esc(dd2.toLocaleDateString('en-CA',{weekday:'short'}))+'</b><span>'+dd2.getDate()+'</span>'+(isDue?'<em>due</em>':'')+'</button>';
+   }
+   chips+='</div>';
+  }
+  h='<h3>Plan: '+esc(pi.t.title)+'</h3><p class="hint" style="margin:-6px 0 2px">'+esc(pi.c.name)+(pi.t.due?' \u00b7 due '+esc(fmtDue(pi.t.due)):'')+'. Tap the days you will work on it.</p>'+chips
+   +(pi.kind==='assign'&&pi.t.steps&&pi.t.steps.length?'<p class="lab" style="margin:14px 0 6px">STEPS</p>'+stepList(pi.c,pi.t):'');
  }else if(m.kind==='sheet'){
   var sc=classById(m.classId);
   if(m.what==='chap'){
@@ -4713,8 +4890,8 @@ function modalHtml(){
   +'<div class="acts">'
   +(m.kind==='class'&&m.classId?'<button data-delclass="'+m.classId+'" style="margin-right:auto;color:#A34A3F">Delete class</button>':'')
   +(m.kind==='app'&&m.id?'<button data-delapp="'+m.id+'" style="margin-right:auto;color:#A34A3F">Remove app</button>':'')
-  +((m.kind==='settings'||m.kind==='sheet')
-    ?'<button data-close="1" style="background:#33312C;color:#fff;border-color:#33312C;'+(m.kind==='sheet'?'width:100%':'')+'">'+(m.kind==='sheet'?'Cancel':'Close')+'</button>'
+  +((m.kind==='settings'||m.kind==='sheet'||m.kind==='plan')
+    ?'<button data-close="1" style="background:#33312C;color:#fff;border-color:#33312C;'+(m.kind!=='settings'?'width:100%':'')+'">'+(m.kind==='sheet'?'Cancel':m.kind==='plan'?'Done':'Close')+'</button>'
     :'<button data-close="1">Cancel</button><button data-savemodal="1" style="background:#33312C;color:#fff;border-color:#33312C">Save</button>')
   +'</div></div></div>';
 }
@@ -4736,8 +4913,11 @@ function saveModal(){
  }else if(m.kind==='assign'){
   var ti=val('m1');if(!ti)return;
   var fid=val('m10')||(view.modal.pendingFileId||'');
-  if(m.id){var a=findAsg(m.classId,m.id);a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=val('m14')===''?'':+val('m14');a.mark=val('m15')===''?'':+val('m15');touch(a)}
-  else{classById(m.classId).assignments.push(touch({id:uid(),title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:val('m14')===''?'':+val('m14'),mark:val('m15')===''?'':+val('m15'),done:false}))}
+  // a step typed but not yet Entered still counts
+  var pend=document.getElementById('stepnew');if(pend&&pend.value.trim()){m.steps=m.steps||[];m.steps.push({id:uid(),title:pend.value.trim(),done:false})}
+  var stepsOut=(m.steps||[]).filter(function(x){return x.title.trim()});
+  if(m.id){var a=findAsg(m.classId,m.id);a.steps=stepsOut;if(!stepsOut.length)delete a.steps;a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=val('m14')===''?'':+val('m14');a.mark=val('m15')===''?'':+val('m15');touch(a)}
+  else{classById(m.classId).assignments.push(touch({id:uid(),steps:stepsOut.length?stepsOut:undefined,title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:val('m14')===''?'':+val('m14'),mark:val('m15')===''?'':+val('m15'),done:false}))}
  }else if(m.kind==='app'){
   var an=val('m1'),au=val('m2');if(!an||!au)return;
   if(!/^https?:\/\//i.test(au))au='https://'+au;
@@ -6440,7 +6620,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -6460,6 +6640,23 @@ document.addEventListener('click',function(e){
  if(d.cptab){var tci=d.cptab.indexOf(':');cpSetTab(d.cptab.slice(0,tci),d.cptab.slice(tci+1));render();
   var bar=document.querySelector('.cptabs');if(bar&&bar.getBoundingClientRect().top<0)bar.scrollIntoView({block:'start'}); // keep the bar in view when switching
   return}
+ if(d.stepm&&view.modal&&view.modal.steps){
+  var sp=d.stepm.split(':'),sl2=view.modal.steps;
+  // keep anything typed into the step boxes before redrawing
+  document.querySelectorAll('.stepin').forEach(function(inp){sl2.forEach(function(x){if(x.id===inp.dataset.stepedit)x.title=inp.value})});
+  if(sp[0]==='toggle')sl2.forEach(function(x){if(x.id===sp[1])x.done=!x.done});
+  if(sp[0]==='del')view.modal.steps=sl2.filter(function(x){return x.id!==sp[1]});
+  render();return;
+ }
+ if(d.steptick){
+  var tp=d.steptick.split(':'),ta=findAsg(tp[0],tp[1]);
+  if(ta&&ta.steps){ta.steps.forEach(function(x){if(x.id===tp[2])x.done=!x.done});touch(ta);save();render()}
+  return;
+ }
+ if(d.planwk!==undefined){view.planWeek=d.planwk==='0'?0:(view.planWeek||0)+(+d.planwk);render();return}
+ if(d.planpick){view.modal={kind:'plan',key:d.planpick};render();return}
+ if(d.planoff){var po=d.planoff.split('|'),pk=po[0].split(':'),px=planItem(pk[0],pk[1],pk[2]);if(px){planToggle(px,po[1],false);save();render()}return}
+ if(d.plantoggle&&view.modal&&view.modal.kind==='plan'){var pk2=view.modal.key.split(':'),px2=planItem(pk2[0],pk2[1],pk2[2]);if(px2){planToggle(px2,d.plantoggle);save();render()}return}
  if(d.chap){var cpi=d.chap.indexOf(':'),cpc=d.chap.slice(0,cpi),cpk=d.chap.slice(cpi+1),cps=cpShut(cpc);if(cps[cpk])delete cps[cpk];else cps[cpk]=true;cpSetShut(cpc,cps);render();return}
  if(d.dedupe){
   var dc2=classById(d.dedupe),dx=dc2?cpDupLinks(dc2):[];
@@ -6931,6 +7128,7 @@ document.addEventListener('input',function(e){
   var o=document.getElementById('fontsizeout');if(o)o.textContent=t.value+'%';
   applyFonts();save();return;
  }
+ if(ds.stepedit&&view.modal&&view.modal.steps){view.modal.steps.forEach(function(x){if(x.id===ds.stepedit)x.title=t.value});return}
  if(t.id==='pplsearch'){
   view.pplQ=t.value;var pp=t.selectionStart;render();
   var pa=document.getElementById('pplsearch');if(pa){pa.focus();try{pa.setSelectionRange(pp,pp)}catch(e4){}}
@@ -7017,6 +7215,25 @@ document.addEventListener('dragover',function(e){
  var z=e.target.closest&&e.target.closest('.pastezone');
  if(z){e.preventDefault();z.classList.add('over')}
 });
+/* planner drag and drop */
+var planDragKey=null,planDragFrom=null;
+document.addEventListener('dragstart',function(e){
+ var it=e.target.closest&&e.target.closest('[data-plandrag]');if(!it)return;
+ planDragKey=it.dataset.plandrag;planDragFrom=it.dataset.planfrom||null;
+ try{e.dataTransfer.setData('text/plain',planDragKey);e.dataTransfer.effectAllowed='move'}catch(err){}
+ setTimeout(function(){it.classList.add('dragging')},0);
+});
+document.addEventListener('dragend',function(){planDragKey=null;planDragFrom=null;document.querySelectorAll('.dragging,.dropover').forEach(function(x){x.classList.remove('dragging');x.classList.remove('dropover')})});
+document.addEventListener('dragover',function(e){
+ if(!planDragKey)return;var day=e.target.closest&&e.target.closest('[data-planday]');if(!day)return;
+ e.preventDefault();document.querySelectorAll('.dropover').forEach(function(x){if(x!==day)x.classList.remove('dropover')});day.classList.add('dropover');
+});
+document.addEventListener('drop',function(e){
+ if(!planDragKey)return;var day=e.target.closest&&e.target.closest('[data-planday]');if(!day)return;
+ e.preventDefault();var k=planDragKey.split(':'),x=planItem(k[0],k[1],k[2]);
+ if(x){if(planDragFrom&&planDragFrom!==day.dataset.planday)planToggle(x,planDragFrom,false);planToggle(x,day.dataset.planday,true);save()}
+ planDragKey=null;planDragFrom=null;render();
+});
 document.addEventListener('dragleave',function(e){
  var z=e.target.closest&&e.target.closest('.pastezone');
  if(z)z.classList.remove('over');
@@ -7033,6 +7250,12 @@ document.addEventListener('keydown',function(e){
  if(e.key==='Escape'&&view.repos){view.repos=null;save();render()}
  if(e.key==='Escape'&&view.paste){view.paste=null;render()}
  if(e.key==='Escape'&&view.modal)closeModal();
+ if(e.key==='Enter'&&view.modal&&e.target.id==='stepnew'){
+  e.preventDefault();var sv=e.target.value.trim();
+  if(sv){view.modal.steps=view.modal.steps||[];view.modal.steps.push({id:uid(),title:sv,done:false});render();var nx=document.getElementById('stepnew');if(nx)nx.focus()}
+  return;
+ }
+ if(e.key==='Enter'&&view.modal&&e.target.classList&&e.target.classList.contains('stepin')){e.preventDefault();var nn=document.getElementById('stepnew');if(nn)nn.focus();return}
  if(e.key==='Enter'&&view.modal&&e.target.tagName==='INPUT'){saveModal()}
  if(e.key==='Enter'&&!view.modal&&e.target.id==='q'){ask(view.classId)}
 });
