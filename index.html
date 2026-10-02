@@ -926,6 +926,10 @@ a.cpitemname:hover{text-decoration:underline}
   .cpsettings>button:not(.cpghost),.cpsettings>.fakebtn{font-size:12.5px;padding:6px 10px;min-height:0}
   .cpchadd{padding:4px 10px 10px}
 }
+.cppal{width:30px;height:30px;flex:none;border:none;background:transparent;color:var(--ink3);border-radius:8px;padding:0;display:grid;place-items:center;cursor:pointer;min-height:0!important;opacity:.75}
+.cppal svg{width:17px;height:17px}
+.cppal:hover{opacity:1;background:var(--card);color:var(--ink)}
+@media(max-width:700px){.cphead{position:relative}.cphead .cptitlecol{padding-right:34px}.cphead .cppal{position:absolute;top:8px;right:8px}.cphead .cpacts:not(:has(>:not(.cppal))){display:contents}}
 /* adding straight into a chapter */
 .cpchadd{display:flex;gap:4px;padding:2px 12px 10px;border-top:1px dashed var(--line)}
 .cpchbody+.cpchadd,.cpchempty+.cpchadd{margin-top:0}
@@ -1242,7 +1246,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v93';
+var BUILD='v94';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3398,6 +3402,7 @@ function pickerHtml(){
  }
 
  var h='<div class="pickpanel" style="'+pos+'">'+head+'<h3>Colours</h3><p class="sub2">Pick any colour, or use the pencils on the page to change one section.</p>';
+ if(view.page==='class'&&classById(view.classId))h+='<button data-secopen="1" style="width:100%;margin-bottom:6px">Colours and bold for this class\u2019s sections</button>';
 
  h+='<p class="lab">PRESETS</p>';
  h+=PRESETS.map(function(pr,i){
@@ -3736,7 +3741,10 @@ function cpColors(c){
   return {c:hsl2hex(hh,ss,L),bg:hsl2hex(hh,Math.min(ss*.6,42),95.5),line:hsl2hex(hh,Math.min(ss*.45,34),89),
    title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.25,22),48),wash:hsl2hex(hh,Math.min(ss*.35,26),97.5)};
  }
- var out={asg:mk(0,1.15,40,85,36),files:mk(32,.6,26,46,38),mini:mk(80,.4,16,30,36),done:mk(-30,.55,28,46,54),third:mk(185,.35,16,30,40),
+ // every section stays in the class's own colour family: same hue (nudged only a few degrees), told
+ // apart by depth and softness -- a brown class gets deep brown, caramel, taupe and a soft sand, never
+ // a stray green or blue. Low-saturation class colours stay muted instead of being forced bright.
+ var out={asg:mk(0,1.6,22,70,32),files:mk(5,1.25,16,52,45),mini:mk(-5,.85,10,36,38),done:mk(9,1.1,14,46,56),third:mk(-2,1.1,14,50,25),
   dark:hsl2hex(h,Math.min(s*.25,18),21),darkSoft:hsl2hex(h,Math.min(s*.35,30),78),darkInk:hsl2hex(h,Math.min(s*.2,20),95)};
  // a colour you picked for a section (Section style) replaces the worked-out one, shades and all
  CP_SECS.forEach(function(k){var ov=cpOverride(c.id,k[0]);if(ov&&k[0]!=='when')out[k[0]]=cpFromHex(ov)});
@@ -3781,13 +3789,14 @@ var CP_ICO={
  more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>'
 };
 // one section card's header band: icon tile, title + count pill, hint line, then actions on the right
+var CP_PAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2.2a1.8 1.8 0 0 0-1.3 3.1c.4.4.5.9.5 1.4 0 .8-.6 1.5-1.5 1.5Z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="11" cy="7" r="1"/><circle cx="15.5" cy="7.5" r="1"/></svg>';
 function cpHead(key,col,title,pill,hint,acts){
  return '<div class="cphead" style="background:var(--s-'+key+'-bg,'+col.bg+');border-bottom-color:var(--s-'+key+'-line,'+col.line+')">'
   +'<div class="cpico" style="background:'+col.c+'">'+CP_ICO[key]+'</div>'
   +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:var(--s-'+key+'-ink,'+col.title+');font-weight:var(--cp-'+key+'-w,650)">'+title+'</h2>'
   +(pill?'<span class="cppill" style="color:'+col.c+'">'+pill+'</span>':'')+'</div>'
   +(hint?'<div class="cphint" style="color:'+col.hint+'">'+hint+'</div>':'')+'</div>'
-  +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
+  +'<div class="cpacts">'+(acts||'')+'<button class="cppal" data-secopen="'+key+'" title="Change this section\u2019s colour" aria-label="Change the colour of this section">'+CP_PAL+'</button></div></div>';
 }
 function cpBtn(col,label,attrs){return '<button class="cpbtn" style="background:'+col.c+'" '+attrs+'>'+label+'</button>'}
 function cpBtn2(col,label,attrs){return '<button class="cpbtn2" style="border-color:'+col.line+'" '+attrs+'>'+label+'</button>'}
