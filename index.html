@@ -1027,7 +1027,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v87';
+var BUILD='v88';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4327,7 +4327,7 @@ function mkCss(){
   // tapping it to type a zoom percentage was itself triggering exactly the native-zoom problem
   // the rest of this file works so hard to keep out. A visual scale keeps it small on screen while
   // the real font-size the OS checks stays 16px.
-  +'#mk .mkzoomval{width:52px;min-width:52px;flex:none;box-sizing:border-box;height:34px;background:none;border:none;color:#EFEAE0;font-size:16px;transform:scale(.78);transform-origin:center;text-align:center;-moz-appearance:textfield}'
+  +'#mk .mkzoomval{width:72px;min-width:72px;flex:none;box-sizing:border-box;height:34px;padding:0 2px;background:none;border:none;color:#EFEAE0;font-size:16px;transform:scale(.78);transform-origin:center;text-align:center;-moz-appearance:textfield}'
   +'#mk .mkmode{display:flex;background:rgba(255,255,255,.08);border-radius:10px;padding:2px;flex-shrink:0}'
   +'#mk .mkmode button{background:none;border:none;color:#C9C3B4;padding:6px 11px;border-radius:8px;font-size:12.5px;cursor:pointer}'
   +'#mk .mkmode button.on{background:#EFEAE0;color:#1c1a17;font-weight:600}'
@@ -4865,7 +4865,15 @@ function mkTouchMove(e){
   mkExtendStroke(dt.clientX,dt.clientY);
   return;
  }
- if(MK.touch.mode!=='pan'||e.touches.length<2)return;
+ if(MK.touch.mode!=='pan')return;
+ if(e.touches.length<2){
+  // one finger of the pinch has already lifted but the other hasn't yet -- the real landing spot is
+  // already committed (see touchend below), so there's nothing left to compute here, but this lone
+  // remaining finger must still be kept off native touch-action or its own last bit of motion gets
+  // read as a fresh one-finger pan/fling the instant it lifts, shoving the page right after it just
+  // landed correctly
+  e.preventDefault();return;
+ }
  e.preventDefault();
  var t=MK.touch,cRaw=mkCenter(e.touches),dist=mkDist(e.touches);
  var mid={x:cRaw.x-t.rectLeft+t.scrollLeft0-t.centerPad0,y:cRaw.y-t.rectTop+t.scrollTop0};
@@ -4927,22 +4935,29 @@ function mkTouchEnd(e){
  }
  if(MK.touch.mode==='pan'&&e.touches.length<2){
   var t=MK.touch,pages=document.getElementById('mkpages');
-  pages.style.transform='none';pages.style.willChange='';pages.style.transformOrigin='';
-  var body=document.getElementById('mkbody');
-  // land the real scroll position while native scrolling is STILL frozen, and only then hand
-  // scrolling back -- restoring it first (the bug, until now) reopened the door for any native
-  // momentum still left over from the gesture to shove the page a moment after we set it correctly,
-  // which is exactly "lands right, then gets yanked somewhere else the instant you let go"
-  MK.zoom=Math.max(.5,Math.min(MK_MAX_ZOOM,t.z0*t.s));
-  mkApplyZoomResize();
-  // the centering margin itself changed (or vanished) between the start zoom and this one -- add
-  // back exactly that difference, or the real landing spot is off by however much it changed
-  var centerPadNew=mkCenterMargin(mkCurPageWidth(MK.zoom));
-  body.scrollLeft=Math.max(0,(t.scrollLeft0-t.tx)+(centerPadNew-t.centerPad0));
-  body.scrollTop=Math.max(0,t.scrollTop0-t.ty);
-  mkOnScroll();
-  body.style.overflow='';
-  MK.touch=null;
+  if(!t.committed){
+   t.committed=true;
+   pages.style.transform='none';pages.style.willChange='';pages.style.transformOrigin='';
+   var body0=document.getElementById('mkbody');
+   MK.zoom=Math.max(.5,Math.min(MK_MAX_ZOOM,t.z0*t.s));
+   mkApplyZoomResize();
+   // the centering margin itself changed (or vanished) between the start zoom and this one -- add
+   // back exactly that difference, or the real landing spot is off by however much it changed
+   var centerPadNew=mkCenterMargin(mkCurPageWidth(MK.zoom));
+   body0.scrollLeft=Math.max(0,(t.scrollLeft0-t.tx)+(centerPadNew-t.centerPad0));
+   body0.scrollTop=Math.max(0,t.scrollTop0-t.ty);
+   mkOnScroll();
+  }
+  // a real two-finger lift almost never lands both fingers in the same millisecond -- one of them is
+  // still physically down for a few ms after this fires. Native scrolling must stay frozen for that
+  // whole tail, not just until the first finger lets go, or that still-down finger is free to be read
+  // as the start of a plain one-finger pan/fling the instant it finally lifts too, carrying over
+  // whatever speed it had from the pinch and shoving the page right after it just landed correctly --
+  // exactly "lands right, then gets yanked somewhere else the instant you let go"
+  if(e.touches.length===0){
+   document.getElementById('mkbody').style.overflow='';
+   MK.touch=null;
+  }
  }
 }
 
