@@ -959,14 +959,12 @@ a.cpitemname:hover{text-decoration:underline}
 .cpqwrap .iconedit{opacity:0}
 .cpqwrap:hover .iconedit,.cpqwrap .iconedit:focus-within{opacity:1}
 @media(hover:none){.cpqwrap .iconedit{display:none}}
-@media(max-width:1199px){.cphomesplit .cprail{order:-1}}
+@media(max-width:1199px){.cphomerail{display:none!important}} /* narrower screens: the summary only repeats Coming up */
+.hero .hello{font-size:13.5px;color:var(--ink3);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:700px){.hero .hello{font-size:12px;margin-bottom:0}}
 @media(max-width:700px){
   .cphomerail #h-glance{display:none}
-  .cprail.cphomerail{grid-template-columns:minmax(0,1fr) auto;gap:10px}
-  .cptoday{padding:13px 14px}
-  .cptoday .cpwhentime{font-size:16px}
-  .cptoday .cpwhenroom{font-size:13px}
-  .cptodayav img,.cptodayav span{width:40px;height:40px}
+
   .cpclsgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;padding:11px}
   .cpclscover{height:56px}
   .cpclsbody{padding:8px 9px 10px}
@@ -1295,7 +1293,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v96';
+var BUILD='v97';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3410,7 +3408,7 @@ function pickerHtml(){
   if(!onHome&&!scl)return btn;
   var sd=cpSecData(),allScope=onHome||view.secScope==='all';
   var sreal=onHome?cpHomeColors():cpColors(scl);
-  var rows=onHome?[['hup','Coming up'],['hcls','Your classes'],['htoday','Today card']]:CP_SECS;
+  var rows=onHome?[['hup','Coming up'],['hcls','Your classes']]:CP_SECS;
   var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>'+(onHome?'Home colours':'Section style')+'</h3>';
   if(!onHome)sh+='<div class="secscope"><button data-secscope="one" class="'+(allScope?'':'on')+'">This class</button><button data-secscope="all" class="'+(allScope?'on':'')+'">Every class</button></div>';
   sh+='<p class="sub2">'+(onHome?'Pick a colour for each part of Home.':(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.'))+' B switches a title between bold and regular.</p>';
@@ -4161,6 +4159,18 @@ function viewHome(){
  }
  h+=homeAccountCard();
  h+=homeInstallCard();
+ // the personal header: your picture, a hello, today's date, and the weather
+ var hr=new Date().getHours(),hello=hr<5?'Good evening':hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+ var who=String(S.owner||'').replace(/\u2019/g,"'").replace(/'s\s+hub$/i,'').replace(/^my hub$/i,'').trim();
+ h+='<div class="hero"><div style="display:flex;align-items:center;gap:16px;min-width:0">'
+  +'<label class="hero-av" title="Click to change your picture">'
+  +'<input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img class="avatar-lg" src="'+S.avatar+'" alt="You">'
+            :'<div class="avatar-lg empty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
+  +'</label><div style="min-width:0"><p class="hello">'+esc(hello+(who?', '+who:''))+'</p>'
+  +'<p class="day">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+'</p>'
+  +'<p class="date">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}))+'</p></div></div>'
+  +wxCard()+'</div>';
  if((S.homeLinks||[]).length){
   h+='<div class="quick cphomequick">'+S.homeLinks.map(function(l,i){
    var ic=linkIcon(l.url,l.title,l.icon,l.icon?true:false)
@@ -4231,14 +4241,6 @@ function viewHome(){
 
  /* ===== side column ===== */
  var R='<aside class="cprail cphomerail">';
- R+='<section class="cpwhen cptoday" style="background:'+col.dark+'"><div class="cptodayrow"><div style="min-width:0">'
-  +'<div class="cpwhenlab" style="color:'+col.darkSoft+'">Today</div>'
-  +'<div class="cpwhentime" style="color:'+col.darkInk+'">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+'</div>'
-  +'<div class="cpwhenroom" style="color:'+col.darkInk+'">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}))+'</div></div>'
-  +'<label class="cptodayav" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
-  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></span>')
-  +'</label></div></section>';
- R+='<div class="cpwx">'+wxCard()+'</div>';
  var doneN=all.filter(function(x){return x.t.done}).length,totalN=all.length,pct=totalN?Math.round(doneN/totalN*100):0;
  R+=cpRailCard('h-glance',col.hup.c,'At a glance','',
   '<div class="cpline"><span class="a">Due this week</span><span class="b cpbig">'+thisWeek.length+'</span></div>'
