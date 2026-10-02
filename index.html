@@ -729,7 +729,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cphead{display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;row-gap:10px}
 .cpico{width:32px;height:32px;border-radius:8px;color:#fff;display:grid;place-items:center;flex:none}
 .cpico svg{width:17px;height:17px}
-.cptitlecol{display:flex;flex-direction:column;gap:2px;flex:none;min-width:0;max-width:100%}
+.cptitlecol{display:flex;flex-direction:column;gap:2px;flex:1 1 auto;min-width:0;max-width:100%}
 .cptitlerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cptitle{font-family:var(--fh,inherit);font-style:var(--hs,normal);font-size:19px;line-height:1.2;margin:0}
 .cppill{white-space:nowrap;flex:none;font-size:11.5px;font-weight:600;background:var(--card);border-radius:99px;padding:1px 8px;line-height:1.5}
@@ -901,6 +901,7 @@ a.cpitemname:hover{text-decoration:underline}
   .cpico{width:28px;height:28px;border-radius:7px}
   .cpico svg{width:15px;height:15px}
   .cptitle{font-size:17px}
+  .cptitlecol{flex:1 1 0}
   .cphint{font-size:12px}
   .cppill{font-size:11px}
   .cpacts{flex-basis:100%;margin-left:0;justify-content:flex-start}
@@ -930,6 +931,49 @@ a.cpitemname:hover{text-decoration:underline}
 .cppal svg{width:17px;height:17px}
 .cppal:hover{opacity:1;background:var(--card);color:var(--ink)}
 @media(max-width:700px){.cphead{position:relative}.cphead .cptitlecol{padding-right:34px}.cphead .cppal{position:absolute;top:8px;right:8px}.cphead .cpacts:not(:has(>:not(.cppal))){display:contents}}
+/* home */
+.cphome .cpgrid{grid-template-columns:26px minmax(0,1fr) 84px 150px 130px}
+.c-cls{min-width:0;display:flex}
+.cpclspill{display:inline-flex;align-items:center;gap:6px;max-width:100%;font-size:11.5px;font-weight:600;border-radius:99px;padding:2px 9px 2px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cpclspill i{width:7px;height:7px;border-radius:50%;flex:none}
+@container (max-width:640px){.cphome .cprow .c-cls{order:5}.cphome .cprow .c-due{order:4}}
+.cpclsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:16px 18px 18px}
+.cpcls{display:flex;flex-direction:column;align-items:stretch;text-align:left;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card);padding:0;cursor:pointer;white-space:normal;min-height:0;font:inherit;color:inherit}
+.cpcls:hover{border-color:var(--line2);box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.cpclscover{display:block;width:100%;height:72px}
+.cpclsband{display:block;height:6px}
+.cpclsbody{display:flex;flex-direction:column;gap:2px;padding:10px 12px 12px;min-width:0}
+.cpclsname{display:flex;align-items:flex-start;gap:7px;font-size:14px;font-weight:600;line-height:1.3;color:var(--head,var(--ink))}
+.cpclsname i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:5px}
+.cpclsmeta{font-size:11.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cpclsstats{font-size:12px;color:var(--ink2);margin-top:4px}
+.cpclsnext{font-size:11.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cptodayrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cptodayav{flex:none;cursor:pointer}
+.cptodayav img,.cptodayav span{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.15)}
+.cptodayav svg{width:22px;height:22px;fill:rgba(255,255,255,.7)}
+.cpwx .wx{min-width:0;width:100%;border-radius:13px}
+.cpbig{font-size:15px!important;font-weight:600;color:var(--ink)!important}
+.cphomequick{margin:0 0 22px;align-items:center}
+.cpqwrap{display:inline-flex;align-items:center;gap:2px}
+.cpqwrap .iconedit{opacity:0}
+.cpqwrap:hover .iconedit,.cpqwrap .iconedit:focus-within{opacity:1}
+@media(hover:none){.cpqwrap .iconedit{display:none}}
+@media(max-width:1199px){.cphomesplit .cprail{order:-1}}
+@media(max-width:700px){
+  .cphomerail #h-glance{display:none}
+  .cprail.cphomerail{grid-template-columns:minmax(0,1fr) auto;gap:10px}
+  .cptoday{padding:13px 14px}
+  .cptoday .cpwhentime{font-size:16px}
+  .cptoday .cpwhenroom{font-size:13px}
+  .cptodayav img,.cptodayav span{width:40px;height:40px}
+  .cpclsgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;padding:11px}
+  .cpclscover{height:56px}
+  .cpclsbody{padding:8px 9px 10px}
+  .cpclsname{font-size:13px}
+  .cpclsnext{display:none}
+  .cphome .cpseg button{padding:5px 8px;font-size:12.5px}
+}
 /* adding straight into a chapter */
 .cpchadd{display:flex;gap:4px;padding:2px 12px 10px;border-top:1px dashed var(--line)}
 .cpchbody+.cpchadd,.cpchempty+.cpchadd{margin-top:0}
@@ -942,7 +986,8 @@ a.cpitemname:hover{text-decoration:underline}
 .cpdupbtn{color:#A34A3F!important;margin-left:auto}
 .secrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
 .secrow input[type=color]{width:34px;height:28px;padding:0;border:1px solid var(--line2);border-radius:7px;background:none;flex:none;cursor:pointer}
-.secname{flex:1;font-size:13.5px}
+.secname{flex:1;font-size:13.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.secname small{display:block;font-size:11px;color:var(--ink3);line-height:1.2}
 .secbold{width:32px;height:28px;padding:0;font-weight:800;font-size:14px;border-radius:7px;flex:none;color:var(--ink3);min-height:0!important}
 .secbold.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
 .secsp{width:47px;flex:none}
@@ -1250,7 +1295,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v95';
+var BUILD='v96';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3361,23 +3406,33 @@ function pickerHtml(){
  var head='<div class="pickhead" data-pickdrag="1"><span class="pickgrip"></span><span style="font-size:12px;color:var(--ink3)">drag to move</span></div>';
 
  if(view.editSurf==='__sec'){
-  var scl=view.page==='class'&&classById(view.classId);
-  if(!scl)return btn;
-  var sreal=cpColors(scl),sd=cpSecData();
-  var allScope=view.secScope==='all';
-  var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>Section style</h3>'
-   +'<div class="secscope"><button data-secscope="one" class="'+(allScope?'':'on')+'">This class</button><button data-secscope="all" class="'+(allScope?'on':'')+'">Every class</button></div>'
-   +'<p class="sub2">'+(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.')+' Each colour sets the whole section: header, icon, buttons and ticks. B switches the title between bold and regular, on every class.</p>';
-  CP_SECS.forEach(function(k){
-   var key=k[0],cur=key==='when'?sreal.dark:sreal[key].c,own=allScope?(sd.all&&sd.all[key]):(sd.cls&&sd.cls[scl.id]&&sd.cls[scl.id][key]);
+  var onHome=view.page==='home',scl=!onHome&&view.page==='class'&&classById(view.classId);
+  if(!onHome&&!scl)return btn;
+  var sd=cpSecData(),allScope=onHome||view.secScope==='all';
+  var sreal=onHome?cpHomeColors():cpColors(scl);
+  var rows=onHome?[['hup','Coming up'],['hcls','Your classes'],['htoday','Today card']]:CP_SECS;
+  var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>'+(onHome?'Home colours':'Section style')+'</h3>';
+  if(!onHome)sh+='<div class="secscope"><button data-secscope="one" class="'+(allScope?'':'on')+'">This class</button><button data-secscope="all" class="'+(allScope?'on':'')+'">Every class</button></div>';
+  sh+='<p class="sub2">'+(onHome?'Pick a colour for each part of Home.':(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.'))+' B switches a title between bold and regular.</p>';
+  rows.forEach(function(k){
+   var key=k[0],dark=key==='when'||key==='htoday',cur=dark?sreal.dark:sreal[key].c,site=CP_SITEWIDE[key];
+   var own=(allScope||site)?(sd.all&&sd.all[key]):(sd.cls&&sd.cls[scl.id]&&sd.cls[scl.id][key]);
    own=own||(S.theme&&S.theme.surfaces&&S.theme.surfaces[key]&&Object.keys(S.theme.surfaces[key]).length);
-   sh+='<div class="secrow"><input type="color" value="'+cur+'" data-secc="'+key+'" aria-label="'+esc(k[1])+' colour"><span class="secname">'+esc(k[1])+'</span>'
-    +(key==='when'?'':'<button class="secbold'+(cpBold(key)?' on':'')+'" data-secbold="'+key+'" title="Bold title" aria-pressed="'+cpBold(key)+'">B</button>')
+   sh+='<div class="secrow"><input type="color" value="'+cur+'" data-secc="'+key+'" aria-label="'+esc(k[1])+' colour"><span class="secname">'+esc(k[1])+(site&&!allScope?'<small>Same on every class</small>':'')+'</span>'
+    +(dark?'':'<button class="secbold'+(cpBold(key)?' on':'')+'" data-secbold="'+key+'" title="Bold title" aria-pressed="'+cpBold(key)+'">B</button>')
     +(own?'<button class="ghost" data-secreset="'+key+'" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp"></span>')+'</div>';
   });
+  if(scl&&(scl.sections||[]).length){
+   var badgeDef=[sreal.asg.c,sreal.files.c,sreal.third.c];
+   sh+='<p class="lab" style="margin:14px 0 2px">CHAPTERS</p>';
+   scl.sections.forEach(function(sc,i){
+    sh+='<div class="secrow"><input type="color" value="'+(sc.color||badgeDef[i%3])+'" data-chc="'+sc.id+'" aria-label="'+esc(sc.name)+' colour"><span class="secname">'+esc(sc.name)+'</span>'
+     +(sc.color?'<button class="ghost" data-chreset="'+sc.id+'" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp" style="width:52px"></span>')+'</div>';
+   });
+  }
   sh+='<div style="display:flex;flex-direction:column;gap:7px;margin-top:14px">'
-   +(allScope?'':'<button data-secall="1">Copy this class\u2019s colours to every class</button>')
-   +(sd.all&&Object.keys(sd.all).length?'<button class="ghost" data-secallreset="1" style="font-size:12.5px">Go back to each class\u2019s own colours</button>':'')
+   +(onHome||allScope?'':'<button data-secall="1">Copy this class\u2019s colours to every class</button>')
+   +(!onHome&&sd.all&&Object.keys(sd.all).some(function(k){return !CP_SITEWIDE[k]&&k.charAt(0)!=='h'})?'<button class="ghost" data-secallreset="1" style="font-size:12.5px">Go back to each class\u2019s own colours</button>':'')
    +'<div style="display:flex;gap:7px"><button data-editsurf="" style="flex:1">All colours</button>'
    +'<button data-picker="0" style="flex:1;background:#33312C;color:#fff;border-color:#33312C">Done</button></div></div>';
   return btn+sh+'</div>';
@@ -3543,88 +3598,6 @@ function dueCard(t,c,kind){
   +'<span class="who" style="color:'+p.ink2+';display:block">'+esc(c.name)+'</span></button>';
 }
 
-function viewHome(){
- var t=today();
- var open=allTasks().filter(function(x){return !x.t.done&&x.t.due});
- var weekEnd=weekStart(1);
- var thisWeek=open.filter(function(x){var d=parseISO(x.t.due);return d>=t&&d<weekEnd});
- var nextStart=weekStart(1);
- var nextEnd=weekStart(2);
- var nextWeek=open.filter(function(x){var d=parseISO(x.t.due);return d>=nextStart&&d<nextEnd});
- var late=open.filter(function(x){return parseISO(x.t.due)<t});
- var doneCount=allTasks().filter(function(x){return x.t.done}).length;
- var list;
- if(view.range==='day'){list=open.filter(function(x){return x.t.due===iso(t)})}
- else if(view.range==='week'){list=thisWeek}
- else{list=open}
- list.sort(function(a,b){return a.t.due<b.t.due?-1:1});
-
- var quickRow='';
- if((S.homeLinks||[]).length){
-  quickRow='<div class="quick" style="margin:22px 0 26px;align-items:center">'+S.homeLinks.map(function(l,i){
-   var ic=linkIcon(l.url,l.title,l.icon,l.icon?true:false)
-    .replace('class="fi round','class="fi round'+(l.icon?'':(l.quiet?' quiet':''))+' ')
-    .replace('class="fi round ','class="fi round ')
-    .replace('src=','style="width:28px;height:28px" src=')
-    .replace('class="favtile"','class="favtile" style="width:28px;height:28px;font-size:15px"');
-   var ctrls=l.icon
-    ? '<span class="iconedit">'
-      +'<label class="ghost" style="font-size:11px;padding:4px 7px;cursor:pointer" title="Use a different picture">'
-      +'<input type="file" accept="image/*" data-linkicon="'+i+'" style="display:none">Change</label>'
-      +'<button class="ghost" data-dellinkicon="'+i+'" style="font-size:11px;padding:4px 7px">Remove</button></span>'
-    : '<label class="fakebtn" style="font-size:11.5px;padding:5px 9px" title="Use your own picture for this button">'
-      +'<input type="file" accept="image/*" data-linkicon="'+i+'" style="display:none">Add icon</label>'
-      +'<button class="ghost" data-paste="linkicon:'+i+'" style="font-size:11.5px">'+(view.paste==='linkicon:'+i?'Waiting for paste':'Paste icon')+'</button>';
-   return '<a class="qlink" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+ic+'<span>'+esc(l.title)+'</span></a>'
-    +ctrls
-    +(view.paste==='linkicon:'+i?'<div class="pastezone" style="flex-basis:100%" data-drop="linkicon:'+i+'">Copy the logo, then press Ctrl and V<p class="pz2">Or drag the image file onto this box. Press Escape to cancel.</p></div>':'');
-  }).join('')+'</div>';
- }
-  var h='';
- if(!S.classes.length){
-  h+='<div class="panel" style="margin-bottom:22px;padding:22px 24px">'
-   +'<h2 style="font-size:20px;margin-bottom:6px">Welcome</h2>'
-   +'<div class="field" style="max-width:340px;margin:12px 0 16px"><label for="hubName">What should this hub be called?</label><input id="hubName" data-setname="owner" maxlength="40" placeholder="e.g. Sam\'s hub" value="'+esc(S.owner==='My hub'?'':S.owner)+'"></div>'
-   +'<p style="color:var(--ink2);margin-bottom:14px">Load your backup to bring everything in, or start fresh by adding a class.</p>'
-   +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-   +'<label class="fakebtn" style="background:#33312C;color:#fff;border-color:#33312C"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
-   +'<button data-add="class">Add a class</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
- }
- h+=homeAccountCard();
- h+=homeInstallCard();
- h+='<div class="hero"><div style="display:flex;align-items:center;gap:16px">'
-  +'<label class="hero-av" title="Click to change your picture">'
-  +'<input type="file" accept="image/*" data-photo="me" style="display:none">'
-  +(S.avatar?'<img class="avatar-lg" src="'+S.avatar+'" alt="You">'
-            :'<div class="avatar-lg empty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
-  +'</label><div><p class="day">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+'</p>'
-  +'<p class="date">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}))+'</p></div></div>'
-  +wxCard()+'</div>';
-
- h+='<div class="stats">'
-  +statBox('Due this week',thisWeek)
-  +statBox('Due next week',nextWeek)+'</div>';
- h+=quickRow;
- h+=todoPanel(open);
-
- h+='<div class="rowhead"><h2 style="font-size:20px">What is coming up</h2><div class="seg">'
-  +'<button data-range="day" class="'+(view.range==='day'?'on':'')+'">Day</button>'
-  +'<button data-range="week" class="'+(view.range==='week'?'on':'')+'">Week</button>'
-  +'<button data-range="month" class="'+(view.range==='month'?'on':'')+'">Month</button></div></div>';
-
- if(late.length&&view.range!=='month'){
-  h+='<p class="hint late" style="margin:0 0 12px;font-size:13px">'+late.length+' item'+(late.length>1?'s are':' is')+' past due.</p>';
- }
- if(view.range==='month'){h+=calendarGrid()}
- else if(!list.length){h+='<p class="empty">Nothing due in this stretch. Add an assignment from a class page.</p>'}
- else{h+='<div class="cards">'+list.map(function(x){return dueCard(x.t,x.c,x.kind)}).join('')+'</div>'}
-
- h+='<div class="rowhead" style="margin-top:30px"><h2 style="font-size:20px">Your classes</h2><span style="display:flex;gap:8px;flex-wrap:wrap"><button data-xact="importclass">Import a shared class</button><button data-add="class">Add class</button></span></div>'
-  +'<div class="classcards">'+S.classes.filter(function(c){return !isRefClass(c)}).map(classCard).join('')+'</div>';
- h+='<div style="margin-top:26px;display:flex;gap:8px;flex-wrap:wrap">'+coverControls('home',S)+'</div>';
- return h;
-}
-
 function firstN(rows,n,label){
  if(rows.length<=n)return rows.join('');
  return rows.slice(0,n).join('')
@@ -3742,22 +3715,37 @@ function viewCalendar(){
    Clearly separated sections, each a card with a tinted header band. All the colours come from the
    class's own colour (cpColors), so every class looks related but distinct; the paint picker's
    per-box colours (--s-<key>-bg/-line/-ink) still win over them wherever they've been set. */
-function cpColors(c){
- var hsl=rgb2hsl.apply(null,hex2rgb(palHex(c.color))),h=hsl[0],s=hsl[1];
- function mk(dh,mul,lo,hi,L){
+// one colour family -> a section's shades (solid, header tint, border, title, hint)
+function cpMaker(base){
+ var hsl=rgb2hsl.apply(null,hex2rgb(base)),h=hsl[0],s=hsl[1];
+ var mk=function(dh,mul,lo,hi,L){
   var ss=Math.max(lo,Math.min(hi,s*mul)),hh=((h+dh)%360+360)%360;
   return {c:hsl2hex(hh,ss,L),bg:hsl2hex(hh,Math.min(ss*.6,42),95.5),line:hsl2hex(hh,Math.min(ss*.45,34),89),
    title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.25,22),48),wash:hsl2hex(hh,Math.min(ss*.35,26),97.5)};
- }
- // every section stays in the class's own colour family: same hue (nudged only a few degrees), told
- // apart by depth and softness -- a brown class gets deep brown, caramel, taupe and a soft sand, never
- // a stray green or blue. Low-saturation class colours stay muted instead of being forced bright.
- var out={asg:mk(0,1.6,22,70,32),files:mk(5,1.25,16,52,45),mini:mk(-5,.85,10,36,38),done:mk(9,1.1,14,46,56),third:mk(-2,1.1,14,50,25),
-  dark:hsl2hex(h,Math.min(s*.25,18),21),darkSoft:hsl2hex(h,Math.min(s*.35,30),78),darkInk:hsl2hex(h,Math.min(s*.2,20),95)};
+ };
+ mk.dark=hsl2hex(h,Math.min(s*.25,18),21);mk.darkSoft=hsl2hex(h,Math.min(s*.35,30),78);mk.darkInk=hsl2hex(h,Math.min(s*.2,20),95);
+ return mk;
+}
+// the site's own colour (the menu colour) -- used for things that look the same everywhere
+function cpSiteBase(){var b=chromeHex('sideBg');var q=rgb2hsl.apply(null,hex2rgb(b));return q[1]<6?'#6f6455':b}
+function cpDarkOver(out,wv){if(!wv)return;var lightText=contrast(wv,'#ffffff')>=3;out.dark=wv;out.darkInk=lightText?'#ffffff':'#2a2620';out.darkSoft=lightText?'rgba(255,255,255,.75)':'rgba(0,0,0,.55)'}
+function cpColors(c){
+ var mk=cpMaker(palHex(c.color)),site=cpMaker(cpSiteBase());
+ // every class section stays in the class's own colour family: same hue (nudged only a few degrees),
+ // told apart by depth and softness. Checklist and Completed instead follow the site's colour, so they
+ // look the same on every class (Jae's choice).
+ var out={asg:mk(0,1.6,22,70,32),files:mk(5,1.25,16,52,45),mini:site(-6,.9,14,40,36),done:site(10,.8,14,40,58),third:mk(-2,1.1,14,50,25),
+  dark:mk.dark,darkSoft:mk.darkSoft,darkInk:mk.darkInk};
  // a colour you picked for a section (Section style) replaces the worked-out one, shades and all
  CP_SECS.forEach(function(k){var ov=cpOverride(c.id,k[0]);if(ov&&k[0]!=='when')out[k[0]]=cpFromHex(ov)});
- var wv=cpOverride(c.id,'when');
- if(wv){var lightText=contrast(wv,'#ffffff')>=3;out.dark=wv;out.darkInk=lightText?'#ffffff':'#2a2620';out.darkSoft=lightText?'rgba(255,255,255,.75)':'rgba(0,0,0,.55)'}
+ cpDarkOver(out,cpOverride(c.id,'when'));
+ return out;
+}
+function cpHomeColors(){
+ var site=cpMaker(cpSiteBase()),d=cpSecData(),all=d.all||{};
+ var out={hup:site(0,1.4,20,60,34),hcls:site(6,1.1,16,48,46),third:site(-3,1,14,44,26),dark:site.dark,darkSoft:site.darkSoft,darkInk:site.darkInk};
+ ['hup','hcls'].forEach(function(k){if(all[k])out[k]=cpFromHex(all[k])});
+ cpDarkOver(out,all.htoday);
  return out;
 }
 var CP_SECS=[['asg','Assignments'],['files','Files & links'],['mini','Checklist'],['done','Completed'],['when','When and where']];
@@ -3767,25 +3755,33 @@ function cpFromHex(hex){
 }
 // Section style choices live in the synced theme: S.theme.sec = {cls:{<classId>:{asg:'#hex'}}, all:{asg:'#hex'}, bold:{asg:false}}
 function cpSecData(){var t=S.theme||{};return t.sec||{}}
-function cpOverride(cid,k){var d=cpSecData();return (d.cls&&d.cls[cid]&&d.cls[cid][k])||(d.all&&d.all[k])||''}
+// Checklist and Completed are always site-wide: only an every-class pick applies to them
+function cpOverride(cid,k){var d=cpSecData();if(CP_SITEWIDE[k])return (d.all&&d.all[k])||'';return (d.cls&&d.cls[cid]&&d.cls[cid][k])||(d.all&&d.all[k])||''}
+var CP_SITEWIDE={mini:1,done:1};
 function cpBold(k){var d=cpSecData();return !(d.bold&&d.bold[k]===false)}
 // the page's colours as CSS variables, set on .cpsplit; the markup only ever refers to var(--cp-...)
+var CP_PARTS=['c','bg','line','title','hint','wash'];
 function cpVarStyle(real){
  var o='';
- ['asg','files','mini','done','third'].forEach(function(k){['c','bg','line','title','hint','wash'].forEach(function(p){o+='--cp-'+k+'-'+p+':'+real[k][p]+';'})});
- ['asg','files','mini','done'].forEach(function(k){o+='--cp-'+k+'-w:'+(cpBold(k)?650:450)+';'});
+ Object.keys(real).forEach(function(k){
+  if(typeof real[k]!=='object')return;
+  CP_PARTS.forEach(function(p){o+='--cp-'+k+'-'+p+':'+real[k][p]+';'});
+  o+='--cp-'+k+'-w:'+(cpBold(k)?650:450)+';';
+ });
  return o+'--cp-dark:'+real.dark+';--cp-darkSoft:'+real.darkSoft+';--cp-darkInk:'+real.darkInk;
 }
-function cpVarRefs(){
+function cpVarRefs(keys){
  var o={};
- ['asg','files','mini','done','third'].forEach(function(k){o[k]={};['c','bg','line','title','hint','wash'].forEach(function(p){o[k][p]='var(--cp-'+k+'-'+p+')'})});
+ (keys||['asg','files','mini','done','third']).forEach(function(k){o[k]={};CP_PARTS.forEach(function(p){o[k][p]='var(--cp-'+k+'-'+p+')'})});
  o.dark='var(--cp-dark)';o.darkSoft='var(--cp-darkSoft)';o.darkInk='var(--cp-darkInk)';
  return o;
 }
 // re-colour the page in place (no redraw), e.g. while you drag a colour picker
 function cpLive(){
- var el=document.querySelector('.cpsplit'),c=view.page==='class'&&classById(view.classId);
- if(el&&c)el.setAttribute('style',cpVarStyle(cpColors(c)));
+ var el=document.querySelector('.cpsplit');if(!el)return;
+ if(view.page==='home'){el.setAttribute('style',cpVarStyle(cpHomeColors()));return}
+ var c=view.page==='class'&&classById(view.classId);
+ if(c)el.setAttribute('style',cpVarStyle(cpColors(c)));
 }
 var CP_ICO={
  asg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>',
@@ -3975,7 +3971,7 @@ function viewClass(c){
   F+='<div class="cpch"><div class="cpchbody">'+colList(fIdx.map(fileRow),'Files','No files yet')+colList(lIdx.map(linkRow),'Links','No links yet')+'</div></div>';
  }else{
   var shut=cpShut(c.id),badges=[col.asg.c,col.files.c,col.third.c],anyOpen=false;
-  var groups=(c.sections||[]).map(function(s,k){return {id:s.id,name:s.name,badge:k}});
+  var groups=(c.sections||[]).map(function(s,k){return {id:s.id,name:s.name,badge:k,color:s.color||''}});
   var unsorted={id:'',name:'Unsorted',badge:-1};
   groups.concat([unsorted]).forEach(function(g){
    var fr=fIdx.filter(function(x){return (x.f.section||'')===g.id}),lr=lIdx.filter(function(x){return (x.l.section||'')===g.id});
@@ -3987,7 +3983,7 @@ function viewClass(c){
    var nameTxt=g.id&&m&&m[3]?m[3]:g.name;
    F+='<div class="cpch'+(isShut?' shut':'')+'">'
     +'<div class="cpchhead" data-chap="'+c.id+':'+(g.id||'_')+'" role="button" aria-expanded="'+(!isShut)+'">'+CP_ICO.chev
-    +(g.id?'<span class="cpbadge" style="background:'+badges[g.badge%3]+'">'+esc(badgeTxt)+'</span>':'<span class="cpbadge" style="background:var(--ink3)">—</span>')
+    +(g.id?'<span class="cpbadge" data-chapbadge="'+g.id+'" style="background:'+(g.color||badges[g.badge%3])+'">'+esc(badgeTxt)+'</span>':'<span class="cpbadge" style="background:var(--ink3)">—</span>')
     +'<span class="cpchname">'+esc(nameTxt)+'</span><span class="cpchcount">'+cnt+'</span>'
     +(g.id?'<span class="cpchacts"><button class="cpghost" data-edit="section" data-id="'+g.id+'" data-c="'+c.id+'">Rename</button><button class="cpghost" data-delsection="'+g.id+'" data-c="'+c.id+'" title="Files and links in it move to Unsorted">Remove</button></span>':'')
     +'</div>';
@@ -4055,7 +4051,7 @@ function viewClass(c){
  /* ===== class settings row ===== */
  var G='<div class="cpsettings"><span class="cpsetlab">Class settings</span>'
   +'<button data-edit="class" data-c="'+c.id+'">Edit class</button>'
-  +'<button data-secopen="1">Section style</button>'
+  +'<button data-secopen="1">Colours</button>'
   +'<button data-xact="shareclass:'+c.id+'">Share this class</button>'
   +'<button data-xact="ics:'+c.id+'">Import from a calendar</button>'
   +coverControls(c.id,c)
@@ -4127,6 +4123,132 @@ function viewClass(c){
  R+='</aside>';
 
  return top+ask+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+A+F+'<div class="cppair">'+K+D+'</div>'+study+G+'</div>'+R+'</div>';
+}
+
+/* ---------- Home (v96 redesign, same style as the class page) ----------
+   Two section cards (Coming up, Your classes) and a side column (today, weather, a quick summary).
+   Home's colours follow the site's own colour (the menu colour); the corner paint button changes them. */
+CP_ICO.hup='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>';
+CP_ICO.hcls='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+function cpRailCard(id,dot,title,act,body){
+ return '<section class="cpcard"'+(id?' id="'+id+'"':'')+'><div class="cpcardhead"><span class="cpdot" style="background:'+dot+'"></span><h3 class="cpcardtitle">'+title+'</h3>'+(act||'')+'</div>'
+  +'<div class="cpcardbody">'+body+'</div></section>';
+}
+function viewHome(){
+ var t=today(),col=cpVarRefs(['hup','hcls','third']),real=cpHomeColors();
+ var open=allTasks().filter(function(x){return !x.t.done&&x.t.due&&!isRefClass(x.c)});
+ var all=allTasks().filter(function(x){return !isRefClass(x.c)});
+ var weekEnd=weekStart(1),nextEnd=weekStart(2);
+ var late=open.filter(function(x){return parseISO(x.t.due)<t});
+ var thisWeek=open.filter(function(x){var d=parseISO(x.t.due);return d>=t&&d<weekEnd});
+ var nextWeek=open.filter(function(x){var d=parseISO(x.t.due);return d>=weekEnd&&d<nextEnd});
+ var dueToday=open.filter(function(x){return x.t.due===iso(t)});
+ var rng=view.hrange||'week';
+ var list=rng==='today'?dueToday:rng==='week'?thisWeek:rng==='next'?nextWeek:open.filter(function(x){return parseISO(x.t.due)>=t});
+ var bydate=function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:((a.t.time||'')<(b.t.time||'')?-1:1)};
+ list=late.slice().sort(bydate).concat(list.slice().sort(bydate)); // anything past due always sits on top
+
+ // ---- above the columns: welcome, account and install prompts, pinned quick links (unchanged) ----
+ var h='';
+ if(!S.classes.length){
+  h+='<div class="panel" style="margin-bottom:22px;padding:22px 24px">'
+   +'<h2 style="font-size:20px;margin-bottom:6px">Welcome</h2>'
+   +'<div class="field" style="max-width:340px;margin:12px 0 16px"><label for="hubName">What should this hub be called?</label><input id="hubName" data-setname="owner" maxlength="40" placeholder="e.g. Sam\'s hub" value="'+esc(S.owner==='My hub'?'':S.owner)+'"></div>'
+   +'<p style="color:var(--ink2);margin-bottom:14px">Load your backup to bring everything in, or start fresh by adding a class.</p>'
+   +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+   +'<label class="fakebtn" style="background:#33312C;color:#fff;border-color:#33312C"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
+   +'<button data-add="class">Add a class</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
+ }
+ h+=homeAccountCard();
+ h+=homeInstallCard();
+ if((S.homeLinks||[]).length){
+  h+='<div class="quick cphomequick">'+S.homeLinks.map(function(l,i){
+   var ic=linkIcon(l.url,l.title,l.icon,l.icon?true:false)
+    .replace('class="fi round','class="fi round'+(l.icon?'':(l.quiet?' quiet':''))+' ')
+    .replace('src=','style="width:26px;height:26px" src=')
+    .replace('class="favtile"','class="favtile" style="width:26px;height:26px;font-size:14px"');
+   // picture controls stay out of the way: only shown on hover (and inside a small ... on touch screens)
+   var ctrls='<span class="iconedit">'
+    +'<label class="ghost" style="font-size:11px;padding:4px 7px;cursor:pointer" title="Use a different picture"><input type="file" accept="image/*" data-linkicon="'+i+'" style="display:none">'+(l.icon?'Change':'Icon')+'</label>'
+    +(l.icon?'<button class="ghost" data-dellinkicon="'+i+'" style="font-size:11px;padding:4px 7px">Remove</button>'
+      :'<button class="ghost" data-paste="linkicon:'+i+'" style="font-size:11px;padding:4px 7px">'+(view.paste==='linkicon:'+i?'Waiting':'Paste')+'</button>')+'</span>';
+   return '<span class="cpqwrap"><a class="qlink" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+ic+'<span>'+esc(l.title)+'</span></a>'+ctrls+'</span>'
+    +(view.paste==='linkicon:'+i?'<div class="pastezone" style="flex-basis:100%" data-drop="linkicon:'+i+'">Copy the logo, then press Ctrl and V<p class="pz2">Or drag the image file onto this box. Press Escape to cancel.</p></div>':'');
+  }).join('')+'</div>';
+ }
+
+ /* ===== Coming up ===== */
+ var nx=null;for(var i=0;i<list.length;i++){if(parseISO(list[i].t.due)>=t){nx=list[i];break}}
+ var hint=late.length?'<span style="color:#A34A3F">'+late.length+' past due</span>'+(nx?' · next: '+esc(nx.t.title):'')
+  :(nx?'Next: '+esc(nx.t.title)+' ('+esc(classLabel(nx.c))+')'+(function(){var cd=cpCountdown(nx.t.due);return cd.n===0?' today':cd.n===1?' tomorrow':' in '+cd.t})():(open.length?'Nothing in this stretch':'All caught up'));
+ var seg='<div class="cpseg">'+[['today','Today'],['week','This week'],['next','Next week'],['all','All']].map(function(o){
+   var on=rng===o[0];return '<button data-hrange="'+o[0]+'" class="'+(on?'on':'')+'"'+(on?' style="background:'+col.hup.bg+';color:'+col.hup.title+'"':'')+'>'+o[1]+'</button>';
+  }).join('')+'</div>';
+ var U='<section class="cpsec cphome" id="h-up">'+cpHead('hup',col.hup,'Coming up',list.length?list.length+' due':'',hint,seg);
+ if(!list.length){
+  U+='<div class="cpempty">'+(rng==='today'?'Nothing due today.':rng==='next'?'Nothing due next week yet.':rng==='week'?'Nothing else due this week.':'Nothing coming up. Add assignments from a class page.')+'</div>';
+ }else{
+  var nearest=nx;
+  var rows=list.map(function(x){
+   var cd=cpCountdown(x.t.due),lt=cd.n!=null&&cd.n<0,p=pal(x.c.color);
+   var cdColor=lt?'#A34A3F':(x===nearest?col.hup.c:'var(--ink2)');
+   return '<div class="cpgrid cprow" data-open="'+x.c.id+'">'
+    +'<span class="c-tick"><button class="tick" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"></button></span>'
+    +'<span class="c-name"><span class="cpnm">'+esc(x.t.title)+'</span></span>'
+    +'<span class="c-count" style="color:'+cdColor+'">'+cd.t+'</span>'
+    +'<i class="c-br"></i>'
+    +'<span class="c-due'+(lt?' late':'')+'">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+'</span>'
+    +'<span class="c-cls"><span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span></span>'
+    +'</div>';
+  });
+  U+='<div class="cpbody"><div class="cpgrid cphdr"><span></span><span>What</span><span class="h-count">Countdown</span><span class="h-due">Due</span><span>Class</span></div>'+rows.slice(0,8).join('');
+  if(rows.length>8)U+='<details class="cpmorebox"><summary style="color:'+col.hup.c+'"><span class="cpshow">Show '+(rows.length-8)+' more</span><span class="cphide">Show fewer</span></summary>'+rows.slice(8).join('')+'</details>';
+  U+='</div>';
+ }
+ U+='</section>';
+
+ /* ===== Your classes ===== */
+ var classes=S.classes.filter(function(c){return !isRefClass(c)});
+ var C='<section class="cpsec" id="h-classes">'+cpHead('hcls',col.hcls,'Your classes',classes.length?classes.length+'':'',classes.length?'Tap a class to open it':'Add your classes to get started',
+   cpBtn(col.hcls,'+ Add class','data-add="class"'));
+ if(!classes.length)C+='<div class="cpempty">No classes yet. Add one, or import a class a friend shared with you.</div>';
+ else C+='<div class="cpclsgrid">'+classes.map(function(c){
+  var p=pal(c.color),n=(c.assignments||[]).filter(function(a){return !a.done}).length,k=(c.tasks||[]).filter(function(x){return !x.done}).length,g=gradeInfo(c);
+  var nextA=(c.assignments||[]).filter(function(a){return !a.done&&a.due&&parseISO(a.due)>=t}).sort(function(a,b){return a.due<b.due?-1:1})[0];
+  return '<button class="cpcls" data-open="'+c.id+'">'
+   +(c.cover?'<img class="cpclscover" src="'+c.cover+'" alt="" style="object-position:50% '+(c.coverPos==null?50:c.coverPos)+'%;object-fit:'+(c.coverFit==='fit'?'contain':'cover')+';background:'+p.bg+'">':'<span class="cpclsband" style="background:'+p.bar+'"></span>')
+   +'<span class="cpclsbody"><span class="cpclsname"><i style="background:'+p.bar+'"></i>'+esc(c.name)+'</span>'
+   +'<span class="cpclsmeta">'+esc([c.code,c.day].filter(Boolean).join(' · ')||' ')+'</span>'
+   +'<span class="cpclsstats">'+(n?'<b>'+n+'</b> open':'All clear')+(k?' · '+k+' to do':'')+(g.avg!=null?' · '+g.avg.toFixed(1)+'%':'')+'</span>'
+   +(nextA?'<span class="cpclsnext">Next: '+esc(nextA.title)+' · '+esc(fmtDue(nextA.due))+'</span>':'')
+   +'</span></button>';
+ }).join('')+'</div>';
+ C+='</section>';
+
+ /* ===== settings row ===== */
+ var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'+coverControls('home',S)
+  +'<button data-secopen="1">Colours</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div>';
+
+ /* ===== side column ===== */
+ var R='<aside class="cprail cphomerail">';
+ R+='<section class="cpwhen cptoday" style="background:'+col.dark+'"><div class="cptodayrow"><div style="min-width:0">'
+  +'<div class="cpwhenlab" style="color:'+col.darkSoft+'">Today</div>'
+  +'<div class="cpwhentime" style="color:'+col.darkInk+'">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+'</div>'
+  +'<div class="cpwhenroom" style="color:'+col.darkInk+'">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}))+'</div></div>'
+  +'<label class="cptodayav" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></span>')
+  +'</label></div></section>';
+ R+='<div class="cpwx">'+wxCard()+'</div>';
+ var doneN=all.filter(function(x){return x.t.done}).length,totalN=all.length,pct=totalN?Math.round(doneN/totalN*100):0;
+ R+=cpRailCard('h-glance',col.hup.c,'At a glance','',
+  '<div class="cpline"><span class="a">Due this week</span><span class="b cpbig">'+thisWeek.length+'</span></div>'
+  +'<div class="cpline"><span class="a">Due next week</span><span class="b cpbig">'+nextWeek.length+'</span></div>'
+  +(late.length?'<div class="cpline"><span class="a" style="color:#A34A3F">Past due</span><span class="b cpbig" style="color:#A34A3F">'+late.length+'</span></div>':'')
+  +'<div class="cpline"><span class="a">Finished</span><span class="b">'+doneN+' of '+totalN+'</span></div>'
+  +'<div class="cpbar" style="background:'+col.hcls.bg+'"><i style="width:'+pct+'%;background:'+col.hcls.c+'"></i></div>');
+ R+='</aside>';
+
+ return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+U+C+G+'</div>'+R+'</div>';
 }
 
 function coverControls(id,owner){
@@ -6102,7 +6224,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-dedupe],[data-secopen],[data-secscope],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -6118,6 +6240,7 @@ document.addEventListener('click',function(e){
  if(d.scroll){view.menu=false;render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
+ if(d.hrange){view.hrange=d.hrange;render();return}
  if(d.chap){var cpi=d.chap.indexOf(':'),cpc=d.chap.slice(0,cpi),cpk=d.chap.slice(cpi+1),cps=cpShut(cpc);if(cps[cpk])delete cps[cpk];else cps[cpk]=true;cpSetShut(cpc,cps);render();return}
  if(d.dedupe){
   var dc2=classById(d.dedupe),dx=dc2?cpDupLinks(dc2):[];
@@ -6243,11 +6366,12 @@ document.addEventListener('click',function(e){
  }
  if(d.secopen){view.editSurf='__sec';view.picker=true;render();return}
  if(d.secscope){view.secScope=d.secscope;render();return}
+ if(d.chreset){var rcl=classById(view.classId),rs=rcl&&(rcl.sections||[]).filter(function(x){return x.id===d.chreset})[0];if(rs){delete rs.color;save();render()}return}
  if(d.secbold||d.secreset||d.secall||d.secallreset){
   S.theme=S.theme||{};var sec=S.theme.sec=S.theme.sec||{},scid=view.classId;
   if(d.secbold){sec.bold=sec.bold||{};if(cpBold(d.secbold))sec.bold[d.secbold]=false;else delete sec.bold[d.secbold]}
   if(d.secreset){
-   if(view.secScope==='all'){if(sec.all)delete sec.all[d.secreset]}
+   if(view.page==='home'||view.secScope==='all'||CP_SITEWIDE[d.secreset]){if(sec.all)delete sec.all[d.secreset]}
    else if(sec.cls&&sec.cls[scid])delete sec.cls[scid][d.secreset];
    if(S.theme.surfaces)delete S.theme.surfaces[d.secreset];
    applyTheme();
@@ -6256,7 +6380,7 @@ document.addEventListener('click',function(e){
    sec.all=sec.all||{};
    Object.keys(sec.cls[scid]).forEach(function(k){sec.all[k]=sec.cls[scid][k];Object.keys(sec.cls).forEach(function(id){delete sec.cls[id][k]})});
   }
-  if(d.secallreset)delete sec.all;
+  if(d.secallreset&&sec.all)Object.keys(sec.all).forEach(function(k){if(!CP_SITEWIDE[k]&&k.charAt(0)!=='h')delete sec.all[k]});
   save();render();return;
  }
  if(d.bannersize){S.banners=S.banners||{};S.banners[pageKey()]=d.bannersize;save();render();return}
@@ -6283,7 +6407,7 @@ document.addEventListener('click',function(e){
  if(d.opencolours!==undefined){view.modal=null;view.menu=false;view.picker=true;render();return}
  if(d.picker!==undefined){
   view.picker=d.picker==='1';
-  if(view.picker&&view.page==='class'&&classById(view.classId))view.editSurf='__sec'; // on a class page, the corner paint button opens the section colours first
+  if(view.picker&&(view.page==='home'||(view.page==='class'&&classById(view.classId))))view.editSurf='__sec'; // on Home and class pages, the corner paint button opens their section colours first
   render();return;
  }
  if(d.preset!==undefined&&d.preset!==''){
@@ -6518,9 +6642,15 @@ document.addEventListener('input',function(e){
   if(v){var box=document.querySelector('[data-themehex="'+ds.themecolor+'"]');if(box)box.value=v;save()}
   return;
  }
- if(ds.secc&&view.page==='class'){
-  S.theme=S.theme||{};var sc2=S.theme.sec=S.theme.sec||{};sc2.cls=sc2.cls||{};sc2.cls[view.classId]=sc2.cls[view.classId]||{};
-  if(view.secScope==='all'){
+ if(ds.chc&&view.page==='class'){
+  var chcl=classById(view.classId),chs=chcl&&(chcl.sections||[]).filter(function(x){return x.id===ds.chc})[0];
+  if(chs){chs.color=t.value;document.querySelectorAll('[data-chapbadge="'+ds.chc+'"]').forEach(function(b){b.style.background=t.value});save()}
+  return;
+ }
+ if(ds.secc&&(view.page==='class'||view.page==='home')){
+  S.theme=S.theme||{};var sc2=S.theme.sec=S.theme.sec||{};sc2.cls=sc2.cls||{};
+  if(view.classId)sc2.cls[view.classId]=sc2.cls[view.classId]||{};
+  if(view.page==='home'||view.secScope==='all'||CP_SITEWIDE[ds.secc]){
    // every class: one colour for this section everywhere, so drop any class's own pick for it
    sc2.all=sc2.all||{};sc2.all[ds.secc]=t.value;
    Object.keys(sc2.cls).forEach(function(id){delete sc2.cls[id][ds.secc]});
