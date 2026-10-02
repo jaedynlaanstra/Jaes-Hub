@@ -731,23 +731,23 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cpico svg{width:17px;height:17px}
 .cptitlecol{display:flex;flex-direction:column;gap:2px;flex:1 1 auto;min-width:0;max-width:100%}
 .cptitlerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.cptitle{font-family:var(--fh,inherit);font-style:var(--hs,normal);font-size:19px;line-height:1.2;margin:0}
-.cppill{white-space:nowrap;flex:none;font-size:11.5px;font-weight:600;background:var(--card);border-radius:99px;padding:1px 8px;line-height:1.5}
+.cptitle{font-family:var(--fh,inherit);font-style:var(--hs,normal);font-size:19px;line-height:1.2;margin:0;letter-spacing:-.005em}
+.cppill{white-space:nowrap;flex:none;font-size:11.5px;font-weight:500;background:var(--card);border-radius:99px;padding:1px 8px;line-height:1.5}
 .cphint{font-size:12.5px;line-height:1.35}
 .cpacts{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
-.cpbtn,.cpbtn2{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;flex:none;font-size:13px;font-weight:600;border-radius:8px;padding:7px 13px;line-height:1.2;cursor:pointer;font-family:inherit}
+.cpbtn,.cpbtn2{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;flex:none;font-size:13px;font-weight:500;border-radius:8px;padding:7px 13px;line-height:1.2;cursor:pointer;font-family:inherit}
 .cpbtn{color:#fff;border:1px solid transparent}
 .cpbtn:hover{filter:brightness(1.08)}
 .cpbtn2{background:var(--card);color:var(--ink);border:1px solid var(--line2);padding:6px 12px}
 .cpbtn2:hover{background:var(--paper)}
 .cpseg{display:flex;background:var(--card);border-radius:8px;padding:2px;gap:2px}
 .cpseg button{border:none;background:transparent;padding:5px 11px;border-radius:6px;font-size:13px;color:var(--ink2);min-height:0}
-.cpseg button.on{font-weight:600}
+.cpseg button.on{font-weight:500}
 .cpsearch{width:210px;flex:none;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:0 10px;color:var(--ink3);cursor:text}
 .cpsearch svg{width:14px;height:14px;flex:none}
 .cpsearch input{border:none;background:transparent;padding:7px 0;font-size:13px;width:100%;outline:none;color:var(--ink);min-width:0}
 .cpempty{padding:18px 18px;font-size:13.5px;color:var(--ink3);line-height:1.5}
-.cptext{background:none;border:none;padding:0;font-size:13px;font-weight:600;cursor:pointer;min-height:0}
+.cptext{background:none;border:none;padding:0;font-size:13px;font-weight:500;cursor:pointer;min-height:0}
 .cpghost{background:none;border:none;padding:3px 6px;font-size:12px;color:var(--ink3);cursor:pointer;border-radius:6px;min-height:0;display:inline-flex;align-items:center;font-family:inherit}
 .cpghost:hover{color:var(--ink);background:var(--paper)}
 .cpmeta{font-size:12px;color:var(--ink3);white-space:nowrap;flex:none}
@@ -756,20 +756,20 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 /* assignments */
 .cpbody{padding:2px 18px 10px}
 .cpgrid{display:grid;grid-template-columns:26px minmax(0,1fr) 84px 150px 50px 80px;column-gap:10px;align-items:center}
-.cphdr{padding:9px 0;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line)}
+.cphdr{padding:9px 0;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line)}
 .cprow{padding:9px 8px;margin:0 -8px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;border-radius:8px}
 .cprow:hover{background:var(--paper)}
 .cprow .tick{width:17px;height:17px}
-.c-name{display:flex;align-items:center;gap:6px;min-width:0;font-weight:600}
+.c-name{display:flex;align-items:center;gap:6px;min-width:0;font-weight:500}
 .cpnm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.c-count{font-size:12.5px;font-weight:600;white-space:nowrap}
+.c-count{font-size:12.5px;font-weight:500;white-space:nowrap}
 .c-due{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-due.late{color:#A34A3F}
 .c-worth{color:var(--ink2)}
 .c-worth:empty::before,.c-prio:empty::before{content:'\2014';color:var(--ink3)}
-.c-prio .prio{font-size:11.5px;font-weight:600;padding:2px 8px}
+.c-prio .prio{font-size:11.5px;font-weight:500;padding:2px 8px}
 .c-br{display:none}
-.cpmorebox summary{list-style:none;cursor:pointer;font-size:13px;font-weight:600;padding:10px 0 2px}
+.cpmorebox summary{list-style:none;cursor:pointer;font-size:13px;font-weight:500;padding:10px 0 2px}
 .cpmorebox summary::-webkit-details-marker{display:none}
 .cpmorebox summary::marker{content:''}
 .cpmorebox .cphide,.cpmorebox[open] .cpshow{display:none}
@@ -800,8 +800,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cpch.shut .cpchhead{border-bottom-color:transparent}
 .cpchev{width:16px;height:16px;flex:none;color:var(--ink3);transition:transform .2s ease}
 .cpch.shut .cpchev{transform:rotate(-90deg)}
-.cpbadge{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#fff;border-radius:5px;padding:3px 7px;flex:none;line-height:1.3}
-.cpchname{font-size:15px;font-weight:600;color:var(--head,var(--ink));min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpbadge{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#fff;border-radius:5px;padding:3px 7px;flex:none;line-height:1.3}
+.cpchname{font-size:15px;font-weight:500;color:var(--head,var(--ink));min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cpchcount{font-size:12px;color:var(--ink3);white-space:nowrap;flex:none}
 .cpchacts{margin-left:auto;display:flex;gap:2px;flex:none}
 .cpchbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
@@ -811,16 +811,16 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cpch>.cpchbody:first-child{border-top:none}
 .cpcol{padding:9px 12px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .cpcol+.cpcol{border-left:1px solid var(--line)}
-.cpcollab{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:0 6px 4px}
+.cpcollab{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:0 6px 4px}
 .cpcolempty{font-size:13px;color:var(--ink3);padding:7px 6px}
 .cpcol .more summary{padding:6px 6px 2px;font-size:12.5px}
 .cpitem{display:flex;align-items:center;gap:10px;padding:6px 6px;border-radius:8px;min-width:0}
 .cpitem:hover{background:var(--paper)}
-.cptile{width:28px;height:33px;flex:none;border-radius:4px;font-size:8.5px;font-weight:700;letter-spacing:.02em;display:grid;place-items:center;overflow:hidden}
+.cptile{width:28px;height:33px;flex:none;border-radius:4px;font-size:8.5px;font-weight:600;letter-spacing:.02em;display:grid;place-items:center;overflow:hidden}
 .cptileimg{background:var(--paper);border:1px solid var(--line)}
 .cptileimg img{max-width:20px;max-height:20px;object-fit:contain}
 .cpitemtext{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
-.cpitemname{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--link,var(--ink));text-decoration:none;line-height:1.35}
+.cpitemname{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--link,var(--ink));text-decoration:none;line-height:1.35}
 a.cpitemname:hover{text-decoration:underline}
 .cpitemmeta{font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cpdots{width:28px;height:28px;flex:none;border:none;background:transparent;color:var(--ink3);border-radius:8px;padding:0;display:grid;place-items:center;opacity:0;cursor:pointer;min-height:0}
@@ -829,7 +829,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpdots:hover{background:var(--card);color:var(--ink)}
 @media(hover:none){.cpdots{opacity:1}}
 .cpsnip{font-size:12px;color:var(--ink2);background:var(--paper);border-radius:7px;padding:7px 10px;margin:0 6px 6px 44px}
-.cpffoot{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.cpffoot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 @container (max-width:640px){
   .cpchbody{grid-template-columns:minmax(0,1fr)}
   .cpcol+.cpcol{border-left:none;border-top:1px solid var(--line)}
@@ -843,27 +843,27 @@ a.cpitemname:hover{text-decoration:underline}
 .cpli:last-child,.cplist .more .cpli:last-child{border-bottom:none}
 .cpgrow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cpli .tick{width:17px;height:17px}
-.cpmark{border:none;border-radius:99px;padding:2px 9px;font-size:12px;font-weight:600;cursor:pointer;min-height:0}
+.cpmark{border:none;border-radius:99px;padding:2px 9px;font-size:12px;font-weight:500;cursor:pointer;min-height:0}
 .cpprog{padding:15px 18px 4px}
 .cpbar{height:8px;border-radius:99px;overflow:hidden}
 .cpbar i{display:block;height:100%;border-radius:99px;transition:width .4s ease}
 
 /* class settings row */
 .cpsettings{border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.cpsetlab{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-right:6px}
+.cpsetlab{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-right:6px}
 .cpsettings>button:not(.cpghost),.cpsettings>.fakebtn{font-size:12.5px;background:var(--card);border:1px solid var(--line2);border-radius:7px;padding:5px 11px;color:var(--ink)}
 .cpsettings .pastezone{flex-basis:100%}
 
 /* right rail */
 .cprail{display:flex;flex-direction:column;gap:12px;position:relative;min-width:0;border-radius:16px}
 .cpwhen{position:relative;border-radius:13px;padding:15px 16px;display:flex;flex-direction:column;gap:4px}
-.cpwhenlab{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.cpwhentime{font-size:16.5px;font-weight:600;line-height:1.3}
+.cpwhenlab{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.cpwhentime{font-size:16.5px;font-weight:500;line-height:1.3}
 .cpwhenroom{font-size:14px}
 .cpcard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:0}
 .cpcardhead{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--paper)}
 .cpdot{width:7px;height:7px;border-radius:50%;flex:none}
-.cpcardtitle{font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:0;font-style:normal}
+.cpcardtitle{font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:0;font-style:normal}
 .cpcardact{margin-left:auto;font-size:12px;color:var(--ink3);background:none;border:none;padding:2px 4px;cursor:pointer;min-height:0}
 .cpcardact:hover{color:var(--ink)}
 .cpcardbody{padding:11px 14px 13px;display:flex;flex-direction:column;gap:8px}
@@ -876,7 +876,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cprefline:hover .cprefacts{opacity:1}
 @media(hover:none){.cprefacts{opacity:1}}
 .cpgrade{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.cpgradebig{font-size:23px;font-weight:600;line-height:1.1}
+.cpgradebig{font-size:23px;font-weight:500;line-height:1.1}
 .cpperson{display:flex;gap:12px;align-items:flex-start}
 .cpperson+.cpperson,.pastezone+.cpperson{padding-top:12px;border-top:1px solid var(--line)}
 .cpphoto{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none}
@@ -934,7 +934,7 @@ a.cpitemname:hover{text-decoration:underline}
 /* home */
 .cphome .cpgrid{grid-template-columns:26px minmax(0,1fr) 84px 150px 130px}
 .c-cls{min-width:0;display:flex}
-.cpclspill{display:inline-flex;align-items:center;gap:6px;max-width:100%;font-size:11.5px;font-weight:600;border-radius:99px;padding:2px 9px 2px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cpclspill{display:inline-flex;align-items:center;gap:6px;max-width:100%;font-size:11.5px;font-weight:500;border-radius:99px;padding:2px 9px 2px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cpclspill i{width:7px;height:7px;border-radius:50%;flex:none}
 @container (max-width:640px){.cphome .cprow .c-cls{order:5}.cphome .cprow .c-due{order:4}}
 .cpclsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:16px 18px 18px}
@@ -943,7 +943,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpclscover{display:block;width:100%;height:72px}
 .cpclsband{display:block;height:6px}
 .cpclsbody{display:flex;flex-direction:column;gap:2px;padding:10px 12px 12px;min-width:0}
-.cpclsname{display:flex;align-items:flex-start;gap:7px;font-size:14px;font-weight:600;line-height:1.3;color:var(--head,var(--ink))}
+.cpclsname{display:flex;align-items:flex-start;gap:7px;font-size:14px;font-weight:500;line-height:1.3;color:var(--head,var(--ink))}
 .cpclsname i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:5px}
 .cpclsmeta{font-size:11.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cpclsstats{font-size:12px;color:var(--ink2);margin-top:4px}
@@ -953,7 +953,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cptodayav img,.cptodayav span{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.15)}
 .cptodayav svg{width:22px;height:22px;fill:rgba(255,255,255,.7)}
 .cpwx .wx{min-width:0;width:100%;border-radius:13px}
-.cpbig{font-size:15px!important;font-weight:600;color:var(--ink)!important}
+.cpbig{font-size:15px!important;font-weight:500;color:var(--ink)!important}
 .cphomequick{margin:0 0 22px;align-items:center}
 .cpqwrap{display:inline-flex;align-items:center;gap:2px}
 .cpqwrap .iconedit{opacity:0}
@@ -972,25 +972,32 @@ a.cpitemname:hover{text-decoration:underline}
   .cpclsnext{display:none}
   .cphome .cpseg button{padding:5px 8px;font-size:12.5px}
 }
-/* next due countdown */
-.cpnext{position:relative;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--cp-asg-c);color:var(--cp-asg-on,#fff);border-radius:16px;padding:22px 26px 24px;cursor:pointer;container-type:inline-size}
-.cpnext:hover{filter:brightness(1.05)}
-.cpnextl{min-width:0;flex:1 1 260px}
-.cpnextlab{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.78}
-.cpnextbig{display:flex;align-items:baseline;gap:10px;margin:2px 0 4px;line-height:1}
-.cpnextbig .n{font-family:var(--fh,inherit);font-size:84px;font-weight:700;letter-spacing:-.03em}
-.cpnextbig .u{font-size:24px;font-weight:600}
-.cpnexttitle{font-family:var(--fh,inherit);font-size:26px;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
-.cpnextdate{font-size:14px;opacity:.85;margin-top:5px}
-.cpnextr{display:flex;flex-direction:column;align-items:flex-end;gap:14px;flex:0 1 260px;min-width:0}
-.cpnextpill{background:#fff;color:var(--cp-asg-c);font-size:12.5px;font-weight:700;border-radius:99px;padding:3px 11px;white-space:nowrap}
-.cpnextafter{width:100%;background:rgba(255,255,255,.12);border-radius:11px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;margin-top:auto}
-.cpnextrow{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}
-.cpnextrow span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cpnextrow b{white-space:nowrap;font-weight:600}
-@container (max-width:520px){.cpnextr{align-items:stretch;flex-basis:100%}.cpnextpill{align-self:flex-start}}
-@media(max-width:1199px){.cpnext{order:-1}}
-@media(max-width:700px){.cpnext{padding:16px 18px 18px;border-radius:14px}.cpnextbig .n{font-size:58px}.cpnextbig .u{font-size:19px}.cpnexttitle{font-size:20px}.cpnextdate{font-size:13px}}
+/* next due: square card in the side column */
+.cpnextc{cursor:pointer;background:var(--cp-asg-wash);border-color:var(--cp-asg-line)}
+.cpnextc .cpcardhead{background:transparent;border-bottom-color:var(--cp-asg-line)}
+.cpnextc:hover{border-color:var(--cp-asg-c)}
+.cpnexttag{margin-left:auto;font-size:11px;color:var(--cp-asg-c);background:var(--card);border-radius:99px;padding:1px 8px;white-space:nowrap}
+.cpnextc .cpcardbody{gap:2px;padding:12px 14px 14px}
+.cpnextbig{display:flex;align-items:baseline;gap:7px;line-height:1;color:var(--cp-asg-c)}
+.cpnextbig .n{font-family:var(--fh,inherit);font-size:52px;font-weight:var(--wh,500);letter-spacing:-.02em}
+.cpnextbig .u{font-size:15px}
+.cpnextc .cpnexttitle{font-size:15px;line-height:1.3;margin-top:8px;color:var(--head,var(--ink));overflow-wrap:anywhere}
+.cpnextdate{font-size:12.5px;color:var(--ink3);margin-top:1px}
+.cpnextafter{margin-top:10px;padding-top:9px;border-top:1px solid var(--cp-asg-line);display:flex;flex-direction:column;gap:5px}
+.cpnextafter .cpline{font-size:12.5px;color:var(--ink2)}
+.cpnextc.late .cpnextbig,.cpnexts.late .cpnextsnum{color:#A34A3F}
+/* next due: slim row when the side column sits below your work */
+.cpnexts{display:none;align-items:center;gap:14px;background:var(--cp-asg-wash);border:1px solid var(--cp-asg-line);border-radius:13px;padding:11px 14px;cursor:pointer}
+.cpnextsnum{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;height:64px;border-radius:11px;background:var(--card);color:var(--cp-asg-c);line-height:1;flex:none;padding:0 6px}
+.cpnextsnum .n{font-family:var(--fh,inherit);font-size:28px;font-weight:var(--wh,500)}
+.cpnextsnum .u{font-size:10.5px;margin-top:3px;white-space:nowrap}
+.cpnextstext{min-width:0}
+.cpnextslab{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.cpnexts .cpnexttitle{font-size:14.5px;line-height:1.3;color:var(--head,var(--ink));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1199px){.cpnextc{display:none}.cpnexts{display:flex;order:-1}}
+/* small, quiet text buttons (same grey as the CLASS SETTINGS label) */
+.cpquiet{background:none;border:none;padding:3px 6px;margin:0 -2px;font-size:12px;color:var(--ink3);cursor:pointer;border-radius:6px;min-height:0!important;font-family:inherit;display:inline-flex;align-items:center}
+.cpquiet:hover{color:var(--ink2);background:var(--paper)}
 /* chapter header extras */
 .cpbadgeico{display:inline-grid;place-items:center;padding:3px 7px}
 .cpchdots{opacity:.7}
@@ -1001,13 +1008,13 @@ a.cpitemname:hover{text-decoration:underline}
 .cpwide{grid-template-columns:minmax(0,1fr)!important}
 .cpcalwrap{padding:12px 16px 16px;overflow-x:auto}
 .cpcal{min-width:560px}
-.cpcal th{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px 8px}
+.cpcal th{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px 8px}
 .cpcal td{border-color:var(--line);height:96px;padding:5px 6px;border-radius:0}
 .cpcal td.off{background:var(--paper);opacity:.75}
 .cpcal td.today{background:var(--cp-kcal-wash)}
 .cpcal .today .dnum{background:var(--cp-kcal-c);color:var(--cp-kcal-on,#fff)}
-.cpcal .chip{font-size:11px;font-weight:600;border-radius:4px;padding:2px 6px;margin-top:3px}
-.cpday{display:flex;align-items:baseline;gap:8px;padding:14px 0 4px;font-size:13px;font-weight:700;color:var(--head,var(--ink));border-bottom:1px solid var(--line)}
+.cpcal .chip{font-size:11px;font-weight:500;border-radius:4px;padding:2px 6px;margin-top:3px}
+.cpday{display:flex;align-items:baseline;gap:8px;padding:14px 0 4px;font-size:13px;font-weight:600;color:var(--head,var(--ink));border-bottom:1px solid var(--line)}
 .cpday:first-child{padding-top:8px}
 .cpday span{font-size:12px;font-weight:400;color:var(--ink3)}
 .cppagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:4px 0 20px}
@@ -1024,7 +1031,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpapp.editing{border-style:dashed}
 .cpappic{width:42px;height:42px;display:grid;place-items:center}
 .cpappic img,.cpappic .favtile{width:40px!important;height:40px!important;border-radius:10px;object-fit:contain;font-size:18px}
-.cpappnm{font-size:13.5px;font-weight:600;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cpappnm{font-size:13.5px;font-weight:500;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .cpapphost{font-size:11px;color:var(--ink3);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* settings groups as cards */
 .modal .cpsg{border:1px solid var(--line);border-radius:12px;margin-bottom:9px;overflow:hidden;background:var(--card)}
@@ -1050,18 +1057,18 @@ a.cpitemname:hover{text-decoration:underline}
 /* adding straight into a chapter */
 .cpchadd{display:flex;gap:4px;padding:2px 12px 10px;border-top:1px dashed var(--line)}
 .cpchbody+.cpchadd,.cpchempty+.cpchadd{margin-top:0}
-.cpaddbtn{background:none;border:none;padding:6px 8px;font-size:12.5px;font-weight:600;cursor:pointer;border-radius:6px;min-height:0;font-family:inherit;display:inline-flex;align-items:center}
+.cpaddbtn{background:none;border:none;padding:6px 8px;font-size:12.5px;font-weight:500;cursor:pointer;border-radius:6px;min-height:0;font-family:inherit;display:inline-flex;align-items:center}
 .cpaddbtn:hover{background:var(--paper)}
 /* Section style panel (inside the colour picker) */
 .secscope{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:3px;gap:3px;margin:4px 0 8px}
 .secscope button{flex:1;border:none;background:transparent;font-size:13px;padding:6px 8px;border-radius:7px;color:var(--ink2);min-height:0!important}
-.secscope button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.secscope button.on{background:var(--card);color:var(--ink);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .cpdupbtn{color:#A34A3F!important;margin-left:auto}
 .secrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
 .secrow input[type=color]{width:34px;height:28px;padding:0;border:1px solid var(--line2);border-radius:7px;background:none;flex:none;cursor:pointer}
 .secname{flex:1;font-size:13.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .secname small{display:block;font-size:11px;color:var(--ink3);line-height:1.2}
-.secbold{width:32px;height:28px;padding:0;font-weight:800;font-size:14px;border-radius:7px;flex:none;color:var(--ink3);min-height:0!important}
+.secbold{width:32px;height:28px;padding:0;font-weight:600;font-size:14px;border-radius:7px;flex:none;color:var(--ink3);min-height:0!important}
 .secbold.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
 .secsp{width:47px;flex:none}
 </style>
@@ -1368,7 +1375,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v99';
+var BUILD='v100';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3756,9 +3763,9 @@ function cpMaker(base){
  var mk=function(dh,mul,lo,hi,L){
   var ss=Math.max(lo,Math.min(hi,s*mul)),hh=((h+dh)%360+360)%360;
   return {c:hsl2hex(hh,ss,L),bg:hsl2hex(hh,Math.min(ss*.7,46),92.5),line:hsl2hex(hh,Math.min(ss*.5,36),86),
-   title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.3,24),44),wash:hsl2hex(hh,Math.min(ss*.45,30),96.2)};
+   title:hsl2hex(hh,Math.min(ss*.6,42),27),hint:hsl2hex(hh,Math.min(ss*.25,20),47),wash:hsl2hex(hh,Math.min(ss*.45,30),96.2)};
  };
- mk.dark=hsl2hex(h,Math.min(s*.25,18),21);mk.darkSoft=hsl2hex(h,Math.min(s*.35,30),78);mk.darkInk=hsl2hex(h,Math.min(s*.2,20),95);
+ mk.dark=hsl2hex(h,Math.min(s*.35,22),31);mk.darkSoft=hsl2hex(h,Math.min(s*.35,30),80);mk.darkInk=hsl2hex(h,Math.min(s*.2,20),96);
  return mk;
 }
 // the site's own colour (the menu colour) -- used for things that look the same everywhere
@@ -3769,7 +3776,7 @@ function cpColors(c){
  // every class section stays in the class's own colour family: same hue (nudged only a few degrees),
  // told apart by depth and softness. Checklist and Completed instead follow the site's colour, so they
  // look the same on every class (Jae's choice).
- var out={asg:mk(0,1.6,22,70,32),files:mk(5,1.25,16,52,45),mini:site(-6,.9,14,40,36),done:site(10,.8,14,40,58),third:mk(-2,1.1,14,50,25),
+ var out={asg:mk(0,1.25,20,52,41),files:mk(5,1.05,14,42,52),mini:site(-6,.8,12,34,46),done:site(10,.7,12,34,62),third:mk(-2,1,12,40,34),
   dark:mk.dark,darkSoft:mk.darkSoft,darkInk:mk.darkInk};
  // a colour you picked for a section (Section style) replaces the worked-out one, shades and all
  CP_SECS.forEach(function(k){var ov=cpOverride(c.id,k[0]);if(ov&&k[0]!=='when')out[k[0]]=cpFromHex(ov)});
@@ -3781,12 +3788,12 @@ var CP_SITE_TITLES={home:'Home colours',calendar:'Calendar colours',apps:'Applic
 function cpSiteColors(page){
  if(page==='home')return cpHomeColors();
  var site=cpMaker(cpSiteBase()),all=cpSecData().all||{},out={dark:site.dark,darkSoft:site.darkSoft,darkInk:site.darkInk,third:site(-3,1,14,44,26)};
- (CP_SITE_ROWS[page]||[]).forEach(function(r,i){out[r[0]]=all[r[0]]?cpFromHex(all[r[0]]):(i?site(6,1.1,16,48,46):site(0,1.4,20,60,34))});
+ (CP_SITE_ROWS[page]||[]).forEach(function(r,i){out[r[0]]=all[r[0]]?cpFromHex(all[r[0]]):(i?site(6,.95,12,38,52):site(0,1.15,16,46,42))});
  return out;
 }
 function cpHomeColors(){
  var site=cpMaker(cpSiteBase()),d=cpSecData(),all=d.all||{};
- var out={hup:site(0,1.4,20,60,34),hcls:site(6,1.1,16,48,46),third:site(-3,1,14,44,26),dark:site.dark,darkSoft:site.darkSoft,darkInk:site.darkInk};
+ var out={hup:site(0,1.15,16,46,42),hcls:site(6,.95,12,38,52),third:site(-3,1,14,44,26),dark:site.dark,darkSoft:site.darkSoft,darkInk:site.darkInk};
  ['hup','hcls'].forEach(function(k){if(all[k])out[k]=cpFromHex(all[k])});
  cpDarkOver(out,all.htoday);
  return out;
@@ -3794,14 +3801,15 @@ function cpHomeColors(){
 var CP_SECS=[['asg','Assignments'],['files','Files & links'],['mini','Checklist'],['done','Completed'],['when','When and where']];
 function cpFromHex(hex){
  var q=rgb2hsl.apply(null,hex2rgb(hex)),hh=q[0],ss=q[1];
- return {c:hex,bg:hsl2hex(hh,Math.min(ss*.7,46),92.5),line:hsl2hex(hh,Math.min(ss*.5,36),86),title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.3,24),44),wash:hsl2hex(hh,Math.min(ss*.45,30),96.2)};
+ return {c:hex,bg:hsl2hex(hh,Math.min(ss*.7,46),92.5),line:hsl2hex(hh,Math.min(ss*.5,36),86),title:hsl2hex(hh,Math.min(ss*.6,42),27),hint:hsl2hex(hh,Math.min(ss*.25,20),47),wash:hsl2hex(hh,Math.min(ss*.45,30),96.2)};
 }
 // Section style choices live in the synced theme: S.theme.sec = {cls:{<classId>:{asg:'#hex'}}, all:{asg:'#hex'}, bold:{asg:false}}
 function cpSecData(){var t=S.theme||{};return t.sec||{}}
 // Checklist and Completed are always site-wide: only an every-class pick applies to them
 function cpOverride(cid,k){var d=cpSecData();if(CP_SITEWIDE[k])return (d.all&&d.all[k])||'';return (d.cls&&d.cls[cid]&&d.cls[cid][k])||(d.all&&d.all[k])||''}
 var CP_SITEWIDE={mini:1,done:1};
-function cpBold(k){var d=cpSecData();return !(d.bold&&d.bold[k]===false)}
+// titles use your own heading weight; B makes one a little stronger (older saves stored only "false")
+function cpBold(k){var d=cpSecData();return !!(d.bold&&d.bold[k]===true)}
 // the page's colours as CSS variables, set on .cpsplit; the markup only ever refers to var(--cp-...)
 var CP_PARTS=['c','bg','line','title','hint','wash'];
 function cpVarStyle(real){
@@ -3809,7 +3817,7 @@ function cpVarStyle(real){
  Object.keys(real).forEach(function(k){
   if(typeof real[k]!=='object')return;
   CP_PARTS.forEach(function(p){o+='--cp-'+k+'-'+p+':'+real[k][p]+';'});
-  o+='--cp-'+k+'-w:'+(cpBold(k)?650:450)+';--cp-'+k+'-on:'+(contrast(real[k].c,'#ffffff')>=2.6?'#ffffff':'#221d18')+';';
+  o+='--cp-'+k+'-w:'+(cpBold(k)?'600':'var(--wh,500)')+';--cp-'+k+'-on:'+(contrast(real[k].c,'#ffffff')>=2.6?'#ffffff':'#221d18')+';';
  });
  return o+'--cp-dark:'+real.dark+';--cp-darkSoft:'+real.darkSoft+';--cp-darkInk:'+real.darkInk;
 }
@@ -3841,7 +3849,7 @@ var CP_PAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 function cpHead(key,col,title,pill,hint,acts){
  return '<div class="cphead" style="background:var(--s-'+key+'-bg,'+col.bg+');border-bottom-color:var(--s-'+key+'-line,'+col.line+')">'
   +'<div class="cpico" style="background:'+col.c+'">'+CP_ICO[key]+'</div>'
-  +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:var(--s-'+key+'-ink,'+col.title+');font-weight:var(--cp-'+key+'-w,650)">'+title+'</h2>'
+  +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:var(--s-'+key+'-ink,'+col.title+');font-weight:var(--cp-'+key+'-w,500)">'+title+'</h2>'
   +(pill?'<span class="cppill" style="color:'+col.c+'">'+pill+'</span>':'')+'</div>'
   +(hint?'<div class="cphint" style="color:'+col.hint+'">'+hint+'</div>':'')+'</div>'
   +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
@@ -3945,19 +3953,23 @@ function viewClass(c){
  else if(asg.length)hint='No due dates set';
  else hint=allAsg?'All caught up':'Add your first assignment';
  // the big countdown card for whatever is due soonest (late work first, since that's most urgent)
- var NX='';
+ var NX='',NXS='';
  if(nextA){
-  var ncd=cpCountdown(nextA.due),nl=ncd.n<0,big=ncd.n===0?'Today':String(Math.abs(ncd.n)),unit=ncd.n===0?'':(Math.abs(ncd.n)===1?'day':'days')+(nl?' late':'');
+  var ncd=cpCountdown(nextA.due),nl=ncd.n<0,big=ncd.n===0?'Today':String(Math.abs(ncd.n)),unit=ncd.n===0?'':(Math.abs(ncd.n)===1?'day':'days')+(nl?' late':' left');
   var tags=[nextA.priority||'',nextA.weight!==''&&nextA.weight!=null?nextA.weight+'%':''].filter(Boolean).join(' \u00b7 ');
   var after=asg.filter(function(a){return a.due&&a!==nextA}).slice(0,2);
-  NX='<section class="cpnext" data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'" title="Open '+esc(nextA.title)+'">'
-   +'<div class="cpnextl"><div class="cpnextlab">'+(nl?'Past due':'Next due')+'</div>'
-   +'<div class="cpnextbig"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
-   +'<div class="cpnexttitle">'+esc(nextA.title)+'</div>'
-   +'<div class="cpnextdate">'+esc(withTime(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),nextA.time))+'</div></div>'
-   +'<div class="cpnextr">'+(tags?'<span class="cpnextpill">'+esc(tags)+'</span>':'')
-   +(after.length?'<div class="cpnextafter"><div class="cpnextlab">After that</div>'+after.map(function(a){var cc=cpCountdown(a.due);return '<div class="cpnextrow"><span>'+esc(a.title)+'</span><b>'+cc.t+'</b></div>'}).join('')+'</div>':'')
+  var nDate=esc(withTime(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),nextA.time));
+  var nAttr=' data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'" title="Open '+esc(nextA.title)+'"';
+  // side column (wide screens): a square-ish card with the big number
+  NX='<section class="cpcard cpnextc'+(nl?' late':'')+'"'+nAttr+'>'
+   +'<div class="cpcardhead"><span class="cpdot" style="background:'+col.asg.c+'"></span><h3 class="cpcardtitle">'+(nl?'Past due':'Next due')+'</h3>'+(tags?'<span class="cpnexttag">'+esc(tags)+'</span>':'')+'</div>'
+   +'<div class="cpcardbody"><div class="cpnextbig"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
+   +'<div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div>'
+   +(after.length?'<div class="cpnextafter">'+after.map(function(a){var cc=cpCountdown(a.due);return '<div class="cpline"><span class="a">'+esc(a.title)+'</span><span class="b">'+cc.t+'</span></div>'}).join('')+'</div>':'')
    +'</div></section>';
+  // smaller screens (no side column beside your work): one slim row at the top
+  NXS='<section class="cpnexts'+(nl?' late':'')+'"'+nAttr+'><div class="cpnextsnum"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
+   +'<div class="cpnextstext"><div class="cpnextslab">'+(nl?'Past due':'Next due')+(tags?' \u00b7 '+esc(tags):'')+'</div><div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div></div></section>';
  }
  var A='<section class="cpsec cpasg" id="c-assign">'+pencil('asg')
   +cpHead('asg',col.asg,'Assignments',asg.length?asg.length+' open':'',hint,
@@ -4065,12 +4077,12 @@ function viewClass(c){
    // only the side(s) that have something: both empty is one quiet line, one empty gives the other the full width
    if(!isShut)F+=(!fr.length&&!lr.length)?'<div class="cpchempty">Nothing in this chapter yet. Add a file or link below, or move one here with its ⋯ button.</div>'
     :'<div class="cpchbody'+(fr.length&&lr.length?'':' one')+'">'+(fr.length?colList(fr.map(fileRow),'Files',''):'')+(lr.length?colList(lr.map(linkRow),'Links',''):'')+'</div>';
-   if(!isShut)F+='<div class="cpchadd"><label class="cpaddbtn" style="color:'+col.files.c+'"><input type="file" multiple data-file="'+c.id+'" data-filesec="'+esc(g.id)+'" style="display:none">+ File</label>'
-    +'<button class="cpaddbtn" style="color:'+col.files.c+'" data-add="link" data-c="'+c.id+'" data-sec="'+esc(g.id||'_')+'">+ Link</button></div>';
+   if(!isShut)F+='<div class="cpchadd"><label class="cpquiet"><input type="file" multiple data-file="'+c.id+'" data-filesec="'+esc(g.id)+'" style="display:none">+ File</label>'
+    +'<button class="cpquiet" data-add="link" data-c="'+c.id+'" data-sec="'+esc(g.id||'_')+'">+ Link</button></div>';
    F+='</div>';
   });
-  F+='<div class="cpffoot" style="color:'+col.files.c+'"><button class="cptext" style="color:inherit" data-add="section" data-c="'+c.id+'">+ New chapter</button>'
-   +'<button class="cptext" style="color:inherit" data-chapall="'+c.id+'">'+(anyOpen?'Collapse all':'Expand all')+'</button>'+dupBtn+'</div>';
+  F+='<div class="cpffoot"><button class="cpquiet" data-add="section" data-c="'+c.id+'">+ New chapter</button>'
+   +'<button class="cpquiet" data-chapall="'+c.id+'">'+(anyOpen?'Collapse all':'Expand all')+'</button>'+dupBtn+'</div>';
  }
  if(dupBtn&&!(c.sections||[]).length&&!q)F+='<div class="cpffoot">'+dupBtn+'</div>';
  F+='</div></section>';
@@ -4140,7 +4152,7 @@ function viewClass(c){
    +'<div class="cpcardhead"><span class="cpdot" style="background:'+dot+'"></span><h3 class="cpcardtitle"'+(key?' style="color:'+surfHead(key)+'"':'')+'>'+title+'</h3>'+(act||'')+'</div>'
    +'<div class="cpcardbody">'+body+'</div></section>';
  }
- var R='<aside class="cprail" style="'+surfStyle('rail','transparent','transparent','')+'">'+pencil('rail');
+ var R='<aside class="cprail" style="'+surfStyle('rail','transparent','transparent','')+'">'+pencil('rail')+NX;
  if(c.day||c.room){
   var online=/online/i.test(c.day||'');
    // a light colour picked for this card in the old design keeps readable dark text instead of the new light text
@@ -4170,7 +4182,7 @@ function viewClass(c){
   var zone=(view.paste===c.id+':'+ct.id)?'<div class="pastezone" data-drop="'+c.id+':'+ct.id+'">Copy an image, then press Ctrl and V<p class="pz2">Or drag an image file onto this box. Press Escape to cancel.</p></div>':'';
   return zone+'<div class="cpperson">'
    +(ct.photo?'<img class="cpphoto" src="'+ct.photo+'" alt="'+esc(ct.name)+'">':'<div class="cpphoto cpphotoempty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
-   +'<div class="cppersontext"><div class="cpline"><span class="a" style="font-weight:600">'+esc(ct.name||'Unnamed')+'</span></div>'
+   +'<div class="cppersontext"><div class="cpline"><span class="a" style="font-weight:500">'+esc(ct.name||'Unnamed')+'</span></div>'
    +(ct.role?'<div class="cpmeta">'+esc(ct.role)+'</div>':'')
    +(ct.office?'<div class="cpmeta">'+esc(ct.office)+'</div>':'')
    +(ct.hours?'<div class="cpmeta">'+esc(ct.hours)+'</div>':'')
@@ -4193,11 +4205,11 @@ function viewClass(c){
   }).join('');
  R+=railCard('cp-ref',col.third.c,'Reference files','<button class="cpcardact" data-xact="refadd">Add</button>',rb);
  R+=railCard('cp-claude',col.done.c,'Claude project',c.claude?'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Edit</button>':'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Add link</button>',
-  c.claude?'<div class="cpline"><a class="a" href="'+esc(c.claude)+'" target="_blank" rel="noopener" style="font-weight:600">Open Claude project →</a></div>'
+  c.claude?'<div class="cpline"><a class="a" href="'+esc(c.claude)+'" target="_blank" rel="noopener" style="font-weight:500">Open Claude project →</a></div>'
    :'<div class="cpline"><span class="a cpsoft">No project linked</span></div>');
  R+='</aside>';
 
- return top+ask+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NX+A+F+'<div class="cppair">'+K+D+'</div>'+study+G+'</div>'+R+'</div>';
+ return top+ask+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+A+F+'<div class="cppair">'+K+D+'</div>'+study+G+'</div>'+R+'</div>';
 }
 
 /* ---------- Home (v96 redesign, same style as the class page) ----------
@@ -4414,7 +4426,7 @@ function viewProfessors(){
   var ct=x.ct,c=x.c,p=pal(c.color);
   return '<div class="cpperson cppcard">'
    +(ct.photo?'<img class="cpphoto" src="'+ct.photo+'" alt="'+esc(ct.name)+'">':'<div class="cpphoto cpphotoempty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
-   +'<div class="cppersontext"><div class="cpline"><span class="a" style="font-weight:600">'+esc(ct.name||'Unnamed')+'</span></div>'
+   +'<div class="cppersontext"><div class="cpline"><span class="a" style="font-weight:500">'+esc(ct.name||'Unnamed')+'</span></div>'
    +(ct.role?'<div class="cpmeta">'+esc(ct.role)+'</div>':'')
    +(ct.office?'<div class="cpmeta">'+esc(ct.office)+'</div>':'')
    +(ct.hours?'<div class="cpmeta">'+esc(ct.hours)+'</div>':'')
@@ -6552,7 +6564,7 @@ document.addEventListener('click',function(e){
  if(d.chreset){var rcl=classById(view.classId),rs=rcl&&(rcl.sections||[]).filter(function(x){return x.id===d.chreset})[0];if(rs){delete rs.color;save();render()}return}
  if(d.secbold||d.secreset||d.secall||d.secallreset){
   S.theme=S.theme||{};var sec=S.theme.sec=S.theme.sec||{},scid=view.classId;
-  if(d.secbold){sec.bold=sec.bold||{};if(cpBold(d.secbold))sec.bold[d.secbold]=false;else delete sec.bold[d.secbold]}
+  if(d.secbold){sec.bold=sec.bold||{};if(cpBold(d.secbold))delete sec.bold[d.secbold];else sec.bold[d.secbold]=true}
   if(d.secreset){
    if(CP_SITE_ROWS[view.page]||view.secScope==='all'||CP_SITEWIDE[d.secreset]){if(sec.all)delete sec.all[d.secreset]}
    else if(sec.cls&&sec.cls[scid])delete sec.cls[scid][d.secreset];
