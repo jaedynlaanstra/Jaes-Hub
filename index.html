@@ -1027,7 +1027,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v90';
+var BUILD='v91';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4379,6 +4379,39 @@ function mkCss(){
   +'#mk .mkrow button.mkswatch.on,#mk .mkrow label.mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #1c1a17,0 0 0 3px #fff}'
   +'#mk .mkswatch input[type=color]{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);border:none;padding:0;margin:0;opacity:0;cursor:pointer}'
   +'@media (max-width:420px){#mk .mkrow{gap:6px}#mk .mkrow button,#mk .mksizebtn{min-width:40px;width:auto;height:40px}#mk .mksizebtn{width:40px}#mk .mkrow button.mkswatch,#mk .mkrow label.mkswatch{width:32px;height:32px;min-width:32px;max-width:32px}}'
+  +'#mk .mkicon{position:relative}'
+  +'#mk .mkicon.on{background:#EFEAE0;color:#1c1a17}'
+  +'#mk .mkbadge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:#F5D949;color:#1c1a17;font-size:10.5px;font-weight:700;line-height:17px;text-align:center}'
+  +'#mk .mknotes{display:none;width:270px;flex-shrink:0;position:relative;overflow:hidden;background:rgba(0,0,0,.25);border-left:1px solid rgba(255,255,255,.08)}'
+  +'#mk .mknotes.on{display:flex;flex-direction:column}'
+  +'#mk .mknoteshead{padding:10px 12px 6px;font-size:13px;font-weight:600;color:#EFEAE0;flex-shrink:0}'
+  +'#mk .mknoteshead span{color:#C9C3B4;font-weight:400;margin-left:4px}'
+  +'#mk .mknoteslist{position:relative;flex:1;overflow:hidden}'
+  +'#mk .mknote{position:absolute;left:10px;right:10px;top:0;display:block;text-align:left;background:#2a2722;color:#EFEAE0;border:none;border-left:4px solid #F5D949;border-radius:10px;padding:9px 11px;box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;font:inherit;will-change:transform}'
+  +'#mk .mknotemeta{display:block;font-size:11px;color:#C9C3B4;margin-bottom:4px}'
+  +'#mk .mknotemeta b{display:inline-block;min-width:16px;height:16px;line-height:16px;border-radius:8px;background:rgba(255,255,255,.14);color:#EFEAE0;text-align:center;font-size:10px;margin-right:6px}'
+  +'#mk .mknotetext{display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.4;white-space:pre-wrap;word-break:break-word}'
+  +'#mk .mknotesempty{padding:16px 14px;font-size:13px;line-height:1.5;color:#C9C3B4}'
+  +'#mk .mknotesempty b{display:block;color:#EFEAE0;margin-bottom:4px}'
+  +'#mk .mknotedot{position:absolute;z-index:3;width:22px;height:22px;margin:-26px 0 0 -4px;border-radius:11px 11px 11px 3px;border:2px solid #fff;color:#1c1a17;font-size:11px;font-weight:700;line-height:18px;text-align:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer;touch-action:manipulation}'
+  +'@media (max-width:699px){#mk .mknotes{position:absolute;left:0;right:0;bottom:0;width:auto;max-height:44%;z-index:5;border-left:none;border-top:1px solid rgba(255,255,255,.12);border-radius:16px 16px 0 0;background:#24211d;box-shadow:0 -10px 30px rgba(0,0,0,.45)}#mk .mkmain{position:relative}#mk .mknoteslist{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 10px 10px}#mk .mknote{position:relative;left:0;right:0;width:100%;margin-bottom:8px;transform:none!important}}'
+  +'#mk .mkbubble{position:absolute;z-index:20;display:flex;align-items:center;gap:6px;background:#EFEAE0;color:#1c1a17;border:none;border-radius:20px;padding:0 14px 0 11px;height:40px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.4);cursor:pointer;animation:mkpop .16s ease-out}'
+  +'@keyframes mkpop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}'
+  +'#mk .mknoteed{position:absolute;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 70px) 14px 14px}'
+  +'#mk .mknoteedcard{width:100%;max-width:440px;background:#2a2722;border-radius:16px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:mkpop .16s ease-out}'
+  +'#mk .mknoteedhead{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:15px}'
+  +'#mk .mknoteedhead i{width:14px;height:14px;border-radius:7px;flex-shrink:0}'
+  +'#mk .mknoteedhead span{margin-left:auto;font-size:12.5px;color:#C9C3B4}'
+  +'#mk .mknoteed textarea{display:block;width:100%;box-sizing:border-box;min-height:120px;resize:vertical;background:#1c1a17;color:#EFEAE0;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px;line-height:1.45;-webkit-user-select:text;user-select:text;outline:none}'
+  +'#mk .mknoteed textarea:focus{border-color:rgba(255,255,255,.4)}'
+  +'#mk .mknoteedbtns{display:flex;align-items:center;gap:8px;margin-top:12px}'
+  +'#mk .mknoteedbtns button{height:42px;padding:0 16px;border-radius:11px;border:none;background:rgba(255,255,255,.1);color:#EFEAE0;font-size:14.5px;cursor:pointer}'
+  +'#mk .mknoteedbtns button.mkprimary{background:#EFEAE0;color:#1c1a17;font-weight:600}'
+  +'#mk .mknoteedbtns button.mkdanger{color:#ff8a80}'
+  +'#mk .mknoteedbtns button.mkdanger.mkprimary{background:#e5534b;color:#fff}'
+  +'#mk .mkask b{display:block;font-size:16px;margin-bottom:6px}'
+  +'#mk .mkask p{margin:0 0 6px;font-size:14px;line-height:1.4;color:#C9C3B4;white-space:pre-wrap;word-break:break-word}'
+  +'#mk .mkask .mkasksub{color:#EFEAE0}'
   +'#mk .mkswatch.mkcustom{background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)}';
  document.head.appendChild(st);
 }
@@ -4410,14 +4443,14 @@ async function mkOpen(cid,i){
  var doc;
  try{doc=await lib.getDocument({data:b64ToBytes(f.data)}).promise}catch(e){alert('Could not open this PDF.');return}
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},zoomGen:0,curPage:1,zoom:1,mode:'read',
-     tool:'pen',color:MK_COLORS.pen[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false};
+     tool:'pen',color:MK_COLORS.pen[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false,notesOpen:false};
  mkCss();
  mkLockViewportZoom();
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
  document.body.appendChild(el);
  mkSetMode('read');
  el.innerHTML='<div class="mktop" id="mktop"></div>'
-  +'<div class="mkmain"><div class="mkthumbs" id="mkthumbs"></div><div class="mkbody" id="mkbody"><div class="mkpages" id="mkpages"></div><div class="mkspacer" id="mkspacer"></div></div></div>'
+  +'<div class="mkmain"><div class="mkthumbs" id="mkthumbs"></div><div class="mkbody" id="mkbody"><div class="mkpages" id="mkpages"></div><div class="mkspacer" id="mkspacer"></div></div><div class="mknotes" id="mknotes"></div></div>'
   +'<div class="mktools" id="mktoolbar"></div>';
  el.addEventListener('click',mkClick);
  el.addEventListener('input',mkColorInput);
@@ -4450,6 +4483,7 @@ async function mkOpen(cid,i){
  var pagesEl=document.getElementById('mkpages');
  pagesEl.innerHTML=frag;pagesEl.style.paddingBottom=Math.round(12*MK.zoom)+'px';
  body.addEventListener('scroll',mkOnScrollThrottled,{passive:true});
+ body.addEventListener('scroll',mkNotesOnScroll,{passive:true});
  mkOnScroll();
 }
 function mkClose(){
@@ -4469,7 +4503,7 @@ function mkRefitKeepingPlace(){
  mkRecomputeFitScale();mkApplyZoomResize();
  var g=mkGeom(MK.zoom),s=mkScrollFor(g,a,cx,0);
  body.scrollLeft=Math.max(0,Math.min(g.maxLeft,s.sl));body.scrollTop=Math.max(0,Math.min(g.maxTop,s.st));
- mkOnScroll();
+ mkOnScroll();mkNotesLayout();
 }
 function mkRecomputeFitScale(){
  var body=document.getElementById('mkbody');if(!body)return;
@@ -4696,14 +4730,18 @@ function mkEraseAt(page,centers){
   var pieces=mkEraseSplit(pts,centers,r);
   if(pieces.length===1&&pieces[0].length>=pts.length){next.push(s);continue}
   changed=true;
-  pieces.forEach(function(seg){
-   next.push({id:uid(),tool:s.tool,color:s.color,width:s.width,page:page,pts:seg});
+  // the longest piece left over keeps the original's id, so a note on it simply stays attached
+  var keep=-1,best=-1;
+  pieces.forEach(function(seg,pi){var L=0;for(var q=1;q<seg.length;q++)L+=Math.hypot(seg[q][0]-seg[q-1][0],seg[q][1]-seg[q-1][1]);if(L>best){best=L;keep=pi}});
+  pieces.forEach(function(seg,pi){
+   next.push({id:pi===keep?s.id:uid(),tool:s.tool,color:s.color,width:s.width,page:page,pts:seg});
   });
  }
  if(changed){MK.eraseCur=next;mkMarks().strokes=MK.eraseOther.concat(next);mkDrawAnnoForPage(page)}
  return changed;
 }
 function mkBeginStroke(anno,page,clientX,clientY,pressure){
+ mkHideBubble();
  var p=mkAnnoPoint(anno,clientX,clientY,page);
  if(MK.tool==='eraser'){
   MK.erasing=true;MK.erasePage=page;MK.eraseBefore=JSON.parse(JSON.stringify(mkStrokesForPage(page)));
@@ -4767,9 +4805,15 @@ function mkFinishErase(){
  if(!page)return;
  var after=mkStrokesForPage(page);
  if(JSON.stringify(after)!==JSON.stringify(before)){
-  MK.history.push({t:'erase',page:page,before:before,after:JSON.parse(JSON.stringify(after))});
+  var act={t:'erase',page:page,before:before,after:JSON.parse(JSON.stringify(after))};
+  MK.history.push(act);
   MK.future=[];
   mkRerenderChrome();mkCommit();
+  // a highlight that had a note is now completely gone: ask whether its note goes too
+  var still={};after.forEach(function(x){still[x.id]=1});
+  var gone={};before.forEach(function(x){if(!still[x.id])gone[x.id]=1});
+  var orphaned=((MK.f.marks&&MK.f.marks.notes)||[]).filter(function(nt){return gone[nt.sid]});
+  if(orphaned.length)mkAskDeleteNotes(orphaned,act);
  }
 }
 function mkFinishStroke(){
@@ -4848,6 +4892,7 @@ function mkShowView(v){
  var tx=p.left-v.sl+body.scrollLeft-p0.left*kx,ty=p.top-v.st+body.scrollTop-p0.top*ky;
  document.getElementById('mkpages').style.transform='translate('+tx+'px,'+ty+'px) scale('+kx+','+ky+')';
  MK.shown=v;
+ mkHideBubble();mkNotesLayout();
  var zval=document.getElementById('mkzoomval');if(zval)zval.value=Math.round(mkClampZoom(v.z)*100)+'%';
 }
 // make view v the real layout (v must already be in range), with no transform left over
@@ -4859,7 +4904,7 @@ function mkCommitView(v){
  if(Math.abs(v.z-MK.zoom)>1e-9){MK.zoom=v.z;mkApplyZoomResize()}
  body.scrollLeft=v.sl;body.scrollTop=v.st;
  MK.g0=null;MK.shown=null;
- mkOnScroll();
+ mkOnScroll();mkNotesLayout();
 }
 // glide from what's on screen now to view `target`, then make it real
 function mkSettleTo(target,ms){
@@ -4982,6 +5027,7 @@ function mkCommitPending(useX,useY){
 }
 function mkTouchStart(e){
  if(!MK)return;
+ if(e.target&&e.target.closest&&e.target.closest('.mknoteed'))return; // typing a note: leave touches to the sheet
  // Safari fires a duplicate TouchEvent for every Apple Pencil contact alongside the PointerEvent we
  // actually draw with -- if we merely ignore it without suppressing it too, the browser is left free
  // to treat that same contact as a native gesture, which is what was starting a text selection
@@ -5123,6 +5169,7 @@ function mkAddStroke(s){
  var mk=mkMarks();mk.strokes.push(s);
  MK.history.push({t:'add',s:s});MK.future=[];
  mkDrawAnnoForPage(s.page);mkRerenderChrome();mkCommit();
+ if(s.tool==='hi')mkShowBubble(s,4000); // offer a note on the highlight you just drew
 }
 function mkRemoveStroke(s){
  var mk=mkMarks(),idx=mk.strokes.indexOf(s);if(idx<0)return;
@@ -5138,7 +5185,7 @@ function mkUndo(){
  var act=MK.history.pop(),mk=mkMarks(),page;
  if(act.t==='add'){page=act.s.page;var idx=mk.strokes.indexOf(act.s);if(idx>-1)mk.strokes.splice(idx,1)}
  else if(act.t==='remove'){page=act.s.page;mk.strokes.splice(act.idx,0,act.s)}
- else{page=act.page;mkSwapPage(mk,page,act.before)}
+ else{page=act.page;mkSwapPage(mk,page,act.before);if(act.notesBefore)mk.notes=JSON.parse(JSON.stringify(act.notesBefore))}
  MK.future.push(act);
  mkDrawAnnoForPage(page);mkRerenderChrome();mkCommit();
 }
@@ -5147,7 +5194,7 @@ function mkRedo(){
  var act=MK.future.pop(),mk=mkMarks(),page;
  if(act.t==='add'){page=act.s.page;mk.strokes.push(act.s)}
  else if(act.t==='remove'){page=act.s.page;var idx=mk.strokes.indexOf(act.s);if(idx>-1)mk.strokes.splice(idx,1)}
- else{page=act.page;mkSwapPage(mk,page,act.after)}
+ else{page=act.page;mkSwapPage(mk,page,act.after);if(act.notesAfter)mk.notes=JSON.parse(JSON.stringify(act.notesAfter))}
  MK.history.push(act);
  mkDrawAnnoForPage(page);mkRerenderChrome();mkCommit();
 }
@@ -5161,6 +5208,211 @@ function mkCommit(){
   mirrorFiles(cid);saveFiles(cid,true);save();
   if(sbUser)cloudSync(true);
  },600);
+}
+
+/* ---------- notes on highlights (like comments in Word) ----------
+   A note belongs to one highlight (by the highlight's id) and is stored next to the strokes, in
+   marks.notes, so it syncs with the rest of your markup. Older app versions keep the marks object
+   whole, so they carry notes along untouched. A note also remembers its own spot (page, x, y), so
+   if its highlight is ever gone it still has somewhere to sit.
+   Notes are only shown while the Notes panel is on: a column beside the page on a wide screen
+   (each note level with its highlight, like Word), a list sliding up from the bottom on a phone. */
+var MK_ICO_NOTE=mkIco('<path d="M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-7l-4.5 3.5V16H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/><path d="M8 9h8M8 12h5"/>',18);
+function mkNotes(){var mk=mkMarks();if(!mk.notes)mk.notes=[];return mk.notes}
+function mkNoteCount(){return (MK&&MK.f.marks&&MK.f.marks.notes)?MK.f.marks.notes.length:0}
+function mkStrokeById(id){var l=(MK.f.marks&&MK.f.marks.strokes)||[];for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i];return null}
+function mkNoteFor(sid){var l=mkNotes();for(var i=0;i<l.length;i++)if(l[i].sid===sid)return l[i];return null}
+function mkBBox(pts){
+ var b={x0:Infinity,y0:Infinity,x1:-Infinity,y1:-Infinity};
+ pts.forEach(function(q){if(q[0]<b.x0)b.x0=q[0];if(q[0]>b.x1)b.x1=q[0];if(q[1]<b.y0)b.y0=q[1];if(q[1]>b.y1)b.y1=q[1]});
+ return b;
+}
+// where a note points on its page, in page units: the top-right corner of its highlight, or its saved spot
+function mkNoteSpot(nt){
+ var s=mkStrokeById(nt.sid);
+ if(s&&s.pts&&s.pts.length){var b=mkBBox(s.pts);return {page:s.page,x:b.x1,y:b.y0,live:true}}
+ return {page:nt.page,x:nt.x,y:nt.y,live:false};
+}
+// page units -> screen position, valid even mid-pinch (the canvas's on-screen rect includes the transform)
+function mkPageToScreen(page,x,y){
+ var anno=document.querySelector('.mkanno[data-mkpage="'+page+'"]'),info=MK.pageInfo[page];if(!anno||!info)return null;
+ var r=anno.getBoundingClientRect(),k=r.width/info.vp1.width;
+ return {x:r.left+x*k,y:r.top+y*k,k:k};
+}
+// the highlight under a screen point (a little forgiving, so a fingertip finds it)
+function mkHitHighlight(cx,cy){
+ for(var n=1;n<=MK.pageCount;n++){
+  var anno=document.querySelector('.mkanno[data-mkpage="'+n+'"]');if(!anno)continue;
+  var r=anno.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)continue;
+  var k=r.width/MK.pageInfo[n].vp1.width,p=[(cx-r.left)/k,(cy-r.top)/k];
+  var list=mkStrokesForPage(n);
+  for(var i=list.length-1;i>=0;i--){
+   var s=list[i];if(s.tool!=='hi'||!s.pts||!s.pts.length)continue;
+   var reach=s.width/2+8/k;
+   if(!mkBoundsNear(s.pts,p,reach))continue;
+   if(s.pts.length===1){if(Math.hypot(p[0]-s.pts[0][0],p[1]-s.pts[0][1])<=reach)return s;continue}
+   for(var j=1;j<s.pts.length;j++)if(mkDistToSeg(p,s.pts[j-1],s.pts[j])<=reach)return s;
+  }
+  return null;
+ }
+ return null;
+}
+
+/* the small "Add note" bubble: right after you draw a highlight, or when you tap one in Reading mode */
+var mkBubbleTimer=null;
+function mkShowBubble(s,ms){
+ mkHideBubble();
+ var el=document.getElementById('mk');if(!el||!s||!s.pts||!s.pts.length)return;
+ var b=mkBBox(s.pts),pos=mkPageToScreen(s.page,b.x1,b.y0);if(!pos)return;
+ var has=mkNoteFor(s.id);
+ var bub=document.createElement('button');bub.className='mkbubble';bub.id='mkbubble';
+ bub.setAttribute('data-mk','note:'+s.id);
+ bub.innerHTML=MK_ICO_NOTE+'<span>'+(has?'Open note':'Add note')+'</span>';
+ el.appendChild(bub);
+ var w=bub.offsetWidth,h=bub.offsetHeight,vw=el.clientWidth;
+ var left=Math.max(8,Math.min(vw-w-8,pos.x-w/2)),top=pos.y-h-10;
+ if(top<70)top=pos.y+Math.max(14,s.width*pos.k)+6;
+ bub.style.left=left+'px';bub.style.top=top+'px';
+ if(ms)mkBubbleTimer=setTimeout(mkHideBubble,ms);
+}
+function mkHideBubble(){clearTimeout(mkBubbleTimer);var b=document.getElementById('mkbubble');if(b)b.remove()}
+
+/* writing a note */
+function mkOpenNoteEditor(sid,noteId){
+ mkHideBubble();
+ var nt=noteId?mkNotes().filter(function(x){return x.id===noteId})[0]:mkNoteFor(sid);
+ var s=nt?mkStrokeById(nt.sid):mkStrokeById(sid);
+ if(!nt&&!s)return;
+ MK.editingNote={id:nt?nt.id:null,sid:nt?nt.sid:sid};
+ var el=document.getElementById('mk'),ed=document.createElement('div');
+ ed.className='mknoteed';ed.id='mknoteed';
+ var color=(nt&&nt.color)||(s&&s.color)||'#F5D949',page=nt?mkNoteSpot(nt).page:s.page;
+ ed.innerHTML='<div class="mknoteedcard" role="dialog" aria-label="Note">'
+  +'<div class="mknoteedhead"><i style="background:'+esc(color)+'"></i><b>'+(nt?'Note':'New note')+'</b><span>Page '+page+'</span></div>'
+  +'<textarea id="mknotetext" rows="5" placeholder="Type your note">'+esc(nt?nt.text:'')+'</textarea>'
+  +'<div class="mknoteedbtns">'+(nt?'<button data-mk="notedel" class="mkdanger">Delete</button>':'')
+  +'<span class="mkgrow"></span><button data-mk="notecancel">Cancel</button><button data-mk="notesave" class="mkprimary">Save</button></div></div>';
+ el.appendChild(ed);
+ var ta=document.getElementById('mknotetext');
+ setTimeout(function(){try{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)}catch(e){}},30);
+}
+function mkCloseNoteEditor(){var ed=document.getElementById('mknoteed');if(ed)ed.remove();MK.editingNote=null}
+function mkSaveNote(){
+ var ed=MK.editingNote;if(!ed)return;
+ var ta=document.getElementById('mknotetext'),text=(ta?ta.value:'').replace(/\s+$/,'');
+ var list=mkNotes(),nt=ed.id?list.filter(function(x){return x.id===ed.id})[0]:null;
+ if(!text){if(nt)mkDeleteNote(nt.id);mkCloseNoteEditor();return}
+ var now=new Date().toISOString();
+ if(nt){nt.text=text;nt.at=now}
+ else{
+  var s=mkStrokeById(ed.sid);if(!s){mkCloseNoteEditor();return}
+  var b=mkBBox(s.pts);
+  list.push({id:uid(),sid:s.id,page:s.page,x:b.x1,y:b.y0,color:s.color,text:text,at:now});
+ }
+ mkCloseNoteEditor();mkNotesChanged();
+}
+function mkDeleteNote(id){
+ var mk=mkMarks();mk.notes=mkNotes().filter(function(x){return x.id!==id});
+ mkNotesChanged();
+}
+function mkNotesChanged(){mkRerenderChrome();mkCommit()}
+
+/* the Notes panel */
+function mkToggleNotes(){
+ MK.notesOpen=!MK.notesOpen;
+ mkHideBubble();
+ var el=document.getElementById('mknotes');
+ el.className='mknotes'+(MK.notesOpen?' on':'');
+ mkRefitKeepingPlace(); // on a wide screen the panel takes width from the page, same as the thumbnail rail
+ mkNotesRefresh();
+}
+function mkNotesNarrow(){return window.matchMedia('(max-width:699px)').matches}
+function mkNotesSorted(){
+ return mkNotes().map(function(nt){return {nt:nt,sp:mkNoteSpot(nt)}})
+  .sort(function(a,b){return a.sp.page-b.sp.page||a.sp.y-b.sp.y||a.sp.x-b.sp.x});
+}
+// rebuild the panel's cards and the little numbered markers on the pages
+function mkNotesRefresh(){
+ if(!MK)return;
+ document.querySelectorAll('#mk .mknotedot').forEach(function(d){d.remove()});
+ var panel=document.getElementById('mknotes');if(!panel)return;
+ if(!MK.notesOpen){panel.innerHTML='';return}
+ var items=mkNotesSorted();
+ if(!items.length){
+  panel.innerHTML='<div class="mknotesempty"><b>No notes yet</b>Draw a highlight in Markup, then tap <i>Add note</i>. In Reading, tap any highlight.</div>';
+  return;
+ }
+ var html='<div class="mknoteshead">Notes <span>'+items.length+'</span></div><div class="mknoteslist" id="mknoteslist">';
+ items.forEach(function(it,i){
+  var nt=it.nt;
+  html+='<button class="mknote" data-mk="noteopen:'+nt.id+'" data-mknote="'+nt.id+'" style="border-left-color:'+esc(nt.color||'#F5D949')+'">'
+   +'<span class="mknotemeta"><b>'+(i+1)+'</b>Page '+it.sp.page+(it.sp.live?'':' · highlight removed')+'</span>'
+   +'<span class="mknotetext">'+esc(nt.text)+'</span></button>';
+  // the matching marker on the page, placed in % so it rides along with zoom and pinch for free
+  var wrap=document.querySelector('.mkpagebox[data-mkpage="'+it.sp.page+'"] .mkpagewrap'),info=MK.pageInfo[it.sp.page];
+  if(wrap&&info){
+   var d=document.createElement('button');d.className='mknotedot';d.setAttribute('data-mk','noteopen:'+nt.id);
+   d.style.left=(it.sp.x/info.vp1.width*100)+'%';d.style.top=(it.sp.y/info.vp1.height*100)+'%';
+   d.style.background=nt.color||'#F5D949';d.textContent=i+1;d.setAttribute('aria-label','Note '+(i+1));
+   wrap.appendChild(d);
+  }
+ });
+ panel.innerHTML=html+'</div>';
+ mkNotesLayout();
+}
+// wide screens: line each card up level with its highlight, nudging cards down so none overlap
+function mkNotesLayout(){
+ if(!MK||!MK.notesOpen||mkNotesNarrow())return;
+ var list=document.getElementById('mknoteslist');if(!list)return;
+ var lr=list.getBoundingClientRect(),prev=-Infinity;
+ mkNotesSorted().forEach(function(it){
+  var card=list.querySelector('[data-mknote="'+it.nt.id+'"]');if(!card)return;
+  var pos=mkPageToScreen(it.sp.page,it.sp.x,it.sp.y);if(!pos)return;
+  var top=Math.max(pos.y-lr.top-6,prev+8);
+  card.style.transform='translateY('+Math.round(top)+'px)';
+  prev=top+card.offsetHeight;
+ });
+}
+var mkNotesRaf=0;
+function mkNotesOnScroll(){
+ if(!MK)return;
+ mkHideBubble();
+ if(!MK.notesOpen||mkNotesRaf)return;
+ mkNotesRaf=requestAnimationFrame(function(){mkNotesRaf=0;mkNotesLayout()});
+}
+// jump to a note's highlight (used from the phone list, where cards aren't beside their highlight)
+function mkScrollToNote(nt){
+ var sp=mkNoteSpot(nt),body=document.getElementById('mkbody'),g=mkGeom(MK.zoom),p=g.pages[sp.page];if(!p)return;
+ var k=p.w/MK.pageInfo[sp.page].vp1.width;
+ body.scrollTop=Math.max(0,Math.min(g.maxTop,p.top+sp.y*k-body.clientHeight*.3));
+ body.scrollLeft=Math.max(0,Math.min(g.maxLeft,p.left+sp.x*k-body.clientWidth/2));
+ mkOnScroll();
+}
+
+/* erasing a highlight that has a note: ask whether the note goes too */
+function mkAskDeleteNotes(notes,act){
+ var el=document.getElementById('mk'),dlg=document.createElement('div');
+ dlg.className='mknoteed';dlg.id='mkaskdel';
+ var one=notes.length===1;
+ dlg.innerHTML='<div class="mknoteedcard mkask" role="alertdialog">'
+  +'<b>'+(one?'This highlight had a note':'These highlights had '+notes.length+' notes')+'</b>'
+  +'<p>'+(one?'“'+esc(notes[0].text.length>90?notes[0].text.slice(0,90)+'…':notes[0].text)+'”':'')+'</p>'
+  +'<p class="mkasksub">Delete the note'+(one?'':'s')+' too?</p>'
+  +'<div class="mknoteedbtns"><span class="mkgrow"></span><button data-mk="askkeep">Keep '+(one?'note':'notes')+'</button><button data-mk="askdel" class="mkdanger mkprimary">Delete '+(one?'note':'notes')+'</button></div></div>';
+ el.appendChild(dlg);
+ MK.askDel={ids:notes.map(function(n){return n.id}),act:act};
+}
+function mkAnswerDeleteNotes(del){
+ var d=document.getElementById('mkaskdel');if(d)d.remove();
+ var q=MK.askDel;MK.askDel=null;if(!q)return;
+ if(del){
+  var mk=mkMarks();
+  // remembered on the erase's undo step, so Undo brings the highlight AND its note back together
+  q.act.notesBefore=JSON.parse(JSON.stringify(mkNotes()));
+  mk.notes=mkNotes().filter(function(x){return q.ids.indexOf(x.id)<0});
+  q.act.notesAfter=JSON.parse(JSON.stringify(mk.notes));
+  mkNotesChanged();
+ }
 }
 
 /* ---------- page thumbnails (the hamburger toggle on the left) ---------- */
@@ -5198,6 +5450,7 @@ function mkRerenderChrome(){
  var top=document.getElementById('mktop'),tools=document.getElementById('mktoolbar');
  if(top)top.innerHTML=mkTopHtml();
  if(tools)tools.innerHTML=MK.mode==='edit'?mkToolbarHtml():'';
+ mkNotesRefresh();
 }
 function mkTopHtml(){
  return '<button class="mkicon" data-mk="thumbs" aria-label="Show pages">'+MK_ICO.menu+'</button>'
@@ -5212,6 +5465,7 @@ function mkTopHtml(){
   +'<button data-mk="zoomin" aria-label="Zoom in">+</button></div>'
   +'<div class="mkmode"><button class="'+(MK.mode==='read'?'on':'')+'" data-mk="mode:read">Reading</button>'
   +'<button class="'+(MK.mode==='edit'?'on':'')+'" data-mk="mode:edit">Markup</button></div>'
+  +'<button class="mkicon'+(MK.notesOpen?' on':'')+'" data-mk="notes" aria-label="Show notes" title="Notes">'+MK_ICO_NOTE+(mkNoteCount()?'<span class="mkbadge">'+mkNoteCount()+'</span>':'')+'</button>'
   +'<button class="mkicon" data-mk="openext" aria-label="Open in your browser">'+MK_ICO.ext+'</button>'
   +'<button class="mkicon" data-mk="dark" aria-label="Switch dark or light">'+(MK.dark?MK_ICO.sun:MK_ICO.moon)+'</button>';
 }
@@ -5242,15 +5496,34 @@ function mkApplyZoomValue(raw){
  mkZoomTo(n/100);
 }
 function mkZoomKey(e){
+ if(e.target&&e.target.id==='mknotetext'){if(e.key==='Escape'){e.preventDefault();mkCloseNoteEditor()}else if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();mkSaveNote()}return}
  if(e.target&&e.target.id==='mkzoomval'&&(e.key==='Enter')){e.preventDefault();mkApplyZoomValue(e.target.value);e.target.blur()}
 }
 function mkZoomBlur(e){
  if(e.target&&e.target.id==='mkzoomval')mkApplyZoomValue(e.target.value);
 }
 function mkClick(e){
- var b=e.target.closest('[data-mk]');if(!b)return;
+ var b=e.target.closest('[data-mk]');
+ if(!b){
+  // tapping the empty dark backdrop around a note editor closes it, like any sheet
+  if(e.target.classList&&e.target.classList.contains('mknoteed')&&e.target.id==='mknoteed'){mkCloseNoteEditor();return}
+  // Reading mode: tap a highlight to add (or open) its note
+  if(MK.mode==='read'&&e.target.closest&&e.target.closest('#mkbody')){
+   var hs=mkHitHighlight(e.clientX,e.clientY);
+   if(hs){var hn=mkNoteFor(hs.id);if(hn&&MK.notesOpen)mkOpenNoteEditor(null,hn.id);else mkShowBubble(hs,5000)}
+   else mkHideBubble();
+  }
+  return;
+ }
  var a=b.getAttribute('data-mk'),arg='',i=a.indexOf(':');if(i>-1){arg=a.slice(i+1);a=a.slice(0,i)}
  if(a==='close'){mkClose();return}
+ if(a==='notes'){mkToggleNotes();mkRerenderChrome();return}
+ if(a==='note'){mkOpenNoteEditor(arg);return}
+ if(a==='noteopen'){var on=mkNotes().filter(function(x){return x.id===arg})[0];if(on){if(mkNotesNarrow())mkScrollToNote(on);mkOpenNoteEditor(null,on.id)}return}
+ if(a==='notesave'){mkSaveNote();return}
+ if(a==='notecancel'){mkCloseNoteEditor();return}
+ if(a==='notedel'){var ed=MK.editingNote;mkCloseNoteEditor();if(ed&&ed.id)mkDeleteNote(ed.id);return}
+ if(a==='askkeep'||a==='askdel'){mkAnswerDeleteNotes(a==='askdel');return}
  if(a==='thumbs'){mkToggleThumbs();return}
  if(a==='mode'){mkSetMode(MK.mode===arg&&arg==='edit'?'read':arg);mkRerenderChrome();return}
  if(a==='dark'){MK.dark=!MK.dark;document.querySelectorAll('.mkpagewrap').forEach(function(w){w.style.filter=MK.dark?'invert(1) hue-rotate(180deg)':''});mkRerenderChrome();return}
