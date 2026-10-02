@@ -795,7 +795,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 /* files and links */
 .cpfbody{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
 .cpch{border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.cpchhead{display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--paper);cursor:pointer;-webkit-user-select:none;user-select:none;border-bottom:1px solid var(--line)}
+.cpchhead{display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--cp-files-wash,var(--paper));cursor:pointer;-webkit-user-select:none;user-select:none;border-bottom:1px solid var(--line)}
 .cpchhead:hover{filter:brightness(.985)}
 .cpch.shut .cpchhead{border-bottom-color:transparent}
 .cpchev{width:16px;height:16px;flex:none;color:var(--ink3);transition:transform .2s ease}
@@ -972,6 +972,31 @@ a.cpitemname:hover{text-decoration:underline}
   .cpclsnext{display:none}
   .cphome .cpseg button{padding:5px 8px;font-size:12.5px}
 }
+/* next due countdown */
+.cpnext{position:relative;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--cp-asg-c);color:var(--cp-asg-on,#fff);border-radius:16px;padding:22px 26px 24px;cursor:pointer;container-type:inline-size}
+.cpnext:hover{filter:brightness(1.05)}
+.cpnextl{min-width:0;flex:1 1 260px}
+.cpnextlab{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.78}
+.cpnextbig{display:flex;align-items:baseline;gap:10px;margin:2px 0 4px;line-height:1}
+.cpnextbig .n{font-family:var(--fh,inherit);font-size:84px;font-weight:700;letter-spacing:-.03em}
+.cpnextbig .u{font-size:24px;font-weight:600}
+.cpnexttitle{font-family:var(--fh,inherit);font-size:26px;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.cpnextdate{font-size:14px;opacity:.85;margin-top:5px}
+.cpnextr{display:flex;flex-direction:column;align-items:flex-end;gap:14px;flex:0 1 260px;min-width:0}
+.cpnextpill{background:#fff;color:var(--cp-asg-c);font-size:12.5px;font-weight:700;border-radius:99px;padding:3px 11px;white-space:nowrap}
+.cpnextafter{width:100%;background:rgba(255,255,255,.12);border-radius:11px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;margin-top:auto}
+.cpnextrow{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}
+.cpnextrow span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpnextrow b{white-space:nowrap;font-weight:600}
+@container (max-width:520px){.cpnextr{align-items:stretch;flex-basis:100%}.cpnextpill{align-self:flex-start}}
+@media(max-width:1199px){.cpnext{order:-1}}
+@media(max-width:700px){.cpnext{padding:16px 18px 18px;border-radius:14px}.cpnextbig .n{font-size:58px}.cpnextbig .u{font-size:19px}.cpnexttitle{font-size:20px}.cpnextdate{font-size:13px}}
+/* chapter header extras */
+.cpbadgeico{display:inline-grid;place-items:center;padding:3px 7px}
+.cpchdots{opacity:.7}
+.cpchhead:hover .cpchdots{opacity:1}
+.sechex{width:78px!important;flex:none;font-size:12px!important;padding:5px 7px!important;font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important;text-transform:lowercase}
+@media(max-width:700px){.sechex{font-size:16px!important;width:96px!important}}
 /* adding straight into a chapter */
 .cpchadd{display:flex;gap:4px;padding:2px 12px 10px;border-top:1px dashed var(--line)}
 .cpchbody+.cpchadd,.cpchempty+.cpchadd{margin-top:0}
@@ -1293,7 +1318,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v97';
+var BUILD='v98';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3416,15 +3441,15 @@ function pickerHtml(){
    var key=k[0],dark=key==='when'||key==='htoday',cur=dark?sreal.dark:sreal[key].c,site=CP_SITEWIDE[key];
    var own=(allScope||site)?(sd.all&&sd.all[key]):(sd.cls&&sd.cls[scl.id]&&sd.cls[scl.id][key]);
    own=own||(S.theme&&S.theme.surfaces&&S.theme.surfaces[key]&&Object.keys(S.theme.surfaces[key]).length);
-   sh+='<div class="secrow"><input type="color" value="'+cur+'" data-secc="'+key+'" aria-label="'+esc(k[1])+' colour"><span class="secname">'+esc(k[1])+(site&&!allScope?'<small>Same on every class</small>':'')+'</span>'
+   sh+='<div class="secrow"><input type="color" value="'+cur+'" data-secc="'+key+'" aria-label="'+esc(k[1])+' colour"><input type="text" class="sechex" value="'+cur+'" data-sechex="'+key+'" spellcheck="false" aria-label="'+esc(k[1])+' hex code"><span class="secname">'+esc(k[1])+(site&&!allScope?'<small>Same on every class</small>':'')+'</span>'
     +(dark?'':'<button class="secbold'+(cpBold(key)?' on':'')+'" data-secbold="'+key+'" title="Bold title" aria-pressed="'+cpBold(key)+'">B</button>')
     +(own?'<button class="ghost" data-secreset="'+key+'" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp"></span>')+'</div>';
   });
   if(scl&&(scl.sections||[]).length){
-   var badgeDef=[sreal.asg.c,sreal.files.c,sreal.third.c];
    sh+='<p class="lab" style="margin:14px 0 2px">CHAPTERS</p>';
-   scl.sections.forEach(function(sc,i){
-    sh+='<div class="secrow"><input type="color" value="'+(sc.color||badgeDef[i%3])+'" data-chc="'+sc.id+'" aria-label="'+esc(sc.name)+' colour"><span class="secname">'+esc(sc.name)+'</span>'
+   cpSections(scl).forEach(function(sc){
+    var chv=sc.color||sreal.files.c;
+    sh+='<div class="secrow"><input type="color" value="'+chv+'" data-chc="'+sc.id+'" aria-label="'+esc(sc.name)+' colour"><input type="text" class="sechex" value="'+chv+'" data-chhex="'+sc.id+'" spellcheck="false" aria-label="'+esc(sc.name)+' hex code"><span class="secname">'+esc(sc.name)+'</span>'
      +(sc.color?'<button class="ghost" data-chreset="'+sc.id+'" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp" style="width:52px"></span>')+'</div>';
    });
   }
@@ -3718,8 +3743,8 @@ function cpMaker(base){
  var hsl=rgb2hsl.apply(null,hex2rgb(base)),h=hsl[0],s=hsl[1];
  var mk=function(dh,mul,lo,hi,L){
   var ss=Math.max(lo,Math.min(hi,s*mul)),hh=((h+dh)%360+360)%360;
-  return {c:hsl2hex(hh,ss,L),bg:hsl2hex(hh,Math.min(ss*.6,42),95.5),line:hsl2hex(hh,Math.min(ss*.45,34),89),
-   title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.25,22),48),wash:hsl2hex(hh,Math.min(ss*.35,26),97.5)};
+  return {c:hsl2hex(hh,ss,L),bg:hsl2hex(hh,Math.min(ss*.7,46),92.5),line:hsl2hex(hh,Math.min(ss*.5,36),86),
+   title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.3,24),44),wash:hsl2hex(hh,Math.min(ss*.45,30),96.2)};
  };
  mk.dark=hsl2hex(h,Math.min(s*.25,18),21);mk.darkSoft=hsl2hex(h,Math.min(s*.35,30),78);mk.darkInk=hsl2hex(h,Math.min(s*.2,20),95);
  return mk;
@@ -3749,7 +3774,7 @@ function cpHomeColors(){
 var CP_SECS=[['asg','Assignments'],['files','Files & links'],['mini','Checklist'],['done','Completed'],['when','When and where']];
 function cpFromHex(hex){
  var q=rgb2hsl.apply(null,hex2rgb(hex)),hh=q[0],ss=q[1];
- return {c:hex,bg:hsl2hex(hh,Math.min(ss*.6,42),95.5),line:hsl2hex(hh,Math.min(ss*.45,34),89),title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.25,22),48),wash:hsl2hex(hh,Math.min(ss*.35,26),97.5)};
+ return {c:hex,bg:hsl2hex(hh,Math.min(ss*.7,46),92.5),line:hsl2hex(hh,Math.min(ss*.5,36),86),title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.3,24),44),wash:hsl2hex(hh,Math.min(ss*.45,30),96.2)};
 }
 // Section style choices live in the synced theme: S.theme.sec = {cls:{<classId>:{asg:'#hex'}}, all:{asg:'#hex'}, bold:{asg:false}}
 function cpSecData(){var t=S.theme||{};return t.sec||{}}
@@ -3764,7 +3789,7 @@ function cpVarStyle(real){
  Object.keys(real).forEach(function(k){
   if(typeof real[k]!=='object')return;
   CP_PARTS.forEach(function(p){o+='--cp-'+k+'-'+p+':'+real[k][p]+';'});
-  o+='--cp-'+k+'-w:'+(cpBold(k)?650:450)+';';
+  o+='--cp-'+k+'-w:'+(cpBold(k)?650:450)+';--cp-'+k+'-on:'+(contrast(real[k].c,'#ffffff')>=2.6?'#ffffff':'#221d18')+';';
  });
  return o+'--cp-dark:'+real.dark+';--cp-darkSoft:'+real.darkSoft+';--cp-darkInk:'+real.darkInk;
 }
@@ -3791,6 +3816,7 @@ var CP_ICO={
  more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>'
 };
 // one section card's header band: icon tile, title + count pill, hint line, then actions on the right
+var CP_FOLDER='<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9L9.6 3.9A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>';
 var CP_PAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2.2a1.8 1.8 0 0 0-1.3 3.1c.4.4.5.9.5 1.4 0 .8-.6 1.5-1.5 1.5Z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="11" cy="7" r="1"/><circle cx="15.5" cy="7.5" r="1"/></svg>';
 function cpHead(key,col,title,pill,hint,acts){
  return '<div class="cphead" style="background:var(--s-'+key+'-bg,'+col.bg+');border-bottom-color:var(--s-'+key+'-line,'+col.line+')">'
@@ -3835,6 +3861,21 @@ function cpDupLinks(c){
 }
 function cpHost(url){try{return new URL(url).hostname.replace(/^www\./,'')}catch(e){return ''}}
 // which chapters are folded shut, remembered per class on this device
+// chapters in your chosen order. Order is kept as a number on each chapter (ord), because sync merges
+// lists item by item and keeps each device's own array order -- a plain re-shuffle would never travel
+function cpSections(c){
+ return (c.sections||[]).map(function(x,i){return {x:x,i:i}})
+  .sort(function(a,b){var oa=a.x.ord==null?a.i:a.x.ord,ob=b.x.ord==null?b.i:b.x.ord;return oa-ob||a.i-b.i})
+  .map(function(o){return o.x});
+}
+function cpMoveSection(c,id,where){
+ var list=cpSections(c),i=-1;
+ list.forEach(function(x,k){if(x.id===id)i=k});
+ if(i<0)return;
+ var it=list.splice(i,1)[0],to=where==='up'?Math.max(0,i-1):where==='down'?Math.min(list.length,i+1):where==='top'?0:list.length;
+ list.splice(to,0,it);
+ list.forEach(function(x,k){x.ord=k});
+}
 function cpShut(cid){try{return JSON.parse(localStorage.getItem('hub:chap:'+cid)||'{}')||{}}catch(e){return {}}}
 function cpSetShut(cid,o){try{localStorage.setItem('hub:chap:'+cid,JSON.stringify(o))}catch(e){}}
 
@@ -3883,6 +3924,21 @@ function viewClass(c){
  if(nextA){var nc=cpCountdown(nextA.due);hint=nc.n<0?esc(nextA.title)+' is '+nc.t:'Next due: '+esc(nextA.title)+(nc.n===0?' today':nc.n===1?' tomorrow':' in '+nc.t);}
  else if(asg.length)hint='No due dates set';
  else hint=allAsg?'All caught up':'Add your first assignment';
+ // the big countdown card for whatever is due soonest (late work first, since that's most urgent)
+ var NX='';
+ if(nextA){
+  var ncd=cpCountdown(nextA.due),nl=ncd.n<0,big=ncd.n===0?'Today':String(Math.abs(ncd.n)),unit=ncd.n===0?'':(Math.abs(ncd.n)===1?'day':'days')+(nl?' late':'');
+  var tags=[nextA.priority||'',nextA.weight!==''&&nextA.weight!=null?nextA.weight+'%':''].filter(Boolean).join(' \u00b7 ');
+  var after=asg.filter(function(a){return a.due&&a!==nextA}).slice(0,2);
+  NX='<section class="cpnext" data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'" title="Open '+esc(nextA.title)+'">'
+   +'<div class="cpnextl"><div class="cpnextlab">'+(nl?'Past due':'Next due')+'</div>'
+   +'<div class="cpnextbig"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
+   +'<div class="cpnexttitle">'+esc(nextA.title)+'</div>'
+   +'<div class="cpnextdate">'+esc(withTime(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),nextA.time))+'</div></div>'
+   +'<div class="cpnextr">'+(tags?'<span class="cpnextpill">'+esc(tags)+'</span>':'')
+   +(after.length?'<div class="cpnextafter"><div class="cpnextlab">After that</div>'+after.map(function(a){var cc=cpCountdown(a.due);return '<div class="cpnextrow"><span>'+esc(a.title)+'</span><b>'+cc.t+'</b></div>'}).join('')+'</div>':'')
+   +'</div></section>';
+ }
  var A='<section class="cpsec cpasg" id="c-assign">'+pencil('asg')
   +cpHead('asg',col.asg,'Assignments',asg.length?asg.length+' open':'',hint,
     '<div class="cpseg"><button data-asgview="cards" class="'+(view.asgView==='cards'?'on':'')+'"'+(view.asgView==='cards'?' style="background:'+col.asg.bg+';color:'+col.asg.title+'"':'')+'>Cards</button>'
@@ -3968,8 +4024,8 @@ function viewClass(c){
  }else if(!(c.sections||[]).length){
   F+='<div class="cpch"><div class="cpchbody">'+colList(fIdx.map(fileRow),'Files','No files yet')+colList(lIdx.map(linkRow),'Links','No links yet')+'</div></div>';
  }else{
-  var shut=cpShut(c.id),badges=[col.asg.c,col.files.c,col.third.c],anyOpen=false;
-  var groups=(c.sections||[]).map(function(s,k){return {id:s.id,name:s.name,badge:k,color:s.color||''}});
+  var shut=cpShut(c.id),anyOpen=false;
+  var groups=cpSections(c).map(function(s,k){return {id:s.id,name:s.name,badge:k,color:s.color||''}});
   var unsorted={id:'',name:'Unsorted',badge:-1};
   groups.concat([unsorted]).forEach(function(g){
    var fr=fIdx.filter(function(x){return (x.f.section||'')===g.id}),lr=lIdx.filter(function(x){return (x.l.section||'')===g.id});
@@ -3977,13 +4033,14 @@ function viewClass(c){
    var isShut=!!shut[g.id||'_'];if(!isShut)anyOpen=true;
    var cnt=[fr.length?fr.length+' file'+(fr.length>1?'s':''):'',lr.length?lr.length+' link'+(lr.length>1?'s':''):''].filter(Boolean).join(' · ')||'Empty';
    var m=/^(chapter|ch\.?|week|module|unit)\s*(\d+)\s*[:\-–]?\s*(.*)$/i.exec(g.name);
-   var badgeTxt=g.id?(m?({c:'CH',w:'WK',m:'MOD',u:'UNIT'}[m[1].charAt(0).toLowerCase()])+' '+m[2]:String(g.badge+1)):'';
+   // a number only when the chapter's own name has one (Week 3, Chapter 2, Module 1); otherwise a small folder
+   var badgeTxt=g.id&&m?({c:'CH',w:'WK',m:'MOD',u:'UNIT'}[m[1].charAt(0).toLowerCase()])+' '+m[2]:'';
    var nameTxt=g.id&&m&&m[3]?m[3]:g.name;
    F+='<div class="cpch'+(isShut?' shut':'')+'">'
     +'<div class="cpchhead" data-chap="'+c.id+':'+(g.id||'_')+'" role="button" aria-expanded="'+(!isShut)+'">'+CP_ICO.chev
-    +(g.id?'<span class="cpbadge" data-chapbadge="'+g.id+'" style="background:'+(g.color||badges[g.badge%3])+'">'+esc(badgeTxt)+'</span>':'<span class="cpbadge" style="background:var(--ink3)">—</span>')
+    +(g.id?'<span class="cpbadge'+(badgeTxt?'':' cpbadgeico')+'" data-chapbadge="'+g.id+'" style="background:'+(g.color||col.files.c)+'">'+(badgeTxt?esc(badgeTxt):CP_FOLDER)+'</span>':'<span class="cpbadge" style="background:var(--ink3)">—</span>')
     +'<span class="cpchname">'+esc(nameTxt)+'</span><span class="cpchcount">'+cnt+'</span>'
-    +(g.id?'<span class="cpchacts"><button class="cpghost" data-edit="section" data-id="'+g.id+'" data-c="'+c.id+'">Rename</button><button class="cpghost" data-delsection="'+g.id+'" data-c="'+c.id+'" title="Files and links in it move to Unsorted">Remove</button></span>':'')
+    +(g.id?'<span class="cpchacts"><button class="cpdots cpchdots" data-sheet="chap" data-i="'+(c.sections||[]).indexOf((c.sections||[]).filter(function(x){return x.id===g.id})[0])+'" data-c="'+c.id+'" aria-label="Rename, move or remove this chapter">'+CP_ICO.more+'</button></span>':'')
     +'</div>';
    // only the side(s) that have something: both empty is one quiet line, one empty gives the other the full width
    if(!isShut)F+=(!fr.length&&!lr.length)?'<div class="cpchempty">Nothing in this chapter yet. Add a file or link below, or move one here with its ⋯ button.</div>'
@@ -4120,7 +4177,7 @@ function viewClass(c){
    :'<div class="cpline"><span class="a cpsoft">No project linked</span></div>');
  R+='</aside>';
 
- return top+ask+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+A+F+'<div class="cppair">'+K+D+'</div>'+study+G+'</div>'+R+'</div>';
+ return top+ask+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NX+A+F+'<div class="cppair">'+K+D+'</div>'+study+G+'</div>'+R+'</div>';
 }
 
 /* ---------- Home (v96 redesign, same style as the class page) ----------
@@ -4348,7 +4405,18 @@ function modalHtml(){
    +'<p class="hint" id="asgfilenote">Uploading puts it in this class\u2019s files too.</p></div>';
  }else if(m.kind==='sheet'){
   var sc=classById(m.classId);
-  if(m.what==='file'){
+  if(m.what==='chap'){
+   var sch=(sc.sections||[])[m.i];
+   if(!sch)return '';
+   var ordl=cpSections(sc),pos=ordl.indexOf(sch),last=ordl.length-1;
+   h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sch.name)+'</h3><div class="sheetlist">'
+    +'<button data-sheetdo="chrename">Rename</button>'
+    +(pos>0?'<button data-sheetdo="chup">Move up</button>':'')
+    +(pos<last?'<button data-sheetdo="chdown">Move down</button>':'')
+    +(pos>1?'<button data-sheetdo="chtop">Move to the top</button>':'')
+    +(pos<last-1?'<button data-sheetdo="chbottom">Move to the bottom</button>':'')
+    +'<button data-sheetdo="chremove" class="danger">Remove chapter (its files and links move to Unsorted)</button></div>';
+  }else if(m.what==='file'){
    var sf=(FILES[m.classId]||[])[m.i];
    if(!sf)return '';
    h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sf.name)+'</h3><div class="sheetlist">'
@@ -4596,7 +4664,7 @@ function sectionName(c,id){
  return '';
 }
 function sectionOptions(c,cur){
- return '<option value="">Unsorted</option>'+(c.sections||[]).map(function(sc){
+ return '<option value="">Unsorted</option>'+cpSections(c).map(function(sc){
   return '<option value="'+sc.id+'"'+(cur===sc.id?' selected':'')+'>'+esc(sc.name)+'</option>';
  }).join('');
 }
@@ -6345,6 +6413,19 @@ document.addEventListener('click',function(e){
  if(d.sheetdo){
   var sm=view.modal,scc=classById(sm.classId),act=d.sheetdo;
   view.modal=null;
+  if(sm.what==='chap'){
+   var chx=(scc.sections||[])[sm.i];if(!chx){render();return}
+   if(act==='chrename'){openModal('section',sm.classId,chx.id);return}
+   if(act==='chremove'){
+    scc.sections=scc.sections.filter(function(x){return x!==chx});
+    (FILES[sm.classId]||[]).forEach(function(f){if(f.section===chx.id)f.section=''});
+    scc.links.forEach(function(l){if(l.section===chx.id)l.section=''});
+    save();saveFiles(sm.classId);render();return;
+   }
+   var mv={chup:'up',chdown:'down',chtop:'top',chbottom:'bottom'}[act];
+   if(mv){cpMoveSection(scc,chx.id,mv);save();render();return}
+   render();return;
+  }
   if(sm.what==='file'){
    var fi=sm.i,fl=(FILES[sm.classId]||[])[fi];
    if(act==='open'||act==='download'){render();openFile(sm.classId,fi);return}
@@ -6644,6 +6725,14 @@ document.addEventListener('input',function(e){
   if(v){var box=document.querySelector('[data-themehex="'+ds.themecolor+'"]');if(box)box.value=v;save()}
   return;
  }
+ if(ds.sechex||ds.chhex){
+  var hv=t.value.trim();if(hv&&hv[0]!=='#')hv='#'+hv;
+  if(!/^#[0-9a-fA-F]{6}$/.test(hv))return;
+  var twin=document.querySelector(ds.sechex?'[data-secc="'+ds.sechex+'"]':'[data-chc="'+ds.chhex+'"]');
+  if(twin){twin.value=hv.toLowerCase();twin.dispatchEvent(new Event('input',{bubbles:true}))}
+  return;
+ }
+ if(ds.secc||ds.chc){var hx=document.querySelector(ds.secc?'[data-sechex="'+ds.secc+'"]':'[data-chhex="'+ds.chc+'"]');if(hx&&document.activeElement!==hx)hx.value=t.value}
  if(ds.chc&&view.page==='class'){
   var chcl=classById(view.classId),chs=chcl&&(chcl.sections||[]).filter(function(x){return x.id===ds.chc})[0];
   if(chs){chs.color=t.value;document.querySelectorAll('[data-chapbadge="'+ds.chc+'"]').forEach(function(b){b.style.background=t.value});save()}
