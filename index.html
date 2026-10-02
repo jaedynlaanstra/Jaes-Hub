@@ -721,6 +721,208 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   .split>div,.split>.rail{width:100%!important;max-width:100%!important}
   .banner h1{font-size:22px!important}
 }
+/* ---------- class page, v92 redesign ---------- */
+.cpsplit{display:grid;grid-template-columns:minmax(0,1fr) 318px;gap:26px;align-items:start}
+.cpmain{display:flex;flex-direction:column;gap:28px;min-width:0}
+.cpsec{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;container-type:inline-size;min-width:0}
+.cpanchor{position:absolute;top:0;left:0}
+.cphead{display:flex;align-items:center;gap:14px;padding:18px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap;row-gap:12px}
+.cpico{width:40px;height:40px;border-radius:10px;color:#fff;display:grid;place-items:center;flex:none}
+.cpico svg{width:20px;height:20px}
+.cptitlecol{display:flex;flex-direction:column;gap:2px;flex:none;min-width:0;max-width:100%}
+.cptitlerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cptitle{font-family:var(--fh,inherit);font-style:var(--hs,normal);font-size:24px;font-weight:600;line-height:1.2;margin:0}
+.cppill{white-space:nowrap;flex:none;font-size:13px;font-weight:600;background:var(--card);border-radius:99px;padding:2px 10px;line-height:1.5}
+.cphint{font-size:14px;line-height:1.35}
+.cpacts{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.cpbtn,.cpbtn2{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;flex:none;font-size:14px;font-weight:600;border-radius:9px;padding:9px 16px;line-height:1.2;cursor:pointer;font-family:inherit}
+.cpbtn{color:#fff;border:1px solid transparent}
+.cpbtn:hover{filter:brightness(1.08)}
+.cpbtn2{background:var(--card);color:var(--ink);border:1px solid var(--line2);padding:8px 14px}
+.cpbtn2:hover{background:var(--paper)}
+.cpseg{display:flex;background:var(--card);border-radius:9px;padding:3px;gap:2px}
+.cpseg button{border:none;background:transparent;padding:6px 14px;border-radius:7px;font-size:14px;color:var(--ink2);min-height:0}
+.cpseg button.on{font-weight:600}
+.cpsearch{width:240px;flex:none;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:9px;padding:0 12px;color:var(--ink3);cursor:text}
+.cpsearch svg{width:15px;height:15px;flex:none}
+.cpsearch input{border:none;background:transparent;padding:9px 0;font-size:14px;width:100%;outline:none;color:var(--ink);min-width:0}
+.cpempty{padding:26px 22px;font-size:15px;color:var(--ink3);line-height:1.5}
+.cptext{background:none;border:none;padding:0;font-size:14px;font-weight:600;cursor:pointer;min-height:0}
+.cpghost{background:none;border:none;padding:4px 6px;font-size:13px;color:var(--ink3);cursor:pointer;border-radius:6px;min-height:0;display:inline-flex;align-items:center;font-family:inherit}
+.cpghost:hover{color:var(--ink);background:var(--paper)}
+.cpmeta{font-size:13px;color:var(--ink3);white-space:nowrap;flex:none}
+.cpsoft{color:var(--ink2)}
+
+/* assignments */
+.cpbody{padding:6px 22px 14px}
+.cpgrid{display:grid;grid-template-columns:30px minmax(0,1fr) 96px 172px 60px 92px;column-gap:12px;align-items:center}
+.cphdr{padding:12px 0;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line)}
+.cprow{padding:14px 10px;margin:0 -10px;border-bottom:1px solid var(--line);font-size:16px;cursor:pointer;border-radius:8px}
+.cprow:hover{background:var(--paper)}
+.cprow .tick{width:20px;height:20px}
+.c-name{display:flex;align-items:center;gap:6px;min-width:0;font-weight:600}
+.cpnm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c-count{font-size:14px;font-weight:600;white-space:nowrap}
+.c-due{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-due.late{color:#A34A3F}
+.c-worth{color:var(--ink2)}
+.c-worth:empty::before,.c-prio:empty::before{content:'\2014';color:var(--ink3)}
+.c-prio .prio{font-size:13px;font-weight:600;padding:3px 10px}
+.c-br{display:none}
+.cpmorebox summary{list-style:none;cursor:pointer;font-size:14px;font-weight:600;padding:14px 0 2px}
+.cpmorebox summary::-webkit-details-marker{display:none}
+.cpmorebox summary::marker{content:''}
+.cpmorebox .cphide,.cpmorebox[open] .cpshow{display:none}
+.cpmorebox[open] .cphide{display:inline}
+.cpmorebox[open] summary{order:2}
+.cpmorebox[open]{display:flex;flex-direction:column}
+.cpcards{padding:16px 22px 12px}
+@container (max-width:640px){
+  .cphdr{display:none}
+  .cprow{display:flex;flex-wrap:wrap;align-items:center;column-gap:10px;row-gap:2px;padding:12px 8px;margin:0 -8px}
+  .cprow .c-tick{order:0;width:26px;flex:none}
+  .cprow .c-name{order:1;flex:1 1 0;font-size:15.5px}
+  .cprow .c-count{order:2;font-size:13px}
+  .cprow .c-br{display:block;order:3;flex-basis:100%;height:0}
+  .cprow .c-due{order:4;margin-left:36px;font-size:13px;color:var(--ink2)}
+  .cprow .c-worth{order:5;font-size:13px}
+  .cprow .c-prio{order:6}
+  .cprow .c-prio .prio{font-size:11.5px;padding:1px 8px}
+  .cprow .c-worth:empty,.cprow .c-prio:empty,.cprow .c-due:empty{display:none}
+  .cprow .c-due:not(:empty)~.c-worth:not(:empty)::before{content:'\00b7  '}
+}
+
+/* files and links */
+.cpfbody{padding:22px;display:flex;flex-direction:column;gap:18px}
+.cpch{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cpchhead{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--paper);cursor:pointer;-webkit-user-select:none;user-select:none;border-bottom:1px solid var(--line)}
+.cpchhead:hover{filter:brightness(.985)}
+.cpch.shut .cpchhead{border-bottom-color:transparent}
+.cpchev{width:18px;height:18px;flex:none;color:var(--ink3);transition:transform .2s ease}
+.cpch.shut .cpchev{transform:rotate(-90deg)}
+.cpbadge{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;border-radius:6px;padding:4px 9px;flex:none;line-height:1.3}
+.cpchname{font-size:18px;font-weight:600;color:var(--head,var(--ink));min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpchcount{font-size:13px;color:var(--ink3);white-space:nowrap;flex:none}
+.cpchacts{margin-left:auto;display:flex;gap:2px;flex:none}
+.cpchbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.cpchbody.one{grid-template-columns:minmax(0,1fr)}
+.cpchbody.one .cpcol>.cpitem,.cpchbody.one .cpcol .more>div>.cpitem{max-width:640px}
+.cpchempty{padding:14px 24px;font-size:14px;color:var(--ink3)}
+.cpch>.cpchbody:first-child{border-top:none}
+.cpcol{padding:12px 16px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.cpcol+.cpcol{border-left:1px solid var(--line)}
+.cpcollab{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:0 8px 6px}
+.cpcolempty{font-size:14px;color:var(--ink3);padding:9px 8px}
+.cpcol .more summary{padding:8px 8px 2px;font-size:13.5px}
+.cpitem{display:flex;align-items:center;gap:12px;padding:9px 8px;border-radius:8px;min-width:0}
+.cpitem:hover{background:var(--paper)}
+.cptile{width:34px;height:40px;flex:none;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.02em;display:grid;place-items:center;overflow:hidden}
+.cptileimg{background:var(--paper);border:1px solid var(--line)}
+.cptileimg img{max-width:24px;max-height:24px;object-fit:contain}
+.cpitemtext{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+.cpitemname{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--link,var(--ink));text-decoration:none;line-height:1.35}
+a.cpitemname:hover{text-decoration:underline}
+.cpitemmeta{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cpdots{width:32px;height:32px;flex:none;border:none;background:transparent;color:var(--ink3);border-radius:8px;padding:0;display:grid;place-items:center;opacity:0;cursor:pointer;min-height:0}
+.cpdots svg{width:18px;height:18px}
+.cpitem:hover .cpdots,.cpdots:focus-visible{opacity:1}
+.cpdots:hover{background:var(--card);color:var(--ink)}
+@media(hover:none){.cpdots{opacity:1}}
+.cpsnip{font-size:12.5px;color:var(--ink2);background:var(--paper);border-radius:7px;padding:7px 10px;margin:0 8px 8px 54px}
+.cpffoot{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+@container (max-width:640px){
+  .cpchbody{grid-template-columns:minmax(0,1fr)}
+  .cpcol+.cpcol{border-left:none;border-top:1px solid var(--line)}
+  .cpchcount{display:none}
+}
+
+/* checklist and completed */
+.cppair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px;align-items:start}
+.cplist{padding:6px 22px 14px}
+.cpli{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px;min-width:0}
+.cpli:last-child,.cplist .more .cpli:last-child{border-bottom:none}
+.cpgrow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpli .tick{width:20px;height:20px}
+.cpmark{border:none;border-radius:99px;padding:3px 10px;font-size:13px;font-weight:600;cursor:pointer;min-height:0}
+.cpprog{padding:20px 22px 6px}
+.cpbar{height:10px;border-radius:99px;overflow:hidden}
+.cpbar i{display:block;height:100%;border-radius:99px;transition:width .4s ease}
+
+/* class settings row */
+.cpsettings{border-top:1px solid var(--line);padding-top:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cpsetlab{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-right:6px}
+.cpsettings>button:not(.cpghost),.cpsettings>.fakebtn{font-size:14px;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:7px 13px;color:var(--ink)}
+.cpsettings .pastezone{flex-basis:100%}
+
+/* right rail */
+.cprail{display:flex;flex-direction:column;gap:14px;position:relative;min-width:0;border-radius:16px}
+.cpwhen{position:relative;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px}
+.cpwhenlab{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.cpwhentime{font-size:20px;font-weight:600;line-height:1.3}
+.cpwhenroom{font-size:16px}
+.cpcard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+.cpcardhead{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--paper)}
+.cpdot{width:8px;height:8px;border-radius:50%;flex:none}
+.cpcardtitle{font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:0;font-style:normal}
+.cpcardact{margin-left:auto;font-size:13px;color:var(--ink3);background:none;border:none;padding:2px 4px;cursor:pointer;min-height:0}
+.cpcardact:hover{color:var(--ink)}
+.cpcardbody{padding:14px 18px 16px;display:flex;flex-direction:column;gap:10px}
+.cpline{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:15px;min-width:0}
+.cpline .a{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit;text-decoration:none}
+.cpline a.a:hover,.cpline .a a:hover{text-decoration:underline}
+.cpline .a a{color:inherit;text-decoration:none}
+.cpline .b{font-size:13px;color:var(--ink3);white-space:nowrap}
+.cprefacts{display:flex;gap:0;opacity:0}
+.cprefline:hover .cprefacts{opacity:1}
+@media(hover:none){.cprefacts{opacity:1}}
+.cpgrade{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.cpgradebig{font-size:28px;font-weight:600;line-height:1.1}
+.cpperson{display:flex;gap:14px;align-items:flex-start}
+.cpperson+.cpperson,.pastezone+.cpperson{padding-top:12px;border-top:1px solid var(--line)}
+.cpphoto{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none}
+.cpphotoempty{background:var(--paper);display:grid;place-items:center}
+.cpphotoempty svg{width:24px;height:24px;fill:var(--ink3)}
+.cppersontext{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.cpemail{font-size:13.5px;color:var(--link,var(--ink2));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none}
+.cpemail:hover{text-decoration:underline}
+.cppbtns{display:flex;flex-wrap:wrap;margin:4px 0 0 -6px}
+
+/* narrower screens: one column, the info cards after your work */
+@media(max-width:1199px){
+  .cpsplit{display:flex;flex-direction:column;align-items:stretch;gap:24px}
+  .cpmain{display:contents}
+  .cpasg{order:0}.cpfiles{order:1}.cppair{order:2}.cprail{order:3}.studyrow,.cpmain>.panel,.cpmain>.answer{order:4}.cpsettings{order:5}
+  .cprail{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));align-items:start}
+}
+@media(max-width:700px){
+  .cpsplit{gap:16px}
+  .cppair{gap:16px}
+  .cphead{padding:14px 16px;gap:12px}
+  .cpico{width:34px;height:34px;border-radius:9px}
+  .cpico svg{width:18px;height:18px}
+  .cptitle{font-size:20px}
+  .cphint{font-size:13px}
+  .cpacts{flex-basis:100%;margin-left:0;justify-content:flex-start}
+  .cpsearch{flex:1 1 100%;width:auto}
+  .cpsearch input{font-size:16px}
+  .cpreadpdfs{display:none}
+  .cpbtn,.cpbtn2{min-height:40px}
+  .cpacts .cpbtn{margin-left:auto}
+  .cpbody{padding:2px 16px 10px}
+  .cpcards{padding:12px 16px 8px}
+  .cpfbody{padding:14px;gap:12px}
+  .cpchhead{padding:11px 12px;gap:9px}
+  .cpchname{font-size:16px}
+  .cpchacts .cpghost{font-size:12px;padding:4px}
+  .cpcol{padding:10px 8px 10px}
+  .cplist{padding:2px 16px 10px}
+  .cpprog{padding:16px 16px 4px}
+  .cpempty{padding:20px 16px;font-size:14px}
+  .cprail{grid-template-columns:minmax(0,1fr)}
+  .cpitem{padding:8px 6px}
+  .cpsettings{gap:8px}
+  .cpsettings>button:not(.cpghost),.cpsettings>.fakebtn{font-size:13.5px;padding:8px 12px}
+}
 </style>
 </head>
 <body>
@@ -876,15 +1078,13 @@ function lum(hx){
 function contrast(a,b){var l1=lum(a),l2=lum(b);if(l1<l2){var t=l1;l1=l2;l2=t}return (l1+0.05)/(l2+0.05)}
 var SURFACES=[
  {key:'banner',label:'Page header (top band)'},
- {key:'when',label:'Class time and place box'},
- {key:'prof',label:'Teacher box'},
- {key:'next',label:'Coming up box'},
- {key:'rail',label:'Background behind the boxes'},
- {key:'mini',label:'Checklist bar'},
- {key:'files',label:'Files box'},
- {key:'links',label:'Links box'},
- {key:'done',label:'Finished assignments box'},
- {key:'asg',label:'Assignments list'}
+ {key:'when',label:'When and where card'},
+ {key:'prof',label:'Professor card'},
+ {key:'rail',label:'Background behind the side cards'},
+ {key:'asg',label:'Assignments header'},
+ {key:'files',label:'Files and links header'},
+ {key:'mini',label:'Checklist header'},
+ {key:'done',label:'Completed header'}
 ];
 function surfLabel(key){for(var i=0;i<SURFACES.length;i++){if(SURFACES[i].key===key)return SURFACES[i].label}return key}
 function surfGet(key,part){
@@ -1027,7 +1227,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v91';
+var BUILD='v92';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3492,16 +3692,76 @@ function viewCalendar(){
  return h;
 }
 
-function viewClass(c){
- var p=pal(c.color),files=FILES[c.id]||[];
+/* ---------- class page (v92 redesign) ----------
+   Clearly separated sections, each a card with a tinted header band. All the colours come from the
+   class's own colour (cpColors), so every class looks related but distinct; the paint picker's
+   per-box colours (--s-<key>-bg/-line/-ink) still win over them wherever they've been set. */
+function cpColors(c){
+ var hsl=rgb2hsl.apply(null,hex2rgb(palHex(c.color))),h=hsl[0],s=hsl[1];
+ function mk(dh,mul,lo,hi,L){
+  var ss=Math.max(lo,Math.min(hi,s*mul)),hh=((h+dh)%360+360)%360;
+  return {c:hsl2hex(hh,ss,L),bg:hsl2hex(hh,Math.min(ss*.6,42),95.5),line:hsl2hex(hh,Math.min(ss*.45,34),89),
+   title:hsl2hex(hh,Math.min(ss*.75,55),21),hint:hsl2hex(hh,Math.min(ss*.25,22),48),wash:hsl2hex(hh,Math.min(ss*.35,26),97.5)};
+ }
+ return {asg:mk(0,1.15,40,85,36),files:mk(32,.6,26,46,38),mini:mk(80,.4,16,30,36),done:mk(-30,.55,28,46,54),third:mk(185,.35,16,30,40),
+  dark:hsl2hex(h,Math.min(s*.25,18),21),darkSoft:hsl2hex(h,Math.min(s*.35,30),78),darkInk:hsl2hex(h,Math.min(s*.2,20),95)};
+}
+var CP_ICO={
+ asg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>',
+ files:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9L9.6 3.9A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>',
+ mini:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5"/><path d="m9 11 3 3L22 4"/></svg>',
+ done:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13 17 22l-5-3-5 3 1.5-9"/></svg>',
+ chev:'<svg class="cpchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+ search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+ more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>'
+};
+// one section card's header band: icon tile, title + count pill, hint line, then actions on the right
+function cpHead(key,col,title,pill,hint,acts){
+ return '<div class="cphead" style="background:var(--s-'+key+'-bg,'+col.bg+');border-bottom-color:var(--s-'+key+'-line,'+col.line+')">'
+  +'<div class="cpico" style="background:'+col.c+'">'+CP_ICO[key]+'</div>'
+  +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:var(--s-'+key+'-ink,'+col.title+')">'+title+'</h2>'
+  +(pill?'<span class="cppill" style="color:'+col.c+'">'+pill+'</span>':'')+'</div>'
+  +(hint?'<div class="cphint" style="color:'+col.hint+'">'+hint+'</div>':'')+'</div>'
+  +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
+}
+function cpBtn(col,label,attrs){return '<button class="cpbtn" style="background:'+col.c+'" '+attrs+'>'+label+'</button>'}
+function cpBtn2(col,label,attrs){return '<button class="cpbtn2" style="border-color:'+col.line+'" '+attrs+'>'+label+'</button>'}
+// days until a due date, as words: "Today", "Tomorrow", "4 days", "2 days late"
+function cpCountdown(due){
+ var d=parseISO(due);if(!d)return {t:'',n:null};
+ var n=daysBetween(today(),d);
+ return {n:n,t:n===0?'Today':n===1?'Tomorrow':n<0?(-n)+(n===-1?' day late':' days late'):n+' days'};
+}
+// the little coloured type tile in front of a file or link
+var CP_TILES={PDF:['#fbe9e5','#b8432a'],DOC:['#e8eef6','#3f6390'],PPT:['#fbeee4','#b0603a'],XLS:['#e6f0e6','#3d7a46'],CSV:['#e6f0e6','#3d7a46'],
+ IMG:['#ebf1ec','#55785f'],TXT:['#f1efea','#6f685d'],ZIP:['#f1efea','#6f685d'],FILE:['#f1efea','#6f685d'],WEB:['#eaf0f3','#4a6b7d'],AI:['#f3ede2','#8a6a3a']};
+var CP_EXT_LABEL={pdf:'PDF',docx:'DOC',doc:'DOC',pptx:'PPT',ppt:'PPT',xlsx:'XLS',csv:'CSV',image:'IMG',text:'TXT',zip:'ZIP'};
+function cpTile(label,img){
+ var t=CP_TILES[label]||CP_TILES.FILE;
+ if(img)return '<span class="cptile cptileimg"><img src="'+img+'" alt=""></span>';
+ return '<span class="cptile" style="background:'+t[0]+';color:'+t[1]+'">'+label+'</span>';
+}
+function cpFileLabel(f){return CP_EXT_LABEL[f.ext]||CP_EXT_LABEL[f.kind]||'FILE'}
+function cpLinkLabel(l){
+ var host='';try{host=new URL(l.url).hostname}catch(e){}
+ if(/(^|\.)claude\.(ai|site)$/.test(host))return 'AI';
+ var fk=urlFileKind(l.url);return fk?(CP_EXT_LABEL[fk]||'FILE'):'WEB';
+}
+function cpHost(url){try{return new URL(url).hostname.replace(/^www\./,'')}catch(e){return ''}}
+// which chapters are folded shut, remembered per class on this device
+function cpShut(cid){try{return JSON.parse(localStorage.getItem('hub:chap:'+cid)||'{}')||{}}catch(e){return {}}}
+function cpSetShut(cid,o){try{localStorage.setItem('hub:chap:'+cid,JSON.stringify(o))}catch(e){}}
 
- // ---- top strip: pinned links and textbook ----
+function viewClass(c){
+ var col=cpColors(c),files=FILES[c.id]||[],p=pal(c.color);
+
+ // ---- top strip: pinned links and textbook (unchanged) ----
  var top='';
  var pinned=(c.links||[]).filter(function(l){return l.pinned});
  if(pinned.length){
   top+='<div class="quick">'+pinned.map(function(l){
    return '<a class="qlink" href="'+esc(l.url)+'" target="_blank" rel="noopener">'
-    +linkIcon(l.url,l.title).replace('class="fi round"','class="fi round" style="width:26px;height:26px"').replace('class="favtile"','class="favtile" style="width:26px;height:26px;font-size:14px"')
+    +linkIcon(l.url,l.title,l.icon).replace('class="fi round"','class="fi round" style="width:26px;height:26px"').replace('class="favtile"','class="favtile" style="width:26px;height:26px;font-size:14px"')
     +'<span>'+esc(l.title)+'</span></a>';
   }).join('')+'</div>';
  }
@@ -3511,288 +3771,265 @@ function viewClass(c){
    ? '<img src="'+bk.icon+'" alt="" style="max-width:34px;max-height:32px;width:auto;height:auto;border-radius:3px;object-fit:contain;flex-shrink:0">'
    : '<span style="width:24px;height:30px;border-radius:3px;background:#C9BFA8;flex-shrink:0;box-shadow:inset -4px 0 0 rgba(0,0,0,.09)"></span>';
   var chip='<a class="qlink" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">'+bkIcon+'<span>'+esc(bk.title||'Textbook')+'</span></a>';
-  if(bk.type==='file'){
-   chip='<button class="qlink" data-openbook="'+c.id+'">'+bkIcon+'<span>'+esc(bk.title||'Textbook')+'</span></button>';
-  }
+  if(bk.type==='file')chip='<button class="qlink" data-openbook="'+c.id+'">'+bkIcon+'<span>'+esc(bk.title||'Textbook')+'</span></button>';
   if(!top)top='<div class="quick">'+chip+'</div>';
   else top=top.replace('</div>',chip+'</div>');
  }
 
- // ---- main column ----
- var m=LOCAL?'<div id="c-overview"></div>':'<div id="c-overview"><div class="search">'
+ // ---- ask box (Claude version only, unchanged) ----
+ var ask='';
  if(!LOCAL){
- m+=''  +'<input id="q" placeholder="Ask anything about this class\u2019s files" value="'+esc(view.answer[c.id]&&view.answer[c.id].q||'')+'">'
-  +'<button data-ask="'+c.id+'"'+(view.asking[c.id]?' disabled':'')+'>'+(view.asking[c.id]?'<span class="spin"></span>':'Ask')+'</button></div>'
-  +'<p class="hint">'+(LOCAL?'Asking only works in the Claude version of this page. Everything else works here.':(function(){
-   var n=files.filter(canRead).length,skip=files.length-n;
-   if(!files.length)return 'Upload files below and this can answer from them.';
-   if(!n)return 'None of these files can be read yet.';
-   return 'Reads the '+n+' file'+(n>1?'s':'')+' saved below.'+(skip?' '+skip+' cannot be read.':'');
-  })())+'</p>';
- if(view.answer[c.id]&&view.answer[c.id].text){
-  m+='<div class="answer" style="background:'+p.bg+';color:'+p.ink+'">'+esc(view.answer[c.id].text)+'</div>';
- }
- m+='</div>';
+  ask='<div id="c-overview"><div class="search"><input id="q" placeholder="Ask anything about this class’s files" value="'+esc(view.answer[c.id]&&view.answer[c.id].q||'')+'">'
+   +'<button data-ask="'+c.id+'"'+(view.asking[c.id]?' disabled':'')+'>'+(view.asking[c.id]?'<span class="spin"></span>':'Ask')+'</button></div>';
+  if(view.answer[c.id]&&view.answer[c.id].text)ask+='<div class="answer" style="background:'+p.bg+';color:'+p.ink+'">'+esc(view.answer[c.id].text)+'</div>';
+  ask+='</div>';
  }
 
  var asg=(c.assignments||[]).filter(function(a){return !a.done}).sort(function(a,b){
   if(!a.due)return 1;if(!b.due)return -1;return a.due<b.due?-1:1});
  var finished=(c.assignments||[]).filter(function(a){return a.done}).sort(function(a,b){
   return (b.doneAt||'')<(a.doneAt||'')?-1:1});
+ var allAsg=(c.assignments||[]).length;
 
- m+='<div class="asgwrap" style="'+surfStyle('asg','transparent','transparent','')+'">'+pencil('asg')
-  +'<div class="rowhead" id="c-assign" style="margin-top:26px"><h2 style="font-size:19px">Assignments</h2>'
-  +'<div style="display:flex;gap:8px;align-items:center">'
-  +'<div class="viewtog"><button data-asgview="cards" class="'+(view.asgView==='cards'?'on':'')+'">Cards</button>'
-  +'<button data-asgview="table" class="'+(view.asgView==='table'?'on':'')+'">Table</button></div>'
-  +'<button data-add="assign" data-c="'+c.id+'">Add</button></div></div>';
- // (header closed)
- if(!asg.length)m+='<p class="empty">Nothing outstanding. Finished work is below.</p>';
- else if(view.asgView==='table'){
-  var rowHtml=asg.map(function(a){
+ /* ===== Assignments ===== */
+ var nextA=null;for(var ni=0;ni<asg.length;ni++){if(asg[ni].due){nextA=asg[ni];break}}
+ var hint='';
+ if(nextA){var nc=cpCountdown(nextA.due);hint=nc.n<0?esc(nextA.title)+' is '+nc.t:'Next due: '+esc(nextA.title)+(nc.n===0?' today':nc.n===1?' tomorrow':' in '+nc.t);}
+ else if(asg.length)hint='No due dates set';
+ else hint=allAsg?'All caught up':'Add your first assignment';
+ var A='<section class="cpsec cpasg" id="c-assign">'+pencil('asg')
+  +cpHead('asg',col.asg,'Assignments',asg.length?asg.length+' open':'',hint,
+    '<div class="cpseg"><button data-asgview="cards" class="'+(view.asgView==='cards'?'on':'')+'"'+(view.asgView==='cards'?' style="background:'+col.asg.bg+';color:'+col.asg.title+'"':'')+'>Cards</button>'
+    +'<button data-asgview="table" class="'+(view.asgView!=='cards'?'on':'')+'"'+(view.asgView!=='cards'?' style="background:'+col.asg.bg+';color:'+col.asg.title+'"':'')+'>Table</button></div>'
+    +cpBtn(col.asg,'+ Add','data-add="assign" data-c="'+c.id+'"'));
+ if(!asg.length){
+  A+='<div class="cpempty">'+(allAsg?'Nothing outstanding. Finished work is in Completed.':'Nothing here yet. Add assignments as they come in, with a due date and how much they’re worth.')+'</div>';
+ }else if(view.asgView==='cards'){
+  A+='<div class="cpbody cpcards">'+firstN(asg.map(function(a){
    var d=parseISO(a.due),late=d&&d<today();
-   return '<tr data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'">'
-    +'<td style="width:34px"><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark done"></button></td>'
-    +'<td><span class="tt"><span class="sdot" style="width:8px;height:8px;border-radius:50%;background:'+p.bar+'"></span>'
-    +'<span>'+esc(a.title)+'</span>'+asgFileIcon(c,a)+'</span></td>'
-    +'<td style="color:var(--ink2)">'+(a.weight!==''&&a.weight!=null?a.weight+'%':'')+'</td>'
-    +'<td>'+prioPill(a.priority)+'</td>'
-    +'<td'+(late?' class="late"':'')+'>'+(a.due?esc(withTime(parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),a.time)):'')+'</td>'
-    +'<td style="color:var(--ink2)">'+(late?'Late':'Open')+'</td></tr>';
-  });
-  m+='<table class="tbl"><thead><tr><th style="width:34px"></th><th>Assignment</th><th>Worth</th><th>Priority</th><th>Due</th><th>Status</th></tr></thead><tbody>'
-   +rowHtml.slice(0,5).join('')+'</tbody></table>';
-  if(rowHtml.length>5){
-   m+='<details class="more"><summary>'+(rowHtml.length-5)+' more assignments</summary>'
-    +'<table class="tbl"><tbody>'+rowHtml.slice(5).join('')+'</tbody></table></details>';
-  }
- }else{
-  m+=firstN(asg.map(function(a){
-   var d=parseISO(a.due),late=d&&d<today();
-   return '<details class="asg" style="border-left-color:'+p.bar+'">'
+   return '<details class="asg" style="border-left-color:'+col.asg.c+'">'
     +'<summary><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark done"></button>'
     +'<span class="grow">'+esc(a.title)+asgFileIcon(c,a)+'</span>'+prioPill(a.priority)
-    +(a.due?'<span class="pill '+(late?'late':'')+'" style="background:'+(late?'#F7ECEA':p.bg)+';color:'+(late?'#A34A3F':p.ink2)+'">'+esc(withTime(fmtDue(a.due),a.time))+'</span>':'')
+    +(a.due?'<span class="pill '+(late?'late':'')+'" style="background:'+(late?'#F7ECEA':col.asg.bg)+';color:'+(late?'#A34A3F':col.asg.title)+'">'+esc(withTime(fmtDue(a.due),a.time))+'</span>':'')
     +'</summary><div class="asgbody">'+(a.notes?esc(a.notes):'No instructions saved yet.')
     +'<div class="acts2"><button data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'">Edit</button>'
     +'<button data-del="assign" data-id="'+a.id+'" data-c="'+c.id+'">Delete</button></div></div></details>';
-  }),5,'assignments');
- }
-
- var q=(view.fileQ||'').trim().toLowerCase();
- var groups=[{id:'',name:'Unsorted'}].concat(c.sections||[]);
-
- m+='</div><div class="two2">'
-  +'<div class="panel" id="c-files" style="'+surfStyle('files','','','')+'">'+pencil('files')+'<div class="rowhead" style="margin-bottom:8px"><h3 style="color:'+surfHead('files')+'">Files</h3>'
-  +'<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">'
-  +'<button class="readpdfs" data-index="'+c.id+'"'+(view.indexing?' disabled':'')+'>'+(view.indexing?'<span class="spin"></span>':'Read PDFs')+'</button>'
-  +'<button data-add="section" data-c="'+c.id+'">New section</button>'
-  +'<label class="fakebtn"><input type="file" multiple data-file="'+c.id+'" style="display:none">Upload</label></div></div>'
-  +'<input type="text" id="filesearch" placeholder="Search names, links and inside PDFs" value="'+esc(view.fileQ||'')+'" style="width:100%;font-size:12.5px;padding:8px 11px;margin-bottom:6px">';
-
- function fileRow(f,i){
-  var canOpen=READABLE[f.kind];
-  return '<div class="item">'+fileIcon(f)+'<span class="grow">'
-   +(f.kind==='pdf'?'<a href="#" data-mkopen="'+i+'" data-c="'+c.id+'" title="Open">'+esc(f.name)+'</a>'
-     :(canOpen?'<a href="#" data-openfile="'+i+'" data-c="'+c.id+'" title="Open in a new tab">'+esc(f.name)+'</a>':esc(f.name)))
-   +'</span>'
-   +(f.saved===false&&f.data?'<span class="tag">too big to keep</span>':'')
-   +((c.sections||[]).length?'<select data-movefile="'+i+'" data-c="'+c.id+'" style="width:auto;font-size:11.5px;padding:4px 6px">'+sectionOptions(c,f.section||'')+'</select>':'')
-   +'<button class="ghost" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" style="font-size:11px;padding:4px 6px">Edit</button></div>';
- }
- function linkRow(l,i){
-  return '<div class="item">'+linkIcon(l.url,l.title,l.icon)+'<span class="grow"><a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a></span>'
-   +((c.sections||[]).length?'<select data-movelink="'+i+'" data-c="'+c.id+'" style="width:auto;font-size:11.5px;padding:4px 6px">'+sectionOptions(c,l.section||'')+'</select>':'')
-   +'<button class="ghost" data-pin="'+i+'" data-c="'+c.id+'" style="font-size:11px;padding:4px 6px">'+(l.pinned?'Unpin':'Pin')+'</button>'
-   +'<button class="x" data-dellink="'+i+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button>'
-   +'<button class="rowmore" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">\u22ef</button></div>';
- }
-
- var fIdx=files.map(function(f,i){return {f:f,i:i}});
- var lIdx=c.links.map(function(l,i){return {l:l,i:i}});
- if(q){
-  var fm=fIdx.filter(function(x){
-   return x.f.name.toLowerCase().indexOf(q)>-1||(x.f.text&&x.f.text.toLowerCase().indexOf(q)>-1);
-  });
-  var lm=lIdx.filter(function(x){return (x.l.title+' '+x.l.url).toLowerCase().indexOf(q)>-1});
-  m+=(fm.length?fm.map(function(x){
-   var row=fileRow(x.f,x.i),snip='';
-   if(x.f.text){
-    var at=x.f.text.toLowerCase().indexOf(q);
-    if(at>-1){
-     var from=Math.max(0,at-60);
-     snip='<p class="snip">'+(from?'\u2026':'')+esc(x.f.text.slice(from,at+q.length+90).trim())+'\u2026</p>';
-    }
-   }
-   return row+snip;
-  }).join(''):'<p class="empty">No files match.</p>');
-  m+='</div><div class="panel" id="c-links"><div class="rowhead"><h3 style="color:'+surfHead('links')+'">Links</h3><button data-add="link" data-c="'+c.id+'">Add</button></div>'
-   +(lm.length?lm.map(function(x){return linkRow(x.l,x.i)}).join(''):'<p class="empty">No links match.</p>')+'</div></div>';
+  }),5,'assignments')+'</div>';
  }else{
-  if(!files.length)m+='<p class="empty">Slides, PDFs, screenshots and notes go here.</p>';
-  else if(!(c.sections||[]).length)m+=firstThree(fIdx.map(function(x){return fileRow(x.f,x.i)}),'files');
-  else{
-   groups.forEach(function(g){
-    var rows=fIdx.filter(function(x){return (x.f.section||'')===g.id});
-    if(!rows.length)return;
-    m+='<p class="lab2">'+esc(g.name)+(g.id?'<button class="ghost" data-edit="section" data-id="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:6px">rename</button><button class="ghost" data-delsection="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:4px">remove</button>':'')+'</p>'
-     +firstThree(rows.map(function(x){return fileRow(x.f,x.i)}),'files');
-   });
-  }
-  m+='</div>';
-
-  m+='<div class="panel" id="c-links" style="'+surfStyle('links','','','')+'">'+pencil('links')+'<div class="rowhead"><h3 style="color:'+surfHead('links')+'">Links</h3><button data-add="link" data-c="'+c.id+'">Add</button></div>';
-  if(!c.links.length)m+='<p class="empty">FOL shells, readings, anything you keep reopening.</p>';
-  else if(!(c.sections||[]).length)m+=firstThree(lIdx.map(function(x){return linkRow(x.l,x.i)}),'links');
-  else{
-   groups.forEach(function(g){
-    var rows=lIdx.filter(function(x){return (x.l.section||'')===g.id});
-    if(!rows.length)return;
-    m+='<p class="lab2">'+esc(g.name)+(g.id?'<button class="ghost" data-edit="section" data-id="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:6px">rename</button><button class="ghost" data-delsection="'+g.id+'" data-c="'+c.id+'" style="font-size:11px;margin-left:4px">remove</button>':'')+'</p>'+firstThree(rows.map(function(x){return linkRow(x.l,x.i)}),'links');
-   });
-  }
-  m+='</div></div>';
+  var nearest=nextA?nextA.id:null;
+  var rows=asg.map(function(a){
+   var cd=cpCountdown(a.due),late=cd.n!=null&&cd.n<0;
+   var cdColor=late?'#A34A3F':(a.id===nearest?col.asg.c:'var(--ink2)');
+   return '<div class="cpgrid cprow" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'">'
+    +'<span class="c-tick"><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark done"></button></span>'
+    +'<span class="c-name"><span class="cpnm">'+esc(a.title)+'</span>'+asgFileIcon(c,a)+'</span>'
+    +'<span class="c-count" style="color:'+cdColor+'">'+cd.t+'</span>'
+    +'<i class="c-br"></i>'
+    +'<span class="c-due'+(late?' late':'')+'">'+(a.due?esc(withTime(parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),a.time)):'')+'</span>'
+    +'<span class="c-worth">'+(a.weight!==''&&a.weight!=null?a.weight+'%':'')+'</span>'
+    +'<span class="c-prio">'+prioPill(a.priority)+'</span>'
+    +'</div>';
+  });
+  A+='<div class="cpbody"><div class="cpgrid cphdr"><span></span><span>Assignment</span><span class="h-count">Countdown</span><span class="h-due">Due</span><span class="h-worth">Worth</span><span class="h-prio">Priority</span></div>'
+   +rows.slice(0,5).join('');
+  if(rows.length>5)A+='<details class="cpmorebox"><summary style="color:'+col.asg.c+'"><span class="cpshow">Show '+(rows.length-5)+' more assignment'+(rows.length-5>1?'s':'')+'</span><span class="cphide">Show fewer</span></summary>'+rows.slice(5).join('')+'</details>';
+  A+='</div>';
  }
+ A+='</section>';
 
+ /* ===== Files & links, grouped by chapter ===== */
+ var q=(view.fileQ||'').trim().toLowerCase();
+ var fIdx=files.map(function(f,i){return {f:f,i:i}});
+ var lIdx=(c.links||[]).map(function(l,i){return {l:l,i:i}});
+ function fileRow(x){
+  var f=x.f,i=x.i,nn=(f.marks&&f.marks.notes&&f.marks.notes.length)||0;
+  var meta=cpFileLabel(f)+(f.kind==='pdf'&&f.marks&&f.marks.strokes&&f.marks.strokes.length?' · marked up':'')+(nn?' · '+nn+' note'+(nn>1?'s':''):'')+(f.saved===false&&f.data?' · too big to keep':'');
+  var name=f.kind==='pdf'?'<a class="cpitemname" href="#" data-mkopen="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>'
+   :(READABLE[f.kind]?'<a class="cpitemname" href="#" data-openfile="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>':'<span class="cpitemname">'+esc(f.name)+'</span>');
+  return '<div class="cpitem">'+cpTile(cpFileLabel(f),f.icon)+'<span class="cpitemtext">'+name+'<span class="cpitemmeta">'+esc(meta)+'</span></span>'
+   +'<button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(f.name)+'">'+CP_ICO.more+'</button></div>';
+ }
+ function linkRow(x){
+  var l=x.l,i=x.i;
+  return '<div class="cpitem">'+cpTile(cpLinkLabel(l),l.icon)+'<span class="cpitemtext"><a class="cpitemname" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a>'
+   +'<span class="cpitemmeta">'+(l.pinned?'Pinned · ':'')+esc(cpHost(l.url))+'</span></span>'
+   +'<button class="cpdots" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(l.title)+'">'+CP_ICO.more+'</button></div>';
+ }
+ function colList(rows,label,empty,n){
+  return '<div class="cpcol"><div class="cpcollab">'+label+'</div>'
+   +(rows.length?firstN(rows,n||6,label.toLowerCase()):'<div class="cpcolempty">'+empty+'</div>')+'</div>';
+ }
+ var total=files.length+(c.links||[]).length;
+ var F='<section class="cpsec cpfiles" id="c-files"><span id="c-links" class="cpanchor"></span>'+pencil('files')
+  +cpHead('files',col.files,'Files &amp; links',total?total+' item'+(total>1?'s':''):'',(c.sections||[]).length?'Grouped by chapter, files and links together':'Slides, readings and links for this class',
+    '<label class="cpsearch" style="border-color:'+col.files.line+'">'+CP_ICO.search+'<input type="text" id="filesearch" placeholder="Search names, links and PDFs" value="'+esc(view.fileQ||'')+'"></label>'
+    +'<button class="cpbtn2 cpreadpdfs" style="border-color:'+col.files.line+'" data-index="'+c.id+'" title="Lets search look inside your PDFs"'+(view.indexing?' disabled':'')+'>'+(view.indexing?'<span class="spin"></span>':'Read PDFs')+'</button>'
+    +cpBtn2(col.files,'+ Link','data-add="link" data-c="'+c.id+'"')
+    +'<label class="cpbtn" style="background:'+col.files.c+'"><input type="file" multiple data-file="'+c.id+'" style="display:none">+ Upload</label>');
+ F+='<div class="cpfbody">';
+ if(q){
+  var fm=fIdx.filter(function(x){return x.f.name.toLowerCase().indexOf(q)>-1||(x.f.text&&x.f.text.toLowerCase().indexOf(q)>-1)});
+  var lm=lIdx.filter(function(x){return (x.l.title+' '+x.l.url).toLowerCase().indexOf(q)>-1});
+  var fRows=fm.map(function(x){
+   var snip='';
+   if(x.f.text){var at=x.f.text.toLowerCase().indexOf(q);if(at>-1){var from=Math.max(0,at-60);snip='<p class="cpsnip">'+(from?'…':'')+esc(x.f.text.slice(from,at+q.length+90).trim())+'…</p>'}}
+   return fileRow(x)+snip;
+  });
+  F+='<div class="cpch"><div class="cpchbody">'+colList(fRows,'Files','No files match.',50)+colList(lm.map(linkRow),'Links','No links match.',50)+'</div></div>';
+ }else if(!total){
+  F+='<div class="cpempty" style="padding:6px 0">Nothing here yet. Upload slides and PDFs, or add links to readings and course pages.</div>';
+ }else if(!(c.sections||[]).length){
+  F+='<div class="cpch"><div class="cpchbody">'+colList(fIdx.map(fileRow),'Files','No files yet')+colList(lIdx.map(linkRow),'Links','No links yet')+'</div></div>';
+ }else{
+  var shut=cpShut(c.id),badges=[col.asg.c,col.files.c,col.third.c],anyOpen=false;
+  var groups=(c.sections||[]).map(function(s,k){return {id:s.id,name:s.name,badge:k}});
+  var unsorted={id:'',name:'Unsorted',badge:-1};
+  groups.concat([unsorted]).forEach(function(g){
+   var fr=fIdx.filter(function(x){return (x.f.section||'')===g.id}),lr=lIdx.filter(function(x){return (x.l.section||'')===g.id});
+   if(!g.id&&!fr.length&&!lr.length)return;
+   var isShut=!!shut[g.id||'_'];if(!isShut)anyOpen=true;
+   var cnt=[fr.length?fr.length+' file'+(fr.length>1?'s':''):'',lr.length?lr.length+' link'+(lr.length>1?'s':''):''].filter(Boolean).join(' · ')||'Empty';
+   var m=/^(chapter|ch\.?|week|module|unit)\s*(\d+)\s*[:\-–]?\s*(.*)$/i.exec(g.name);
+   var badgeTxt=g.id?(m?({c:'CH',w:'WK',m:'MOD',u:'UNIT'}[m[1].charAt(0).toLowerCase()])+' '+m[2]:String(g.badge+1)):'';
+   var nameTxt=g.id&&m&&m[3]?m[3]:g.name;
+   F+='<div class="cpch'+(isShut?' shut':'')+'">'
+    +'<div class="cpchhead" data-chap="'+c.id+':'+(g.id||'_')+'" role="button" aria-expanded="'+(!isShut)+'">'+CP_ICO.chev
+    +(g.id?'<span class="cpbadge" style="background:'+badges[g.badge%3]+'">'+esc(badgeTxt)+'</span>':'<span class="cpbadge" style="background:var(--ink3)">—</span>')
+    +'<span class="cpchname">'+esc(nameTxt)+'</span><span class="cpchcount">'+cnt+'</span>'
+    +(g.id?'<span class="cpchacts"><button class="cpghost" data-edit="section" data-id="'+g.id+'" data-c="'+c.id+'">Rename</button><button class="cpghost" data-delsection="'+g.id+'" data-c="'+c.id+'" title="Files and links in it move to Unsorted">Remove</button></span>':'')
+    +'</div>';
+   // only the side(s) that have something: both empty is one quiet line, one empty gives the other the full width
+   if(!isShut)F+=(!fr.length&&!lr.length)?'<div class="cpchempty">Nothing in this chapter yet. Move files and links here with their ⋯ button.</div>'
+    :'<div class="cpchbody'+(fr.length&&lr.length?'':' one')+'">'+(fr.length?colList(fr.map(fileRow),'Files',''):'')+(lr.length?colList(lr.map(linkRow),'Links',''):'')+'</div>';
+   F+='</div>';
+  });
+  F+='<div class="cpffoot" style="color:'+col.files.c+'"><button class="cptext" style="color:inherit" data-add="section" data-c="'+c.id+'">+ New chapter</button>'
+   +'<button class="cptext" style="color:inherit" data-chapall="'+c.id+'">'+(anyOpen?'Collapse all':'Expand all')+'</button></div>';
+ }
+ F+='</div></section>';
+
+ /* ===== Checklist + Completed ===== */
  var openT=c.tasks.filter(function(t){return !t.done}),doneT=c.tasks.filter(function(t){return t.done});
- m+='<div class="mini" id="c-due" style="margin-top:14px;'+surfStyle('mini','var(--miniBg,#F4F2ED)','var(--line)','')+'">'+pencil('mini')+'<div class="rowhead" style="margin-bottom:6px"><h3 style="color:'+surfInk('mini','var(--ink2)')+'">Checklist</h3><button class="ghost" data-add="task" data-c="'+c.id+'" style="font-size:12px">Add</button></div>';
- if(!c.tasks.length)m+='<p class="empty" style="font-size:12.5px;padding:2px 0">Odd jobs and reminders go here.</p>';
- else{
-  m+=firstThree(openT.concat(doneT).map(function(t){
-   return '<div class="item"><button class="tick'+(t.done?' on':'')+'" style="'+(t.done?'background:'+p.bar:'')+'" data-tick="'+t.id+'" data-c="'+c.id+'" aria-label="Toggle done"></button>'
-    +'<span class="grow'+(t.done?' done':'')+'">'+esc(t.title)+'</span>'
-    +(t.due?'<span class="tag">'+esc(withTime(fmtDue(t.due),t.time))+'</span>':'')
-    +'<button class="x" data-del="task" data-id="'+t.id+'" data-c="'+c.id+'" aria-label="Delete">\u00d7</button></div>';
-  }),'to do');
- }
- m+='</div>';
+ var K='<section class="cpsec cpmini" id="c-due">'+pencil('mini')
+  +cpHead('mini',col.mini,'Checklist',openT.length?openT.length+' to do':'','Odd jobs and reminders',cpBtn(col.mini,'+ Add','data-add="task" data-c="'+c.id+'"'));
+ if(!c.tasks.length)K+='<div class="cpempty">Nothing here yet. Add a quick reminder to get it out of your head.</div>';
+ else K+='<div class="cplist">'+firstN(openT.concat(doneT).map(function(t){
+   return '<div class="cpli"><button class="tick'+(t.done?' on':'')+'" style="'+(t.done?'background:'+col.mini.c:'')+'" data-tick="'+t.id+'" data-c="'+c.id+'" aria-label="Toggle done"></button>'
+    +'<span class="cpgrow'+(t.done?' done':'')+'">'+esc(t.title)+'</span>'
+    +(t.due?'<span class="cpmeta">'+esc(withTime(fmtDue(t.due),t.time))+'</span>':'')
+    +'<button class="x" data-del="task" data-id="'+t.id+'" data-c="'+c.id+'" aria-label="Delete">×</button></div>';
+  }),5,'to do')+'</div>';
+ K+='</section>';
 
+ var pct=allAsg?Math.round(finished.length/allAsg*100):0;
+ var D='<section class="cpsec cpdone">'+pencil('done')
+  +cpHead('done',col.done,'Completed',finished.length?finished.length+' done':'',allAsg?finished.length+' of '+allAsg+' done':'Finished work collects here','');
+ D+='<div class="cpprog"><div class="cpbar" style="background:'+col.done.bg+'"><i style="width:'+pct+'%;background:'+col.done.c+'"></i></div></div>';
+ if(!finished.length)D+='<div class="cpempty" style="padding-top:8px">Nothing finished yet. Ticked-off work collects here.</div>';
+ else D+='<div class="cplist">'+firstN(finished.map(function(a){
+   return '<div class="cpli"><span class="cpgrow">'+esc(a.title)+'</span>'
+    +(a.mark!==''&&a.mark!=null
+      ?'<button class="cpmark" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" title="Change the mark" style="background:'+col.done.bg+';color:'+col.done.title+'">'+a.mark+'%</button>'
+      :'<button class="cpghost" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" style="color:'+col.done.c+'">Add mark</button>')
+    +'<span class="cpmeta">'+esc(a.doneAt?parseISO(a.doneAt).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'')+'</span>'
+    +'<button class="cpghost" data-undo="'+a.id+'" data-c="'+c.id+'">Put back</button></div>';
+  }),5,'finished')+'</div>';
+ D+='</section>';
+
+ /* ===== study questions (Claude version only, unchanged) ===== */
+ var study='';
  if(!LOCAL){
- var readable=files.filter(canRead);
- m+='<div class="studyrow" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px">'
-  +'<span class="hint" style="margin:0">Study questions from</span>'
-  +'<select id="studyfile" style="width:auto;max-width:260px;font-size:12.5px;padding:6px 9px">'
-  +'<option value="">'+(readable.length?'all readable files':'no files yet')+'</option>'
-  +readable.map(function(f){return '<option value="'+f.id+'">'+esc(f.name)+'</option>'}).join('')
-  +'</select>'
-  +'<button data-studygo="'+c.id+'"'+(view.study&&view.study.loading?' disabled':'')+'>'+(view.study&&view.study.loading&&view.study.cid===c.id?'<span class="spin"></span>':'Make questions')+'</button></div>';
- if(view.study&&view.study.cid===c.id&&!view.study.loading){
-  if(view.study.error)m+='<div class="answer" style="background:#F6F4F0">'+esc(view.study.error)+'</div>';
-  else{
-   m+='<div class="panel" style="margin-top:12px"><div class="rowhead"><h3>Study questions</h3><button class="ghost" data-studyclose="1">Close</button></div>'
+  var readable=files.filter(canRead);
+  study+='<div class="studyrow" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
+   +'<span class="hint" style="margin:0">Study questions from</span>'
+   +'<select id="studyfile" style="width:auto;max-width:260px;font-size:12.5px;padding:6px 9px">'
+   +'<option value="">'+(readable.length?'all readable files':'no files yet')+'</option>'
+   +readable.map(function(f){return '<option value="'+f.id+'">'+esc(f.name)+'</option>'}).join('')+'</select>'
+   +'<button data-studygo="'+c.id+'"'+(view.study&&view.study.loading?' disabled':'')+'>'+(view.study&&view.study.loading&&view.study.cid===c.id?'<span class="spin"></span>':'Make questions')+'</button></div>';
+  if(view.study&&view.study.cid===c.id&&!view.study.loading){
+   if(view.study.error)study+='<div class="answer" style="background:#F6F4F0">'+esc(view.study.error)+'</div>';
+   else study+='<div class="panel"><div class="rowhead"><h3>Study questions</h3><button class="ghost" data-studyclose="1">Close</button></div>'
     +'<p class="hint" style="margin:-6px 0 10px">From '+esc(view.study.from)+'. Click a question to see the answer.</p>'
     +view.study.items.map(function(it,i){
-     return '<details class="asg" style="border-left-color:'+p.bar+'"><summary><span style="color:var(--ink3);font-size:12px;width:18px">'+(i+1)+'</span><span class="grow">'+esc(it.q)+'</span></summary>'
-      +'<div class="asgbody">'+esc(it.a)+'</div></details>';
+     return '<details class="asg" style="border-left-color:'+col.asg.c+'"><summary><span style="color:var(--ink3);font-size:12px;width:18px">'+(i+1)+'</span><span class="grow">'+esc(it.q)+'</span></summary><div class="asgbody">'+esc(it.a)+'</div></details>';
     }).join('')+'</div>';
   }
  }
- }
- m+='<div class="doneboxwrap"><div class="donebox" style="'+surfStyle('done','var(--doneBg)','var(--doneLine)','var(--doneInk)')+'">'+pencil('done')+'<h3>Previously completed</h3>';
- if(!finished.length)m+='<p class="empty" style="color:var(--doneInk);opacity:.75">Nothing finished yet. It will collect here.</p>';
- else{
-  m+=firstThree(finished.map(function(a){
-   return '<div class="item"><span class="grow done">'+esc(a.title)+'</span>'
-    +(a.mark!==''&&a.mark!=null
-      ?'<button class="pill" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" title="Change the mark" style="background:var(--card);color:var(--doneInk);border:none;cursor:pointer">'+a.mark+'%</button>'
-      :'<button class="ghost" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" style="font-size:11.5px;color:var(--doneInk)">Add mark</button>')
-    +'<span class="when2">'+esc(a.doneAt?'done '+parseISO(a.doneAt).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):(a.due?'was due '+parseISO(a.due).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):''))+'</span>'
-    +'<button class="ghost" data-undo="'+a.id+'" data-c="'+c.id+'" style="font-size:11.5px;color:var(--doneInk)">Put back</button></div>';
-  }),'finished');
- }
- m+='</div></div>';
 
- m+='<div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">'
+ /* ===== class settings row ===== */
+ var G='<div class="cpsettings"><span class="cpsetlab">Class settings</span>'
   +'<button data-edit="class" data-c="'+c.id+'">Edit class</button>'
   +'<button data-xact="shareclass:'+c.id+'">Share this class</button>'
   +'<button data-xact="ics:'+c.id+'">Import from a calendar</button>'
   +coverControls(c.id,c)
-  +'</div>';
- m+='<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
   +'<button data-add="book" data-c="'+c.id+'">'+(c.textbook?'Edit textbook':'Add a textbook')+'</button>'
-  +(c.textbook?'<button class="ghost" data-delbook="'+c.id+'">Remove textbook</button>':'')
+  +(c.textbook?'<button class="cpghost" data-delbook="'+c.id+'">Remove textbook</button>':'')
   +'</div>';
 
- // ---- right rail ----
- var r='<div class="rail" style="'+surfStyle('rail','var(--railBg,#F1EEE8)','#E6E2D9','')+'">'+pencil('rail');
-
+ /* ===== right rail ===== */
+ function railCard(id,dot,title,act,body,key){
+  return '<section class="cpcard"'+(id?' id="'+id+'"':'')+(key?' style="'+surfStyle(key,'','','')+'"':'')+'>'+(key?pencil(key):'')
+   +'<div class="cpcardhead"><span class="cpdot" style="background:'+dot+'"></span><h3 class="cpcardtitle"'+(key?' style="color:'+surfHead(key)+'"':'')+'>'+title+'</h3>'+(act||'')+'</div>'
+   +'<div class="cpcardbody">'+body+'</div></section>';
+ }
+ var R='<aside class="cprail" style="'+surfStyle('rail','transparent','transparent','')+'">'+pencil('rail');
  if(c.day||c.room){
   var online=/online/i.test(c.day||'');
-  r+='<div class="railcard" id="c-when" style="'+surfStyle('when',p.bg,'transparent','')+'">'+pencil('when')
-   +'<h3 style="color:'+surfInk('when',p.ink2)+';font-size:12px;font-weight:400;margin-bottom:6px">When and where</h3>'
-   +'<p style="font-size:16px;color:'+surfInk('when',p.ink)+'">'+esc(c.day||'Not set')+'</p>'
-   +(c.room?'<p style="font-size:15px;color:'+surfInk('when',p.ink)+';margin-top:2px">'+esc(c.room)+'</p>'
-          :(online?'':'<p style="font-size:13px;color:'+surfInk('when',p.ink2)+';margin-top:2px">Room not set</p>'))
-   +'</div>';
+   // a light colour picked for this card in the old design keeps readable dark text instead of the new light text
+  var wOld=!!surfGet('when','bg'),wInk=wOld?'var(--ink)':col.darkInk,wSoft=wOld?'var(--ink2)':col.darkSoft;
+  R+='<section class="cpwhen" id="cp-when" style="background:var(--s-when-bg,'+col.dark+')">'+pencil('when')
+   +'<div class="cpwhenlab" style="color:var(--s-when-line,'+wSoft+')">When and where</div>'
+   +'<div class="cpwhentime" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.day||'Time not set')+'</div>'
+   +(c.room?'<div class="cpwhenroom" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.room)+'</div>':(online?'':'<div class="cpwhenroom" style="color:'+wSoft+'">Room not set</div>'))
+   +'</section>';
  }
-
  var gi=gradeInfo(c);
  if(gi.total){
-  var gtxt='';
-  if(gi.avg==null)gtxt='<p style="font-size:13px;color:var(--ink2)">No marks entered yet. Add them as work comes back.</p>';
+  var gb;
+  if(gi.avg==null)gb='<div class="cpsoft" style="font-size:14.5px;line-height:1.45">No marks yet. Add them as work comes back.</div>';
   else{
-   gtxt='<p class="gbig" style="font-size:26px;font-weight:500;line-height:1.1">'+gi.avg.toFixed(1)+'%</p>'
-    +'<p style="font-size:12px;color:var(--ink2);margin-top:3px">on '+gi.graded+'% of the course marked so far</p>';
+   gb='<div class="cpgrade"><span class="cpgradebig" style="color:'+col.mini.title+'">'+gi.avg.toFixed(1)+'%</span><span class="cpmeta">on '+gi.graded+'% of the course</span></div>';
    if(gi.need!=null){
     var nd=gi.need;
-    var msg=nd<=0?'You have already locked in your target.':(nd>100?'Your target is out of reach now, you would need over 100%.':'You need about '+nd.toFixed(0)+'% on the remaining '+gi.remaining+'% to reach '+c.target+'%.');
-    gtxt+='<p style="font-size:12.5px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)">'+msg+'</p>';
-   }else if(!c.target){
-    gtxt+='<p style="font-size:12px;color:var(--ink3);margin-top:8px">Set a target in Edit class to see what you need.</p>';
-   }
+    gb+='<div class="cpsoft" style="font-size:13.5px">'+(nd<=0?'You have already locked in your target.':(nd>100?'Your target is out of reach now, you would need over 100%.':'You need about '+nd.toFixed(0)+'% on the remaining '+gi.remaining+'% to reach '+c.target+'%.'))+'</div>';
+   }else if(!c.target)gb+='<div class="cpsoft" style="font-size:13px">Set a target in Edit class to see what you need.</div>';
   }
-  r+='<div class="railcard" id="c-grade"><h3 style="margin-bottom:8px">Grade</h3>'+gtxt+'</div>';
+  R+=railCard('cp-grade',col.mini.c,'Grade','',gb);
  }
- r+=refFilesRail();
- r+='<div class="railcard" id="c-prof" style="'+surfStyle('prof','','','')+'">'+pencil('prof')+'<div class="rowhead" style="margin-bottom:8px"><h3 style="color:'+surfHead('prof')+'">Professor information</h3>'
-  +'<button class="ghost" data-add="contact" data-c="'+c.id+'" style="font-size:12px">Add</button></div>';
- if(!c.contacts.length)r+='<p class="empty">Add your professor, and anyone else worth keeping handy.</p>';
- else{
-  r+=c.contacts.map(function(ct){
-   var zone=(view.paste===c.id+':'+ct.id)
-    ?'<div class="pastezone" data-drop="'+c.id+':'+ct.id+'">Copy an image, then press Ctrl and V<p class="pz2">Or drag an image file onto this box. Press Escape to cancel.</p></div>':'';
-   return zone+'<div class="person">'
-    +(ct.photo?'<img class="photo" src="'+ct.photo+'" alt="'+esc(ct.name)+'">'
-              :'<div class="photoempty" title="No photo yet"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
-    +'<div style="flex:1;min-width:0"><p style="font-size:14px;color:'+surfInk('prof')+'">'+esc(ct.name||'Unnamed')+'</p>'
-    +(ct.role?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+'">'+esc(ct.role)+'</p>':'')
-    +(ct.office?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+'">'+esc(ct.office)+'</p>':'')
-    +(ct.hours?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+'">'+esc(ct.hours)+'</p>':'')
-    +(ct.email?'<p style="font-size:11.5px;color:'+surfInk('prof','var(--ink2)')+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(ct.email)+'</p>':'')
-    +'<div class="pbtns">'
-    +(ct.email?'<a class="fakebtn" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener" style="text-decoration:none">Email</a>':'')
-    +'<button data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button>'
-    +'<label class="fakebtn"><input type="file" accept="image/*" data-photo="'+c.id+':'+ct.id+'" style="display:none">'+(ct.photo?'Photo':'Photo')+'</label>'
-    +'<button data-paste="'+c.id+':'+ct.id+'">'+(view.paste===c.id+':'+ct.id?'Waiting':'Paste')+'</button>'
-    +'<button class="x" data-delcontact="'+ct.id+'" data-c="'+c.id+'" aria-label="Remove">\u00d7</button>'
-    +'</div></div></div>';
+ var pb='';
+ if(!c.contacts.length)pb='<div class="cpsoft" style="font-size:14px">Add your professor, and anyone else worth keeping handy.</div>';
+ else pb=c.contacts.map(function(ct){
+  var zone=(view.paste===c.id+':'+ct.id)?'<div class="pastezone" data-drop="'+c.id+':'+ct.id+'">Copy an image, then press Ctrl and V<p class="pz2">Or drag an image file onto this box. Press Escape to cancel.</p></div>':'';
+  return zone+'<div class="cpperson">'
+   +(ct.photo?'<img class="cpphoto" src="'+ct.photo+'" alt="'+esc(ct.name)+'">':'<div class="cpphoto cpphotoempty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
+   +'<div class="cppersontext"><div class="cpline"><span class="a" style="font-weight:600">'+esc(ct.name||'Unnamed')+'</span></div>'
+   +(ct.role?'<div class="cpmeta">'+esc(ct.role)+'</div>':'')
+   +(ct.office?'<div class="cpmeta">'+esc(ct.office)+'</div>':'')
+   +(ct.hours?'<div class="cpmeta">'+esc(ct.hours)+'</div>':'')
+   +(ct.email?'<a class="cpemail" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener">'+esc(ct.email)+'</a>':'')
+   +'<div class="cppbtns">'
+   +'<button class="cpghost" data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button>'
+   +'<label class="cpghost"><input type="file" accept="image/*" data-photo="'+c.id+':'+ct.id+'" style="display:none">Photo</label>'
+   +'<button class="cpghost" data-paste="'+c.id+':'+ct.id+'">'+(view.paste===c.id+':'+ct.id?'Waiting':'Paste')+'</button>'
+   +'<button class="cpghost" data-delcontact="'+ct.id+'" data-c="'+c.id+'" aria-label="Remove '+esc(ct.name||'contact')+'">Remove</button>'
+   +'</div></div></div>';
+ }).join('');
+ R+=railCard('c-prof',col.files.c,'Professor','<button class="cpcardact" data-add="contact" data-c="'+c.id+'">Add</button>',pb,'prof');
+ var rf=FILES[REF_CID]||[];
+ var rb=!rf.length?'<div class="cpsoft" style="font-size:14px">A formatting guide or template you want handy on every class page.</div>'
+  :rf.map(function(f,i){
+   var link=f.kind==='pdf'?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
+    :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
+   return '<div class="cpline cprefline"><span class="a">'+link+'</span><span class="b">'+cpFileLabel(f)+'</span>'
+    +'<span class="cprefacts"><button class="cpghost" data-refedit="'+i+'" aria-label="Rename or change the picture">Edit</button><button class="cpghost" data-delfile="'+i+'" data-c="'+REF_CID+'" aria-label="Delete">×</button></span></div>';
   }).join('');
- }
- r+='</div>';
+ R+=railCard('cp-ref',col.third.c,'Reference files','<button class="cpcardact" data-xact="refadd">Add</button>',rb);
+ R+=railCard('cp-claude',col.done.c,'Claude project',c.claude?'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Edit</button>':'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Add link</button>',
+  c.claude?'<div class="cpline"><a class="a" href="'+esc(c.claude)+'" target="_blank" rel="noopener" style="font-weight:600">Open Claude project →</a></div>'
+   :'<div class="cpline"><span class="a cpsoft">No project linked</span></div>');
+ R+='</aside>';
 
- if(c.claude){
-  r+='<div class="railcard" id="c-claude"><h3 style="margin-bottom:8px">Claude project</h3>'
-   +'<a href="'+esc(c.claude)+'" target="_blank" rel="noopener"><button style="width:100%">Open Claude project</button></a></div>';
- }else{
-  r+='<div class="railcard" id="c-claude"><h3 style="margin-bottom:6px">Claude project</h3>'
-   +'<p class="empty" style="margin-bottom:8px">Paste a link in Edit class to keep this class\u2019s project one click away.</p>'
-   +'<button data-edit="class" data-c="'+c.id+'">Add a Claude project link</button></div>';
- }
- r+='<div class="railcard" id="c-next" style="'+surfStyle('next','','','')+'">'+pencil('next')+'<div class="rowhead" style="margin-bottom:8px"><h3 style="color:'+surfHead('next')+'">Upcoming submissions</h3>'
-  +'<button class="ghost" data-add="assign" data-c="'+c.id+'" style="font-size:12px">Add</button></div>';
- if(!asg.length)r+='<p class="empty">Nothing outstanding.</p>';
- else{
-  r+=firstThree(asg.map(function(a){
-   var dd=parseISO(a.due),lt=dd&&dd<today();
-   return '<div class="item"><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark done"></button>'
-    +'<span class="sdot" style="width:8px;height:8px;border-radius:50%;background:'+p.bar+';flex-shrink:0"></span>'
-    +'<span class="grow" style="color:'+surfInk('next')+'">'+esc(a.title)+'</span>'
-    +'<span class="tag" style="color:'+(lt?'#A34A3F':surfInk('next','var(--ink3)'))+'">'+esc(withTime(fmtDue(a.due),a.time))+'</span></div>';
-  }),'coming up');
- }
- r+='</div></div>';
-
- return top+'<div class="split"><div>'+m+'</div>'+r+'</div>';
+ return top+ask+'<div class="cpsplit"><div class="cpmain">'+A+F+'<div class="cppair">'+K+D+'</div>'+study+G+'</div>'+R+'</div>';
 }
 
 function coverControls(id,owner){
@@ -3897,6 +4134,7 @@ function modalHtml(){
     +'<button data-sheetdo="'+(READABLE[sf.kind]?'open':'download')+'">'+(READABLE[sf.kind]?'Open':'Download a copy')+'</button>'
     +(READABLE[sf.kind]?'<button data-sheetdo="replace">Replace with an edited copy</button>':'')
     +'<button data-sheetdo="rename">Rename</button>'
+    +((sc.sections||[]).length?'<label class="sheetmove">Chapter<select data-sheetmove="1">'+sectionOptions(sc,sf.section||'')+'</select></label>':'')
     +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
   }else{
    var sl=sc.links[m.i];
@@ -3905,7 +4143,7 @@ function modalHtml(){
     +'<button data-sheetdo="openlink">Open</button>'
     +'<button data-sheetdo="edit">Edit</button>'
     +'<button data-sheetdo="pin">'+(sl.pinned?'Unpin from the top':'Pin to the top')+'</button>'
-    +((sc.sections||[]).length?'<label class="sheetmove">Section<select data-sheetmove="1">'+sectionOptions(sc,sl.section||'')+'</select></label>':'')
+    +((sc.sections||[]).length?'<label class="sheetmove">Chapter<select data-sheetmove="1">'+sectionOptions(sc,sl.section||'')+'</select></label>':'')
     +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
   }
  }else if(m.kind==='settings'){
@@ -5766,7 +6004,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -5782,6 +6020,8 @@ document.addEventListener('click',function(e){
  if(d.scroll){view.menu=false;render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
+ if(d.chap){var cpi=d.chap.indexOf(':'),cpc=d.chap.slice(0,cpi),cpk=d.chap.slice(cpi+1),cps=cpShut(cpc);if(cps[cpk])delete cps[cpk];else cps[cpk]=true;cpSetShut(cpc,cps);render();return}
+ if(d.chapall){var cpcl=classById(d.chapall);if(cpcl){var cpsh=cpShut(d.chapall),keys=(cpcl.sections||[]).map(function(x){return x.id}).concat(['_']);var anyO=keys.some(function(k){return !cpsh[k]});var nx={};if(anyO)keys.forEach(function(k){nx[k]=true});cpSetShut(d.chapall,nx);render()}return}
  if(d.wx){fetchWeather();render();return}
  if(d.mon){
   var base=view.calMonth?parseISO(view.calMonth+'-01'):new Date(today().getFullYear(),today().getMonth(),1);
