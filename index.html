@@ -31,10 +31,13 @@
 #splash{display:none;position:fixed;inset:0;z-index:600;background:#d9d3c8;overflow:hidden}
 .splash-on #splash{display:block}
 #splash .sp-cream{position:absolute;inset:0;background:#f5f1e9;opacity:0}
-#splash .sp-mark{position:absolute;left:50%;top:50%;width:min(72vmin,660px);height:min(72vmin,660px);margin-left:calc(min(72vmin,660px)/-2);margin-top:calc(min(72vmin,660px)/-2 - 2vh)}
-#splash svg{width:100%;height:100%;overflow:visible;transform-origin:center;opacity:0}
-#splash .sc{transform-box:fill-box;transform-origin:center;opacity:0}
-#splash .sb{transform-box:fill-box;transform-origin:center}
+#splash .sp-mark{--u:calc(min(72vmin,660px)/600);position:absolute;left:50%;top:50%;width:min(72vmin,660px);height:min(72vmin,660px);margin-left:calc(min(72vmin,660px)/-2);margin-top:calc(min(72vmin,660px)/-2 - 2vh)}
+#splash #spSvg{position:absolute;inset:0;opacity:0;will-change:transform,opacity}
+#splash .sp-card{position:absolute;width:57.333%;height:57.333%;border-radius:11.63%;opacity:0;box-shadow:0 calc(var(--u)*6) calc(var(--u)*16) rgba(90,79,60,.14);will-change:transform,opacity}
+#splash .sp-bump{position:absolute;width:57.333%;height:57.333%;will-change:transform}
+#splash .sp-ov{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
+#splash .spk{transform-box:fill-box}
+#splash .sp-cream{will-change:opacity}
 .pull-ring{position:fixed;left:50%;top:0;width:30px;height:30px;margin-left:-15px;z-index:180;pointer-events:none;opacity:0;transform:translateY(-40px);display:flex;align-items:center;justify-content:center;background:var(--card,#fff);border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.14)}
 .pull-ring i{width:16px;height:16px;border-radius:50%;border:2px solid #D8D2C6;border-top-color:#5C7A66;display:block}
 .pull-ring.spin i{animation:spRot .7s linear infinite}
@@ -721,7 +724,64 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 </style>
 </head>
 <body>
-<div id="splash" aria-hidden="true"><div class="sp-cream" id="spCream"></div><div class="sp-mark"><svg id="spSvg" viewBox="190 160 600 600"><defs><linearGradient id="spSageG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#91a28d"/><stop offset="1" stop-color="#7d917c"/></linearGradient><filter id="spSoft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#5a4f3c" flood-opacity="0.14"/></filter></defs><g class="sc" id="spC1"><rect x="412" y="385" width="344" height="344" rx="40" fill="#b8abca" filter="url(#spSoft)"/></g><g class="sc" id="spC2"><rect x="368" y="335" width="344" height="344" rx="40" fill="#ecca9f" filter="url(#spSoft)"/></g><g class="sb" id="spBump"><g class="sc" id="spC3"><rect x="321" y="285" width="344" height="344" rx="40" fill="url(#spSageG)" filter="url(#spSoft)"/></g><path id="spChk" d="M412 466 L462 520 L577 397" pathLength="1" fill="none" stroke="#f7f2ea" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></g><path class="spk" d="M305 265 L268 228" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M368 238 L358 195" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M280 326 L232 316" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></svg></div></div>
+<div id="splash" aria-hidden="true"><div class="sp-cream" id="spCream"></div><div class="sp-mark"><div id="spSvg"><div class="sp-card" id="spC1" style="left:37%;top:37.5%;background:#b8abca"></div><div class="sp-card" id="spC2" style="left:29.667%;top:29.167%;background:#ecca9f"></div><div class="sp-bump" id="spBump" style="left:21.833%;top:20.833%"><div class="sp-card" id="spC3" style="left:0;top:0;width:100%;height:100%;background:linear-gradient(#91a28d,#7d917c)"></div><svg class="sp-ov" viewBox="321 285 344 344"><path id="spChk" d="M412 466 L462 520 L577 397" pathLength="1" fill="none" stroke="#f7f2ea" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></svg></div><svg class="sp-ov" viewBox="190 160 600 600" style="inset:0"><path class="spk" d="M305 265 L268 228" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M368 238 L358 195" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M280 326 L232 316" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></svg></div></div></div>
+<script>
+/* ---------- opening animation: the Claude Design "App Opening" sequence (3.5s, tap to skip).
+   Runs right after the markup, before the big app script, and is played by the browser (Web Animations,
+   transform and opacity only) so it stays smooth while the app loads behind it. ---------- */
+(function(){
+ var sp=document.getElementById('splash');
+ if(!sp||!/splash-on/.test(document.documentElement.className)){if(sp)sp.remove();return}
+ if(!sp.animate){sp.remove();document.documentElement.className=document.documentElement.className.replace(' splash-on','');return}
+ var E={
+  outCubic:function(t){t--;return t*t*t+1},
+  outBack:function(t){var c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)},
+  inOutCubic:function(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1}
+ };
+ function an(from,to,s0,e0,ease){return function(T){if(T<=s0)return from;if(T>=e0)return to;return from+(to-from)*ease((T-s0)/(e0-s0))}}
+ function enter(a,b,s0,e0){return an(a,b,s0,e0,E.outCubic)}
+ function pop(a,b,s0,e0){return an(a,b,s0,e0,E.outBack)}
+ function draw(a,b,s0,e0){return an(a,b,s0,e0,E.inOutCubic)}
+ var L=0,S=.5,K=1.5,P=2.1,Hd=2.6,X=3.0,END=3.5;
+ var $=function(id){return document.getElementById(id)};
+ var anims=[],finished=false,FPS=30,N=Math.round(END*FPS);
+ function play(el,fn){
+  var fr=[];
+  for(var i=0;i<=N;i++){var o=fn(i/FPS);o.offset=i/N;fr.push(o)}
+  var a=el.animate(fr,{duration:END*1000,fill:'both',easing:'linear'});
+  anims.push(a);return a;
+ }
+ play(sp,function(T){return{opacity:enter(1,0,X+.15,X+.5)(T)}});
+ var main=anims[0];
+ play($('spCream'),function(T){return{opacity:enter(0,1,L,S)(T)}});
+ [{id:'spC1',start:S,fromY:90,fromS:.5},{id:'spC2',start:S+.16,fromY:90,fromS:.5},{id:'spC3',start:S+.34,fromY:-140,fromS:.7}].forEach(function(c){
+  play($(c.id),function(T){
+   var p=pop(0,1,c.start,c.start+.5)(T),o=enter(0,1,c.start,c.start+.2)(T);
+   return{opacity:o,transform:'translate(0,'+(c.fromY/344*100*(1-p))+'%) scale('+(c.fromS+(1-c.fromS)*p)+')'};
+  });
+ });
+ play($('spBump'),function(T){return{transform:'scale('+(T<P?pop(1,1.05,K+.35,P+.05)(T):enter(1.05,1,P+.05,P+.45)(T))+')'}});
+ play($('spChk'),function(T){var c=draw(0,1,K,K+.45)(T);return{strokeDashoffset:1-c,opacity:c>0?1:0}});
+ var vecs=[[305,265,268,228,0],[368,238,358,195,.06],[280,326,232,316,.12]];
+ [].slice.call(sp.querySelectorAll('.spk')).forEach(function(el,i){
+  var v=vecs[i],d=v[4];
+  play(el,function(T){
+   var k=enter(0,1,P+d,P+d+.3)(T),kick=T<P+d+.3?0:pop(0,1,P+d+.3,P+d+.55)(T);
+   return{strokeDashoffset:1-k,opacity:k>0?1:0,transform:'translate('+((v[2]-v[0])*.35*(k-kick))+'px,'+((v[3]-v[1])*.35*(k-kick))+'px)'};
+  });
+ });
+ play($('spSvg'),function(T){return{opacity:enter(1,0,X,X+.4)(T),transform:'scale('+(draw(1,1.025,Hd,X)(T)*enter(1,1.12,X,X+.5)(T))+')'}});
+ function done(){if(finished)return;finished=true;anims.forEach(function(a){try{a.cancel()}catch(e){}});sp.remove();document.documentElement.className=document.documentElement.className.replace(' splash-on','')}
+ main.onfinish=done;
+ setTimeout(done,END*1000+800);
+ sp.addEventListener('click',function(){
+  if(finished)return;
+  finished=true;anims.forEach(function(a){try{a.pause()}catch(e){}});
+  sp.animate([{opacity:getComputedStyle(sp).opacity},{opacity:0}],{duration:250,fill:'forwards'});
+  setTimeout(function(){sp.remove();document.documentElement.className=document.documentElement.className.replace(' splash-on','')},270);
+ });
+})();
+</script>
 <div id="app"></div>
 <script>
 var PALETTES=[
@@ -967,7 +1027,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v84';
+var BUILD='v86';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2415,64 +2475,6 @@ function openAccountFlow(mode){
  buildOnb();
 }
 
-
-/* ---------- opening animation: the Claude Design "App Opening" sequence, same timing and easing (3.5s, tap to skip) ---------- */
-(function(){
- var sp=document.getElementById('splash');
- if(!sp||!/splash-on/.test(document.documentElement.className)){if(sp)sp.remove();return}
- var E={
-  outCubic:function(t){t--;return t*t*t+1},
-  outBack:function(t){var c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)},
-  inOutCubic:function(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1}
- };
- function an(from,to,s0,e0,ease){return function(T){if(T<=s0)return from;if(T>=e0)return to;return from+(to-from)*ease((T-s0)/(e0-s0))}}
- function enter(a,b,s0,e0){return an(a,b,s0,e0,E.outCubic)}
- function pop(a,b,s0,e0){return an(a,b,s0,e0,E.outBack)}
- function draw(a,b,s0,e0){return an(a,b,s0,e0,E.inOutCubic)}
- var L=0,S=.5,K=1.5,P=2.1,Hd=2.6,X=3.0,END=3.5;
- var $=function(id){return document.getElementById(id)};
- var cream=$('spCream'),svg=$('spSvg'),bump=$('spBump'),chk=$('spChk'),sparks=[].slice.call(sp.querySelectorAll('.spk'));
- var cards=[{el:$('spC1'),start:S,fromY:90,fromS:.5},{el:$('spC2'),start:S+.16,fromY:90,fromS:.5},{el:$('spC3'),start:S+.34,fromY:-140,fromS:.7}];
- var vecs=[[305,265,268,228,0],[368,238,358,195,.06],[280,326,232,316,.12]];
- var t0=null,raf=0,finished=false;
- function render(T){
-  var exitO=enter(1,0,X+.15,X+.5)(T);
-  sp.style.opacity=exitO;
-  cream.style.opacity=enter(0,1,L,S)(T);
-  cards.forEach(function(c){
-   var p=pop(0,1,c.start,c.start+.5)(T),o=enter(0,1,c.start,c.start+.2)(T);
-   c.el.style.opacity=o;
-   c.el.style.transform='translate(0px,'+(c.fromY*(1-p))+'px) scale('+(c.fromS+(1-c.fromS)*p)+')';
-  });
-  var check=draw(0,1,K,K+.45)(T);
-  var b=T<P?pop(1,1.05,K+.35,P+.05)(T):enter(1.05,1,P+.05,P+.45)(T);
-  bump.style.transform='scale('+b+')';
-  chk.style.strokeDashoffset=1-check;chk.style.opacity=check>0?1:0;
-  sparks.forEach(function(el,i){
-   var v=vecs[i],d=v[4],k=enter(0,1,P+d,P+d+.3)(T),kick=T<P+d+.3?0:pop(0,1,P+d+.3,P+d+.55)(T);
-   var dx=(v[2]-v[0])*.35*(k-kick),dy=(v[3]-v[1])*.35*(k-kick);
-   el.style.strokeDashoffset=1-k;el.style.opacity=k>0?1:0;el.style.transform='translate('+dx+'px,'+dy+'px)';
-  });
-  var breathe=draw(1,1.025,Hd,X)(T),exitS=enter(1,1.12,X,X+.5)(T);
-  svg.style.opacity=enter(1,0,X,X+.4)(T);
-  svg.style.transform='scale('+(breathe*exitS)+')';
- }
- function done(){if(finished)return;finished=true;cancelAnimationFrame(raf);sp.remove();document.documentElement.className=document.documentElement.className.replace(' splash-on','')}
- function frame(now){
-  if(finished)return;
-  if(t0===null)t0=now;
-  var T=(now-t0)/1000;
-  if(T>=END){done();return}
-  render(T);
-  raf=requestAnimationFrame(frame);
- }
- render(0);
- raf=requestAnimationFrame(frame);
- sp.addEventListener('click',function(){
-  if(finished)return;
-  cancelAnimationFrame(raf);sp.style.transition='opacity .25s ease';sp.style.opacity='0';setTimeout(done,270);
- });
-})();
 
 /* ---------- pull down at the top of a page to sync (phones and tablets) ---------- */
 var pullState={y0:null,d:0,busy:false};
@@ -4751,15 +4753,27 @@ function mkTouchFind(touches,id){for(var i=0;i<touches.length;i++){if(touches[i]
 // UIs solve this the same way: hold off a beat before commtting to a one-finger draw, so a second
 // finger arriving just after the first still reads as the two-finger gesture it actually is.
 var MK_DRAW_GRACE_MS=70,MK_DRAW_MOVE_PX=6;
+function mkCurPageWidth(zoom){
+ var info=MK.pageInfo[MK.curPage];if(!info)return 0;
+ return info.vp1.width*info.fitScale*zoom;
+}
 function mkStartPan(e){
  if(MK.drawing||MK.erasing)mkCancelStroke();
  var body=document.getElementById('mkbody'),rect=body.getBoundingClientRect(),c0=mkCenter(e.touches);
+ // the page sits centered (a real margin) when it's narrower than the screen, and flush left once
+ // it's wider -- and that margin does NOT shrink in step with zoom the way the page itself grows.
+ // the live pinch preview is a single uniform scale, which can only correctly represent a page that
+ // scales uniformly -- so a pinch that crosses from "fits on screen" to "wider than the screen"
+ // (true on almost every ordinary zoom-in, since you usually start near 100%) made the live preview
+ // and the real final layout disagree by exactly however much that margin changed. Freezing the
+ // starting margin here and threading it through the math below is what makes them agree again.
+ var centerPad0=mkCenterMargin(mkCurPageWidth(MK.zoom));
  // work in the page's own coordinate space throughout (screen position minus the container's own
  // position, plus the scroll already applied), not raw screen pixels -- mixing the two is what
  // threw the anchor off by exactly the amount the page had already been scrolled.
  MK.touch={mode:'pan',z0:MK.zoom,scrollTop0:body.scrollTop,scrollLeft0:body.scrollLeft,
-  rectTop:rect.top,rectLeft:rect.left,
-  startDist:mkDist(e.touches),prevMid:{x:c0.x-rect.left+body.scrollLeft,y:c0.y-rect.top+body.scrollTop},tx:0,ty:0,s:1};
+  rectTop:rect.top,rectLeft:rect.left,centerPad0:centerPad0,
+  startDist:mkDist(e.touches),prevMid:{x:c0.x-rect.left+body.scrollLeft-centerPad0,y:c0.y-rect.top+body.scrollTop},tx:0,ty:0,s:1};
  var pages=document.getElementById('mkpages');
  pages.style.transformOrigin='0 0';
  pages.style.willChange='transform';
@@ -4837,7 +4851,7 @@ function mkTouchMove(e){
  if(MK.touch.mode!=='pan'||e.touches.length<2)return;
  e.preventDefault();
  var t=MK.touch,cRaw=mkCenter(e.touches),dist=mkDist(e.touches);
- var mid={x:cRaw.x-t.rectLeft+t.scrollLeft0,y:cRaw.y-t.rectTop+t.scrollTop0};
+ var mid={x:cRaw.x-t.rectLeft+t.scrollLeft0-t.centerPad0,y:cRaw.y-t.rectTop+t.scrollTop0};
  // an ordinary two-finger scroll never holds its spacing perfectly steady -- so zoom only once the
  // pinch has moved a deliberate amount past where it started; a small drag inside that band pans only
  var raw=dist/t.startDist,DEAD=.025,eff;
@@ -4904,7 +4918,10 @@ function mkTouchEnd(e){
   // which is exactly "lands right, then gets yanked somewhere else the instant you let go"
   MK.zoom=Math.max(.5,Math.min(MK_MAX_ZOOM,t.z0*t.s));
   mkApplyZoomResize();
-  body.scrollLeft=Math.max(0,t.scrollLeft0-t.tx);
+  // the centering margin itself changed (or vanished) between the start zoom and this one -- add
+  // back exactly that difference, or the real landing spot is off by however much it changed
+  var centerPadNew=mkCenterMargin(mkCurPageWidth(MK.zoom));
+  body.scrollLeft=Math.max(0,(t.scrollLeft0-t.tx)+(centerPadNew-t.centerPad0));
   body.scrollTop=Math.max(0,t.scrollTop0-t.ty);
   mkOnScroll();
   body.style.overflow='';
