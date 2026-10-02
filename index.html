@@ -967,7 +967,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v81';
+var BUILD='v83';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4256,7 +4256,7 @@ function mkCss(){
   // so if the REAL, committed gap never moved with zoom the two would only agree on a single page;
   // scrolled past several pages, the fixed gaps we'd already passed didn't grow the way the preview
   // just showed they would, and letting go landed you further off with every extra page in between
-  +'#mk .mkpagewrap{position:relative;margin:0 auto;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease;flex-shrink:0}'
+  +'#mk .mkpagewrap{position:relative;margin:0;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease;flex-shrink:0}'
   +'#mk .mkpagewrap canvas{display:block;position:absolute;left:0;top:0;width:100%;height:100%}'
   +'#mk .mktext{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;line-height:1;-webkit-user-select:text;user-select:text;color:transparent}'
   +'#mk .mktext span{position:absolute;white-space:pre;cursor:text;transform-origin:0% 0%}'
@@ -4359,10 +4359,19 @@ var mkResizeTimer=null;
 function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(function(){if(MK)mkApplyZoom()},200)}
 
 /* ---------- building the page list ---------- */
+// centering an element that's sometimes WIDER than its container by leaving it to CSS auto-margins
+// is exactly the kind of thing browsers have not always agreed on when the content overflows --
+// worked out by hand here instead, so there is exactly one answer, the same in every browser: a
+// page narrower than the view sits centered with equal space both sides; once it's wider, it's
+// flush left with nothing left ambiguous about which end of it scrollLeft is measured from
+function mkCenterMargin(w){
+ var body=document.getElementById('mkbody');
+ return Math.max(0,Math.round(((body?body.clientWidth:w)-w)/2));
+}
 function mkPageHtml(n){
  var info=MK.pageInfo[n];
  var w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom),gap=Math.round(12*MK.zoom);
- return '<div class="mkpagebox" data-mkpage="'+n+'"><div class="mkpagewrap" style="width:'+w+'px;height:'+h+'px;margin:'+gap+'px auto;'+(MK.dark?'filter:invert(1) hue-rotate(180deg)':'')+'">'
+ return '<div class="mkpagebox" data-mkpage="'+n+'"><div class="mkpagewrap" style="width:'+w+'px;height:'+h+'px;margin:'+gap+'px 0 '+gap+'px '+mkCenterMargin(w)+'px;'+(MK.dark?'filter:invert(1) hue-rotate(180deg)':'')+'">'
   +'<canvas class="mkcanvas" data-mkpage="'+n+'"></canvas><div class="mktext" data-mkpage="'+n+'"></div><canvas class="mkanno" data-mkpage="'+n+'"></canvas><canvas class="mklive" data-mkpage="'+n+'"></canvas></div></div>';
 }
 async function mkRenderOnePage(n){
@@ -4434,7 +4443,7 @@ function mkApplyZoomResize(){
  for(var n=1;n<=MK.pageCount;n++){
   var info=MK.pageInfo[n],w=Math.round(info.vp1.width*info.fitScale*MK.zoom),h=Math.round(info.vp1.height*info.fitScale*MK.zoom);
   var wrap=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .mkpagewrap');
-  if(wrap){wrap.style.width=w+'px';wrap.style.height=h+'px';wrap.style.margin=gap+'px auto'}
+  if(wrap){wrap.style.width=w+'px';wrap.style.height=h+'px';wrap.style.margin=gap+'px 0 '+gap+'px '+mkCenterMargin(w)+'px'}
   MK.rendered[n]=false;
  }
 }
@@ -4948,11 +4957,26 @@ function mkColorInput(e){
  if(!e.target.matches||!e.target.matches('[data-mkcustom]'))return;
  MK.color=e.target.value;MK.toolColor[MK.tool]=e.target.value;mkRerenderChrome();
 }
+// the +/- buttons and typing a percentage in directly have no finger position to anchor to, so
+// (same as every other zoom control anywhere) they keep whatever was in the middle of your screen
+// still in the middle after -- not the fixed page-pixel spot your scroll position used to point at,
+// which is what silently sent you somewhere else entirely every single time you zoomed this way
+function mkZoomAroundCenter(newZoom){
+ var body=document.getElementById('mkbody');
+ var oldZoom=MK.zoom;
+ var centerX=body.scrollLeft+body.clientWidth/2,centerY=body.scrollTop+body.clientHeight/2;
+ MK.zoom=newZoom;
+ mkApplyZoomResize();
+ var ratio=MK.zoom/oldZoom;
+ body.scrollLeft=Math.max(0,centerX*ratio-body.clientWidth/2);
+ body.scrollTop=Math.max(0,centerY*ratio-body.clientHeight/2);
+ mkOnScroll();
+}
 function mkApplyZoomValue(raw){
  var n=parseInt(String(raw).replace(/[^0-9]/g,''),10);
  if(isNaN(n))n=Math.round(MK.zoom*100);
  n=Math.max(50,Math.min(MK_MAX_ZOOM*100,n));
- MK.zoom=n/100;mkApplyZoom();
+ mkZoomAroundCenter(n/100);
 }
 function mkZoomKey(e){
  if(e.target&&e.target.id==='mkzoomval'&&(e.key==='Enter')){e.preventDefault();mkApplyZoomValue(e.target.value);e.target.blur()}
@@ -4976,8 +5000,8 @@ function mkClick(e){
  if(a==='color'){MK.color=arg;MK.toolColor[MK.tool]=arg;mkRerenderChrome();return}
  if(a==='undo'){mkUndo();return}
  if(a==='redo'){mkRedo();return}
- if(a==='zoomin'){MK.zoom=Math.min(MK_MAX_ZOOM,MK.zoom+.1);mkApplyZoom();return}
- if(a==='zoomout'){MK.zoom=Math.max(.5,MK.zoom-.1);mkApplyZoom();return}
+ if(a==='zoomin'){mkZoomAroundCenter(Math.min(MK_MAX_ZOOM,MK.zoom+.1));return}
+ if(a==='zoomout'){mkZoomAroundCenter(Math.max(.5,MK.zoom-.1));return}
  if(a==='thumb'){
   var n=+arg,box=document.querySelector('.mkpagebox[data-mkpage="'+n+'"]');
   if(box)document.getElementById('mkbody').scrollTop=box.offsetTop;
