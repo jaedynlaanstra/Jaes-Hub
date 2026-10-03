@@ -1464,7 +1464,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v104';
+var BUILD='v105';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -5164,8 +5164,19 @@ async function indexPdfs(cid){
    feel glitchy before, since asking it to redraw on every tiny finger movement is too slow to keep up.
    A mouse or an Apple Pencil always draws in Markup mode, since neither is ambiguous the way a finger is. */
 var MK=null;
-var MK_SIZES={hi:{s:8,sm:11,m:14,l:22},pen:{s:1,sm:1.5,m:2,l:3.5},eraser:{s:10,sm:13,m:16,l:24}};
-var MK_SIZE_NAMES={s:'Small',sm:'Small-medium',m:'Medium',l:'Large'};
+// pen and highlighter widths are in page units (they zoom with the page, like real ink); the eraser
+// is a radius in SCREEN pixels, so the ring you see is the same size at any zoom
+var MK_SIZES={hi:{s:8,sm:11,m:14,l:22},pen:{xs:.6,s:1,sm:1.5},eraser:{s:8,sm:12,m:18,l:28}};
+var MK_SIZE_NAMES={xs:'Extra fine',s:'Small',sm:'Small-medium',m:'Medium',l:'Large'};
+var MK_SIZE_DOTS={hi:{s:8,sm:12,m:16,l:22},pen:{xs:5,s:8,sm:12},eraser:{s:8,sm:12,m:16,l:22}};
+// each tool remembers its own last size on this device (Jae: highlighter on its 2nd size, pen on fine)
+var MK_SIZE_DEFAULT={hi:'sm',pen:'s',eraser:'m'};
+function mkLoadSizes(){
+ var o={};try{o=JSON.parse(localStorage.getItem('hub:mksize')||'{}')||{}}catch(e){}
+ var out={};Object.keys(MK_SIZE_DEFAULT).forEach(function(t){out[t]=MK_SIZES[t][o[t]]!==undefined?o[t]:MK_SIZE_DEFAULT[t]});
+ return out;
+}
+function mkSaveSizes(){try{localStorage.setItem('hub:mksize',JSON.stringify(MK.toolSize))}catch(e){}}
 var MK_COLORS={hi:['#F5D949','#F5A0B5','#8FD19E','#7FB8E0','#D9A8F0','#F2B26B'],pen:['#000000','#D9534F','#3B82F6','#1F9D6B','#8B5CF6','#E67E22']};
 function mkIco(inner,sz){return '<svg viewBox="0 0 24 24" width="'+(sz||19)+'" height="'+(sz||19)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>'}
 var MK_ICO={
@@ -5285,6 +5296,15 @@ function mkCss(){
   +'#mk .mkrow label.mkswatch.mkcustom{background:conic-gradient(from 20deg,#b98f86,#bfae86,#94a98f,#8ea2ad,#a296b0,#b98f86);border-color:rgba(255,255,255,.22)}'
   +'#mk .mkswatch.mkcustom i{position:absolute;inset:5px;border-radius:50%;background:#2a2723;display:flex;align-items:center;justify-content:center;color:rgba(239,234,224,.8);font:500 15px/1 system-ui,sans-serif;font-style:normal;pointer-events:none}'
   +'#mk .mkswatch.mkcustom.on i{inset:6px}'
+  +'#mk .mkfloat{position:fixed;z-index:6;display:none;flex-direction:column;align-items:center;gap:4px;padding:4px 5px 7px;background:rgba(36,33,29,.92);border:1px solid rgba(255,255,255,.1);border-radius:16px;box-shadow:0 6px 22px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}'
+  +'#mk .mkfloat.show{display:flex}'
+  +'#mk .mkfgrip{width:40px;height:20px;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none}'
+  +'#mk .mkfgrip i{width:18px;height:4px;border-radius:2px;background:rgba(239,234,224,.3)}'
+  +'#mk .mkfloat button{position:relative;width:42px;height:42px;border-radius:12px;border:none;background:transparent;color:rgba(239,234,224,.75);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}'
+  +'#mk .mkfloat button.on{background:rgba(239,234,224,.16);color:#fff}'
+  +'#mk .mkfloat button:disabled{opacity:.35}'
+  +'#mk .mkfloat button b{position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.3)}'
+  +'#mk .mkfloat .mkfsep{width:22px;height:1px;background:rgba(255,255,255,.12);margin:1px 0}'
   +'@media (max-width:420px){#mk .mkswatch.mkcustom i{inset:4px;font-size:13px}}';
  document.head.appendChild(st);
 }
@@ -5316,7 +5336,8 @@ async function mkOpen(cid,i){
  var doc;
  try{doc=await lib.getDocument({data:b64ToBytes(f.data)}).promise}catch(e){alert('Could not open this PDF.');return}
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},zoomGen:0,curPage:1,zoom:1,mode:'read',
-     tool:'pen',color:MK_COLORS.pen[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},size:'m',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false,notesOpen:false};
+     tool:'pen',color:MK_COLORS.pen[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},toolSize:mkLoadSizes(),size:'s',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false,notesOpen:false};
+ MK.size=MK.toolSize.pen;
  mkCss();
  mkLockViewportZoom();
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
@@ -5324,7 +5345,7 @@ async function mkOpen(cid,i){
  mkSetMode('read');
  el.innerHTML='<div class="mktop" id="mktop"></div>'
   +'<div class="mkmain"><div class="mkthumbs" id="mkthumbs"></div><div class="mkbody" id="mkbody"><div class="mkpages" id="mkpages"></div><div class="mkspacer" id="mkspacer"></div></div><div class="mknotes" id="mknotes"></div></div>'
-  +'<div class="mktools" id="mktoolbar"></div>';
+  +'<div class="mktools" id="mktoolbar"></div><div class="mkfloat" id="mkfloat"></div>';
  el.addEventListener('click',mkClick);
  el.addEventListener('input',mkColorInput);
  el.addEventListener('keydown',mkZoomKey);
@@ -5368,7 +5389,7 @@ function mkClose(){
 var mkResizeTimer=null;
 // a rotation (or anything else that changes the width) re-fits the pages -- keep whatever you were
 // reading at the top-middle of the screen in the same place instead of letting it slide away
-function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(function(){if(MK)mkRefitKeepingPlace()},200)}
+function mkOnResize(){clearTimeout(mkResizeTimer);mkResizeTimer=setTimeout(function(){if(MK){mkRefitKeepingPlace();mkFloatRender()}},200)}
 function mkRefitKeepingPlace(){
  if(MK.touch&&MK.touch.mode!=='draw'&&MK.touch.mode!=='pending')mkSettleFinish();
  var body=document.getElementById('mkbody');if(!body)return;
@@ -5523,6 +5544,13 @@ function mkDrawLive(n){
   if(d.pred)tail=tail.concat(d.pred);
   mkPaintStroke(ctx,tail.length?{tool:d.tool,color:d.color,width:d.width,pts:d.pts.concat(tail)}:d,scale);
  }
+ // the eraser shows a soft ring under the tip, exactly the area it removes
+ if(MK.erasing&&MK.erasePage===n&&MK.eraseLastPt){
+  var ep=MK.eraseLastPt,er=MK_SIZES.eraser[MK.size];
+  ctx.beginPath();ctx.arc(ep[0]*scale,ep[1]*scale,er,0,Math.PI*2);
+  ctx.fillStyle='rgba(120,120,120,.12)';ctx.fill();
+  ctx.lineWidth=1.5;ctx.strokeStyle='rgba(60,60,60,.55)';ctx.stroke();
+ }
 }
 /* the pen: a plain, steady line. A tapered pressure-sensitive version was tried and rolled back --
    it read as inconsistent rather than natural on a real iPad, so the pen is always the same
@@ -5530,7 +5558,7 @@ function mkDrawLive(n){
 function mkPaintStroke(ctx,s,scale){
  if(s.tool==='hi'){mkPaintHighlight(ctx,s,scale);return}
  ctx.save();
- ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
+ ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(.5,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
  var pts=s.pts||[];
  ctx.beginPath();
  if(pts.length<=2){
@@ -5585,12 +5613,16 @@ function mkPaintHighlight(ctx,s,scale){
  o.setTransform(tf);o.fillStyle=s.color;
  var keep=[pts[0]];
  for(var i=1;i<pts.length;i++){var q=keep[keep.length-1];if(Math.abs(pts[i][0]-q[0])+Math.abs(pts[i][1]-q[1])>.01)keep.push(pts[i])}
- if(keep.length===1){o.fillRect(keep[0][0]-h*.15,keep[0][1]-h,h*.3,w)}
+ // every quad and every dot is wound the same way round, so in ONE fill they can only add up,
+ // never cancel -- the union of all pieces, drawn in a single fast call
+ o.beginPath();
+ if(keep.length===1)o.rect(keep[0][0]-h*.15,keep[0][1]-h,h*.3,w);
  for(var j=1;j<keep.length;j++){
   var a=keep[j-1],b=keep[j],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),nx=-dy/len*h,ny=dx/len*h;
-  o.beginPath();o.moveTo(a[0]+nx,a[1]+ny);o.lineTo(b[0]+nx,b[1]+ny);o.lineTo(b[0]-nx,b[1]-ny);o.lineTo(a[0]-nx,a[1]-ny);o.closePath();o.fill();
-  if(j<keep.length-1){o.beginPath();o.arc(b[0],b[1],h,0,Math.PI*2);o.fill()}
+  o.moveTo(a[0]-nx,a[1]-ny);o.lineTo(b[0]-nx,b[1]-ny);o.lineTo(b[0]+nx,b[1]+ny);o.lineTo(a[0]+nx,a[1]+ny);o.closePath();
+  if(j<keep.length-1){o.moveTo(b[0]+h,b[1]);o.arc(b[0],b[1],h,0,Math.PI*2);o.closePath()}
  }
+ o.fill('nonzero');
  ctx.save();
  ctx.setTransform(1,0,0,1,0,0);
  ctx.globalAlpha=.38;ctx.globalCompositeOperation='multiply';
@@ -5626,12 +5658,23 @@ function mkDensify(pts,maxGap){
 // on right now -- a fast swipe only samples a handful of points, and erasing just those single spots
 // leaves untouched streaks of ink behind between them, which is what made the eraser feel like it
 // only worked when you dabbed it slowly rather than dragged it
-function mkEraseSplit(pts,centers,r){
- var dense=mkDensify(pts,Math.max(2,r/3));
+function mkEraseSplit(pts,centers,R,step){
+ // only the stretches of the line that pass near the eraser get extra points (so the cut lands
+ // within a fraction of the eraser size); the rest keeps its original points untouched
+ var dense=[pts[0]];
+ for(var k=1;k<pts.length;k++){
+  var a=pts[k-1],b=pts[k],near=false;
+  for(var c=0;c<centers.length;c++){if(mkDistToSeg(centers[c],a,b)<=R+step){near=true;break}}
+  if(near){
+   var n=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/step));
+   for(var st=1;st<n;st++){var t=st/n;dense.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,b[2]])}
+  }
+  dense.push(b);
+ }
  var pieces=[],cur=[];
  dense.forEach(function(p){
   var hit=false;
-  for(var i=0;i<centers.length;i++){if(Math.hypot(p[0]-centers[i][0],p[1]-centers[i][1])<=r){hit=true;break}}
+  for(var i=0;i<centers.length;i++){if(Math.hypot(p[0]-centers[i][0],p[1]-centers[i][1])<=R){hit=true;break}}
   if(hit){if(cur.length>1)pieces.push(cur);cur=[]}
   else cur.push(p);
  });
@@ -5643,13 +5686,16 @@ function mkBoundsNearAny(pts,centers,r){
  return false;
 }
 function mkEraseAt(page,centers){
- var r=MK_SIZES.eraser[MK.size],list=MK.eraseCur,next=[],changed=false;
+ // eraser radius is screen pixels; in page units it shrinks as you zoom in, so it stays precise.
+ // A line counts as touched when the ring reaches its EDGE, not just its centre (thick highlights)
+ var r=MK_SIZES.eraser[MK.size]/mkScaleFor(page),list=MK.eraseCur,next=[],changed=false;
  if(!list)return false;
  for(var i=0;i<list.length;i++){
   var s=list[i];
   var pts=mkStrokePts(s);
-  if(!pts||pts.length<2||!mkBoundsNearAny(pts,centers,r)){next.push(s);continue}
-  var pieces=mkEraseSplit(pts,centers,r);
+  var R=r+(s.width||0)/2;
+  if(!pts||pts.length<2||!mkBoundsNearAny(pts,centers,R)){next.push(s);continue}
+  var pieces=mkEraseSplit(pts,centers,R,Math.max(.25,r/5));
   if(pieces.length===1&&pieces[0].length>=pts.length){next.push(s);continue}
   changed=true;
   // the longest piece left over keeps the original's id, so a note on it simply stays attached
@@ -5659,8 +5705,15 @@ function mkEraseAt(page,centers){
    next.push({id:pi===keep?s.id:uid(),tool:s.tool,color:s.color,width:s.width,page:page,pts:seg});
   });
  }
- if(changed){MK.eraseCur=next;mkMarks().strokes=MK.eraseOther.concat(next);mkDrawAnnoForPage(page)}
+ if(changed){MK.eraseCur=next;mkMarks().strokes=MK.eraseOther.concat(next);mkScheduleAnno(page)}
  return changed;
+}
+// redrawing every line on the page once per animation frame at most, not on every Pencil sample
+var mkAnnoPending=null;
+function mkScheduleAnno(page){
+ if(mkAnnoPending!==null){mkAnnoPending=page;return}
+ mkAnnoPending=page;
+ requestAnimationFrame(function(){var pg=mkAnnoPending;mkAnnoPending=null;if(MK&&pg)mkDrawAnnoForPage(pg)});
 }
 function mkBeginStroke(anno,page,clientX,clientY,pressure){
  mkHideBubble();
@@ -5672,7 +5725,7 @@ function mkBeginStroke(anno,page,clientX,clientY,pressure){
   MK.eraseCur=all.filter(function(s){return s.page===page});
   MK.eraseLastPt=p;
   MK.drawingAnno=anno; // needed so every later move while dragging can still find its page/canvas
-  mkEraseAt(page,[p]);return;
+  mkEraseAt(page,[p]);mkDrawLive(page);return;
  }
  var sz=MK_SIZES[MK.tool][MK.size],pr=(pressure===undefined||!pressure)?.5:pressure;
  MK.drawing={id:uid(),tool:MK.tool,color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]],holdPt:[p[0],p[1]],holdAt:Date.now()};
@@ -5686,7 +5739,7 @@ var MK_HOLD_MS=350,MK_HOLD_EPS=4;
 //  - each kept point is eased a little toward the true pen position (a light "streamline"), which
 //    irons out the hand's micro-wobble without making the line feel laggy at the Pencil's 240 Hz
 //  - the true final position is always added when you lift, so the line still ends exactly at the tip
-var MK_STREAMLINE={pen:.62,touch:.5};
+var MK_STREAMLINE={pen:.78,touch:.6};
 function mkAppendPoint(clientX,clientY,pressure){
  if(!MK.drawing||!MK.drawingAnno)return;
  var d=MK.drawing,pg=d.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
@@ -5705,6 +5758,7 @@ function mkScheduleRedraw(){
  requestAnimationFrame(function(){
   mkRedrawScheduled=false;
   if(MK&&MK.drawing)mkDrawLive(MK.drawing.page);
+  else if(MK&&MK.erasing&&MK.erasePage)mkDrawLive(MK.erasePage);
  });
 }
 function mkExtendStroke(clientX,clientY,pressure){
@@ -5712,10 +5766,11 @@ function mkExtendStroke(clientX,clientY,pressure){
   if(!MK.drawingAnno)return;
   var pg=+MK.drawingAnno.getAttribute('data-mkpage');
   var p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg);
-  var r=MK_SIZES.eraser[MK.size],last=MK.eraseLastPt;
-  var centers=last?mkDensify([last,p],Math.max(2,r/3)):[p];
+  var r=MK_SIZES.eraser[MK.size]/mkScaleFor(pg),last=MK.eraseLastPt;
+  var centers=last?mkDensify([last,p],Math.max(.25,r/3)):[p];
   MK.eraseLastPt=p;
   mkEraseAt(pg,centers);
+  mkScheduleRedraw();
   return;
  }
  mkAppendPoint(clientX,clientY,pressure);
@@ -5725,6 +5780,7 @@ function mkFinishErase(){
  var page=MK.erasePage,before=MK.eraseBefore;
  MK.erasing=false;MK.erasePage=null;MK.eraseBefore=null;MK.eraseOther=null;MK.eraseCur=null;MK.eraseLastPt=null;
  if(!page)return;
+ mkDrawLive(page);mkDrawAnnoForPage(page); // clear the ring, and show the final result right away
  var after=mkStrokesForPage(page);
  if(JSON.stringify(after)!==JSON.stringify(before)){
   var act={t:'erase',page:page,before:before,after:JSON.parse(JSON.stringify(after))};
@@ -6072,12 +6128,9 @@ function mkPointerMove(e){
  var evs=(e.getCoalescedEvents&&e.getCoalescedEvents())||[];
  if(!evs.length)evs=[e];
  for(var i=0;i<evs.length;i++)mkExtendStroke(evs[i].clientX,evs[i].clientY,mkPressureOf(evs[i]));
- // where the browser can guess the next few millimetres of the stroke, show them on the live layer
- // only (replaced every move, never saved) -- it makes the ink feel attached to the Pencil tip
- if(MK.drawing&&MK.drawingAnno&&e.getPredictedEvents){
-  var pe=e.getPredictedEvents()||[],pg=MK.drawing.page;
-  MK.drawing.pred=pe.slice(0,3).map(function(q){var a=mkAnnoPoint(MK.drawingAnno,q.clientX,q.clientY,pg);return [a[0],a[1],.5]});
- }
+ // (Safari's predicted points used to be drawn ahead of the tip here; on tight curves like the
+ // bowl of an "a" or "d" they shot past where you stopped and looked like the loop over-ran, so
+ // the live line now only ever shows where the Pencil has really been)
 }
 function mkPointerUp(e){
  if(!MK||e.pointerType==='touch')return;
@@ -6368,10 +6421,51 @@ function mkThumbHighlight(){
 }
 
 /* ---------- toolbar and top bar ---------- */
+function mkPickTool(t){
+ MK.tool=t;if(MK.toolColor[t])MK.color=MK.toolColor[t];
+ MK.size=MK.toolSize[t]||MK_SIZE_DEFAULT[t];
+ mkRerenderChrome();
+}
+/* the little floating tool menu (Markup mode, iPad/computer): pen, highlighter, eraser and undo,
+   draggable by its grip to wherever you are writing; the spot is remembered on this device */
+function mkFloatPos(){var o=null;try{o=JSON.parse(localStorage.getItem('hub:mkfloat')||'null')}catch(e){}return o}
+function mkFloatPlace(el,x,y){
+ var w=el.offsetWidth||52,h=el.offsetHeight||200;
+ x=Math.max(6,Math.min(window.innerWidth-w-6,x));y=Math.max(56,Math.min(window.innerHeight-h-6,y));
+ el.style.left=x+'px';el.style.top=y+'px';return [x,y];
+}
+function mkFloatRender(){
+ var el=document.getElementById('mkfloat');if(!el||!MK)return;
+ var show=MK.mode==='edit'&&window.innerWidth>=600;
+ el.classList.toggle('show',show);if(!show)return;
+ var dot=function(t){return MK.toolColor[t]?'<b style="background:'+MK.toolColor[t]+'"></b>':''};
+ el.innerHTML='<div class="mkfgrip" data-mkfgrip="1" title="Drag to move"><i></i></div>'
+  +'<button class="'+(MK.tool==='pen'?'on':'')+'" data-mk="ftool:pen" aria-label="Pen">'+MK_ICO.pen+dot('pen')+'</button>'
+  +'<button class="'+(MK.tool==='hi'?'on':'')+'" data-mk="ftool:hi" aria-label="Highlighter">'+MK_ICO.hi+dot('hi')+'</button>'
+  +'<button class="'+(MK.tool==='eraser'?'on':'')+'" data-mk="ftool:eraser" aria-label="Eraser">'+MK_ICO.eraser+'</button>'
+  +'<span class="mkfsep"></span>'
+  +'<button data-mk="undo" aria-label="Undo"'+(MK.history.length?'':' disabled')+'>'+MK_ICO.undo+'</button>';
+ var pos=mkFloatPos();
+ if(pos)mkFloatPlace(el,pos.x*window.innerWidth,pos.y*window.innerHeight);
+ else mkFloatPlace(el,window.innerWidth-el.offsetWidth-16,Math.round(window.innerHeight*.3));
+ if(!el.dataset.wired){
+  el.dataset.wired='1';
+  el.addEventListener('pointerdown',function(e){
+   if(!e.target.closest('[data-mkfgrip]'))return;
+   e.preventDefault();e.stopPropagation();
+   var r=el.getBoundingClientRect(),dx=e.clientX-r.left,dy=e.clientY-r.top,id=e.pointerId;
+   var mv=function(ev){if(ev.pointerId!==id)return;ev.preventDefault();mkFloatPlace(el,ev.clientX-dx,ev.clientY-dy)};
+   var up=function(ev){if(ev.pointerId!==id)return;window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
+    var rr=el.getBoundingClientRect();try{localStorage.setItem('hub:mkfloat',JSON.stringify({x:rr.left/window.innerWidth,y:rr.top/window.innerHeight}))}catch(err){}};
+   window.addEventListener('pointermove',mv,{passive:false});window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);
+  });
+ }
+}
 function mkRerenderChrome(){
  var top=document.getElementById('mktop'),tools=document.getElementById('mktoolbar');
  if(top)top.innerHTML=mkTopHtml();
  if(tools)tools.innerHTML=MK.mode==='edit'?mkToolbarHtml():'';
+ mkFloatRender();
  mkNotesRefresh();
 }
 function mkTopHtml(){
@@ -6393,13 +6487,13 @@ function mkTopHtml(){
 }
 function mkToolbarHtml(){
  var isHi=MK.tool==='hi',isPen=MK.tool==='pen',isEr=MK.tool==='eraser';
- var sizePx={s:8,sm:12,m:16,l:22};
+ var sizePx=MK_SIZE_DOTS[MK.tool];
  return '<div class="mkrow">'
   +'<button class="'+(isHi?'on':'')+'" data-mk="tool:hi" title="Highlighter">'+MK_ICO.hi+'</button>'
   +'<button class="'+(isPen?'on':'')+'" data-mk="tool:pen" title="Pen">'+MK_ICO.pen+'</button>'
   +'<button class="'+(isEr?'on':'')+'" data-mk="tool:eraser" title="Eraser">'+MK_ICO.eraser+'</button>'
   +'<span class="mksep"></span>'
-  +['s','sm','m','l'].map(function(sz){return '<button class="mksizebtn '+(MK.size===sz?'on':'')+'" data-mk="size:'+sz+'" aria-label="'+MK_SIZE_NAMES[sz]+'" title="'+MK_SIZE_NAMES[sz]+'"><i style="width:'+sizePx[sz]+'px;height:'+sizePx[sz]+'px"></i></button>'}).join('')
+  +Object.keys(MK_SIZES[MK.tool]).map(function(sz){return '<button class="mksizebtn '+(MK.size===sz?'on':'')+'" data-mk="size:'+sz+'" aria-label="'+MK_SIZE_NAMES[sz]+'" title="'+MK_SIZE_NAMES[sz]+'"><i style="width:'+sizePx[sz]+'px;height:'+sizePx[sz]+'px"></i></button>'}).join('')
   +'</div>'
   +(isEr?'':'<div class="mkrow">'
     +MK_COLORS[MK.tool].map(function(cc){return '<button class="mkswatch'+(MK.color===cc?' on':'')+'" style="background:'+cc+'" data-mk="color:'+cc+'" aria-label="Colour"></button>'}).join('')
@@ -6452,9 +6546,10 @@ function mkClick(e){
  if(a==='openext'){openFile(MK.cid,MK.i);return}
  if(a==='tool'){
  if(MK.tool===arg){mkSetMode('read');mkRerenderChrome();return}
- MK.tool=arg;if(MK.toolColor[arg])MK.color=MK.toolColor[arg];mkRerenderChrome();return;
+ mkPickTool(arg);return;
 }
- if(a==='size'){MK.size=arg;mkRerenderChrome();return}
+ if(a==='ftool'){if(MK.tool!==arg)mkPickTool(arg);return} // the floating menu never leaves Markup
+ if(a==='size'){MK.size=arg;MK.toolSize[MK.tool]=arg;mkSaveSizes();mkRerenderChrome();return}
  if(a==='color'){MK.color=arg;MK.toolColor[MK.tool]=arg;mkRerenderChrome();return}
  if(a==='undo'){mkUndo();return}
  if(a==='redo'){mkRedo();return}
