@@ -1464,7 +1464,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v105';
+var BUILD='v106';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -5271,6 +5271,7 @@ function mkCss(){
   +'#mk .mknote{position:absolute;left:10px;right:10px;top:0;display:block;text-align:left;background:#2a2722;color:#EFEAE0;border:none;border-left:4px solid #F5D949;border-radius:10px;padding:9px 11px;box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;font:inherit;will-change:transform}'
   +'#mk .mknotemeta{display:block;font-size:11px;color:#C9C3B4;margin-bottom:4px}'
   +'#mk .mknotemeta b{display:inline-block;min-width:16px;height:16px;line-height:16px;border-radius:8px;background:rgba(255,255,255,.14);color:#EFEAE0;text-align:center;font-size:10px;margin-right:6px}'
+  +'#mk .mknotelink{color:#9cc3e8;text-decoration:underline;text-underline-offset:2px;word-break:break-all}'
   +'#mk .mknotetext{display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.4;white-space:pre-wrap;word-break:break-word}'
   +'#mk .mknotesempty{padding:16px 14px;font-size:13px;line-height:1.5;color:#C9C3B4}'
   +'#mk .mknotesempty b{display:block;color:#EFEAE0;margin-bottom:4px}'
@@ -6307,6 +6308,18 @@ function mkNotesSorted(){
   .sort(function(a,b){return a.sp.page-b.sp.page||a.sp.y-b.sp.y||a.sp.x-b.sp.x});
 }
 // rebuild the panel's cards and the little numbered markers on the pages
+// web addresses in a note become links that open in a new tab (Safari on iPhone/iPad)
+function mkLinkify(t){
+ t=String(t||'');var out='',last=0,re=/\b(?:https?:\/\/|www\.)[^\s<>"]+/gi,m;
+ while((m=re.exec(t))){
+  var u=m[0].replace(/[.,;:!?)\]'"]+$/,'');if(!u)continue;
+  out+=esc(t.slice(last,m.index));
+  var href=/^www\./i.test(u)?'https://'+u:u;
+  out+='<a class="mknotelink" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(u)+'</a>';
+  last=m.index+u.length;re.lastIndex=last;
+ }
+ return out+esc(t.slice(last));
+}
 function mkNotesRefresh(){
  if(!MK)return;
  document.querySelectorAll('#mk .mknotedot').forEach(function(d){d.remove()});
@@ -6320,9 +6333,10 @@ function mkNotesRefresh(){
  var html='<div class="mknoteshead">Notes <span>'+items.length+'</span></div><div class="mknoteslist" id="mknoteslist">';
  items.forEach(function(it,i){
   var nt=it.nt;
-  html+='<button class="mknote" data-mk="noteopen:'+nt.id+'" data-mknote="'+nt.id+'" style="border-left-color:'+esc(nt.color||'#F5D949')+'">'
+  // a div, not a button: links inside a note have to be real, tappable links
+  html+='<div class="mknote" role="button" tabindex="0" data-mk="noteopen:'+nt.id+'" data-mknote="'+nt.id+'" style="border-left-color:'+esc(nt.color||'#F5D949')+'">'
    +'<span class="mknotemeta"><b>'+(i+1)+'</b>Page '+it.sp.page+(it.sp.live?'':' · highlight removed')+'</span>'
-   +'<span class="mknotetext">'+esc(nt.text)+'</span></button>';
+   +'<span class="mknotetext">'+mkLinkify(nt.text)+'</span></div>';
   // the matching marker on the page, placed in % so it rides along with zoom and pinch for free
   var wrap=document.querySelector('.mkpagebox[data-mkpage="'+it.sp.page+'"] .mkpagewrap'),info=MK.pageInfo[it.sp.page];
   if(wrap&&info){
@@ -6519,6 +6533,7 @@ function mkZoomBlur(e){
  if(e.target&&e.target.id==='mkzoomval')mkApplyZoomValue(e.target.value);
 }
 function mkClick(e){
+ if(e.target.closest&&e.target.closest('a.mknotelink'))return; // a link in a note: just open it
  var b=e.target.closest('[data-mk]');
  if(!b){
   // tapping the empty dark backdrop around a note editor closes it, like any sheet
@@ -7416,7 +7431,7 @@ document.addEventListener('keydown',function(e){
  if(e.key==='Escape'&&view.modal)closeModal();
  if(e.key==='Enter'&&view.modal&&e.target.id==='stepnew'){
   e.preventDefault();var sv=e.target.value.trim();
-  if(sv){view.modal.steps=view.modal.steps||[];view.modal.steps.push({id:uid(),title:sv,done:false});render();var nx=document.getElementById('stepnew');if(nx)nx.focus()}
+  if(sv){view.modal.steps=view.modal.steps||[];view.modal.steps.push({id:uid(),title:sv,done:false});e.target.value='';render();var nx=document.getElementById('stepnew');if(nx)nx.focus()}
   return;
  }
  if(e.key==='Enter'&&view.modal&&e.target.classList&&e.target.classList.contains('stepin')){e.preventDefault();var nn=document.getElementById('stepnew');if(nn)nn.focus();return}
@@ -7450,11 +7465,16 @@ document.addEventListener('toggle',function(e){
   lastKey=key;
   var keep=[];
   ['.pickpanel','.modal'].forEach(function(sel){var el=document.querySelector(sel);if(el&&el.scrollTop)keep.push([sel,el.scrollTop])});
+  // anything typed into an open popup survives a redraw (a sync finishing in the background used to
+  // rebuild the popup from scratch and wipe what you had typed, e.g. a link's name and address)
+  var typed=null,modalNow=view.modal;
+  if(modalNow){typed={};document.querySelectorAll('.modal input[id],.modal textarea[id],.modal select[id]').forEach(function(f){if(f.type!=='file'&&f.type!=='checkbox'&&f.type!=='radio')typed[f.id]=f.value})}
   var ae=document.activeElement,field=null;
   if(ae&&ae.id&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)){
    field={id:ae.id};try{field.s=ae.selectionStart;field.e=ae.selectionEnd}catch(e){}
   }
   raw.apply(this,arguments);
+  if(typed&&view.modal===modalNow)Object.keys(typed).forEach(function(id){var f=document.getElementById(id);if(f&&f.closest('.modal')&&f.value!==typed[id])f.value=typed[id]});
   if(same&&Math.abs(window.scrollY-y)>1){window.scrollTo(0,y)}
   if(same)requestAnimationFrame(function(){if(lastKey===key&&!busy()&&Math.abs(window.scrollY-y)>1)window.scrollTo(0,y)});
   keep.forEach(function(k){var el=document.querySelector(k[0]);if(el)el.scrollTop=k[1]});
