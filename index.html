@@ -975,7 +975,6 @@ a.cpitemname:hover{text-decoration:underline}
 .cpqwrap .iconedit{opacity:0}
 .cpqwrap:hover .iconedit,.cpqwrap .iconedit:focus-within{opacity:1}
 @media(hover:none){.cpqwrap .iconedit{display:none}}
-@media(max-width:1199px){.cphomerail{display:none!important}} /* narrower screens: the summary only repeats Coming up */
 .hero .hello{font-size:13.5px;color:var(--ink3);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:700px){.hero .hello{font-size:12px;margin-bottom:0}}
 @media(max-width:700px){
@@ -1014,7 +1013,8 @@ a.cpitemname:hover{text-decoration:underline}
 .cpnextstext{min-width:0}
 .cpnextslab{font-size:12px;color:var(--ink3)}
 .cpnexts .cpnexttitle{font-size:14.5px;line-height:1.3;color:var(--head,var(--ink));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:1199px){.cpnextc{display:none}.cpnexts{display:flex;order:-1}}
+@media(max-width:1199px){.cpnextc{display:none}}
+@media(max-width:700px){.cpnexts{display:flex;order:-1}}
 /* class page tabs */
 .cptabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:4px 0 22px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:20;background:var(--paper)}
 .cptabs::-webkit-scrollbar{display:none}
@@ -1030,6 +1030,95 @@ a.cpitemname:hover{text-decoration:underline}
 @media(max-width:1199px){.cpinfowrap{order:2}}
 @media(max-width:900px){.cptabs{position:static}}
 @media(max-width:700px){.cptabs{margin:0 -16px 16px;padding:0 10px}.cptab{padding:10px 11px 9px;font-size:14px;gap:7px}.cptabn{font-size:11px;height:19px;min-width:20px;padding:0 6px}.cpinfo{grid-template-columns:minmax(0,1fr)}}
+/* ===== v113 layout ===== */
+.cphead2 .cphint{color:inherit;opacity:.82}
+.cphead2 .cphint span{color:inherit!important}
+.cphead2 .cppill{color:var(--ink2)!important}
+.cphead2 .cpbtn{background:rgba(255,255,255,.18)!important;border-color:rgba(255,255,255,.3)!important;color:inherit!important}
+.cphead2 .cpbtn:hover{background:rgba(255,255,255,.28)!important;filter:none}
+.cphead2 .cpseg{background:rgba(255,255,255,.16)}
+.cphead2 .cpseg button{color:inherit;opacity:.85}
+.cphead2 .cpseg button.on{opacity:1}
+.cphead2 .cppal,.cphead2 .cpcardact{color:inherit}
+/* Home: the week across the top */
+.hweek{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.hwd{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;min-height:92px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.hwd.on{border-color:var(--cp-hup-c);box-shadow:inset 0 0 0 1px var(--cp-hup-c)}
+.hwd.past{opacity:.7}
+.hwdn{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink3)}
+.hwdn b{font-size:15px;font-weight:450;color:var(--ink)}
+.hwchip{display:block;width:100%;text-align:left;border:none;border-radius:7px;padding:5px 7px;font:inherit;font-size:11.5px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;min-height:0!important}
+.hwchip.done{opacity:.45;text-decoration:line-through}
+.hwempty{font-size:11.5px;color:var(--ink3);opacity:.7}
+@media(max-width:700px){
+  .hweek{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:2px 16px;scroll-snap-type:x proximity}
+  .hweek::-webkit-scrollbar{display:none}
+  .hwd{flex:0 0 112px;scroll-snap-align:start}
+}
+/* Home: next due */
+.hnext{display:flex;align-items:center;gap:16px;border-radius:13px;padding:16px 18px;cursor:pointer}
+.hnext .n{font-family:var(--fh,inherit);font-size:52px;line-height:1;font-weight:var(--wh,500);letter-spacing:-.02em}
+.hnum{display:flex;flex-direction:column;align-items:center;flex:none;min-width:64px}
+.hnum .u{font-size:12.5px;opacity:.85;margin-top:4px;white-space:nowrap}
+.htext{min-width:0;border-left:1px solid rgba(255,255,255,.3);padding-left:15px}
+.hlab{font-size:12px;opacity:.78}
+.htitle{font-size:15px;line-height:1.3;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hdate{font-size:12px;opacity:.8;margin-top:3px}
+@media(max-width:700px){.hnext{padding:11px 14px;gap:12px}.hnext .n{font-size:30px}.hnum{min-width:44px}.hnum .u{font-size:11px}.htitle{font-size:14.5px;-webkit-line-clamp:1}}
+/* Home: today's plan as checklist lines */
+.cplines{display:flex;flex-direction:column;padding:2px 18px 6px}
+.cpline2{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);min-width:0}
+.cpline2:last-child{border-bottom:none}
+.cpline2 .cpl2name{flex:1;min-width:0;text-align:left;background:none;border:none;padding:0;font:inherit;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;min-height:0!important}
+.cpline2.done .cpl2name{color:var(--ink3);text-decoration:line-through}
+.cpline2 .cplate{font-size:12px;color:#A34A3F;white-space:nowrap}
+.cpline2 .cpsteps{margin-left:0}
+@media(max-width:700px){.cplines{padding:0 13px 4px}.cpline2 .cpclspill{display:none}}
+/* Home: term countdown and music */
+.hterm b{display:block;font-size:24px;font-weight:450;line-height:1.2}
+.htbar{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin:8px 0 4px}
+.htbar i{display:block;height:100%;background:var(--cp-hup-c);border-radius:99px}
+.tset{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.tset label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink3);flex:1 1 120px}
+.tset input{font:inherit;font-size:16px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);min-width:0}
+.hmseg{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:2px;gap:2px}
+.hmseg button{flex:1;border:none;background:transparent;border-radius:7px;padding:5px 6px;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.hmseg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08);font-weight:500}
+.hmslot{border-radius:12px;background:var(--paper)}
+.hmform{display:flex;flex-direction:column;gap:7px}
+.hmform input{font:inherit;font-size:16px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);min-width:0;width:100%;box-sizing:border-box}
+#musichost iframe{display:block;border:0;width:100%;border-radius:12px;background:transparent}
+.cphomesplit{grid-template-columns:minmax(0,1fr) 300px}
+.cphomerail{gap:14px}
+@media(max-width:1199px){
+  .cphomesplit .cphomerail{display:contents}
+  #h-next{order:-2}#h-up{order:1}#h-plan{order:2}#h-week{order:3}#h-term{order:4}#h-music{order:5}#h-classes{order:6}.cphomesplit .cpsettings{order:9}
+}
+@media(max-width:700px){#h-classes{display:none}}
+/* class page: FanshaweOnline chip, summary tiles, folding cards */
+.cpfolic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:13px;font-weight:600;flex:none}
+.cpsums{display:grid;grid-template-columns:minmax(0,1.35fr) repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px}
+.cpsum{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 15px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:2px;min-width:0;text-align:left;font:inherit;color:var(--ink);cursor:pointer;white-space:normal;min-height:0!important}
+.cpsum small{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cpsum b{font-size:21px;font-weight:450;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cpsum .cpt2{font-size:15.5px;font-weight:500}
+.cpsum .cpemailbtn{align-self:flex-start;margin-top:6px}
+.cpsum.solid small{color:inherit;opacity:.82}
+@media(max-width:1000px){.cpsums{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.cpsums{display:none}}
+.cpsplit.cpone{grid-template-columns:minmax(0,1fr)}
+.cpfoldrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;align-items:start}
+.cpfold>summary{list-style:none;cursor:pointer}
+.cpfold>summary::-webkit-details-marker{display:none}
+.cpfold:not([open])>summary{border-bottom:none}
+.cpfold .tpchev{margin-left:auto;display:flex;color:var(--ink3);transition:transform .2s}
+.cpfold .tpchev svg{width:14px;height:14px}
+.cpfold:not([open]) .tpchev{transform:rotate(-90deg)}
+.cpfoldmeta{font-size:12px;color:var(--ink3);margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.cpinfohead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:13.5px}
+.cpinfohead b{font-weight:500}
+.cpemailbtn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;padding:6px 12px}
+@media(max-width:1199px){.cpfoldrow{order:2}}
 /* sub-steps */
 .cpsteps{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;margin-left:8px;font-weight:400}
 .cpstepsbar{display:inline-block;width:34px;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
@@ -1060,7 +1149,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpwdue{margin-left:auto;font-size:10.5px;color:#A34A3F;white-space:nowrap}
 .cpwlist{display:flex;flex-direction:column;gap:6px;padding:7px;flex:1}
 .cpwempty{font-size:12px;color:var(--ink3);padding:4px 3px}
-.cpplan{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--pc);border-radius:8px;padding:7px 8px 8px;cursor:grab;min-width:0}
+.cpplan{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 8px 8px;cursor:grab;min-width:0}
 .cpplan:hover{border-color:var(--line2);border-left-color:var(--pc)}
 .cpplan.dragging{opacity:.4}
 .cpplan.done{opacity:.6}
@@ -1480,7 +1569,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v112';
+var BUILD='v113';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1729,7 +1818,7 @@ function persistLocal(){
 }
 /* ---------- change tracking: stamps edits and records deletions so both sync ---------- */
 var LISTS=['assignments','tasks','contacts','links','sections','files'];
-var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook','shareCode','srcCode','tp'];
+var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook','shareCode','srcCode','tp','fol'];
 var SEEN=null;
 var TOMB_DAYS=180;
 function fp(o){return JSON.stringify(o,function(k,v){return k==='savedAt'?undefined:v})}
@@ -3112,7 +3201,7 @@ function sameData(local,remote){
  var total=Math.max(a.length,b.length,1);
  return (shared/total)>=0.8;
 }
-var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage'];
+var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage','termDates','music'];
 function mergeState(local,remote){
  // field-by-field, most recently touched item wins, using each item's own savedAt
  if(!remote)return local;
@@ -3809,10 +3898,8 @@ function sidebar(c){
   if(on){
    h+='<div class="ssub">'
     +sideItem('data-scroll','c-assign','Assignments',false)
-    +sideItem('data-scroll','c-due','Checklist',false)
-    +sideItem('data-scroll','c-prof','People',false)
-    +sideItem('data-scroll','c-files','Files',false)
-    +sideItem('data-scroll','c-links','Links',false)
+    +sideItem('data-scroll','c-files','Files & links',false)
+    +sideItem('data-scroll','c-info','Class info',false)
     +sideItem('data-scroll','c-title','Title page',false)
     +(LOCAL?'':sideItem('data-scroll','c-overview','Ask the files',false))
     +'</div>';
@@ -4003,12 +4090,12 @@ var CP_ICO={
 // one section card's header band: icon tile, title + count pill, hint line, then actions on the right
 var CP_FOLDER='<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9L9.6 3.9A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>';
 var CP_PAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2.2a1.8 1.8 0 0 0-1.3 3.1c.4.4.5.9.5 1.4 0 .8-.6 1.5-1.5 1.5Z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="11" cy="7" r="1"/><circle cx="15.5" cy="7.5" r="1"/></svg>';
+// v113: the header band is the section's own colour with light text on it (no little icon square)
 function cpHead(key,col,title,pill,hint,acts){
- return '<div class="cphead" style="background:var(--s-'+key+'-bg,'+col.bg+');border-bottom-color:var(--s-'+key+'-line,'+col.line+')">'
-  +'<div class="cpico" style="background:'+col.c+'">'+CP_ICO[key]+'</div>'
-  +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:var(--s-'+key+'-ink,'+col.title+');font-weight:var(--cp-'+key+'-w,500)">'+title+'</h2>'
+ return '<div class="cphead cphead2" style="background:'+col.c+';color:var(--cp-'+key+'-on,#fff);border-bottom-color:transparent">'
+  +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:inherit;font-weight:var(--cp-'+key+'-w,500)">'+title+'</h2>'
   +(pill?'<span class="cppill" style="color:'+col.c+'">'+pill+'</span>':'')+'</div>'
-  +(hint?'<div class="cphint" style="color:'+col.hint+'">'+hint+'</div>':'')+'</div>'
+  +(hint?'<div class="cphint">'+hint+'</div>':'')+'</div>'
   +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
 }
 function cpBtn(col,label,attrs){return '<button class="cpbtn" style="background:'+col.c+'" '+attrs+'>'+label+'</button>'}
@@ -4171,13 +4258,17 @@ function viewClass(c){
  // ---- top strip: pinned links and textbook (unchanged) ----
  var top='';
  var pinned=(c.links||[]).filter(function(l){return l.pinned});
+ // FanshaweOnline first, on every class: straight to this class's own page once its link is set in Edit class
+ var folChip='<a class="qlink cpfol" href="'+esc(c.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener"><span class="cpfolic" style="background:'+real.asg.wash+';color:'+real.asg.c+'">F</span><span>FanshaweOnline</span></a>';
+ top+='<div class="quick">'+folChip;
  if(pinned.length){
-  top+='<div class="quick">'+pinned.map(function(l){
+  top+=pinned.map(function(l){
    return '<a class="qlink" href="'+esc(l.url)+'" target="_blank" rel="noopener">'
     +linkIcon(l.url,l.title,l.icon).replace('class="fi round"','class="fi round" style="width:26px;height:26px"').replace('class="favtile"','class="favtile" style="width:26px;height:26px;font-size:14px"')
     +'<span>'+esc(l.title)+'</span></a>';
-  }).join('')+'</div>';
+  }).join('');
  }
+ top+='</div>';
  var bk=c.textbook;
  if(bk){
   var bkIcon=bk.icon
@@ -4185,8 +4276,7 @@ function viewClass(c){
    : '<span style="width:24px;height:30px;border-radius:3px;background:#C9BFA8;flex-shrink:0;box-shadow:inset -4px 0 0 rgba(0,0,0,.09)"></span>';
   var chip='<a class="qlink" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">'+bkIcon+'<span>'+esc(bk.title||'Textbook')+'</span></a>';
   if(bk.type==='file')chip='<button class="qlink" data-openbook="'+c.id+'">'+bkIcon+'<span>'+esc(bk.title||'Textbook')+'</span></button>';
-  if(!top)top='<div class="quick">'+chip+'</div>';
-  else top=top.replace('</div>',chip+'</div>');
+  top=top.slice(0,-6)+chip+'</div>';
  }
 
  // ---- ask box (Claude version only, unchanged) ----
@@ -4344,33 +4434,16 @@ function viewClass(c){
  if(dupBtn&&!(c.sections||[]).length&&!q)F+='<div class="cpffoot">'+dupBtn+'</div>';
  F+='</div></section>';
 
- /* ===== Checklist + Completed ===== */
- var openT=c.tasks.filter(function(t){return !t.done}),doneT=c.tasks.filter(function(t){return t.done});
- var K='<section class="cpsec cpmini" id="c-due">'+pencil('mini')
-  +cpHead('mini',col.mini,'Checklist',openT.length?openT.length+' to do':'','Odd jobs and reminders',cpBtn(col.mini,'+ Add','data-add="task" data-c="'+c.id+'"'));
- if(!c.tasks.length)K+='<div class="cpempty">Nothing here yet. Add a quick reminder to get it out of your head.</div>';
- else K+='<div class="cplist">'+firstN(openT.concat(doneT).map(function(t){
-   return '<div class="cpli"><button class="tick'+(t.done?' on':'')+'" style="'+(t.done?'background:'+col.mini.c:'')+'" data-tick="'+t.id+'" data-c="'+c.id+'" aria-label="Toggle done"></button>'
-    +'<span class="cpgrow'+(t.done?' done':'')+'">'+esc(t.title)+'</span>'
-    +(t.due?'<span class="cpmeta">'+esc(withTime(fmtDue(t.due),t.time))+'</span>':'')
-    +'<button class="x" data-del="task" data-id="'+t.id+'" data-c="'+c.id+'" aria-label="Delete">×</button></div>';
-  }),5,'to do')+'</div>';
- K+='</section>';
-
- var pct=allAsg?Math.round(finished.length/allAsg*100):0;
- var D='<section class="cpsec cpdone">'+pencil('done')
-  +cpHead('done',col.done,'Completed',finished.length?finished.length+' done':'',allAsg?finished.length+' of '+allAsg+' done':'Finished work collects here','');
- D+='<div class="cpprog"><div class="cpbar" style="background:'+col.done.bg+'"><i style="width:'+pct+'%;background:'+col.done.c+'"></i></div></div>';
- if(!finished.length)D+='<div class="cpempty" style="padding-top:8px">Nothing finished yet. Ticked-off work collects here.</div>';
- else D+='<div class="cplist">'+firstN(finished.map(function(a){
+ /* ===== Recently completed (folds shut to save room; the old Checklist is gone, steps replace it) ===== */
+ var DB=!finished.length?'<div class="cpsoft" style="font-size:13.5px">Nothing finished yet. Ticked-off work collects here.</div>'
+  :firstN(finished.map(function(a){
    return '<div class="cpli"><span class="cpgrow">'+esc(a.title)+'</span>'
     +(a.mark!==''&&a.mark!=null
       ?'<button class="cpmark" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" title="Change the mark" style="background:'+col.done.bg+';color:'+col.done.title+'">'+a.mark+'%</button>'
       :'<button class="cpghost" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" style="color:'+col.done.c+'">Add mark</button>')
     +'<span class="cpmeta">'+esc(a.doneAt?parseISO(a.doneAt).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'')+'</span>'
     +'<button class="cpghost" data-undo="'+a.id+'" data-c="'+c.id+'">Put back</button></div>';
-  }),5,'finished')+'</div>';
- D+='</section>';
+  }),5,'finished');
 
  /* ===== study questions (Claude version only, unchanged) ===== */
  var study='';
@@ -4409,30 +4482,6 @@ function viewClass(c){
    +'<div class="cpcardhead"><span class="cpdot" style="background:'+dot+'"></span><h3 class="cpcardtitle"'+(key?' style="color:'+surfHead(key)+'"':'')+'>'+title+'</h3>'+(act||'')+'</div>'
    +'<div class="cpcardbody">'+body+'</div></section>';
  }
- var R='<aside class="cprail" style="'+surfStyle('rail','transparent','transparent','')+'">'+pencil('rail')+NX;
- if(c.day||c.room){
-  var online=/online/i.test(c.day||'');
-   // a light colour picked for this card in the old design keeps readable dark text instead of the new light text
-  var wOld=!!surfGet('when','bg')&&!cpOverride(c.id,'when'),wInk=wOld?'var(--ink)':col.darkInk,wSoft=wOld?'var(--ink2)':col.darkSoft;
-  R+='<section class="cpwhen" id="cp-when" style="background:var(--s-when-bg,'+col.dark+')">'+pencil('when')
-   +'<div class="cpwhenlab" style="color:var(--s-when-line,'+wSoft+')">When and where</div>'
-   +'<div class="cpwhentime" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.day||'Time not set')+'</div>'
-   +(c.room?'<div class="cpwhenroom" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.room)+'</div>':(online?'':'<div class="cpwhenroom" style="color:'+wSoft+'">Room not set</div>'))
-   +'</section>';
- }
- var gi=gradeInfo(c);
- if(gi.total){
-  var gb;
-  if(gi.avg==null)gb='<div class="cpsoft" style="font-size:14.5px;line-height:1.45">No marks yet. Add them as work comes back.</div>';
-  else{
-   gb='<div class="cpgrade"><span class="cpgradebig" style="color:'+col.mini.title+'">'+gi.avg.toFixed(1)+'%</span><span class="cpmeta">on '+gi.graded+'% of the course</span></div>';
-   if(gi.need!=null){
-    var nd=gi.need;
-    gb+='<div class="cpsoft" style="font-size:13.5px">'+(nd<=0?'You have already locked in your target.':(nd>100?'Your target is out of reach now, you would need over 100%.':'You need about '+nd.toFixed(0)+'% on the remaining '+gi.remaining+'% to reach '+c.target+'%.'))+'</div>';
-   }else if(!c.target)gb+='<div class="cpsoft" style="font-size:13px">Set a target in Edit class to see what you need.</div>';
-  }
-  R+=railCard('cp-grade',col.mini.c,'Grade','',gb);
- }
  var pb='';
  if(!c.contacts.length)pb='<div class="cpsoft" style="font-size:14px">Add your professor, and anyone else worth keeping handy.</div>';
  else pb=c.contacts.map(function(ct){
@@ -4443,7 +4492,7 @@ function viewClass(c){
    +(ct.role?'<div class="cpmeta">'+esc(ct.role)+'</div>':'')
    +(ct.office?'<div class="cpmeta">'+esc(ct.office)+'</div>':'')
    +(ct.hours?'<div class="cpmeta">'+esc(ct.hours)+'</div>':'')
-   +(ct.email?'<a class="cpemail" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener">'+esc(ct.email)+'</a>':'')
+   +(ct.email?'<div class="cpmeta">'+esc(ct.email)+'</div><a class="cpbtn2 cpemailbtn" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener">✉ Email</a>':'')
    +'<div class="cppbtns">'
    +'<button class="cpghost" data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button>'
    +'<label class="cpghost"><input type="file" accept="image/*" data-photo="'+c.id+':'+ct.id+'" style="display:none">Photo</label>'
@@ -4451,31 +4500,51 @@ function viewClass(c){
    +'<button class="cpghost" data-delcontact="'+ct.id+'" data-c="'+c.id+'" aria-label="Remove '+esc(ct.name||'contact')+'">Remove</button>'
    +'</div></div></div>';
  }).join('');
- var I='';
- I+=railCard('c-prof',col.files.c,'Professor','<button class="cpcardact" data-add="contact" data-c="'+c.id+'">Add</button>',pb,'prof');
+ // professor, reference files and the Claude project, together in one Class info card
+ var IB='<div id="c-prof"><div class="cpinfohead"><b>Professor</b><button class="cpghost" data-add="contact" data-c="'+c.id+'">+ Add</button></div>'+pb+'</div>';
  var rf=FILES[REF_CID]||[];
- var rb=!rf.length?'<div class="cpsoft" style="font-size:14px">A formatting guide or template you want handy on every class page.</div>'
+ IB+='<div class="cpinfohead"><b>Reference files</b><button class="cpghost" data-xact="refadd">+ Add</button></div>'
+  +(!rf.length?'<div class="cpsoft" style="font-size:13.5px">A formatting guide or template you want handy on every class page.</div>'
   :rf.map(function(f,i){
    var link=f.kind==='pdf'?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
     :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
    return '<div class="cpline cprefline"><span class="a">'+link+'</span><span class="b">'+cpFileLabel(f)+'</span>'
     +'<span class="cprefacts"><button class="cpghost" data-refedit="'+i+'" aria-label="Rename or change the picture">Edit</button><button class="cpghost" data-delfile="'+i+'" data-c="'+REF_CID+'" aria-label="Delete">×</button></span></div>';
-  }).join('');
- I+=railCard('cp-ref',col.third.c,'Reference files','<button class="cpcardact" data-xact="refadd">Add</button>',rb);
- I+=railCard('cp-claude',col.done.c,'Claude project',c.claude?'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Edit</button>':'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Add link</button>',
-  c.claude?'<div class="cpline"><a class="a" href="'+esc(c.claude)+'" target="_blank" rel="noopener" style="font-weight:500">Open Claude project →</a></div>'
-   :'<div class="cpline"><span class="a cpsoft">No project linked</span></div>');
- R+=tpCard(c);
- R+='</aside>';
+  }).join(''));
+ IB+='<div class="cpinfohead"><b>Claude project</b><button class="cpghost" data-edit="class" data-c="'+c.id+'">'+(c.claude?'Edit':'Add link')+'</button></div>'
+  +(c.claude?'<div class="cpline"><a class="a" href="'+esc(c.claude)+'" target="_blank" rel="noopener" style="font-weight:500">Open Claude project →</a></div>':'<div class="cpsoft" style="font-size:13.5px">No project linked</div>');
+ function fold(k,dot,title,meta,body){
+  var on=false;try{on=localStorage.getItem('hub:fold:'+k)==='1'}catch(e){}
+  return '<details class="cpcard cpfold" data-fold="'+k+'"'+(on?' open':'')+'><summary class="cpcardhead"><span class="cpdot" style="background:'+dot+'"></span><h3 class="cpcardtitle">'+title+'</h3>'
+   +(meta?'<span class="cpfoldmeta">'+meta+'</span>':'')+'<span class="tpchev">'+CP_ICO.chev+'</span></summary><div class="cpcardbody">'+body+'</div></details>';
+ }
+ var BOT='<section class="cpfoldrow" id="c-info">'
+  +fold('done',col.done.c,'Recently completed',finished.length?finished.length+' done':'',DB)
+  +fold('info',col.third.c,'Class info',c.contacts.length?esc(c.contacts[0].name||''):'',IB)
+  +tpCard(c)+'</section>';
+
+ /* ===== the summary strip (computer and iPad): next due, grade, when, professor ===== */
+ var on2=function(hx){return contrast(hx,'#ffffff')>=2.6?'#fff':'#221d18'};
+ var gi=gradeInfo(c),prof=c.contacts.filter(function(x){return /prof|instructor|teacher|lecturer/i.test(x.role||'')})[0]||c.contacts[0];
+ var TL='<div class="cpsums">';
+ if(nextA){var tcd=cpCountdown(nextA.due),tl=tcd.n<0,tbg=tl?'#9c4a41':real.asg.c,tsi=stepInfo(nextA);
+  TL+='<button class="cpsum solid" style="background:'+tbg+';border-color:'+tbg+';color:'+on2(tbg)+'" data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'"><small>'+(tl?'Past due · ':'Next due · ')+esc(tl?tcd.t:tcd.n===0?'today':tcd.n===1?'tomorrow':tcd.t+' left')+'</small>'
+   +'<b class="cpt2">'+esc(nextA.title)+'</b><small>'+esc(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}))+(tsi.n?' · '+tsi.d+' of '+tsi.n+' steps':'')+'</small></button>';
+ }else TL+='<div class="cpsum" style="cursor:default"><small>Next due</small><b class="cpt2">Nothing due</b><small>'+(allAsg?'All caught up':'Add your first assignment')+'</small></div>';
+ TL+='<div class="cpsum" style="cursor:default"><small>Grade</small>'+(gi.avg!=null?'<b style="color:'+real.asg.c+'">'+gi.avg.toFixed(1)+'%</b><small>on '+gi.graded+'% of the course</small>'
+  :'<b class="cpt2">No marks yet</b><small>'+(gi.total?'Add marks as work comes back':'Give assignments a worth (%)')+'</small>')+'</div>';
+ TL+='<button class="cpsum" data-edit="class" data-c="'+c.id+'"><small>When and where</small><b class="cpt2">'+esc(c.day||'Not set')+'</b><small>'+esc(c.room||(/online/i.test(c.day||'')?'Online':'Room not set'))+'</small></button>';
+ TL+=prof?'<div class="cpsum" style="cursor:default"><small>Professor</small><b class="cpt2">'+esc(prof.name||'Unnamed')+'</b><small>'+esc(prof.hours||prof.office||prof.role||'')+'</small>'
+   +(prof.email?'<a class="cpbtn2 cpemailbtn" data-phoneapp="1" href="'+mailto(prof,c)+'" target="_blank" rel="noopener">✉ Email</a>':'')+'</div>'
+  :'<button class="cpsum" data-add="contact" data-c="'+c.id+'"><small>Professor</small><b class="cpt2">Add your professor</b><small>Name, email and office hours</small></button>';
+ TL+='</div>';
 
  /* ===== section bar: everything stays on the page; a tab glides to its section ===== */
- var TABS=[['c-assign','Assignments',real.asg.c],['c-files','Files &amp; links',real.files.c],['c-pair','Checklist &amp; done',real.mini.c],['c-info','Class info',real.third.c]];
+ var TABS=[['c-assign','Assignments',real.asg.c],['c-files','Files &amp; links',real.files.c],['c-info','Class info',real.third.c]];
  var T='<nav class="cptabs" aria-label="Jump to a part of this class">'+TABS.map(function(t,i){
    return '<button class="cptab'+(i?'':' on')+'" data-cpjump="'+t[0]+'" style="--tc:'+t[2]+'"><i class="cptabdot"></i><span>'+t[1]+'</span></button>';
   }).join('')+'</nav>';
- return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+A+F
-  +'<div class="cppair" id="c-pair">'+K+D+'</div>'
-  +'<section class="cpinfowrap" id="c-info"><div class="cpinfo">'+I+'</div></section>'+study+G+'</div>'+R+'</div>';
+ return top+TL+ask+T+'<div class="cpsplit cpone" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+A+F+BOT+study+G+'</div></div>';
 }
 
 /* ---------- Home (v96 redesign, same style as the class page) ----------
@@ -4594,19 +4663,97 @@ function viewHome(){
  var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'+coverControls('home',S)
   +'<button data-secopen="1">Colours</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div>';
 
- /* ===== side column ===== */
- var R='<aside class="cprail cphomerail">';
- var doneN=all.filter(function(x){return x.t.done}).length,totalN=all.length,pct=totalN?Math.round(doneN/totalN*100):0;
- R+=cpRailCard('h-glance',col.hup.c,'At a glance','',
-  '<div class="cpline"><span class="a">Due this week</span><span class="b cpbig">'+thisWeek.length+'</span></div>'
-  +'<div class="cpline"><span class="a">Due next week</span><span class="b cpbig">'+nextWeek.length+'</span></div>'
-  +(late.length?'<div class="cpline"><span class="a" style="color:#A34A3F">Past due</span><span class="b cpbig" style="color:#A34A3F">'+late.length+'</span></div>':'')
-  +'<div class="cpline"><span class="a">Finished</span><span class="b">'+doneN+' of '+totalN+'</span></div>'
-  +'<div class="cpbar" style="background:'+col.hcls.bg+'"><i style="width:'+pct+'%;background:'+col.hcls.c+'"></i></div>');
- R+='</aside>';
 
- return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+homeTodayPlan(col)+U+C+G+'</div>'+R+'</div>';
+ /* ===== side column (moves into the list on narrower screens) ===== */
+ var R='<aside class="cprail cphomerail">'+homeNextDue(open,t)+homeTermCard()+homeMusicCard()+'</aside>';
+
+ return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+homeWeekStrip()+homeTodayPlan(col)+U+C+G+'</div>'+R+'</div>';
 }
+// the week across the top of Home: every due date sitting on its day, in its class colour
+function homeWeekStrip(){
+ var ws=weekStart(0),t=today(),td=iso(t),byDay={};
+ allTasks().forEach(function(x){if(x.t.due&&!isRefClass(x.c))(byDay[x.t.due]=byDay[x.t.due]||[]).push(x)});
+ var h='<section class="hweek" id="h-week" aria-label="This week">';
+ for(var i=0;i<7;i++){
+  var d=new Date(ws);d.setDate(ws.getDate()+i);var k=iso(d),list=(byDay[k]||[]).sort(function(a,b){return (a.t.done?1:0)-(b.t.done?1:0)});
+  h+='<div class="hwd'+(k===td?' on':'')+(k<td?' past':'')+'"><div class="hwdn"><span>'+esc(d.toLocaleDateString('en-CA',{weekday:'short'}))+'</span><b>'+d.getDate()+'</b></div>'
+   +(list.length?list.map(function(x){var hx=palHex(x.c.color),fg=contrast(hx,'#ffffff')>=2.6?'#fff':'#221d18';
+     return '<button class="hwchip'+(x.t.done?' done':'')+'" style="background:'+hx+';color:'+fg+'" data-open="'+x.c.id+'" title="'+esc(x.t.title+' · '+x.c.name)+'">'+esc(x.t.title)+'</button>'}).join('')
+    :'<span class="hwempty">'+(k===td?'Nothing due':'')+'</span>')+'</div>';
+ }
+ return h+'</section>';
+}
+// Next due on Home: late work first, then whatever is soonest, in that class's colour
+function homeNextDue(open,t){
+ var srt=open.slice().sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0});
+ var x=srt[0];if(!x)return '';
+ var cd=cpCountdown(x.t.due),late=cd.n<0,hx=late?'#9c4a41':palHex(x.c.color),fg=late||contrast(hx,'#ffffff')>=2.6?'#fff':'#221d18';
+ var big=cd.n===0?'Today':String(Math.abs(cd.n)),unit=cd.n===0?'':(Math.abs(cd.n)===1?'day':'days')+(late?' late':' left');
+ var si=stepInfo(x.t);
+ return '<section class="hnext" id="h-next" style="background:'+hx+';color:'+fg+'" '+(x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"')+'>'
+  +'<div class="hnum"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
+  +'<div class="htext"><div class="hlab">'+(late?'Past due':'Next due')+' · '+esc(classLabel(x.c))+'</div><div class="htitle">'+esc(x.t.title)+'</div>'
+  +'<div class="hdate">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+(si.n?' · '+si.d+' of '+si.n+' steps':'')+'</div></div></section>';
+}
+// how far through the term you are: "Week 5 of 14"
+function homeTermCard(){
+ var td=S.termDates||{},label=S.term||'This term';
+ var form='<div class="tset"><label>First day<input type="date" id="termstart" data-termset="start" value="'+esc(td.start||'')+'"></label>'
+  +'<label>Last day<input type="date" id="termend" data-termset="end" value="'+esc(td.end||'')+'"></label></div>';
+ var body;
+ if(!td.start||!td.end)body='<div class="cpsoft" style="font-size:13.5px">Add your term’s first and last day to count down the weeks.</div>'+form;
+ else{
+  var a=parseISO(td.start),b=parseISO(td.end),t=today(),DAY=864e5;
+  var span=Math.max(1,Math.round((b-a)/DAY)),gone=Math.round((t-a)/DAY),N=Math.max(1,Math.ceil((span+1)/7));
+  var pct=Math.max(0,Math.min(100,Math.round(gone/span*100))),left=Math.round((b-t)/DAY);
+  var big=gone<0?'Starts in '+(-gone)+' day'+(-gone===1?'':'s'):left<0?'Term finished':'Week '+Math.min(N,Math.floor(gone/7)+1)+' of '+N;
+  body='<b>'+big+'</b><div class="htbar"><i style="width:'+pct+'%"></i></div><span class="cpsoft" style="font-size:12.5px">'
+   +(gone<0?'':left<0?'Nice work.':left===0?'Last day today':left+' day'+(left===1?'':'s')+' to go')+'</span>'+(view.termEdit?form:'');
+ }
+ return '<section class="cpcard" id="h-term"><div class="cpcardhead"><span class="cpdot" style="background:var(--cp-hup-c)"></span><h3 class="cpcardtitle">'+esc(label)+'</h3>'
+  +(td.start&&td.end?'<button class="cpcardact" data-termedit="1">'+(view.termEdit?'Done':'Edit')+'</button>':'')+'</div><div class="cpcardbody hterm">'+body+'</div></section>';
+}
+/* music: everyone picks Spotify or Apple Music and pastes a playlist, album or song link. The player
+   itself lives OUTSIDE the redrawn page (#musichost, laid over the card's slot), so ticking something
+   off or a sync never restarts the song, and it keeps playing while you move around the app. */
+function musicEmbed(svc,url){
+ url=String(url||'').trim();var m;
+ if(svc==='spotify'){
+  m=/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(playlist|album|track|artist|show|episode)\/([A-Za-z0-9]+)/.exec(url)||/^spotify:(playlist|album|track|artist|show|episode):([A-Za-z0-9]+)$/.exec(url);
+  return m?{src:'https://open.spotify.com/embed/'+m[1]+'/'+m[2]+'?utm_source=generator',h:152}:null;
+ }
+ m=/^https?:\/\/(?:embed\.)?music\.apple\.com\/(.+)$/.exec(url);
+ return m?{src:'https://embed.music.apple.com/'+m[1],h:175}:null;
+}
+function homeMusicCard(){
+ var mu=S.music||{},svc=mu.svc||'spotify',emb=musicEmbed(svc,mu[svc]),name=svc==='spotify'?'Spotify':'Apple Music';
+ var body='<div class="hmseg"><button class="'+(svc==='spotify'?'on':'')+'" data-musicsvc="spotify">Spotify</button><button class="'+(svc==='apple'?'on':'')+'" data-musicsvc="apple">Apple Music</button></div>';
+ if(emb&&!view.musicEdit)body+='<div class="hmslot" id="musicslot" data-src="'+esc(emb.src)+'" data-h="'+emb.h+'" style="height:'+emb.h+'px"></div>';
+ else body+='<div class="hmform"><input id="musicurl" placeholder="Paste a '+name+' playlist, album or song link" value="'+esc(mu[svc]||'')+'">'
+  +(view.musicErr?'<span style="font-size:12.5px;color:#A34A3F">'+esc(view.musicErr)+'</span>':'<span class="cpsoft" style="font-size:12px">In '+name+', tap Share, then Copy link.</span>')
+  +'<button class="cpbtn2" data-musicsave="1" style="align-self:flex-start">Play this</button></div>';
+ return '<section class="cpcard" id="h-music"><div class="cpcardhead"><span class="cpdot" style="background:'+(svc==='spotify'?'#1DB954':'#FA2D48')+'"></span><h3 class="cpcardtitle">Music</h3>'
+  +(emb&&!view.musicEdit?'<button class="cpcardact" data-musicedit="1">Change</button>':'')+'</div><div class="cpcardbody">'+body+'</div></section>';
+}
+var musicHost=null,musicTick=null;
+function musicSync(){
+ var slot=document.getElementById('musicslot');
+ if(!slot){if(musicHost){musicHost.style.visibility='hidden';musicHost.style.left='-9999px'}return}
+ if(!musicHost){musicHost=document.createElement('div');musicHost.id='musichost';document.body.appendChild(musicHost)}
+ var src=slot.getAttribute('data-src'),h=+slot.getAttribute('data-h'),fr=musicHost.querySelector('iframe');
+ if(!fr||fr.getAttribute('data-src')!==src){
+  var apple=src.indexOf('music.apple.com')>-1;
+  musicHost.innerHTML='<iframe data-src="'+esc(src)+'" src="'+esc(src)+'" height="'+h+'" title="Music player" '
+   +(apple?'allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"'
+          :'allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"')+'></iframe>';
+ }
+ var r=slot.getBoundingClientRect();
+ musicHost.style.cssText='position:absolute;z-index:5;visibility:visible;left:'+(r.left+window.scrollX)+'px;top:'+(r.top+window.scrollY)+'px;width:'+r.width+'px;height:'+h+'px';
+ if(!musicTick)musicTick=setInterval(function(){if(document.getElementById('musicslot'))musicSync();else{clearInterval(musicTick);musicTick=null;musicSync()}},250);
+}
+window.addEventListener('resize',function(){musicSync()});
+// anything that changes the page's layout (a list growing, a picture loading) re-lines the player up at once
+try{new ResizeObserver(function(){if(musicHost)musicSync()}).observe(document.getElementById('app')||document.body)}catch(e){}
 
 /* ---------- Calendar, People and Applications (v99, same style as Home and the class pages) ---------- */
 CP_ICO.kcal='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
@@ -4806,6 +4953,17 @@ function viewPlan(){
  return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+W+T+G+'</div></div>';
 }
 // "Today's plan" on Home, once you've started planning
+// one Today's plan line: tick, name (tap to pick its day), steps, a due hint and the class
+function planLine(x,day){
+ var p=pal(x.c.color),cd=x.t.due?cpCountdown(x.t.due):null,dueTxt='';
+ if(cd&&!x.t.done){dueTxt=cd.n<0?cd.t:cd.n===0?'due today':cd.n===1?'due tomorrow':''}
+ return '<div class="cpline2'+(x.t.done?' done':'')+'">'
+  +'<button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"'+(x.t.done?' style="background:'+p.bar+'"':'')+'></button>'
+  +'<button class="cpl2name" data-planpick="'+planKey(x)+'">'+esc(x.t.title)+'</button>'
+  +stepChip(x.t)
+  +(dueTxt?'<span class="cplate">'+esc(dueTxt)+'</span>':'')
+  +'<span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span></div>';
+}
 function homeTodayPlan(col){
  var all=allTasks().filter(function(x){return !isRefClass(x.c)}),td=iso(today());
  if(!all.some(function(x){return x.t.plan&&x.t.plan.length}))return '';
@@ -4813,7 +4971,7 @@ function homeTodayPlan(col){
  var open=list.filter(function(x){return !x.t.done}).length;
  var h='<section class="cpsec" id="h-plan">'+cpHead('hup',col.hup,'Today’s plan',list.length?(open?open+' to do':'all done'):'',list.length?'What you planned to work on today':'Nothing planned for today',
    '<button class="cpbtn2" data-go="plan">Plan my week</button>');
- h+=list.length?'<div class="cptray cptoday2">'+list.map(function(x){return planCard(x,td)}).join('')+'</div>':'<div class="cpempty">Open Plan my week to pick what you will work on today.</div>';
+ h+=list.length?'<div class="cplines">'+list.map(function(x){return planLine(x,td)}).join('')+'</div>':'<div class="cpempty">Open Plan my week to pick what you will work on today.</div>';
  return h+'</section>';
 }
 
@@ -5052,6 +5210,7 @@ function modalHtml(){
    +'<div class="field"><label for="m13">Target grade (%)</label><input id="m13" type="number" min="0" max="100" value="'+esc(c2&&c2.target?c2.target:'')+'" placeholder="85"></div>'
    +'<div class="field"><label for="m3">When it meets</label><input id="m3" value="'+esc(c2?c2.day:'')+'" placeholder="Mondays 12 to 3 pm"></div>'
    +'<div class="field"><label for="m9">Room</label><input id="m9" value="'+esc(c2?(c2.room||''):'')+'" placeholder="Room L5015"></div>'
+   +'<div class="field"><label for="m14">FanshaweOnline link for this class</label><input id="m14" value="'+esc(c2?(c2.fol||''):'')+'" placeholder="Paste the address of this class in FOL"></div>'
    +'<div class="field"><label for="m11">Claude project link</label><input id="m11" value="'+esc(c2?(c2.claude||''):'')+'" placeholder="https://claude.ai/project/..."></div>'
    +'<div class="field"><label>Colour</label><div class="swatches">'
    +PALETTES.map(function(pp){return '<button class="sw '+(m.color===pp.id?'on':'')+'" style="background:'+pp.bg+'" data-sw="'+pp.id+'" aria-label="'+pp.name+'"></button>'}).join('')
@@ -5141,8 +5300,8 @@ function saveModal(){
   mirrorFiles(REF_CID);saveFiles(REF_CID,true);
  }else if(m.kind==='class'){
   var cn=val('m1');if(!cn)return;
-  if(m.classId){var cc=classById(m.classId);cc.name=cn;cc.code=val('m2');cc.day=val('m3');cc.room=val('m9');cc.claude=val('m11');cc.short=val('m12');cc.target=val('m13')?+val('m13'):'';cc.color=m.color}
-  else{S.classes.push({id:uid(),name:cn,code:val('m2'),day:val('m3'),room:val('m9'),claude:val('m11'),color:m.color,contacts:[],assignments:[],tasks:[],links:[]})}
+  if(m.classId){var cc=classById(m.classId);cc.name=cn;cc.code=val('m2');cc.day=val('m3');cc.room=val('m9');cc.claude=val('m11');cc.fol=val('m14');cc.short=val('m12');cc.target=val('m13')?+val('m13'):'';cc.color=m.color}
+  else{S.classes.push({id:uid(),name:cn,code:val('m2'),day:val('m3'),room:val('m9'),claude:val('m11'),fol:val('m14'),color:m.color,contacts:[],assignments:[],tasks:[],links:[]})}
  }
  save();closeModal();
 }
@@ -7133,7 +7292,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-tpcopy],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-tpcopy],[data-termedit],[data-musicsvc],[data-musicedit],[data-musicsave],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -7146,7 +7305,7 @@ document.addEventListener('click',function(e){
  if(d.delclass){if(confirm('Delete this class and everything in it?')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
  if(d.go){go(d.go);return}
  if(d.open){go('class',d.open);return}
- if(d.scroll){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(d.scroll){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);if(d.scroll==='c-info'){try{localStorage.setItem('hub:fold:info','1')}catch(e){}}render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
  if(d.hrange){view.hrange=d.hrange;render();return}
@@ -7189,6 +7348,10 @@ document.addEventListener('click',function(e){
   else{base.setMonth(base.getMonth()+(+d.mon));view.calMonth=base.getFullYear()+'-'+String(base.getMonth()+1).padStart(2,'0')}
   render();return;
  }
+ if(d.termedit){view.termEdit=!view.termEdit;render();return}
+ if(d.musicsvc){S.music=Object.assign({},S.music||{},{svc:d.musicsvc});view.musicEdit=false;view.musicErr='';save();render();return}
+ if(d.musicedit){view.musicEdit=true;view.musicErr='';render();return}
+ if(d.musicsave){var mu2=Object.assign({},S.music||{}),sv2=mu2.svc||'spotify',mv=(document.getElementById('musicurl')||{}).value||'';if(!musicEmbed(sv2,mv)){view.musicErr='That doesn\u2019t look like a '+(sv2==='spotify'?'Spotify':'Apple Music')+' link. In the app, tap Share, then Copy link.';render();return}mu2[sv2]=mv.trim();S.music=mu2;view.musicEdit=false;view.musicErr='';save();render();return}
  if(d.tpcopy){var tcc=classById(d.tpcopy);if(tcc)tpCopy(tcc,el);return}
  if(d.add){openModal(d.add,d.c||view.classId);if(d.sec&&view.modal)view.modal.section=d.sec==='_'?'':d.sec;return}
  if(d.edit){openModal(d.edit,d.c||view.classId,d.id);return}
@@ -7406,7 +7569,8 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('change',function(e){
  var t=e.target;
- if(t.dataset&&t.dataset.tpset){save();return} // typed live above; saved (and synced) once you leave the box
+ if(t.dataset&&t.dataset.tpset){save();return}
+ if(t.dataset&&t.dataset.termset){S.termDates=Object.assign({},S.termDates||{});S.termDates[t.dataset.termset]=t.value;save();if(S.termDates.start&&S.termDates.end&&!view.termEdit)render();return} // typed live above; saved (and synced) once you leave the box
  if(t.dataset&&t.dataset.tpfrom){
   var fc=classById(t.dataset.tpfrom),fa=fc&&(fc.assignments||[]).filter(function(a){return a.id===t.value})[0];
   if(fa){var fd=tpDraft(fc.id);fd.title=fa.title;fd.due=fa.due||'';tpSaveDraft(fc.id);render()}
@@ -7790,6 +7954,7 @@ document.addEventListener('keydown',function(e){
 document.addEventListener('toggle',function(e){
  var d=e.target;
  if(d&&d.dataset&&d.dataset.tptoggle)tpSetOpen(d.open);
+ if(d&&d.dataset&&d.dataset.fold){try{localStorage.setItem('hub:fold:'+d.dataset.fold,d.open?'1':'0')}catch(e){}}
  if(d&&d.dataset&&d.dataset.sg){view.sgOpen=view.sgOpen||{};view.sgOpen[d.dataset.sg]=d.open}
 },true);
 
@@ -7827,6 +7992,9 @@ document.addEventListener('toggle',function(e){
   if(same&&Math.abs(window.scrollY-y)>1){window.scrollTo(0,y)}
   if(same)requestAnimationFrame(function(){if(lastKey===key&&!busy()&&Math.abs(window.scrollY-y)>1)window.scrollTo(0,y)});
   keep.forEach(function(k){var el=document.querySelector(k[0]);if(el)el.scrollTop=k[1]});
+  try{musicSync()}catch(e){}
+  // phone: the week strip scrolls sideways; start it at today
+  var hw=document.querySelector('.hweek');if(hw&&hw.scrollWidth>hw.clientWidth+4){var hon=hw.querySelector('.hwd.on');if(hon)hw.scrollLeft=Math.max(0,hon.offsetLeft-hw.offsetLeft-16)}
   if(field){
    var el=document.getElementById(field.id);
    if(el&&el!==document.activeElement){try{el.focus({preventScroll:true});if(field.s!=null)el.setSelectionRange(field.s,field.e)}catch(e){}}
