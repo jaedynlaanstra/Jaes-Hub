@@ -1480,7 +1480,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v111';
+var BUILD='v112';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4727,8 +4727,10 @@ function viewApps(){
 
 /* ---------- sub-steps on assignments, and Plan my week (v102) ----------
    Steps: a.steps = [{id,title,done}] on the assignment itself (it syncs like any other field).
-   Plan: x.plan = ['YYYY-MM-DD', ...] on an assignment or a checklist item -- the days you mean to work
-   on it, which can be more than one and are separate from when it's due. */
+   Plan: x.plan = ['YYYY-MM-DD'] on an assignment or a checklist item -- the ONE day you mean to work
+   on it (v112: Jae wants one day each, moved around as needed; older data with several days counts
+   only its last day). Separate from when it's due. */
+function planDay(t){var p=t&&t.plan;return p&&p.length?p[p.length-1]:''}
 function stepInfo(a){var st=(a&&a.steps)||[];var d=0;st.forEach(function(x){if(x.done)d++});return {n:st.length,d:d}}
 function stepChip(a){
  var si=stepInfo(a);if(!si.n)return '';
@@ -4748,11 +4750,10 @@ function planItem(kind,cid,id){
  return null;
 }
 function planToggle(x,day,on){
- var p=x.t.plan||[],has=p.indexOf(day)>-1;
+ var has=planDay(x.t)===day;
  if(on===undefined)on=!has;
- if(on&&!has)p=p.concat([day]).sort();
- if(!on&&has)p=p.filter(function(d){return d!==day});
- if(p.length)x.t.plan=p;else delete x.t.plan;
+ if(on)x.t.plan=[day];        // planning it on a day MOVES it there
+ else if(has)delete x.t.plan;
  touch(x.t);
 }
 function planKey(x){return x.kind+':'+x.c.id+':'+x.t.id}
@@ -4777,16 +4778,18 @@ function viewPlan(){
  var range=ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+' – '+we.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
  var all=allTasks().filter(function(x){return !isRefClass(x.c)});
  var byDay={};days.forEach(function(d){byDay[d]=[]});
- all.forEach(function(x){(x.t.plan||[]).forEach(function(d){if(byDay[d])byDay[d].push(x)})});
+ all.forEach(function(x){var d=planDay(x.t);if(d&&byDay[d])byDay[d].push(x)});
  var horizon=new Date(we);horizon.setDate(we.getDate()+14);
  var tray=all.filter(function(x){
   if(x.t.done)return false;
-  if((x.t.plan||[]).some(function(d){return byDay[d]}))return false; // already planned this week
+  var pd=planDay(x.t);
+  // already has a day: it only comes back here if that day was in an earlier week and it still isn't done
+  if(pd&&(byDay[pd]||pd>=iso(weekStart(0))))return false;
   if(!x.t.due)return x.kind==='task';
   var dd=parseISO(x.t.due);return dd<=horizon;
  }).sort(function(a,b){return (a.t.due||'9')<(b.t.due||'9')?-1:1});
  var planned=0;days.forEach(function(d){planned+=byDay[d].length});
- var W='<section class="cpsec" id="p-week">'+cpHead('kplan',col.kplan,label,planned?planned+' planned':'',esc(range)+(window.matchMedia&&matchMedia('(hover:none)').matches?' · tap any item to choose its days':' · drag work onto a day, or click it to choose days'),
+ var W='<section class="cpsec" id="p-week">'+cpHead('kplan',col.kplan,label,planned?planned+' planned':'',esc(range)+(window.matchMedia&&matchMedia('(hover:none)').matches?' · tap any item to choose its day':' · drag work onto a day, or click it to choose a day'),
    '<div class="cpseg"><button data-planwk="-1" aria-label="Previous week">‹</button><button data-planwk="0">This week</button><button data-planwk="1" aria-label="Next week">›</button></div>');
  W+='<div class="cpweek">'+days.map(function(d){
   var dd=parseISO(d),isT=d===iso(t),past=dd<t;
@@ -4806,7 +4809,7 @@ function viewPlan(){
 function homeTodayPlan(col){
  var all=allTasks().filter(function(x){return !isRefClass(x.c)}),td=iso(today());
  if(!all.some(function(x){return x.t.plan&&x.t.plan.length}))return '';
- var list=all.filter(function(x){return (x.t.plan||[]).indexOf(td)>-1});
+ var list=all.filter(function(x){return planDay(x.t)===td});
  var open=list.filter(function(x){return !x.t.done}).length;
  var h='<section class="cpsec" id="h-plan">'+cpHead('hup',col.hup,'Today’s plan',list.length?(open?open+' to do':'all done'):'',list.length?'What you planned to work on today':'Nothing planned for today',
    '<button class="cpbtn2" data-go="plan">Plan my week</button>');
@@ -4886,12 +4889,12 @@ function modalHtml(){
   for(var wk=0;wk<2;wk++){
    chips+='<p class="lab" style="margin:12px 0 6px">'+(wk?'THE WEEK AFTER':'THIS WEEK')+'</p><div class="plandays">';
    for(var di=0;di<7;di++){
-    var dd2=new Date(ws0);dd2.setDate(ws0.getDate()+wk*7+di);var k2=iso(dd2),onp=(pi.t.plan||[]).indexOf(k2)>-1,isDue=pi.t.due===k2;
+    var dd2=new Date(ws0);dd2.setDate(ws0.getDate()+wk*7+di);var k2=iso(dd2),onp=planDay(pi.t)===k2,isDue=pi.t.due===k2;
     chips+='<button class="planday'+(onp?' on':'')+(k2===iso(today())?' today':'')+'" data-plantoggle="'+k2+'"><b>'+esc(dd2.toLocaleDateString('en-CA',{weekday:'short'}))+'</b><span>'+dd2.getDate()+'</span>'+(isDue?'<em>due</em>':'')+'</button>';
    }
    chips+='</div>';
   }
-  h='<h3>Plan: '+esc(pi.t.title)+'</h3><p class="hint" style="margin:-6px 0 2px">'+esc(pi.c.name)+(pi.t.due?' \u00b7 due '+esc(fmtDue(pi.t.due)):'')+'. Tap the days you will work on it.</p>'+chips
+  h='<h3>Plan: '+esc(pi.t.title)+'</h3><p class="hint" style="margin:-6px 0 2px">'+esc(pi.c.name)+(pi.t.due?' \u00b7 due '+esc(fmtDue(pi.t.due)):'')+'. Tap the day you will work on it. Tap another day to move it.</p>'+chips
    +(pi.kind==='assign'&&pi.t.steps&&pi.t.steps.length?'<p class="lab" style="margin:14px 0 6px">STEPS</p>'+stepList(pi.c,pi.t):'');
  }else if(m.kind==='sheet'){
   var sc=classById(m.classId);
