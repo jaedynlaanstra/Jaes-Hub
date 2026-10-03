@@ -1480,7 +1480,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v107';
+var BUILD='v108';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -5485,6 +5485,7 @@ async function mkOpen(cid,i){
  mkOnScroll();
 }
 function mkClose(){
+ mkCommitNow();
  var el=document.getElementById('mk');if(el)el.remove();
  window.removeEventListener('resize',mkOnResize);
  mkRestoreViewportZoom();
@@ -6030,6 +6031,7 @@ function mkGesturePoint(t,touches){
  return {x:c.x-t.rectL,y:c.y-t.rectT};
 }
 function mkGestureBegin(e){
+ var fingers=mkFingers(e.touches);if(!fingers.length)return;
  if(MK.drawing||MK.erasing)mkCancelStroke();
  var body=document.getElementById('mkbody');
  // freeze native scrolling for the whole gesture: if a one-finger scroll was already moving when the
@@ -6042,7 +6044,7 @@ function mkGestureBegin(e){
   raw:{z:MK.zoom,sl:body.scrollLeft,st:body.scrollTop}};
  MK.shown={z:MK.zoom,sl:t.raw.sl,st:t.raw.st,n:1,g:MK.g0};
  MK.touch=t;
- mkGestureRebase(t,e.touches);
+ mkGestureRebase(t,fingers);
 }
 // fingers were added or lifted: re-grab whatever is under the fingers now, from the current
 // (unstretched) state, so the change of finger count itself never moves anything
@@ -6107,6 +6109,8 @@ function mkCommitPending(useX,useY){
  MK.touch={mode:'draw',id:id};
  mkBeginStroke(anno,page,useX,useY);
 }
+// real fingers only (the Pencil's own touch twin left out)
+function mkFingers(list){var out=[];for(var i=0;i<list.length;i++)if(list[i].touchType!=='stylus')out.push(list[i]);return out}
 function mkTouchStart(e){
  if(!MK)return;
  if(e.target&&e.target.closest&&e.target.closest('.mknoteed'))return; // typing a note: leave touches to the sheet
@@ -6125,7 +6129,7 @@ function mkTouchStart(e){
  if(MK.touch&&MK.touch.mode==='pending'){
   // a second finger joined while we were still waiting to see what the first one was doing --
   // this is a two-finger gesture, not a draw, no matter how it looked for that first instant
-  if(e.touches.length>=2){e.preventDefault();clearTimeout(MK.touch.timer);MK.touch=null;mkGestureBegin(e)}
+  if(mkFingers(e.touches).length>=2){e.preventDefault();clearTimeout(MK.touch.timer);MK.touch=null;mkGestureBegin(e)}
   return;
  }
  if(e.touches.length===1){
@@ -6141,6 +6145,9 @@ function mkTouchStart(e){
   var t=e.touches[0],target=document.elementFromPoint(t.clientX,t.clientY),anno=target&&target.closest&&target.closest('.mkanno');
   if(!anno)return;
   e.preventDefault();
+  // once you've used the Pencil, only the Pencil draws (like Apple's own apps): a finger, or a palm
+  // resting on the glass while you write, just scrolls -- it can never start a line, or end yours
+  if(MK.pencilSeen){mkGestureBegin(e);return}
   var page=+anno.getAttribute('data-mkpage'),id0=t.identifier;
   MK.touch={mode:'pending',id:id0,anno:anno,page:page,x0:t.clientX,y0:t.clientY,lastX:t.clientX,lastY:t.clientY};
   MK.touch.timer=setTimeout(function(){
@@ -6148,7 +6155,7 @@ function mkTouchStart(e){
     var p=MK.touch;mkCommitPending(p.lastX,p.lastY);
    }
   },MK_DRAW_GRACE_MS);
- }else if(e.touches.length>=2){
+ }else if(mkFingers(e.touches).length>=2){
   e.preventDefault();
   mkGestureBegin(e);
  }
@@ -6181,10 +6188,11 @@ function mkTouchMove(e){
  if(MK.touch.mode==='settle'){e.preventDefault();return}
  if(MK.touch.mode!=='pan')return;
  e.preventDefault();
- if(!e.touches.length)return;
+ var mf=mkFingers(e.touches);
+ if(!mf.length)return;
  // the finger count can change without a touchstart/touchend reaching us (iOS sometimes merges them)
- if(Math.min(2,e.touches.length)!==MK.touch.count)mkGestureRebase(MK.touch,e.touches);
- mkGestureMove(MK.touch,e.touches);
+ if(Math.min(2,mf.length)!==MK.touch.count)mkGestureRebase(MK.touch,mf);
+ mkGestureMove(MK.touch,mf);
 }
 function mkTouchEnd(e){
  if(!MK)return;
@@ -6210,7 +6218,8 @@ function mkTouchEnd(e){
  // fingers come off the glass a few milliseconds apart: while any finger is still down the gesture
  // simply carries on with the fingers that are left (nothing is decided yet, so nothing can jump);
  // only when the last one lifts does the page come to rest, exactly where it already is on screen
- if(e.touches.length>0){mkGestureRebase(MK.touch,e.touches);return}
+ var lf=mkFingers(e.touches);
+ if(lf.length>0){mkGestureRebase(MK.touch,lf);return}
  mkGestureEnd(MK.touch);
 }
 
@@ -6220,7 +6229,19 @@ function mkPointerDown(e){
  if(!MK||MK.mode!=='edit'||e.pointerType==='touch')return;
  var anno=e.target.closest&&e.target.closest('.mkanno');if(!anno)return;
  e.preventDefault();
- if(e.pointerType==='pen')MK.activePointerType='pen';
+ if(e.pointerType==='pen'){
+  MK.activePointerType='pen';
+  if(!MK.pencilSeen)MK.pencilSeen=true;
+  // whatever a palm or finger was doing when the Pencil touched down is dropped on the spot: a finger
+  // line in progress is thrown away (it was your palm), a palm scroll is landed where it is
+  if(MK.touch){
+   var mt=MK.touch;clearTimeout(mt.timer);
+   if(mt.mode==='draw'||mt.mode==='pending'){
+    if(MK.drawing){var dp=MK.drawing.page;MK.drawing=null;MK.drawingAnno=null;mkDrawLive(dp)}
+    MK.touch=null;
+   }else mkSettleFinish();
+  }
+ }
  try{anno.setPointerCapture(e.pointerId)}catch(err){}
  mkBeginStroke(anno,+anno.getAttribute('data-mkpage'),e.clientX,e.clientY,mkPressureOf(e));
 }
@@ -6238,6 +6259,7 @@ function mkPointerMove(e){
 }
 function mkPointerUp(e){
  if(!MK||e.pointerType==='touch')return;
+ MK.lastInk=Date.now();
  MK.activePointerType=null;
  mkFinishStroke();
 }
@@ -6247,7 +6269,11 @@ function mkMarks(){MK.f.marks=MK.f.marks||{savedAt:'',strokes:[]};return MK.f.ma
 function mkAddStroke(s){
  var mk=mkMarks();mk.strokes.push(s);
  MK.history.push({t:'add',s:s});MK.future=[];
- mkDrawAnnoForPage(s.page);mkRerenderChrome();mkCommit();
+ // just paint the new line on top -- redrawing every line on a zoomed-in page after each stroke
+ // took long enough to delay the start of the next one (the cross of a "t")
+ var an=document.querySelector('.mkanno[data-mkpage="'+s.page+'"]');
+ if(an&&an.width){var asc=mkScaleFor(s.page),actx=an.getContext('2d');actx.setTransform(mkCanvasDpr(an,s.page,asc),0,0,mkCanvasDpr(an,s.page,asc),0,0);mkPaintStroke(actx,s,asc)}
+ else mkDrawAnnoForPage(s.page);mkRerenderChrome();mkCommit();
  if(s.tool==='hi')mkShowBubble(s,4000); // offer a note on the highlight you just drew
 }
 function mkRemoveStroke(s){
@@ -6278,15 +6304,23 @@ function mkRedo(){
  mkDrawAnnoForPage(page);mkRerenderChrome();mkCommit();
 }
 var mkCommitTimer=null;
+// saving (and syncing) the marks is real work, so it waits for a pause in your writing: never in the
+// middle of a word, where it could hold up the next stroke. Closing the PDF saves straight away.
+var mkSavePending=null;
 function mkCommit(){
- var cid=MK.cid;
+ mkSavePending={cid:MK.cid,f:MK.f};
  clearTimeout(mkCommitTimer);
- mkCommitTimer=setTimeout(function(){
-  var mk=MK&&MK.f.marks;if(!mk)return;
-  mk.savedAt=new Date().toISOString();
-  mirrorFiles(cid);saveFiles(cid,true);save();
-  if(sbUser)cloudSync(true);
- },600);
+ mkCommitTimer=setTimeout(function tick(){
+  if(MK&&(MK.drawing||MK.erasing||Date.now()-(MK.lastInk||0)<1500)){mkCommitTimer=setTimeout(tick,700);return}
+  mkCommitNow();
+ },1500);
+}
+function mkCommitNow(){
+ clearTimeout(mkCommitTimer);var p=mkSavePending;mkSavePending=null;
+ if(!p||!p.f.marks)return;
+ p.f.marks.savedAt=new Date().toISOString();
+ mirrorFiles(p.cid);saveFiles(p.cid,true);save();
+ if(sbUser)cloudSync(true);
 }
 
 /* ---------- notes on highlights (like comments in Word) ----------
