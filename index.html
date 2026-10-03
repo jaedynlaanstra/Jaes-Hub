@@ -1480,7 +1480,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v108';
+var BUILD='v109';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1790,7 +1790,7 @@ async function saveFiles(cid,quiet){
    for(var k=0;k<n;k++)sdel('hub:fd:'+f.id+':'+k);
   }
  }
- var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,text:f.text,marks:f.marks,chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
+ var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,icon:f.icon,text:f.text,marks:f.marks,marksSyncedAt:f.marksSyncedAt,chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
  try{await sset('hub:files:'+cid,JSON.stringify(index))}catch(e){}
  render();
 }
@@ -3371,7 +3371,7 @@ function reconcileFiles(){
   (c.files||[]).forEach(function(m){
    var f=null;for(var i=0;i<list.length;i++){if(list[i].id===m.id){f=list[i];break}}
    if(!f){list.push({id:m.id,name:m.name,kind:m.kind,ext:m.ext,mime:m.mime,section:m.section||'',data:'',cloud:true});changed=true}
-   else{['name','kind','ext','mime','section'].forEach(function(k){if((f[k]||'')!==(m[k]||'')){f[k]=m[k];changed=true}})}
+   else{['name','kind','ext','mime','section','icon'].forEach(function(k){if((f[k]||'')!==(m[k]||'')){f[k]=m[k];changed=true}})}
   });
   for(var i=list.length-1;i>=0;i--){
    var f=list[i];
@@ -3407,7 +3407,7 @@ async function listCloudNames(bucket,uid){
  return names;
 }
 async function syncFiles(){
- var bucket=sb.storage.from('hub-files'),uid=sbUser.id,dirty={},errs=0,moved=0,limitName='';
+ var bucket=sb.storage.from('hub-files'),uid=sbUser.id,dirty={},remirror={},errs=0,moved=0,limitName='';
  var names=await listCloudNames(bucket,uid);
  var cids=Object.keys(FILES);
  for(var a=0;a<cids.length;a++){
@@ -3416,15 +3416,27 @@ async function syncFiles(){
    var f=list[b],path=uid+'/'+f.id,exists=!!names[f.id];
    if(f.holdUntil&&f.holdUntil>Date.now()){limitName=limitName||f.name;continue}
    try{
-    if(f.kind==='pdf'&&f.marks&&f.marks.savedAt&&f.marksSyncedAt!==f.marks.savedAt){
-     await withTimeout(bucket.upload(path+'.marks.json',new Blob([JSON.stringify(f.marks)],{type:'application/json'}),{upsert:true,contentType:'application/json'}),60000,null);
-     f.marksSyncedAt=f.marks.savedAt;dirty[cid]=1;moved++;
+    /* markup travels as <file>.marks.json; the synced file list says which copy is newest (marksAt).
+       Only ever UPLOAD a copy at least as new as that, and only DOWNLOAD a copy that is newer than
+       ours. (Before: a device that had restarted forgot it had already uploaded, and pushed its own
+       older markup over the newer one from your other device, then downloaded its old copy back.) */
+    var metaMarksAt=(fmeta[f.id]&&fmeta[f.id].marksAt)||'',localAt=(f.marks&&f.marks.savedAt)||'';
+    if(f.kind==='pdf'&&localAt&&f.marksSyncedAt!==localAt&&!(metaMarksAt>localAt)){
+     var upm=await withTimeout(bucket.upload(path+'.marks.json',new Blob([JSON.stringify(f.marks)],{type:'application/json'}),{upsert:true,contentType:'application/json'}),60000,{error:{message:'timeout'}});
+     if(!upm||upm.error)throw (upm&&upm.error)||new Error('marks upload failed');
+     f.marksSyncedAt=localAt;dirty[cid]=1;moved++;
+     if(metaMarksAt!==localAt)remirror[cid]=1; // make sure the list points at this copy
     }
-    if(f.kind==='pdf'){
-     var metaMarksAt=(fmeta[f.id]&&fmeta[f.id].marksAt)||'';
-     if(metaMarksAt&&metaMarksAt!==(f.marks&&f.marks.savedAt)&&names[f.id+'.marks.json']){
-      var dlm=await withTimeout(bucket.download(path+'.marks.json'),60000,null);
-      if(dlm&&!dlm.error&&dlm.data){try{f.marks=JSON.parse(await dlm.data.text());f.marksSyncedAt=f.marks.savedAt;dirty[cid]=1;moved++}catch(e){}}
+    if(f.kind==='pdf'&&metaMarksAt>localAt&&names[f.id+'.marks.json']){
+     var dlm=await withTimeout(bucket.download(path+'.marks.json'),60000,null);
+     if(dlm&&!dlm.error&&dlm.data){
+      try{
+       var got=JSON.parse(await dlm.data.text());
+       if(got&&((got.savedAt||'')>localAt)){
+        f.marks=got;f.marksSyncedAt=got.savedAt;dirty[cid]=1;moved++;
+        if(MK&&MK.f===f&&!MK.drawing&&!MK.erasing){mkMarks();Object.keys(MK.pageInfo).forEach(function(n){mkDrawAnnoForPage(+n)});mkRerenderChrome()} // open right now: show it
+       }
+      }catch(e){}
      }
     }
     var needUpload=(!f.cloud&&(f.data||f.kind==='text'))||(f.cloud&&!exists&&hasContent(f));
@@ -3447,7 +3459,7 @@ async function syncFiles(){
    }catch(e){if(isFileLimitErr(e)){f.holdUntil=Date.now()+30*60000;limitName=limitName||f.name}else errs++}
   }
  }
- for(var k in dirty)await saveFiles(k,true);
+ for(var k in dirty)await saveFiles(k,!remirror[k]); // not quiet: also updates and saves the synced file list
  return{errs:errs,moved:moved,limitName:limitName};
 }
 /* ---- the sync loop ---- */
@@ -5845,16 +5857,41 @@ var MK_HOLD_MS=350,MK_HOLD_EPS=4;
 //    irons out the hand's micro-wobble without making the line feel laggy at the Pencil's 240 Hz
 //  - the true final position is always added when you lift, so the line still ends exactly at the tip
 var MK_STREAMLINE={pen:.78,touch:.6};
+/* highlighter: draw, then keep the Pencil still for a moment, and the line snaps straight right
+   there while you are still holding. Close to level, it becomes perfectly level (0 degrees, at the
+   middle height of what you drew); steeper, it's a straight line at its own angle. Keep holding
+   and move along, and the straight line follows: longer or shorter, still level. */
+var MK_LEVEL_DEG=25;
+function mkStraightPts(d,end){
+ var a=d.pts0[0],dx=end[0]-a[0],dy=end[1]-a[1];
+ if(Math.abs(dy)<=Math.tan(MK_LEVEL_DEG*Math.PI/180)*Math.abs(dx))return [[a[0],d.levelY,.5],[end[0],d.levelY,.5]];
+ return [[a[0],a[1],.5],[end[0],end[1],.5]];
+}
+function mkHoldSnap(){
+ var d=MK&&MK.drawing;if(!d||d.tool!=='hi'||d.straight)return;
+ var a=d.pts[0],e=d.holdPt||d.pts[d.pts.length-1];
+ if(Math.hypot(e[0]-a[0],e[1]-a[1])*mkScaleFor(d.page)<12)return; // just a dab, nothing to straighten
+ var ys=d.pts.map(function(q){return q[1]}).sort(function(x,y){return x-y});
+ d.levelY=ys[Math.floor(ys.length/2)];
+ d.pts0=d.pts.slice();d.straight=true;d.rawLast=null;
+ d.pts=mkStraightPts(d,e);
+ mkDrawLive(d.page);
+}
 function mkAppendPoint(clientX,clientY,pressure){
  if(!MK.drawing||!MK.drawingAnno)return;
  var d=MK.drawing,pg=d.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
+ if(d.straight){d.pts=mkStraightPts(d,p);return}
  d.rawLast=[p[0],p[1],pr];
  var last=d.pts[d.pts.length-1],scale=mkScaleFor(pg);
  if(Math.hypot(p[0]-last[0],p[1]-last[1])*scale<.35)return;
  var k=MK.activePointerType==='pen'?MK_STREAMLINE.pen:MK_STREAMLINE.touch;
  d.pts.push([last[0]+(p[0]-last[0])*k,last[1]+(p[1]-last[1])*k,pr]);
  var hp=d.holdPt;
- if(!hp||Math.hypot(p[0]-hp[0],p[1]-hp[1])>MK_HOLD_EPS){MK.drawing.holdPt=[p[0],p[1]];MK.drawing.holdAt=Date.now()}
+ if(!hp||Math.hypot(p[0]-hp[0],p[1]-hp[1])>MK_HOLD_EPS){
+  MK.drawing.holdPt=[p[0],p[1]];MK.drawing.holdAt=Date.now();
+  // the Pencil sends nothing while it is perfectly still, so a timer notices the hold
+  if(d.tool==='hi'){clearTimeout(MK.holdTimer);MK.holdTimer=setTimeout(mkHoldSnap,MK_HOLD_MS)}
+ }
 }
 var mkRedrawScheduled=false;
 function mkScheduleRedraw(){
@@ -5902,19 +5939,20 @@ function mkFinishErase(){
 function mkFinishStroke(){
  if(MK.erasing){mkFinishErase();MK.drawingAnno=null;return}
  if(!MK.drawing)return;
+ clearTimeout(MK.holdTimer);
+ // lifted right at the end of a hold, before the timer had its turn: straighten it now
+ if(MK.drawing.tool==='hi'&&!MK.drawing.straight&&MK.drawing.holdAt&&(Date.now()-MK.drawing.holdAt>=MK_HOLD_MS))mkHoldSnap();
  var s=MK.drawing;MK.drawing=null;MK.drawingAnno=null;
- var rl=s.rawLast,lp=s.pts[s.pts.length-1];
- if(rl&&(rl[0]!==lp[0]||rl[1]!==lp[1]))s.pts.push(rl);
- delete s.rawLast;delete s.pred;
- mkDrawLive(s.page);
- if(s.tool==='hi'&&s.holdAt&&(Date.now()-s.holdAt>=MK_HOLD_MS)){
-  var start=s.pts[0],end=s.holdPt;
-  if(Math.hypot(end[0]-start[0],end[1]-start[1])>=1)s.pts=[start,[end[0],end[1],.5]];
-  // held right where it started, with no real line to straighten -- keep the natural dot as-is
+ if(!s.straight){
+  var rl=s.rawLast,lp=s.pts[s.pts.length-1];
+  if(rl&&(rl[0]!==lp[0]||rl[1]!==lp[1]))s.pts.push(rl);
  }
+ ['rawLast','pred','straight','pts0','levelY','holdPt','holdAt'].forEach(function(k){delete s[k]});
+ mkDrawLive(s.page);
  mkAddStroke(s);
 }
 function mkCancelStroke(){
+ clearTimeout(MK.holdTimer);
  var page=MK.drawing&&MK.drawing.page;
  MK.drawing=null;MK.drawingAnno=null;
  if(MK.erasing)mkFinishErase();
@@ -6315,6 +6353,8 @@ function mkCommit(){
   mkCommitNow();
  },1500);
 }
+document.addEventListener('visibilitychange',function(){if(document.hidden&&mkSavePending)mkCommitNow()});
+window.addEventListener('pagehide',function(){if(mkSavePending)mkCommitNow()});
 function mkCommitNow(){
  clearTimeout(mkCommitTimer);var p=mkSavePending;mkSavePending=null;
  if(!p||!p.f.marks)return;
