@@ -867,6 +867,22 @@ a.cpitemname:hover{text-decoration:underline}
 .cpcardact{margin-left:auto;font-size:12px;color:var(--ink3);background:none;border:none;padding:2px 4px;cursor:pointer;min-height:0}
 .cpcardact:hover{color:var(--ink)}
 .cpcardbody{padding:11px 14px 13px;display:flex;flex-direction:column;gap:8px}
+.cptp>summary{list-style:none;cursor:pointer;border-bottom:none}
+.cptp>summary::-webkit-details-marker{display:none}
+.cptp[open]>summary{border-bottom:1px solid var(--line)}
+.cptp .tpchev{margin-left:auto;display:flex;color:var(--ink3);transition:transform .2s}
+.cptp .tpchev svg{width:14px;height:14px}
+.cptp:not([open]) .tpchev{transform:rotate(-90deg)}
+.cptp .tpf{display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--ink2)}
+.cptp .tpf input,.cptp select{font:inherit;font-size:16px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);width:100%;box-sizing:border-box;min-width:0}
+.cptp select{font-size:14px;color:var(--ink2)}
+.cptp .tpprev{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 10px;margin-top:2px}
+.cptp .tppage{font-family:'Times New Roman',Times,serif;font-size:13px;line-height:1.5;text-align:center;color:#111;word-break:break-word}
+.cptp .tpph{color:#aaa}
+.cptp .tpcopy{font:inherit;font-size:14px;font-weight:500;padding:9px 12px;border:none;border-radius:10px;background:var(--cp-files-c,#555);color:var(--cp-files-on,#fff);cursor:pointer}
+.cptp .tphint{font-size:12px;color:var(--ink3);line-height:1.4}
+.cptp .tpmore summary{font-size:12.5px;color:var(--ink3);cursor:pointer;padding:2px 0}
+.cptp .tpmore[open]{display:flex;flex-direction:column;gap:8px}
 .cpline{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;min-width:0}
 .cpline .a{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit;text-decoration:none}
 .cpline a.a:hover,.cpline .a a:hover{text-decoration:underline}
@@ -1464,7 +1480,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v106';
+var BUILD='v107';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -1713,7 +1729,7 @@ function persistLocal(){
 }
 /* ---------- change tracking: stamps edits and records deletions so both sync ---------- */
 var LISTS=['assignments','tasks','contacts','links','sections','files'];
-var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook','shareCode','srcCode'];
+var CLASS_KEYS=['name','code','short','day','room','color','claude','target','cover','coverPos','coverZoom','coverFit','textbook','shareCode','srcCode','tp'];
 var SEEN=null;
 var TOMB_DAYS=180;
 function fp(o){return JSON.stringify(o,function(k,v){return k==='savedAt'?undefined:v})}
@@ -3096,7 +3112,7 @@ function sameData(local,remote){
  var total=Math.max(a.length,b.length,1);
  return (shared/total)>=0.8;
 }
-var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term'];
+var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage'];
 function mergeState(local,remote){
  // field-by-field, most recently touched item wins, using each item's own savedAt
  if(!remote)return local;
@@ -3748,6 +3764,7 @@ function sidebar(c){
     +sideItem('data-scroll','c-prof','People',false)
     +sideItem('data-scroll','c-files','Files',false)
     +sideItem('data-scroll','c-links','Links',false)
+    +sideItem('data-scroll','c-title','Title page',false)
     +(LOCAL?'':sideItem('data-scroll','c-overview','Ask the files',false))
     +'</div>';
   }
@@ -4013,6 +4030,91 @@ window.addEventListener('scroll',function(){if(!cpSpyRaf)cpSpyRaf=requestAnimati
 var CP_TAB_FOR={'c-assign':'asg','c-files':'files','c-links':'files','c-due':'done','c-prof':'info'};
 function cpShut(cid){try{return JSON.parse(localStorage.getItem('hub:chap:'+cid)||'{}')||{}}catch(e){return {}}}
 function cpSetShut(cid,o){try{localStorage.setItem('hub:chap:'+cid,JSON.stringify(o))}catch(e){}}
+
+/* ===== Title page: an APA student title page, filled in for each class, copied ready to paste
+   into Word (Times New Roman 12 pt, 1.5 spacing, centred, title in bold a few lines down).
+   Your name and school are shared by every class (S.titlePage); the course and instructor lines
+   start from the class itself and can be changed per class (c.tp). The project name and due date
+   are a draft kept on this device per class. ===== */
+function tpOpen(){try{return localStorage.getItem('hub:tpopen')==='1'}catch(e){return false}}
+function tpSetOpen(on){try{localStorage.setItem('hub:tpopen',on?'1':'0')}catch(e){}}
+function tpDraft(cid){
+ view.tp=view.tp||{};
+ if(!view.tp[cid]){var o=null;try{o=JSON.parse(localStorage.getItem('hub:tpd:'+cid)||'null')}catch(e){}view.tp[cid]=o||{title:'',due:''}}
+ return view.tp[cid];
+}
+function tpSaveDraft(cid){try{localStorage.setItem('hub:tpd:'+cid,JSON.stringify(tpDraft(cid)))}catch(e){}}
+function tpProfOf(c){
+ var cs=c.contacts||[],p=cs.filter(function(x){return /prof|instructor|teacher|lecturer/i.test(x.role||'')})[0]||cs[0];
+ return p?p.name||'':'';
+}
+function tpLines(c){
+ var tp=c.tp||{},me=S.titlePage||{},d=tpDraft(c.id);
+ var owner=(S.owner&&S.owner!=='My hub')?S.owner.replace(/['’]s hub$/i,''):'';
+ var due=d.due?parseISO(d.due):null;
+ return {title:d.title||'',author:me.author!=null&&me.author!==''?me.author:owner,school:me.school||'',
+  course:tp.course!=null&&tp.course!==''?tp.course:(c.code?c.code+': ':'')+c.name,
+  prof:tp.prof!=null&&tp.prof!==''?tp.prof:tpProfOf(c),
+  date:due?due.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):''};
+}
+function tpPreview(c){
+ var L=tpLines(c),ph=function(v,t){return v?esc(v):'<span class="tpph">'+t+'</span>'};
+ return '<div class="tppage"><b>'+ph(L.title,'Project name')+'</b><br><br>'+ph(L.author,'Your name')+'<br>'+ph(L.school,'School')+'<br>'
+  +ph(L.course,'Course')+'<br>'+ph(L.prof,'Instructor')+'<br>'+ph(L.date,'Due date')+'</div>';
+}
+function tpWordHtml(c){
+ var L=tpLines(c),st="margin:0;text-align:center;line-height:150%;font-family:'Times New Roman',Times,serif;font-size:12pt";
+ var para=function(t,bold){return '<p class="MsoNormal" align="center" style="'+st+'">'+(t?(bold?'<b>'+esc(t)+'</b>':esc(t)):'&nbsp;')+'</p>'};
+ // APA puts the title three or four lines down the page, then one blank line before your name
+ var lines=[para(''),para(''),para(''),para(L.title,true),para('')];
+ [L.author,L.school,L.course,L.prof,L.date].forEach(function(t){if(t)lines.push(para(t))});
+ // a page break, so you keep typing straight onto page 2
+ lines.push('<p class="MsoNormal" style="'+st+';text-align:left"><br clear="all" style="page-break-before:always"></p>');
+ return '<div style="font-family:\'Times New Roman\',Times,serif;font-size:12pt">'+lines.join('')+'</div>';
+}
+function tpPlain(c){var L=tpLines(c);return ['','','',L.title,'',L.author,L.school,L.course,L.prof,L.date].filter(function(x,i){return i<5||x}).join('\n')}
+async function tpCopy(c,btn){
+ var html=tpWordHtml(c),txt=tpPlain(c),ok=false;
+ // first choice: hand the clipboard our exact HTML during a copy event, so the browser can't swap
+ // in its own computed styles (that turned "1.5 spacing" into a fixed 24px and lost the page break)
+ var put=function(e){e.clipboardData.setData('text/html',html);e.clipboardData.setData('text/plain',txt);e.preventDefault();ok=true};
+ document.addEventListener('copy',put);
+ var ta=document.createElement('textarea');ta.value=' ';ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0;opacity:0';
+ document.body.appendChild(ta);ta.select();
+ try{document.execCommand('copy')}catch(e){}
+ document.removeEventListener('copy',put);ta.remove();
+ if(!ok){
+  try{
+   if(window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){
+    await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([txt],{type:'text/plain'})})]);ok=true;
+   }
+  }catch(e){}
+ }
+ if(btn){btn.textContent=ok?'Copied. Paste into Word':'Could not copy';setTimeout(function(){btn.textContent='Copy for Word'},2600)}
+}
+function tpCard(c){
+ var d=tpDraft(c.id),L=tpLines(c),tp=c.tp||{},me=S.titlePage||{},open=tpOpen();
+ var asg=(c.assignments||[]).filter(function(a){return !a.done});
+ var pick=asg.length?'<select id="tpfrom" data-tpfrom="'+c.id+'" aria-label="Fill from an assignment"><option value="">Fill from an assignment…</option>'
+  +asg.map(function(a){return '<option value="'+a.id+'">'+esc(a.title)+'</option>'}).join('')+'</select>':'';
+ var fld=function(id,lab,val,ph,attr,type){return '<label class="tpf"><span>'+lab+'</span><input id="'+id+'" '+(type?'type="'+type+'" ':'')+attr+' value="'+esc(val||'')+'" placeholder="'+esc(ph)+'"></label>'};
+ return '<details class="cpcard cptp" id="c-title"'+(open?' open':'')+' data-tptoggle="1">'
+  +'<summary class="cpcardhead"><span class="cpdot" style="background:var(--cp-files-c,#8a8a8a)"></span><h3 class="cpcardtitle">Title page</h3><span class="tpchev">'+CP_ICO.chev+'</span></summary>'
+  +'<div class="cpcardbody">'
+  +pick
+  +fld('tptitle','Project name',d.title,'e.g. Reading Response #1','data-tp="title" data-c="'+c.id+'"')
+  +fld('tpdue','Due date',d.due,'','data-tp="due" data-c="'+c.id+'"','date')
+  +'<div class="tpprev" id="tpprev">'+tpPreview(c)+'</div>'
+  +'<button class="tpcopy" data-tpcopy="'+c.id+'">Copy for Word</button>'
+  +'<div class="tphint">Times New Roman, 12 pt, 1.5 spacing, with a page break after. Add the page number in Word: Insert, Page Number, top right.</div>'
+  +'<details class="tpmore"><summary>Name, school, course and instructor</summary>'
+  +fld('tpauthor','Your name (and student number)',me.author,L.author||'Jane Doe 1234567','data-tpset="author"')
+  +fld('tpschool','School (every class)',me.school,'Lawrence Kinlin School of Business, Fanshawe College','data-tpset="school"')
+  +fld('tpcourse','Course (this class)',tp.course,(c.code?c.code+': ':'')+c.name,'data-tpset="course" data-c="'+c.id+'"')
+  +fld('tpprof','Instructor (this class)',tp.prof,tpProfOf(c)||'Dr. Name','data-tpset="prof" data-c="'+c.id+'"')
+  +'</details></div></details>';
+}
+function tpRefresh(cid){var c=classById(cid),pv=document.getElementById('tpprev');if(c&&pv)pv.innerHTML=tpPreview(c)}
 
 function viewClass(c){
  var real=cpColors(c),col=cpVarRefs(),files=FILES[c.id]||[],p=pal(c.color);
@@ -4314,6 +4416,7 @@ function viewClass(c){
  I+=railCard('cp-claude',col.done.c,'Claude project',c.claude?'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Edit</button>':'<button class="cpcardact" data-edit="class" data-c="'+c.id+'">Add link</button>',
   c.claude?'<div class="cpline"><a class="a" href="'+esc(c.claude)+'" target="_blank" rel="noopener" style="font-weight:500">Open Claude project →</a></div>'
    :'<div class="cpline"><span class="a cpsoft">No project linked</span></div>');
+ R+=tpCard(c);
  R+='</aside>';
 
  /* ===== section bar: everything stays on the page; a tab glides to its section ===== */
@@ -6798,7 +6901,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-tpcopy],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -6811,7 +6914,7 @@ document.addEventListener('click',function(e){
  if(d.delclass){if(confirm('Delete this class and everything in it?')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
  if(d.go){go(d.go);return}
  if(d.open){go('class',d.open);return}
- if(d.scroll){view.menu=false;render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(d.scroll){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
  if(d.hrange){view.hrange=d.hrange;render();return}
@@ -6854,6 +6957,7 @@ document.addEventListener('click',function(e){
   else{base.setMonth(base.getMonth()+(+d.mon));view.calMonth=base.getFullYear()+'-'+String(base.getMonth()+1).padStart(2,'0')}
   render();return;
  }
+ if(d.tpcopy){var tcc=classById(d.tpcopy);if(tcc)tpCopy(tcc,el);return}
  if(d.add){openModal(d.add,d.c||view.classId);if(d.sec&&view.modal)view.modal.section=d.sec==='_'?'':d.sec;return}
  if(d.edit){openModal(d.edit,d.c||view.classId,d.id);return}
  if(d.ask){ask(d.ask);return}
@@ -7070,6 +7174,12 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('change',function(e){
  var t=e.target;
+ if(t.dataset&&t.dataset.tpset){save();return} // typed live above; saved (and synced) once you leave the box
+ if(t.dataset&&t.dataset.tpfrom){
+  var fc=classById(t.dataset.tpfrom),fa=fc&&(fc.assignments||[]).filter(function(a){return a.id===t.value})[0];
+  if(fa){var fd=tpDraft(fc.id);fd.title=fa.title;fd.due=fa.due||'';tpSaveDraft(fc.id);render()}
+  return;
+ }
  if(t.dataset&&t.dataset.setname){
   var nm=t.value.trim().slice(0,40),key=t.dataset.setname;
   S[key]=nm||(key==='owner'?'My hub':'');
@@ -7245,6 +7355,12 @@ function setThemeColour(kind,key,value){
 }
 document.addEventListener('input',function(e){
  var t=e.target,ds=t.dataset||{};
+ if(ds.tp){var td=tpDraft(ds.c);td[ds.tp]=t.value;tpSaveDraft(ds.c);tpRefresh(ds.c);return}
+ if(ds.tpset){
+  if(ds.tpset==='author'||ds.tpset==='school'){S.titlePage=Object.assign({},S.titlePage||{});S.titlePage[ds.tpset]=t.value}
+  else{var tc=classById(ds.c);if(tc){tc.tp=Object.assign({},tc.tp||{});tc.tp[ds.tpset]=t.value}}
+  tpRefresh(ds.c||view.classId);return;
+ }
  if(ds.themecolor){
   var v=setThemeColour('class',ds.themecolor,t.value);
   if(v){var box=document.querySelector('[data-themehex="'+ds.themecolor+'"]');if(box)box.value=v;save()}
@@ -7441,6 +7557,7 @@ document.addEventListener('keydown',function(e){
 
 document.addEventListener('toggle',function(e){
  var d=e.target;
+ if(d&&d.dataset&&d.dataset.tptoggle)tpSetOpen(d.open);
  if(d&&d.dataset&&d.dataset.sg){view.sgOpen=view.sgOpen||{};view.sgOpen[d.dataset.sg]=d.open}
 },true);
 
