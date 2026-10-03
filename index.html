@@ -1480,7 +1480,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v110';
+var BUILD='v111';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -5391,7 +5391,7 @@ function mkCss(){
   // just showed they would, and letting go landed you further off with every extra page in between
   +'#mk .mkpagewrap{position:relative;margin:0;box-shadow:0 6px 30px rgba(0,0,0,.4);background:#fff;transition:filter .15s ease;flex-shrink:0}'
   +'#mk .mkpagewrap canvas{display:block;position:absolute;left:0;top:0;width:100%;height:100%}'
-  +'#mk .mktext{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;line-height:1;-webkit-user-select:text;user-select:text;color:transparent}'
+  +'#mk .mktext{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;line-height:1;-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;color:transparent}'
   +'#mk .mktext span{position:absolute;white-space:pre;cursor:text;transform-origin:0% 0%}'
   +'#mk.mk-edit .mktext{pointer-events:none}'
   +'#mk .mkbody{touch-action:pan-x pan-y}'
@@ -5447,6 +5447,7 @@ function mkCss(){
   +'#mk .mkask p{margin:0 0 6px;font-size:14px;line-height:1.4;color:#C9C3B4;white-space:pre-wrap;word-break:break-word}'
   +'#mk .mkask .mkasksub{color:#EFEAE0}'
   +'#mk .mksave{height:34px;padding:0 13px;border-radius:9px;border:none;background:#EFEAE0;color:#1c1a17;font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;flex-shrink:0;white-space:nowrap}'
+  +'#mk .mkcopy{padding:0 18px}'
   +'#mk .mkverlist{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow:auto;margin:10px 0 4px}'
   +'#mk .mkverrow{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border-radius:10px;border:none;background:rgba(255,255,255,.08);color:#EFEAE0;font:inherit;cursor:pointer}'
   +'#mk .mkverrow b{font-size:14px;margin:0}#mk .mkverrow span{font-size:12.5px;color:#C9C3B4}'
@@ -5481,7 +5482,7 @@ function mkRestoreViewportZoom(){
  mkViewportSaved=null;
 }
 function mkSetMode(mode){
- MK.mode=mode;
+ MK.mode=mode;mkHideCopy();
  var el=document.getElementById('mk');
  if(el)el.className=mode==='edit'?'mk-edit':'';
 }
@@ -5887,7 +5888,7 @@ function mkBeginStroke(anno,page,clientX,clientY,pressure){
   mkEraseAt(page,[p]);mkDrawLive(page);return;
  }
  var sz=MK_SIZES[MK.tool][MK.size],pr=(pressure===undefined||!pressure)?.5:pressure;
- MK.drawing={id:uid(),tool:MK.tool,color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]],holdPt:[p[0],p[1]],holdAt:Date.now()};
+ MK.drawing={id:uid(),tool:MK.tool,color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]],holdPt:[p[0],p[1]],holdAt:Date.now(),t0:Date.now(),cx:clientX,cy:clientY};
  // with a mouse or trackpad the highlighter only goes straight across: it stays level at the
  // height you started, however much the mouse wanders up and down
  if(MK.tool==='hi'&&MK.ptrMouse){var md=MK.drawing;md.straight=true;md.forceLevel=true;md.levelY=p[1];md.pts0=[md.pts[0]]}
@@ -5988,11 +5989,15 @@ function mkFinishStroke(){
  // lifted right at the end of a hold, before the timer had its turn: straighten it now
  if(MK.drawing.tool==='hi'&&!MK.drawing.straight&&MK.drawing.holdAt&&(Date.now()-MK.drawing.holdAt>=MK_HOLD_MS))mkHoldSnap();
  var s=MK.drawing;MK.drawing=null;MK.drawingAnno=null;
+ // Markup mode: a quick tap (no real movement) on an existing highlight opens "Add note" for it,
+ // rather than leaving a little dot on top of it
+ var sc0=mkScaleFor(s.page),tap=Date.now()-s.t0<350&&s.pts.every(function(q){return Math.hypot(q[0]-s.pts[0][0],q[1]-s.pts[0][1])*sc0<6});
+ if(tap){var hit=mkHitHighlight(s.cx,s.cy);if(hit){mkDrawLive(s.page);var hn2=mkNoteFor(hit.id);if(hn2)mkOpenNoteEditor(null,hn2.id);else mkShowBubble(hit,5000);return}}
  if(!s.straight){
   var rl=s.rawLast,lp=s.pts[s.pts.length-1];
   if(rl&&(rl[0]!==lp[0]||rl[1]!==lp[1]))s.pts.push(rl);
  }
- ['rawLast','pred','straight','forceLevel','pts0','levelY','holdPt','holdAt'].forEach(function(k){delete s[k]});
+ ['rawLast','pred','straight','forceLevel','pts0','levelY','holdPt','holdAt','t0','cx','cy'].forEach(function(k){delete s[k]});
  mkDrawLive(s.page);
  mkAddStroke(s);
 }
@@ -6538,6 +6543,39 @@ function mkShowBubble(s,ms){
  bub.style.left=left+'px';bub.style.top=top+'px';
  if(ms)mkBubbleTimer=setTimeout(mkHideBubble,ms);
 }
+/* Reading mode: select text and a Copy button appears just under it. It copies straight to the
+   clipboard, so copying never depends on the browser's own menu showing up. */
+var mkSelTimer=null,mkSelText='';
+document.addEventListener('selectionchange',function(){
+ if(!MK)return;clearTimeout(mkSelTimer);
+ mkSelTimer=setTimeout(function(){
+  if(!MK)return;
+  var sel=window.getSelection(),t=sel&&!sel.isCollapsed?String(sel).replace(/\s+\n/g,'\n').trim():'';
+  var node=sel&&sel.anchorNode,inText=node&&(node.nodeType===1?node:node.parentElement);
+  inText=inText&&inText.closest&&inText.closest('.mktext');
+  if(!t||!inText||MK.mode!=='read'){if(document.getElementById('mkcopy')&&!t)mkHideCopy();return}
+  mkSelText=t;
+  var r=sel.getRangeAt(0).getBoundingClientRect(),el=document.getElementById('mk'),b=document.getElementById('mkcopy');
+  if(!b){b=document.createElement('button');b.id='mkcopy';b.className='mkbubble mkcopy';b.setAttribute('data-mk','copysel');
+   b.addEventListener('pointerdown',function(e){e.preventDefault()}); // keep the selection when you click it
+   el.appendChild(b)}
+  b.textContent='Copy';
+  var w=b.offsetWidth||80,vw=el.clientWidth,vh=el.clientHeight;
+  var left=Math.max(8,Math.min(vw-w-8,r.left+r.width/2-w/2)),top=r.bottom+12;
+  if(top>vh-60)top=Math.max(70,r.top-52);
+  b.style.left=left+'px';b.style.top=top+'px';
+ },220);
+});
+function mkHideCopy(){var b=document.getElementById('mkcopy');if(b)b.remove()}
+async function mkCopySel(){
+ var t=mkSelText,ok=false,b=document.getElementById('mkcopy');if(!t)return;
+ try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(t);ok=true}}catch(e){}
+ if(!ok){
+  var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0;opacity:0';
+  document.getElementById('mk').appendChild(ta);ta.select();try{ok=document.execCommand('copy')}catch(e){}ta.remove();
+ }
+ if(b){b.textContent=ok?'Copied ✓':'Could not copy';setTimeout(mkHideCopy,1400)}
+}
 function mkHideBubble(){clearTimeout(mkBubbleTimer);var b=document.getElementById('mkbubble');if(b)b.remove()}
 
 /* writing a note */
@@ -6773,7 +6811,8 @@ function mkTopHtml(){
  return '<button class="mkicon" data-mk="thumbs" aria-label="Show pages">'+MK_ICO.menu+'</button>'
   +'<button class="mkicon" data-mk="close" aria-label="Close">'+MK_ICO.close+'</button>'
   +(MK.mode==='edit'?'<button class="mkicon" data-mk="undo" aria-label="Undo"'+(MK.history.length?'':' disabled')+'>'+MK_ICO.undo+'</button>'
-    +'<button class="mkicon" data-mk="redo" aria-label="Redo"'+(MK.future.length?'':' disabled')+'>'+MK_ICO.redo+'</button>':'')
+    +'<button class="mkicon" data-mk="redo" aria-label="Redo"'+(MK.future.length?'':' disabled')+'>'+MK_ICO.redo+'</button>'
+    +'<button class="mksave" data-mk="save" id="mksavebtn">'+mkSaveLabel()+'</button>':'')
   +'<span class="mkname" title="'+esc(MK.f.name)+'">'+esc(MK.f.name)+'</span>'
   +'<span class="mkgrow"></span>'
   +'<span class="mkpage" id="mkpageline">'+MK.curPage+' / '+MK.pageCount+'</span>'
@@ -6782,7 +6821,6 @@ function mkTopHtml(){
   +'<button data-mk="zoomin" aria-label="Zoom in">+</button></div>'
   +'<div class="mkmode"><button class="'+(MK.mode==='read'?'on':'')+'" data-mk="mode:read">Reading</button>'
   +'<button class="'+(MK.mode==='edit'?'on':'')+'" data-mk="mode:edit">Markup</button></div>'
-  +(MK.mode==='edit'?'<button class="mksave" data-mk="save" id="mksavebtn">'+mkSaveLabel()+'</button>':'')
   +'<button class="mkicon" data-mk="versions" aria-label="Earlier versions of your markup" title="Earlier versions">'+MK_ICO_HIST+'</button>'
   +'<button class="mkicon'+(MK.notesOpen?' on':'')+'" data-mk="notes" aria-label="Show notes" title="Notes">'+MK_ICO_NOTE+(mkNoteCount()?'<span class="mkbadge">'+mkNoteCount()+'</span>':'')+'</button>'
   +'<button class="mkicon" data-mk="openext" aria-label="Open in your browser">'+MK_ICO.ext+'</button>'
@@ -6856,6 +6894,7 @@ function mkClick(e){
  if(a==='size'){MK.size=arg;MK.toolSize[MK.tool]=arg;mkSaveSizes();mkRerenderChrome();return}
  if(a==='color'){MK.color=arg;MK.toolColor[MK.tool]=arg;mkRerenderChrome();return}
  if(a==='save'){mkSaveNow();return}
+ if(a==='copysel'){mkCopySel();return}
  if(a==='versions'){mkShowVersions();return}
  if(a==='verrestore'){mkRestoreVersion(+arg);return}
  if(a==='verclose'){var vb=document.getElementById('mkver');if(vb)vb.remove();return}
