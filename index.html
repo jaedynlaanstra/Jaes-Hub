@@ -756,7 +756,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 /* assignments */
 .cpbody{padding:2px 18px 10px}
 .cpgrid{display:grid;grid-template-columns:26px minmax(0,1fr) 84px 150px 50px 80px;column-gap:10px;align-items:center}
-.cphdr{padding:9px 0;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line)}
+.cphdr{padding:9px 0;font-size:12px;font-weight:400;color:var(--ink3);border-bottom:1px solid var(--line)}
 .cprow{padding:9px 8px;margin:0 -8px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;border-radius:8px}
 .cprow:hover{background:var(--paper)}
 .cprow .tick{width:17px;height:17px}
@@ -800,7 +800,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cpch.shut .cpchhead{border-bottom-color:transparent}
 .cpchev{width:16px;height:16px;flex:none;color:var(--ink3);transition:transform .2s ease}
 .cpch.shut .cpchev{transform:rotate(-90deg)}
-.cpbadge{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#fff;border-radius:5px;padding:3px 7px;flex:none;line-height:1.3}
+.cpbadge{font-size:11.5px;font-weight:500;color:#fff;border-radius:5px;padding:3px 7px;flex:none;line-height:1.3}
 .cpchname{font-size:15px;font-weight:500;color:var(--head,var(--ink));min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cpchcount{font-size:12px;color:var(--ink3);white-space:nowrap;flex:none}
 .cpchacts{margin-left:auto;display:flex;gap:2px;flex:none}
@@ -811,7 +811,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cpch>.cpchbody:first-child{border-top:none}
 .cpcol{padding:9px 12px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .cpcol+.cpcol{border-left:1px solid var(--line)}
-.cpcollab{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:0 6px 4px}
+.cpcollab{font-size:12px;font-weight:400;color:var(--ink3);padding:0 6px 4px}
 .cpcolempty{font-size:13px;color:var(--ink3);padding:7px 6px}
 .cpcol .more summary{padding:6px 6px 2px;font-size:12.5px}
 .cpitem{display:flex;align-items:center;gap:10px;padding:6px 6px;border-radius:8px;min-width:0}
@@ -850,20 +850,20 @@ a.cpitemname:hover{text-decoration:underline}
 
 /* class settings row */
 .cpsettings{border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.cpsetlab{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-right:6px}
+.cpsetlab{font-size:12.5px;font-weight:400;color:var(--ink3);margin-right:6px}
 .cpsettings>button:not(.cpghost),.cpsettings>.fakebtn{font-size:12.5px;background:var(--card);border:1px solid var(--line2);border-radius:7px;padding:5px 11px;color:var(--ink)}
 .cpsettings .pastezone{flex-basis:100%}
 
 /* right rail */
 .cprail{display:flex;flex-direction:column;gap:12px;position:relative;min-width:0;border-radius:16px}
 .cpwhen{position:relative;border-radius:13px;padding:15px 16px;display:flex;flex-direction:column;gap:4px}
-.cpwhenlab{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.cpwhenlab{font-size:12px;font-weight:400;opacity:.9}
 .cpwhentime{font-size:16.5px;font-weight:500;line-height:1.3}
 .cpwhenroom{font-size:14px}
 .cpcard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:0}
 .cpcardhead{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--paper)}
 .cpdot{width:7px;height:7px;border-radius:50%;flex:none}
-.cpcardtitle{font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:0;font-style:normal}
+.cpcardtitle{font-family:inherit;font-size:13.5px;font-weight:500;color:var(--ink2);margin:0;font-style:normal}
 .cpcardact{margin-left:auto;font-size:12px;color:var(--ink3);background:none;border:none;padding:2px 4px;cursor:pointer;min-height:0}
 .cpcardact:hover{color:var(--ink)}
 .cpcardbody{padding:11px 14px 13px;display:flex;flex-direction:column;gap:8px}
@@ -972,24 +972,21 @@ a.cpitemname:hover{text-decoration:underline}
   .cpclsnext{display:none}
   .cphome .cpseg button{padding:5px 8px;font-size:12.5px}
 }
-/* next due: square card in the side column */
-.cpnextc{cursor:pointer;background:var(--cp-asg-c);border-color:transparent;color:var(--cp-asg-on,#fff)}
-.cpnextc .cpcardhead{background:transparent;border-bottom-color:rgba(255,255,255,.18)}
-.cpnextc .cpcardtitle{color:inherit;opacity:.8}
-.cpnextc .cpdot{background:currentColor!important;opacity:.7}
-.cpnextc:hover{filter:brightness(1.06)}
-.cpnexttag{margin-left:auto;font-size:11px;color:var(--cp-asg-c);background:var(--cp-asg-on,#fff);border-radius:99px;padding:1px 8px;white-space:nowrap}
-.cpnextc .cpcardbody{gap:2px;padding:12px 14px 14px}
-.cpnextbig{display:flex;align-items:baseline;gap:7px;line-height:1}
-.cpnextbig .n{font-family:var(--fh,inherit);font-size:52px;font-weight:var(--wh,500);letter-spacing:-.02em}
-.cpnextbig .u{font-size:15px}
-.cpnextc .cpnexttitle{font-size:15px;line-height:1.3;margin-top:8px;overflow-wrap:anywhere}
-.cpnextdate{font-size:12.5px;opacity:.78;margin-top:1px}
-.cpnextafter{margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.18);display:flex;flex-direction:column;gap:5px}
-.cpnextafter .cpline{font-size:12.5px;opacity:.9}
-.cpnextafter .cpline .b{color:inherit;opacity:.8}
+/* next due: the number is the focus, a little text beside it */
+.cpnextc{cursor:pointer;background:var(--cp-asg-c);border-color:transparent;color:var(--cp-asg-on,#fff);padding:18px 18px 18px 20px}
+.cpnextc:hover{filter:brightness(1.05)}
 .cpnextc.late{background:#9c4a41;color:#fff}
-.cpnexts.late .cpnextsnum{color:#A34A3F}
+.cpnextrow2{display:flex;align-items:center;gap:16px}
+.cpnextbig{display:flex;flex-direction:column;align-items:center;line-height:1;flex:none;min-width:72px}
+.cpnextbig .n{font-family:var(--fh,inherit);font-size:60px;font-weight:var(--wh,500);letter-spacing:-.02em}
+.cpnextbig .u{font-size:13px;opacity:.85;margin-top:4px;white-space:nowrap}
+.cpnextside{min-width:0;flex:1;border-left:1px solid rgba(255,255,255,.22);padding-left:16px}
+.cpnextlab2{font-size:12px;opacity:.75}
+.cpnextc .cpnexttitle{font-size:14.5px;line-height:1.3;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cpnextdate{font-size:12px;opacity:.78;margin-top:3px}
+.cpnextsteps{display:flex;align-items:center;gap:6px;font-size:11.5px;opacity:.85;margin-top:6px}
+.cpnextsteps .cpstepsbar{background:rgba(255,255,255,.25);width:46px}
+.cpnextsteps .cpstepsbar i{background:currentColor}
 /* next due: slim row when the side column sits below your work */
 .cpnexts{display:none;align-items:center;gap:14px;background:var(--cp-asg-c);color:var(--cp-asg-on,#fff);border-radius:13px;padding:11px 14px;cursor:pointer}
 .cpnexts .cpnextslab,.cpnexts .cpnextdate{color:inherit;opacity:.78}
@@ -999,7 +996,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpnextsnum .n{font-family:var(--fh,inherit);font-size:28px;font-weight:var(--wh,500)}
 .cpnextsnum .u{font-size:10.5px;margin-top:3px;white-space:nowrap}
 .cpnextstext{min-width:0}
-.cpnextslab{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.cpnextslab{font-size:12px;color:var(--ink3)}
 .cpnexts .cpnexttitle{font-size:14.5px;line-height:1.3;color:var(--head,var(--ink));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:1199px){.cpnextc{display:none}.cpnexts{display:flex;order:-1}}
 /* class page tabs */
@@ -1011,8 +1008,10 @@ a.cpitemname:hover{text-decoration:underline}
 .cptabdot{width:8px;height:8px;border-radius:50%;background:var(--tc);flex:none;opacity:.85}
 .cptabn{font-size:12px;font-weight:500;min-width:24px;height:21px;padding:0 8px;border-radius:99px;display:inline-grid;place-items:center;background:var(--line);color:var(--ink2)}
 .cptab.on .cptabn{background:var(--tc);color:#fff}
+.cptab{font-weight:400}
+.cptab.on{font-weight:500}
 .cpinfo{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;align-items:start}
-@media(max-width:1199px){.cpinfo{order:1}}
+@media(max-width:1199px){.cpinfowrap{order:2}}
 @media(max-width:900px){.cptabs{position:static}}
 @media(max-width:700px){.cptabs{margin:0 -16px 16px;padding:0 10px}.cptab{padding:10px 11px 9px;font-size:14px;gap:7px}.cptabn{font-size:11px;height:19px;min-width:20px;padding:0 6px}.cpinfo{grid-template-columns:minmax(0,1fr)}}
 /* sub-steps */
@@ -1039,7 +1038,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpwday.past{opacity:.72}
 .cpwday.dropover{border-color:var(--cp-kplan-c);border-style:dashed;background:var(--cp-kplan-wash)}
 .cpwhead{display:flex;align-items:baseline;gap:6px;padding:8px 10px 6px;border-bottom:1px solid var(--line)}
-.cpwname{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.cpwname{font-size:12.5px;color:var(--ink3)}
 .cpwnum{font-size:16px;color:var(--head,var(--ink))}
 .cpwday.today .cpwnum{color:var(--cp-kplan-c)}
 .cpwdue{margin-left:auto;font-size:10.5px;color:#A34A3F;white-space:nowrap}
@@ -1063,7 +1062,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cptray{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding:14px 16px 16px}
 .plandays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
 .planday{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 0 6px;border-radius:9px;min-height:0!important;font-family:inherit;position:relative}
-.planday b{font-size:10.5px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
+.planday b{font-size:11.5px;font-weight:400;color:var(--ink3)}
 .planday span{font-size:15px}
 .planday em{font-style:normal;font-size:9.5px;color:#A34A3F;line-height:1}
 .planday.today{border-color:var(--ink3)}
@@ -1076,6 +1075,15 @@ a.cpitemname:hover{text-decoration:underline}
   .cptray{grid-template-columns:minmax(0,1fr);padding:10px}
   .cpplan{cursor:pointer}
 }
+/* softer type: names a touch lighter, titles not tightened */
+.c-name,.cpitemname,.cpchname,.cpclsname,.cpappnm,.cpplanname,.cpnexttitle{font-weight:450}
+.cptitle{letter-spacing:0}
+.cpline .a[style*="font-weight:500"]{font-weight:450!important}
+.cpsec,.cpcard,.cpwhen{line-height:1.55}
+.cphint{line-height:1.45}
+.cpinfowrap{scroll-margin-top:72px}
+.cpsec,.cppair{scroll-margin-top:72px}
+@media(max-width:900px){.cpsec,.cppair,.cpinfowrap{scroll-margin-top:62px}}
 /* small, quiet text buttons (same grey as the CLASS SETTINGS label) */
 .cpquiet{background:none;border:none;padding:3px 6px;margin:0 -2px;font-size:12px;color:var(--ink3);cursor:pointer;border-radius:6px;min-height:0!important;font-family:inherit;display:inline-flex;align-items:center}
 .cpquiet:hover{color:var(--ink2);background:var(--paper)}
@@ -1089,7 +1097,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpwide{grid-template-columns:minmax(0,1fr)!important}
 .cpcalwrap{padding:12px 16px 16px;overflow-x:auto}
 .cpcal{min-width:560px}
-.cpcal th{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px 8px}
+.cpcal th{font-size:12px;font-weight:400;padding:2px 6px 8px}
 .cpcal td{border-color:var(--line);height:96px;padding:5px 6px;border-radius:0}
 .cpcal td.off{background:var(--paper);opacity:.75}
 .cpcal td.today{background:var(--cp-kcal-wash)}
@@ -1456,7 +1464,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v102';
+var BUILD='v103';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3990,6 +3998,18 @@ function cpMoveSection(c,id,where){
 // which tab a class is showing, remembered per class on this device
 function cpTab(cid){try{return localStorage.getItem('hub:tab:'+cid)||'asg'}catch(e){return 'asg'}}
 function cpSetTab(cid,t){try{localStorage.setItem('hub:tab:'+cid,t)}catch(e){}}
+// which section you're looking at: the last one whose top has passed just under the bar
+var cpSpyLock=0,cpSpyRaf=0;
+function cpMarkTab(id){document.querySelectorAll('.cptab').forEach(function(t){t.classList.toggle('on',t.dataset.cpjump===id)})}
+function cpSpy(){
+ cpSpyRaf=0;if(view.page!=='class'||cpSpyLock)return; // a tapped tab stays chosen until you scroll yourself
+ var tabs=document.querySelectorAll('.cptab');if(!tabs.length)return;
+ var bar=document.querySelector('.cptabs'),line=(bar?bar.getBoundingClientRect().bottom:0)+40,cur=tabs[0].dataset.cpjump;
+ tabs.forEach(function(t){var el=document.getElementById(t.dataset.cpjump);if(el&&el.getBoundingClientRect().top<=line)cur=t.dataset.cpjump});
+ cpMarkTab(cur);
+}
+window.addEventListener('scroll',function(){if(!cpSpyRaf)cpSpyRaf=requestAnimationFrame(cpSpy)},{passive:true});
+['wheel','touchmove','keydown'].forEach(function(ev){window.addEventListener(ev,function(){cpSpyLock=0},{passive:true})});
 var CP_TAB_FOR={'c-assign':'asg','c-files':'files','c-links':'files','c-due':'done','c-prof':'info'};
 function cpShut(cid){try{return JSON.parse(localStorage.getItem('hub:chap:'+cid)||'{}')||{}}catch(e){return {}}}
 function cpSetShut(cid,o){try{localStorage.setItem('hub:chap:'+cid,JSON.stringify(o))}catch(e){}}
@@ -4048,16 +4068,14 @@ function viewClass(c){
   var nDate=esc(withTime(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),nextA.time));
   var nAttr=' data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'" title="Open '+esc(nextA.title)+'"';
   // side column (wide screens): a square-ish card with the big number
-  NX='<section class="cpcard cpnextc'+(nl?' late':'')+'"'+nAttr+'>'
-   +'<div class="cpcardhead"><span class="cpdot" style="background:'+col.asg.c+'"></span><h3 class="cpcardtitle">'+(nl?'Past due':'Next due')+'</h3>'+(tags?'<span class="cpnexttag">'+esc(tags)+'</span>':'')+'</div>'
-   +'<div class="cpcardbody"><div class="cpnextbig"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
-   +'<div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div>'
-   +(function(){var si=stepInfo(nextA);return si.n?'<div class="cpnextsteps"><span class="cpstepsbar"><i style="width:'+Math.round(si.d/si.n*100)+'%"></i></span>'+si.d+' of '+si.n+' steps</div>':''})()
-   +(after.length?'<div class="cpnextafter">'+after.map(function(a){var cc=cpCountdown(a.due);return '<div class="cpline"><span class="a">'+esc(a.title)+'</span><span class="b">'+cc.t+'</span></div>'}).join('')+'</div>':'')
-   +'</div></section>';
+  NX='<section class="cpcard cpnextc'+(nl?' late':'')+'"'+nAttr+'><div class="cpnextrow2">'
+   +'<div class="cpnextbig"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
+   +'<div class="cpnextside"><div class="cpnextlab2">'+(nl?'Past due':'Next due')+'</div><div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div>'
+   +(function(){var si=stepInfo(nextA);return si.n?'<div class="cpnextsteps"><span class="cpstepsbar"><i style="width:'+Math.round(si.d/si.n*100)+'%"></i></span>'+si.d+'/'+si.n+'</div>':''})()
+   +'</div></div></section>';
   // smaller screens (no side column beside your work): one slim row at the top
   NXS='<section class="cpnexts'+(nl?' late':'')+'"'+nAttr+'><div class="cpnextsnum"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
-   +'<div class="cpnextstext"><div class="cpnextslab">'+(nl?'Past due':'Next due')+(tags?' \u00b7 '+esc(tags):'')+'</div><div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div></div></section>';
+   +'<div class="cpnextstext"><div class="cpnextslab">'+(nl?'Past due':'Next due')+'</div><div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div></div></section>';
  }
  var A='<section class="cpsec cpasg" id="c-assign">'+pencil('asg')
   +cpHead('asg',col.asg,'Assignments',asg.length?asg.length+' open':'',hint,
@@ -4154,7 +4172,7 @@ function viewClass(c){
    var cnt=[fr.length?fr.length+' file'+(fr.length>1?'s':''):'',lr.length?lr.length+' link'+(lr.length>1?'s':''):''].filter(Boolean).join(' · ')||'Empty';
    var m=/^(chapter|ch\.?|week|module|unit)\s*(\d+)\s*[:\-–]?\s*(.*)$/i.exec(g.name);
    // a number only when the chapter's own name has one (Week 3, Chapter 2, Module 1); otherwise a small folder
-   var badgeTxt=g.id&&m?({c:'CH',w:'WK',m:'MOD',u:'UNIT'}[m[1].charAt(0).toLowerCase()])+' '+m[2]:'';
+   var badgeTxt=g.id&&m?({c:'Ch',w:'Wk',m:'Mod',u:'Unit'}[m[1].charAt(0).toLowerCase()])+' '+m[2]:'';
    var nameTxt=g.id&&m&&m[3]?m[3]:g.name;
    F+='<div class="cpch'+(isShut?' shut':'')+'">'
     +'<div class="cpchhead" data-chap="'+c.id+':'+(g.id||'_')+'" role="button" aria-expanded="'+(!isShut)+'">'+CP_ICO.chev
@@ -4298,16 +4316,14 @@ function viewClass(c){
    :'<div class="cpline"><span class="a cpsoft">No project linked</span></div>');
  R+='</aside>';
 
- /* ===== tabs: one part of the class at a time, the at-a-glance cards always beside it ===== */
- var tab=cpTab(c.id),openTasks=c.tasks.filter(function(x){return !x.done}).length;
- var TABS=[['asg','Assignments',asg.length,real.asg.c],['files','Files &amp; links',total,real.files.c],['done','Checklist &amp; done',openTasks,real.mini.c],['info','Class info','',real.third.c]];
- var T='<nav class="cptabs" role="tablist" aria-label="Parts of this class">'+TABS.map(function(t){
-   var on=tab===t[0];
-   return '<button role="tab" aria-selected="'+on+'" class="cptab'+(on?' on':'')+'" data-cptab="'+c.id+':'+t[0]+'" style="--tc:'+t[3]+'">'
-    +'<i class="cptabdot"></i><span>'+t[1]+'</span><b class="cptabn">'+(t[2]===''?'\u00b7':t[2])+'</b></button>';
+ /* ===== section bar: everything stays on the page; a tab glides to its section ===== */
+ var TABS=[['c-assign','Assignments',real.asg.c],['c-files','Files &amp; links',real.files.c],['c-pair','Checklist &amp; done',real.mini.c],['c-info','Class info',real.third.c]];
+ var T='<nav class="cptabs" aria-label="Jump to a part of this class">'+TABS.map(function(t,i){
+   return '<button class="cptab'+(i?'':' on')+'" data-cpjump="'+t[0]+'" style="--tc:'+t[2]+'"><i class="cptabdot"></i><span>'+t[1]+'</span></button>';
   }).join('')+'</nav>';
- var body=tab==='files'?F:tab==='done'?'<div class="cppair">'+K+D+'</div>':tab==='info'?'<div class="cpinfo">'+I+'</div>'+study+G:A;
- return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+body+'</div>'+R+'</div>';
+ return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+A+F
+  +'<div class="cppair" id="c-pair">'+K+D+'</div>'
+  +'<section class="cpinfowrap" id="c-info"><div class="cpinfo">'+I+'</div></section>'+study+G+'</div>'+R+'</div>';
 }
 
 /* ---------- Home (v96 redesign, same style as the class page) ----------
@@ -6620,7 +6636,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -6633,10 +6649,11 @@ document.addEventListener('click',function(e){
  if(d.delclass){if(confirm('Delete this class and everything in it?')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
  if(d.go){go(d.go);return}
  if(d.open){go('class',d.open);return}
- if(d.scroll){view.menu=false;if(view.page==='class'&&CP_TAB_FOR[d.scroll])cpSetTab(view.classId,CP_TAB_FOR[d.scroll]);render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(d.scroll){view.menu=false;render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
  if(d.hrange){view.hrange=d.hrange;render();return}
+ if(d.cpjump){var jt=document.getElementById(d.cpjump);if(jt){cpSpyLock=Date.now();cpMarkTab(d.cpjump);jt.scrollIntoView({behavior:'smooth',block:'start'})}return}
  if(d.cptab){var tci=d.cptab.indexOf(':');cpSetTab(d.cptab.slice(0,tci),d.cptab.slice(tci+1));render();
   var bar=document.querySelector('.cptabs');if(bar&&bar.getBoundingClientRect().top<0)bar.scrollIntoView({block:'start'}); // keep the bar in view when switching
   return}
