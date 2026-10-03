@@ -1464,7 +1464,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v103';
+var BUILD='v104';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -5282,7 +5282,10 @@ function mkCss(){
   +'#mk .mkask b{display:block;font-size:16px;margin-bottom:6px}'
   +'#mk .mkask p{margin:0 0 6px;font-size:14px;line-height:1.4;color:#C9C3B4;white-space:pre-wrap;word-break:break-word}'
   +'#mk .mkask .mkasksub{color:#EFEAE0}'
-  +'#mk .mkswatch.mkcustom{background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)}';
+  +'#mk .mkrow label.mkswatch.mkcustom{background:conic-gradient(from 20deg,#b98f86,#bfae86,#94a98f,#8ea2ad,#a296b0,#b98f86);border-color:rgba(255,255,255,.22)}'
+  +'#mk .mkswatch.mkcustom i{position:absolute;inset:5px;border-radius:50%;background:#2a2723;display:flex;align-items:center;justify-content:center;color:rgba(239,234,224,.8);font:500 15px/1 system-ui,sans-serif;font-style:normal;pointer-events:none}'
+  +'#mk .mkswatch.mkcustom.on i{inset:6px}'
+  +'@media (max-width:420px){#mk .mkswatch.mkcustom i{inset:4px;font-size:13px}}';
  document.head.appendChild(st);
 }
 function mkStrokesForPage(page){return ((MK.f.marks&&MK.f.marks.strokes)||[]).filter(function(s){return s.page===page})}
@@ -5525,9 +5528,9 @@ function mkDrawLive(n){
    it read as inconsistent rather than natural on a real iPad, so the pen is always the same
    thickness now, however hard you press, matching the highlighter's own flat, predictable feel. */
 function mkPaintStroke(ctx,s,scale){
+ if(s.tool==='hi'){mkPaintHighlight(ctx,s,scale);return}
  ctx.save();
- if(s.tool==='hi'){ctx.globalAlpha=.38;ctx.globalCompositeOperation='multiply';ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='butt';ctx.lineJoin='round'}
- else{ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round'}
+ ctx.globalAlpha=1;ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(1,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
  var pts=s.pts||[];
  ctx.beginPath();
  if(pts.length<=2){
@@ -5543,6 +5546,55 @@ function mkPaintStroke(ctx,s,scale){
   var last=pts[pts.length-1];ctx.lineTo(last[0]*scale,last[1]*scale);
  }
  ctx.stroke();
+ ctx.restore();
+}
+/* the highlighter. A single wide translucent ctx.stroke() showed thin white "scratches" across
+   the band on iPad: where a wobbly hand-drawn line doubles back on itself, Safari's stroker builds
+   a twisted outline whose overlapping parts cancel out, leaving hairline holes. So the band is now
+   built from simple pieces (a filled quad per segment, a dot at each bend) painted SOLID on a
+   scratch canvas, where overlaps can't cancel or darken, then laid onto the page once at
+   highlighter opacity. Same look (flat ends, round bends), no holes. */
+var mkHiCanvas=null;
+function mkHiPolyline(pts,scale){
+ var out=[];
+ if(pts.length<=2){pts.forEach(function(p){out.push([p[0]*scale,p[1]*scale])});return out}
+ out.push([pts[0][0]*scale,pts[0][1]*scale]);
+ var sx=pts[0][0],sy=pts[0][1];
+ for(var i=1;i<pts.length-1;i++){
+  var cx=pts[i][0],cy=pts[i][1],ex=(pts[i][0]+pts[i+1][0])/2,ey=(pts[i][1]+pts[i+1][1])/2;
+  for(var k=1;k<=3;k++){var t=k/3,u=1-t;out.push([(u*u*sx+2*u*t*cx+t*t*ex)*scale,(u*u*sy+2*u*t*cy+t*t*ey)*scale])}
+  sx=ex;sy=ey;
+ }
+ var l=pts[pts.length-1];out.push([l[0]*scale,l[1]*scale]);
+ return out;
+}
+function mkPaintHighlight(ctx,s,scale){
+ var pts=mkHiPolyline(s.pts||[],scale);if(!pts.length)return;
+ var w=Math.max(1,s.width*scale),h=w/2,tf=ctx.getTransform(),cv=ctx.canvas;
+ // device-pixel box around the stroke, so only that patch is cleared and copied
+ var minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+ pts.forEach(function(p){if(p[0]<minX)minX=p[0];if(p[0]>maxX)maxX=p[0];if(p[1]<minY)minY=p[1];if(p[1]>maxY)maxY=p[1]});
+ var bx=Math.max(0,Math.floor(tf.a*(minX-h)+tf.e-2)),by=Math.max(0,Math.floor(tf.d*(minY-h)+tf.f-2));
+ var bx2=Math.min(cv.width,Math.ceil(tf.a*(maxX+h)+tf.e+2)),by2=Math.min(cv.height,Math.ceil(tf.d*(maxY+h)+tf.f+2));
+ if(bx2<=bx||by2<=by)return;
+ if(!mkHiCanvas)mkHiCanvas=document.createElement('canvas');
+ var off=mkHiCanvas;
+ if(off.width<cv.width||off.height<cv.height){off.width=Math.max(off.width,cv.width);off.height=Math.max(off.height,cv.height)}
+ var o=off.getContext('2d');
+ o.setTransform(1,0,0,1,0,0);o.clearRect(bx,by,bx2-bx,by2-by);
+ o.setTransform(tf);o.fillStyle=s.color;
+ var keep=[pts[0]];
+ for(var i=1;i<pts.length;i++){var q=keep[keep.length-1];if(Math.abs(pts[i][0]-q[0])+Math.abs(pts[i][1]-q[1])>.01)keep.push(pts[i])}
+ if(keep.length===1){o.fillRect(keep[0][0]-h*.15,keep[0][1]-h,h*.3,w)}
+ for(var j=1;j<keep.length;j++){
+  var a=keep[j-1],b=keep[j],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),nx=-dy/len*h,ny=dx/len*h;
+  o.beginPath();o.moveTo(a[0]+nx,a[1]+ny);o.lineTo(b[0]+nx,b[1]+ny);o.lineTo(b[0]-nx,b[1]-ny);o.lineTo(a[0]-nx,a[1]-ny);o.closePath();o.fill();
+  if(j<keep.length-1){o.beginPath();o.arc(b[0],b[1],h,0,Math.PI*2);o.fill()}
+ }
+ ctx.save();
+ ctx.setTransform(1,0,0,1,0,0);
+ ctx.globalAlpha=.38;ctx.globalCompositeOperation='multiply';
+ ctx.drawImage(off,bx,by,bx2-bx,by2-by,bx,by,bx2-bx,by2-by);
  ctx.restore();
 }
 function mkAnnoPoint(anno,clientX,clientY,page){
@@ -6351,7 +6403,7 @@ function mkToolbarHtml(){
   +'</div>'
   +(isEr?'':'<div class="mkrow">'
     +MK_COLORS[MK.tool].map(function(cc){return '<button class="mkswatch'+(MK.color===cc?' on':'')+'" style="background:'+cc+'" data-mk="color:'+cc+'" aria-label="Colour"></button>'}).join('')
-    +'<label class="mkswatch mkcustom" title="Choose any colour"><input type="color" data-mkcustom="1" value="'+MK.color+'"></label>'
+    +(function(){var own=MK_COLORS[MK.tool].indexOf(MK.color)<0;return '<label class="mkswatch mkcustom'+(own?' on':'')+'" title="Choose any colour"><i'+(own?' style="background:'+MK.color+'"':'')+'>'+(own?'':'+')+'</i><input type="color" data-mkcustom="1" value="'+MK.color+'"></label>'})()
     +'</div>');
 }
 function mkColorInput(e){
