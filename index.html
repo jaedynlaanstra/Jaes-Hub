@@ -1480,7 +1480,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v109';
+var BUILD='v110';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3406,6 +3406,39 @@ async function listCloudNames(bucket,uid){
  }
  return names;
 }
+/* ---- markup is MERGED between devices, never replaced: every line and note has its own id, so
+   two copies are combined (the newer copy wins for anything both have), and anything you erased or
+   deleted is remembered by id in marks.deleted so it doesn't come back. Before, the newest copy
+   replaced the other one whole, so markup made on one device could wipe out notes from another. */
+function mkMergeMarks(a,b){
+ if(!a)return b;if(!b)return a;
+ var nw=(a.savedAt||'')>=(b.savedAt||'')?a:b,old=nw===a?b:a,del={};
+ [old.deleted,nw.deleted].forEach(function(m){Object.keys(m||{}).forEach(function(k){if(!del[k]||m[k]>del[k])del[k]=m[k]})});
+ var join=function(key){
+  var seen={},out=[];
+  (nw[key]||[]).forEach(function(x){if(x&&x.id&&!del[x.id]&&!seen[x.id]){seen[x.id]=1;out.push(x)}});
+  (old[key]||[]).forEach(function(x){if(x&&x.id&&!del[x.id]&&!seen[x.id]){seen[x.id]=1;out.push(x)}});
+  return out;
+ };
+ var out=Object.assign({},old,nw);
+ out.strokes=join('strokes');out.notes=join('notes');out.deleted=del;
+ return out;
+}
+function mkMarksSig(m){return m?((m.strokes||[]).map(function(x){return x.id}).sort().join(',')+'|'+(m.notes||[]).map(function(x){return x.id+':'+(x.text||'').length}).sort().join(',')):''}
+/* local safety net: the last 10 different versions of each PDF's markup are kept on this device
+   (the PDF's Versions button lists them), saved whenever the PDF opens and before any copy from
+   another device is merged in */
+async function mkHistAdd(f,why){
+ if(!f||!f.marks||!((f.marks.strokes||[]).length||(f.marks.notes||[]).length))return;
+ try{
+  await idbReady;var key='mkhist:'+f.id,list=(await idbDo('readonly',function(st){return st.get(key)}))||[];
+  var sig=mkMarksSig(f.marks);if(list.length&&list[0].sig===sig)return;
+  list.unshift({at:new Date().toISOString(),why:why,sig:sig,marks:JSON.parse(JSON.stringify(f.marks))});
+  list=list.slice(0,10);
+  await idbDo('readwrite',function(st){return st.put(list,key)});
+ }catch(e){}
+}
+async function mkHistGet(f){try{await idbReady;return (await idbDo('readonly',function(st){return st.get('mkhist:'+f.id)}))||[]}catch(e){return []}}
 async function syncFiles(){
  var bucket=sb.storage.from('hub-files'),uid=sbUser.id,dirty={},remirror={},errs=0,moved=0,limitName='';
  var names=await listCloudNames(bucket,uid);
@@ -3421,23 +3454,27 @@ async function syncFiles(){
        ours. (Before: a device that had restarted forgot it had already uploaded, and pushed its own
        older markup over the newer one from your other device, then downloaded its old copy back.) */
     var metaMarksAt=(fmeta[f.id]&&fmeta[f.id].marksAt)||'',localAt=(f.marks&&f.marks.savedAt)||'';
-    if(f.kind==='pdf'&&localAt&&f.marksSyncedAt!==localAt&&!(metaMarksAt>localAt)){
-     var upm=await withTimeout(bucket.upload(path+'.marks.json',new Blob([JSON.stringify(f.marks)],{type:'application/json'}),{upsert:true,contentType:'application/json'}),60000,{error:{message:'timeout'}});
-     if(!upm||upm.error)throw (upm&&upm.error)||new Error('marks upload failed');
-     f.marksSyncedAt=localAt;dirty[cid]=1;moved++;
-     if(metaMarksAt!==localAt)remirror[cid]=1; // make sure the list points at this copy
-    }
-    if(f.kind==='pdf'&&metaMarksAt>localAt&&names[f.id+'.marks.json']){
-     var dlm=await withTimeout(bucket.download(path+'.marks.json'),60000,null);
-     if(dlm&&!dlm.error&&dlm.data){
-      try{
-       var got=JSON.parse(await dlm.data.text());
-       if(got&&((got.savedAt||'')>localAt)){
-        f.marks=got;f.marksSyncedAt=got.savedAt;dirty[cid]=1;moved++;
-        if(MK&&MK.f===f&&!MK.drawing&&!MK.erasing){mkMarks();Object.keys(MK.pageInfo).forEach(function(n){mkDrawAnnoForPage(+n)});mkRerenderChrome()} // open right now: show it
-       }
-      }catch(e){}
+    var unsent=f.kind==='pdf'&&!!localAt&&f.marksSyncedAt!==localAt,behind=f.kind==='pdf'&&metaMarksAt>localAt;
+    if(unsent||behind){
+     // fetch the cloud copy first (if there is one) and merge: nothing from either device is lost
+     var cloudM=null;
+     if(names[f.id+'.marks.json']){
+      var dlm=await withTimeout(bucket.download(path+'.marks.json'),60000,{error:{message:'timeout'}});
+      if(!dlm||dlm.error){if(behind||unsent)throw (dlm&&dlm.error)||new Error('marks download failed')}
+      else{try{cloudM=JSON.parse(await dlm.data.text())}catch(e){cloudM=null}}
      }
+     var merged=mkMergeMarks(f.marks,cloudM),mineSig=mkMarksSig(f.marks);
+     if(cloudM&&mkMarksSig(merged)!==mineSig)await mkHistAdd(f,'before merging markup from your other device');
+     if(unsent||(cloudM&&mkMarksSig(merged)!==mkMarksSig(cloudM))){
+      // we hold something the cloud doesn't: upload the merged copy as the newest version
+      merged.savedAt=new Date().toISOString();
+      var upm=await withTimeout(bucket.upload(path+'.marks.json',new Blob([JSON.stringify(merged)],{type:'application/json'}),{upsert:true,contentType:'application/json'}),60000,{error:{message:'timeout'}});
+      if(!upm||upm.error)throw (upm&&upm.error)||new Error('marks upload failed');
+      remirror[cid]=1;
+     }
+     var changedHere=mkMarksSig(merged)!==mineSig;
+     f.marks=merged;f.marksSyncedAt=merged.savedAt;dirty[cid]=1;moved++;
+     if(changedHere&&MK&&MK.f===f&&!MK.drawing&&!MK.erasing){MK.knownIds=mkIdsOf(merged);Object.keys(MK.pageInfo).forEach(function(n){mkDrawAnnoForPage(+n)});mkRerenderChrome()} // open right now: show it
     }
     var needUpload=(!f.cloud&&(f.data||f.kind==='text'))||(f.cloud&&!exists&&hasContent(f));
     if(needUpload){
@@ -5409,6 +5446,10 @@ function mkCss(){
   +'#mk .mkask b{display:block;font-size:16px;margin-bottom:6px}'
   +'#mk .mkask p{margin:0 0 6px;font-size:14px;line-height:1.4;color:#C9C3B4;white-space:pre-wrap;word-break:break-word}'
   +'#mk .mkask .mkasksub{color:#EFEAE0}'
+  +'#mk .mksave{height:34px;padding:0 13px;border-radius:9px;border:none;background:#EFEAE0;color:#1c1a17;font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;flex-shrink:0;white-space:nowrap}'
+  +'#mk .mkverlist{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow:auto;margin:10px 0 4px}'
+  +'#mk .mkverrow{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border-radius:10px;border:none;background:rgba(255,255,255,.08);color:#EFEAE0;font:inherit;cursor:pointer}'
+  +'#mk .mkverrow b{font-size:14px;margin:0}#mk .mkverrow span{font-size:12.5px;color:#C9C3B4}'
   +'#mk .mkrow label.mkswatch.mkcustom{background:conic-gradient(from 20deg,#b98f86,#bfae86,#94a98f,#8ea2ad,#a296b0,#b98f86);border-color:rgba(255,255,255,.22)}'
   +'#mk .mkswatch.mkcustom i{position:absolute;inset:5px;border-radius:50%;background:#2a2723;display:flex;align-items:center;justify-content:center;color:rgba(239,234,224,.8);font:500 15px/1 system-ui,sans-serif;font-style:normal;pointer-events:none}'
   +'#mk .mkswatch.mkcustom.on i{inset:6px}'
@@ -5454,6 +5495,7 @@ async function mkOpen(cid,i){
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},zoomGen:0,curPage:1,zoom:1,mode:'read',
      tool:'pen',color:MK_COLORS.pen[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},toolSize:mkLoadSizes(),size:'s',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false,notesOpen:false};
  MK.size=MK.toolSize.pen;
+ MK.knownIds=mkIdsOf(f.marks);mkHistAdd(f,'when you opened it');
  mkCss();
  mkLockViewportZoom();
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
@@ -5846,6 +5888,9 @@ function mkBeginStroke(anno,page,clientX,clientY,pressure){
  }
  var sz=MK_SIZES[MK.tool][MK.size],pr=(pressure===undefined||!pressure)?.5:pressure;
  MK.drawing={id:uid(),tool:MK.tool,color:MK.color,width:sz,page:page,pts:[[p[0],p[1],pr]],holdPt:[p[0],p[1]],holdAt:Date.now()};
+ // with a mouse or trackpad the highlighter only goes straight across: it stays level at the
+ // height you started, however much the mouse wanders up and down
+ if(MK.tool==='hi'&&MK.ptrMouse){var md=MK.drawing;md.straight=true;md.forceLevel=true;md.levelY=p[1];md.pts0=[md.pts[0]]}
  MK.drawingAnno=anno;
  mkDrawLive(page);
 }
@@ -5864,7 +5909,7 @@ var MK_STREAMLINE={pen:.78,touch:.6};
 var MK_LEVEL_DEG=25;
 function mkStraightPts(d,end){
  var a=d.pts0[0],dx=end[0]-a[0],dy=end[1]-a[1];
- if(Math.abs(dy)<=Math.tan(MK_LEVEL_DEG*Math.PI/180)*Math.abs(dx))return [[a[0],d.levelY,.5],[end[0],d.levelY,.5]];
+ if(d.forceLevel||Math.abs(dy)<=Math.tan(MK_LEVEL_DEG*Math.PI/180)*Math.abs(dx))return [[a[0],d.levelY,.5],[end[0],d.levelY,.5]];
  return [[a[0],a[1],.5],[end[0],end[1],.5]];
 }
 function mkHoldSnap(){
@@ -5947,7 +5992,7 @@ function mkFinishStroke(){
   var rl=s.rawLast,lp=s.pts[s.pts.length-1];
   if(rl&&(rl[0]!==lp[0]||rl[1]!==lp[1]))s.pts.push(rl);
  }
- ['rawLast','pred','straight','pts0','levelY','holdPt','holdAt'].forEach(function(k){delete s[k]});
+ ['rawLast','pred','straight','forceLevel','pts0','levelY','holdPt','holdAt'].forEach(function(k){delete s[k]});
  mkDrawLive(s.page);
  mkAddStroke(s);
 }
@@ -6151,6 +6196,7 @@ function mkCommitPending(useX,useY){
 function mkFingers(list){var out=[];for(var i=0;i<list.length;i++)if(list[i].touchType!=='stylus')out.push(list[i]);return out}
 function mkTouchStart(e){
  if(!MK)return;
+ MK.ptrMouse=false;
  if(e.target&&e.target.closest&&e.target.closest('.mknoteed'))return; // typing a note: leave touches to the sheet
  // Safari fires a duplicate TouchEvent for every Apple Pencil contact alongside the PointerEvent we
  // actually draw with -- if we merely ignore it without suppressing it too, the browser is left free
@@ -6267,6 +6313,7 @@ function mkPointerDown(e){
  if(!MK||MK.mode!=='edit'||e.pointerType==='touch')return;
  var anno=e.target.closest&&e.target.closest('.mkanno');if(!anno)return;
  e.preventDefault();
+ MK.ptrMouse=e.pointerType==='mouse';
  if(e.pointerType==='pen'){
   MK.activePointerType='pen';
   if(!MK.pencilSeen)MK.pencilSeen=true;
@@ -6355,10 +6402,73 @@ function mkCommit(){
 }
 document.addEventListener('visibilitychange',function(){if(document.hidden&&mkSavePending)mkCommitNow()});
 window.addEventListener('pagehide',function(){if(mkSavePending)mkCommitNow()});
+function mkIdsOf(m){var o={};((m&&m.strokes)||[]).concat((m&&m.notes)||[]).forEach(function(x){if(x&&x.id)o[x.id]=1});return o}
+/* Save: saves this PDF's markup now and waits until your account has the copy, so you can be sure.
+   (It also saves on its own a moment after you stop writing; this is the "I'm done, make sure" button.) */
+var MK_ICO_HIST=mkIco('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/><path d="M12 7v5l3 2"/>',18);
+function mkSaveLabel(){
+ var f=MK&&MK.f;if(!f)return 'Save';
+ if(MK.saveState==='saving')return 'Saving…';
+ if(MK.saveState==='saved')return 'Saved ✓';
+ if(MK.saveState==='local')return 'Saved on this device';
+ if(MK.saveState==='fail')return 'Not saved yet, try again';
+ return 'Save';
+}
+function mkSetSave(st){if(!MK)return;MK.saveState=st;var b=document.getElementById('mksavebtn');if(b)b.textContent=mkSaveLabel()}
+async function mkSaveNow(){
+ if(!MK)return;var f=MK.f;
+ if(MK.drawing||MK.erasing)return;
+ mkSetSave('saving');
+ if(mkSavePending)mkCommitNow();
+ else{mkSavePending={cid:MK.cid,f:f};mkCommitNow()}
+ if(!sbUser){mkSetSave('local');setTimeout(function(){if(MK&&MK.saveState==='local')mkSetSave('')},4000);return}
+ cloudSync(true);
+ var t0=Date.now();
+ (function wait(){
+  if(!MK||MK.f!==f)return;
+  if(f.marks&&f.marksSyncedAt===f.marks.savedAt&&!driveSyncing){mkSetSave('saved');setTimeout(function(){if(MK&&MK.saveState==='saved')mkSetSave('')},5000);return}
+  if(Date.now()-t0>45000){mkSetSave('fail');return}
+  if(!driveSyncing&&Date.now()-t0>3000)cloudSync(true); // a sync that was already running finished first: go again
+  setTimeout(wait,700);
+ })();
+}
+async function mkShowVersions(){
+ var list=await mkHistGet(MK.f),old=document.getElementById('mkver');if(old)old.remove();
+ var el=document.createElement('div');el.id='mkver';el.className='mknoteed';
+ var rows=list.length?list.map(function(v,i){
+  var n=(v.marks.strokes||[]).length,nn=(v.marks.notes||[]).length,d=new Date(v.at);
+  return '<button class="mkverrow" data-mk="verrestore:'+i+'"><b>'+d.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+', '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'</b>'
+   +'<span>'+n+' line'+(n===1?'':'s')+(nn?', '+nn+' note'+(nn===1?'':'s'):'')+' · '+esc(v.why||'')+'</span></button>';
+ }).join(''):'<p>No earlier versions on this device yet. From now on, a copy is kept each time you open this PDF and before markup from your other device is merged in.</p>';
+ el.innerHTML='<div class="mknoteedcard mkask"><b>Earlier versions (this device)</b><p class="mkasksub">Tap one to bring back its lines and notes. Nothing you have now is removed.</p>'
+  +'<div class="mkverlist">'+rows+'</div><div class="mknoteedbtns"><button data-mk="verclose">Close</button></div></div>';
+ document.getElementById('mk').appendChild(el);
+}
+async function mkRestoreVersion(i){
+ var list=await mkHistGet(MK.f),v=list[i];if(!v)return;
+ await mkHistAdd(MK.f,'before restoring an earlier version');
+ var m=mkMarks(),back=v.marks,have=mkIdsOf(m);
+ // restoring ADDS the old lines and notes back (and un-deletes them); it never removes anything
+ m.deleted=m.deleted||{};
+ (back.strokes||[]).forEach(function(x){if(!have[x.id]){m.strokes.push(x);delete m.deleted[x.id]}});
+ m.notes=m.notes||[];(back.notes||[]).forEach(function(x){if(!have[x.id]){m.notes.push(x);delete m.deleted[x.id]}});
+ MK.knownIds=mkIdsOf(m);
+ Object.keys(MK.pageInfo).forEach(function(n){mkDrawAnnoForPage(+n)});
+ var vb=document.getElementById('mkver');if(vb)vb.remove();
+ mkRerenderChrome();mkCommit();mkSaveNow();
+}
 function mkCommitNow(){
  clearTimeout(mkCommitTimer);var p=mkSavePending;mkSavePending=null;
  if(!p||!p.f.marks)return;
- p.f.marks.savedAt=new Date().toISOString();
+ var now=new Date().toISOString(),m=p.f.marks;
+ // lines/notes that were here and now aren't (erased, undone, deleted) are remembered as deleted,
+ // so merging with another device's copy can't bring them back
+ if(MK&&MK.f===p.f&&MK.knownIds){
+  var cur=mkIdsOf(m);m.deleted=m.deleted||{};
+  Object.keys(MK.knownIds).forEach(function(id){if(!cur[id])m.deleted[id]=now});
+  MK.knownIds=cur;
+ }
+ m.savedAt=now;
  mirrorFiles(p.cid);saveFiles(p.cid,true);save();
  if(sbUser)cloudSync(true);
 }
@@ -6672,6 +6782,8 @@ function mkTopHtml(){
   +'<button data-mk="zoomin" aria-label="Zoom in">+</button></div>'
   +'<div class="mkmode"><button class="'+(MK.mode==='read'?'on':'')+'" data-mk="mode:read">Reading</button>'
   +'<button class="'+(MK.mode==='edit'?'on':'')+'" data-mk="mode:edit">Markup</button></div>'
+  +(MK.mode==='edit'?'<button class="mksave" data-mk="save" id="mksavebtn">'+mkSaveLabel()+'</button>':'')
+  +'<button class="mkicon" data-mk="versions" aria-label="Earlier versions of your markup" title="Earlier versions">'+MK_ICO_HIST+'</button>'
   +'<button class="mkicon'+(MK.notesOpen?' on':'')+'" data-mk="notes" aria-label="Show notes" title="Notes">'+MK_ICO_NOTE+(mkNoteCount()?'<span class="mkbadge">'+mkNoteCount()+'</span>':'')+'</button>'
   +'<button class="mkicon" data-mk="openext" aria-label="Open in your browser">'+MK_ICO.ext+'</button>'
   +'<button class="mkicon" data-mk="dark" aria-label="Switch dark or light">'+(MK.dark?MK_ICO.sun:MK_ICO.moon)+'</button>';
@@ -6743,6 +6855,10 @@ function mkClick(e){
  if(a==='ftool'){if(MK.tool!==arg)mkPickTool(arg);return} // the floating menu never leaves Markup
  if(a==='size'){MK.size=arg;MK.toolSize[MK.tool]=arg;mkSaveSizes();mkRerenderChrome();return}
  if(a==='color'){MK.color=arg;MK.toolColor[MK.tool]=arg;mkRerenderChrome();return}
+ if(a==='save'){mkSaveNow();return}
+ if(a==='versions'){mkShowVersions();return}
+ if(a==='verrestore'){mkRestoreVersion(+arg);return}
+ if(a==='verclose'){var vb=document.getElementById('mkver');if(vb)vb.remove();return}
  if(a==='undo'){mkUndo();return}
  if(a==='redo'){mkRedo();return}
  if(a==='zoomin'){mkSettleFinish();mkZoomTo(MK.zoom+.1);return} // land any glide first, so quick taps all count
