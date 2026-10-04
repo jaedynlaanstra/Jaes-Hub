@@ -1092,9 +1092,52 @@ a.cpitemname:hover{text-decoration:underline}
 .cphomerail{gap:14px}
 @media(max-width:1199px){
   .cphomesplit .cphomerail{display:contents}
-  #h-next{order:-2}#h-up{order:1}#h-plan{order:2}#h-week{order:3}#h-term{order:4}#h-music{order:5}#h-classes{order:6}.cphomesplit .cpsettings{order:9}
+  #h-next{order:-2}.hpair{order:1}#h-week{order:3}#h-term{order:4}#h-music{order:5}#h-classes{order:6}.cphomesplit .cpsettings{order:9}
 }
 @media(max-width:700px){#h-classes{display:none}}
+/* Home: Today's plan and Coming up, two calm boxes side by side */
+.hpair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
+.hpair>:only-child{grid-column:1/-1}
+.hbox{background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-height:270px;min-width:0}
+.hpair>:only-child.hbox{min-height:0}
+.hboxhead{border-radius:13px 13px 0 0;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 14px 10px;background:#F1EFEA;border-bottom:1px solid var(--line)}
+.hboxt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.hboxt h2{margin:0;font-family:var(--fh,inherit);font-size:16px;font-weight:var(--wh,500);line-height:1.2;color:var(--head,var(--ink))}
+.hsub{align-self:flex-start;background:none;border:none;padding:0;font:inherit;font-size:12.5px;color:var(--ink3);cursor:pointer;min-height:0!important}
+.hsel{position:relative;display:inline-flex;align-self:flex-start}
+.hsel select{appearance:none;-webkit-appearance:none;background:none;border:none;padding:0 14px 0 0;font:inherit;font-size:12.5px;color:var(--ink3);cursor:pointer}
+.hsel::after{content:'';position:absolute;right:2px;top:50%;width:5px;height:5px;border-right:1.5px solid var(--ink3);border-bottom:1.5px solid var(--ink3);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.hboxn{flex:none;font-size:12px;font-weight:500;min-width:22px;height:22px;padding:0 7px;border-radius:99px;background:var(--card);color:var(--ink2);display:grid;place-items:center;border:1px solid var(--line)}
+.hboxbody{display:flex;flex-direction:column;padding:4px 14px 10px;flex:1;min-height:0}
+.hrow{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.hrow:last-of-type{border-bottom:none}
+.hrow .tick{margin-top:1px}
+.hrt{min-width:0;flex:1;cursor:pointer}
+.hrtitle{font-size:14px;line-height:1.3;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hrow.done .hrtitle{color:var(--ink3);text-decoration:line-through}
+.hrmeta{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--ink3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrmeta i{width:7px;height:7px;border-radius:50%;flex:none}
+.hrmeta .late{color:#A34A3F}
+.hboxempty{font-size:13px;color:var(--ink3);line-height:1.45;padding:8px 0}
+.hmore.hph{display:none}
+.hmore{margin-top:auto;align-self:flex-start;background:none;border:none;padding:6px 0 0;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.hlight .cphead2{background:#F1EFEA!important;color:var(--head,var(--ink))!important;border-bottom:1px solid var(--line)!important}
+.hlight .cphead2 .cpbtn{background:var(--card)!important;border-color:var(--line2)!important;color:var(--ink)!important}
+@media(max-width:700px){
+  .hpair{gap:10px}
+  .hboxhead{padding:10px 11px 8px}
+  .hboxt h2{font-size:15px}
+  .hboxbody{padding:2px 11px 8px}
+  .hrow{gap:8px;padding:8px 0}
+  .hrow .tick{width:18px;height:18px;min-width:18px}
+  .hrtitle{font-size:13.5px;-webkit-line-clamp:1}
+  .hbox{min-height:min(46vw,180px)}
+  .hstp{display:none}
+  .hrmeta{font-size:11.5px}
+  .hsub,.hsel select{font-size:12px}
+  .hbox .hrow:nth-of-type(n+3){display:none}
+  .hmore.hdesk{display:none}.hmore.hph{display:inline}
+}
 /* class page: FanshaweOnline chip, summary tiles, folding cards */
 .cpfolic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:13px;font-weight:600;flex:none}
 .cpsums{display:grid;grid-template-columns:minmax(0,1.35fr) repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px}
@@ -1569,7 +1612,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v113';
+var BUILD='v114';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4611,39 +4654,27 @@ function viewHome(){
   }).join('')+'</div>';
  }
 
- /* ===== Coming up ===== */
- var nx=null;for(var i=0;i<list.length;i++){if(parseISO(list[i].t.due)>=t){nx=list[i];break}}
- var hint=late.length?'<span style="color:#A34A3F">'+late.length+' past due</span>'+(nx?' · next: '+esc(nx.t.title):'')
-  :(nx?'Next: '+esc(nx.t.title)+' ('+esc(classLabel(nx.c))+')'+(function(){var cd=cpCountdown(nx.t.due);return cd.n===0?' today':cd.n===1?' tomorrow':' in '+cd.t})():(open.length?'Nothing in this stretch':'All caught up'));
- var seg='<div class="cpseg">'+[['today','Today'],['week','This week'],['next','Next week'],['all','All']].map(function(o){
-   var on=rng===o[0];return '<button data-hrange="'+o[0]+'" class="'+(on?'on':'')+'"'+(on?' style="background:'+col.hup.bg+';color:'+col.hup.title+'"':'')+'>'+o[1]+'</button>';
-  }).join('')+'</div>';
- var U='<section class="cpsec cphome" id="h-up">'+cpHead('hup',col.hup,'Coming up',list.length?list.length+' due':'',hint,seg);
- if(!list.length){
-  U+='<div class="cpempty">'+(rng==='today'?'Nothing due today.':rng==='next'?'Nothing due next week yet.':rng==='week'?'Nothing else due this week.':'Nothing coming up. Add assignments from a class page.')+'</div>';
- }else{
-  var nearest=nx;
-  var rows=list.map(function(x){
+ /* ===== Coming up: a compact, roughly square box beside Today's plan ===== */
+ var rngNames={today:'Today',week:'This week',next:'Next week',all:'Everything'};
+ var U='<section class="hbox" id="h-up"><div class="hboxhead"><div class="hboxt"><h2>Coming up</h2>'
+  +'<label class="hsel"><select id="hrangesel" data-hrangesel="1" aria-label="Show">'+Object.keys(rngNames).map(function(k){return '<option value="'+k+'"'+(rng===k?' selected':'')+'>'+rngNames[k]+'</option>'}).join('')+'</select></label></div>'
+  +(list.length?'<span class="hboxn">'+list.length+'</span>':'')+'</div><div class="hboxbody">';
+ if(!list.length)U+='<div class="hboxempty">'+(rng==='today'?'Nothing due today.':rng==='next'?'Nothing due next week yet.':rng==='week'?'Nothing else due this week.':'Nothing coming up.')+'</div>';
+ else{
+  U+=list.slice(0,4).map(function(x){
    var cd=cpCountdown(x.t.due),lt=cd.n!=null&&cd.n<0,p=pal(x.c.color);
-   var cdColor=lt?'#A34A3F':(x===nearest?col.hup.c:'var(--ink2)');
-   return '<div class="cpgrid cprow" data-open="'+x.c.id+'">'
-    +'<span class="c-tick"><button class="tick" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"></button></span>'
-    +'<span class="c-name"><span class="cpnm">'+esc(x.t.title)+'</span>'+stepChip(x.t)+'</span>'
-    +'<span class="c-count" style="color:'+cdColor+'">'+cd.t+'</span>'
-    +'<i class="c-br"></i>'
-    +'<span class="c-due'+(lt?' late':'')+'">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+'</span>'
-    +'<span class="c-cls"><span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span></span>'
-    +'</div>';
-  });
-  U+='<div class="cpbody"><div class="cpgrid cphdr"><span></span><span>What</span><span class="h-count">Countdown</span><span class="h-due">Due</span><span>Class</span></div>'+rows.slice(0,8).join('');
-  if(rows.length>8)U+='<details class="cpmorebox"><summary style="color:'+col.hup.c+'"><span class="cpshow">Show '+(rows.length-8)+' more</span><span class="cphide">Show fewer</span></summary>'+rows.slice(8).join('')+'</details>';
-  U+='</div>';
+   return '<div class="hrow"><button class="tick" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"></button>'
+    +'<div class="hrt" data-open="'+x.c.id+'"><div class="hrtitle">'+esc(x.t.title)+'</div>'
+    +'<div class="hrmeta"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+' · <span'+(lt?' class="late"':'')+'>'+esc(cd.t)+'</span></div></div></div>';
+  }).join('');
+  if(list.length>4)U+='<button class="hmore hdesk" data-go="calendar">+'+(list.length-4)+' more in Calendar</button>';
+  if(list.length>2)U+='<button class="hmore hph" data-go="calendar">+'+(list.length-2)+' more</button>';
  }
- U+='</section>';
+ U+='</div></section>';
 
  /* ===== Your classes ===== */
  var classes=S.classes.filter(function(c){return !isRefClass(c)});
- var C='<section class="cpsec" id="h-classes">'+cpHead('hcls',col.hcls,'Your classes',classes.length?classes.length+'':'',classes.length?'Tap a class to open it':'Add your classes to get started',
+ var C='<section class="cpsec hlight" id="h-classes">'+cpHead('hcls',col.hcls,'Your classes',classes.length?classes.length+'':'',classes.length?'Tap a class to open it':'Add your classes to get started',
    cpBtn(col.hcls,'+ Add class','data-add="class"'));
  if(!classes.length)C+='<div class="cpempty">No classes yet. Add one, or import a class a friend shared with you.</div>';
  else C+='<div class="cpclsgrid">'+classes.map(function(c){
@@ -4667,7 +4698,7 @@ function viewHome(){
  /* ===== side column (moves into the list on narrower screens) ===== */
  var R='<aside class="cprail cphomerail">'+homeNextDue(open,t)+homeTermCard()+homeMusicCard()+'</aside>';
 
- return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+homeWeekStrip()+homeTodayPlan(col)+U+C+G+'</div>'+R+'</div>';
+ return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+homeWeekStrip()+'<div class="hpair">'+homeTodayPlan(col)+U+'</div>'+C+G+'</div>'+R+'</div>';
 }
 // the week across the top of Home: every due date sitting on its day, in its class colour
 function homeWeekStrip(){
@@ -4687,7 +4718,8 @@ function homeWeekStrip(){
 function homeNextDue(open,t){
  var srt=open.slice().sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0});
  var x=srt[0];if(!x)return '';
- var cd=cpCountdown(x.t.due),late=cd.n<0,hx=late?'#9c4a41':palHex(x.c.color),fg=late||contrast(hx,'#ffffff')>=2.6?'#fff':'#221d18';
+ // Home only: the menu (navigation bar) colour with white text; late work stays a soft red
+ var cd=cpCountdown(x.t.due),late=cd.n<0,hx=late?'#9c4a41':chromeHex('sideBg'),fg=contrast(hx,'#ffffff')>=1.5?'#fff':'#221d18';
  var big=cd.n===0?'Today':String(Math.abs(cd.n)),unit=cd.n===0?'':(Math.abs(cd.n)===1?'day':'days')+(late?' late':' left');
  var si=stepInfo(x.t);
  return '<section class="hnext" id="h-next" style="background:'+hx+';color:'+fg+'" '+(x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"')+'>'
@@ -4966,13 +4998,23 @@ function planLine(x,day){
 }
 function homeTodayPlan(col){
  var all=allTasks().filter(function(x){return !isRefClass(x.c)}),td=iso(today());
- if(!all.some(function(x){return x.t.plan&&x.t.plan.length}))return '';
  var list=all.filter(function(x){return planDay(x.t)===td});
  var open=list.filter(function(x){return !x.t.done}).length;
- var h='<section class="cpsec" id="h-plan">'+cpHead('hup',col.hup,'Today’s plan',list.length?(open?open+' to do':'all done'):'',list.length?'What you planned to work on today':'Nothing planned for today',
-   '<button class="cpbtn2" data-go="plan">Plan my week</button>');
- h+=list.length?'<div class="cplines">'+list.map(function(x){return planLine(x,td)}).join('')+'</div>':'<div class="cpempty">Open Plan my week to pick what you will work on today.</div>';
- return h+'</section>';
+ var h='<section class="hbox" id="h-plan"><div class="hboxhead"><div class="hboxt"><h2>Today’s plan</h2><button class="hsub" data-go="plan">Plan my week ›</button></div>'
+  +(list.length?'<span class="hboxn">'+(open||'✓')+'</span>':'')+'</div><div class="hboxbody">';
+ if(!list.length)h+='<div class="hboxempty">Nothing planned for today. Open Plan my week to pick what you’ll work on.</div>';
+ else{
+  h+=list.slice(0,4).map(function(x){
+   var p=pal(x.c.color),cd=x.t.due?cpCountdown(x.t.due):null,si=stepInfo(x.t);
+   var hint=cd&&!x.t.done?(cd.n<0?cd.t:cd.n===0?'due today':cd.n===1?'due tomorrow':''):'';
+   return '<div class="hrow'+(x.t.done?' done':'')+'"><button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"'+(x.t.done?' style="background:'+p.bar+'"':'')+'></button>'
+    +'<div class="hrt" data-planpick="'+planKey(x)+'"><div class="hrtitle">'+esc(x.t.title)+'</div>'
+    +'<div class="hrmeta"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+(si.n?'<span class="hstp"> · '+si.d+'/'+si.n+' steps</span>':'')+(hint?' · <span class="late">'+esc(hint)+'</span>':'')+'</div></div></div>';
+  }).join('');
+  if(list.length>4)h+='<button class="hmore hdesk" data-go="plan">+'+(list.length-4)+' more</button>';
+  if(list.length>2)h+='<button class="hmore hph" data-go="plan">+'+(list.length-2)+' more</button>';
+ }
+ return h+'</div></section>';
 }
 
 function coverControls(id,owner){
@@ -7570,6 +7612,7 @@ document.addEventListener('click',function(e){
 document.addEventListener('change',function(e){
  var t=e.target;
  if(t.dataset&&t.dataset.tpset){save();return}
+ if(t.dataset&&t.dataset.hrangesel){view.hrange=t.value;render();return}
  if(t.dataset&&t.dataset.termset){S.termDates=Object.assign({},S.termDates||{});S.termDates[t.dataset.termset]=t.value;save();if(S.termDates.start&&S.termDates.end&&!view.termEdit)render();return} // typed live above; saved (and synced) once you leave the box
  if(t.dataset&&t.dataset.tpfrom){
   var fc=classById(t.dataset.tpfrom),fa=fc&&(fc.assignments||[]).filter(function(a){return a.id===t.value})[0];
