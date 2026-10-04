@@ -648,7 +648,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .mbar{display:none}
 .rowmore{display:none}
 .sheetlist{display:flex;flex-direction:column;gap:8px}
-.sheetlist button{width:100%;min-height:46px;font-size:15px;text-align:left;padding:0 16px}
+.sheetlist button,.sheetlist .sheetbtn{width:100%;min-height:46px;font-size:15px;text-align:left;padding:0 16px}
+.sheetlist .sheetbtn{display:flex;align-items:center;border:1px solid var(--line2);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;box-sizing:border-box}
 .sheetlist .danger{color:#A34A3F}
 .sheetmove{display:flex;align-items:center;gap:12px;border:1px solid var(--line2);border-radius:8px;padding:0 6px 0 16px;min-height:46px;font-size:15px}
 .sheetmove select{flex:1;border:none;background:transparent;font-size:15px}
@@ -745,7 +746,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cpseg{display:flex;background:var(--card);border-radius:8px;padding:2px;gap:2px}
 .cpseg button{border:none;background:transparent;padding:5px 11px;border-radius:6px;font-size:13px;color:var(--ink2);min-height:0}
 .cpseg button.on{font-weight:500}
-.cpsearch{width:210px;flex:none;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:0 10px;color:var(--ink3);cursor:text}
+.cpsearch{width:210px;flex:1 1 170px;max-width:300px;min-width:0;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:0 10px;color:var(--ink3);cursor:text}
 .cpsearch svg{width:14px;height:14px;flex:none}
 .cpsearch input{border:none;background:transparent;padding:7px 0;font-size:13px;width:100%;outline:none;color:var(--ink);min-width:0}
 .cpempty{padding:18px 18px;font-size:13.5px;color:var(--ink3);line-height:1.5}
@@ -1307,6 +1308,15 @@ a.cpitemname:hover{text-decoration:underline}
 @media(max-width:1000px){.hupgrid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:700px){.hup2>summary{padding:14px 14px}.hup2>summary h2{font-size:22px}.hupgrid{padding:0 10px 10px;gap:10px}.hus .hr2 .tt{display:block;-webkit-line-clamp:unset;overflow:visible}}
 @media(max-width:1199px){.p3 #h-plan{order:2}.p3 #h-res{order:7}.p3 #h-up{order:1}}
+/* Files & links header: title + Add on line one, description + search on line two */
+.cpfhead{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;row-gap:6px}
+.cpfhead .cptitlerow{min-width:0}
+.cpfhead>.cpbtn{justify-self:end}
+.cpfhead .cphint{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cpfhead .cpsearch{width:170px;max-width:none;flex:none;justify-self:end}
+/* side by side, the two headers are the same height so the cards line up */
+@media(min-width:1000px){.cpduo>.cpsec>.cphead{min-height:112px;box-sizing:border-box;align-content:center}}
+@media(max-width:700px){.cpfhead .cpsearch{width:150px}.cpfhead .cpsearch input{font-size:16px}}
 /* sub-steps */
 .cpsteps{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;margin-left:8px;font-weight:400}
 .cpstepsbar{display:inline-block;width:34px;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
@@ -1757,7 +1767,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v123';
+var BUILD='v125';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4573,12 +4583,15 @@ function viewClass(c){
  }
  var total=files.length+(c.links||[]).length;
  var dups=cpDupLinks(c),dupBtn=dups.length?'<button class="cptext cpdupbtn" data-dedupe="'+c.id+'">Remove '+dups.length+' duplicate link'+(dups.length>1?'s':'')+'</button>':'';
+ // v125: the same height as the Assignments header: title + "+ Add" on the first line, the description
+ // and the search on the second (Upload, Add a link and Read PDFs are inside "+ Add")
  var F='<section class="cpsec cpfiles" id="c-files"><span id="c-links" class="cpanchor"></span>'+pencil('files')
-  +cpHead('files',col.files,'Files &amp; links',total?total+' item'+(total>1?'s':''):'',(c.sections||[]).length?'Grouped by chapter, files and links together':'Slides, readings and links for this class',
-    '<label class="cpsearch" style="border-color:'+col.files.line+'">'+CP_ICO.search+'<input type="text" id="filesearch" placeholder="Search names, links and PDFs" value="'+esc(view.fileQ||'')+'"></label>'
-    +'<button class="cpbtn2 cpreadpdfs" style="border-color:'+col.files.line+'" data-index="'+c.id+'" title="Lets search look inside your PDFs"'+(view.indexing?' disabled':'')+'>'+(view.indexing?'<span class="spin"></span>':'Read PDFs')+'</button>'
-    +cpBtn2(col.files,'+ Link','data-add="link" data-c="'+c.id+'"')
-    +'<label class="cpbtn" style="background:'+col.files.c+'"><input type="file" multiple data-file="'+c.id+'" style="display:none">+ Upload</label>');
+  +'<div class="cphead cphead2 cpfhead" style="background:'+col.files.c+';color:var(--cp-files-on,#fff);border-bottom-color:transparent">'
+  +'<div class="cptitlerow"><h2 class="cptitle" style="color:inherit;font-weight:var(--cp-files-w,500)">Files &amp; links</h2>'+(total?'<span class="cppill" style="color:'+col.files.c+'">'+total+' item'+(total>1?'s':'')+'</span>':'')+'</div>'
+  +'<button class="cpbtn" data-sheet="fadd" data-i="0" data-c="'+c.id+'">'+(view.indexing?'<span class="spin"></span>':'+ Add')+'</button>'
+  +'<div class="cphint">'+((c.sections||[]).length?'Files and links by chapter':'Slides, readings and links')+'</div>'
+  +'<label class="cpsearch" style="border-color:'+col.files.line+'">'+CP_ICO.search+'<input type="text" id="filesearch" placeholder="Search files" value="'+esc(view.fileQ||'')+'"></label>'
+  +'</div>';
  F+='<div class="cpfbody">';
  if(q){
   var fm=fIdx.filter(function(x){return x.f.name.toLowerCase().indexOf(q)>-1||(x.f.text&&x.f.text.toLowerCase().indexOf(q)>-1)});
@@ -4608,7 +4621,7 @@ function viewClass(c){
    var nameTxt=g.id&&m&&m[3]?m[3]:g.name;
    F+='<div class="cpch'+(isShut?' shut':'')+'">'
     +'<div class="cpchhead" data-chap="'+c.id+':'+(g.id||'_')+'" role="button" aria-expanded="'+(!isShut)+'">'+CP_ICO.chev
-    +(g.id?'<span class="cpbadge'+(badgeTxt?'':' cpbadgeico')+'" data-chapbadge="'+g.id+'" style="background:'+(g.color||col.files.c)+'">'+(badgeTxt?esc(badgeTxt):CP_FOLDER)+'</span>':'<span class="cpbadge" style="background:var(--ink3)">—</span>')
+    +(g.id?'<span class="cpbadge'+(badgeTxt?'':' cpbadgeico')+'" data-chapbadge="'+g.id+'" style="background:'+(g.color||col.files.c)+(g.color&&contrast(g.color,'#ffffff')<2.6?';color:#2a2620':'')+'">'+(badgeTxt?esc(badgeTxt):CP_FOLDER)+'</span>':'<span class="cpbadge" style="background:var(--ink3)">—</span>')
     +'<span class="cpchname">'+esc(nameTxt)+'</span><span class="cpchcount">'+cnt+'</span>'
     +(g.id?'<span class="cpchacts"><button class="cpdots cpchdots" data-sheet="chap" data-i="'+(c.sections||[]).indexOf((c.sections||[]).filter(function(x){return x.id===g.id})[0])+'" data-c="'+c.id+'" aria-label="Rename, move or remove this chapter">'+CP_ICO.more+'</button></span>':'')
     +'</div>';
@@ -5444,6 +5457,12 @@ function modalHtml(){
    +(pi.kind==='assign'&&pi.t.steps&&pi.t.steps.length?'<p class="lab" style="margin:14px 0 6px">STEPS</p>'+stepList(pi.c,pi.t):'');
  }else if(m.kind==='sheet'){
   var sc=classById(m.classId);
+  if(m.what==='fadd'){
+   h='<h3>Add to Files &amp; links</h3><div class="sheetlist">'
+    +'<label class="sheetbtn"><input type="file" multiple data-file="'+sc.id+'" data-closesheet="1" style="display:none">Upload files</label>'
+    +'<button data-add="link" data-c="'+sc.id+'">Add a link</button>'
+    +'<button data-index="'+sc.id+'" data-closesheet="1">Let search read inside your PDFs</button></div>';
+  }else
   if(m.what==='chap'){
    var sch=(sc.sections||[])[m.i];
    if(!sch)return '';
@@ -7784,7 +7803,7 @@ document.addEventListener('click',function(e){
   if(nn&&nn.trim()){rf.name=nn.trim();saveFiles(d.c)}
   return;
  }
- if(d.index){indexPdfs(d.index);return}
+ if(d.index){if(view.modal&&view.modal.what==='fadd')view.modal=null;indexPdfs(d.index);return}
  if(d.delsection){
   var dc=classById(d.c);
   dc.sections=dc.sections.filter(function(x){return x.id!==d.delsection});
@@ -7991,7 +8010,7 @@ document.addEventListener('change',function(e){
   }
   applyFonts();save();return;
  }
- if(t.dataset&&t.dataset.file&&t.files.length){addFiles(t.dataset.file,t.files,t.dataset.filesec||'')}
+ if(t.dataset&&t.dataset.file&&t.files.length){if(t.dataset.closesheet)view.modal=null;addFiles(t.dataset.file,t.files,t.dataset.filesec||'')}
  if(t.dataset&&t.dataset.photo&&t.files[0]){setPhoto(t.dataset.photo,t.files[0])}
  if(t.dataset&&t.dataset.linkicon&&t.files[0]){setPhoto('linkicon:'+t.dataset.linkicon,t.files[0])}
  if(t.dataset&&t.dataset.appicon&&t.files[0]){setPhoto('appicon:'+t.dataset.appicon,t.files[0])}
@@ -8166,7 +8185,7 @@ document.addEventListener('input',function(e){
  if(ds.secc||ds.chc){var hx=document.querySelector(ds.secc?'[data-sechex="'+ds.secc+'"]':'[data-chhex="'+ds.chc+'"]');if(hx&&document.activeElement!==hx)hx.value=t.value}
  if(ds.chc&&view.page==='class'){
   var chcl=classById(view.classId),chs=chcl&&(chcl.sections||[]).filter(function(x){return x.id===ds.chc})[0];
-  if(chs){chs.color=t.value;document.querySelectorAll('[data-chapbadge="'+ds.chc+'"]').forEach(function(b){b.style.background=t.value});save()}
+  if(chs){chs.color=t.value;document.querySelectorAll('[data-chapbadge="'+ds.chc+'"]').forEach(function(b){b.style.background=t.value;b.style.color=contrast(t.value,'#ffffff')<2.6?'#2a2620':''});save()}
   return;
  }
  if(ds.secc&&(view.page==='class'||CP_SITE_ROWS[view.page])){
