@@ -1175,8 +1175,12 @@ a.cpitemname:hover{text-decoration:underline}
 .hband .wxm i{width:14px;height:14px;border-radius:50%;background:#F2D27A;box-shadow:0 0 0 3px rgba(242,210,122,.25)}
 .hband .wxm i.moon{background:#E9E6DA;box-shadow:0 0 0 3px rgba(233,230,218,.2)}
 .hband .wxm i.cloud{background:#D8DDE3;box-shadow:0 0 0 3px rgba(216,221,227,.25)}
+/* with a cover photo, the greeting bar sits just under it as a rounded card */
+.main.hhome.hascover>.body{padding-top:0!important}
+.main.hhome.hascover .hband{margin-top:18px}
 @media(max-width:700px){
- .main.hhome,.main.hhome>.body{padding-top:0!important}
+ .main.hhome:not(.hascover),.main.hhome:not(.hascover)>.body{padding-top:0!important}
+ .main.hhome.hascover .hband{margin:14px 0 14px;border-radius:18px;padding:14px 16px}
  .hband{margin:0 -16px 14px;border-radius:0 0 22px 22px;padding:calc(env(safe-area-inset-top,0px) + 62px) 18px 18px}
  .hband .day{font-size:23px}.hband .av{width:46px;height:46px}
 }
@@ -1728,7 +1732,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v116';
+var BUILD='v117';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3836,11 +3840,11 @@ function render(){
   +((S.sideHidden&&!narrowScreen())?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
   +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?S.cover:''));
-     if(view.page==='home')return '<main class="main hhome nohead">';
+     if(view.page==='home')return '<main class="main hhome nohead'+(hasCov?' hascover':'')+'">';
      return '<main class="main'+(hasCov?' hascover':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
   +'<button class="menubtn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +(view.page==='home'?'':'<button class="homebtn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')
-  +(view.page==='home'?'<div style="display:none">':'')+coverBlock(c)
+  +coverBlock(c)+(view.page==='home'?'<div style="display:none">':'')
   +'<div class="banner sz-'+bannerSize()+(view.picker&&bannerSize()==='hidden'?' editing':'')+'" style="background:var(--s-banner-bg,'+head.bg+')">'+pencil('banner')
   +(view.picker&&bannerSize()==='hidden'?'<span class="hiddennote">Header hidden on this page. Use the pencil to bring it back.</span>':'')
 
@@ -4796,7 +4800,7 @@ function viewHome(){
  C+='</section>';
 
  /* ===== settings row ===== */
- var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'
+ var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'+coverControls('home',S)
   +'<button data-secopen="1">Colours</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div>';
 
 
