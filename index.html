@@ -1164,8 +1164,11 @@ a.cpitemname:hover{text-decoration:underline}
 .cpinfohead b{font-weight:500}
 .cpemailbtn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;padding:6px 12px}
 @media(max-width:1199px){.cpfoldrow{order:2}}
-.cpduo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start;order:0}
-@media(max-width:999px){.cpduo{grid-template-columns:minmax(0,1fr);gap:24px}}
+.cpduo{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start;order:0}
+/* side by side only when each card is wide enough for its header to sit on one line (symmetry) */
+.cpmain{container-type:inline-size;container-name:cpmain}
+@container cpmain (min-width:1150px){.cpduo{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}
+@container (min-width:540px){.cpfiles .cphead{flex-wrap:nowrap}.cpfiles .cptitlecol{flex:1 1 0;min-width:0}.cpfiles .cphint{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cpfiles .cpacts{flex-wrap:nowrap;flex:none}}
 /* ===== v115 Home (round 3, option A) ===== */
 .hband{display:flex;align-items:center;gap:14px;background:var(--sideBg);color:#fff;border-radius:18px;padding:16px 18px;margin:0 0 16px}
 .hband .av{width:54px;height:54px;border-radius:50%;flex:none;object-fit:cover;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.18);display:grid;place-items:center;cursor:pointer;overflow:hidden}
@@ -1314,9 +1317,8 @@ a.cpitemname:hover{text-decoration:underline}
 .cpfhead>.cpbtn{justify-self:end}
 .cpfhead .cphint{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cpfhead .cpsearch{width:170px;max-width:none;flex:none;justify-self:end}
-/* side by side, the two headers are the same height so the cards line up */
-@media(min-width:1000px){.cpduo>.cpsec>.cphead{min-height:112px;box-sizing:border-box;align-content:center}}
 @media(max-width:700px){.cpfhead .cpsearch{width:150px}.cpfhead .cpsearch input{font-size:16px}}
+.cpsearch.cpsearchs{width:150px;flex:0 1 150px;min-width:110px}
 /* sub-steps */
 .cpsteps{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;margin-left:8px;font-weight:400}
 .cpstepsbar{display:inline-block;width:34px;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
@@ -1767,7 +1769,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v125';
+var BUILD='v126';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4583,15 +4585,14 @@ function viewClass(c){
  }
  var total=files.length+(c.links||[]).length;
  var dups=cpDupLinks(c),dupBtn=dups.length?'<button class="cptext cpdupbtn" data-dedupe="'+c.id+'">Remove '+dups.length+' duplicate link'+(dups.length>1?'s':'')+'</button>':'';
- // v125: the same height as the Assignments header: title + "+ Add" on the first line, the description
- // and the search on the second (Upload, Add a link and Read PDFs are inside "+ Add")
+ // the same layout as the Assignments header (title and description on the left, buttons on the right, one
+ // line); the search box is kept short (150px) so it all fits on that one line instead of wrapping
  var F='<section class="cpsec cpfiles" id="c-files"><span id="c-links" class="cpanchor"></span>'+pencil('files')
-  +'<div class="cphead cphead2 cpfhead" style="background:'+col.files.c+';color:var(--cp-files-on,#fff);border-bottom-color:transparent">'
-  +'<div class="cptitlerow"><h2 class="cptitle" style="color:inherit;font-weight:var(--cp-files-w,500)">Files &amp; links</h2>'+(total?'<span class="cppill" style="color:'+col.files.c+'">'+total+' item'+(total>1?'s':'')+'</span>':'')+'</div>'
-  +'<button class="cpbtn" data-sheet="fadd" data-i="0" data-c="'+c.id+'">'+(view.indexing?'<span class="spin"></span>':'+ Add')+'</button>'
-  +'<div class="cphint">'+((c.sections||[]).length?'Files and links by chapter':'Slides, readings and links')+'</div>'
-  +'<label class="cpsearch" style="border-color:'+col.files.line+'">'+CP_ICO.search+'<input type="text" id="filesearch" placeholder="Search files" value="'+esc(view.fileQ||'')+'"></label>'
-  +'</div>';
+  +cpHead('files',col.files,'Files &amp; links',total?total+' item'+(total>1?'s':''):'',(c.sections||[]).length?'Grouped by chapter, files and links together':'Slides, readings and links for this class',
+    '<label class="cpsearch cpsearchs" style="border-color:'+col.files.line+'">'+CP_ICO.search+'<input type="text" id="filesearch" placeholder="Search" value="'+esc(view.fileQ||'')+'"></label>'
+    +'<button class="cpbtn2 cpreadpdfs" style="border-color:'+col.files.line+'" data-index="'+c.id+'" title="Lets search look inside your PDFs"'+(view.indexing?' disabled':'')+'>'+(view.indexing?'<span class="spin"></span>':'Read PDFs')+'</button>'
+    +cpBtn2(col.files,'+ Link','data-add="link" data-c="'+c.id+'"')
+    +'<label class="cpbtn" style="background:'+col.files.c+'"><input type="file" multiple data-file="'+c.id+'" style="display:none">+ Upload</label>');
  F+='<div class="cpfbody">';
  if(q){
   var fm=fIdx.filter(function(x){return x.f.name.toLowerCase().indexOf(q)>-1||(x.f.text&&x.f.text.toLowerCase().indexOf(q)>-1)});
