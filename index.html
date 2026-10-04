@@ -1162,6 +1162,98 @@ a.cpitemname:hover{text-decoration:underline}
 .cpinfohead b{font-weight:500}
 .cpemailbtn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;padding:6px 12px}
 @media(max-width:1199px){.cpfoldrow{order:2}}
+/* ===== v115 Home (round 3, option A) ===== */
+.hband{display:flex;align-items:center;gap:14px;background:var(--sideBg);color:#fff;border-radius:18px;padding:16px 18px;margin:0 0 16px}
+.hband .av{width:54px;height:54px;border-radius:50%;flex:none;object-fit:cover;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.18);display:grid;place-items:center;cursor:pointer;overflow:hidden}
+.hband .av img{width:100%;height:100%;object-fit:cover;display:block}
+.hband .av svg{width:24px;height:24px;fill:rgba(255,255,255,.8)}
+.hband .t{min-width:0;flex:1}
+.hband .hello{font-size:13px;opacity:.82;margin:0}
+.hband .day{font-family:var(--fh,inherit);font-size:26px;font-weight:var(--wh,500);letter-spacing:-.01em;line-height:1.15;margin:1px 0 0;color:#fff}
+.hband .wxm{flex:none;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border-radius:12px;padding:7px 11px;font-size:13px;color:#fff;border:none;font-family:inherit;cursor:pointer}
+.hband .wxm b{font-size:18px;font-weight:450}
+.hband .wxm i{width:14px;height:14px;border-radius:50%;background:#F2D27A;box-shadow:0 0 0 3px rgba(242,210,122,.25)}
+.hband .wxm i.moon{background:#E9E6DA;box-shadow:0 0 0 3px rgba(233,230,218,.2)}
+.hband .wxm i.cloud{background:#D8DDE3;box-shadow:0 0 0 3px rgba(216,221,227,.25)}
+@media(max-width:700px){
+ .main.hhome,.main.hhome>.body{padding-top:0!important}
+ .hband{margin:0 -16px 14px;border-radius:0 0 22px 22px;padding:calc(env(safe-area-inset-top,0px) + 62px) 18px 18px}
+ .hband .day{font-size:23px}.hband .av{width:46px;height:46px}
+}
+.hhome .cphomequick{margin:0 0 16px}
+/* next due, number on the right */
+.hn2{display:flex;align-items:center;gap:14px;border-radius:14px;padding:15px 18px;cursor:pointer}
+.hn2 .tx{min-width:0;flex:1}
+.hn2 .lab{font-size:12px;opacity:.8}
+.hn2 .ti{font-size:15.5px;line-height:1.3;margin-top:2px}
+.hn2 .dt{font-size:12px;opacity:.8;margin-top:3px}
+.hn2 .num{flex:none;display:flex;flex-direction:column;align-items:center;border-left:1px solid rgba(255,255,255,.3);padding-left:16px;min-width:74px}
+.hn2 .num .n{font-family:var(--fh,inherit);font-size:44px;line-height:1;font-weight:var(--wh,500)}
+.hn2 .num .u{font-size:12px;opacity:.85;margin-top:3px;white-space:nowrap}
+@media(max-width:700px){.hn2{padding:12px 14px}.hn2 .num .n{font-size:34px}.hn2 .num{min-width:60px;padding-left:13px}.hn2 .ti{font-size:14.5px}}
+/* Today's plan + Coming up */
+.hp2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.hb2{background:var(--card);border:1px solid color-mix(in srgb,var(--sideBg) 16%,var(--card));border-radius:14px;display:flex;flex-direction:column;min-height:250px;min-width:0;overflow:hidden}
+.hb2 .hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 14px 10px;background:color-mix(in srgb,var(--sideBg) 11%,var(--card));color:color-mix(in srgb,var(--sideBg) 80%,#000)}
+.hb2 .hd h2{margin:0;font-family:var(--fh,inherit);font-size:16px;font-weight:var(--wh,500);line-height:1.2;color:inherit}
+.hb2 .hd .sub{display:inline-block;background:none;border:none;padding:0;margin-top:2px;font:inherit;font-size:12.5px;color:inherit;opacity:.75;cursor:pointer;min-height:0!important}
+.hb2 .hd .hsel2{position:relative;display:inline-flex;margin-top:2px;opacity:.75}
+.hb2 .hd .hsel2 select{appearance:none;-webkit-appearance:none;background:none;border:none;padding:0 14px 0 0;font:inherit;font-size:12.5px;color:inherit;cursor:pointer}
+.hb2 .hd .hsel2::after{content:'';position:absolute;right:2px;top:50%;width:5px;height:5px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.hb2 .hd .n{flex:none;font-size:12px;font-weight:600;min-width:22px;height:22px;padding:0 7px;border-radius:99px;display:grid;place-items:center;background:var(--sideBg);color:#fff}
+.hb2 .bd{display:flex;flex-direction:column;padding:2px 14px 10px;flex:1}
+.hr2{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.hr2:last-of-type{border-bottom:none}
+.hr2 .tick{margin-top:1px}
+.hr2 .hx{min-width:0;flex:1;cursor:pointer}
+.hr2 .tt{font-size:14px;line-height:1.3;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hr2.done .tt{color:var(--ink3);text-decoration:line-through}
+.hr2 .mt{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink3);margin-top:3px;flex-wrap:wrap}
+.hr2 .mt i{width:8px;height:8px;border-radius:50%;flex:none}
+.hr2 .mt .late{color:#A34A3F}.hr2 .mt .soon{color:color-mix(in srgb,var(--sideBg) 85%,#000);font-weight:500}
+.hb2 .more{margin-top:auto;align-self:flex-start;background:none;border:none;padding:6px 0 0;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.hb2 .empty{font-size:13px;color:var(--ink3);line-height:1.45;padding:10px 0}
+@media(max-width:700px){
+ .hp2{grid-template-columns:minmax(0,1fr);gap:12px}
+ .hb2{min-height:0}
+ .hr2 .tt{display:block;-webkit-line-clamp:unset;overflow:visible}
+}
+/* clock */
+.hclock{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.hclock b{font-family:var(--fh,inherit);font-size:40px;line-height:1;font-weight:var(--wh,500);letter-spacing:-.01em;font-variant-numeric:tabular-nums;color:var(--head,var(--ink))}
+.hclock .ap{font-size:15px;color:var(--ink2)}
+.hclock small{flex-basis:100%;font-size:12.5px;color:var(--ink3)}
+/* month calendar (computer) */
+.hcal{background:color-mix(in srgb,var(--sideBg) 12%,var(--card));border-radius:16px;padding:16px 16px 14px;color:color-mix(in srgb,var(--sideBg) 75%,#000);cursor:pointer}
+.hcal .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.hcal .top svg{width:26px;height:26px;flex:none;opacity:.85}
+.hcal .top b{display:block;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:1.2}
+.hcal .top span{display:block;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;opacity:.8}
+.hcal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-variant-numeric:tabular-nums}
+.hcal .g .h{font-size:12px;font-weight:600;padding-bottom:4px;color:var(--ink)}
+.hcal .g .d{position:relative;font-size:13px;color:var(--ink);height:30px;display:grid;place-items:center;border-radius:50%}
+.hcal .g .d.off{opacity:.3}
+.hcal .g .d.on{background:var(--sideBg);color:#fff;width:30px;margin:0 auto}
+.hcal .g .d em{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);display:flex;gap:2px}
+.hcal .g .d em i{width:4px;height:4px;border-radius:50%}
+@media(max-width:1199px){.hcal{display:none}}
+/* music */
+.hsp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.hsp .top{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--ink2);padding:0 2px}
+.hsp .top b{display:flex;align-items:center;gap:7px;font-weight:500;color:var(--ink)}
+.hsp .top b i{width:9px;height:9px;border-radius:50%}
+.hsp .top button{background:none;border:none;padding:0;font:inherit;font-size:13px;color:var(--ink2);cursor:pointer;min-height:0!important}
+/* term, slim */
+.ht2{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 15px}
+.ht2 .r{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;color:var(--ink2);flex-wrap:wrap}
+.ht2 .r b{font-size:15px;font-weight:500;color:var(--ink)}
+.ht2 .r button{background:none;border:none;padding:0;font:inherit;font-size:12.5px;color:var(--ink3);cursor:pointer;min-height:0!important}
+.ht2 .bar{display:block;width:100%;height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:8px}
+.ht2 .bar i{display:block;height:100%;background:var(--sideBg);border-radius:99px}
+/* layout */
+.cphomesplit.p3 .cpmain{gap:18px}
+.cphomesplit.p3 .cphomerail{gap:14px}
+@media(max-width:1199px){.cphomesplit.p3 .cphomerail{display:contents}.p3 #h-next{order:-2}.p3 .hp2{order:1}.p3 #h-week{order:3}.p3 #h-clock{order:4}.p3 #h-music{order:5}.p3 #h-term{order:6}.p3 #h-classes{order:7}.p3 .cpsettings{order:9}}
 /* sub-steps */
 .cpsteps{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;margin-left:8px;font-weight:400}
 .cpstepsbar{display:inline-block;width:34px;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
@@ -1612,7 +1704,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v114';
+var BUILD='v115';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3720,17 +3812,18 @@ function render(){
   +((S.sideHidden&&!narrowScreen())?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
   +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?S.cover:''));
+     if(view.page==='home')return '<main class="main hhome nohead">';
      return '<main class="main'+(hasCov?' hascover':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
   +'<button class="menubtn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +(view.page==='home'?'':'<button class="homebtn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')
-  +coverBlock(c)
+  +(view.page==='home'?'<div style="display:none">':'')+coverBlock(c)
   +'<div class="banner sz-'+bannerSize()+(view.picker&&bannerSize()==='hidden'?' editing':'')+'" style="background:var(--s-banner-bg,'+head.bg+')">'+pencil('banner')
   +(view.picker&&bannerSize()==='hidden'?'<span class="hiddennote">Header hidden on this page. Use the pencil to bring it back.</span>':'')
 
   +'<p class="eyebrow" style="color:var(--s-banner-line,'+head.ink2+')">'+esc(eyebrow)+'</p>'
   +'<h1 style="color:var(--s-banner-ink,'+head.ink+')">'+esc(title)+'</h1>'
   +(sub?'<p class="sub" style="color:'+head.ink2+'">'+esc(sub)+'</p>':'')
-  +'</div>'
+  +'</div>'+(view.page==='home'?'</div>':'')
   +'<div class="body">'+body+'</div></main></div>'
   +(view.storageOk?'':'<p class="hint" style="margin:12px 40px">Saving failed, most likely because storage is full. Delete a few uploaded files and try again.</p>')
   +'</div>'
@@ -4603,9 +4696,9 @@ function viewHome(){
  var t=today(),col=cpVarRefs(['hup','hcls','third']),real=cpHomeColors();
  var open=allTasks().filter(function(x){return !x.t.done&&x.t.due&&!isRefClass(x.c)});
  var all=allTasks().filter(function(x){return !isRefClass(x.c)});
- var weekEnd=weekStart(1),nextEnd=weekStart(2);
+ var weekEnd=weekStart(1),nextEnd=weekStart(2),in7=new Date(t);in7.setDate(t.getDate()+7);
  var late=open.filter(function(x){return parseISO(x.t.due)<t});
- var thisWeek=open.filter(function(x){var d=parseISO(x.t.due);return d>=t&&d<weekEnd});
+ var thisWeek=open.filter(function(x){var d=parseISO(x.t.due);return d>=t&&d<in7}); // 'week' = the next 7 days
  var nextWeek=open.filter(function(x){var d=parseISO(x.t.due);return d>=weekEnd&&d<nextEnd});
  var dueToday=open.filter(function(x){return x.t.due===iso(t)});
  var rng=view.hrange||'week';
@@ -4624,20 +4717,17 @@ function viewHome(){
    +'<label class="fakebtn" style="background:#33312C;color:#fff;border-color:#33312C"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
    +'<button data-add="class">Add a class</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
  }
+ // the coloured top bar: your picture, a hello, today's date and the weather (replaces the old header on Home)
+ var hr=new Date().getHours(),hello=hr<5?'Good evening':hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+ var who=String(S.owner||'').replace(/’/g,"'").replace(/'s\s+hub$/i,'').replace(/^my hub$/i,'').trim();
+ var w=view.wx||{},wt=w.state==='ok'||w.temp!=null?wxType(w):'',night=hr>=19||hr<6;
+ var wxIco=!wt?'':(/cloud|rain|snow|storm|fog|drizzle/.test(wt)?'cloud':(night?'moon':''));
+ h='<div class="hband"><label class="av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg>')+'</label>'
+  +'<div class="t"><p class="hello">'+esc(hello+(who?', '+who:''))+'</p><p class="day">'+esc(t.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+'</p></div>'
+  +(w.temp!=null?'<button class="wxm" data-wx="1" title="London, Ontario · tap to refresh"><i class="'+wxIco+'"></i><b>'+w.temp+'°</b>'+esc(w.cond||'')+'</button>':'')+'</div>'+h;
  h+=homeAccountCard();
  h+=homeInstallCard();
- // the personal header: your picture, a hello, today's date, and the weather
- var hr=new Date().getHours(),hello=hr<5?'Good evening':hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
- var who=String(S.owner||'').replace(/\u2019/g,"'").replace(/'s\s+hub$/i,'').replace(/^my hub$/i,'').trim();
- h+='<div class="hero"><div style="display:flex;align-items:center;gap:16px;min-width:0">'
-  +'<label class="hero-av" title="Click to change your picture">'
-  +'<input type="file" accept="image/*" data-photo="me" style="display:none">'
-  +(S.avatar?'<img class="avatar-lg" src="'+S.avatar+'" alt="You">'
-            :'<div class="avatar-lg empty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
-  +'</label><div style="min-width:0"><p class="hello">'+esc(hello+(who?', '+who:''))+'</p>'
-  +'<p class="day">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+'</p>'
-  +'<p class="date">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}))+'</p></div></div>'
-  +wxCard()+'</div>';
  if((S.homeLinks||[]).length){
   h+='<div class="quick cphomequick">'+S.homeLinks.map(function(l,i){
    var ic=linkIcon(l.url,l.title,l.icon,l.icon?true:false)
@@ -4654,23 +4744,14 @@ function viewHome(){
   }).join('')+'</div>';
  }
 
- /* ===== Coming up: a compact, roughly square box beside Today's plan ===== */
- var rngNames={today:'Today',week:'This week',next:'Next week',all:'Everything'};
- var U='<section class="hbox" id="h-up"><div class="hboxhead"><div class="hboxt"><h2>Coming up</h2>'
-  +'<label class="hsel"><select id="hrangesel" data-hrangesel="1" aria-label="Show">'+Object.keys(rngNames).map(function(k){return '<option value="'+k+'"'+(rng===k?' selected':'')+'>'+rngNames[k]+'</option>'}).join('')+'</select></label></div>'
-  +(list.length?'<span class="hboxn">'+list.length+'</span>':'')+'</div><div class="hboxbody">';
- if(!list.length)U+='<div class="hboxempty">'+(rng==='today'?'Nothing due today.':rng==='next'?'Nothing due next week yet.':rng==='week'?'Nothing else due this week.':'Nothing coming up.')+'</div>';
- else{
-  U+=list.slice(0,4).map(function(x){
-   var cd=cpCountdown(x.t.due),lt=cd.n!=null&&cd.n<0,p=pal(x.c.color);
-   return '<div class="hrow"><button class="tick" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"></button>'
-    +'<div class="hrt" data-open="'+x.c.id+'"><div class="hrtitle">'+esc(x.t.title)+'</div>'
-    +'<div class="hrmeta"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+' · <span'+(lt?' class="late"':'')+'>'+esc(cd.t)+'</span></div></div></div>';
-  }).join('');
-  if(list.length>4)U+='<button class="hmore hdesk" data-go="calendar">+'+(list.length-4)+' more in Calendar</button>';
-  if(list.length>2)U+='<button class="hmore hph" data-go="calendar">+'+(list.length-2)+' more</button>';
- }
- U+='</div></section>';
+ /* ===== Coming up (beside Today's plan; one above the other on a phone) ===== */
+ var rngNames={today:'Today',week:'Next 7 days',next:'Next week',all:'Everything'};
+ var U='<section class="hb2" id="h-up"><div class="hd"><div><h2>Coming up</h2><label class="hsel2"><select id="hrangesel" data-hrangesel="1" aria-label="Show">'
+  +Object.keys(rngNames).map(function(k){return '<option value="'+k+'"'+(rng===k?' selected':'')+'>'+rngNames[k]+'</option>'}).join('')+'</select></label></div>'
+  +(list.length?'<span class="n">'+list.length+'</span>':'')+'</div><div class="bd">'
+  +(list.length?hRows(list,'up')+(list.length>4?'<button class="more" data-go="calendar">+'+(list.length-4)+' more in Calendar</button>':'')
+   :'<div class="empty">'+(rng==='today'?'Nothing due today.':rng==='next'?'Nothing due next week yet.':rng==='week'?'Nothing due in the next 7 days.':'Nothing coming up.')+'</div>')
+  +'</div></section>';
 
  /* ===== Your classes ===== */
  var classes=S.classes.filter(function(c){return !isRefClass(c)});
@@ -4691,14 +4772,14 @@ function viewHome(){
  C+='</section>';
 
  /* ===== settings row ===== */
- var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'+coverControls('home',S)
+ var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'
   +'<button data-secopen="1">Colours</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div>';
 
 
  /* ===== side column (moves into the list on narrower screens) ===== */
- var R='<aside class="cprail cphomerail">'+homeNextDue(open,t)+homeTermCard()+homeMusicCard()+'</aside>';
+ var R='<aside class="cprail cphomerail">'+homeNextDue(open,t)+homeClock()+homeCalendar()+homeMusicCard()+homeTermCard()+'</aside>';
 
- return h+'<div class="cpsplit cphomesplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+homeWeekStrip()+'<div class="hpair">'+homeTodayPlan(col)+U+'</div>'+C+G+'</div>'+R+'</div>';
+ return h+'<div class="cpsplit cphomesplit p3" style="'+cpVarStyle(real)+'"><div class="cpmain"><div class="hp2">'+homeTodayPlan()+U+'</div>'+homeWeekStrip()+C+G+'</div>'+R+'</div>';
 }
 // the week across the top of Home: every due date sitting on its day, in its class colour
 function homeWeekStrip(){
@@ -4714,58 +4795,96 @@ function homeWeekStrip(){
  }
  return h+'</section>';
 }
-// Next due on Home: late work first, then whatever is soonest, in that class's colour
+// v115 Home (round 3, option A): the rows used in Today's plan and Coming up
+function hRows(list,kind){
+ return list.slice(0,4).map(function(x){
+  var cd=x.t.due?cpCountdown(x.t.due):null,lt=cd&&cd.n<0&&!x.t.done,si=stepInfo(x.t);
+  var when=cd&&!x.t.done?(kind==='plan'?(lt?cd.t:cd.n===0?'due today':cd.n===1?'due tomorrow':''):cd.t):'';
+  return '<div class="hr2'+(x.t.done?' done':'')+'"><button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"'+(x.t.done?' style="background:'+palHex(x.c.color)+'"':'')+'></button>'
+   +'<div class="hx" '+(kind==='plan'?'data-planpick="'+planKey(x)+'"':'data-open="'+x.c.id+'"')+'><div class="tt">'+esc(x.t.title)+'</div>'
+   +'<div class="mt"><i style="background:'+palHex(x.c.color)+'"></i>'+esc(classLabel(x.c))+(si.n?' · '+si.d+'/'+si.n+' steps':'')
+   +(when?' · <span class="'+(lt?'late':(cd.n<=1?'soon':''))+'">'+esc(when)+'</span>':'')+'</div></div></div>';
+ }).join('');
+}
+function homeTodayPlan(){
+ var all=allTasks().filter(function(x){return !isRefClass(x.c)}),td=iso(today());
+ var list=all.filter(function(x){return planDay(x.t)===td});
+ var open=list.filter(function(x){return !x.t.done}).length;
+ return '<section class="hb2" id="h-plan"><div class="hd"><div><h2>Today’s plan</h2><button class="sub" data-go="plan">Plan my week ›</button></div>'
+  +(list.length?'<span class="n">'+(open||'✓')+'</span>':'')+'</div><div class="bd">'
+  +(list.length?hRows(list,'plan')+(list.length>4?'<button class="more" data-go="plan">+'+(list.length-4)+' more</button>':'')
+   :'<div class="empty">Nothing planned for today. Open Plan my week to pick what you’ll work on.</div>')
+  +'</div></section>';
+}
+// Next due on Home: what it is on the left, the days-left number on the right, in the menu colour
 function homeNextDue(open,t){
  var srt=open.slice().sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0});
  var x=srt[0];if(!x)return '';
- // Home only: the menu (navigation bar) colour with white text; late work stays a soft red
  var cd=cpCountdown(x.t.due),late=cd.n<0,hx=late?'#9c4a41':chromeHex('sideBg'),fg=contrast(hx,'#ffffff')>=1.5?'#fff':'#221d18';
- var big=cd.n===0?'Today':String(Math.abs(cd.n)),unit=cd.n===0?'':(Math.abs(cd.n)===1?'day':'days')+(late?' late':' left');
  var si=stepInfo(x.t);
- return '<section class="hnext" id="h-next" style="background:'+hx+';color:'+fg+'" '+(x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"')+'>'
-  +'<div class="hnum"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
-  +'<div class="htext"><div class="hlab">'+(late?'Past due':'Next due')+' · '+esc(classLabel(x.c))+'</div><div class="htitle">'+esc(x.t.title)+'</div>'
-  +'<div class="hdate">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+(si.n?' · '+si.d+' of '+si.n+' steps':'')+'</div></div></section>';
+ return '<section class="hn2" id="h-next" style="background:'+hx+';color:'+fg+'" '+(x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"')+'>'
+  +'<div class="tx"><div class="lab">'+(late?'Past due':'Next due')+' · '+esc(classLabel(x.c))+'</div><div class="ti">'+esc(x.t.title)+'</div>'
+  +'<div class="dt">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+(si.n?' · '+si.d+' of '+si.n+' steps':'')+'</div></div>'
+  +'<div class="num"><span class="n">'+(cd.n===0?'Today':Math.abs(cd.n))+'</span>'+(cd.n===0?'':'<span class="u">'+(Math.abs(cd.n)===1?'day':'days')+(late?' late':' left')+'</span>')+'</div></section>';
 }
-// how far through the term you are: "Week 5 of 14"
+// the time, updated every few seconds without redrawing the page
+function homeClock(){
+ var now=new Date();
+ return '<section class="hclock" id="h-clock"><b data-clock="t">'+esc(clockParts(now)[0])+'</b><span class="ap" data-clock="ap">'+esc(clockParts(now)[1])+'</span>'
+  +'<small data-clock="d">'+esc(now.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+'</small></section>';
+}
+function clockParts(d){var h=d.getHours(),m=d.getMinutes();return [((h%12)||12)+':'+(m<10?'0':'')+m,h<12?'AM':'PM']}
+setInterval(function(){
+ var els=document.querySelectorAll('[data-clock]');if(!els.length)return;
+ var now=new Date(),p=clockParts(now);
+ els.forEach(function(el){var k=el.getAttribute('data-clock'),v=k==='t'?p[0]:k==='ap'?p[1]:now.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});if(el.textContent!==v)el.textContent=v});
+},5000);
+// a month calendar (computer): today circled, a dot for each class with something due that day
+function homeCalendar(){
+ var t=today(),td=iso(t),y=t.getFullYear(),m=t.getMonth(),first=new Date(y,m,1),start=new Date(first);start.setDate(1-first.getDay());
+ var byDay={};allTasks().forEach(function(x){if(x.t.due&&!x.t.done&&!isRefClass(x.c))(byDay[x.t.due]=byDay[x.t.due]||[]).push(x)});
+ var weeks=Math.ceil((first.getDay()+new Date(y,m+1,0).getDate())/7);
+ var g='<div class="g">'+['Su','Mo','Tu','We','Th','Fr','Sa'].map(function(d){return '<span class="h">'+d+'</span>'}).join('');
+ var cur=new Date(start);
+ for(var i=0;i<weeks*7;i++){var k=iso(cur);g+='<span class="d'+(cur.getMonth()!==m?' off':'')+(k===td?' on':'')+'">'+cur.getDate()+((byDay[k]&&k!==td)?'<em>'+byDay[k].slice(0,3).map(function(x){return '<i style="background:'+palHex(x.c.color)+'"></i>'}).join('')+'</em>':'')+'</span>';cur.setDate(cur.getDate()+1)}
+ return '<section class="hcal" id="h-cal" data-go="calendar" title="Open Calendar"><div class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'
+  +'<div><b>Calendar</b><span>'+esc(t.toLocaleDateString('en-CA',{month:'long',year:'numeric'}))+'</span></div></div>'+g+'</div></section>';
+}
+// how far through the term you are; slim once your dates are in
 function homeTermCard(){
  var td=S.termDates||{},label=S.term||'This term';
  var form='<div class="tset"><label>First day<input type="date" id="termstart" data-termset="start" value="'+esc(td.start||'')+'"></label>'
   +'<label>Last day<input type="date" id="termend" data-termset="end" value="'+esc(td.end||'')+'"></label></div>';
- var body;
- if(!td.start||!td.end)body='<div class="cpsoft" style="font-size:13.5px">Add your term’s first and last day to count down the weeks.</div>'+form;
- else{
-  var a=parseISO(td.start),b=parseISO(td.end),t=today(),DAY=864e5;
-  var span=Math.max(1,Math.round((b-a)/DAY)),gone=Math.round((t-a)/DAY),N=Math.max(1,Math.ceil((span+1)/7));
-  var pct=Math.max(0,Math.min(100,Math.round(gone/span*100))),left=Math.round((b-t)/DAY);
-  var big=gone<0?'Starts in '+(-gone)+' day'+(-gone===1?'':'s'):left<0?'Term finished':'Week '+Math.min(N,Math.floor(gone/7)+1)+' of '+N;
-  body='<b>'+big+'</b><div class="htbar"><i style="width:'+pct+'%"></i></div><span class="cpsoft" style="font-size:12.5px">'
-   +(gone<0?'':left<0?'Nice work.':left===0?'Last day today':left+' day'+(left===1?'':'s')+' to go')+'</span>'+(view.termEdit?form:'');
- }
- return '<section class="cpcard" id="h-term"><div class="cpcardhead"><span class="cpdot" style="background:var(--cp-hup-c)"></span><h3 class="cpcardtitle">'+esc(label)+'</h3>'
-  +(td.start&&td.end?'<button class="cpcardact" data-termedit="1">'+(view.termEdit?'Done':'Edit')+'</button>':'')+'</div><div class="cpcardbody hterm">'+body+'</div></section>';
+ if(!td.start||!td.end)return '<section class="cpcard" id="h-term"><div class="cpcardhead"><span class="cpdot" style="background:var(--sideBg)"></span><h3 class="cpcardtitle">'+esc(label)+'</h3></div><div class="cpcardbody hterm">'
+  +'<div class="cpsoft" style="font-size:13.5px">Add your term’s first and last day to count down the weeks.</div>'+form+'</div></section>';
+ var a=parseISO(td.start),b=parseISO(td.end),t=today(),DAY=864e5;
+ var span=Math.max(1,Math.round((b-a)/DAY)),gone=Math.round((t-a)/DAY),N=Math.max(1,Math.ceil((span+1)/7));
+ var pct=Math.max(0,Math.min(100,Math.round(gone/span*100))),left=Math.round((b-t)/DAY);
+ var big=gone<0?'Starts in '+(-gone)+' day'+(-gone===1?'':'s'):left<0?'Term finished':'Week '+Math.min(N,Math.floor(gone/7)+1)+' of '+N;
+ var tail=gone<0?'':left<0?'Nice work':left===0?'Last day today':left+' day'+(left===1?'':'s')+' to go';
+ return '<section class="ht2" id="h-term"><div class="r"><b>'+esc(label)+' · '+big+'</b><span>'+tail+' <button data-termedit="1">'+(view.termEdit?'Done':'Edit')+'</button></span></div>'
+  +'<div class="bar"><i style="width:'+pct+'%"></i></div>'+(view.termEdit?'<div class="hterm">'+form+'</div>':'')+'</section>';
 }
-/* music: everyone picks Spotify or Apple Music and pastes a playlist, album or song link. The player
-   itself lives OUTSIDE the redrawn page (#musichost, laid over the card's slot), so ticking something
-   off or a sync never restarts the song, and it keeps playing while you move around the app. */
+/* music: one service per person (Spotify unless you pick Apple Music in Settings). The player itself
+   lives OUTSIDE the redrawn page (#musichost, laid over #musicslot), so redraws never restart the song */
 function musicEmbed(svc,url){
  url=String(url||'').trim();var m;
  if(svc==='spotify'){
   m=/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(playlist|album|track|artist|show|episode)\/([A-Za-z0-9]+)/.exec(url)||/^spotify:(playlist|album|track|artist|show|episode):([A-Za-z0-9]+)$/.exec(url);
-  return m?{src:'https://open.spotify.com/embed/'+m[1]+'/'+m[2]+'?utm_source=generator',h:152}:null;
+  return m?{src:'https://open.spotify.com/embed/'+m[1]+'/'+m[2]+'?utm_source=generator',h:352}:null;
  }
  m=/^https?:\/\/(?:embed\.)?music\.apple\.com\/(.+)$/.exec(url);
- return m?{src:'https://embed.music.apple.com/'+m[1],h:175}:null;
+ return m?{src:'https://embed.music.apple.com/'+m[1],h:450}:null;
 }
 function homeMusicCard(){
  var mu=S.music||{},svc=mu.svc||'spotify',emb=musicEmbed(svc,mu[svc]),name=svc==='spotify'?'Spotify':'Apple Music';
- var body='<div class="hmseg"><button class="'+(svc==='spotify'?'on':'')+'" data-musicsvc="spotify">Spotify</button><button class="'+(svc==='apple'?'on':'')+'" data-musicsvc="apple">Apple Music</button></div>';
- if(emb&&!view.musicEdit)body+='<div class="hmslot" id="musicslot" data-src="'+esc(emb.src)+'" data-h="'+emb.h+'" style="height:'+emb.h+'px"></div>';
- else body+='<div class="hmform"><input id="musicurl" placeholder="Paste a '+name+' playlist, album or song link" value="'+esc(mu[svc]||'')+'">'
+ var body;
+ if(emb&&!view.musicEdit)body='<div class="hmslot" id="musicslot" data-src="'+esc(emb.src)+'" data-h="'+emb.h+'" style="height:'+emb.h+'px"></div>';
+ else body='<div class="hmform"><input id="musicurl" placeholder="Paste a '+name+' playlist, album or song link" value="'+esc(mu[svc]||'')+'">'
   +(view.musicErr?'<span style="font-size:12.5px;color:#A34A3F">'+esc(view.musicErr)+'</span>':'<span class="cpsoft" style="font-size:12px">In '+name+', tap Share, then Copy link.</span>')
   +'<button class="cpbtn2" data-musicsave="1" style="align-self:flex-start">Play this</button></div>';
- return '<section class="cpcard" id="h-music"><div class="cpcardhead"><span class="cpdot" style="background:'+(svc==='spotify'?'#1DB954':'#FA2D48')+'"></span><h3 class="cpcardtitle">Music</h3>'
-  +(emb&&!view.musicEdit?'<button class="cpcardact" data-musicedit="1">Change</button>':'')+'</div><div class="cpcardbody">'+body+'</div></section>';
+ return '<section class="hsp" id="h-music"><div class="top"><b><i style="background:'+(svc==='spotify'?'#1DB954':'#FA2D48')+'"></i>'+name+'</b>'
+  +(emb&&!view.musicEdit?'<button data-musicedit="1">Change</button>':'')+'</div>'+body+'</section>';
 }
 var musicHost=null,musicTick=null;
 function musicSync(){
@@ -4996,27 +5115,6 @@ function planLine(x,day){
   +(dueTxt?'<span class="cplate">'+esc(dueTxt)+'</span>':'')
   +'<span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span></div>';
 }
-function homeTodayPlan(col){
- var all=allTasks().filter(function(x){return !isRefClass(x.c)}),td=iso(today());
- var list=all.filter(function(x){return planDay(x.t)===td});
- var open=list.filter(function(x){return !x.t.done}).length;
- var h='<section class="hbox" id="h-plan"><div class="hboxhead"><div class="hboxt"><h2>Today’s plan</h2><button class="hsub" data-go="plan">Plan my week ›</button></div>'
-  +(list.length?'<span class="hboxn">'+(open||'✓')+'</span>':'')+'</div><div class="hboxbody">';
- if(!list.length)h+='<div class="hboxempty">Nothing planned for today. Open Plan my week to pick what you’ll work on.</div>';
- else{
-  h+=list.slice(0,4).map(function(x){
-   var p=pal(x.c.color),cd=x.t.due?cpCountdown(x.t.due):null,si=stepInfo(x.t);
-   var hint=cd&&!x.t.done?(cd.n<0?cd.t:cd.n===0?'due today':cd.n===1?'due tomorrow':''):'';
-   return '<div class="hrow'+(x.t.done?' done':'')+'"><button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"'+(x.t.done?' style="background:'+p.bar+'"':'')+'></button>'
-    +'<div class="hrt" data-planpick="'+planKey(x)+'"><div class="hrtitle">'+esc(x.t.title)+'</div>'
-    +'<div class="hrmeta"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+(si.n?'<span class="hstp"> · '+si.d+'/'+si.n+' steps</span>':'')+(hint?' · <span class="late">'+esc(hint)+'</span>':'')+'</div></div></div>';
-  }).join('');
-  if(list.length>4)h+='<button class="hmore hdesk" data-go="plan">+'+(list.length-4)+' more</button>';
-  if(list.length>2)h+='<button class="hmore hph" data-go="plan">+'+(list.length-2)+' more</button>';
- }
- return h+'</div></section>';
-}
-
 function coverControls(id,owner){
  var key='cover:'+id;
  return '<label class="fakebtn"><input type="file" accept="image/*" data-cover="'+id+'" style="display:none">'+(owner.cover?'Change cover':'Add a cover picture')+'</label>'
@@ -5157,7 +5255,8 @@ function modalHtml(){
    +sg('sync','Account and sync',syncRight,syncBody,!sbUser||!!view.driveError)
    +sg('hub','Your hub',S.owner,
      '<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
-     +'<div class="field" style="margin:0"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>',false)
+     +'<div class="field" style="margin:0"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>'
+     +'<div class="field" style="margin:0"><label for="setMusic">Music on Home</label><select id="setMusic" data-musicsvcsel="1"><option value="spotify"'+((S.music&&S.music.svc)==='apple'?'':' selected')+'>Spotify</option><option value="apple"'+((S.music&&S.music.svc)==='apple'?' selected':'')+'>Apple Music</option></select></div>',false)
    +sg('look','Look and feel','',
      '<button data-opencolours="1">Change colours</button>'
      +(onbPlatform()!=='desktop'?'<button data-xact="togglephoneapps">Open apps in their phone apps: '+(phoneAppsOn()?'On':'Off')+'</button>':''),false)
@@ -7613,6 +7712,7 @@ document.addEventListener('change',function(e){
  var t=e.target;
  if(t.dataset&&t.dataset.tpset){save();return}
  if(t.dataset&&t.dataset.hrangesel){view.hrange=t.value;render();return}
+ if(t.dataset&&t.dataset.musicsvcsel){S.music=Object.assign({},S.music||{},{svc:t.value});view.musicEdit=false;view.musicErr='';save();render();return}
  if(t.dataset&&t.dataset.termset){S.termDates=Object.assign({},S.termDates||{});S.termDates[t.dataset.termset]=t.value;save();if(S.termDates.start&&S.termDates.end&&!view.termEdit)render();return} // typed live above; saved (and synced) once you leave the box
  if(t.dataset&&t.dataset.tpfrom){
   var fc=classById(t.dataset.tpfrom),fa=fc&&(fc.assignments||[]).filter(function(a){return a.id===t.value})[0];
