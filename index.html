@@ -106,6 +106,8 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .ssub{margin:3px 0 8px 19px;padding-left:12px;border-left:1px solid rgba(255,255,255,.15)}
 .ssub .sitem{font-size:13px;padding:6px 10px;color:var(--sideSoft,#A49D90)}
 .ssub .sitem:hover{color:var(--sideBright,#FFFDF8)}
+.ssub .sfol{text-decoration:none;color:var(--sideBright,#FFFDF8)}
+.ssub .sfol .sext{margin-left:auto;font-size:12px;opacity:.7}
 .main{flex:1;min-width:0;background:var(--card)}
 .menubtn,.homebtn{display:none;background:rgba(0,0,0,.06);border:none;border-radius:8px;padding:7px 11px;margin-bottom:14px;font-size:13px}
 .backdrop{position:fixed;inset:0;background:rgba(28,26,22,.42);z-index:55}
@@ -1007,7 +1009,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpnexts .cpnextslab,.cpnexts .cpnextdate{color:inherit;opacity:.78}
 .cpnexts .cpnexttitle{color:inherit!important}
 .cpnexts.late{background:#9c4a41;color:#fff}
-.cpnextsnum{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;height:64px;border-radius:11px;background:var(--card);color:#33312C;line-height:1;flex:none;padding:0 6px}
+.cpnextsnum{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;height:64px;border-radius:11px;background:rgba(255,255,255,.18);color:inherit;line-height:1;flex:none;padding:0 6px}
 .cpnextsnum .n{font-family:var(--fh,inherit);font-size:28px;font-weight:var(--wh,500)}
 .cpnextsnum .u{font-size:10.5px;margin-top:3px;white-space:nowrap}
 .cpnextstext{min-width:0}
@@ -1161,6 +1163,8 @@ a.cpitemname:hover{text-decoration:underline}
 .cpinfohead b{font-weight:500}
 .cpemailbtn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;padding:6px 12px}
 @media(max-width:1199px){.cpfoldrow{order:2}}
+.cpduo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start;order:0}
+@media(max-width:999px){.cpduo{grid-template-columns:minmax(0,1fr);gap:24px}}
 /* ===== v115 Home (round 3, option A) ===== */
 .hband{display:flex;align-items:center;gap:14px;background:var(--sideBg);color:#fff;border-radius:18px;padding:16px 18px;margin:0 0 16px}
 .hband .av{width:54px;height:54px;border-radius:50%;flex:none;object-fit:cover;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.18);display:grid;place-items:center;cursor:pointer;overflow:hidden}
@@ -1731,7 +1735,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v121';
+var BUILD='v122';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4060,6 +4064,8 @@ function sidebar(c){
    +'<span class="nm2">'+esc(cl.name)+'</span></div>';
   if(on){
    h+='<div class="ssub">'
+    // this class's own FanshaweOnline page (set its address in Edit class); opens in a new tab
+    +'<a class="sitem sfol" href="'+esc(cl.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener"><span class="nm2">FanshaweOnline</span><span class="sext">↗</span></a>'
     +sideItem('data-scroll','c-assign','Assignments',false)
     +sideItem('data-scroll','c-files','Files & links',false)
     +sideItem('data-scroll','c-info','Class info',false)
@@ -4422,16 +4428,14 @@ function viewClass(c){
  var top='';
  var pinned=(c.links||[]).filter(function(l){return l.pinned});
  // FanshaweOnline first, on every class: straight to this class's own page once its link is set in Edit class
- var folChip='<a class="qlink cpfol" href="'+esc(c.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener"><span class="cpfolic" style="background:'+real.asg.wash+';color:'+real.asg.c+'">F</span><span>FanshaweOnline</span></a>';
- top+='<div class="quick">'+folChip;
  if(pinned.length){
+  top+='<div class="quick">';
   top+=pinned.map(function(l){
    return '<a class="qlink" href="'+esc(l.url)+'" target="_blank" rel="noopener">'
     +linkIcon(l.url,l.title,l.icon).replace('class="fi round"','class="fi round" style="width:26px;height:26px"').replace('class="favtile"','class="favtile" style="width:26px;height:26px;font-size:14px"')
     +'<span>'+esc(l.title)+'</span></a>';
-  }).join('');
+  }).join('')+'</div>';
  }
- top+='</div>';
  var bk=c.textbook;
  if(bk){
   var bkIcon=bk.icon
@@ -4439,7 +4443,7 @@ function viewClass(c){
    : '<span style="width:24px;height:30px;border-radius:3px;background:#C9BFA8;flex-shrink:0;box-shadow:inset -4px 0 0 rgba(0,0,0,.09)"></span>';
   var chip='<a class="qlink" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">'+bkIcon+'<span>'+esc(bk.title||'Textbook')+'</span></a>';
   if(bk.type==='file')chip='<button class="qlink" data-openbook="'+c.id+'">'+bkIcon+'<span>'+esc(bk.title||'Textbook')+'</span></button>';
-  top=top.slice(0,-6)+chip+'</div>';
+  top=top?top.slice(0,-6)+chip+'</div>':'<div class="quick">'+chip+'</div>';
  }
 
  // ---- ask box (Claude version only, unchanged) ----
@@ -4471,7 +4475,7 @@ function viewClass(c){
   var after=asg.filter(function(a){return a.due&&a!==nextA}).slice(0,2);
   var nDate=esc(withTime(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),nextA.time));
   var nAttr=' data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'" title="Open '+esc(nextA.title)+'"';
-  var clsHex=palHex(c.color),clsOn=contrast(clsHex,'#ffffff')>=2.6?'#fff':'#221d18';
+  var clsHex=palHex(c.color),clsOn='#fff'; // Jae always wants white text on the countdown card
   if(!nl)nAttr+=' style="background:'+clsHex+';color:'+clsOn+';--cp-asg-c:'+clsHex+'"';
   // side column (wide screens): a square-ish card with the big number
   NX='<section class="cpcard cpnextc'+(nl?' late':'')+'"'+nAttr+'><div class="cpnextrow2">'
@@ -4734,7 +4738,7 @@ function viewClass(c){
  var T='<nav class="cptabs" aria-label="Jump to a part of this class">'+TABS.map(function(t,i){
    return '<button class="cptab'+(i?'':' on')+'" data-cpjump="'+t[0]+'" style="--tc:'+t[2]+'"><i class="cptabdot"></i><span>'+t[1]+'</span></button>';
   }).join('')+'</nav>';
- return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+A+F+BOT+study+G+'</div>'+R+'</div>';
+ return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+'<div class="cpduo">'+A+F+'</div>'+BOT+study+G+'</div>'+R+'</div>';
 }
 
 /* ---------- Home (v96 redesign, same style as the class page) ----------
