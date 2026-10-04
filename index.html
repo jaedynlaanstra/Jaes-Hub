@@ -1732,7 +1732,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v117';
+var BUILD='v118';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3364,7 +3364,7 @@ function sameData(local,remote){
  var total=Math.max(a.length,b.length,1);
  return (shared/total)>=0.8;
 }
-var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage','termDates','music'];
+var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage','termDates','music','spClient'];
 function mergeState(local,remote){
  // field-by-field, most recently touched item wins, using each item's own savedAt
  if(!remote)return local;
@@ -4915,7 +4915,8 @@ function homeMusicCard(){
   +'<button class="cpbtn2" data-musicsave="1" style="align-self:flex-start">Play this</button></div>';
  return '<section class="hsp" id="h-music"><div class="top"><b><i style="background:'+(svc==='spotify'?'#1DB954':'#FA2D48')+'"></i>'+name+'</b>'
   +(emb&&!view.musicEdit?'<button data-musicedit="1">Change</button>':'')+'</div>'+body
-  +(svc==='spotify'&&spClientId()?'<button class="spconnect" data-sp="connect">Connect Spotify</button><p class="spnote">Log in once and Doable remembers you, with full songs and what’s playing on any of your devices.</p>':'')
+  +(svc==='spotify'&&spClientId()?'<button class="spconnect" data-sp="connect">Connect Spotify</button><p class="spnote">Log in once and Doable remembers you, with full songs and what’s playing on any of your devices.</p>'
+    :(svc==='spotify'?'<p class="spnote">To stay logged in, add your Spotify Client ID in Settings, under Your hub.</p>':''))
   +(view.spMsg?'<p class="spnote" style="color:#A34A3F">'+esc(view.spMsg)+'</p>':'')+'</section>';
 }
 /* ---------- Spotify connection (v116): log in once on each device and Doable remembers you ----------
@@ -4925,7 +4926,7 @@ function homeMusicCard(){
    iPad Home Screen apps each connect once. SPOTIFY_CLIENT_ID comes from Jae's Spotify developer app. */
 var SPOTIFY_CLIENT_ID='';
 var SP_SCOPES='user-read-currently-playing user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played';
-function spClientId(){return SPOTIFY_CLIENT_ID||(function(){try{return localStorage.getItem('hub:spclient')||''}catch(e){return ''}})()}
+function spClientId(){return SPOTIFY_CLIENT_ID||(S.spClient||'').trim()||(function(){try{return localStorage.getItem('hub:spclient')||''}catch(e){return ''}})()}
 // always the folder address (never .../index.html), so it matches what is registered with Spotify exactly
 function spRedirect(){return location.origin+location.pathname.replace(/index\.html$/,'')}
 function spTok(){try{return JSON.parse(localStorage.getItem('hub:sp')||'null')}catch(e){return null}}
@@ -5061,8 +5062,13 @@ function musicSync(){
    +(apple?'allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"'
           :'allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"')+'></iframe>';
  }
- var r=slot.getBoundingClientRect();
- musicHost.style.cssText='position:absolute;z-index:5;visibility:visible;left:'+(r.left+window.scrollX)+'px;top:'+(r.top+window.scrollY)+'px;width:'+r.width+'px;height:'+h+'px';
+ // the page can be shrunk or enlarged with the Size slider (CSS zoom on .main). The player sits outside
+ // that, so it gets the same scale itself; browsers disagree on whether measurements include the zoom,
+ // so compare the slot's measured width with its own layout width to tell which kind we got.
+ var main=slot.closest('.main'),z=main?parseFloat(getComputedStyle(main).zoom)||1:1;
+ var r=slot.getBoundingClientRect(),w=slot.offsetWidth||r.width,k=(Math.abs(r.width-w*z)<2||z===1)?1:z;
+ musicHost.style.cssText='position:absolute;z-index:5;visibility:visible;left:'+(r.left*k+window.scrollX)+'px;top:'+(r.top*k+window.scrollY)+'px;width:'+w+'px;height:'+h+'px'
+  +(z!==1?';transform:scale('+z+');transform-origin:0 0':'');
  if(!musicTick)musicTick=setInterval(function(){if(document.getElementById('musicslot'))musicSync();else{clearInterval(musicTick);musicTick=null;musicSync()}},250);
 }
 window.addEventListener('resize',function(){musicSync()});
@@ -5420,6 +5426,7 @@ function modalHtml(){
      '<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
      +'<div class="field" style="margin:0"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>'
      +'<div class="field" style="margin:0"><label for="setMusic">Music on Home</label><select id="setMusic" data-musicsvcsel="1"><option value="spotify"'+((S.music&&S.music.svc)==='apple'?'':' selected')+'>Spotify</option><option value="apple"'+((S.music&&S.music.svc)==='apple'?' selected':'')+'>Apple Music</option></select></div>'
+     +(SPOTIFY_CLIENT_ID?'':'<div class="field" style="margin:0"><label for="setSpClient">Spotify Client ID</label><input id="setSpClient" data-setname="spClient" maxlength="64" placeholder="From developer.spotify.com, your Doable app" value="'+esc(S.spClient||'')+'"><span class="hint" style="margin:4px 0 0">Paste it once and the Connect Spotify button appears on Home, on all your devices.</span></div>')
      +(spConnected()?'<div class="field" style="margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:13.5px">Spotify is connected on this device.</span><button data-sp="disconnect">Disconnect</button></div>':''),false)
    +sg('look','Look and feel','',
      '<button data-opencolours="1">Change colours</button>'
