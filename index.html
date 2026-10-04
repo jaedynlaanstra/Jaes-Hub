@@ -1285,6 +1285,28 @@ a.cpitemname:hover{text-decoration:underline}
 .hsp .spitem:hover{background:var(--paper)}
 .hsp .spitem img,.hsp .spitem .spph{width:38px;height:38px;border-radius:6px;object-fit:cover;flex:none}
 .hsp .spdevico{background:var(--line);opacity:1}
+/* v123: Coming up with three coloured sections; Today's plan and Resources in the side column */
+.hup2{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.hup2>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer}
+.hup2>summary::-webkit-details-marker{display:none}
+.hup2>summary h2{margin:0;font-family:var(--fh,inherit);font-size:24px;font-weight:var(--wh,500);line-height:1.15;color:var(--head,var(--ink))}
+.hup2 .hupn{font-size:13px;color:var(--ink3)}
+.hup2 .tpchev{margin-left:auto;display:flex;color:var(--ink3);transition:transform .2s}
+.hup2 .tpchev svg{width:16px;height:16px}
+.hup2:not([open]) .tpchev{transform:rotate(-90deg)}
+.hupgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 14px 14px}
+.hus{border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.hush{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}
+.hush b{font-size:14.5px;font-weight:500}
+.husn{min-width:22px;height:22px;padding:0 7px;border-radius:99px;color:#fff;font-size:12px;font-weight:600;display:grid;place-items:center}
+.husb{padding:2px 12px 8px;display:flex;flex-direction:column}
+.husb .empty{font-size:13px;color:var(--ink3);padding:10px 0}
+.husb .more{align-self:flex-start;background:none;border:none;padding:6px 0 0;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.hlater{display:block;margin:0 18px 14px;background:none;border:none;padding:0;font:inherit;font-size:13px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.cphomerail .hb2{min-height:0}
+@media(max-width:1000px){.hupgrid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:700px){.hup2>summary{padding:14px 14px}.hup2>summary h2{font-size:22px}.hupgrid{padding:0 10px 10px;gap:10px}.hus .hr2 .tt{display:block;-webkit-line-clamp:unset;overflow:visible}}
+@media(max-width:1199px){.p3 #h-plan{order:2}.p3 #h-res{order:7}.p3 #h-up{order:1}}
 /* sub-steps */
 .cpsteps{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;margin-left:8px;font-weight:400}
 .cpstepsbar{display:inline-block;width:34px;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
@@ -1735,7 +1757,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v122';
+var BUILD='v123';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4802,14 +4824,25 @@ function viewHome(){
   }).join('')+'</div>';
  }
 
- /* ===== Coming up (beside Today's plan; one above the other on a phone) ===== */
- var rngNames={today:'Today',week:'Next 7 days',next:'Next week',all:'Everything'};
- var U='<section class="hb2" id="h-up"><div class="hd"><div><h2>Coming up</h2><label class="hsel2"><select id="hrangesel" data-hrangesel="1" aria-label="Show">'
-  +Object.keys(rngNames).map(function(k){return '<option value="'+k+'"'+(rng===k?' selected':'')+'>'+rngNames[k]+'</option>'}).join('')+'</select></label></div>'
-  +(list.length?'<span class="n">'+list.length+'</span>':'')+'</div><div class="bd">'
-  +(list.length?hRows(list,'up')+(list.length>4?'<button class="more" data-go="calendar">+'+(list.length-4)+' more in Calendar</button>':'')
-   :'<div class="empty">'+(rng==='today'?'Nothing due today.':rng==='next'?'Nothing due next week yet.':rng==='week'?'Nothing due in the next 7 days.':'Nothing coming up.')+'</div>')
-  +'</div></section>';
+ /* ===== Coming up (v123): one big card that folds shut, with Due today / this week / next week,
+    each under its own soft colour (three shades worked out from the menu colour) ===== */
+ var tdS=iso(t),wkEnd=weekStart(1),nxEnd=weekStart(2);
+ var dToday=late.slice().sort(bydate).concat(open.filter(function(x){return x.t.due===tdS}).sort(bydate));
+ var dWeek=open.filter(function(x){var d=parseISO(x.t.due);return x.t.due>tdS&&d<wkEnd}).sort(bydate);
+ var dNext=open.filter(function(x){var d=parseISO(x.t.due);return d>=wkEnd&&d<nxEnd}).sort(bydate);
+ var laterN=open.filter(function(x){return parseISO(x.t.due)>=nxEnd}).length;
+ // three soft, clearly different colours around the menu colour's own hue
+ var hb=rgb2hsl.apply(null,hex2rgb(chromeHex('sideBg')))[0],tone=function(dh){var hh=((hb+dh)%360+360)%360;return {bg:hsl2hex(hh,38,91),title:hsl2hex(hh,30,26),c:hsl2hex(hh,32,50)}};
+ var tones=[tone(0),tone(55),tone(-55)];
+ var upOpen=true;try{upOpen=localStorage.getItem('hub:fold:hup')!=='0'}catch(e){}
+ function upSec(title,list,tone,empty){
+  return '<div class="hus"><div class="hush" style="background:'+tone.bg+';color:'+tone.title+'"><b>'+title+'</b>'+(list.length?'<span class="husn" style="background:'+tone.c+'">'+list.length+'</span>':'')+'</div>'
+   +'<div class="husb">'+(list.length?hRows(list,'up',6)+(list.length>6?'<button class="more" data-go="calendar">+'+(list.length-6)+' more</button>':''):'<div class="empty">'+empty+'</div>')+'</div></div>';
+ }
+ var U='<details class="hup2" id="h-up" data-fold="hup"'+(upOpen?' open':'')+'><summary class="hupsum"><h2>Coming up</h2>'
+  +'<span class="hupn">'+(dToday.length+dWeek.length+dNext.length)+' due</span><span class="tpchev">'+CP_ICO.chev+'</span></summary>'
+  +'<div class="hupgrid">'+upSec('Due today',dToday,tones[0],'Nothing due today.')+upSec('Due this week',dWeek,tones[1],'Nothing else this week.')+upSec('Due next week',dNext,tones[2],'Nothing yet.')+'</div>'
+  +(laterN?'<button class="hlater" data-go="calendar">'+laterN+' more due after next week, see Calendar ›</button>':'')+'</details>';
 
  /* ===== Your classes ===== */
  var classes=S.classes.filter(function(c){return !isRefClass(c)});
@@ -4835,9 +4868,9 @@ function viewHome(){
 
 
  /* ===== side column (moves into the list on narrower screens) ===== */
- var R='<aside class="cprail cphomerail">'+homeNextDue(open,t)+homeClock()+homeCalendar()+homeMusicCard()+homeTermCard()+'</aside>';
+ var R='<aside class="cprail cphomerail">'+homeNextDue(open,t)+homeClock()+homeTodayPlan()+homeResources()+homeCalendar()+homeMusicCard()+homeTermCard()+'</aside>';
 
- return h+'<div class="cpsplit cphomesplit p3" style="'+cpVarStyle(real)+'"><div class="cpmain"><div class="hp2">'+homeTodayPlan()+U+'</div>'+homeWeekStrip()+C+G+'</div>'+R+'</div>';
+ return h+'<div class="cpsplit cphomesplit p3" style="'+cpVarStyle(real)+'"><div class="cpmain">'+U+homeWeekStrip()+C+G+'</div>'+R+'</div>';
 }
 // the week across the top of Home: every due date sitting on its day, in its class colour
 function homeWeekStrip(){
@@ -4854,8 +4887,8 @@ function homeWeekStrip(){
  return h+'</section>';
 }
 // v115 Home (round 3, option A): the rows used in Today's plan and Coming up
-function hRows(list,kind){
- return list.slice(0,4).map(function(x){
+function hRows(list,kind,max){
+ return list.slice(0,max||4).map(function(x){
   var cd=x.t.due?cpCountdown(x.t.due):null,lt=cd&&cd.n<0&&!x.t.done,si=stepInfo(x.t);
   var when=cd&&!x.t.done?(kind==='plan'?(lt?cd.t:cd.n===0?'due today':cd.n===1?'due tomorrow':''):cd.t):'';
   return '<div class="hr2'+(x.t.done?' done':'')+'"><button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done"'+(x.t.done?' style="background:'+palHex(x.c.color)+'"':'')+'></button>'
@@ -4907,6 +4940,19 @@ function homeCalendar(){
  for(var i=0;i<weeks*7;i++){var k=iso(cur);g+='<span class="d'+(cur.getMonth()!==m?' off':'')+(k===td?' on':'')+'">'+cur.getDate()+((byDay[k]&&k!==td)?'<em>'+byDay[k].slice(0,3).map(function(x){return '<i style="background:'+palHex(x.c.color)+'"></i>'}).join('')+'</em>':'')+'</span>';cur.setDate(cur.getDate()+1)}
  return '<section class="hcal" id="h-cal" data-go="calendar" title="Open Calendar"><div class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'
   +'<div><b>Calendar</b><span>'+esc(t.toLocaleDateString('en-CA',{month:'long',year:'numeric'}))+'</span></div></div>'+g+'</div></section>';
+}
+// Resources: your reference files (formatting guides, templates), folded shut until you need them
+function homeResources(){
+ var rf=FILES[REF_CID]||[],on=false;try{on=localStorage.getItem('hub:fold:hres')==='1'}catch(e){}
+ var body=!rf.length?'<div class="cpsoft" style="font-size:13.5px">A formatting guide or template you want handy everywhere.</div>'
+  :rf.map(function(f,i){
+   var link=f.kind==='pdf'?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
+    :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
+   return '<div class="cpline cprefline"><span class="a">'+link+'</span><span class="b">'+cpFileLabel(f)+'</span></div>';
+  }).join('');
+ return '<details class="cpcard cpfold" id="h-res" data-fold="hres"'+(on?' open':'')+'><summary class="cpcardhead"><span class="cpdot" style="background:var(--sideBg)"></span><h3 class="cpcardtitle">Resources</h3>'
+  +(rf.length?'<span class="cpfoldmeta">'+rf.length+'</span>':'')+'<span class="tpchev">'+CP_ICO.chev+'</span></summary><div class="cpcardbody">'+body
+  +'<button class="cpghost" data-xact="refadd" style="align-self:flex-start">+ Add a file</button></div></details>';
 }
 // how far through the term you are; slim once your dates are in
 function homeTermCard(){
