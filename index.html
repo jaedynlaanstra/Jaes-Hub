@@ -1732,7 +1732,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v118';
+var BUILD='v120';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4924,7 +4924,7 @@ function homeMusicCard(){
    ANY of your devices with its cover, and (with Spotify Premium) play/pause/skip, pick a playlist and
    choose which device plays. The login is kept on this device only (localStorage 'hub:sp'); iPhone and
    iPad Home Screen apps each connect once. SPOTIFY_CLIENT_ID comes from Jae's Spotify developer app. */
-var SPOTIFY_CLIENT_ID='';
+var SPOTIFY_CLIENT_ID='a813b2423fd5435fbe465a21f00bd6dd'; // Jae's Spotify developer app "Doable" (not a secret)
 var SP_SCOPES='user-read-currently-playing user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played';
 function spClientId(){return SPOTIFY_CLIENT_ID||(S.spClient||'').trim()||(function(){try{return localStorage.getItem('hub:spclient')||''}catch(e){return ''}})()}
 // always the folder address (never .../index.html), so it matches what is registered with Spotify exactly
@@ -4956,10 +4956,13 @@ function spBoot(){
  if(!/^sp_/.test(state))return;
  history.replaceState(null,'',location.pathname+location.hash);
  var saved=null;try{saved=JSON.parse(localStorage.getItem('hub:spauth')||'null');localStorage.removeItem('hub:spauth')}catch(e){}
- if(err||!code||!saved||saved.s!==state){view.spMsg=err==='access_denied'?'Spotify wasn’t connected.':'Spotify login didn’t finish. Try Connect again.';return}
+ // say exactly which step went wrong, so it can be fixed
+ if(err){view.spMsg=err==='access_denied'?'Spotify wasn’t connected (the login was cancelled).':'Spotify login didn’t finish. Spotify said: '+err;return}
+ if(!saved){view.spMsg='Spotify login didn’t finish: the login came back to a different window than the one that started it (code A). Try Connect again from this window.';return}
+ if(!code||saved.s!==state){view.spMsg='Spotify login didn’t finish: the login reply didn’t match (code B). Try Connect again.';return}
  spBootP=spTokenCall({grant_type:'authorization_code',code:code,redirect_uri:spRedirect(),client_id:spClientId(),code_verifier:saved.v})
-  .then(function(d){spSetTok({access:d.access_token,refresh:d.refresh_token,exp:Date.now()+(d.expires_in-60)*1000});view.spMsg='';spPoll(true)})
-  .catch(function(){view.spMsg='Spotify login didn’t finish. Try Connect again.';render()});
+  .then(function(d){spSetTok({access:d.access_token,refresh:d.refresh_token,exp:Date.now()+(d.expires_in-60)*1000});view.spMsg='';render();spPoll(true)})
+  .catch(function(e){view.spMsg='Spotify login didn’t finish. Spotify said: '+String(e&&e.message||'no answer')+' (code C)';render()});
 }
 async function spAccess(){
  var t=spTok();if(!t||!t.refresh)return null;
