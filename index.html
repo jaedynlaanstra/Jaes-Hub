@@ -1254,6 +1254,30 @@ a.cpitemname:hover{text-decoration:underline}
 .cphomesplit.p3 .cpmain{gap:18px}
 .cphomesplit.p3 .cphomerail{gap:14px}
 @media(max-width:1199px){.cphomesplit.p3 .cphomerail{display:contents}.p3 #h-next{order:-2}.p3 .hp2{order:1}.p3 #h-week{order:3}.p3 #h-clock{order:4}.p3 #h-music{order:5}.p3 #h-term{order:6}.p3 #h-classes{order:7}.p3 .cpsettings{order:9}}
+/* Spotify, connected */
+.hsp .spdev{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%}
+.hsp .spnow,.hsp .spidle{display:flex;align-items:center;gap:12px;min-width:0}
+.hsp .spart{width:84px;height:84px;border-radius:10px;object-fit:cover;flex:none;display:block}
+.hsp .spph{background:linear-gradient(135deg,#1DB954,#0f6b31);opacity:.35;border-radius:10px;display:block}
+.hsp .spmeta,.hsp .spidle>div{min-width:0;display:flex;flex-direction:column;gap:2px}
+.hsp .spmeta b,.hsp .spidle b{font-size:15px;font-weight:500;color:var(--ink);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hsp .spmeta span,.hsp .spidle span{font-size:12.5px;color:var(--ink3);line-height:1.35}
+.hsp .spbar{height:4px;border-radius:99px;background:var(--line);overflow:hidden}
+.hsp .spbar i{display:block;height:100%;background:#1DB954;border-radius:99px;transition:width 1s linear}
+.hsp .spctl{display:flex;align-items:center;justify-content:center;gap:22px}
+.hsp .spctl button{background:none;border:none;padding:4px;color:var(--ink);cursor:pointer;display:grid;place-items:center;min-height:0!important}
+.hsp .spctl svg{width:22px;height:22px}
+.hsp .spctl .spplay{width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--card)}
+.hsp .spnote{font-size:12.5px;color:var(--ink3);line-height:1.4;margin:0}
+.hsp .splinks{display:flex;gap:8px;justify-content:center}
+.hsp .splinks button,.hsp .spback,.hsp .spconnect{font:inherit;font-size:13px;border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 14px;cursor:pointer;min-height:0!important}
+.hsp .spconnect{background:#1DB954;border-color:#1DB954;color:#fff;font-weight:500;align-self:flex-start}
+.hsp .spback{align-self:flex-start}
+.hsp .splist{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto}
+.hsp .spitem{display:flex;align-items:center;gap:10px;background:none;border:none;border-radius:9px;padding:6px;text-align:left;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;min-height:0!important}
+.hsp .spitem:hover{background:var(--paper)}
+.hsp .spitem img,.hsp .spitem .spph{width:38px;height:38px;border-radius:6px;object-fit:cover;flex:none}
+.hsp .spdevico{background:var(--line);opacity:1}
 /* sub-steps */
 .cpsteps{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;margin-left:8px;font-weight:400}
 .cpstepsbar{display:inline-block;width:34px;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
@@ -1704,7 +1728,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v115';
+var BUILD='v116';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3784,7 +3808,7 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)sche
 window.addEventListener('online',function(){scheduleCloudSync(200)});
 setInterval(function(){if(!document.hidden)scheduleCloudSync(0)},90000);
 
-function go(page,cid){view.page=page;view.classId=cid||null;view.menu=false;view.modal=null;view.fileQ='';view.appQ='';view.appEdit=false;window.scrollTo(0,0);render()}
+function go(page,cid){if(page==='home')setTimeout(function(){spPoll(true)},50);view.page=page;view.classId=cid||null;view.menu=false;view.modal=null;view.fileQ='';view.appQ='';view.appEdit=false;window.scrollTo(0,0);render()}
 
 /* ---------- rendering ---------- */
 function render(){
@@ -4877,14 +4901,149 @@ function musicEmbed(svc,url){
  return m?{src:'https://embed.music.apple.com/'+m[1],h:450}:null;
 }
 function homeMusicCard(){
- var mu=S.music||{},svc=mu.svc||'spotify',emb=musicEmbed(svc,mu[svc]),name=svc==='spotify'?'Spotify':'Apple Music';
+ var mu=S.music||{},svc=mu.svc||'spotify';
+ if(svc==='spotify'&&spConnected())return spCard();
+ var emb=musicEmbed(svc,mu[svc]),name=svc==='spotify'?'Spotify':'Apple Music';
  var body;
  if(emb&&!view.musicEdit)body='<div class="hmslot" id="musicslot" data-src="'+esc(emb.src)+'" data-h="'+emb.h+'" style="height:'+emb.h+'px"></div>';
  else body='<div class="hmform"><input id="musicurl" placeholder="Paste a '+name+' playlist, album or song link" value="'+esc(mu[svc]||'')+'">'
   +(view.musicErr?'<span style="font-size:12.5px;color:#A34A3F">'+esc(view.musicErr)+'</span>':'<span class="cpsoft" style="font-size:12px">In '+name+', tap Share, then Copy link.</span>')
   +'<button class="cpbtn2" data-musicsave="1" style="align-self:flex-start">Play this</button></div>';
  return '<section class="hsp" id="h-music"><div class="top"><b><i style="background:'+(svc==='spotify'?'#1DB954':'#FA2D48')+'"></i>'+name+'</b>'
-  +(emb&&!view.musicEdit?'<button data-musicedit="1">Change</button>':'')+'</div>'+body+'</section>';
+  +(emb&&!view.musicEdit?'<button data-musicedit="1">Change</button>':'')+'</div>'+body
+  +(svc==='spotify'&&spClientId()?'<button class="spconnect" data-sp="connect">Connect Spotify</button><p class="spnote">Log in once and Doable remembers you, with full songs and what’s playing on any of your devices.</p>':'')
+  +(view.spMsg?'<p class="spnote" style="color:#A34A3F">'+esc(view.spMsg)+'</p>':'')+'</section>';
+}
+/* ---------- Spotify connection (v116): log in once on each device and Doable remembers you ----------
+   Uses Spotify's own login (Authorization Code with PKCE, no secret needed). Shows what's playing on
+   ANY of your devices with its cover, and (with Spotify Premium) play/pause/skip, pick a playlist and
+   choose which device plays. The login is kept on this device only (localStorage 'hub:sp'); iPhone and
+   iPad Home Screen apps each connect once. SPOTIFY_CLIENT_ID comes from Jae's Spotify developer app. */
+var SPOTIFY_CLIENT_ID='';
+var SP_SCOPES='user-read-currently-playing user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played';
+function spClientId(){return SPOTIFY_CLIENT_ID||(function(){try{return localStorage.getItem('hub:spclient')||''}catch(e){return ''}})()}
+// always the folder address (never .../index.html), so it matches what is registered with Spotify exactly
+function spRedirect(){return location.origin+location.pathname.replace(/index\.html$/,'')}
+function spTok(){try{return JSON.parse(localStorage.getItem('hub:sp')||'null')}catch(e){return null}}
+function spSetTok(t){try{if(t)localStorage.setItem('hub:sp',JSON.stringify(t));else localStorage.removeItem('hub:sp')}catch(e){}}
+function spConnected(){var t=spTok();return !!(t&&t.refresh)}
+function spB64url(buf){var s='',b=new Uint8Array(buf);for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+async function spConnect(){
+ var cid=spClientId();if(!cid){view.spMsg='Spotify isn’t set up for Doable yet.';render();return}
+ var rnd=new Uint8Array(48);crypto.getRandomValues(rnd);var verifier=spB64url(rnd);
+ var st=new Uint8Array(12);crypto.getRandomValues(st);var state='sp_'+spB64url(st);
+ var challenge=spB64url(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier)));
+ try{localStorage.setItem('hub:spauth',JSON.stringify({v:verifier,s:state}))}catch(e){}
+ // a plain navigation (not a link), so on iPhone/iPad the login opens INSIDE the Home Screen app and
+ // comes back to it, keeping the login with this app rather than with Safari
+ location.href='https://accounts.spotify.com/authorize?'+new URLSearchParams({response_type:'code',client_id:cid,scope:SP_SCOPES,redirect_uri:spRedirect(),code_challenge_method:'S256',code_challenge:challenge,state:state}).toString();
+}
+async function spTokenCall(params){
+ var r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(params).toString()});
+ var d=await r.json().catch(function(){return {}});
+ if(!r.ok||!d.access_token)throw new Error(d.error_description||d.error||'token');
+ return d;
+}
+// coming back from Spotify's login page: swap the one-time code for the login, and tidy the address bar
+var spBootP=null;
+function spBoot(){
+ var q=new URLSearchParams(location.search),code=q.get('code'),state=q.get('state')||'',err=q.get('error');
+ if(!/^sp_/.test(state))return;
+ history.replaceState(null,'',location.pathname+location.hash);
+ var saved=null;try{saved=JSON.parse(localStorage.getItem('hub:spauth')||'null');localStorage.removeItem('hub:spauth')}catch(e){}
+ if(err||!code||!saved||saved.s!==state){view.spMsg=err==='access_denied'?'Spotify wasn’t connected.':'Spotify login didn’t finish. Try Connect again.';return}
+ spBootP=spTokenCall({grant_type:'authorization_code',code:code,redirect_uri:spRedirect(),client_id:spClientId(),code_verifier:saved.v})
+  .then(function(d){spSetTok({access:d.access_token,refresh:d.refresh_token,exp:Date.now()+(d.expires_in-60)*1000});view.spMsg='';spPoll(true)})
+  .catch(function(){view.spMsg='Spotify login didn’t finish. Try Connect again.';render()});
+}
+async function spAccess(){
+ var t=spTok();if(!t||!t.refresh)return null;
+ if(t.access&&t.exp>Date.now())return t.access;
+ try{
+  var d=await spTokenCall({grant_type:'refresh_token',refresh_token:t.refresh,client_id:spClientId()});
+  t={access:d.access_token,refresh:d.refresh_token||t.refresh,exp:Date.now()+(d.expires_in-60)*1000};spSetTok(t);return t.access;
+ }catch(e){
+  if(/invalid_grant|revoked|expired/i.test(String(e.message))){spSetTok(null);view.sp=null;view.spMsg='Spotify signed you out. Connect again to bring it back.';render()}
+  return null;
+ }
+}
+async function spApi(method,path,body){
+ var a=await spAccess();if(!a)return {status:0};
+ var r=await fetch('https://api.spotify.com/v1'+path,{method:method,headers:Object.assign({Authorization:'Bearer '+a},body?{'Content-Type':'application/json'}:{}),body:body?JSON.stringify(body):undefined});
+ var d=null;if(r.status!==204){try{d=await r.json()}catch(e){}}
+ return {status:r.status,data:d};
+}
+// what's playing right now, on any of your devices
+var spLastPoll=0;
+async function spPoll(force){
+ if(!spConnected())return;
+ if(!force&&Date.now()-spLastPoll<7000)return;spLastPoll=Date.now();
+ var r=await spApi('GET','/me/player?additional_types=episode');
+ var prev=JSON.stringify(view.sp||null);
+ if(r.status===200&&r.data){
+  var it=r.data.item||{},img=((it.album&&it.album.images)||it.images||[])[0];
+  view.sp={on:true,playing:!!r.data.is_playing,title:it.name||'',artist:(it.artists||[]).map(function(a){return a.name}).join(', ')||(it.show&&it.show.name)||'',
+   img:img?img.url:'',dur:it.duration_ms||0,pos:r.data.progress_ms||0,at:Date.now(),device:(r.data.device&&r.data.device.name)||'',url:(it.external_urls&&it.external_urls.spotify)||''};
+ }else if(r.status===204||r.status===200)view.sp={on:false};
+ else if(r.status===0)return;
+ if(JSON.stringify(view.sp)!==prev||force)spPaint();
+}
+// redraw only the Spotify card (never the whole page, so nothing else jumps)
+function spPaint(){var el=document.getElementById('h-music');if(!el){return}var tmp=document.createElement('div');tmp.innerHTML=homeMusicCard();el.replaceWith(tmp.firstChild)}
+setInterval(function(){if(view.page==='home'&&spConnected()&&!document.hidden)spPoll()},8000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&view.page==='home')spPoll(true)});
+// the progress bar creeps along between checks
+setInterval(function(){var s=view.sp,b=document.getElementById('spprog');if(!s||!s.playing||!b||!s.dur)return;b.style.width=Math.min(100,(s.pos+Date.now()-s.at)/s.dur*100)+'%'},1000);
+function spCard(){
+ var s=view.sp,premNote=view.spPremium===false?'<p class="spnote">Play, pause and skip from Doable need Spotify Premium. You can still see what’s playing.</p>':'';
+ var top='<div class="top"><b><i style="background:#1DB954"></i>Spotify</b><span class="spdev">'+(s&&s.on&&s.device?'On '+esc(s.device):'')+'</span></div>';
+ if(view.spPick==='lists'){
+  var L=view.spLists;
+  return '<section class="hsp" id="h-music">'+top+'<div class="splist">'+(L?(L.length?L.map(function(p){return '<button class="spitem" data-sp="pl:'+esc(p.uri)+'">'+(p.img?'<img src="'+esc(p.img)+'" alt="">':'<span class="spph"></span>')+'<span>'+esc(p.name)+'</span></button>'}).join(''):'<p class="spnote">No playlists found.</p>'):'<p class="spnote">Loading your playlists…</p>')
+   +'</div><button class="spback" data-sp="close">Back</button></section>';
+ }
+ if(view.spPick==='devices'){
+  var Dv=view.spDevices;
+  return '<section class="hsp" id="h-music">'+top+'<p class="spnote" style="margin:0 2px">Play on…</p><div class="splist">'+(Dv?(Dv.length?Dv.map(function(d){return '<button class="spitem" data-sp="dev:'+esc(d.id)+'"><span class="spph spdevico"></span><span>'+esc(d.name)+(d.is_active?' · playing':'')+'</span></button>'}).join(''):'<p class="spnote">No devices found. Open the Spotify app on your phone, iPad or computer, then try again.</p>'):'<p class="spnote">Looking for your devices…</p>')
+   +'</div><button class="spback" data-sp="close">Back</button></section>';
+ }
+ var body;
+ if(!s)body='<p class="spnote">Checking what’s playing…</p>';
+ else if(!s.on)body='<div class="spidle"><span class="spart spph"></span><div><b>Nothing playing</b><span>Pick a playlist to start, or press play in Spotify.</span></div></div>';
+ else body='<div class="spnow">'+(s.img?'<img class="spart" src="'+esc(s.img)+'" alt="">':'<span class="spart spph"></span>')
+  +'<div class="spmeta"><b>'+esc(s.title)+'</b><span>'+esc(s.artist)+'</span></div></div>'
+  +'<div class="spbar"><i id="spprog" style="width:'+(s.dur?Math.min(100,(s.pos+(s.playing?Date.now()-s.at:0))/s.dur*100):0)+'%"></i></div>';
+ var ctl='<div class="spctl"><button data-sp="prev" aria-label="Previous">'+SP_ICO.prev+'</button><button class="spplay" data-sp="'+(s&&s.on&&s.playing?'pause':'play')+'" aria-label="'+(s&&s.on&&s.playing?'Pause':'Play')+'">'+(s&&s.on&&s.playing?SP_ICO.pause:SP_ICO.play)+'</button><button data-sp="next" aria-label="Next">'+SP_ICO.next+'</button></div>';
+ return '<section class="hsp" id="h-music">'+top+body+ctl+premNote+(view.spMsg?'<p class="spnote" style="color:#A34A3F">'+esc(view.spMsg)+'</p>':'')
+  +'<div class="splinks"><button data-sp="lists">Playlists</button><button data-sp="devices">Play on…</button></div></section>';
+}
+var SP_ICO={play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>',
+ prev:'<svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z" fill="currentColor"/></svg>',next:'<svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z" fill="currentColor"/></svg>'};
+async function spAction(a){
+ if(a==='connect'){spConnect();return}
+ if(a==='disconnect'){spSetTok(null);view.sp=null;view.spMsg='';render();return}
+ if(a==='close'){view.spPick='';spPaint();return}
+ if(a==='lists'){view.spPick='lists';view.spLists=null;spPaint();var r=await spApi('GET','/me/playlists?limit=30');view.spLists=((r.data&&r.data.items)||[]).filter(Boolean).map(function(p){return {uri:p.uri,name:p.name,img:p.images&&p.images[0]?p.images[p.images.length-1].url:''}});spPaint();return}
+ if(a==='devices'){view.spPick='devices';view.spDevices=null;spPaint();var r2=await spApi('GET','/me/player/devices');view.spDevices=(r2.data&&r2.data.devices)||[];spPaint();return}
+ var res;
+ if(a.indexOf('pl:')===0){
+  view.spPick='';spPaint();
+  res=await spApi('PUT','/me/player/play',{context_uri:a.slice(3)});
+  if(res.status===404){ // no device is active: start it on the first device we can find
+   var dv=await spApi('GET','/me/player/devices'),first=((dv.data&&dv.data.devices)||[])[0];
+   if(first)res=await spApi('PUT','/me/player/play?device_id='+encodeURIComponent(first.id),{context_uri:a.slice(3)});
+   else{view.spMsg='Open the Spotify app on one of your devices first, then pick the playlist again.';spPaint();return}
+  }
+ }else if(a.indexOf('dev:')===0){view.spPick='';spPaint();res=await spApi('PUT','/me/player',{device_ids:[a.slice(4)],play:true})}
+ else if(a==='play')res=await spApi('PUT','/me/player/play');
+ else if(a==='pause')res=await spApi('PUT','/me/player/pause');
+ else if(a==='next')res=await spApi('POST','/me/player/next');
+ else if(a==='prev')res=await spApi('POST','/me/player/previous');
+ if(res&&res.status===403){view.spPremium=false}
+ else if(res&&res.status===404&&(a==='play')){view.spMsg='Open the Spotify app on one of your devices first, or use “Play on…”.'}
+ else if(res&&res.status>=200&&res.status<300){view.spPremium=true;view.spMsg=''}
+ if(view.sp&&res&&res.status<300&&(a==='play'||a==='pause')){view.sp.playing=a==='play';view.sp.pos+=Date.now()-view.sp.at;view.sp.at=Date.now()}
+ spPaint();setTimeout(function(){spPoll(true)},700);
 }
 var musicHost=null,musicTick=null;
 function musicSync(){
@@ -5256,7 +5415,8 @@ function modalHtml(){
    +sg('hub','Your hub',S.owner,
      '<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
      +'<div class="field" style="margin:0"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>'
-     +'<div class="field" style="margin:0"><label for="setMusic">Music on Home</label><select id="setMusic" data-musicsvcsel="1"><option value="spotify"'+((S.music&&S.music.svc)==='apple'?'':' selected')+'>Spotify</option><option value="apple"'+((S.music&&S.music.svc)==='apple'?' selected':'')+'>Apple Music</option></select></div>',false)
+     +'<div class="field" style="margin:0"><label for="setMusic">Music on Home</label><select id="setMusic" data-musicsvcsel="1"><option value="spotify"'+((S.music&&S.music.svc)==='apple'?'':' selected')+'>Spotify</option><option value="apple"'+((S.music&&S.music.svc)==='apple'?' selected':'')+'>Apple Music</option></select></div>'
+     +(spConnected()?'<div class="field" style="margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:13.5px">Spotify is connected on this device.</span><button data-sp="disconnect">Disconnect</button></div>':''),false)
    +sg('look','Look and feel','',
      '<button data-opencolours="1">Change colours</button>'
      +(onbPlatform()!=='desktop'?'<button data-xact="togglephoneapps">Open apps in their phone apps: '+(phoneAppsOn()?'On':'Off')+'</button>':''),false)
@@ -7433,7 +7593,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-tpcopy],[data-termedit],[data-musicsvc],[data-musicedit],[data-musicsave],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-tpcopy],[data-sp],[data-termedit],[data-musicsvc],[data-musicedit],[data-musicsave],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -7489,6 +7649,7 @@ document.addEventListener('click',function(e){
   else{base.setMonth(base.getMonth()+(+d.mon));view.calMonth=base.getFullYear()+'-'+String(base.getMonth()+1).padStart(2,'0')}
   render();return;
  }
+ if(d.sp){spAction(d.sp);return}
  if(d.termedit){view.termEdit=!view.termEdit;render();return}
  if(d.musicsvc){S.music=Object.assign({},S.music||{},{svc:d.musicsvc});view.musicEdit=false;view.musicErr='';save();render();return}
  if(d.musicedit){view.musicEdit=true;view.musicErr='';render();return}
@@ -8152,7 +8313,9 @@ window.addEventListener('scroll',function(){
  var b=document.getElementById('mbar');if(b)b.classList.toggle('show',on);
  document.body.classList.toggle('scrolled',on);
 },{passive:true});
+try{spBoot()}catch(e){}
 load();
+setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
 fetchWeather();
 (function(){
  var ua=navigator.userAgent||'';
