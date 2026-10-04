@@ -1007,14 +1007,13 @@ a.cpitemname:hover{text-decoration:underline}
 .cpnexts .cpnextslab,.cpnexts .cpnextdate{color:inherit;opacity:.78}
 .cpnexts .cpnexttitle{color:inherit!important}
 .cpnexts.late{background:#9c4a41;color:#fff}
-.cpnextsnum{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;height:64px;border-radius:11px;background:var(--card);color:var(--cp-asg-c);line-height:1;flex:none;padding:0 6px}
+.cpnextsnum{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;height:64px;border-radius:11px;background:var(--card);color:#33312C;line-height:1;flex:none;padding:0 6px}
 .cpnextsnum .n{font-family:var(--fh,inherit);font-size:28px;font-weight:var(--wh,500)}
 .cpnextsnum .u{font-size:10.5px;margin-top:3px;white-space:nowrap}
 .cpnextstext{min-width:0}
 .cpnextslab{font-size:12px;color:var(--ink3)}
 .cpnexts .cpnexttitle{font-size:14.5px;line-height:1.3;color:var(--head,var(--ink));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:1199px){.cpnextc{display:none}}
-@media(max-width:700px){.cpnexts{display:flex;order:-1}}
+@media(max-width:1199px){.cpnextc{display:none}.cpnexts{display:flex;order:-1}}
 /* class page tabs */
 .cptabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:4px 0 22px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:20;background:var(--paper)}
 .cptabs::-webkit-scrollbar{display:none}
@@ -1732,7 +1731,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v120';
+var BUILD='v121';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4472,6 +4471,8 @@ function viewClass(c){
   var after=asg.filter(function(a){return a.due&&a!==nextA}).slice(0,2);
   var nDate=esc(withTime(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),nextA.time));
   var nAttr=' data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'" title="Open '+esc(nextA.title)+'"';
+  var clsHex=palHex(c.color),clsOn=contrast(clsHex,'#ffffff')>=2.6?'#fff':'#221d18';
+  if(!nl)nAttr+=' style="background:'+clsHex+';color:'+clsOn+';--cp-asg-c:'+clsHex+'"';
   // side column (wide screens): a square-ish card with the big number
   NX='<section class="cpcard cpnextc'+(nl?' late':'')+'"'+nAttr+'><div class="cpnextrow2">'
    +'<div class="cpnextbig"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
@@ -4665,9 +4666,8 @@ function viewClass(c){
    +'</div></div></div>';
  }).join('');
  // professor, reference files and the Claude project, together in one Class info card
- var IB='<div id="c-prof"><div class="cpinfohead"><b>Professor</b><button class="cpghost" data-add="contact" data-c="'+c.id+'">+ Add</button></div>'+pb+'</div>';
  var rf=FILES[REF_CID]||[];
- IB+='<div class="cpinfohead"><b>Reference files</b><button class="cpghost" data-xact="refadd">+ Add</button></div>'
+ var IB='<div class="cpinfohead"><b>Reference files</b><button class="cpghost" data-xact="refadd">+ Add</button></div>'
   +(!rf.length?'<div class="cpsoft" style="font-size:13.5px">A formatting guide or template you want handy on every class page.</div>'
   :rf.map(function(f,i){
    var link=f.kind==='pdf'?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
@@ -4684,8 +4684,34 @@ function viewClass(c){
  }
  var BOT='<section class="cpfoldrow" id="c-info">'
   +fold('done',col.done.c,'Recently completed',finished.length?finished.length+' done':'',DB)
-  +fold('info',col.third.c,'Class info',c.contacts.length?esc(c.contacts[0].name||''):'',IB)
-  +tpCard(c)+'</section>';
+  +fold('info',col.third.c,'Class info','',IB)+'</section>';
+
+ /* ===== right column (v121, back by request): Next due, When and where, Grade, Professor, Title page ===== */
+ var R='<aside class="cprail cpclassrail">'+NX;
+ if(c.day||c.room){
+  var online=/online/i.test(c.day||'');
+  var wOld=!!surfGet('when','bg')&&!cpOverride(c.id,'when'),wInk=wOld?'var(--ink)':col.darkInk,wSoft=wOld?'var(--ink2)':col.darkSoft;
+  R+='<section class="cpwhen" id="cp-when" style="background:var(--s-when-bg,'+col.dark+')">'
+   +'<div class="cpwhenlab" style="color:var(--s-when-line,'+wSoft+')">When and where</div>'
+   +'<div class="cpwhentime" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.day||'Time not set')+'</div>'
+   +(c.room?'<div class="cpwhenroom" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.room)+'</div>':(online?'':'<div class="cpwhenroom" style="color:'+wSoft+'">Room not set</div>'))
+   +'</section>';
+ }
+ var gi0=gradeInfo(c);
+ if(gi0.total){
+  var gb;
+  if(gi0.avg==null)gb='<div class="cpsoft" style="font-size:14.5px;line-height:1.45">No marks yet. Add them as work comes back.</div>';
+  else{
+   gb='<div class="cpgrade"><span class="cpgradebig" style="color:'+palHex(c.color)+'">'+gi0.avg.toFixed(1)+'%</span><span class="cpmeta">on '+gi0.graded+'% of the course</span></div>';
+   if(gi0.need!=null){
+    var nd=gi0.need;
+    gb+='<div class="cpsoft" style="font-size:13.5px">'+(nd<=0?'You have already locked in your target.':(nd>100?'Your target is out of reach now, you would need over 100%.':'You need about '+nd.toFixed(0)+'% on the remaining '+gi0.remaining+'% to reach '+c.target+'%.'))+'</div>';
+   }else if(!c.target)gb+='<div class="cpsoft" style="font-size:13px">Set a target in Edit class to see what you need.</div>';
+  }
+  R+=railCard('cp-grade',col.mini.c,'Grade','',gb);
+ }
+ R+=railCard('c-prof',col.files.c,'Professor','<button class="cpcardact" data-add="contact" data-c="'+c.id+'">Add</button>',pb);
+ R+=tpCard(c)+'</aside>';
 
  /* ===== the summary strip (computer and iPad): next due, grade, when, professor ===== */
  var on2=function(hx){return contrast(hx,'#ffffff')>=2.6?'#fff':'#221d18'};
@@ -4708,7 +4734,7 @@ function viewClass(c){
  var T='<nav class="cptabs" aria-label="Jump to a part of this class">'+TABS.map(function(t,i){
    return '<button class="cptab'+(i?'':' on')+'" data-cpjump="'+t[0]+'" style="--tc:'+t[2]+'"><i class="cptabdot"></i><span>'+t[1]+'</span></button>';
   }).join('')+'</nav>';
- return top+TL+ask+T+'<div class="cpsplit cpone" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+A+F+BOT+study+G+'</div></div>';
+ return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+A+F+BOT+study+G+'</div>'+R+'</div>';
 }
 
 /* ---------- Home (v96 redesign, same style as the class page) ----------
