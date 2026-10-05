@@ -1789,7 +1789,7 @@ var CHROME=[
  {key:'sideInk',label:'Menu text',hint:'The page names in the menu',def:'#C6C0B4'},
  {key:'sideBright',label:'Menu highlight text',hint:'Your name, the page you are on, and the weather box',def:'#FFFDF8'},
  {key:'sideSoft',label:'Menu small text',hint:'Pages under a class (Assignments, Files), the Classes label, and the term under your name',def:'#A49D90'},
- {key:'paper',label:'Page background',hint:'The colour behind everything',def:'#FBFAF8'},
+ {key:'paper',label:'Page background',hint:'Behind the cards on every page, unless a page has its own (set in that page\'s Colours)',def:'#FBFAF8'},
  {key:'card',label:'Boxes and popups',hint:'The white areas: cards, popups and text boxes',def:'#FFFFFF'},
  {key:'doneBg',label:'Finished items background',hint:'The box behind things you have completed',def:'#FAF0EF'},
  {key:'ink',label:'Main text',hint:'Most of the writing on the page',def:'#33312C'},
@@ -1881,7 +1881,8 @@ function applyTheme(){
  // --paper stays the soft tint used INSIDE cards (headers, hovers); a picked Page background goes to --pagebg only
  CHROME.forEach(function(chx){if(chx.key!=='ink2'&&chx.key!=='ink3')root.style.setProperty('--'+chx.key,chx.key==='paper'?chx.def:chromeHex(chx.key))});
  // the page behind the cards: only once you've picked one (the cards themselves keep the Boxes colour)
- if(S.theme&&S.theme.chrome&&S.theme.chrome.paper)root.style.setProperty('--pagebg',S.theme.chrome.paper);else root.style.removeProperty('--pagebg');
+ var pbg=pageBgFor(pageKey());
+ if(pbg)root.style.setProperty('--pagebg',pbg);else root.style.removeProperty('--pagebg');
  SURFACES.forEach(function(sf){
   ['bg','line','ink'].forEach(function(part){
    var v=surfGet(sf.key,part);
@@ -1906,7 +1907,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v132';
+var BUILD='v133';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4072,6 +4073,17 @@ function render(){
  applyTheme();
 }
 
+/* page background, per page (v133): S.theme.pageBg = {home:'#..', calendar:'#..', 'class:<id>':'#..', 'class:*':'#..'}.
+   A page uses its own colour, then (class pages) the every-class colour, then the all-pages one (S.theme.chrome.paper,
+   set in All colours), then white */
+function pageBgFor(k){
+ var t=S.theme||{},m=t.pageBg||{};
+ return m[k]||(/^class:/.test(k)&&m['class:*'])||(t.chrome&&t.chrome.paper)||'';
+}
+function pageBgKey(){ // which colour the page's own colour panel edits
+ if(view.page==='class')return view.secScope==='all'?'class:*':'class:'+view.classId;
+ return view.page;
+}
 function pageKey(){return view.page==='class'?'class:'+view.classId:view.page}
 function bannerSize(){return (S.banners&&S.banners[pageKey()])||S.bannerAll||'large'}
 function coverKey(c){return c?'cover:'+c.id:'cover:home'}
@@ -4113,9 +4125,9 @@ function pickerHtml(){
   var rows=onHome?CP_SITE_ROWS[view.page]:CP_SECS;
   var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>'+(onHome?CP_SITE_TITLES[view.page]:'Section style')+'</h3>';
   if(!onHome)sh+='<div class="secscope"><button data-secscope="one" class="'+(allScope?'':'on')+'">This class</button><button data-secscope="all" class="'+(allScope?'on':'')+'">Every class</button></div>';
-  var pgb=(S.theme&&S.theme.chrome&&S.theme.chrome.paper)||'#FFFFFF';
-  sh+='<div class="secrow"><input type="color" value="'+pgb+'" data-themechrome="paper" aria-label="Page background colour"><input type="text" class="sechex" value="'+pgb+'" data-themechromehex="paper" spellcheck="false" aria-label="Page background hex code"><span class="secname">Page background<small>Behind the cards, on every page</small></span>'
-   +(S.theme&&S.theme.chrome&&S.theme.chrome.paper?'<button class="ghost" data-pagebgreset="1" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp"></span>')+'</div>';
+  var pbk=pageBgKey(),pgb=pageBgFor(pbk)||'#FFFFFF',pown=!!((S.theme&&S.theme.pageBg||{})[pbk]);
+  sh+='<div class="secrow"><input type="color" value="'+pgb+'" data-pagebg="1" aria-label="Page background colour"><input type="text" class="sechex" value="'+pgb+'" data-pagebghex="1" spellcheck="false" aria-label="Page background hex code"><span class="secname">Page colour<small>'+(pbk==='class:*'?'Every class':pbk.indexOf('class:')===0?'This class only':'This page only')+'</small></span>'
+   +(pown?'<button class="ghost" data-pagebgreset="1" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp"></span>')+'</div>';
   sh+='<p class="sub2">'+(onHome?'Pick a colour for each part of this page.':(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.'))+' B switches a title between bold and regular.</p>';
   rows.forEach(function(k){
    var key=k[0],dark=key==='when'||key==='htoday',cur=dark?sreal.dark:sreal[key].c,site=CP_SITEWIDE[key];
@@ -4481,7 +4493,7 @@ function cpHead(key,col,title,pill,hint,acts,fold){
 }
 document.addEventListener('click',function(e){
  if(!(e.target.closest&&e.target.closest('[data-pagebgreset]')))return;
- if(S.theme&&S.theme.chrome)delete S.theme.chrome.paper;applyTheme();save();render();
+ if(S.theme&&S.theme.pageBg)delete S.theme.pageBg[pageBgKey()];applyTheme();save();render();
 });
 function fitLines(){
  document.querySelectorAll('[data-fit]').forEach(function(el){
@@ -8520,6 +8532,12 @@ document.addEventListener('input',function(e){
    var pair=document.querySelector(ds.surfpart?'[data-surfparthex="'+spec.join(':')+'"]':'[data-surfpart="'+spec.join(':')+'"]');
    if(pair)pair.value=val2;
   }
+  return;
+ }
+ if(ds.pagebg||ds.pagebghex){
+  var pv=t.value.trim();if(!/^#?[0-9a-fA-F]{6}$/.test(pv))return;if(pv[0]!=='#')pv='#'+pv;
+  S.theme=S.theme||{};S.theme.pageBg=S.theme.pageBg||{};S.theme.pageBg[pageBgKey()]=pv;applyTheme();save();
+  var pair=document.querySelector(ds.pagebg?'[data-pagebghex]':'[data-pagebg]');if(pair)pair.value=pv;
   return;
  }
  if(ds.themechrome){
