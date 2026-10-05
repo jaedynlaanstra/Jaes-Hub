@@ -247,7 +247,7 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
   .tbl td:nth-child(3){margin-left:32px}
   .modalbg{align-items:flex-end;padding:0}
   .modal{max-width:none;width:100%;border-radius:18px 18px 0 0;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
-  .pickpanel{left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;max-height:72vh;border-radius:18px 18px 0 0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
+  .pickpanel{left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;height:var(--pkh,46vh);max-height:none;border-radius:18px 18px 0 0;padding-top:8px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
   .pickbtn{right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
   .coverwrap{max-height:190px}
   .pencil{width:30px;height:30px}
@@ -356,6 +356,15 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .pickhead{display:flex;align-items:center;gap:8px;cursor:grab;margin:-4px -4px 10px;padding:4px}
 .pickhead:active{cursor:grabbing}
 .pickgrip{width:26px;height:4px;border-radius:3px;background:var(--line2)}
+.pkph{display:none}
+/* phones: the colour panel is a sheet along the bottom. Drag its handle up or down to make it taller or
+   shorter (all the way down closes it), and the page gets room underneath so every part can be scrolled into view */
+@media(max-width:700px){
+  .pickhead{justify-content:center;flex-direction:column;gap:5px;margin:-4px -18px 8px;padding:6px 18px 8px;touch-action:none;position:sticky;top:-8px;background:var(--card);z-index:2}
+  .pickgrip{width:40px;height:5px}
+  .pkdesk{display:none}.pkph{display:inline}
+  body:has(.pickpanel) .main{padding-bottom:var(--pkh,46vh)}
+}
 .pickbtn{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;background:var(--sideBg);border:none;box-shadow:0 4px 16px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:70;padding:0}
 .pickbtn svg{width:21px;height:21px;fill:var(--sideBright,#EAE6DC)}
 .pickbtn:hover{filter:brightness(1.15)}
@@ -467,7 +476,7 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
   .tbl td:nth-child(3){margin-left:32px}
   .modalbg{align-items:flex-end;padding:0}
   .modal{max-width:none;width:100%;border-radius:18px 18px 0 0;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
-  .pickpanel{left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;max-height:72vh;border-radius:18px 18px 0 0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
+  .pickpanel{left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;height:var(--pkh,46vh);max-height:none;border-radius:18px 18px 0 0;padding-top:8px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
   .pickbtn{right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
   .coverwrap{max-height:190px}
   .pencil{width:30px;height:30px}
@@ -734,6 +743,15 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cpico svg{width:17px;height:17px}
 .cptitlecol{display:flex;flex-direction:column;gap:2px;flex:1 1 auto;min-width:0;max-width:100%}
 .cptitlerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cpfoldchev{display:none}
+@media(max-width:700px){
+  [data-secfold]{cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .cpfoldchev{display:inline-flex;margin-left:auto;opacity:.85;transition:transform .2s}
+  .cpfoldchev svg{width:18px;height:18px}
+  .cpsec:not(.cpshut) .cpfoldchev{transform:rotate(180deg)}
+  .cpsec.cpshut>:not(.cphead){display:none!important}
+  .cpsec.cpshut .cphead .cpacts,.cpsec.cpshut .cphead .cphint{display:none!important}
+}
 .cptitle{font-family:var(--fh,inherit);font-style:var(--hs,normal);font-size:19px;line-height:1.2;margin:0;letter-spacing:-.005em}
 .cppill{white-space:nowrap;flex:none;font-size:11.5px;font-weight:500;background:var(--card);border-radius:99px;padding:1px 8px;line-height:1.5}
 .cphint{font-size:12.5px;line-height:1.35}
@@ -1048,7 +1066,9 @@ a.cpitemname:hover{text-decoration:underline}
 .hwd.on{border-color:var(--cp-hup-c);box-shadow:inset 0 0 0 1px var(--cp-hup-c)}
 .hwd.past{opacity:.7}
 .hwdn{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink3)}
-.hwdn b{font-size:15px;font-weight:450;color:var(--ink)}
+.hwdn{align-items:center!important}
+.hwdn b{font-family:var(--fh,inherit);font-size:24px;line-height:1;font-weight:var(--wh,500);color:var(--ink)}
+.hwd.on .hwdn b{color:var(--cp-hup-c)}
 .hwchip{display:block;width:100%;text-align:left;border:none;border-radius:7px;padding:5px 7px;font:inherit;font-size:11.5px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;min-height:0!important}
 .hwchip.done{opacity:.45;text-decoration:line-through}
 .hwempty{font-size:11.5px;color:var(--ink3);opacity:.7}
@@ -1096,7 +1116,15 @@ a.cpitemname:hover{text-decoration:underline}
   .cphomesplit .cphomerail{display:contents}
   #h-next{order:-2}.hpair{order:1}#h-week{order:3}#h-term{order:4}#h-music{order:5}#h-classes{order:6}.cphomesplit .cpsettings{order:9}
 }
-@media(max-width:700px){#h-classes{display:none}}
+@media(max-width:700px){
+  #h-clock{display:none}
+  #h-classes .cpclsgrid{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;gap:10px;padding:12px}
+  #h-classes .cpclsgrid::-webkit-scrollbar{display:none}
+  #h-classes .cpcls{flex:0 0 172px;scroll-snap-align:start}
+  #h-classes .cphint{display:none}
+  #h-classes .cphead{flex-wrap:nowrap}
+  #h-classes .cptitlerow{flex-wrap:nowrap}#h-classes .cptitle{white-space:nowrap}#h-classes .cpacts{flex:none}
+}
 /* Home: Today's plan and Coming up, two calm boxes side by side */
 .hpair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
 .hpair>:only-child{grid-column:1/-1}
@@ -1195,6 +1223,9 @@ a.cpitemname:hover{text-decoration:underline}
 /* next due, number on the right */
 .hn2{display:flex;align-items:center;gap:14px;border-radius:14px;padding:15px 18px;cursor:pointer}
 .hn2 .tx{min-width:0;flex:1}
+.hn2 .hntick{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.75);background:transparent;padding:0;cursor:pointer;min-height:0!important;transition:background .15s}
+.hn2 .hntick:hover{background:rgba(255,255,255,.22)}
+.hband .day .nw{white-space:nowrap}
 .hn2 .lab{font-size:12px;opacity:.8}
 .hn2 .ti{font-size:15.5px;line-height:1.3;margin-top:2px}
 .hn2 .dt{font-size:12px;opacity:.8;margin-top:3px}
@@ -1257,7 +1288,8 @@ a.cpitemname:hover{text-decoration:underline}
 /* term, slim */
 .ht2{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 15px}
 .ht2 .r{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;color:var(--ink2);flex-wrap:wrap}
-.ht2 .r b{font-size:15px;font-weight:500;color:var(--ink)}
+.ht2 .r b{font-family:var(--fh,inherit);font-size:21px;line-height:1.2;font-weight:var(--wh,500);color:var(--ink)}
+.ht2 .r b .tl{display:block;font-family:var(--fb,inherit);font-size:12.5px;font-weight:400;color:var(--ink3)}
 .ht2 .r button{background:none;border:none;padding:0;font:inherit;font-size:12.5px;color:var(--ink3);cursor:pointer;min-height:0!important}
 .ht2 .bar{display:block;width:100%;height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:8px}
 .ht2 .bar i{display:block;height:100%;background:var(--sideBg);border-radius:99px}
@@ -1289,6 +1321,14 @@ a.cpitemname:hover{text-decoration:underline}
 .hsp .spitem:hover{background:var(--paper)}
 .hsp .spitem img,.hsp .spitem .spph{width:38px;height:38px;border-radius:6px;object-fit:cover;flex:none}
 .hsp .spdevico{background:var(--line);opacity:1}
+.hsp.tint{background:var(--spbg);border-color:transparent;color:#fff;transition:background .6s}
+.hsp.tint .top,.hsp.tint .top b,.hsp.tint .top button,.hsp.tint .spdev,.hsp.tint .spmeta b,.hsp.tint .spmeta span,.hsp.tint .spidle b,.hsp.tint .spidle span,.hsp.tint .spnote,.hsp.tint .spctl button,.hsp.tint .spitem{color:#fff}
+.hsp.tint .spdev,.hsp.tint .spmeta span,.hsp.tint .spnote{opacity:.78}
+.hsp.tint .spbar{background:rgba(255,255,255,.25)}
+.hsp.tint .spbar i{background:#fff}
+.hsp.tint .spctl .spplay{background:#fff;color:var(--spbg)}
+.hsp.tint .splinks button,.hsp.tint .spback{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+.hsp.tint .spitem:hover{background:rgba(255,255,255,.12)}
 /* v123: Coming up with three coloured sections; Today's plan and Resources in the side column */
 .hup2{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .hup2>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer}
@@ -1311,6 +1351,7 @@ a.cpitemname:hover{text-decoration:underline}
 @media(max-width:1000px){.hupgrid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:700px){.hup2>summary{padding:14px 14px}.hup2>summary h2{font-size:22px}.hupgrid{padding:0 10px 10px;gap:10px}.hus .hr2 .tt{display:block;-webkit-line-clamp:unset;overflow:visible}}
 @media(max-width:1199px){.p3 #h-plan{order:2}.p3 #h-res{order:7}.p3 #h-up{order:1}}
+@media(max-width:700px){.p3 #h-classes{order:3}} /* phones: your classes slide sideways right under the week */
 /* Files & links header: title + Add on line one, description + search on line two */
 .cpfhead{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;row-gap:6px}
 .cpfhead .cptitlerow{min-width:0}
@@ -1769,7 +1810,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v126';
+var BUILD='v127';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -2399,6 +2440,7 @@ document.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('[data-xact]');
  if(!b)return;
  var a=b.getAttribute('data-xact');
+ if(b.hasAttribute('data-closesheet')&&view.modal){view.modal=null;render()}
  if(a.indexOf('plat:')===0){
   var pl=a.slice(5);
   if(onb&&document.getElementById('onb')&&document.getElementById('onb').contains(b)){onb.plat=pl;buildOnb()}
@@ -2638,7 +2680,7 @@ function xmCss(){
  +'#xm .xmsg{color:#A34A3F;font-size:13px;margin:0 0 10px}#xm .xmsg.ok{color:#4C6F55}'
  +'#xm .xbox{background:var(--paper,#FBFAF8);border:1px solid var(--line,#E4E0D7);border-radius:12px;padding:11px 13px;margin:0 0 12px;font-size:14px;word-break:break-word}'
  +'#xm .xcode{font-size:24px;letter-spacing:.14em;font-weight:700;margin:2px 0 6px}'
- +'#xm .xlist{max-height:38vh;overflow:auto;border:1px solid var(--line,#E4E0D7);border-radius:12px;margin:0 0 12px}#xm .xrow{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-bottom:1px solid var(--line,#E4E0D7);font-size:14px;cursor:pointer}#xm .xrow:last-child{border-bottom:none}#xm .xrow input{margin-top:3px;width:auto;flex:none}#xm .xrow small{display:block;color:var(--ink3,#A29D93);font-size:12px}#xm .xrow.dim{opacity:.5}'
+ +'#xm .xlist{max-height:38vh;overflow:auto;border:1px solid var(--line,#E4E0D7);border-radius:12px;margin:0 0 12px}#xm .xrow{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-bottom:1px solid var(--line,#E4E0D7);font-size:14px;cursor:pointer}#xm .xrow:last-child{border-bottom:none}#xm .xrow input{margin-top:3px;width:auto;flex:none}#xm .xrow small{display:block;color:var(--ink3,#A29D93);font-size:12px}#xm .xrow.dim{opacity:.5}#xm select.xcls{width:auto;max-width:100%;padding:5px 8px;margin:6px 0 2px;font-size:16px;border-radius:8px}'
  +'#xm details{margin:0 0 12px;font-size:13.5px;color:var(--ink2,#6B675F)}#xm summary{cursor:pointer;margin-bottom:6px}#xm details p{font-size:13px}';
  document.head.appendChild(st);
 }
@@ -3042,22 +3084,39 @@ function icsPickHtml(msg){
   +'<input type="file" id="xmIcs" accept=".ics,text/calendar" style="margin-bottom:8px">'
   +'<p class="xmsg" id="xmMsg">'+esc(msg||'')+'</p><div class="xacts"><button class="xbtn" data-xm="close">Cancel</button></div>';
 }
+/* one calendar with every class mixed together: each event can go to its own class ('__each').
+   Doable guesses the class from the event's name or notes (course code like MKTG-7011, its letters, the short name or full name) */
+function icsGuess(ev){
+ var hay=' '+(ev.title+' '+(ev.notes||'')).toUpperCase().replace(/[^A-Z0-9]+/g,' ')+' ',best=null,bestLen=0;
+ S.classes.filter(function(c){return !isRefClass(c)}).forEach(function(c){
+  var code=String(c.code||'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').trim();
+  [code,code.split(' ')[0],String(c.short||'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').trim(),String(c.name||'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').trim()]
+   .forEach(function(k){if(k&&k.length>=3&&hay.indexOf(' '+k+' ')>-1&&k.length>bestLen){best=c.id;bestLen=k.length}});
+ });
+ return best;
+}
+function icsEach(){return ics.target==='__each'}
+function icsDupEv(ev){var cid=icsEach()?ev.cls:ics.target;return !!(cid&&cid!=='__new'&&icsDup(cid,ev))}
 function icsListHtml(){
- var t0=iso(today()),rows=ics.events.map(function(ev,i){
+ var cls=S.classes.filter(function(c){return !isRefClass(c)}),t0=iso(today()),rows=ics.events.map(function(ev,i){
   if(!ics.showPast&&ev.due<t0)return '';
-  var dup=ics.target&&ics.target!=='__new'&&icsDup(ics.target,ev);
-  return '<label class="xrow'+(dup?' dim':'')+'"><input type="checkbox" data-i="'+i+'"'+(ev.sel&&!dup?' checked':'')+(dup?' disabled':'')+'><div>'+esc(ev.title)+'<small>'+esc(parseISO(ev.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric',year:'numeric'})+(ev.time?' · '+fmtTime(ev.time):'')+(ev.rep?' · repeats':'')+(dup?' · already in this class':''))+'</small></div></label>';
+  var dup=icsDupEv(ev);
+  var pick=icsEach()?'<select class="xcls" data-cls="'+i+'" aria-label="Class for this event"><option value="">Pick a class…</option>'
+   +cls.map(function(c){return '<option value="'+c.id+'"'+(ev.cls===c.id?' selected':'')+'>'+esc(classLabel(c))+'</option>'}).join('')+'</select>':'';
+  return '<label class="xrow'+(dup?' dim':'')+'"><input type="checkbox" data-i="'+i+'"'+(ev.sel&&!dup?' checked':'')+(dup?' disabled':'')+'><div style="min-width:0;flex:1">'+esc(ev.title)+'<small>'+esc(parseISO(ev.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric',year:'numeric'})+(ev.time?' · '+fmtTime(ev.time):'')+(ev.rep?' · repeats':'')+(dup?' · already in this class':''))+'</small>'+pick+'</div></label>';
  }).join('');
- var opts=S.classes.filter(function(c){return !isRefClass(c)}).map(function(c){return '<option value="'+c.id+'"'+(ics.target===c.id?' selected':'')+'>'+esc(c.name)+'</option>'}).join('')+'<option value="__new"'+(ics.target==='__new'?' selected':'')+'>A new class…</option>';
+ var opts='<option value="__each"'+(icsEach()?' selected':'')+'>Choose a class for each event</option>'
+  +cls.map(function(c){return '<option value="'+c.id+'"'+(ics.target===c.id?' selected':'')+'>'+esc(c.name)+'</option>'}).join('')+'<option value="__new"'+(ics.target==='__new'?' selected':'')+'>A new class…</option>';
  return '<h2>Choose what to import</h2>'
   +'<label for="xmTarget">Add to</label><select id="xmTarget">'+opts+'</select>'
+  +(icsEach()?'<p style="font-size:13px;margin:-2px 0 10px">Pick a class under each event. Doable has guessed where it could from the event names.</p>':'')
   +(ics.target==='__new'?'<input id="xmNew" type="text" placeholder="Name of the new class" maxlength="80" value="'+esc(ics.newName||'')+'">':'')
   +'<div style="display:flex;gap:14px;flex-wrap:wrap;margin:0 0 8px;font-size:13.5px"><label class="xrow" style="border:none;padding:0;margin:0"><input type="checkbox" id="xmPast"'+(ics.showPast?' checked':'')+'> Show past events</label><button class="xbtn" data-xm="all:1" style="padding:5px 10px;font-size:13px">Select all</button><button class="xbtn" data-xm="all:0" style="padding:5px 10px;font-size:13px">Select none</button></div>'
   +'<div class="xlist">'+(rows||'<div class="xrow" style="cursor:default"><small>Nothing to show. Try “Show past events”.</small></div>')+'</div>'
   +'<p class="xmsg" id="xmMsg"></p><div class="xacts"><button class="xbtn" data-xm="close">Cancel</button><button class="xbtn primary" data-xm="icsgo" id="xmGo">Import <span id="xmCount"></span></button></div>';
 }
 function icsCount(){
- var n=0;ics.events.forEach(function(ev){var dup=ics.target&&ics.target!=='__new'&&icsDup(ics.target,ev);if(ev.sel&&!dup&&(ics.showPast||ev.due>=iso(today())))n++});
+ var n=0;ics.events.forEach(function(ev){var dup=icsDupEv(ev);if(ev.sel&&!dup&&(!icsEach()||ev.cls)&&(ics.showPast||ev.due>=iso(today())))n++});
  var el=document.getElementById('xmCount');if(el)el.textContent=n?'('+n+')':'';
  var g=document.getElementById('xmGo');if(g)g.disabled=!n;
  return n;
@@ -3075,16 +3134,34 @@ document.addEventListener('change',async function(e){
   var evs=icsParse(text);
   if(!evs.length){xmMsg('No events found in that file. Make sure it is an .ics calendar file.');return}
   var t0=iso(today());
-  evs.forEach(function(ev){ev.sel=ev.due>=t0});
-  ics.events=evs;icsRender();
+  evs.forEach(function(ev){ev.sel=ev.due>=t0;ev.cls=icsGuess(ev)||''});
+  ics.events=evs;
+  // events that look like they belong to two or more different classes: start in "a class for each event"
+  var seen={};evs.forEach(function(ev){if(ev.cls)seen[ev.cls]=1});
+  if(Object.keys(seen).length>1){ics.target='__each';evs.forEach(function(ev){if(!ev.cls)ev.sel=false})} // unmatched ones (a dentist visit) start unticked
+  icsRender();
  }else if(t.id==='xmTarget'){ics.target=t.value;icsRender()}
  else if(t.id==='xmPast'){ics.showPast=t.checked;if(ics.showPast)ics.events.forEach(function(ev){if(ev.sel===undefined)ev.sel=false});icsRender()}
  else if(t.hasAttribute&&t.hasAttribute('data-i')){ics.events[+t.getAttribute('data-i')].sel=t.checked;icsCount()}
+ else if(t.hasAttribute&&t.hasAttribute('data-cls')){
+  var ev=ics.events[+t.getAttribute('data-cls')];ev.cls=t.value;if(t.value)ev.sel=true;
+  var xl=document.querySelector('#xm .xlist'),top=xl?xl.scrollTop:0;icsRender();xl=document.querySelector('#xm .xlist');if(xl)xl.scrollTop=top;
+ }
 });
 document.addEventListener('input',function(e){if(e.target&&e.target.id==='xmNew'&&ics)ics.newName=e.target.value});
 XM.all=function(v){var t0=iso(today());ics.events.forEach(function(ev){ev.sel=v==='1'&&(ics.showPast||ev.due>=t0)});icsRender()};
 XM.icsgo=function(){
  var t0=iso(today()),pick=ics.events.filter(function(ev){return ev.sel&&(ics.showPast||ev.due>=t0)});
+ if(icsEach()){
+  var none=pick.filter(function(ev){return !ev.cls}).length;
+  if(none){xmMsg(none+' ticked event'+(none===1?' has':'s have')+' no class yet. Pick one under '+(none===1?'it':'each')+', or untick '+(none===1?'it':'them')+'.');return}
+  var tot=0,used={};
+  pick.forEach(function(ev){var cc=classById(ev.cls);if(!cc||icsDup(cc.id,ev))return;cc.assignments.push({id:uid(),title:ev.title,due:ev.due,time:ev.time,notes:ev.notes,done:false});tot++;used[cc.id]=1});
+  save();
+  var names=Object.keys(used).map(function(id){return esc(classById(id).name)});
+  xmOpen('<h2>Done</h2><p>Added <b>'+tot+'</b> due date'+(tot===1?'':'s')+(names.length?' to <b>'+names.join('</b>, <b>')+'</b>':'')+'.</p><div class="xacts"><button class="xbtn primary" data-xm="close">Done</button></div>');
+  ics=null;render();return;
+ }
  var c;
  if(ics.target==='__new'){
   var nm=(ics.newName||'').trim();if(!nm){xmMsg('Give the new class a name.');return}
@@ -3928,7 +4005,7 @@ function pickerHtml(){
   +'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7 2 3 6 3 11c0 4.4 3.3 7.5 7.5 7.5.9 0 1.5.6 1.5 1.4 0 .4-.2.8-.4 1.1-.2.3-.3.6-.3 1 0 .6.4 1 1 1 5 0 9-4.4 9-9.5C21.3 6 17 2 12 2zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3.5 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg></button>';
  if(!view.picker)return btn;
  var pos=view.pickPos?('left:'+view.pickPos.x+'px;top:'+view.pickPos.y+'px;right:auto;bottom:auto'):'';
- var head='<div class="pickhead" data-pickdrag="1"><span class="pickgrip"></span><span style="font-size:12px;color:var(--ink3)">drag to move</span></div>';
+ var head='<div class="pickhead" data-pickdrag="1"><span class="pickgrip"></span><span class="pkdesk" style="font-size:12px;color:var(--ink3)">drag to move</span><span class="pkph" style="font-size:12px;color:var(--ink3)">drag up or down</span></div>';
 
  if(view.editSurf==='__sec'){
   var onHome=!!CP_SITE_ROWS[view.page],scl=!onHome&&view.page==='class'&&classById(view.classId);
@@ -4110,7 +4187,7 @@ function sidebar(c){
  });
  h+='<p class="slabel">\u00a0</p>'+sideItem('data-add','class','Add a class',false);
  h+='</div>';
- h+='<div class="sidefoot">'+sideItem('data-add','settings','Settings',false)+'</div>';
+ h+='<div class="sidefoot">'+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
 function sideItem(attr,key,label,on){
@@ -4294,13 +4371,22 @@ var CP_ICO={
 var CP_FOLDER='<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9L9.6 3.9A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>';
 var CP_PAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2.2a1.8 1.8 0 0 0-1.3 3.1c.4.4.5.9.5 1.4 0 .8-.6 1.5-1.5 1.5Z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="11" cy="7" r="1"/><circle cx="15.5" cy="7.5" r="1"/></svg>';
 // v113: the header band is the section's own colour with light text on it (no little icon square)
-function cpHead(key,col,title,pill,hint,acts){
+function cpHead(key,col,title,pill,hint,acts,fold){
  return '<div class="cphead cphead2" style="background:'+col.c+';color:var(--cp-'+key+'-on,#fff);border-bottom-color:transparent">'
-  +'<div class="cptitlecol"><div class="cptitlerow"><h2 class="cptitle" style="color:inherit;font-weight:var(--cp-'+key+'-w,500)">'+title+'</h2>'
-  +(pill?'<span class="cppill" style="color:'+col.c+'">'+pill+'</span>':'')+'</div>'
+  +'<div class="cptitlecol"'+(fold?' data-secfold="'+fold+'"':'')+'><div class="cptitlerow"><h2 class="cptitle" style="color:inherit;font-weight:var(--cp-'+key+'-w,500)">'+title+'</h2>'
+  +(pill?'<span class="cppill" style="color:'+col.c+'">'+pill+'</span>':'')+(fold?'<span class="cpfoldchev" aria-hidden="true">'+CP_ICO.chev+'</span>':'')+'</div>'
   +(hint?'<div class="cphint">'+hint+'</div>':'')+'</div>'
   +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
 }
+/* phones: Assignments and Files & links fold shut to just their coloured header (tap the title).
+   Remembered on this device for every class (localStorage 'hub:shut:asg' / 'hub:shut:files') */
+function cpSecShut(k){try{return localStorage.getItem('hub:shut:'+k)==='1'}catch(e){return false}}
+document.addEventListener('click',function(e){
+ var t=e.target.closest&&e.target.closest('[data-secfold]');
+ if(!t||window.innerWidth>700)return;
+ var k=t.getAttribute('data-secfold'),sec=t.closest('.cpsec'),shut=!sec.classList.contains('cpshut');
+ sec.classList.toggle('cpshut',shut);try{localStorage.setItem('hub:shut:'+k,shut?'1':'0')}catch(err){}
+});
 function cpBtn(col,label,attrs){return '<button class="cpbtn" style="background:'+col.c+'" '+attrs+'>'+label+'</button>'}
 function cpBtn2(col,label,attrs){return '<button class="cpbtn2" style="border-color:'+col.line+'" '+attrs+'>'+label+'</button>'}
 // days until a due date, as words: "Today", "Tomorrow", "4 days", "2 days late"
@@ -4521,11 +4607,11 @@ function viewClass(c){
   NXS='<section class="cpnexts'+(nl?' late':'')+'"'+nAttr+'><div class="cpnextsnum"><span class="n">'+big+'</span>'+(unit?'<span class="u">'+unit+'</span>':'')+'</div>'
    +'<div class="cpnextstext"><div class="cpnextslab">'+(nl?'Past due':'Next due')+'</div><div class="cpnexttitle">'+esc(nextA.title)+'</div><div class="cpnextdate">'+nDate+'</div></div></section>';
  }
- var A='<section class="cpsec cpasg" id="c-assign">'+pencil('asg')
+ var A='<section class="cpsec cpasg'+(cpSecShut('asg')?' cpshut':'')+'" id="c-assign">'+pencil('asg')
   +cpHead('asg',col.asg,'Assignments',asg.length?asg.length+' open':'',hint,
     '<div class="cpseg"><button data-asgview="cards" class="'+(view.asgView==='cards'?'on':'')+'"'+(view.asgView==='cards'?' style="background:'+col.asg.bg+';color:'+col.asg.title+'"':'')+'>Cards</button>'
     +'<button data-asgview="table" class="'+(view.asgView!=='cards'?'on':'')+'"'+(view.asgView!=='cards'?' style="background:'+col.asg.bg+';color:'+col.asg.title+'"':'')+'>Table</button></div>'
-    +cpBtn(col.asg,'+ Add','data-add="assign" data-c="'+c.id+'"'));
+    +cpBtn(col.asg,'+ Add','data-add="assign" data-c="'+c.id+'"'),'asg');
  if(!asg.length){
   A+='<div class="cpempty">'+(allAsg?'Nothing outstanding. Finished work is in Completed.':'Nothing here yet. Add assignments as they come in, with a due date and how much they’re worth.')+'</div>';
  }else if(view.asgView==='cards'){
@@ -4587,12 +4673,12 @@ function viewClass(c){
  var dups=cpDupLinks(c),dupBtn=dups.length?'<button class="cptext cpdupbtn" data-dedupe="'+c.id+'">Remove '+dups.length+' duplicate link'+(dups.length>1?'s':'')+'</button>':'';
  // the same layout as the Assignments header (title and description on the left, buttons on the right, one
  // line); the search box is kept short (150px) so it all fits on that one line instead of wrapping
- var F='<section class="cpsec cpfiles" id="c-files"><span id="c-links" class="cpanchor"></span>'+pencil('files')
+ var F='<section class="cpsec cpfiles'+(cpSecShut('files')?' cpshut':'')+'" id="c-files"><span id="c-links" class="cpanchor"></span>'+pencil('files')
   +cpHead('files',col.files,'Files &amp; links',total?total+' item'+(total>1?'s':''):'',(c.sections||[]).length?'Grouped by chapter, files and links together':'Slides, readings and links for this class',
     '<label class="cpsearch cpsearchs" style="border-color:'+col.files.line+'">'+CP_ICO.search+'<input type="text" id="filesearch" placeholder="Search" value="'+esc(view.fileQ||'')+'"></label>'
     +'<button class="cpbtn2 cpreadpdfs" style="border-color:'+col.files.line+'" data-index="'+c.id+'" title="Lets search look inside your PDFs"'+(view.indexing?' disabled':'')+'>'+(view.indexing?'<span class="spin"></span>':'Read PDFs')+'</button>'
     +cpBtn2(col.files,'+ Link','data-add="link" data-c="'+c.id+'"')
-    +'<label class="cpbtn" style="background:'+col.files.c+'"><input type="file" multiple data-file="'+c.id+'" style="display:none">+ Upload</label>');
+    +'<label class="cpbtn" style="background:'+col.files.c+'"><input type="file" multiple data-file="'+c.id+'" style="display:none">+ Upload</label>','files');
  F+='<div class="cpfbody">';
  if(q){
   var fm=fIdx.filter(function(x){return x.f.name.toLowerCase().indexOf(q)>-1||(x.f.text&&x.f.text.toLowerCase().indexOf(q)>-1)});
@@ -4818,7 +4904,7 @@ function viewHome(){
  var wxIco=!wt?'':(/cloud|rain|snow|storm|fog|drizzle/.test(wt)?'cloud':(night?'moon':''));
  h='<div class="hband"><label class="av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
   +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg>')+'</label>'
-  +'<div class="t"><p class="hello">'+esc(hello+(who?', '+who:''))+'</p><p class="day">'+esc(t.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+'</p></div>'
+  +'<div class="t"><p class="hello">'+esc(hello+(who?', '+who:''))+'</p><p class="day">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+', <span class="nw">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric'}))+'</span></p></div>'
   +(w.temp!=null?'<button class="wxm" data-wx="1" title="London, Ontario · tap to refresh"><i class="'+wxIco+'"></i><b>'+w.temp+'°</b>'+esc(w.cond||'')+'</button>':'')+'</div>'+h;
  h+=homeAccountCard();
  h+=homeInstallCard();
@@ -4861,7 +4947,7 @@ function viewHome(){
  /* ===== Your classes ===== */
  var classes=S.classes.filter(function(c){return !isRefClass(c)});
  var C='<section class="cpsec hlight" id="h-classes">'+cpHead('hcls',col.hcls,'Your classes',classes.length?classes.length+'':'',classes.length?'Tap a class to open it':'Add your classes to get started',
-   cpBtn(col.hcls,'+ Add class','data-add="class"'));
+   cpBtn(col.hcls,'+ Add class','data-sheet="addcls"'));
  if(!classes.length)C+='<div class="cpempty">No classes yet. Add one, or import a class a friend shared with you.</div>';
  else C+='<div class="cpclsgrid">'+classes.map(function(c){
   var p=pal(c.color),n=(c.assignments||[]).filter(function(a){return !a.done}).length,k=(c.tasks||[]).filter(function(x){return !x.done}).length,g=gradeInfo(c);
@@ -4878,7 +4964,7 @@ function viewHome(){
 
  /* ===== settings row ===== */
  var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'+coverControls('home',S)
-  +'<button data-secopen="1">Colours</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div>';
+  +'<button data-secopen="1">Colours</button></div>';
 
 
  /* ===== side column (moves into the list on narrower screens) ===== */
@@ -4928,6 +5014,7 @@ function homeNextDue(open,t){
  var cd=cpCountdown(x.t.due),late=cd.n<0,hx=late?'#9c4a41':chromeHex('sideBg'),fg=contrast(hx,'#ffffff')>=1.5?'#fff':'#221d18';
  var si=stepInfo(x.t);
  return '<section class="hn2" id="h-next" style="background:'+hx+';color:'+fg+'" '+(x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"')+'>'
+  +'<button class="hntick" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done" title="Mark done"></button>'
   +'<div class="tx"><div class="lab">'+(late?'Past due':'Next due')+' · '+esc(classLabel(x.c))+'</div><div class="ti">'+esc(x.t.title)+'</div>'
   +'<div class="dt">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+(si.n?' · '+si.d+' of '+si.n+' steps':'')+'</div></div>'
   +'<div class="num"><span class="n">'+(cd.n===0?'Today':Math.abs(cd.n))+'</span>'+(cd.n===0?'':'<span class="u">'+(Math.abs(cd.n)===1?'day':'days')+(late?' late':' left')+'</span>')+'</div></section>';
@@ -4980,7 +5067,7 @@ function homeTermCard(){
  var pct=Math.max(0,Math.min(100,Math.round(gone/span*100))),left=Math.round((b-t)/DAY);
  var big=gone<0?'Starts in '+(-gone)+' day'+(-gone===1?'':'s'):left<0?'Term finished':'Week '+Math.min(N,Math.floor(gone/7)+1)+' of '+N;
  var tail=gone<0?'':left<0?'Nice work':left===0?'Last day today':left+' day'+(left===1?'':'s')+' to go';
- return '<section class="ht2" id="h-term"><div class="r"><b>'+esc(label)+' · '+big+'</b><span>'+tail+' <button data-termedit="1">'+(view.termEdit?'Done':'Edit')+'</button></span></div>'
+ return '<section class="ht2" id="h-term"><div class="r"><b><span class="tl">'+esc(label)+'</span>'+big+'</b><span>'+tail+' <button data-termedit="1">'+(view.termEdit?'Done':'Edit')+'</button></span></div>'
   +'<div class="bar"><i style="width:'+pct+'%"></i></div>'+(view.termEdit?'<div class="hterm">'+form+'</div>':'')+'</section>';
 }
 /* music: one service per person (Spotify unless you pick Apple Music in Settings). The player itself
@@ -5003,7 +5090,7 @@ function homeMusicCard(){
  else body='<div class="hmform"><input id="musicurl" placeholder="Paste a '+name+' playlist, album or song link" value="'+esc(mu[svc]||'')+'">'
   +(view.musicErr?'<span style="font-size:12.5px;color:#A34A3F">'+esc(view.musicErr)+'</span>':'<span class="cpsoft" style="font-size:12px">In '+name+', tap Share, then Copy link.</span>')
   +'<button class="cpbtn2" data-musicsave="1" style="align-self:flex-start">Play this</button></div>';
- return '<section class="hsp" id="h-music"><div class="top"><b><i style="background:'+(svc==='spotify'?'#1DB954':'#FA2D48')+'"></i>'+name+'</b>'
+ return '<section class="hsp" id="h-music"><div class="top"><b>'+name+'</b>'
   +(emb&&!view.musicEdit?'<button data-musicedit="1">Change</button>':'')+'</div>'+body
   +(svc==='spotify'&&spClientId()?'<button class="spconnect" data-sp="connect">Connect Spotify</button><p class="spnote">Log in once and Doable remembers you, with full songs and what’s playing on any of your devices.</p>'
     :(svc==='spotify'?'<p class="spnote">To stay logged in, add your Spotify Client ID in Settings, under Your hub.</p>':''))
@@ -5092,17 +5179,43 @@ setInterval(function(){if(view.page==='home'&&spConnected()&&!document.hidden)sp
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&view.page==='home')spPoll(true)});
 // the progress bar creeps along between checks
 setInterval(function(){var s=view.sp,b=document.getElementById('spprog');if(!s||!s.playing||!b||!s.dur)return;b.style.width=Math.min(100,(s.pos+Date.now()-s.at)/s.dur*100)+'%'},1000);
+/* the card's background is a soft, darker shade of the album cover (read from a tiny copy of the picture;
+   Spotify's image server allows this). Remembered per picture so it doesn't flicker between checks */
+var spTints={};
+function spTintFor(url){
+ if(!url)return null;
+ if(spTints[url]!==undefined)return spTints[url];
+ spTints[url]=null;
+ var im=new Image();im.crossOrigin='anonymous';
+ im.onload=function(){
+  try{
+   var cv=document.createElement('canvas');cv.width=cv.height=24;var cx=cv.getContext('2d');cx.drawImage(im,0,0,24,24);
+   var px=cx.getImageData(0,0,24,24).data,R=0,G=0,B=0,W=0;
+   for(var i=0;i<px.length;i+=4){var hs=rgb2hsl(px[i],px[i+1],px[i+2]),w=0.15+hs[1]/100*(1-Math.abs(hs[2]-50)/50);R+=px[i]*w;G+=px[i+1]*w;B+=px[i+2]*w;W+=w}
+   var h=rgb2hsl(R/W,G/W,B/W);
+   spTints[url]=hsl2hex(h[0],Math.min(h[1],48),Math.max(24,Math.min(36,h[2]*.7)));
+  }catch(e){spTints[url]=false}
+  spPaint();
+ };
+ im.onerror=function(){spTints[url]=false};
+ im.src=url;
+ return null;
+}
+function spCardOpen(){
+ var s=view.sp,bg=s&&s.on&&s.img?spTintFor(s.img):null;
+ return bg?'<section class="hsp tint" id="h-music" style="--spbg:'+bg+'">':'<section class="hsp" id="h-music">';
+}
 function spCard(){
  var s=view.sp,premNote=view.spPremium===false?'<p class="spnote">Play, pause and skip from Doable need Spotify Premium. You can still see what’s playing.</p>':'';
- var top='<div class="top"><b><i style="background:#1DB954"></i>Spotify</b><span class="spdev">'+(s&&s.on&&s.device?'On '+esc(s.device):'')+'</span></div>';
+ var top='<div class="top"><b>Spotify</b><span class="spdev">'+(s&&s.on&&s.device?'On '+esc(s.device):'')+'</span></div>';
  if(view.spPick==='lists'){
   var L=view.spLists;
-  return '<section class="hsp" id="h-music">'+top+'<div class="splist">'+(L?(L.length?L.map(function(p){return '<button class="spitem" data-sp="pl:'+esc(p.uri)+'">'+(p.img?'<img src="'+esc(p.img)+'" alt="">':'<span class="spph"></span>')+'<span>'+esc(p.name)+'</span></button>'}).join(''):'<p class="spnote">No playlists found.</p>'):'<p class="spnote">Loading your playlists…</p>')
+  return spCardOpen()+top+'<div class="splist">'+(L?(L.length?L.map(function(p){return '<button class="spitem" data-sp="pl:'+esc(p.uri)+'">'+(p.img?'<img src="'+esc(p.img)+'" alt="">':'<span class="spph"></span>')+'<span>'+esc(p.name)+'</span></button>'}).join(''):'<p class="spnote">No playlists found.</p>'):'<p class="spnote">Loading your playlists…</p>')
    +'</div><button class="spback" data-sp="close">Back</button></section>';
  }
  if(view.spPick==='devices'){
   var Dv=view.spDevices;
-  return '<section class="hsp" id="h-music">'+top+'<p class="spnote" style="margin:0 2px">Play on…</p><div class="splist">'+(Dv?(Dv.length?Dv.map(function(d){return '<button class="spitem" data-sp="dev:'+esc(d.id)+'"><span class="spph spdevico"></span><span>'+esc(d.name)+(d.is_active?' · playing':'')+'</span></button>'}).join(''):'<p class="spnote">No devices found. Open the Spotify app on your phone, iPad or computer, then try again.</p>'):'<p class="spnote">Looking for your devices…</p>')
+  return spCardOpen()+top+'<p class="spnote" style="margin:0 2px">Play on…</p><div class="splist">'+(Dv?(Dv.length?Dv.map(function(d){return '<button class="spitem" data-sp="dev:'+esc(d.id)+'"><span class="spph spdevico"></span><span>'+esc(d.name)+(d.is_active?' · playing':'')+'</span></button>'}).join(''):'<p class="spnote">No devices found. Open the Spotify app on your phone, iPad or computer, then try again.</p>'):'<p class="spnote">Looking for your devices…</p>')
    +'</div><button class="spback" data-sp="close">Back</button></section>';
  }
  var body;
@@ -5112,7 +5225,7 @@ function spCard(){
   +'<div class="spmeta"><b>'+esc(s.title)+'</b><span>'+esc(s.artist)+'</span></div></div>'
   +'<div class="spbar"><i id="spprog" style="width:'+(s.dur?Math.min(100,(s.pos+(s.playing?Date.now()-s.at:0))/s.dur*100):0)+'%"></i></div>';
  var ctl='<div class="spctl"><button data-sp="prev" aria-label="Previous">'+SP_ICO.prev+'</button><button class="spplay" data-sp="'+(s&&s.on&&s.playing?'pause':'play')+'" aria-label="'+(s&&s.on&&s.playing?'Pause':'Play')+'">'+(s&&s.on&&s.playing?SP_ICO.pause:SP_ICO.play)+'</button><button data-sp="next" aria-label="Next">'+SP_ICO.next+'</button></div>';
- return '<section class="hsp" id="h-music">'+top+body+ctl+premNote+(view.spMsg?'<p class="spnote" style="color:#A34A3F">'+esc(view.spMsg)+'</p>':'')
+ return spCardOpen()+top+body+ctl+premNote+(view.spMsg?'<p class="spnote" style="color:#A34A3F">'+esc(view.spMsg)+'</p>':'')
   +'<div class="splinks"><button data-sp="lists">Playlists</button><button data-sp="devices">Play on…</button></div></section>';
 }
 var SP_ICO={play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>',
@@ -5458,6 +5571,12 @@ function modalHtml(){
    +(pi.kind==='assign'&&pi.t.steps&&pi.t.steps.length?'<p class="lab" style="margin:14px 0 6px">STEPS</p>'+stepList(pi.c,pi.t):'');
  }else if(m.kind==='sheet'){
   var sc=classById(m.classId);
+  if(m.what==='addcls'){
+   h='<h3>Add a class</h3><div class="sheetlist">'
+    +'<button data-add="class">Start a new class</button>'
+    +'<button data-xact="importclass" data-closesheet="1">Import a class a friend shared</button>'
+    +'<button data-xact="ics:" data-closesheet="1">Import due dates from a calendar</button></div>';
+  }else
   if(m.what==='fadd'){
    h='<h3>Add to Files &amp; links</h3><div class="sheetlist">'
     +'<label class="sheetbtn"><input type="file" multiple data-file="'+sc.id+'" data-closesheet="1" style="display:none">Upload files</label>'
@@ -7720,7 +7839,7 @@ document.addEventListener('click',function(e){
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
  if(d.hrange){view.hrange=d.hrange;render();return}
- if(d.cpjump){var jt=document.getElementById(d.cpjump);if(jt){cpSpyLock=Date.now();cpMarkTab(d.cpjump);jt.scrollIntoView({behavior:'smooth',block:'start'})}return}
+ if(d.cpjump){var jt=document.getElementById(d.cpjump);if(jt){if(jt.classList.contains('cpshut')){jt.classList.remove('cpshut');try{localStorage.setItem('hub:shut:'+(d.cpjump==='c-assign'?'asg':'files'),'0')}catch(e){}}cpSpyLock=Date.now();cpMarkTab(d.cpjump);jt.scrollIntoView({behavior:'smooth',block:'start'})}return}
  if(d.cptab){var tci=d.cptab.indexOf(':');cpSetTab(d.cptab.slice(0,tci),d.cptab.slice(tci+1));render();
   var bar=document.querySelector('.cptabs');if(bar&&bar.getBoundingClientRect().top<0)bar.scrollIntoView({block:'start'}); // keep the bar in view when switching
   return}
@@ -7923,7 +8042,9 @@ document.addEventListener('click',function(e){
  if(d.remindoff!==undefined){S.remind=false;save();render();return}
  if(d.studygo){makeStudy(d.studygo);return}
  if(d.studyclose!==undefined){view.study=null;render();return}
- if(d.opencolours!==undefined){view.modal=null;view.menu=false;view.picker=true;render();return}
+ if(d.opencolours!==undefined){view.modal=null;view.menu=false;view.picker=true;
+  if(d.opencolours==='1'&&(CP_SITE_ROWS[view.page]||(view.page==='class'&&classById(view.classId))))view.editSurf='__sec';
+  render();return}
  if(d.picker!==undefined){
   view.picker=d.picker==='1';
   if(view.picker&&(CP_SITE_ROWS[view.page]||(view.page==='class'&&classById(view.classId))))view.editSurf='__sec'; // on Home and class pages, the corner paint button opens their section colours first
@@ -8108,11 +8229,16 @@ function startPanelDrag(e){
  var hd=e.target.closest&&e.target.closest('[data-pickdrag]');
  if(!hd)return;
  var panel=hd.closest('.pickpanel'),r=panel.getBoundingClientRect();
- panelDrag={dx:(e.touches?e.touches[0].clientX:e.clientX)-r.left,dy:(e.touches?e.touches[0].clientY:e.clientY)-r.top,el:panel};
+ panelDrag={dx:(e.touches?e.touches[0].clientX:e.clientX)-r.left,dy:(e.touches?e.touches[0].clientY:e.clientY)-r.top,el:panel,sheet:window.innerWidth<=700};
  e.preventDefault();
 }
+function pkSetH(px){var v=Math.round(px/window.innerHeight*100);view.pickH=v;document.documentElement.style.setProperty('--pkh',v+'vh')}
 function movePanelDrag(e){
  if(!panelDrag)return;
+ if(panelDrag.sheet){ // phone: the top edge follows your finger
+  var fy=e.touches?e.touches[0].clientY:e.clientY,hh=window.innerHeight-fy+panelDrag.dy;
+  panelDrag.h=hh;pkSetH(Math.max(90,Math.min(window.innerHeight*.9,hh)));e.preventDefault();return;
+ }
  var x=(e.touches?e.touches[0].clientX:e.clientX)-panelDrag.dx;
  var y=(e.touches?e.touches[0].clientY:e.clientY)-panelDrag.dy;
  x=Math.max(6,Math.min(window.innerWidth-120,x));
@@ -8123,7 +8249,13 @@ function movePanelDrag(e){
  panelDrag.el.style.right='auto';panelDrag.el.style.bottom='auto';
  e.preventDefault();
 }
-function endPanelDrag(){panelDrag=null}
+function endPanelDrag(){
+ var p=panelDrag;panelDrag=null;
+ if(p&&p.sheet&&p.h!=null){
+  if(p.h<window.innerHeight*.2){view.picker=false;render();return} // pulled down: close it
+  pkSetH(Math.max(window.innerHeight*.3,Math.min(window.innerHeight*.9,p.h)));
+ }
+}
 function startDrag(e){
  var wrap=e.target.closest&&e.target.closest('.coverwrap.repos');
  if(!wrap)return;
