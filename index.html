@@ -744,9 +744,35 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 .cptitlecol{display:flex;flex-direction:column;gap:2px;flex:1 1 auto;min-width:0;max-width:100%}
 .cptitlerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cpfoldchev{display:none}
+.cpsettog,.cpinfobtn{display:none}
 @media(max-width:700px){
   [data-secfold]{cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .cpfoldchev{display:inline-flex;margin-left:auto;opacity:.85;transition:transform .2s}
+  .cpfoldchev{display:inline-flex;position:absolute;right:13px;top:14px;opacity:.85;transition:transform .2s}
+  .cpduo .cpshut+.cpsec,.cpduo .cpsec+.cpshut{margin-top:-12px}
+  /* When and where right under Next due; Grade, Professor and Title page live in the Class info sheet */
+  .cprail.cpclassrail{display:contents}
+  .cpsplit #cp-when{order:-1}
+  .cpinfobtn{display:block;width:100%;text-align:left;font:inherit;color:inherit;padding:0;cursor:pointer}
+  .cpinfobtn .cpcardhead{border-bottom:none}
+  .cpinfobtn .tpchev{transform:rotate(-90deg);margin-left:auto}
+  .cpisbg{position:fixed;inset:0;background:rgba(30,26,22,.32);z-index:80}
+  .cpis{position:fixed;left:0;right:0;bottom:0;max-height:86vh;max-height:86dvh;overflow-y:auto;overscroll-behavior:contain;background:var(--paper,#F6F3EC);border-radius:20px 20px 0 0;z-index:81;
+    padding:0 14px calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;flex-direction:column;gap:12px;box-shadow:0 -10px 40px rgba(0,0,0,.18)}
+  .cpis.anim{animation:cpisup .28s cubic-bezier(.2,.8,.2,1)}
+  @keyframes cpisup{from{transform:translateY(100%)}to{transform:none}}
+  .cpishead{position:sticky;top:0;z-index:2;background:var(--paper,#F6F3EC);display:flex;align-items:center;justify-content:space-between;padding:20px 4px 8px;margin:0 -14px;padding-left:18px;padding-right:18px}
+  .cpisgrip{position:absolute;left:50%;top:8px;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:var(--line2)}
+  .cpishead h3{font-size:18px;font-weight:var(--wh,500);margin:0}
+  .cpisdone{font:inherit;font-size:14px;border:1px solid var(--line2);background:var(--card);border-radius:99px;padding:6px 14px;min-height:0!important;color:var(--ink)}
+  .cpis .cptp{display:block}
+  /* Class settings: just the label until tapped */
+  .cpsetfold .cpsetlab{display:none}
+  .cpsettings.cpsetfold>button.cpsettog{display:inline-flex;align-items:center;gap:6px;flex-basis:100%;background:none;border:none;padding:2px 0;font:inherit;font-size:14px;color:var(--ink2);min-height:0!important;cursor:pointer}
+  .cpsettings.cpsetfold{border-top:none;padding-top:0}
+  .cpsetfold .cpsettog .tpchev{display:inline-flex;transition:transform .2s}
+  .cpsetfold.open .cpsettog .tpchev{transform:rotate(180deg)}
+  .cpsetfold:not(.open)>:not(.cpsettog){display:none!important}
+
   .cpfoldchev svg{width:18px;height:18px}
   .cpsec:not(.cpshut) .cpfoldchev{transform:rotate(180deg)}
   .cpsec.cpshut>:not(.cphead){display:none!important}
@@ -1073,7 +1099,8 @@ a.cpitemname:hover{text-decoration:underline}
 .hwchip.done{opacity:.45;text-decoration:line-through}
 .hwempty{font-size:11.5px;color:var(--ink3);opacity:.7}
 @media(max-width:700px){
-  .hweek{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:2px 16px;scroll-snap-type:x proximity}
+  .hweek{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:2px 16px;scroll-snap-type:x proximity;scroll-padding-inline:16px}
+  .hweek::after{content:'';flex:0 0 6px} /* room after Sunday (Safari ignores the end padding) */
   .hweek::-webkit-scrollbar{display:none}
   .hwd{flex:0 0 112px;scroll-snap-align:start}
 }
@@ -1118,7 +1145,8 @@ a.cpitemname:hover{text-decoration:underline}
 }
 @media(max-width:700px){
   #h-clock{display:none}
-  #h-classes .cpclsgrid{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;gap:10px;padding:12px}
+  #h-classes .cpclsgrid{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;scroll-padding-inline:14px;gap:10px;padding:14px}
+  #h-classes .cpclsgrid::after{content:'';flex:0 0 4px}
   #h-classes .cpclsgrid::-webkit-scrollbar{display:none}
   #h-classes .cpcls{flex:0 0 172px;scroll-snap-align:start}
   #h-classes .cphint{display:none}
@@ -1810,7 +1838,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v127';
+var BUILD='v128';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4378,6 +4406,11 @@ function cpHead(key,col,title,pill,hint,acts,fold){
   +(hint?'<div class="cphint">'+hint+'</div>':'')+'</div>'
   +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
 }
+document.addEventListener('click',function(e){
+ var t=e.target.closest&&e.target.closest('[data-cinfo],[data-csettog]');if(!t)return;
+ if(t.hasAttribute('data-csettog')){var row=t.closest('.cpsettings'),on=!row.classList.contains('open');row.classList.toggle('open',on);t.setAttribute('aria-expanded',on);try{localStorage.setItem('hub:fold:cset',on?'1':'0')}catch(err){}return}
+ var v=t.getAttribute('data-cinfo');view.cinfo=v==='0'?null:v;view.cinfoAnim=!!view.cinfo;render();
+});
 /* phones: Assignments and Files & links fold shut to just their coloured header (tap the title).
    Remembered on this device for every class (localStorage 'hub:shut:asg' / 'hub:shut:files') */
 function cpSecShut(k){try{return localStorage.getItem('hub:shut:'+k)==='1'}catch(e){return false}}
@@ -4756,8 +4789,9 @@ function viewClass(c){
   }
  }
 
- /* ===== class settings row ===== */
- var G='<div class="cpsettings"><span class="cpsetlab">Class settings</span>'
+ /* ===== class settings row (phones: tap "Class settings" to show the buttons; hub:fold:cset) ===== */
+ var csOpen=false;try{csOpen=localStorage.getItem('hub:fold:cset')==='1'}catch(e){}
+ var G='<div class="cpsettings cpsetfold'+(csOpen?' open':'')+'"><span class="cpsetlab">Class settings</span><button class="cpsettog" data-csettog="1" aria-expanded="'+csOpen+'">Class settings<span class="tpchev">'+CP_ICO.chev+'</span></button>'
   +'<button data-edit="class" data-c="'+c.id+'">Edit class</button>'
   +'<button data-secopen="1">Colours</button>'
   +'<button data-xact="shareclass:'+c.id+'">Share this class</button>'
@@ -4808,12 +4842,15 @@ function viewClass(c){
   return '<details class="cpcard cpfold" data-fold="'+k+'"'+(on?' open':'')+'><summary class="cpcardhead"><span class="cpdot" style="background:'+dot+'"></span><h3 class="cpcardtitle">'+title+'</h3>'
    +(meta?'<span class="cpfoldmeta">'+meta+'</span>':'')+'<span class="tpchev">'+CP_ICO.chev+'</span></summary><div class="cpcardbody">'+body+'</div></details>';
  }
+ var phone=window.innerWidth<=700,sheet=phone&&view.cinfo===c.id;
  var BOT='<section class="cpfoldrow" id="c-info">'
   +fold('done',col.done.c,'Recently completed',finished.length?finished.length+' done':'',DB)
-  +fold('info',col.third.c,'Class info','',IB)+'</section>';
+  +(phone?'<button class="cpcard cpinfobtn" data-cinfo="'+c.id+'"><span class="cpcardhead"><span class="cpdot" style="background:'+col.third.c+'"></span><span class="cpcardtitle">Class info</span>'
+     +'<span class="cpfoldmeta">Grade, professor, title page</span><span class="tpchev">'+CP_ICO.chev+'</span></span></button>'
+    :fold('info',col.third.c,'Class info','',IB))+'</section>';
 
  /* ===== right column (v121, back by request): Next due, When and where, Grade, Professor, Title page ===== */
- var R='<aside class="cprail cpclassrail">'+NX;
+ var R='<aside class="cprail cpclassrail">'+NX,SH='';
  if(c.day||c.room){
   var online=/online/i.test(c.day||'');
   var wOld=!!surfGet('when','bg')&&!cpOverride(c.id,'when'),wInk=wOld?'var(--ink)':col.darkInk,wSoft=wOld?'var(--ink2)':col.darkSoft;
@@ -4834,10 +4871,17 @@ function viewClass(c){
     gb+='<div class="cpsoft" style="font-size:13.5px">'+(nd<=0?'You have already locked in your target.':(nd>100?'Your target is out of reach now, you would need over 100%.':'You need about '+nd.toFixed(0)+'% on the remaining '+gi0.remaining+'% to reach '+c.target+'%.'))+'</div>';
    }else if(!c.target)gb+='<div class="cpsoft" style="font-size:13px">Set a target in Edit class to see what you need.</div>';
   }
-  R+=railCard('cp-grade',col.mini.c,'Grade','',gb);
+  SH+=railCard('cp-grade',col.mini.c,'Grade','',gb);
  }
- R+=railCard('c-prof',col.files.c,'Professor','<button class="cpcardact" data-add="contact" data-c="'+c.id+'">Add</button>',pb);
- R+=tpCard(c)+'</aside>';
+ SH+=railCard('c-prof',col.files.c,'Professor','<button class="cpcardact" data-add="contact" data-c="'+c.id+'">Add</button>',pb);
+ SH+=tpCard(c);
+ if(!phone)R+=SH;
+ R+='</aside>';
+ // the phone sheet: slides up only when first opened (view.cinfoAnim), not on every redraw
+ var SHEET=sheet?'<div class="cpisbg" data-cinfo="0"></div><div class="cpis'+(view.cinfoAnim?' anim':'')+'" role="dialog" aria-label="Class info">'
+  +'<div class="cpishead"><span class="cpisgrip"></span><h3>Class info</h3><button class="cpisdone" data-cinfo="0">Done</button></div>'
+  +SH+'<section class="cpcard"><div class="cpcardbody">'+IB+'</div></section></div>':'';
+ view.cinfoAnim=false;
 
  /* ===== the summary strip (computer and iPad): next due, grade, when, professor ===== */
  var on2=function(hx){return contrast(hx,'#ffffff')>=2.6?'#fff':'#221d18'};
@@ -4860,7 +4904,7 @@ function viewClass(c){
  var T='<nav class="cptabs" aria-label="Jump to a part of this class">'+TABS.map(function(t,i){
    return '<button class="cptab'+(i?'':' on')+'" data-cpjump="'+t[0]+'" style="--tc:'+t[2]+'"><i class="cptabdot"></i><span>'+t[1]+'</span></button>';
   }).join('')+'</nav>';
- return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+'<div class="cpduo">'+A+F+'</div>'+BOT+study+G+'</div>'+R+'</div>';
+ return top+ask+T+'<div class="cpsplit" style="'+cpVarStyle(real)+'"><div class="cpmain">'+NXS+'<div class="cpduo">'+A+F+'</div>'+BOT+study+G+'</div>'+R+SHEET+'</div>';
 }
 
 /* ---------- Home (v96 redesign, same style as the class page) ----------
@@ -7835,10 +7879,12 @@ document.addEventListener('click',function(e){
  if(d.delclass){if(confirm('Delete this class and everything in it?')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
  if(d.go){go(d.go);return}
  if(d.open){go('class',d.open);return}
+ if((d.scroll==='c-info'||d.scroll==='c-title')&&window.innerWidth<=700&&view.classId){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);view.cinfo=view.classId;view.cinfoAnim=true;render();return}
  if(d.scroll){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);if(d.scroll==='c-info'){try{localStorage.setItem('hub:fold:info','1')}catch(e){}}render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(d.range){view.range=d.range;render();return}
  if(d.asgview){view.asgView=d.asgview;render();return}
  if(d.hrange){view.hrange=d.hrange;render();return}
+ if(d.cpjump==='c-info'&&window.innerWidth<=700&&view.classId){view.cinfo=view.classId;view.cinfoAnim=true;render();return}
  if(d.cpjump){var jt=document.getElementById(d.cpjump);if(jt){if(jt.classList.contains('cpshut')){jt.classList.remove('cpshut');try{localStorage.setItem('hub:shut:'+(d.cpjump==='c-assign'?'asg':'files'),'0')}catch(e){}}cpSpyLock=Date.now();cpMarkTab(d.cpjump);jt.scrollIntoView({behavior:'smooth',block:'start'})}return}
  if(d.cptab){var tci=d.cptab.indexOf(':');cpSetTab(d.cptab.slice(0,tci),d.cptab.slice(tci+1));render();
   var bar=document.querySelector('.cptabs');if(bar&&bar.getBoundingClientRect().top<0)bar.scrollIntoView({block:'start'}); // keep the bar in view when switching
@@ -8524,7 +8570,7 @@ document.addEventListener('toggle',function(e){
   var key=view.page+':'+(view.classId||''),y=window.scrollY,same=key===lastKey;
   lastKey=key;
   var keep=[];
-  ['.pickpanel','.modal'].forEach(function(sel){var el=document.querySelector(sel);if(el&&el.scrollTop)keep.push([sel,el.scrollTop])});
+  ['.pickpanel','.modal','.cpis'].forEach(function(sel){var el=document.querySelector(sel);if(el&&el.scrollTop)keep.push([sel,el.scrollTop])});
   // anything typed into an open popup survives a redraw (a sync finishing in the background used to
   // rebuild the popup from scratch and wipe what you had typed, e.g. a link's name and address)
   var typed=null,modalNow=view.modal;
