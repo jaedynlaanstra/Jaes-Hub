@@ -126,9 +126,13 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .sizebtns button{font-size:12px;padding:5px 10px}
 .sizebtns button.on{background:#33312C;color:#fff;border-color:#33312C}
 .eyebrow{font-size:12px;color:var(--hdrInk2)}
-.main.cvf .coverwrap::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,var(--hdrbg) 100%)}
-.main.cvf .banner{position:relative;z-index:2;margin-top:-76px;padding-top:30px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 76px)!important}
-@media(max-width:700px){.main.cvf .banner{margin-top:-56px;padding-top:22px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 56px)!important}}
+.main.cvf .coverwrap::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,var(--hdrbg) 100%)} /* fallback for older browsers */
+@supports (background:linear-gradient(color-mix(in srgb,red 50%,transparent),red)){
+  /* an eased fade (no hard edge where it starts) that is fully solid for the last fifth, so the class name sits on solid colour */
+  .main.cvf .coverwrap::after{background:linear-gradient(to bottom,rgba(0,0,0,0) 12%,color-mix(in srgb,var(--hdrbg) 6%,transparent) 28%,color-mix(in srgb,var(--hdrbg) 18%,transparent) 40%,color-mix(in srgb,var(--hdrbg) 36%,transparent) 50%,color-mix(in srgb,var(--hdrbg) 56%,transparent) 58%,color-mix(in srgb,var(--hdrbg) 74%,transparent) 65%,color-mix(in srgb,var(--hdrbg) 88%,transparent) 71%,color-mix(in srgb,var(--hdrbg) 96%,transparent) 76%,var(--hdrbg) 80%)}
+}
+.main.cvf .banner{position:relative;z-index:2;margin-top:-76px;padding-top:30px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 22px)!important}
+@media(max-width:700px){.main.cvf .banner{margin-top:-56px;padding-top:22px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 16px)!important}}
 .banner h1{font-size:38px;letter-spacing:-.02em;line-height:1.15;color:var(--hdrInk);margin-top:7px}
 .banner .sub{font-size:13px;color:var(--hdrInk2);margin-top:4px}
 .nav{display:flex;gap:20px;padding:18px 40px 0;flex-wrap:wrap}
@@ -1902,7 +1906,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v131';
+var BUILD='v132';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
