@@ -51,7 +51,7 @@
   --hdr:#F0EEE9; --hdrInk:#4A4638; --hdrInk2:#837D6D; --hdrBar:#BDB6A3;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--fb,'DM Sans',-apple-system,Segoe UI,sans-serif);font-weight:var(--wb,400);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--pagebg,var(--paper));color:var(--ink);font-family:var(--fb,'DM Sans',-apple-system,Segoe UI,sans-serif);font-weight:var(--wb,400);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .main{zoom:var(--fscale,1)}
 /* the Size slider is for computers: on phones and small tablets the page always fills the screen, even though the setting syncs */
 @media(max-width:900px){.main{zoom:1!important}}
@@ -106,9 +106,10 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .ssub{margin:3px 0 8px 19px;padding-left:12px;border-left:1px solid rgba(255,255,255,.15)}
 .ssub .sitem{font-size:13px;padding:6px 10px;color:var(--sideSoft,#A49D90)}
 .ssub .sitem:hover{color:var(--sideBright,#FFFDF8)}
-.ssub .sfol{text-decoration:none;color:var(--sideBright,#FFFDF8)}
+.ssub .sfol,.sfol.stop{text-decoration:none;color:var(--sideBright,#FFFDF8)}
+.sfol.stop .sext{margin-left:auto;font-size:12px;opacity:.7}
 .ssub .sfol .sext{margin-left:auto;font-size:12px;opacity:.7}
-.main{flex:1;min-width:0;background:var(--card)}
+.main{flex:1;min-width:0;background:var(--pagebg,var(--card))} /* white unless you pick a Page background */
 .menubtn,.homebtn{display:none;background:rgba(0,0,0,.06);border:none;border-radius:8px;padding:7px 11px;margin-bottom:14px;font-size:13px}
 .backdrop{position:fixed;inset:0;background:rgba(28,26,22,.42);z-index:55}
 .banner{padding:64px 40px 28px;position:relative}
@@ -751,7 +752,6 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   .cpduo .cpshut+.cpsec,.cpduo .cpsec+.cpshut{margin-top:-12px}
   /* When and where right under Next due; Grade, Professor and Title page live in the Class info sheet */
   .cprail.cpclassrail{display:contents}
-  .cpsplit #cp-when{order:-1}
   .cpinfobtn{display:block;width:100%;text-align:left;font:inherit;color:inherit;padding:0;cursor:pointer}
   .cpinfobtn .cpcardhead{border-bottom:none}
   .cpinfobtn .tpchev{transform:rotate(-90deg);margin-left:auto}
@@ -765,13 +765,14 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
   .cpishead h3{font-size:18px;font-weight:var(--wh,500);margin:0}
   .cpisdone{font:inherit;font-size:14px;border:1px solid var(--line2);background:var(--card);border-radius:99px;padding:6px 14px;min-height:0!important;color:var(--ink)}
   .cpis .cptp{display:block}
-  /* Class settings: just the label until tapped */
-  .cpsetfold .cpsetlab{display:none}
-  .cpsettings.cpsetfold>button.cpsettog{display:inline-flex;align-items:center;gap:6px;flex-basis:100%;background:none;border:none;padding:2px 0;font:inherit;font-size:14px;color:var(--ink2);min-height:0!important;cursor:pointer}
-  .cpsettings.cpsetfold{border-top:none;padding-top:0}
-  .cpsetfold .cpsettog .tpchev{display:inline-flex;transition:transform .2s}
-  .cpsetfold.open .cpsettog .tpchev{transform:rotate(180deg)}
-  .cpsetfold:not(.open)>:not(.cpsettog){display:none!important}
+}
+/* settings rows (every page, every size): just the label until tapped */
+.cpsettings.cpsetfold>button.cpsettog{display:inline-flex;align-items:center;gap:6px;flex-basis:100%;background:none;border:none;padding:2px 0;font:inherit;font-size:14px;color:var(--ink2);min-height:0!important;cursor:pointer}
+.cpsettings.cpsetfold{border-top:none;padding-top:0}
+.cpsetfold .cpsettog .tpchev{display:inline-flex;transition:transform .2s}
+.cpsetfold.open .cpsettog .tpchev{transform:rotate(180deg)}
+.cpsetfold:not(.open)>:not(.cpsettog){display:none!important}
+@media(max-width:700px){
 
   .cpfoldchev svg{width:18px;height:18px}
   .cpsec:not(.cpshut) .cpfoldchev{transform:rotate(180deg)}
@@ -1062,7 +1063,7 @@ a.cpitemname:hover{text-decoration:underline}
 .cpnexts .cpnexttitle{font-size:14.5px;line-height:1.3;color:var(--head,var(--ink));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:1199px){.cpnextc{display:none}.cpnexts{display:flex;order:-1}}
 /* class page tabs */
-.cptabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:4px 0 22px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:20;background:var(--paper)}
+.cptabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:4px 0 22px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:20;background:var(--pagebg,var(--paper))}
 .cptabs::-webkit-scrollbar{display:none}
 .cptab{display:inline-flex;align-items:center;gap:9px;background:none;border:none;border-radius:0;padding:12px 16px 11px;margin-bottom:-2px;border-bottom:2px solid transparent;font-size:15px;font-weight:var(--wh,500);color:var(--ink3);cursor:pointer;white-space:nowrap;min-height:0!important;flex:none;font-family:inherit}
 .cptab:hover{color:var(--ink2)}
@@ -1095,6 +1096,26 @@ a.cpitemname:hover{text-decoration:underline}
 .hwdn{align-items:center!important}
 .hwdn b{font-family:var(--fh,inherit);font-size:24px;line-height:1;font-weight:var(--wh,500);color:var(--ink)}
 .hwd.on .hwdn b{color:var(--cp-hup-c)}
+.hwk2{display:none}
+@media(max-width:700px){
+  .hweek{display:none!important}
+  .hwk2{display:block;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 6px}
+  .p3 .hwk2{order:3}
+  .hwk2days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+  .hwk2d{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 6px;border-radius:12px;border:1px solid transparent;background:#F5F3EF;font:inherit;color:var(--ink);min-height:0!important;cursor:pointer}
+  .hwk2d .w{font-size:11.5px;color:var(--ink3)}
+  .hwk2d b{font-family:var(--fh,inherit);font-size:19px;line-height:1.15;font-weight:var(--wh,500)}
+  .hwk2d .dots{display:flex;gap:3px;height:6px;align-items:center}
+  .hwk2d .dots i{width:6px;height:6px;border-radius:50%}
+  .hwk2d.tdy{border-color:var(--sideBg)}
+  .hwk2d.sel{background:var(--sideBg);color:#fff;border-color:var(--sideBg)}
+  .hwk2d.sel .w{color:rgba(255,255,255,.8)}
+  .hwk2d.sel .dots i{box-shadow:0 0 0 1.5px rgba(255,255,255,.85)}
+  .hwk2list{margin-top:10px}
+  .hwk2head{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;color:var(--ink2);padding:2px 4px 4px}
+  .hwk2head span{font-size:12px;color:var(--ink3)}
+  .hwk2list .empty{font-size:13.5px;color:var(--ink3);padding:8px 4px 10px}
+}
 .hwchip{display:block;width:100%;text-align:left;border:none;border-radius:7px;padding:5px 7px;font:inherit;font-size:11.5px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;min-height:0!important}
 .hwchip.done{opacity:.45;text-decoration:line-through}
 .hwempty{font-size:11.5px;color:var(--ink3);opacity:.7}
@@ -1253,12 +1274,20 @@ a.cpitemname:hover{text-decoration:underline}
 .hn2 .tx{min-width:0;flex:1}
 .hn2 .hntick{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.75);background:transparent;padding:0;cursor:pointer;min-height:0!important;transition:background .15s}
 .hn2 .hntick:hover{background:rgba(255,255,255,.22)}
-.hband .day .nw{white-space:nowrap}
+.hband .t{display:flex;flex-direction:column;gap:3px}
+.hband .hrow{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.hband .hrow .hello{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hband .day{white-space:nowrap;overflow:hidden}
+.hband .wxm{padding:4px 10px!important;border-radius:99px!important;font-size:12.5px!important;gap:6px!important}
+.hband .wxm b{font-size:13.5px!important;font-weight:500!important}
+.hband .wxm i{width:10px!important;height:10px!important}
+@media(max-width:380px){.hband .wxm .wxc{display:none}}
 .hn2 .lab{font-size:12px;opacity:.8}
 .hn2 .ti{font-size:15.5px;line-height:1.3;margin-top:2px}
 .hn2 .dt{font-size:12px;opacity:.8;margin-top:3px}
 .hn2 .num{flex:none;display:flex;flex-direction:column;align-items:center;border-left:1px solid rgba(255,255,255,.3);padding-left:16px;min-width:74px}
 .hn2 .num .n{font-family:var(--fh,inherit);font-size:44px;line-height:1;font-weight:var(--wh,500)}
+.hn2 .num .n.tdy{font-size:26px}
 .hn2 .num .u{font-size:12px;opacity:.85;margin-top:3px;white-space:nowrap}
 @media(max-width:700px){.hn2{padding:12px 14px}.hn2 .num .n{font-size:34px}.hn2 .num{min-width:60px;padding-left:13px}.hn2 .ti{font-size:14.5px}}
 /* Today's plan + Coming up */
@@ -1813,7 +1842,10 @@ function applyTheme(){
   root.style.setProperty('--'+pp.id+'-ink2',set.ink2);
   root.style.setProperty('--'+pp.id+'-bar',set.bar);
  });
- CHROME.forEach(function(chx){if(chx.key!=='ink2'&&chx.key!=='ink3')root.style.setProperty('--'+chx.key,chromeHex(chx.key))});
+ // --paper stays the soft tint used INSIDE cards (headers, hovers); a picked Page background goes to --pagebg only
+ CHROME.forEach(function(chx){if(chx.key!=='ink2'&&chx.key!=='ink3')root.style.setProperty('--'+chx.key,chx.key==='paper'?chx.def:chromeHex(chx.key))});
+ // the page behind the cards: only once you've picked one (the cards themselves keep the Boxes colour)
+ if(S.theme&&S.theme.chrome&&S.theme.chrome.paper)root.style.setProperty('--pagebg',S.theme.chrome.paper);else root.style.removeProperty('--pagebg');
  SURFACES.forEach(function(sf){
   ['bg','line','ink'].forEach(function(part){
    var v=surfGet(sf.key,part);
@@ -1838,7 +1870,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v128';
+var BUILD='v129';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3506,7 +3538,7 @@ function sameData(local,remote){
  var total=Math.max(a.length,b.length,1);
  return (shared/total)>=0.8;
 }
-var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage','termDates','music','spClient'];
+var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage','termDates','music','spClient','school'];
 function mergeState(local,remote){
  // field-by-field, most recently touched item wins, using each item's own savedAt
  if(!remote)return local;
@@ -4043,6 +4075,9 @@ function pickerHtml(){
   var rows=onHome?CP_SITE_ROWS[view.page]:CP_SECS;
   var sh='<div class="pickpanel" style="'+pos+'">'+head+'<h3>'+(onHome?CP_SITE_TITLES[view.page]:'Section style')+'</h3>';
   if(!onHome)sh+='<div class="secscope"><button data-secscope="one" class="'+(allScope?'':'on')+'">This class</button><button data-secscope="all" class="'+(allScope?'on':'')+'">Every class</button></div>';
+  var pgb=(S.theme&&S.theme.chrome&&S.theme.chrome.paper)||'#FFFFFF';
+  sh+='<div class="secrow"><input type="color" value="'+pgb+'" data-themechrome="paper" aria-label="Page background colour"><input type="text" class="sechex" value="'+pgb+'" data-themechromehex="paper" spellcheck="false" aria-label="Page background hex code"><span class="secname">Page background<small>Behind the cards, on every page</small></span>'
+   +(S.theme&&S.theme.chrome&&S.theme.chrome.paper?'<button class="ghost" data-pagebgreset="1" style="font-size:12px;padding:3px 6px">Reset</button>':'<span class="secsp"></span>')+'</div>';
   sh+='<p class="sub2">'+(onHome?'Pick a colour for each part of this page.':(allScope?'Colours you pick now change that section on every class.':'Colours you pick now change '+esc(scl.name)+' only.'))+' B switches a title between bold and regular.</p>';
   rows.forEach(function(k){
    var key=k[0],dark=key==='when'||key==='htoday',cur=dark?sreal.dark:sreal[key].c,site=CP_SITEWIDE[key];
@@ -4196,6 +4231,7 @@ function sidebar(c){
   +sideItem('data-go','plan','Plan my week',view.page==='plan')
   +sideItem('data-go','professors','People',view.page==='professors')
   +sideItem('data-go','apps','Applications',view.page==='apps')
+  +schoolSideLink()
   +'<p class="slabel">Classes</p>';
  S.classes.filter(function(cl){return !isRefClass(cl)}).forEach(function(cl){
   var p=pal(cl.color),on=c&&c.id===cl.id;
@@ -4218,6 +4254,10 @@ function sidebar(c){
  h+='<div class="sidefoot">'+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
+/* your school's site in the menu (Fanshawe Online unless changed in Settings > Your hub; an empty address hides it) */
+function schoolLink(){var sc=S.school||{};return {title:sc.title!=null?sc.title:'Fanshawe Online',url:sc.url!=null?sc.url:'https://www.fanshaweonline.ca/d2l/home'}}
+function schoolSideLink(){var sc=schoolLink();if(!sc.url)return '';
+ return '<a class="sitem sfol stop" href="'+esc(sc.url)+'" target="_blank" rel="noopener"><span class="nm2">'+esc(sc.title||'School site')+'</span><span class="sext">↗</span></a>'}
 function sideItem(attr,key,label,on){
  return '<div class="sitem'+(on?' on':'')+'" '+attr+'="'+key+'"><span class="nm2">'+esc(label)+'</span></div>';
 }
@@ -4407,8 +4447,25 @@ function cpHead(key,col,title,pill,hint,acts,fold){
   +(acts?'<div class="cpacts">'+acts+'</div>':'')+'</div>';
 }
 document.addEventListener('click',function(e){
+ if(!(e.target.closest&&e.target.closest('[data-pagebgreset]')))return;
+ if(S.theme&&S.theme.chrome)delete S.theme.chrome.paper;applyTheme();save();render();
+});
+function fitLines(){
+ document.querySelectorAll('[data-fit]').forEach(function(el){
+  el.style.fontSize='';var fs=parseFloat(getComputedStyle(el).fontSize),min=+el.getAttribute('data-fit')||12,g=0;
+  while(el.scrollWidth>el.clientWidth+1&&fs>min&&g++<40){fs-=0.5;el.style.fontSize=fs+'px'}
+ });
+}
+window.addEventListener('resize',function(){fitLines()});
+try{document.fonts.ready.then(fitLines);document.fonts.addEventListener('loadingdone',fitLines)}catch(e){}
+/* every page's settings row is just its label until tapped (remembered per page on this device: hub:fold:set:<page>) */
+function cpSetHead(label,k){
+ var on=false;try{on=localStorage.getItem('hub:fold:set:'+k)==='1'}catch(e){}
+ return '<div class="cpsettings cpsetfold'+(on?' open':'')+'"><button class="cpsettog" data-csettog="'+k+'" aria-expanded="'+on+'">'+label+'<span class="tpchev">'+CP_ICO.chev+'</span></button>';
+}
+document.addEventListener('click',function(e){
  var t=e.target.closest&&e.target.closest('[data-cinfo],[data-csettog]');if(!t)return;
- if(t.hasAttribute('data-csettog')){var row=t.closest('.cpsettings'),on=!row.classList.contains('open');row.classList.toggle('open',on);t.setAttribute('aria-expanded',on);try{localStorage.setItem('hub:fold:cset',on?'1':'0')}catch(err){}return}
+ if(t.hasAttribute('data-csettog')){var row=t.closest('.cpsettings'),on=!row.classList.contains('open');row.classList.toggle('open',on);t.setAttribute('aria-expanded',on);try{localStorage.setItem('hub:fold:set:'+t.getAttribute('data-csettog'),on?'1':'0')}catch(err){}return}
  var v=t.getAttribute('data-cinfo');view.cinfo=v==='0'?null:v;view.cinfoAnim=!!view.cinfo;render();
 });
 /* phones: Assignments and Files & links fold shut to just their coloured header (tap the title).
@@ -4790,8 +4847,7 @@ function viewClass(c){
  }
 
  /* ===== class settings row (phones: tap "Class settings" to show the buttons; hub:fold:cset) ===== */
- var csOpen=false;try{csOpen=localStorage.getItem('hub:fold:cset')==='1'}catch(e){}
- var G='<div class="cpsettings cpsetfold'+(csOpen?' open':'')+'"><span class="cpsetlab">Class settings</span><button class="cpsettog" data-csettog="1" aria-expanded="'+csOpen+'">Class settings<span class="tpchev">'+CP_ICO.chev+'</span></button>'
+ var G=cpSetHead('Class settings','cls')
   +'<button data-edit="class" data-c="'+c.id+'">Edit class</button>'
   +'<button data-secopen="1">Colours</button>'
   +'<button data-xact="shareclass:'+c.id+'">Share this class</button>'
@@ -4846,7 +4902,7 @@ function viewClass(c){
  var BOT='<section class="cpfoldrow" id="c-info">'
   +fold('done',col.done.c,'Recently completed',finished.length?finished.length+' done':'',DB)
   +(phone?'<button class="cpcard cpinfobtn" data-cinfo="'+c.id+'"><span class="cpcardhead"><span class="cpdot" style="background:'+col.third.c+'"></span><span class="cpcardtitle">Class info</span>'
-     +'<span class="cpfoldmeta">Grade, professor, title page</span><span class="tpchev">'+CP_ICO.chev+'</span></span></button>'
+     +'<span class="cpfoldmeta">'+(c.day||c.room?'When, grade, professor':'Grade, professor, title page')+'</span><span class="tpchev">'+CP_ICO.chev+'</span></span></button>'
     :fold('info',col.third.c,'Class info','',IB))+'</section>';
 
  /* ===== right column (v121, back by request): Next due, When and where, Grade, Professor, Title page ===== */
@@ -4854,11 +4910,13 @@ function viewClass(c){
  if(c.day||c.room){
   var online=/online/i.test(c.day||'');
   var wOld=!!surfGet('when','bg')&&!cpOverride(c.id,'when'),wInk=wOld?'var(--ink)':col.darkInk,wSoft=wOld?'var(--ink2)':col.darkSoft;
-  R+='<section class="cpwhen" id="cp-when" style="background:var(--s-when-bg,'+col.dark+')">'
+  var WH='<section class="cpwhen" id="cp-when" style="background:var(--s-when-bg,'+col.dark+')">'
    +'<div class="cpwhenlab" style="color:var(--s-when-line,'+wSoft+')">When and where</div>'
    +'<div class="cpwhentime" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.day||'Time not set')+'</div>'
    +(c.room?'<div class="cpwhenroom" style="color:var(--s-when-ink,'+wInk+')">'+esc(c.room)+'</div>':(online?'':'<div class="cpwhenroom" style="color:'+wSoft+'">Room not set</div>'))
    +'</section>';
+  if(phone)SH+=WH;else R+=WH; // phones: it lives in the Class info pop-up
+
  }
  var gi0=gradeInfo(c);
  if(gi0.total){
@@ -4948,8 +5006,9 @@ function viewHome(){
  var wxIco=!wt?'':(/cloud|rain|snow|storm|fog|drizzle/.test(wt)?'cloud':(night?'moon':''));
  h='<div class="hband"><label class="av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
   +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg>')+'</label>'
-  +'<div class="t"><p class="hello">'+esc(hello+(who?', '+who:''))+'</p><p class="day">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+', <span class="nw">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric'}))+'</span></p></div>'
-  +(w.temp!=null?'<button class="wxm" data-wx="1" title="London, Ontario · tap to refresh"><i class="'+wxIco+'"></i><b>'+w.temp+'°</b>'+esc(w.cond||'')+'</button>':'')+'</div>'+h;
+  +'<div class="t"><div class="hrow"><p class="hello">'+esc(hello+(who?', '+who:''))+'</p>'
+  +(w.temp!=null?'<button class="wxm" data-wx="1" title="London, Ontario · tap to refresh"><i class="'+wxIco+'"></i><b>'+w.temp+'°</b><span class="wxc">'+esc(w.cond||'')+'</span></button>':'')+'</div>'
+  +'<p class="day" data-fit="15">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+', '+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric'}))+'</p></div></div>'+h;
  h+=homeAccountCard();
  h+=homeInstallCard();
  if((S.homeLinks||[]).length){
@@ -5007,15 +5066,33 @@ function viewHome(){
  C+='</section>';
 
  /* ===== settings row ===== */
- var G='<div class="cpsettings"><span class="cpsetlab">Home settings</span>'+coverControls('home',S)
+ var G=cpSetHead('Home settings','home')+coverControls('home',S)
   +'<button data-secopen="1">Colours</button></div>';
 
 
  /* ===== side column (moves into the list on narrower screens) ===== */
  var R='<aside class="cprail cphomerail">'+homeNextDue(open,t)+homeClock()+homeTodayPlan()+homeResources()+homeCalendar()+homeMusicCard()+homeTermCard()+'</aside>';
 
- return h+'<div class="cpsplit cphomesplit p3" style="'+cpVarStyle(real)+'"><div class="cpmain">'+U+homeWeekStrip()+C+G+'</div>'+R+'</div>';
+ return h+'<div class="cpsplit cphomesplit p3" style="'+cpVarStyle(real)+'"><div class="cpmain">'+U+homeWeekStrip()+homeWeekPhone()+C+G+'</div>'+R+'</div>';
 }
+function homeWeekPhone(){
+ var ws=weekStart(0),td=iso(today()),byDay={};
+ allTasks().forEach(function(x){if(x.t.due&&!isRefClass(x.c))(byDay[x.t.due]=byDay[x.t.due]||[]).push(x)});
+ var sel=view.hday&&view.hday>=iso(ws)&&view.hday<iso(weekStart(1))?view.hday:td;
+ var h='<section class="hwk2" id="h-week2" aria-label="This week"><div class="hwk2days">';
+ for(var i=0;i<7;i++){
+  var d=new Date(ws);d.setDate(ws.getDate()+i);var k=iso(d),list=byDay[k]||[];
+  h+='<button class="hwk2d'+(k===sel?' sel':'')+(k===td?' tdy':'')+'" data-hday="'+k+'" aria-pressed="'+(k===sel)+'">'
+   +'<span class="w">'+esc(d.toLocaleDateString('en-CA',{weekday:'short'}).replace('.',''))+'</span><b>'+d.getDate()+'</b>'
+   +'<span class="dots">'+list.slice(0,4).map(function(x){return '<i style="background:'+palHex(x.c.color)+(x.t.done?';opacity:.35':'')+'"></i>'}).join('')+'</span></button>';
+ }
+ var L=(byDay[sel]||[]).slice().sort(function(a,b){return (a.t.done?1:0)-(b.t.done?1:0)||((a.t.time||'')<(b.t.time||'')?-1:1)});
+ h+='</div><div class="hwk2list"><div class="hwk2head">'+esc(parseISO(sel).toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))
+  +'<span>'+(L.length?L.length+' due':'')+'</span></div>'
+  +(L.length?hRows(L,'up',20):'<div class="empty">Nothing due'+(sel===td?' today':'')+'.</div>')+'</div></section>';
+ return h;
+}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-hday]');if(!b)return;view.hday=b.getAttribute('data-hday');render()});
 // the week across the top of Home: every due date sitting on its day, in its class colour
 function homeWeekStrip(){
  var ws=weekStart(0),t=today(),td=iso(t),byDay={};
@@ -5061,7 +5138,7 @@ function homeNextDue(open,t){
   +'<button class="hntick" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark done" title="Mark done"></button>'
   +'<div class="tx"><div class="lab">'+(late?'Past due':'Next due')+' · '+esc(classLabel(x.c))+'</div><div class="ti">'+esc(x.t.title)+'</div>'
   +'<div class="dt">'+esc(withTime(parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),x.t.time))+(si.n?' · '+si.d+' of '+si.n+' steps':'')+'</div></div>'
-  +'<div class="num"><span class="n">'+(cd.n===0?'Today':Math.abs(cd.n))+'</span>'+(cd.n===0?'':'<span class="u">'+(Math.abs(cd.n)===1?'day':'days')+(late?' late':' left')+'</span>')+'</div></section>';
+  +'<div class="num"><span class="n'+(cd.n===0?' tdy':'')+'">'+(cd.n===0?'Today':Math.abs(cd.n))+'</span>'+(cd.n===0?'':'<span class="u">'+(Math.abs(cd.n)===1?'day':'days')+(late?' late':' left')+'</span>')+'</div></section>';
 }
 // the time, updated every few seconds without redrawing the page
 function homeClock(){
@@ -5392,7 +5469,7 @@ function viewCalendar(){
   }).join('')+'</div>';
  }
  W+='</section>';
- var G='<div class="cpsettings"><span class="cpsetlab">Calendar settings</span><button data-xact="ics:">Import from a calendar</button><button data-secopen="1">Colours</button></div>';
+ var G=cpSetHead('Calendar settings','cal')+'<button data-xact="ics:">Import from a calendar</button><button data-secopen="1">Colours</button></div>';
  return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+M+W+G+'</div></div>';
 }
 function viewProfessors(){
@@ -5419,7 +5496,7 @@ function viewProfessors(){
    +'</div></div>';
  }).join('')+'</div>';
  P+='</section>';
- var G='<div class="cpsettings"><span class="cpsetlab">People settings</span><button data-secopen="1">Colours</button></div>';
+ var G=cpSetHead('People settings','ppl')+'<button data-secopen="1">Colours</button></div>';
  return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+P+G+'</div></div>';
 }
 function viewApps(){
@@ -5438,7 +5515,7 @@ function viewApps(){
   return '<a class="cpapp" data-phoneapp="1" href="'+esc(a.url)+'" target="_blank" rel="noopener"><span class="cpappic">'+ic+'</span><span class="cpappnm">'+esc(a.title)+'</span><span class="cpapphost">'+esc(host)+'</span></a>';
  }).join('')+'</div>';
  A+='</section>';
- var G='<div class="cpsettings"><span class="cpsetlab">Applications settings</span><button data-secopen="1">Colours</button></div>';
+ var G=cpSetHead('Applications settings','apps')+'<button data-secopen="1">Colours</button></div>';
  return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+A+G+'</div></div>';
 }
 
@@ -5519,7 +5596,7 @@ function viewPlan(){
  var T='<section class="cpsec" id="p-tray">'+cpHead('ktray',col.ktray,'To plan',tray.length?tray.length+'':'',tray.length?'Coming up soon and not on this week yet':'Everything coming up is planned','');
  T+=tray.length?'<div class="cptray">'+tray.map(function(x){return planCard(x,'')}).join('')+'</div>':'<div class="cpempty">Nice. Everything due in the next few weeks has a day.</div>';
  T+='</section>';
- var G='<div class="cpsettings"><span class="cpsetlab">Planner settings</span><button data-secopen="1">Colours</button></div>';
+ var G=cpSetHead('Planner settings','plan')+'<button data-secopen="1">Colours</button></div>';
  return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+W+T+G+'</div></div>';
 }
 // "Today's plan" on Home, once you've started planning
@@ -5687,6 +5764,8 @@ function modalHtml(){
    +sg('hub','Your hub',S.owner,
      '<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
      +'<div class="field" style="margin:0"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>'
+     +'<div class="field" style="margin:0"><label for="setSchoolT">School site in the menu</label><input id="setSchoolT" data-schoolset="title" maxlength="40" placeholder="Name, e.g. Fanshawe Online" value="'+esc(schoolLink().title)+'">'
+      +'<input id="setSchoolU" data-schoolset="url" maxlength="300" placeholder="Web address (leave empty to hide it)" value="'+esc(schoolLink().url)+'" style="margin-top:6px"></div>'
      +'<div class="field" style="margin:0"><label for="setMusic">Music on Home</label><select id="setMusic" data-musicsvcsel="1"><option value="spotify"'+((S.music&&S.music.svc)==='apple'?'':' selected')+'>Spotify</option><option value="apple"'+((S.music&&S.music.svc)==='apple'?' selected':'')+'>Apple Music</option></select></div>'
      +(SPOTIFY_CLIENT_ID?'':'<div class="field" style="margin:0"><label for="setSpClient">Spotify Client ID</label><input id="setSpClient" data-setname="spClient" maxlength="64" placeholder="From developer.spotify.com, your Doable app" value="'+esc(S.spClient||'')+'"><span class="hint" style="margin:4px 0 0">Paste it once and the Connect Spotify button appears on Home, on all your devices.</span></div>')
      +(spConnected()?'<div class="field" style="margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:13.5px">Spotify is connected on this device.</span><button data-sp="disconnect">Disconnect</button></div>':''),false)
@@ -8157,6 +8236,11 @@ document.addEventListener('change',function(e){
   if(fa){var fd=tpDraft(fc.id);fd.title=fa.title;fd.due=fa.due||'';tpSaveDraft(fc.id);render()}
   return;
  }
+ if(t.dataset&&t.dataset.schoolset){
+  var sc=schoolLink(),v=t.value.trim();
+  if(t.dataset.schoolset==='url'&&v&&!/^https?:\/\//i.test(v))v='https://'+v;
+  sc[t.dataset.schoolset]=v;S.school=sc;save();render();return;
+ }
  if(t.dataset&&t.dataset.setname){
   var nm=t.value.trim().slice(0,40),key=t.dataset.setname;
   S[key]=nm||(key==='owner'?'My hub':'');
@@ -8585,6 +8669,7 @@ document.addEventListener('toggle',function(e){
   if(same)requestAnimationFrame(function(){if(lastKey===key&&!busy()&&Math.abs(window.scrollY-y)>1)window.scrollTo(0,y)});
   keep.forEach(function(k){var el=document.querySelector(k[0]);if(el)el.scrollTop=k[1]});
   try{musicSync()}catch(e){}
+  fitLines();
   // phone: the week strip scrolls sideways; start it at today
   var hw=document.querySelector('.hweek');if(hw&&hw.scrollWidth>hw.clientWidth+4){var hon=hw.querySelector('.hwd.on');if(hon)hw.scrollLeft=Math.max(0,hon.offsetLeft-hw.offsetLeft-16)}
   if(field){
