@@ -126,13 +126,15 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .sizebtns button{font-size:12px;padding:5px 10px}
 .sizebtns button.on{background:#33312C;color:#fff;border-color:#33312C}
 .eyebrow{font-size:12px;color:var(--hdrInk2)}
-.main.cvf .coverwrap::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,var(--hdrbg) 100%)} /* fallback for older browsers */
+.main.cvf{--cvo:48px;--cvl:min(150px,60%)}
+.main.cvf .coverwrap::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,var(--hdrbg) 48px,rgba(0,0,0,0) 200px)} /* fallback for older browsers */
 @supports (background:linear-gradient(color-mix(in srgb,red 50%,transparent),red)){
-  /* an eased fade (no hard edge where it starts) that is fully solid for the last fifth, so the class name sits on solid colour */
-  .main.cvf .coverwrap::after{background:linear-gradient(to bottom,rgba(0,0,0,0) 12%,color-mix(in srgb,var(--hdrbg) 6%,transparent) 28%,color-mix(in srgb,var(--hdrbg) 18%,transparent) 40%,color-mix(in srgb,var(--hdrbg) 36%,transparent) 50%,color-mix(in srgb,var(--hdrbg) 56%,transparent) 58%,color-mix(in srgb,var(--hdrbg) 74%,transparent) 65%,color-mix(in srgb,var(--hdrbg) 88%,transparent) 71%,color-mix(in srgb,var(--hdrbg) 96%,transparent) 76%,var(--hdrbg) 80%)}
+  /* eased fade measured up from the bottom: solid only where the title overlaps, then a long, soft fade with no visible top edge */
+  .main.cvf .coverwrap::after{background:linear-gradient(to top,var(--hdrbg) 0,var(--hdrbg) calc(var(--cvo) + var(--cvl) * 0),color-mix(in srgb,var(--hdrbg) 97%,transparent) calc(var(--cvo) + var(--cvl) * 0.1),color-mix(in srgb,var(--hdrbg) 90%,transparent) calc(var(--cvo) + var(--cvl) * 0.2),color-mix(in srgb,var(--hdrbg) 79%,transparent) calc(var(--cvo) + var(--cvl) * 0.32),color-mix(in srgb,var(--hdrbg) 65%,transparent) calc(var(--cvo) + var(--cvl) * 0.44),color-mix(in srgb,var(--hdrbg) 50%,transparent) calc(var(--cvo) + var(--cvl) * 0.56),color-mix(in srgb,var(--hdrbg) 35%,transparent) calc(var(--cvo) + var(--cvl) * 0.67),color-mix(in srgb,var(--hdrbg) 22%,transparent) calc(var(--cvo) + var(--cvl) * 0.78),color-mix(in srgb,var(--hdrbg) 12%,transparent) calc(var(--cvo) + var(--cvl) * 0.87),color-mix(in srgb,var(--hdrbg) 5%,transparent) calc(var(--cvo) + var(--cvl) * 0.94),rgba(0,0,0,0) calc(var(--cvo) + var(--cvl) * 1))}
 }
-.main.cvf .banner{position:relative;z-index:2;margin-top:-76px;padding-top:30px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 22px)!important}
-@media(max-width:700px){.main.cvf .banner{margin-top:-56px;padding-top:22px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 16px)!important}}
+/* the title area is solid and starts exactly where the photo's fade is already solid, so there's no seam */
+.main.cvf .banner{position:relative;z-index:2;margin-top:calc(-1 * var(--cvo));padding-top:20px!important;background:var(--hdrbg)!important}
+@media(max-width:700px){.main.cvf{--cvo:36px;--cvl:min(110px,60%)}.main.cvf .banner{padding-top:14px!important}}
 .banner h1{font-size:38px;letter-spacing:-.02em;line-height:1.15;color:var(--hdrInk);margin-top:7px}
 .banner .sub{font-size:13px;color:var(--hdrInk2);margin-top:4px}
 .nav{display:flex;gap:20px;padding:18px 40px 0;flex-wrap:wrap}
@@ -1907,7 +1909,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v133';
+var BUILD='v134';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
