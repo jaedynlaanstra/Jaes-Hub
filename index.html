@@ -126,6 +126,9 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .sizebtns button{font-size:12px;padding:5px 10px}
 .sizebtns button.on{background:#33312C;color:#fff;border-color:#33312C}
 .eyebrow{font-size:12px;color:var(--hdrInk2)}
+.main.cvf .coverwrap::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,var(--hdrbg) 100%)}
+.main.cvf .banner{position:relative;z-index:2;margin-top:-76px;padding-top:30px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 76px)!important}
+@media(max-width:700px){.main.cvf .banner{margin-top:-56px;padding-top:22px!important;background:linear-gradient(to bottom,rgba(0,0,0,0),var(--hdrbg) 56px)!important}}
 .banner h1{font-size:38px;letter-spacing:-.02em;line-height:1.15;color:var(--hdrInk);margin-top:7px}
 .banner .sub{font-size:13px;color:var(--hdrInk2);margin-top:4px}
 .nav{display:flex;gap:20px;padding:18px 40px 0;flex-wrap:wrap}
@@ -1899,7 +1902,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v130';
+var BUILD='v131';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4044,7 +4047,9 @@ function render(){
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
   +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?S.cover:''));
      if(view.page==='home')return '<main class="main hhome nohead'+(hasCov?' hascover':'')+'">';
-     return '<main class="main'+(hasCov?' hascover':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
+     // class pages: the cover fades into the title area and the title sits up in the fade (not while repositioning)
+     var fade=view.page==='class'&&hasCov&&bannerSize()!=='hidden'&&view.repos!==coverKey(c);
+     return '<main class="main'+(hasCov?' hascover':'')+(fade?' cvf':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'"'+(fade?' style="--hdrbg:var(--s-banner-bg,'+head.bg+')"':'')+'>';})()
   +'<button class="menubtn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +(view.page==='home'?'':'<button class="homebtn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')
   +coverBlock(c)+(view.page==='home'?'<div style="display:none">':'')
