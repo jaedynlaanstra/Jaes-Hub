@@ -1702,7 +1702,7 @@ function refFilesRail(){
  else h+=files.map(function(f,i){
    var link=f.kind==='pdf'
     ?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
-    :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
+    :(f.kind?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
    var ic=f.icon?'<img src="'+f.icon+'" alt="" style="width:16px;height:16px;object-fit:contain;flex-shrink:0">':fileIcon(f);
    return '<div class="item">'+ic+'<span class="grow">'+link+'</span>'
     +'<button class="ghost" data-refedit="'+i+'" style="font-size:11px;padding:3px 5px" aria-label="Rename or change the picture"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>'
@@ -1909,7 +1909,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v135';
+var BUILD='v137';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3886,10 +3886,11 @@ function mkMergeMarks(a,b){
   return out;
  };
  var out=Object.assign({},old,nw);
- out.strokes=join('strokes');out.notes=join('notes');out.deleted=del;
+ out.strokes=join('strokes');out.notes=join('notes');out.texts=join('texts');out.deleted=del;
+ if(a.pages||b.pages)out.pages=Math.max(a.pages||1,b.pages||1); // note paper: pages are only ever added
  return out;
 }
-function mkMarksSig(m){return m?((m.strokes||[]).map(function(x){return x.id}).sort().join(',')+'|'+(m.notes||[]).map(function(x){return x.id+':'+(x.text||'').length}).sort().join(',')):''}
+function mkMarksSig(m){return m?((m.strokes||[]).map(function(x){return x.id}).sort().join(',')+'|'+(m.notes||[]).map(function(x){return x.id+':'+(x.text||'').length}).sort().join(',')+'|'+(m.texts||[]).map(function(x){return x.id+':'+(x.at||'')}).sort().join(',')+'|'+(m.pages||'')):''}
 /* local safety net: the last 10 different versions of each PDF's markup are kept on this device
    (the PDF's Versions button lists them), saved whenever the PDF opens and before any copy from
    another device is merged in */
@@ -4542,7 +4543,7 @@ function cpTile(label,img){
  if(img)return '<span class="cptile cptileimg"><img src="'+img+'" alt=""></span>';
  return '<span class="cptile" style="background:'+t[0]+';color:'+t[1]+'">'+label+'</span>';
 }
-function cpFileLabel(f){return CP_EXT_LABEL[f.ext]||CP_EXT_LABEL[f.kind]||'FILE'}
+function cpFileLabel(f){return (f.marks&&f.marks.paper)?'NOTE':CP_EXT_LABEL[f.ext]||CP_EXT_LABEL[f.kind]||'FILE'}
 function cpLinkLabel(l){
  var host='';try{host=new URL(l.url).hostname}catch(e){}
  if(/(^|\.)claude\.(ai|site)$/.test(host))return 'AI';
@@ -4793,7 +4794,7 @@ function viewClass(c){
   var f=x.f,i=x.i,nn=(f.marks&&f.marks.notes&&f.marks.notes.length)||0;
   var meta=cpFileLabel(f)+(f.kind==='pdf'&&f.marks&&f.marks.strokes&&f.marks.strokes.length?' · marked up':'')+(nn?' · '+nn+' note'+(nn>1?'s':''):'')+(f.saved===false&&f.data?' · too big to keep':'');
   var name=f.kind==='pdf'?'<a class="cpitemname" href="#" data-mkopen="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>'
-   :(READABLE[f.kind]?'<a class="cpitemname" href="#" data-openfile="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>':'<span class="cpitemname">'+esc(f.name)+'</span>');
+   :(f.kind?'<a class="cpitemname" href="#" data-openfile="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>':'<span class="cpitemname">'+esc(f.name)+'</span>');
   return '<div class="cpitem">'+cpTile(cpFileLabel(f),f.icon)+'<span class="cpitemtext">'+name+'<span class="cpitemmeta">'+esc(meta)+'</span></span>'
    +'<button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(f.name)+'">'+CP_ICO.more+'</button></div>';
  }
@@ -4854,7 +4855,8 @@ function viewClass(c){
    if(!isShut)F+=(!fr.length&&!lr.length)?'<div class="cpchempty">Nothing in this chapter yet. Add a file or link below, or move one here with its ⋯ button.</div>'
     :'<div class="cpchbody'+(fr.length&&lr.length?'':' one')+'">'+(fr.length?colList(fr.map(fileRow),'Files',''):'')+(lr.length?colList(lr.map(linkRow),'Links',''):'')+'</div>';
    if(!isShut)F+='<div class="cpchadd"><label class="cpquiet"><input type="file" multiple data-file="'+c.id+'" data-filesec="'+esc(g.id)+'" style="display:none">+ File</label>'
-    +'<button class="cpquiet" data-add="link" data-c="'+c.id+'" data-sec="'+esc(g.id||'_')+'">+ Link</button></div>';
+    +'<button class="cpquiet" data-add="link" data-c="'+c.id+'" data-sec="'+esc(g.id||'_')+'">+ Link</button>'
+    +'<button class="cpquiet" data-add="note" data-c="'+c.id+'" data-sec="'+esc(g.id||'_')+'">+ Note</button></div>';
    F+='</div>';
   });
   F+='<div class="cpffoot"><button class="cpquiet" data-add="section" data-c="'+c.id+'">+ New chapter</button>'
@@ -4935,7 +4937,7 @@ function viewClass(c){
   +(!rf.length?'<div class="cpsoft" style="font-size:13.5px">A formatting guide or template you want handy on every class page.</div>'
   :rf.map(function(f,i){
    var link=f.kind==='pdf'?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
-    :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
+    :(f.kind?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
    return '<div class="cpline cprefline"><span class="a">'+link+'</span><span class="b">'+cpFileLabel(f)+'</span>'
     +'<span class="cprefacts"><button class="cpghost" data-refedit="'+i+'" aria-label="Rename or change the picture">Edit</button><button class="cpghost" data-delfile="'+i+'" data-c="'+REF_CID+'" aria-label="Delete">×</button></span></div>';
   }).join(''));
@@ -5238,7 +5240,7 @@ function homeResources(){
  var body=!rf.length?'<div class="cpsoft" style="font-size:13.5px">A formatting guide or template you want handy everywhere.</div>'
   :rf.map(function(f,i){
    var link=f.kind==='pdf'?'<a href="#" data-mkopen="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>'
-    :(READABLE[f.kind]?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
+    :(f.kind?'<a href="#" data-openfile="'+i+'" data-c="'+REF_CID+'">'+esc(f.name)+'</a>':esc(f.name));
    return '<div class="cpline cprefline"><span class="a">'+link+'</span><span class="b">'+cpFileLabel(f)+'</span></div>';
   }).join('');
  return '<details class="cpcard cpfold" id="h-res" data-fold="hres"'+(on?' open':'')+'><summary class="cpcardhead"><span class="cpdot" style="background:var(--sideBg)"></span><h3 class="cpcardtitle">Resources</h3>'
@@ -5888,6 +5890,10 @@ function modalHtml(){
    +(cover?'<img src="'+cover+'" alt="" style="max-width:38px;max-height:48px;object-fit:contain">':'')+'</span>'
    +'<label class="fakebtn"><input type="file" accept="image/*" data-bookcover="1" style="display:none">Choose a picture</label>'
    +'<span class="hint" style="margin:0">or press Ctrl and V</span></div></div>';
+ }else if(m.kind==='note'){
+  h='<h3>New note</h3><div class="field"><label for="m1">Name</label><input id="m1" placeholder="Module 3 notes"></div>'
+   +'<div class="field"><label for="m2">Chapter</label><select id="m2">'+sectionOptions(classById(m.classId),m.section||'')+'</select></div>'
+   +'<p class="hint">Opens a blank grid page. Write with your Pencil, or pick the T tool to type headers and text.</p>';
  }else if(m.kind==='link'){
   var elk=m.id?linkById(classById(m.classId),m.id):null;
   var lcur=view.modal.pendingIcon!==undefined?view.modal.pendingIcon:(elk?(elk.icon||''):'');
@@ -6013,6 +6019,10 @@ function saveModal(){
    var nm=val('m1');if(!nm&&!val('m2'))return;
    c.contacts.push(touch({id:uid(),name:nm,role:val('m5'),email:val('m2'),office:val('m3'),hours:val('m4'),photo:''}));
   }
+ }else if(m.kind==='note'){
+  var nn2=val('m1').trim()||('Notes '+new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'}));
+  var ncid=m.classId,nsec=val('m2');
+  closeModal();makeNotePage(ncid,nn2,nsec);return;
  }else if(m.kind==='refedit'){
   var rf2=(FILES[REF_CID]||[])[m.i];if(!rf2)return;
   var rn=val('m1');if(rn)rf2.name=rn.trim();
@@ -6059,6 +6069,18 @@ function openFile(cid,i){
   var bin=atob(f.data),arr=new Uint8Array(bin.length);
   for(var j=0;j<bin.length;j++)arr[j]=bin.charCodeAt(j);
   url=URL.createObjectURL(new Blob([arr],{type:f.mime||'application/octet-stream'}));
+ }
+ // Excel, Word and other files: on iPhone/iPad hand them to the share sheet ("Open in Excel", Save to Files);
+ // a download link does little inside a Home Screen app. Computers download the file to open it there.
+ if(!READABLE[f.kind]&&navigator.maxTouchPoints>0&&navigator.share&&navigator.canShare){
+  try{
+   var sf=new File([arr],f.name,{type:f.mime||'application/octet-stream'});
+   if(navigator.canShare({files:[sf]})){
+    URL.revokeObjectURL(url);
+    navigator.share({files:[sf],title:f.name}).catch(function(e){if(e&&e.name!=='AbortError')alert('Could not open '+f.name+'. Try again, or open it on a computer.')});
+    return;
+   }
+  }catch(e){}
  }
  var a=document.createElement('a');
  a.href=url;
@@ -6212,6 +6234,7 @@ function mkLoadSizes(){
 }
 function mkSaveSizes(){try{localStorage.setItem('hub:mksize',JSON.stringify(MK.toolSize))}catch(e){}}
 var MK_COLORS={hi:['#F5D949','#F5A0B5','#8FD19E','#7FB8E0','#D9A8F0','#F2B26B'],pen:['#000000','#D9534F','#3B82F6','#1F9D6B','#8B5CF6','#E67E22']};
+MK_COLORS.text=MK_COLORS.pen;
 function mkIco(inner,sz){return '<svg viewBox="0 0 24 24" width="'+(sz||19)+'" height="'+(sz||19)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>'}
 var MK_ICO={
  close:mkIco('<path d="M5 5l14 14M19 5L5 19"/>',17),
@@ -6223,7 +6246,8 @@ var MK_ICO={
  eraser:mkIco('<path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.828 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/>'),
  sun:mkIco('<circle cx="12" cy="12" r="4.2" stroke-width="1.6"/><g stroke-width="1.6"><path d="M12 2.5v2.3M12 19.2v2.3M21.5 12h-2.3M4.8 12H2.5M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6M18.4 18.4l-1.6-1.6M7.2 7.2L5.6 5.6"/></g>',17),
  moon:mkIco('<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" stroke-width="1.6"/>',17),
- ext:mkIco('<path d="M9 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-width="1.6"/><path d="M14 4h6v6M20 4l-9 9" stroke-width="1.6"/>',16)
+ ext:mkIco('<path d="M9 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke-width="1.6"/><path d="M14 4h6v6M20 4l-9 9" stroke-width="1.6"/>',16),
+ text:mkIco('<path d="M5 6V4.5h14V6"/><path d="M12 4.5v15"/><path d="M9 19.5h6"/>')
 };
 function mkCss(){
  if(document.getElementById('mkcss'))return;
@@ -6344,6 +6368,12 @@ function mkCss(){
   +'#mk .mkfloat button.on{background:rgba(239,234,224,.16);color:#fff}'
   +'#mk .mkfloat button:disabled{opacity:.35}'
   +'#mk .mkfloat button b{position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.3)}'
+  +'#mk .mkrow button.mktxtbtn{padding:0 16px}'
+  +'#mk .mktxthint{font-size:12.5px;color:#C9C3B4;white-space:nowrap;margin-left:4px}'
+  +'#mk .mkaddpg{background:rgba(255,255,255,.1);color:#EFEAE0}'
+  +'#mk .mktxtseg{display:flex;background:rgba(255,255,255,.08);border-radius:10px;padding:2px;margin-left:auto}'
+  +'#mk .mktxtseg button{background:none;border:none;color:#C9C3B4;padding:6px 12px;border-radius:8px;font:inherit;font-size:13px;cursor:pointer}'
+  +'#mk .mktxtseg button.on{background:#EFEAE0;color:#1c1a17;font-weight:600}'
   +'#mk .mkfloat .mkfsep{width:22px;height:1px;background:rgba(255,255,255,.12);margin:1px 0}'
   +'@media (max-width:420px){#mk .mkswatch.mkcustom i{inset:4px;font-size:13px}}';
  document.head.appendChild(st);
@@ -6368,7 +6398,7 @@ function mkSetMode(mode){
  var el=document.getElementById('mk');
  if(el)el.className=mode==='edit'?'mk-edit':'';
 }
-async function mkOpen(cid,i){
+async function mkOpen(cid,i,startEdit){
  var f=(FILES[cid]||[])[i];if(!f||f.kind!=='pdf')return;
  if(!f.data){alert(f.cloud?'This file is still downloading from your account. Give it a moment, then try again (Settings > Sync now).':'This file is not saved, so there is nothing to open.');return}
  var lib=await loadPdfJs();
@@ -6378,6 +6408,9 @@ async function mkOpen(cid,i){
  MK={cid:cid,i:i,f:f,doc:doc,pageCount:doc.numPages,pageInfo:{},rendered:{},zoomGen:0,curPage:1,zoom:1,mode:'read',
      tool:'pen',color:MK_COLORS.pen[0],toolColor:{hi:MK_COLORS.hi[0],pen:MK_COLORS.pen[0]},toolSize:mkLoadSizes(),size:'s',dark:false,history:[],future:[],drawing:null,drawingAnno:null,erasing:false,touch:null,thumbsOpen:false,thumbsBuilt:false,notesOpen:false};
  MK.size=MK.toolSize.pen;
+ MK.toolColor.text=MK_COLORS.text[0];MK.textStyle=mkTextStyleSaved();
+ // note paper: one blank grid page in the file, shown as many times as the note has pages
+ if(f.marks&&f.marks.paper){MK.paper=f.marks.paper;MK.pageCount=Math.max(1,f.marks.pages||1)}
  MK.knownIds=mkIdsOf(f.marks);mkHistAdd(f,'when you opened it');
  mkCss();
  mkLockViewportZoom();
@@ -6408,7 +6441,7 @@ async function mkOpen(cid,i){
  var body=document.getElementById('mkbody');
  var containerW=Math.max(240,body.clientWidth-24);
  for(var n=1;n<=MK.pageCount;n++){
-  var page=await MK.doc.getPage(n);
+  var page=await mkGetPage(n);
   var vp1=page.getViewport({scale:1});
   MK.pageInfo[n]={vp1:vp1,fitScale:Math.min(containerW/vp1.width,1.6)};
  }
@@ -6420,7 +6453,9 @@ async function mkOpen(cid,i){
  body.addEventListener('scroll',mkOnScrollThrottled,{passive:true});
  body.addEventListener('scroll',mkNotesOnScroll,{passive:true});
  mkOnScroll();
+ if(startEdit){mkSetMode('edit');mkRerenderChrome()}
 }
+function mkGetPage(n){return MK.doc.getPage(MK.paper?1:n)}
 function mkClose(){
  mkCommitNow();
  var el=document.getElementById('mk');if(el)el.remove();
@@ -6483,7 +6518,7 @@ async function mkRenderOnePage(n){
  // race against the fresh one it just triggered -- without this, a slow render for the OLD zoom
  // level can finish after the new one and silently paint over it with the wrong-resolution result
  var myGen=MK.zoomGen;
- var page=await MK.doc.getPage(n);
+ var page=await mkGetPage(n);
  if(!MK||MK.zoomGen!==myGen){if(MK)MK.rendered[n]=false;return}
  var scale=mkScaleFor(n);
  var viewport=page.getViewport({scale:scale});
@@ -6572,6 +6607,7 @@ function mkDrawAnnoForPage(n){
  ctx.setTransform(dpr,0,0,dpr,0,0);
  ctx.clearRect(0,0,scale*MK.pageInfo[n].vp1.width,scale*MK.pageInfo[n].vp1.height);
  mkStrokesForPage(n).forEach(function(s){mkPaintStroke(ctx,s,scale)});
+ mkPaintTexts(ctx,n,scale);
 }
 /* the stroke you are actively drawing lives on its own overlay canvas, repainted by itself --
    the committed ink underneath never gets touched while you draw, however much of it there is */
@@ -6760,6 +6796,7 @@ function mkScheduleAnno(page){
 function mkBeginStroke(anno,page,clientX,clientY,pressure){
  mkHideBubble();
  var p=mkAnnoPoint(anno,clientX,clientY,page);
+ if(MK.tool==='text'){MK.textTap={page:page,p:p};return} // typing: the tap is handled on release
  if(MK.tool==='eraser'){
   MK.erasing=true;MK.erasePage=page;MK.eraseBefore=JSON.parse(JSON.stringify(mkStrokesForPage(page)));
   var all=mkMarks().strokes;
@@ -6865,6 +6902,7 @@ function mkFinishErase(){
  }
 }
 function mkFinishStroke(){
+ if(MK.textTap){var tt=MK.textTap;MK.textTap=null;mkTextAt(tt.page,tt.p);return}
  if(MK.erasing){mkFinishErase();MK.drawingAnno=null;return}
  if(!MK.drawing)return;
  clearTimeout(MK.holdTimer);
@@ -6884,7 +6922,7 @@ function mkFinishStroke(){
  mkAddStroke(s);
 }
 function mkCancelStroke(){
- clearTimeout(MK.holdTimer);
+ clearTimeout(MK.holdTimer);MK.textTap=null;
  var page=MK.drawing&&MK.drawing.page;
  MK.drawing=null;MK.drawingAnno=null;
  if(MK.erasing)mkFinishErase();
@@ -7116,6 +7154,7 @@ function mkTouchStart(e){
   var t=e.touches[0],target=document.elementFromPoint(t.clientX,t.clientY),anno=target&&target.closest&&target.closest('.mkanno');
   if(!anno)return;
   e.preventDefault();
+  if(MK.tool==='text'){MK.textFinger={id:t.identifier,x0:t.clientX,y0:t.clientY,t0:Date.now(),anno:anno,page:+anno.getAttribute('data-mkpage')};mkGestureBegin(e);return}
   // once you've used the Pencil, only the Pencil draws (like Apple's own apps): a finger, or a palm
   // resting on the glass while you write, just scrolls -- it can never start a line, or end yours
   if(MK.pencilSeen){mkGestureBegin(e);return}
@@ -7133,6 +7172,7 @@ function mkTouchStart(e){
 }
 function mkTouchMove(e){
  if(!MK)return;
+ if(MK.textFinger){var tf0=mkTouchFind(e.touches,MK.textFinger.id);if(!tf0||e.touches.length>1||Math.hypot(tf0.clientX-MK.textFinger.x0,tf0.clientY-MK.textFinger.y0)>8)MK.textFinger.moved=true}
  if(MK.activePointerType==='pen'){e.preventDefault();return} // suppress the pencil's touch-event twin for the whole stroke, not just its start
  if(!MK.touch)return;
  if(MK.touch.mode==='pending'){
@@ -7168,6 +7208,10 @@ function mkTouchMove(e){
 function mkTouchEnd(e){
  if(!MK)return;
  if(MK.activePointerType==='pen'){e.preventDefault();return}
+ if(MK.textFinger&&!e.touches.length){
+  var tf=MK.textFinger;MK.textFinger=null;
+  if(!tf.moved&&Date.now()-tf.t0<600)mkTextAt(tf.page,mkAnnoPoint(tf.anno,tf.x0,tf.y0,tf.page)); // straight away, so iOS lets the keyboard open
+ }
  if(!MK.touch)return;
  if(MK.touch.mode==='pending'){
   // lifted before the grace window ran out, and never moved enough to look like a real stroke --
@@ -7262,6 +7306,7 @@ function mkUndo(){
  var act=MK.history.pop(),mk=mkMarks(),page;
  if(act.t==='add'){page=act.s.page;var idx=mk.strokes.indexOf(act.s);if(idx>-1)mk.strokes.splice(idx,1)}
  else if(act.t==='remove'){page=act.s.page;mk.strokes.splice(act.idx,0,act.s)}
+ else if(act.t==='txt'){page=act.page;mkPutText(act.id,act.before)}
  else{page=act.page;mkSwapPage(mk,page,act.before);if(act.notesBefore)mk.notes=JSON.parse(JSON.stringify(act.notesBefore))}
  MK.future.push(act);
  mkDrawAnnoForPage(page);mkRerenderChrome();mkCommit();
@@ -7271,6 +7316,7 @@ function mkRedo(){
  var act=MK.future.pop(),mk=mkMarks(),page;
  if(act.t==='add'){page=act.s.page;mk.strokes.push(act.s)}
  else if(act.t==='remove'){page=act.s.page;var idx=mk.strokes.indexOf(act.s);if(idx>-1)mk.strokes.splice(idx,1)}
+ else if(act.t==='txt'){page=act.page;mkPutText(act.id,act.after)}
  else{page=act.page;mkSwapPage(mk,page,act.after);if(act.notesAfter)mk.notes=JSON.parse(JSON.stringify(act.notesAfter))}
  MK.history.push(act);
  mkDrawAnnoForPage(page);mkRerenderChrome();mkCommit();
@@ -7289,7 +7335,7 @@ function mkCommit(){
 }
 document.addEventListener('visibilitychange',function(){if(document.hidden&&mkSavePending)mkCommitNow()});
 window.addEventListener('pagehide',function(){if(mkSavePending)mkCommitNow()});
-function mkIdsOf(m){var o={};((m&&m.strokes)||[]).concat((m&&m.notes)||[]).forEach(function(x){if(x&&x.id)o[x.id]=1});return o}
+function mkIdsOf(m){var o={};((m&&m.strokes)||[]).concat((m&&m.notes)||[],(m&&m.texts)||[]).forEach(function(x){if(x&&x.id)o[x.id]=1});return o}
 /* Save: saves this PDF's markup now and waits until your account has the copy, so you can be sure.
    (It also saves on its own a moment after you stop writing; this is the "I'm done, make sure" button.) */
 var MK_ICO_HIST=mkIco('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/><path d="M12 7v5l3 2"/>',18);
@@ -7339,6 +7385,7 @@ async function mkRestoreVersion(i){
  m.deleted=m.deleted||{};
  (back.strokes||[]).forEach(function(x){if(!have[x.id]){m.strokes.push(x);delete m.deleted[x.id]}});
  m.notes=m.notes||[];(back.notes||[]).forEach(function(x){if(!have[x.id]){m.notes.push(x);delete m.deleted[x.id]}});
+ m.texts=m.texts||[];(back.texts||[]).forEach(function(x){if(!have[x.id]){m.texts.push(x);delete m.deleted[x.id]}});
  MK.knownIds=mkIdsOf(m);
  Object.keys(MK.pageInfo).forEach(function(n){mkDrawAnnoForPage(+n)});
  var vb=document.getElementById('mkver');if(vb)vb.remove();
@@ -7358,6 +7405,142 @@ function mkCommitNow(){
  m.savedAt=now;
  mirrorFiles(p.cid);saveFiles(p.cid,true);save();
  if(sbUser)cloudSync(true);
+}
+
+
+/* ---------- typed text and note paper ----------
+   Typed text lives in marks.texts next to the ink, so it syncs and merges the same way:
+   {id,page,x,y,style:'h'|'p',color,text,at}, in page units. y is the grid LINE the text sits on:
+   every typed line rests on a line of the grid (MK_ROW apart), a header is two rows tall.
+   Note paper (made with "+ Note" in a chapter) is a one-page blank grid PDF; marks.paper says so and
+   marks.pages says how many pages the note has, so adding a page never changes the file itself. */
+var MK_ROW=18,MK_TXT={p:{size:12.5,step:18,w:400,drop:4},h:{size:22,step:36,w:600,drop:5}};
+function mkTextStyleSaved(){try{return localStorage.getItem('hub:mktext')==='h'?'h':'p'}catch(e){return 'p'}}
+function mkTexts(){var mk=mkMarks();if(!mk.texts)mk.texts=[];return mk.texts}
+function mkTextsForPage(n){return ((MK.f.marks&&MK.f.marks.texts)||[]).filter(function(t){return t.page===n})}
+function mkTextFont(st,scale){var fam=getComputedStyle(document.body).fontFamily||'sans-serif';return MK_TXT[st].w+' '+(MK_TXT[st].size*scale)+'px '+fam}
+var mkMeasureCtx=null;
+// splits the text into lines that fit between its left edge and the page's right margin
+function mkTextLines(t){
+ var st=MK_TXT[t.style]?t.style:'p',info=MK.pageInfo[t.page],pw=info?info.vp1.width:612;
+ var maxW=Math.max(MK_ROW*3,pw-t.x-MK_ROW);
+ if(!mkMeasureCtx)mkMeasureCtx=document.createElement('canvas').getContext('2d');
+ var ctx=mkMeasureCtx;ctx.font=mkTextFont(st,1);
+ var out=[];
+ String(t.text||'').split('\n').forEach(function(para){
+  var words=para.split(/(\s+)/),line='';
+  words.forEach(function(w){
+   if(!w)return;
+   var tryL=line+w;
+   if(ctx.measureText(tryL).width<=maxW||!line.trim()){
+    // a single word longer than the line: break it by letters
+    while(ctx.measureText(tryL).width>maxW&&tryL.length>1){
+     var k=tryL.length-1;while(k>1&&ctx.measureText(tryL.slice(0,k)).width>maxW)k--;
+     out.push(tryL.slice(0,k));tryL=tryL.slice(k);
+    }
+    line=tryL;
+   }else{out.push(line.replace(/\s+$/,''));line=w.trim()?w:''}
+  });
+  out.push(line.replace(/\s+$/,''));
+ });
+ return {lines:out,step:MK_TXT[st].step,maxW:maxW,ctx:ctx};
+}
+function mkTextBox(t){
+ var L=mkTextLines(t),w=0;L.lines.forEach(function(l){w=Math.max(w,L.ctx.measureText(l).width)});
+ return {x0:t.x-6,x1:t.x+Math.max(w,MK_ROW*2)+6,y0:t.y-L.step,y1:t.y+(L.lines.length-1)*L.step+6};
+}
+function mkPaintTexts(ctx,n,scale){
+ var list=mkTextsForPage(n);if(!list.length)return;
+ ctx.save();ctx.textBaseline='alphabetic';
+ list.forEach(function(t){
+  if(MK.editingText&&MK.editingText.id===t.id)return; // being edited: shown in the editor instead
+  var st=MK_TXT[t.style]?t.style:'p',L=mkTextLines(t);
+  ctx.font=mkTextFont(st,scale);ctx.fillStyle=t.color||'#000';
+  L.lines.forEach(function(l,i){ctx.fillText(l,t.x*scale,(t.y+i*L.step-MK_TXT[st].drop)*scale)});
+ });
+ ctx.restore();
+}
+function mkPutText(id,obj){
+ var list=mkTexts(),i=-1;for(var k=0;k<list.length;k++)if(list[k].id===id){i=k;break}
+ if(obj){obj=JSON.parse(JSON.stringify(obj));if(i>-1)list[i]=obj;else list.push(obj)}
+ else if(i>-1)list.splice(i,1);
+}
+// a tap with the Text tool: edit the text you tapped, or start new text on the nearest grid line
+function mkTextAt(page,p){
+ var hit=null;mkTextsForPage(page).forEach(function(t){var b=mkTextBox(t);if(p[0]>=b.x0&&p[0]<=b.x1&&p[1]>=b.y0&&p[1]<=b.y1)hit=t});
+ if(hit){mkOpenTextEditor(hit);return}
+ var info=MK.pageInfo[page],pw=info.vp1.width,ph=info.vp1.height,st=MK.textStyle==='h'?'h':'p';
+ var x=Math.round(p[0]/MK_ROW)*MK_ROW;x=Math.max(MK_ROW,Math.min(pw-MK_ROW*6,x));
+ var y=Math.ceil(p[1]/MK_ROW)*MK_ROW;y=Math.max(st==='h'?MK_ROW*2:MK_ROW,Math.min(ph-MK_ROW,y));
+ mkOpenTextEditor({id:null,page:page,x:x,y:y,style:st,color:MK.toolColor.text||'#000000',text:''});
+}
+function mkOpenTextEditor(t){
+ mkHideBubble();
+ MK.editingText={id:t.id,page:t.page,x:t.x,y:t.y,style:t.style||'p',color:t.color||'#000000'};
+ if(t.id)mkDrawAnnoForPage(t.page);
+ var el=document.getElementById('mk'),ed=document.createElement('div');
+ ed.className='mknoteed';ed.id='mknoteed';
+ var seg=function(k,label){return '<button data-mk="edtstyle:'+k+'" class="'+(MK.editingText.style===k?'on':'')+'">'+label+'</button>'};
+ ed.innerHTML='<div class="mknoteedcard" role="dialog" aria-label="Text">'
+  +'<div class="mknoteedhead"><i style="background:'+esc(MK.editingText.color)+'"></i><b>'+(t.id?'Edit text':'Type on the page')+'</b><div class="mktxtseg">'+seg('h','Header')+seg('p','Text')+'</div></div>'
+  +'<textarea id="mktxtta" rows="5" placeholder="Type here. Each line sits on a line of the page.">'+esc(t.text||'')+'</textarea>'
+  +'<div class="mknoteedbtns">'+(t.id?'<button data-mk="textdel" class="mkdanger">Delete</button>':'')
+  +'<span class="mkgrow"></span><button data-mk="notecancel">Cancel</button><button data-mk="textsave" class="mkprimary">Save</button></div></div>';
+ el.appendChild(ed);
+ var ta=document.getElementById('mktxtta');
+ var fo=function(){try{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)}catch(e){}};
+ fo();setTimeout(fo,30);
+}
+function mkSaveText(del){
+ var ed=MK.editingText;if(!ed)return;
+ var ta=document.getElementById('mktxtta'),text=del?'':(ta?ta.value:'').replace(/\s+$/,'');
+ var before=null;if(ed.id)mkTexts().forEach(function(t){if(t.id===ed.id)before=JSON.parse(JSON.stringify(t))});
+ var after=text?{id:ed.id||uid(),page:ed.page,x:ed.x,y:ed.y,style:ed.style,color:ed.color,text:text,at:new Date().toISOString()}:null;
+ if(after&&after.style==='h'&&after.y<MK_ROW*2)after.y=MK_ROW*2;
+ mkCloseNoteEditor();
+ if(!before&&!after){mkDrawAnnoForPage(ed.page);return}
+ var id=(after||before).id;
+ mkPutText(id,after);
+ MK.history.push({t:'txt',page:ed.page,id:id,before:before,after:after?JSON.parse(JSON.stringify(after)):null});MK.future=[];
+ mkDrawAnnoForPage(ed.page);mkRerenderChrome();mkCommit();
+}
+// note paper: one more blank page at the end
+function mkAddPage(){
+ if(!MK.paper)return;
+ var mk=mkMarks(),n=MK.pageCount+1;
+ mk.pages=n;MK.pageCount=n;
+ MK.pageInfo[n]={vp1:MK.pageInfo[1].vp1,fitScale:MK.pageInfo[1].fitScale};
+ var pagesEl=document.getElementById('mkpages');if(pagesEl)pagesEl.insertAdjacentHTML('beforeend',mkPageHtml(n));
+ if(MK.thumbsBuilt){MK.thumbsBuilt=false;if(MK.thumbsOpen){MK.thumbsOpen=false;mkToggleThumbs()}}
+ mkRerenderChrome();mkCommit();
+ var box=document.querySelector('.mkpagebox[data-mkpage="'+n+'"]'),body=document.getElementById('mkbody');
+ if(box&&body)body.scrollTop=box.offsetTop;
+ mkOnScroll();
+}
+// a blank page of grid paper (US Letter, a square every 18pt, a quarter inch) as a tiny PDF
+function noteGridPdf(){
+ var W=612,H=792,g=MK_ROW,c='0.80 0.84 0.88 RG 0.5 w\n';
+ for(var x=g;x<W;x+=g)c+=x+' 0 m '+x+' '+H+' l S\n';
+ for(var y=g;y<H;y+=g)c+='0 '+y+' m '+W+' '+y+' l S\n';
+ var objs=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+  '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << >> /Contents 4 0 R >>',
+  '<< /Length '+c.length+' >>\nstream\n'+c+'endstream','<< /Title (Doable note) /Producer (Doable) >>'];
+ var out='%PDF-1.4\n',offs=[];
+ objs.forEach(function(o,i){offs.push(out.length);out+=(i+1)+' 0 obj\n'+o+'\nendobj\n'});
+ var xref=out.length;
+ out+='xref\n0 '+(objs.length+1)+'\n0000000000 65535 f \n'+offs.map(function(o){return ('0000000000'+o).slice(-10)+' 00000 n \n'}).join('');
+ out+='trailer\n<< /Size '+(objs.length+1)+' /Root 1 0 R /Info 5 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';
+ return btoa(out);
+}
+async function makeNotePage(cid,name,section){
+ FILES[cid]=FILES[cid]||[];
+ var now=new Date().toISOString();
+ var rec={id:uid(),name:name,kind:'pdf',ext:'pdf',mime:'application/pdf',data:noteGridPdf(),section:section||'',
+  marks:{savedAt:now,strokes:[],notes:[],texts:[],paper:'grid',pages:1}};
+ FILES[cid].push(rec);
+ await saveFiles(cid);
+ if(sbUser)cloudSync(true);
+ mkOpen(cid,FILES[cid].indexOf(rec),true);
 }
 
 /* ---------- notes on highlights (like comments in Word) ----------
@@ -7479,7 +7662,7 @@ function mkOpenNoteEditor(sid,noteId){
  var ta=document.getElementById('mknotetext');
  setTimeout(function(){try{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)}catch(e){}},30);
 }
-function mkCloseNoteEditor(){var ed=document.getElementById('mknoteed');if(ed)ed.remove();MK.editingNote=null}
+function mkCloseNoteEditor(){var ed=document.getElementById('mknoteed');if(ed)ed.remove();MK.editingNote=null;var et=MK.editingText;MK.editingText=null;if(et&&et.id)mkDrawAnnoForPage(et.page)}
 function mkSaveNote(){
  var ed=MK.editingNote;if(!ed)return;
  var ta=document.getElementById('mknotetext'),text=(ta?ta.value:'').replace(/\s+$/,'');
@@ -7627,7 +7810,7 @@ async function mkToggleThumbs(){
   for(var n2=1;n2<=MK.pageCount;n2++){
    if(!MK)return;
    try{
-    var page=await MK.doc.getPage(n2),vp=page.getViewport({scale:80/page.getViewport({scale:1}).width});
+    var page=await mkGetPage(n2),vp=page.getViewport({scale:80/page.getViewport({scale:1}).width});
     var cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;
     await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
     var holder=el.querySelector('[data-mkph="'+n2+'"]');if(holder)holder.appendChild(cv);
@@ -7664,6 +7847,7 @@ function mkFloatRender(){
   +'<button class="'+(MK.tool==='pen'?'on':'')+'" data-mk="ftool:pen" aria-label="Pen">'+MK_ICO.pen+dot('pen')+'</button>'
   +'<button class="'+(MK.tool==='hi'?'on':'')+'" data-mk="ftool:hi" aria-label="Highlighter">'+MK_ICO.hi+dot('hi')+'</button>'
   +'<button class="'+(MK.tool==='eraser'?'on':'')+'" data-mk="ftool:eraser" aria-label="Eraser">'+MK_ICO.eraser+'</button>'
+  +'<button class="'+(MK.tool==='text'?'on':'')+'" data-mk="ftool:text" aria-label="Text">'+MK_ICO.text+dot('text')+'</button>'
   +'<span class="mkfsep"></span>'
   +'<button data-mk="undo" aria-label="Undo"'+(MK.history.length?'':' disabled')+'>'+MK_ICO.undo+'</button>';
  var pos=mkFloatPos();
@@ -7698,6 +7882,7 @@ function mkTopHtml(){
   +'<span class="mkname" title="'+esc(MK.f.name)+'">'+esc(MK.f.name)+'</span>'
   +'<span class="mkgrow"></span>'
   +'<span class="mkpage" id="mkpageline">'+MK.curPage+' / '+MK.pageCount+'</span>'
+  +(MK.paper?'<button class="mksave mkaddpg" data-mk="addpage">+ Page</button>':'')
   +'<div class="mkzoompill"><button data-mk="zoomout" aria-label="Zoom out">−</button>'
   +'<input id="mkzoomval" class="mkzoomval" value="'+Math.round(MK.zoom*100)+'%" inputmode="numeric">'
   +'<button data-mk="zoomin" aria-label="Zoom in">+</button></div>'
@@ -7710,13 +7895,14 @@ function mkTopHtml(){
 }
 function mkToolbarHtml(){
  var isHi=MK.tool==='hi',isPen=MK.tool==='pen',isEr=MK.tool==='eraser';
- var sizePx=MK_SIZE_DOTS[MK.tool];
+ var sizePx=MK_SIZE_DOTS[MK.tool]||{};
  return '<div class="mkrow">'
   +'<button class="'+(isHi?'on':'')+'" data-mk="tool:hi" title="Highlighter">'+MK_ICO.hi+'</button>'
   +'<button class="'+(isPen?'on':'')+'" data-mk="tool:pen" title="Pen">'+MK_ICO.pen+'</button>'
   +'<button class="'+(isEr?'on':'')+'" data-mk="tool:eraser" title="Eraser">'+MK_ICO.eraser+'</button>'
+  +'<button class="'+(MK.tool==='text'?'on':'')+'" data-mk="tool:text" title="Text">'+MK_ICO.text+'</button>'
   +'<span class="mksep"></span>'
-  +Object.keys(MK_SIZES[MK.tool]).map(function(sz){return '<button class="mksizebtn '+(MK.size===sz?'on':'')+'" data-mk="size:'+sz+'" aria-label="'+MK_SIZE_NAMES[sz]+'" title="'+MK_SIZE_NAMES[sz]+'"><i style="width:'+sizePx[sz]+'px;height:'+sizePx[sz]+'px"></i></button>'}).join('')
+  +(MK.tool==='text'?'<button class="mktxtbtn'+(MK.textStyle==='h'?' on':'')+'" data-mk="tstyle:h" style="font-size:16px;font-weight:600">Header</button><button class="mktxtbtn'+(MK.textStyle!=='h'?' on':'')+'" data-mk="tstyle:p">Text</button><span class="mktxthint">Tap the page to type</span>':Object.keys(MK_SIZES[MK.tool]).map(function(sz){return '<button class="mksizebtn '+(MK.size===sz?'on':'')+'" data-mk="size:'+sz+'" aria-label="'+MK_SIZE_NAMES[sz]+'" title="'+MK_SIZE_NAMES[sz]+'"><i style="width:'+sizePx[sz]+'px;height:'+sizePx[sz]+'px"></i></button>'}).join(''))
   +'</div>'
   +(isEr?'':'<div class="mkrow">'
     +MK_COLORS[MK.tool].map(function(cc){return '<button class="mkswatch'+(MK.color===cc?' on':'')+'" style="background:'+cc+'" data-mk="color:'+cc+'" aria-label="Colour"></button>'}).join('')
@@ -7735,6 +7921,7 @@ function mkApplyZoomValue(raw){
  mkZoomTo(n/100);
 }
 function mkZoomKey(e){
+ if(e.target&&e.target.id==='mktxtta'){if(e.key==='Escape'){e.preventDefault();mkCloseNoteEditor()}else if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();mkSaveText()}return}
  if(e.target&&e.target.id==='mknotetext'){if(e.key==='Escape'){e.preventDefault();mkCloseNoteEditor()}else if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();mkSaveNote()}return}
  if(e.target&&e.target.id==='mkzoomval'&&(e.key==='Enter')){e.preventDefault();mkApplyZoomValue(e.target.value);e.target.blur()}
 }
@@ -7773,6 +7960,11 @@ function mkClick(e){
  mkPickTool(arg);return;
 }
  if(a==='ftool'){if(MK.tool!==arg)mkPickTool(arg);return} // the floating menu never leaves Markup
+ if(a==='tstyle'){MK.textStyle=arg;try{localStorage.setItem('hub:mktext',arg)}catch(e){}mkRerenderChrome();return}
+ if(a==='edtstyle'){if(MK.editingText){MK.editingText.style=arg;document.querySelectorAll('#mknoteed [data-mk^="edtstyle"]').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-mk')==='edtstyle:'+arg)})}return}
+ if(a==='textsave'){mkSaveText();return}
+ if(a==='textdel'){mkSaveText(true);return}
+ if(a==='addpage'){mkAddPage();return}
  if(a==='size'){MK.size=arg;MK.toolSize[MK.tool]=arg;mkSaveSizes();mkRerenderChrome();return}
  if(a==='color'){MK.color=arg;MK.toolColor[MK.tool]=arg;mkRerenderChrome();return}
  if(a==='save'){mkSaveNow();return}
