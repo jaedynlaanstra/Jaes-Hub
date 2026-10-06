@@ -1909,7 +1909,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v134';
+var BUILD='v135';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -4536,7 +4536,7 @@ function cpCountdown(due){
 // the little coloured type tile in front of a file or link
 var CP_TILES={PDF:['#fbe9e5','#b8432a'],DOC:['#e8eef6','#3f6390'],PPT:['#fbeee4','#b0603a'],XLS:['#e6f0e6','#3d7a46'],CSV:['#e6f0e6','#3d7a46'],
  IMG:['#ebf1ec','#55785f'],TXT:['#f1efea','#6f685d'],ZIP:['#f1efea','#6f685d'],FILE:['#f1efea','#6f685d'],WEB:['#eaf0f3','#4a6b7d'],AI:['#f3ede2','#8a6a3a']};
-var CP_EXT_LABEL={pdf:'PDF',docx:'DOC',doc:'DOC',pptx:'PPT',ppt:'PPT',xlsx:'XLS',csv:'CSV',image:'IMG',text:'TXT',zip:'ZIP'};
+var CP_EXT_LABEL={pdf:'PDF',docx:'DOC',doc:'DOC',pptx:'PPT',ppt:'PPT',xlsx:'XLS',xls:'XLS',xlsm:'XLS',csv:'CSV',image:'IMG',text:'TXT',zip:'ZIP'};
 function cpTile(label,img){
  var t=CP_TILES[label]||CP_TILES.FILE;
  if(img)return '<span class="cptile cptileimg"><img src="'+img+'" alt=""></span>';
@@ -5735,9 +5735,9 @@ function modalHtml(){
       +'<p class="hint" style="margin:4px 0 0">Type a step and press Enter.</p></div>';
     })()
    +'<div class="field"><label for="m3">Instructions</label><textarea id="m3" rows="6" placeholder="What the prof asked for, word count, format, how it is graded">'+esc(a?a.notes:'')+'</textarea></div>'
-   +'<div class="field"><label>Instructions PDF</label>'
+   +'<div class="field"><label>Instructions file</label>'
    +'<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">'
-   +'<label class="fakebtn"><input type="file" accept="application/pdf,image/*" data-asgfile="1" style="display:none">Upload</label>'
+   +'<label class="fakebtn"><input type="file" data-asgfile="1" style="display:none">Upload</label>'
    +'<select id="m10" style="flex:1;min-width:140px"><option value="">No file attached</option>'
    +(FILES[m.classId]||[]).map(function(f){
      var sel=(a&&a.fileId===f.id)?' selected':'';
@@ -8358,6 +8358,7 @@ document.addEventListener('change',function(e){
  }
  if(t.dataset&&t.dataset.asgfile&&t.files[0]&&view.modal){
   var acid=view.modal.classId,af=t.files[0];
+  if(af.size>25000000){alert(af.name+' is '+(af.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');t.value='';return}
   (async function(){
    FILES[acid]=FILES[acid]||[];
    var rec=await readFile(af);
