@@ -1826,6 +1826,8 @@ a.h4resname:hover{text-decoration:underline}
 .colpgname i{width:9px;height:9px;border-radius:50%;flex:none}
 .colpgname span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .colpgname b{font-weight:400;color:var(--ink3);font-size:16px;line-height:1}
+.cpsettings button.cpdelcls{color:#A34A3F;border-color:#E3C6C1}
+.cpsettings button.cpdelcls:hover{background:#F7ECEA;border-color:#A34A3F}
 </style>
 </head>
 <body>
@@ -2134,7 +2136,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v138';
+var BUILD='v139';
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -5167,6 +5169,7 @@ function viewClass(c){
   +coverControls(c.id,c)
   +'<button data-add="book" data-c="'+c.id+'">'+(c.textbook?'Edit textbook':'Add a textbook')+'</button>'
   +(c.textbook?'<button class="cpghost" data-delbook="'+c.id+'">Remove textbook</button>':'')
+  +'<button class="cpdelcls" data-delclass="'+c.id+'">Delete class</button>'
   +'</div>';
 
  /* ===== right rail ===== */
@@ -8507,7 +8510,7 @@ document.addEventListener('click',function(e){
  if(d.paste){view.paste=view.paste===d.paste?null:d.paste;render();return}
  if(d.export){exportAll();return}
  if(d.sw){view.modal.color=d.sw;render();return}
- if(d.delclass){if(confirm('Delete this class and everything in it?')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
+ if(d.delclass){var dcl=classById(d.delclass);if(confirm('Delete '+(dcl?'\u201c'+dcl.name+'\u201d':'this class')+'?\n\nAre you sure? This cannot be undone. Its assignments, files, links and notes will be deleted on all your devices.')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
  if(d.go){go(d.go);return}
  if(d.open){go('class',d.open);return}
  if((d.scroll==='c-info'||d.scroll==='c-title')&&window.innerWidth<1200&&view.classId){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);view.cinfo=view.classId;view.cinfoAnim=true;render();return}
