@@ -2136,7 +2136,13 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v139';
+var BUILD='v140';
+/* data format version (v140 safety check). An app only syncs data whose format it understands: if the
+   cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
+   uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
+   number only when a release adds data that older copies would lose. */
+var APP_SCHEMA=1;
+function dataSchema(st){return (st&&+st.schema)||1}
 var DEFAULT={
  version:3,
  owner:"My hub",term:'Fall 2026',
@@ -3682,12 +3688,13 @@ function showSyncedToast(text,ok){
 
 /* ---------- new-version banner ---------- */
 var updChecking=false,updLast=0;
-function showUpdateBanner(){
- if(document.getElementById('updbar'))return;
+function showUpdateBanner(msg){
+ var had=document.getElementById('updbar');
+ if(had){if(msg){var sp=had.querySelector('span');if(sp)sp.textContent=msg}return}
  var b=document.createElement('div');
  b.id='updbar';
  b.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:200;background:#33312C;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 24px rgba(0,0,0,.28);font-size:13.5px;max-width:calc(100vw - 24px)');
- b.innerHTML='<span>A new version is available.</span><button id="updgo" style="background:#fff;color:#33312C;border:none;border-radius:9px;padding:7px 12px;font-weight:600;cursor:pointer">Update</button>';
+ b.innerHTML='<span>'+esc(msg||'A new version is available.')+'</span><button id="updgo" style="background:#fff;color:#33312C;border:none;border-radius:9px;padding:7px 12px;font-weight:600;cursor:pointer">Update</button>';
  document.body.appendChild(b);
  document.getElementById('updgo').onclick=async function(){
   this.textContent='Updating\u2026';
@@ -3824,6 +3831,7 @@ function mergeState(local,remote){
   });
   out.settingsSavedAt=remote.settingsSavedAt;
  }
+ if(local.schema||remote.schema)out.schema=Math.max(dataSchema(local),dataSchema(remote));
  // deletions: a deletion wins unless the item was edited after it was deleted
  var del={};
  [local.deleted,remote.deleted].forEach(function(m){
@@ -4016,6 +4024,10 @@ async function syncOnce(force){
   var q=await sb.from('hub_state').select('state,version').eq('user_id',uid).maybeSingle();
   if(q.error)return{ok:false,error:q.error.message};
   var row=q.data;
+  if(row&&dataSchema(row.state)>APP_SCHEMA){
+   showUpdateBanner('Your data was saved by a newer version of Doable. Update to keep syncing.');
+   return{ok:false,error:'Your data was saved by a newer version of Doable, so this copy has paused syncing to keep it safe. Tap Update at the bottom of the screen. Nothing is lost.'};
+  }
   if(!row){
    var ins=await sb.from('hub_state').insert({user_id:uid,state:payloadOf(S),version:1});
    if(!ins.error){S.everSynced=true;syncVer=1;syncedCanon=canon(payloadOf(S));return{ok:true,changed:changed}}
