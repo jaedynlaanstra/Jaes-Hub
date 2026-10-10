@@ -2802,6 +2802,14 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .zbtn.dark{background:#33312C;color:#fff;border-color:#33312C}
 .zrdchange{align-self:flex-start;margin-top:4px}
 @media(max-width:700px){.zrdopts{grid-template-columns:1fr}}
+/* the menu: logo, picture, space pill, highlight boxes and the bottom group all start on the same line */
+.side .dbrand,.side .me{padding-left:0}
+.side .zpill{margin-left:0}
+.side .slabel{padding-left:12px}
+.side .sidefoot{padding:6px 0}
+.side .sidehide{right:4px}
+/* the quote card: a little deeper than the other widgets (and the page) */
+.wd.wdquote.wdef{background:color-mix(in srgb,var(--sideBg) 17%,var(--card))}
 </style>
 </head>
 <body>
@@ -13043,6 +13051,20 @@ function r9Migrate(){S.spacesInit=S.spacesInit||{};if(S.spacesInit.rd9)return;if
  S.spacesInit=Object.assign({},S.spacesInit,{rd9:true});save()}
 var _r9Load=load;
 load=async function(){await _r9Load();try{r9Migrate()}catch(e){}render()};
+
+
+/* more quotes, so the daily one rarely repeats (one a day, the same on every device) */
+QUOTES=QUOTES.concat([['A journey of a thousand miles begins with a single step.','Lao Tzu'],['Little things make big days.',''],['You can do anything, but not everything.','David Allen'],
+ ['Take it one day at a time.',''],['Your future is created by what you do today, not tomorrow.',''],['Be proud of how far you’ve come.',''],['Breathe. You’ve got this.',''],
+ ['Discipline is choosing what you want most over what you want now.',''],['Make today count.',''],['Tiny progress is still progress.',''],['Rest when you need to, not when you’re done.',''],
+ ['Every day is a fresh start.',''],['Do something today that your future self will thank you for.',''],['Plan your work, then work your plan.',''],['Keep it simple.',''],
+ ['Consistency beats intensity.',''],['Start small. Stay steady.',''],['One thing at a time.',''],['You are allowed to go slowly.',''],['Clear the clutter, clear the mind.',''],
+ ['What you do every day matters more than what you do once in a while.','Gretchen Rubin'],['Be kind to your mind.',''],['Today, just do the next right thing.',''],
+ ['Good things take time.',''],['Celebrate the small wins.',''],['Focus on the step in front of you.',''],['You don’t need more time, you need a plan for the time you have.',''],
+ ['Inhale the future, exhale the past.',''],['Done for today is enough for today.',''],['Grow at your own pace.',''],['Show up for yourself.',''],['A calm mind gets more done.',''],
+ ['It’s okay to start again.',''],['Make room for what matters.',''],['Be the energy you want to attract.',''],['Small habits, big changes.',''],['Trust the process.',''],
+ ['You have survived every hard day so far.',''],['Write it down. Then let it go.',''],['Choose progress over pressure.','']]);
+zQuote=function(){var t=today(),n=Math.round((t-new Date(t.getFullYear(),0,1))/864e5)+t.getFullYear()*7;return QUOTES[n%QUOTES.length]};
 
 try{spBoot()}catch(e){}
 load();
