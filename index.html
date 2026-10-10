@@ -2169,6 +2169,364 @@ button.zch{cursor:pointer}
 .pickpanel:has(.pkacc){width:380px;padding:16px 14px}
 @media(min-width:701px){.pkaccb{padding:0 10px 12px}}
 .pkaccb .secrow{gap:6px}
+/* ===== v142 round 6: frame, rounded menu, motion, widget sizes, budget charts, mood, sections, reading, tour ===== */
+/* the Doable logo at the top of the menu */
+.dbrand{display:flex;align-items:center;gap:9px;padding:0 10px 18px;cursor:pointer;color:var(--sideBright,#FFFDF8);width:max-content}
+.dbrand .dlg{width:30px;height:30px;flex:none;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.dbrand:hover .dlg{transform:rotate(-6deg) scale(1.06)}
+.dbrand span{font-family:var(--fh,inherit);font-size:19px;font-weight:var(--wh,500);letter-spacing:-.01em;line-height:1}
+.side .sidehide{top:24px}
+/* menu items: rounded pills with icons */
+.sitem{border-radius:12px;transition:background .18s,color .18s}
+.sitem.sico{gap:11px}
+.sic{width:22px;height:22px;display:grid;place-items:center;flex:none;opacity:.85}
+.sitem.on .sic,.sitem:hover .sic{opacity:1}
+.sic.pg{width:24px;height:24px;border-radius:8px;background:color-mix(in srgb,var(--pgc) 32%,transparent);color:var(--sideBright,#fff);opacity:1}
+.sitem.on{background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.sidefoot{border-top:none;background:rgba(255,255,255,.06);border-radius:16px;padding:6px;margin-top:12px}
+/* the frame: the menu colour wraps the page, which sits in a rounded panel (computers and iPads in landscape) */
+@media(min-width:901px){
+ body{background:var(--sideBg);transition:background-color .45s ease}
+ .layout{background:var(--sideBg);transition:background-color .45s ease}
+ .side{background:transparent!important;padding-right:10px}
+ .main{margin:12px 12px 12px 0;border-radius:26px;min-height:calc(100vh - 24px);overflow:clip;box-shadow:0 1px 0 rgba(255,255,255,.04)}
+ body.r6noside .main{margin-left:12px}
+ #r6frame{position:fixed;top:0;right:0;bottom:0;left:242px;pointer-events:none;z-index:45;overflow:hidden}
+ body.r6noside #r6frame{left:0}
+ #r6frame i{position:absolute;top:12px;right:12px;bottom:12px;left:0;border-radius:26px;box-shadow:0 0 0 40px var(--sideBg);transition:box-shadow .45s ease}
+ body.r6noside #r6frame i{left:12px}
+ .sideshow{top:20px;left:20px}
+ .coverwrap{border-radius:26px 26px 0 0}
+ .zedit{top:20px}
+ .cptabs{top:12px!important}
+}
+@media(max-width:900px){#r6frame{display:none}}
+/* phones and narrow iPads: the menu is a rounded card that slides in */
+@media(max-width:900px){
+ .side{top:calc(env(safe-area-inset-top,0px) + 10px)!important;bottom:auto;left:10px!important;height:calc(100vh - 20px - env(safe-area-inset-top,0px))!important;height:calc(100dvh - 20px - env(safe-area-inset-top,0px))!important;min-height:0!important;border-radius:26px;transform:translateX(calc(-100% - 24px))}
+ .side.open{transform:none}
+}
+/* motion. Only when arriving on a page (never on every redraw) */
+@keyframes zin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes zcov{from{opacity:.4;transform:scale(1.04)}to{opacity:1;transform:none}}
+@keyframes zdraw{from{stroke-dasharray:0 1000}}
+@keyframes zgrow{from{width:0}}
+@keyframes zgrowh{from{height:0}}
+@keyframes zpop{0%{transform:scale(1)}35%{transform:scale(1.28)}65%{transform:scale(.92)}100%{transform:scale(1)}}
+@keyframes zmin{from{opacity:0;transform:translateY(10px) scale(.975)}to{opacity:1;transform:none}}
+@keyframes zminph{from{transform:translateY(40px);opacity:.3}to{transform:none;opacity:1}}
+@keyframes zbg{from{opacity:0}to{opacity:1}}
+.ain{animation:zin .5s cubic-bezier(.2,.7,.2,1) both}
+.main.enter .pagecover{animation:zcov .8s cubic-bezier(.2,.7,.2,1) both}
+.main.enter .zring circle+circle,.main.enter .zseg{animation:zdraw 1s cubic-bezier(.3,.7,.2,1) both .15s}
+.main.enter .zbar i,.main.enter .cpstepsbar i,.main.enter .h4bar i{animation:zgrow .9s cubic-bezier(.3,.7,.2,1) both .15s}
+.main.enter .zbcb i,.main.enter .zmtrend i{animation:zgrowh .8s cubic-bezier(.3,.7,.2,1) both .2s}
+.zpop{animation:zpop .45s cubic-bezier(.3,1.4,.5,1)}
+.modal.zmin{animation:zmin .26s cubic-bezier(.2,.7,.2,1)}
+.modalbg:has(.modal.zmin){animation:zbg .2s ease}
+@media(max-width:700px){.modal.zmin{animation:zminph .3s cubic-bezier(.2,.8,.2,1)}}
+@media(hover:hover){
+ .wd,.zstat,.h4tile,.zgw,.ztpl,.zbk,.zrd,.zpc,.zgoal,.zbdrow{transition:transform .22s cubic-bezier(.2,.7,.2,1),box-shadow .22s ease}
+ .wd:hover,.zstat:hover,.zgoal:hover{transform:translateY(-2px);box-shadow:0 12px 26px -16px rgba(40,30,20,.32)}
+ .zgw:hover,.ztpl:hover,.zrd:hover{transform:translateY(-2px);box-shadow:0 10px 22px -14px rgba(40,30,20,.3)}
+ .zbk:hover{transform:translateY(-3px)}
+ .zhome.edit .wd:hover{transform:none;box-shadow:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .ain,.main.enter .pagecover,.main.enter .zring circle+circle,.main.enter .zseg,.main.enter .zbar i,.main.enter .zbcb i,.main.enter .zmtrend i,.zpop,.modal.zmin{animation:none!important}
+ body,.layout,#r6frame i{transition:none}
+}
+/* covers with the title inside them (Home, classes and pages): the picture grows to fit the words, the shade reaches the bottom */
+.main .coverwrap.hasov{height:auto!important;max-height:none!important;min-height:var(--cvh,240px);display:flex;flex-direction:column;justify-content:flex-end}
+.coverwrap.hasov .pagecover,.coverwrap.hasov .coverblur{position:absolute;inset:0;width:100%;height:100%}
+.coverwrap.hasov .coverblur{inset:-20px;width:calc(100% + 40px);height:calc(100% + 40px)}
+.coverwrap.hasov .h4ov{position:relative;min-height:0;flex:none;padding-top:72px}
+.coverwrap.hasov::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(to top,rgba(20,16,12,.38),rgba(20,16,12,0) 60%)}
+.cpov .cpovt{white-space:normal;font-size:30px;line-height:1.15;margin:2px 0 0}
+.main.cvov>.body{padding-top:26px!important}
+.main.cvov .banner{display:none}
+@media(max-width:700px){
+ .main .coverwrap.hasov{min-height:max(210px,min(var(--cvh,240px),340px))}
+ .coverwrap.hasov .h4ov{padding-top:calc(env(safe-area-inset-top,0px) + 76px)}
+ .cpov .cpovt{font-size:25px}
+ .main.cvov>.body{padding-top:18px!important}
+}
+/* widgets: small, medium, large */
+.zmain{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-flow:row dense}
+.zw-small{grid-column:span 1}.zw-half{grid-column:span 2}.zw-full{grid-column:1/-1}
+.zside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;gap:16px;align-content:start}
+.zside .zw{grid-column:1/-1}.zside .zw-small{grid-column:span 1}
+@media(max-width:1199px){
+ .zhome{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-flow:row dense;gap:18px}
+ .zmain,.zside{display:contents}
+ .zw,.zside .zw{grid-column:1/-1}.zw-small,.zside .zw-small{grid-column:span 1}.zw-half,.zside .zw-half{grid-column:span 2}
+}
+@media(max-width:700px){
+ .zhome{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .zw-half,.zside .zw-half{grid-column:1/-1}
+ .zw-small,.zside .zw-small{grid-column:span 1}
+}
+.zw-small .wd{min-height:150px}
+.zw-small .wdh{padding:12px 14px 2px}.zw-small .wdb{padding:4px 14px 14px;justify-content:center}
+.zw-small .wdt{font-size:14px}
+.zsm{display:flex;flex-direction:column;gap:2px;min-width:0}
+.zsm.row{flex-direction:row;align-items:center;gap:12px}
+.zw-small .zsm.row{flex-direction:column;align-items:flex-start;gap:8px}
+.zsm.row>div{display:flex;flex-direction:column;min-width:0}
+.zsmb{font-family:var(--fh,inherit);font-size:28px;line-height:1.05;font-weight:var(--wh,500);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zsms{font-size:12.5px;color:var(--ink3);line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.zsmnd{border-radius:18px;padding:16px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;min-height:150px;box-sizing:border-box;cursor:pointer}
+.zsmnd span{font-size:12.5px;opacity:.85}
+.zsmnd b{font-family:var(--fh,inherit);font-size:32px;font-weight:var(--wh,500);line-height:1.05;margin-top:auto}
+.zsmnd small{font-size:13px;opacity:.9;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:4px}
+.zsmface{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--wc) 20%,var(--card));color:var(--wc);margin-bottom:6px}
+.zmoods.sm{gap:4px}.zmoods.sm .zmf{padding:5px 0;border-radius:10px}.zmoods.sm .zmf svg{width:18px;height:18px}
+.zsmread{display:flex;gap:10px;align-items:center;border:none;background:none;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:0!important;min-width:0}
+.zsmread img,.zsmread .wdreadph{width:44px;height:64px;border-radius:6px;object-fit:cover;flex:none}
+.zsmread>span{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
+.zsmread b{font-weight:500;font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wdapps.sm{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;justify-items:center}
+/* press and hold / drag: no text selection, a lifted copy follows the finger, a soft gap where it will land */
+.zhome .zw{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.zhome .zw input,.zhome .zw textarea{-webkit-user-select:text;user-select:text}
+.zhome.edit .zw{touch-action:pan-y}
+.zw.zwph{animation:none!important}
+.zw.zwph>*{visibility:hidden}
+.zw.zwph::after{content:'';position:absolute;inset:0;border-radius:18px;border:2px dashed color-mix(in srgb,var(--ink3) 55%,transparent);background:color-mix(in srgb,var(--ink3) 7%,transparent)}
+.zghost{animation:none!important;transform:scale(1.035) rotate(.6deg);box-shadow:0 22px 44px -14px rgba(30,24,18,.38);border-radius:18px;opacity:.97;transition:transform .15s}
+.zghost .zwx,.zghost .zwm{display:none}
+body.zdragging,body.zdragging *{cursor:grabbing!important}
+/* stat tiles, pies, bars */
+.zstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.zstat{--wt:#ECEBE9;--wc:#7A756E;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ic lab" "big big" "sub sub";gap:4px 10px;align-items:center;min-width:0}
+.zstat .zic{grid-area:ic}
+.zstl{grid-area:lab;font-size:13px;color:var(--ink2)}
+.zstb{grid-area:big;font-family:var(--fh,inherit);font-size:26px;font-weight:var(--wh,500);line-height:1.15;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zsts{grid-area:sub;font-size:12px;color:var(--ink3);line-height:1.4}
+.zgood{color:#4C7D57;font-weight:500}.zbad{color:#A34A3F;font-weight:500}
+@media(max-width:900px){.zstats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:380px){.zstb{font-size:22px}}
+.zdwrap{position:relative;flex:none;color:var(--ink)}
+.zdonut{display:block}
+.zdc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;padding:0 14%}
+.zdc b{font-family:var(--fh,inherit);font-size:19px;font-weight:var(--wh,500);line-height:1.1;color:var(--ink);display:flex;align-items:center;justify-content:center}
+.zdc small{font-size:11.5px;color:var(--ink3);line-height:1.25;margin-top:2px}
+.zw-small .zdc b,.zpie.sm .zdc b{font-size:13px}
+.zpie{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.zpie.sm{gap:16px}
+.zleg{display:flex;flex-direction:column;gap:7px;flex:1;min-width:150px}
+.zlegr{display:flex;align-items:center;gap:9px;font-size:13.5px;min-width:0}
+.zlegr i{width:10px;height:10px;border-radius:3px;flex:none}
+.zlegr span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2)}
+.zlegr b{font-weight:500;font-size:13px;white-space:nowrap}
+.zlegi{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink3)}
+.zlegi i{width:9px;height:9px;border-radius:3px;margin-left:6px}
+.zbars{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:end;height:150px;padding-top:6px}
+.zbc{display:flex;flex-direction:column;align-items:center;gap:6px;height:100%}
+.zbcb{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px}
+.zbcb i{width:min(16px,40%);border-radius:6px 6px 3px 3px;min-height:3px}
+.zbcb i.in{background:#94B09C}.zbcb i.out{background:#C6A68A}
+.zbc span{font-size:11.5px;color:var(--ink3)}
+.zbc.on span{color:var(--ink);font-weight:500}
+.zcat.over .zsoft{color:#A34A3F}
+/* budget: month bar, pay day, bills */
+.zbnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.zbnav>b{font-family:var(--fh,inherit);font-size:20px;font-weight:var(--wh,500);min-width:150px;text-align:center}
+.zbtn.ghost{background:transparent}
+.zbtn[disabled]{opacity:.35;cursor:default}
+.zgrow{flex:1}
+@media(max-width:700px){.zbnav .zgrow{flex-basis:100%;height:0}.zbnav>b{min-width:0;flex:1}}
+.zpay{display:flex;align-items:center;gap:16px;position:relative;cursor:pointer;min-width:0}
+.zpay .zring{flex:none}
+.zpaynum{position:absolute;left:0;width:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:96px;pointer-events:none}
+.zpaynum b{font-family:var(--fh,inherit);font-size:30px;font-weight:var(--wh,500);line-height:1}
+.zpaynum small{font-size:11.5px;color:var(--ink3)}
+.zpay.compact .zpaynum{width:74px;height:74px}.zpay.compact .zpaynum b{font-size:23px}
+.zpaytx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.zpaytx b{font-weight:500;font-size:15.5px}
+.zpay.empty{flex-direction:column;align-items:flex-start;gap:10px;cursor:default}
+.zbill .zamt{font-weight:500;font-size:14px;white-space:nowrap;min-width:64px;text-align:right}
+/* mood */
+.zmoods{display:flex;gap:8px;justify-content:space-between}
+.zmf{--wt:#ECEBE9;--wc:#7A756E;flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;border:none;background:color-mix(in srgb,var(--wt) 75%,var(--card));color:var(--wc);border-radius:14px;padding:8px 0;cursor:pointer;min-height:0!important;font:inherit;transition:transform .2s cubic-bezier(.3,1.5,.5,1),background .2s,opacity .2s}
+.zmf:hover{transform:translateY(-2px)}
+.zmf.on{background:color-mix(in srgb,var(--wc) 24%,var(--card));box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--wc) 55%,transparent)}
+.zmf.dim{opacity:.55}
+.zmoods.big .zmf{padding:14px 0 10px;border-radius:18px}
+.zmoods.big .zmf span{font-size:12.5px;color:var(--ink2)}
+.zmoodday{padding:18px 20px 20px;display:flex;flex-direction:column;gap:14px;background:color-mix(in srgb,var(--wt) 45%,var(--card))}
+.zmdh{display:flex;align-items:center;gap:10px}
+.zmdh>div{flex:1;text-align:center}
+.zmdh h2{margin:2px 0 0;font-family:var(--fh,inherit);font-size:24px;font-weight:var(--wh,500)}
+.zmcal{display:flex;flex-direction:column;gap:6px}
+.zmwk,.zmgrid{display:grid;grid-template-columns:repeat(7,minmax(0,38px));gap:6px;justify-content:space-between}
+.zmwk span{text-align:center;font-size:11.5px;color:var(--ink3)}
+.zmcell{--wt:#F3F1EC;--wc:#A29D93;aspect-ratio:1;border-radius:50%;border:none;background:var(--wt);color:var(--wc);display:grid;place-items:center;padding:0;font:inherit;font-size:12px;cursor:pointer;min-height:0!important}
+.zmcell.y{background:color-mix(in srgb,var(--wc) 22%,var(--card))}
+.zmcell.t{box-shadow:0 0 0 2px var(--card),0 0 0 3.5px var(--ink3)}
+.zmcell.fut{opacity:.4;cursor:default}
+.zmgrid i.e{display:block}
+.zmtrend{display:flex;align-items:flex-end;gap:3px;height:90px}
+.zmtrend i{flex:1;border-radius:4px 4px 2px 2px;min-height:3px}
+.wdmweek{display:flex;justify-content:space-between;gap:4px;margin-top:4px}
+.wdmd{--wt:#F3F1EC;--wc:#A29D93;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.wdmd>svg,.wdmd:empty::before{width:26px;height:26px}
+.wdmd{font-size:0}
+.wdmd>svg{padding:5px;border-radius:50%;background:color-mix(in srgb,var(--wc) 20%,var(--card));color:var(--wc);box-sizing:content-box;width:16px;height:16px}
+.wdmd:not([style])::before{content:'';display:block;width:26px;height:26px;border-radius:50%;background:#F3F1EC}
+.wdmd small{font-size:10.5px;color:var(--ink3)}
+.wdmd.t small{color:var(--ink);font-weight:600}
+/* to-do sections and stores */
+.zsec{border-top:1px solid var(--line);margin-top:4px}
+.zsec>summary{display:flex;align-items:center;gap:10px;padding:12px 0 8px;cursor:pointer;list-style:none}
+.zsec>summary::-webkit-details-marker{display:none}
+.zsecic{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--wt);color:var(--wc);flex:none}
+.zsec>summary b{font-weight:500;font-size:15px}
+.zsec>summary em{font-style:normal;font-size:12px;color:var(--ink3);background:var(--paper);border-radius:99px;padding:0 8px;line-height:20px}
+.zsec>summary .zmini{margin-left:auto}
+.zsecchev{display:grid;place-items:center;color:var(--ink3);transition:transform .2s}
+.zsecchev svg{width:14px;height:14px}
+.zsec:not([open]) .zsecchev{transform:rotate(-90deg)}
+.zsecb{padding:0 0 6px 4px;display:flex;flex-direction:column;gap:2px}
+.zsecb .zadd{margin-top:6px}
+.zsecb .zadd input{font-size:14px;padding:7px 11px}
+.zmini{width:28px;height:28px;display:inline-grid;place-items:center;border:none;background:none;color:var(--ink3);border-radius:8px;padding:0;cursor:pointer;min-height:0!important}
+.zmini:hover{background:var(--paper);color:var(--ink)}
+/* reading & watch list */
+.zrdbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.zrdbar .ztabs{flex:1}
+.zsearch{display:flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:99px;padding:0 12px;background:var(--card);color:var(--ink3);height:36px;box-sizing:border-box}
+.zsearch input{border:none;outline:none;background:none;font:inherit;font-size:14px;width:170px;color:var(--ink);padding:0}
+.zrdh{display:flex;align-items:center;gap:8px;font-size:19px;margin-top:6px}
+.zrdh em{font-style:normal;font-size:12px;color:var(--ink3);background:var(--paper);border-radius:99px;padding:0 8px;line-height:20px;font-family:var(--fb,inherit)}
+.zrdrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.zrd{display:flex;gap:14px;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:12px;font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:0!important;min-width:0}
+.zrdc{width:64px;height:96px;border-radius:8px;object-fit:cover;flex:none;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:border-box;aspect-ratio:auto}
+.zrdt{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.zrdt small{font-size:11.5px;color:var(--ink3)}
+.zrdt b{font-weight:500;font-size:15px;line-height:1.3}
+.zrdp{display:flex;align-items:center;gap:8px;margin-top:6px}
+.zrdp .zbar{flex:1}
+.zrdp em{font-style:normal;font-size:12px;color:var(--ink3)}
+.zrdfin>summary{list-style:none;cursor:pointer;margin-bottom:12px}
+.zrdfin>summary::-webkit-details-marker{display:none}
+.zbk.fin img,.zbk.fin .zbkph{filter:saturate(.85)}
+.zrdempty{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;color:var(--ink3);padding:40px 20px;border:1px dashed var(--line2);border-radius:20px}
+.zrdempty p{max-width:380px;margin:0;font-size:14px;line-height:1.5}
+.zrdtype{margin:-2px 0 14px}
+.zrdform{display:flex;gap:18px;align-items:flex-start}
+.zrdcov{width:110px;flex:none;display:flex;flex-direction:column;align-items:center;gap:8px}
+.zrdcov img,.zrdcov>span{width:110px;aspect-ratio:2/3;border-radius:10px;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.zrdcov>span{display:grid;place-items:center;background:var(--paper);color:var(--ink3);box-shadow:none;border:1px dashed var(--line2)}
+.zrdfields{flex:1;min-width:0}
+.zfind{display:flex;gap:8px}
+.zfind input{flex:1;min-width:0}
+.zfind .zbtn{gap:6px}
+.zres{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin:0 0 14px;max-height:300px;overflow-y:auto;padding:2px}
+.zresi{display:flex;flex-direction:column;gap:4px;border:none;background:none;padding:4px;border-radius:10px;font:inherit;text-align:left;cursor:pointer;min-height:0!important;color:var(--ink)}
+.zresi:hover{background:var(--paper)}
+.zresi.on{background:var(--paper);box-shadow:inset 0 0 0 2px var(--ink2)}
+.zresi img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:7px;background:var(--paper)}
+.zresi b{font-weight:500;font-size:12px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zresi small{font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:700px){.zrdform{flex-direction:column;align-items:stretch}.zrdcov{flex-direction:row;width:auto}.zrdcov img,.zrdcov>span{width:70px}.zsearch{flex:1}.zsearch input{width:100%}.zrdbar .ztabs{order:3;flex-basis:100%}}
+/* calendar: tabs, birthdays, people */
+.zcaltabs{max-width:460px;margin:0 0 16px}
+.zcaltabs button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.zbdlist{padding:18px 20px}
+.zbdhead{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:6px}
+.zbdhead p{margin:4px 0 0}
+.zbdmon{font-size:12.5px;color:var(--ink3);padding:16px 2px 6px;border-bottom:1px solid var(--line)}
+.zbdrow{display:flex;align-items:center;gap:12px;width:100%;border:none;border-bottom:1px solid var(--line);background:none;padding:11px 2px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.zbdrow .zav{width:36px;height:36px}
+.zbdtx{flex:1;min-width:0;display:flex;flex-direction:column}
+.zbdtx b{font-weight:500;font-size:15px}.zbdtx small{font-size:12.5px;color:var(--ink3)}
+.zbdrow em{font-style:normal;font-size:12.5px;color:var(--ink2);background:var(--paper);border-radius:99px;padding:3px 10px;white-space:nowrap}
+.zbdrow.today em{background:#F0E6EB;color:#9A6580;font-weight:500}
+.zpplhint{flex-basis:100%;margin:0 0 4px;font-size:13px;color:var(--ink3);line-height:1.45}
+/* Plan my week: events and due dates on their day; the explanation */
+.zplanhelp{display:flex;gap:12px;align-items:flex-start;background:color-mix(in srgb,var(--sideBg) 7%,var(--card));border:1px solid color-mix(in srgb,var(--sideBg) 14%,var(--card));border-radius:16px;padding:14px 14px 14px 16px;--wt:color-mix(in srgb,var(--sideBg) 14%,var(--card));--wc:var(--sideBg)}
+.zplanhelp>div{flex:1}
+.zplanhelp b{font-weight:500}
+.zplanhelp p{margin:3px 0 0;font-size:13.5px;color:var(--ink2);line-height:1.5}
+.zpinfos{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.zpinfo{display:flex;align-items:flex-start;gap:7px;width:100%;border:1px dashed var(--line2);background:transparent;border-radius:9px;padding:5px 8px;font:inherit;font-size:12px;line-height:1.35;color:var(--ink2);text-align:left;cursor:pointer;min-height:0!important}
+.zpinfo.ev{border-style:solid;border-color:transparent;background:color-mix(in srgb,var(--ink3) 9%,transparent)}
+.zpinfo i{width:7px;height:7px;border-radius:50%;flex:none;margin-top:5px}
+.zpinfo em{font-style:normal;color:var(--ink3)}
+.zpinfo span{min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+/* forms: two fields side by side that never overlap on a phone */
+.zfrow{display:flex;gap:10px;flex-wrap:wrap}
+.zfrow>.field{flex:1 1 140px;min-width:0}
+.modal input[type=date],.modal input[type=time]{min-width:0;max-width:100%;width:100%;box-sizing:border-box}
+@supports(-webkit-touch-callout:none){.modal input[type=date],.modal input[type=time]{-webkit-appearance:none;appearance:none;min-height:42px;text-align:left}}
+@media(max-width:700px){.modal div[style*="display:flex;gap:10px"]{flex-wrap:wrap}.modal div[style*="display:flex;gap:10px"]>.field{flex:1 1 140px!important;min-width:0}}
+/* email accounts per space */
+.zmailrow{display:flex;gap:10px;align-items:flex-end;padding:10px 0;border-bottom:1px solid var(--line)}
+.zmailrow>i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none;margin-bottom:6px}
+@media(max-width:560px){.zmailrow{flex-wrap:wrap}.zmailrow .field{width:auto!important;flex:1 1 100%}.zmailrow>i{display:none}}
+/* the week, as round days (Home) */
+.hwk2d{background:none!important;border:none!important;gap:4px!important;padding:2px 0!important}
+.hwk2d .w{font-size:12px}
+.hwk2d.tdy .w{color:var(--ink);font-weight:600}
+.hwk2d b{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:0 0 0 1px var(--line),0 2px 6px -3px rgba(0,0,0,.12);font-size:15px!important;transition:background .2s,color .2s}
+.hwk2d.sel b{background:#2E2B27;color:#fff;box-shadow:0 6px 14px -6px rgba(0,0,0,.4)}
+.hwk2d.sel{color:inherit!important}
+.hwk2d.sel .w{color:var(--ink)!important}
+.hwk2d.sel .dots i{box-shadow:none!important}
+.hwk2{border-radius:18px!important}
+/* PDF markup: a quiet saved note instead of a Save button */
+#mk .mksavest{font-size:12.5px;color:#A9A399;min-width:44px;transition:opacity .3s;white-space:nowrap}
+#mk .mksavest:empty{opacity:0}
+/* the tour */
+#ztour{position:fixed;inset:0;z-index:400;display:grid;place-items:center;padding:20px;background:rgba(36,32,28,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:zbg .25s ease}
+.ztcard{position:relative;width:min(460px,100%);background:radial-gradient(600px 300px at 20% 0%,#EEF3EC,transparent),radial-gradient(500px 300px at 100% 100%,#F6EEE2,transparent),#FBFAF7;border-radius:28px;padding:26px 26px 22px;box-shadow:0 30px 70px -20px rgba(0,0,0,.4);text-align:center;animation:zmin .35s cubic-bezier(.2,.7,.2,1)}
+.ztcard h2{font-family:var(--fh,inherit);font-weight:var(--wh,500);font-size:24px;margin:18px 0 8px;color:#2a2620}
+.ztcard p{margin:0 auto;max-width:360px;font-size:15px;line-height:1.55;color:#6B675F;min-height:70px}
+.ztskip{position:absolute;top:14px;right:16px;border:none;background:none;font:inherit;font-size:13.5px;color:#8E887E;cursor:pointer;min-height:0!important}
+.ztartw{height:170px;display:grid;place-items:center}
+.ztdots{display:flex;gap:6px;justify-content:center;margin:18px 0 16px}
+.ztdots i{width:7px;height:7px;border-radius:99px;background:#DCD7CE;transition:width .3s,background .3s}
+.ztdots i.on{width:22px;background:#6F6A62}
+.ztbtns{display:flex;justify-content:space-between;align-items:center}
+.ztbtns button{border:1px solid #DDD8CF;background:#fff;border-radius:12px;padding:10px 18px;font:inherit;font-size:14.5px;color:#33312C;cursor:pointer;min-height:0!important}
+.ztbtns .go{background:#33312C;color:#fff;border-color:#33312C;min-width:120px}
+.ztart{position:relative;width:240px;height:160px;display:grid;place-items:center}
+.ztart.logo .dlg{width:110px;height:110px;animation:zfloat 3s ease-in-out infinite}
+.ztart.logo span{position:absolute;border-radius:14px;opacity:.55}
+.ztart.logo .f1{width:34px;height:34px;background:#E9CBA3;left:16px;top:22px;animation:zfloat 3.4s ease-in-out infinite .2s}
+.ztart.logo .f2{width:24px;height:24px;background:#B9AAC9;right:22px;top:40px;animation:zfloat 2.8s ease-in-out infinite .5s}
+.ztart.logo .f3{width:28px;height:28px;background:#C9D6C5;right:46px;bottom:6px;animation:zfloat 3.2s ease-in-out infinite .8s}
+@keyframes zfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.ztart.spaces{display:flex;flex-direction:column;gap:10px}
+.zts{display:inline-flex;align-items:center;gap:8px;color:#fff;border-radius:99px;padding:9px 18px 9px 12px;font-size:15px;box-shadow:0 8px 18px -10px rgba(0,0,0,.4);animation:zin .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d)}
+.ztart.widgets{grid-template-columns:repeat(2,96px);grid-template-rows:repeat(2,70px);gap:10px;place-items:stretch;place-content:center}
+.ztart.widgets .w{background:#fff;border-radius:16px;box-shadow:0 6px 16px -10px rgba(0,0,0,.3);display:grid;place-items:center;animation:zin .5s both}
+.ztart.widgets .b{animation-delay:.08s}.ztart.widgets .c{animation-delay:.16s}.ztart.widgets .d{animation-delay:.24s}
+.ztart.widgets .c{display:flex;flex-direction:column;justify-content:center;gap:7px;padding:0 14px;place-items:stretch}
+.ztart.widgets .c i{height:7px;border-radius:9px;background:#E6E1D8}.ztart.widgets .c i:first-child{width:70%;background:#C9D6C5}
+.ztart.widgets .d{display:flex;flex-direction:column;background:#7F9179;color:#fff}.ztart.widgets .d b{font-size:24px;font-weight:500;line-height:1}.ztart.widgets .d small{font-size:11px;opacity:.85}
+.ztart.widgets .zring,.ztart.widgets .zdwrap{transform:scale(.85)}
+.ztart.plan{display:flex;gap:8px}
+.ztart.plan .pd{width:40px;height:120px;border-radius:14px;background:#fff;box-shadow:0 6px 16px -10px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:8px;box-sizing:border-box}
+.ztart.plan .pd small{font-size:11px;color:#8E887E}
+.ztart.plan .pd.on{background:#33312C}.ztart.plan .pd.on small{color:#fff}
+.ztart.plan .pd i{width:28px;height:18px;border-radius:6px;animation:zin .5s both .2s}
+.ztart.pdf .pg{position:relative;width:130px;height:156px;background:#fff;border-radius:10px;box-shadow:0 10px 24px -12px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:10px;padding:18px 14px;box-sizing:border-box}
+.ztart.pdf .pg>i{height:6px;border-radius:9px;background:#E8E4DC}
+.ztart.pdf .pg>i.hl{background:linear-gradient(90deg,#F2DDA0 0,#F2DDA0 100%);background-size:0 100%;background-repeat:no-repeat;background-color:#E8E4DC;animation:zhl 1.4s ease forwards .3s}
+.ztart.pdf .pg>i.hl.s{animation-delay:.9s}
+@keyframes zhl{to{background-size:100% 100%}}
+.ztart.pdf .ink{position:absolute;left:24px;bottom:16px;width:84px;stroke-dasharray:200;stroke-dashoffset:200;animation:zink 1.4s ease forwards 1.2s}
+@keyframes zink{to{stroke-dashoffset:0}}
+.ztart.sync{display:block}
+.ztart.sync .lap{position:absolute;left:30px;top:30px;width:130px;height:86px;border-radius:12px;background:#fff;box-shadow:0 10px 24px -12px rgba(0,0,0,.35)}
+.ztart.sync .lap i{position:absolute;inset:10px;border-radius:6px;background:#E5ECE3}
+.ztart.sync .ph{position:absolute;right:34px;top:46px;width:54px;height:96px;border-radius:14px;background:#fff;box-shadow:0 10px 24px -12px rgba(0,0,0,.35)}
+.ztart.sync .ph i{position:absolute;inset:7px;border-radius:9px;background:#EDE7F1}
+.ztart.sync .ok{position:absolute;left:104px;top:100px;width:36px;height:36px;border-radius:50%;background:#7F9179;color:#fff;display:grid;place-items:center;box-shadow:0 6px 14px -6px rgba(0,0,0,.4);animation:zpop .6s cubic-bezier(.3,1.4,.5,1) both .3s}
+@media(prefers-reduced-motion:reduce){.ztart *,.ztcard,#ztour{animation:none!important}.ztart.pdf .pg>i.hl{background-size:100% 100%}.ztart.pdf .ink{stroke-dashoffset:0}}
 </style>
 </head>
 <body>
@@ -2477,7 +2835,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v141';
+var BUILD='v142';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -4629,6 +4987,7 @@ function render(){
  var title=c?c.name:({apps:'Applications',install:'Get the app',calendar:'Calendar',professors:'People',plan:'Plan my week'}[view.page]||S.owner);
  var eyebrow=c?(c.kind?spaceById(c.space).name:[c.code,c.day,c.room].filter(Boolean).join(' \u00b7 ')):(curSpace()==='school'?S.term:spaceById(curSpace()).name);
  var sub='';
+ var ovPage=!!(c&&c.cover&&(view.page==='class'||view.page==='page')&&view.repos!==coverKey(c));
 
  var body='';
  if(view.page==='home')body=viewHome();
@@ -4650,20 +5009,19 @@ function render(){
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
   +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?homeOwner().cover:''));
      if(view.page==='home')return '<main class="main hhome nohead'+(hasCov?' hascover':'')+'">';
-     // class pages: the cover fades into the title area and the title sits up in the fade (not while repositioning)
-     var fade=view.page==='class'&&hasCov&&bannerSize()!=='hidden'&&view.repos!==coverKey(c);
-     return '<main class="main'+(hasCov?' hascover':'')+(fade?' cvf':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'"'+(fade?' style="--hdrbg:var(--s-banner-bg,'+head.bg+')"':'')+'>';})()
+     // v142: classes and pages with a cover put their title inside the picture, the same as Home
+     return '<main class="main'+(hasCov?' hascover':'')+(ovPage?' cvov':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
   +'<button class="menubtn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +spacePill('top')
   +(view.page==='home'?'':'<button class="homebtn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')
-  +coverBlock(c,view.page==='home'?homeGreeting(true):'')+(view.page==='home'?'<div style="display:none">':'')
+  +coverBlock(c,view.page==='home'?homeGreeting(true):(ovPage?pageCoverOverlay(c):''))+(view.page==='home'||ovPage?'<div style="display:none">':'')
   +'<div class="banner sz-'+bannerSize()+(view.picker&&bannerSize()==='hidden'?' editing':'')+'" style="background:var(--s-banner-bg,'+head.bg+')">'+pencil('banner')
   +(view.picker&&bannerSize()==='hidden'?'<span class="hiddennote">Header hidden on this page. Use the pencil to bring it back.</span>':'')
 
   +'<p class="eyebrow" style="color:var(--s-banner-line,'+head.ink2+')">'+esc(eyebrow)+'</p>'
   +'<h1 style="color:var(--s-banner-ink,'+head.ink+')">'+esc(title)+'</h1>'
   +(sub?'<p class="sub" style="color:'+head.ink2+'">'+esc(sub)+'</p>':'')
-  +'</div>'+(view.page==='home'?'</div>':'')
+  +'</div>'+(view.page==='home'||ovPage?'</div>':'')
   +'<div class="body">'+body+'</div></main></div>'
   +(view.storageOk?'':'<p class="hint" style="margin:12px 40px">Saving failed, most likely because storage is full. Delete a few uploaded files and try again.</p>')
   +'</div>'
@@ -4696,7 +5054,8 @@ function coverBlock(c,overlay){
  // v138: an Edit cover button in the picture's top-right corner (plus, on Home, the hello, date and pills)
  var pos=owner.coverPos==null?50:owner.coverPos,z=owner.coverZoom||100;
  var hgt=owner.coverHeight||240,fit=owner.coverFit==='fit';
- var h='<div class="coverwrap'+(on?' repos':'')+'"'+(on?' data-repos="'+key+'"':'')+' style="height:'+hgt+'px">'
+ var ov=!!overlay&&!on;
+ var h='<div class="coverwrap'+(on?' repos':'')+(ov?' hasov':'')+'"'+(on?' data-repos="'+key+'"':'')+' style="'+(ov?'--cvh:'+hgt+'px':'height:'+hgt+'px')+'">'
   +(fit?'<img class="coverblur" src="'+cv+'" alt="">':'')
   +'<img class="pagecover" src="'+cv+'" style="object-fit:'+(fit?'contain':'cover')+';object-position:50% '+pos+'%;transform:scale('+(z/100)+')" alt="">'
   +(on?'<span class="coverhint">'+(fit?'Showing the whole picture':'Drag the picture up or down')+'</span>':'')
@@ -5318,7 +5677,7 @@ function viewClass(c){
  var top='';
  var pinned=(c.links||[]).filter(function(l){return l.pinned});
  // FanshaweOnline first, on every class: straight to this class's own page once its link is set in Edit class
- if(pinned.length){
+ if(pinned.length&&!c.cover){
   top+='<div class="quick">';
   top+=pinned.map(function(l){
    return '<a class="qlink" href="'+esc(l.url)+'" target="_blank" rel="noopener">'
@@ -6504,8 +6863,10 @@ function modalHtml(){
      +'<div class="field" style="margin:0"><label for="setMusic">Music on Home</label><select id="setMusic" data-musicsvcsel="1"><option value="spotify"'+((S.music&&S.music.svc)==='apple'?'':' selected')+'>Spotify</option><option value="apple"'+((S.music&&S.music.svc)==='apple'?' selected':'')+'>Apple Music</option></select></div>'
      +(SPOTIFY_CLIENT_ID?'':'<div class="field" style="margin:0"><label for="setSpClient">Spotify Client ID</label><input id="setSpClient" data-setname="spClient" maxlength="64" placeholder="From developer.spotify.com, your Doable app" value="'+esc(S.spClient||'')+'"><span class="hint" style="margin:4px 0 0">Paste it once and the Connect Spotify button appears on Home, on all your devices.</span></div>')
      +(spConnected()?'<div class="field" style="margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:13.5px">Spotify is connected on this device.</span><button data-sp="disconnect">Disconnect</button></div>':''),false)
+   +sg('mail','Email for each space',(S.spaceMail&&Object.keys(S.spaceMail).length)?Object.keys(S.spaceMail).length+' set':'',
+     '<p class="hint" style="margin:0">Email links and Email buttons open with the right account in each space, like your school email in School.</p><button data-zact="mailset">Set email accounts</button>',false)
    +sg('look','Look and feel','',
-     '<button data-opencolours="1">Change colours</button>'
+     '<button data-opencolours="1">Change colours</button><button data-zact="tour">Take the tour</button>'
      +(onbPlatform()!=='desktop'?'<button data-xact="togglephoneapps">Open apps in their phone apps: '+(phoneAppsOn()?'On':'Off')+'</button>':''),false)
    +sg('remind','Reminders',(pushOn()||remindersOn())?'On':'Off',
      (pushSupported()
@@ -8546,7 +8907,7 @@ function mkTopHtml(){
   +'<button class="mkicon" data-mk="close" aria-label="Close">'+MK_ICO.close+'</button>'
   +(MK.mode==='edit'?'<button class="mkicon" data-mk="undo" aria-label="Undo"'+(MK.history.length?'':' disabled')+'>'+MK_ICO.undo+'</button>'
     +'<button class="mkicon" data-mk="redo" aria-label="Redo"'+(MK.future.length?'':' disabled')+'>'+MK_ICO.redo+'</button>'
-    +'<button class="mksave" data-mk="save" id="mksavebtn">'+mkSaveLabel()+'</button>':'')
+    +'<span class="mksavest" id="mksavebtn" aria-live="polite">'+mkSaveLabel()+'</span>':'')
   +'<span class="mkname" title="'+esc(MK.f.name)+'">'+esc(MK.f.name)+'</span>'
   +'<span class="mkgrow"></span>'
   +'<span class="mkpage" id="mkpageline">'+MK.curPage+' / '+MK.pageCount+'</span>'
@@ -9580,7 +9941,7 @@ document.addEventListener('toggle',function(e){
  function busy(){return (touching&&Date.now()-touchAt<8000)||Date.now()-lastScroll<450} // 8s cap: a missed touchend can't freeze redraws
  function later(){clearTimeout(deferred);deferred=setTimeout(function(){deferred=null;if(busy())later();else render()},250)}
  render=function(){
-  if(!window.event&&busy()){later();return}
+  if(!window.event&&busy()&&!view.renderNow){later();return}
   clearTimeout(deferred);deferred=null;
   var key=view.page+':'+(view.classId||''),y=window.scrollY,same=key===lastKey;
   lastKey=key;
@@ -9767,7 +10128,7 @@ function spacePill(where){
  return '<div class="zpill zpill-'+where+'"><button class="zpillbtn" data-zpill="'+where+'" aria-expanded="'+on+'" aria-label="Switch space, now '+sp.name+'"><i>'+spaceIco(sp.id,13)+'</i><span>'+sp.name+'</span><b>▾</b></button>'
   +(on?'<div class="zpilllist" role="menu">'+spacesOn().map(function(s){var c=s.id===sp.id,col=spaceSideBg(s.id);
      return '<button role="menuitem" data-zspace="'+s.id+'" class="'+(c?'on':'')+'"><i style="background:'+col+'">'+spaceIco(s.id,13)+'</i>'+s.name+(c?'<em>✓</em>':'')+'</button>'}).join('')
-   +'<hr><button data-zact="spaces" class="zpilladd">Add or remove spaces…</button></div>':'')+'</div>';
+   +'<hr><button data-zact="spaces" class="zpilladd">Add or remove spaces…</button><button data-zact="mailset" class="zpilladd">Email accounts…</button></div>':'')+'</div>';
 }
 function spaceSideBg(sp){
  if(sp==='school')return (S.theme&&S.theme.chrome&&S.theme.chrome.sideBg)||CHROME[0].def;
@@ -10423,32 +10784,7 @@ ZM.zwgal={wide:true,html:function(){
 },closeLabel:'Done'};
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;var id=t.getAttribute('data-zwcover');if(!id||!t.files||!t.files[0])return;
  shrinkImage(t.files[0],1000,function(url){zwMove(id,function(L,i){L[i].cover=url})})});
-// drag a widget onto another one to move it there (computer)
-document.addEventListener('dragstart',function(e){var w=e.target.closest&&e.target.closest('[data-zwdrag]');if(!w)return;try{e.dataTransfer.setData('text/zw',w.getAttribute('data-zwdrag'));e.dataTransfer.effectAllowed='move'}catch(err){}view.zwdrag=w.getAttribute('data-zwdrag')});
-document.addEventListener('dragover',function(e){if(!view.zwdrag)return;var w=e.target.closest&&e.target.closest('.zhome.edit .zw,.zhome.edit .zside,.zhome.edit .zmain');if(w){e.preventDefault()}});
-document.addEventListener('drop',function(e){
- if(!view.zwdrag)return;var from=view.zwdrag;view.zwdrag=null;
- var tw=e.target.closest&&e.target.closest('.zhome.edit .zw'),side=e.target.closest&&e.target.closest('.zhome.edit .zside');
- if(!tw&&!side&&!(e.target.closest&&e.target.closest('.zhome.edit .zmain')))return;e.preventDefault();
- var to=tw?tw.getAttribute('data-wid'):null;if(to===from)return;
- zwMove(from,function(L,i){var w=L.splice(i,1)[0];
-  if(to){var j=L.map(function(x){return x.id}).indexOf(to);w.col=L[j].col;L.splice(j,0,w)}
-  else{w.col=side?'side':'main';L.push(w)}});
-});
-document.addEventListener('dragend',function(){view.zwdrag=null});
-// press and hold a widget to start editing (phones and iPads)
-(function(){
- var tm=null,sx=0,sy=0;
- document.addEventListener('pointerdown',function(e){
-  if(view.homeEdit||e.pointerType==='mouse')return;var w=e.target.closest&&e.target.closest('.zhome .zw');if(!w)return;
-  sx=e.clientX;sy=e.clientY;clearTimeout(tm);
-  tm=setTimeout(function(){tm=null;view.homeEdit=true;try{navigator.vibrate&&navigator.vibrate(10)}catch(err){}render()},600);
- },true);
- var stop=function(){clearTimeout(tm);tm=null};
- document.addEventListener('pointermove',function(e){if(tm&&(Math.abs(e.clientX-sx)>8||Math.abs(e.clientY-sy)>8))stop()},true);
- document.addEventListener('pointerup',stop,true);document.addEventListener('pointercancel',stop,true);
- document.addEventListener('scroll',stop,{passive:true,capture:true});
-})();
+// moving widgets: see the v142 drag (press and hold, or drag in Edit Home)
 // the School "Your classes" tiles, as a widget
 function homeClassesW(){
  var t=today(),classes=S.classes.filter(function(c){return !isRefClass(c)&&!c.kind});
@@ -10652,6 +10988,1081 @@ pickerHtml=function(){
 };
 document.addEventListener('toggle',function(e){var d=e.target;if(!d||!d.getAttribute||!d.getAttribute('data-pkacc'))return;view.pkAcc=Object.assign({},view.pkAcc||{page:true});view.pkAcc[d.getAttribute('data-pkacc')]=d.open},true);
 ZACT.wdel=function(id){var sp=curSpace(),L=homeWidgets(sp).filter(function(w){return w.id!==id});if(view.modal&&view.modal.kind==='zwmenu')view.modal=null;setHomeWidgets(sp,L);render()};
+
+/* ======================= ROUND 6 (v142): Jae's notes after living with Spaces =======================
+   The app sits in a rounded frame of the menu colour, with the Doable logo and a menu with icons.
+   Pages and widgets fade up when you arrive, rings and pie charts draw themselves, ticks pop.
+   Home widgets: small, medium and large, a separate phone layout, and real drag to move (press and
+   hold on a phone, or Edit Home then drag). Covers on classes and pages look like Home's.
+   Budget: money in and out, spending pies, bills (on the calendar too) and a pay day countdown.
+   New: mood tracker, to-do sections, shopping list by store, reading list covers from the web,
+   an email account per space, birthdays list on the calendar, and a short tour. */
+
+/* ---------- small drawing helpers ---------- */
+// a hollow pie: segs=[{v,col}]. top/sub sit in the hole
+function zDonut(segs,sz,w,top,sub){
+ sz=sz||120;w=w||14;var r=(sz-w)/2,C=2*Math.PI*r,tot=0,live=0;
+ segs.forEach(function(x){var v=Math.max(0,+x.v||0);tot+=v;if(v)live++});
+ var gap=live>1?Math.min(3,C*0.01):0,off=0,c2=sz/2;
+ var h='<svg class="zdonut" width="'+sz+'" height="'+sz+'" viewBox="0 0 '+sz+' '+sz+'" aria-hidden="true"><circle cx="'+c2+'" cy="'+c2+'" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".08" stroke-width="'+w+'"/>';
+ if(tot>0)segs.forEach(function(x){var v=Math.max(0,+x.v||0);if(!v)return;var len=C*v/tot,seg=Math.max(0.6,len-gap);
+  h+='<circle class="zseg" cx="'+c2+'" cy="'+c2+'" r="'+r+'" fill="none" stroke="'+x.col+'" stroke-width="'+w+'" stroke-dasharray="'+seg.toFixed(2)+' '+(C-seg).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 '+c2+' '+c2+')"/>';off+=len});
+ h+='</svg>';
+ return '<div class="zdwrap" style="width:'+sz+'px;height:'+sz+'px">'+h+(top!=null?'<div class="zdc"><b>'+top+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div>':'')+'</div>';
+}
+function zLegend(rows){return '<div class="zleg">'+rows.map(function(r){return '<div class="zlegr"><i style="background:'+r.col+'"></i><span>'+esc(r.label)+'</span><b>'+r.val+'</b></div>'}).join('')+'</div>'}
+// soft stat tile: icon chip, label, big number, a quiet line under it
+function zStat(ico,soft,label,big,sub){
+ return '<div class="zstat" style="'+zcv(soft)+'"><span class="zic">'+zI(ZIC[ico]||ZIC.list,16)+'</span><span class="zstl">'+label+'</span><b class="zstb">'+big+'</b>'+(sub?'<span class="zsts">'+sub+'</span>':'')+'</div>';
+}
+ZIC.smile='<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1 2.2 1.5 3.5 1.5s2.5-.5 3.5-1.5"/><path d="M9 10h.01M15 10h.01"/>';
+ZIC.bill='<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>';
+ZIC.payday='<rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/>';
+ZIC.arrowin='<path d="M12 4v13"/><path d="m6 11 6 6 6-6"/><path d="M5 20h14"/>';
+ZIC.arrowout='<path d="M12 20V7"/><path d="m6 13 6-6 6 6"/><path d="M5 4h14"/>';
+ZIC.people='<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.6c2.9.2 5 2.1 5 5"/>';
+ZIC.home='<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/>';
+ZIC.plus='<path d="M12 5v14M5 12h14"/>';
+ZIC.gear='<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>';
+ZIC.palette='<path d="M12 3a9 9 0 0 0 0 18c1 0 1.6-.8 1.6-1.6 0-.5-.2-.8-.4-1.1-.3-.3-.4-.6-.4-1 0-.9.7-1.6 1.6-1.6h1.9A4.7 4.7 0 0 0 21 11c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="15" cy="7.8" r="1.1"/>';
+ZIC.mail='<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/>';
+ZIC.search='<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>';
+ZIC.tag='<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/>';
+ZIC.store='<path d="M4 9.5 5.5 4h13L20 9.5"/><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0"/><path d="M5.5 12v8h13v-8"/>';
+// dates something repeating falls on, from..to (ISO strings, inclusive)
+var REPS=[['once','Just once'],['week','Every week'],['2week','Every 2 weeks'],['semi','Twice a month (1st and 15th)'],['month','Every month'],['year','Every year']];
+function zRepName(r){for(var i=0;i<REPS.length;i++)if(REPS[i][0]===(r||'once'))return REPS[i][1];return ''}
+function zAddDays(k,n){var d=parseISO(k);d.setDate(d.getDate()+n);return iso(d)}
+function zOcc(start,rep,from,to){
+ var out=[],d=parseISO(start);if(!d||!from||!to||from>to)return out;
+ if(!rep||rep==='once'){if(start>=from&&start<=to)out.push(start);return out}
+ if(rep==='week'||rep==='2week'){
+  var step=rep==='week'?7:14,f=parseISO(from);
+  if(d<f){var n=Math.floor(daysBetween(d,f)/step);d.setDate(d.getDate()+n*step)}
+  for(var g=0;g<120&&iso(d)<=to;g++){var k=iso(d);if(k>=from&&k>=start)out.push(k);d.setDate(d.getDate()+step)}
+  return out;
+ }
+ var f2=parseISO(from),y0=f2.getFullYear(),m0=f2.getMonth();
+ if(y0*12+m0<d.getFullYear()*12+d.getMonth()){y0=d.getFullYear();m0=d.getMonth()}
+ for(var i=0;i<60;i++){
+  var yy=y0+Math.floor((m0+i)/12),mm=(m0+i)%12;
+  if(rep==='year'&&mm!==d.getMonth())continue;
+  var last=new Date(yy,mm+1,0).getDate(),days=rep==='semi'?[1,15]:[Math.min(d.getDate(),last)];
+  var stop=false;
+  days.forEach(function(dd){var k2=iso(new Date(yy,mm,dd));if(k2>to){stop=true;return}if(k2>=from&&k2>=start)out.push(k2)});
+  if(stop||iso(new Date(yy,mm,1))>to)break;
+ }
+ return out;
+}
+function zNextOcc(start,rep,from){return zOcc(start,rep,from,zAddDays(from,400))[0]||''}
+function zPrevOcc(start,rep,before){var L=zOcc(start,rep,zAddDays(before,-400),zAddDays(before,-1));return L[L.length-1]||''}
+
+/* ---------- the Doable logo (the stacked squares and the tick), drawn so it stays sharp ---------- */
+var DOABLE_LOGO='<svg class="dlg" viewBox="0 0 48 48" aria-hidden="true"><path d="M6.6 8.2 4.2 5.8M10.6 6.2 10 3M5 12.2l-3.2-.5" stroke="#9DB098" stroke-width="2" stroke-linecap="round"/>'
+ +'<rect x="16.5" y="18.5" width="24" height="24" rx="6" fill="#B9AAC9"/><rect x="12.5" y="14.5" width="24" height="24" rx="6" fill="#E9CBA3"/><rect x="8" y="10" width="24" height="24" rx="6" fill="#83977F"/>'
+ +'<path d="M14.2 22.4l4.3 4.2 7.6-8.2" fill="none" stroke="#FBF8F2" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function doableBrand(){return '<div class="dbrand" data-go="home" role="button" tabindex="0" aria-label="Doable, go to Home">'+DOABLE_LOGO+'<span>Doable</span></div>'}
+
+/* ---------- the menu: icons on the main items, page icons in each page's colour ---------- */
+var _r6SideItem=sideItem;
+sideItem=function(attr,key,label,on){
+ var ic=null;
+ if(attr==='data-go')ic={home:ZIC.home,calendar:ZIC.cal,plan:ZIC.list,professors:ZIC.people,apps:ZIC.grid,install:ZIC.plus}[key];
+ else if(attr==='data-add')ic=key==='settings'?ZIC.gear:key==='class'?ZIC.plus:null;
+ else if(attr==='data-opencolours')ic=ZIC.palette;
+ else if(attr==='data-znew')ic=ZIC.plus;
+ if(!ic)return _r6SideItem(attr,key,label,on);
+ return '<div class="sitem sico'+(on?' on':'')+'" '+attr+'="'+key+'"><span class="sic">'+zI(ic,17)+'</span><span class="nm2">'+esc(label)+'</span></div>';
+};
+spaceSidebar=function(){
+ var sp=curSpace(),pages=spacePages(sp);
+ var h='<aside class="side'+(view.menu?' open':'')+'">'
+  +'<button class="sidehide" data-side="0" title="Hide the menu" aria-label="Hide the menu">«</button>'
+  +doableBrand()+sideMe()+spacePill('side')
+  +'<div class="sidescroll">'
+  +sideItem('data-go','home','Home',view.page==='home')
+  +sideItem('data-go','calendar','Calendar',view.page==='calendar')
+  +sideItem('data-go','plan','Plan my week',view.page==='plan')
+  +'<p class="slabel">Pages</p>';
+ pages.forEach(function(c){
+  var on=view.page==='page'&&view.classId===c.id,k=KINDS[c.kind]||{},pp=defPal(c.color);
+  h+='<div class="sitem sico'+(on?' on':'')+'" data-open="'+c.id+'"><span class="sic pg" style="--pgc:'+pp.bar+'">'+zI(ZIC[k.ico]||ZIC.note,15)+'</span><span class="nm2">'+esc(c.name)+'</span></div>';
+ });
+ h+=sideItem('data-znew','1','New page',false)+'</div>';
+ h+='<div class="sidefoot">'+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
+ return h+'</aside>';
+};
+var _r6Sidebar=sidebar;
+sidebar=function(c){
+ var h=_r6Sidebar(c);
+ if(curSpace()==='school')h=h.replace(/(<button class="sidehide"[^>]*>[^<]*<\/button>)/,'$1'+doableBrand());
+ return h;
+};
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.classList&&e.target.classList.contains('dbrand'))go('home')});
+
+/* ---------- motion: things fade up when you arrive on a page, rings draw, ticks pop, pop-ups glide in ---------- */
+var r6LastModal=null,r6Swallow=0;
+var _r6Go=go;
+go=function(){view.r6enter=1;return _r6Go.apply(this,arguments)};
+view.r6enter=1;
+function r6Motion(){return !(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
+function r6After(){
+ if(!document.getElementById('r6frame')){var fr=document.createElement('div');fr.id='r6frame';fr.setAttribute('aria-hidden','true');fr.innerHTML='<i></i>';document.body.appendChild(fr)}
+ document.body.classList.toggle('r6noside',!!(S.sideHidden&&!narrowScreen()));
+ var mn=document.querySelector('.main');
+ if(view.r6enter&&mn){
+  view.r6enter=0;
+  if(r6Motion()){
+   mn.classList.add('enter');
+   var all=[].slice.call(mn.querySelectorAll('.zw,.zcard,.zstat,.cpsec,.h4tile,.zbk,.zrd,.zgoal,.cpnextc,.cpnexts,.cprail>*,.zcalbar,.h4band,.h4ov,.zbdlist,.zmoodday,.zplanhelp'));
+   var set=all.filter(function(el){var p=el.parentElement;while(p&&p!==mn){if(all.indexOf(p)>-1)return false;p=p.parentElement}return true});
+   set.slice(0,24).forEach(function(el,i){el.style.animationDelay=(i*38)+'ms';el.classList.add('ain')});
+   setTimeout(function(){set.forEach(function(el){el.classList.remove('ain');el.style.animationDelay=''});mn.classList.remove('enter')},1600);
+  }
+ }
+ var md=document.querySelector('.modal');
+ if(view.modal&&view.modal!==r6LastModal&&md&&r6Motion())md.classList.add('zmin');
+ r6LastModal=view.modal||null;
+ if(view.r6pop){var sel=view.r6pop;view.r6pop=null;try{var pe=document.querySelector(sel);if(pe&&r6Motion()){pe.classList.add('zpop');setTimeout(function(){pe.classList.remove('zpop')},600)}}catch(e){}}
+}
+var _r6Render=render;
+render=function(){
+ var before=app.firstElementChild;
+ _r6Render.apply(this,arguments);
+ if(app.firstElementChild!==before)r6After();
+};
+// remember what was just ticked, so the redraw can make it pop
+document.addEventListener('click',function(e){
+ if(Date.now()-r6Swallow<350){e.preventDefault();e.stopPropagation();return}
+ var b=e.target.closest&&e.target.closest('[data-tick],[data-tickasg],[data-undo],.zck,.wdh1,.zhd,.zmf');if(!b)return;
+ var id=b.getAttribute('data-tick')||b.getAttribute('data-tickasg')||b.getAttribute('data-undo');
+ if(id)view.r6pop='[data-tick="'+id+'"],[data-undo="'+id+'"],[data-tickasg="'+id+'"]';
+ else if(b.getAttribute('data-zact'))view.r6pop='[data-zact="'+b.getAttribute('data-zact').replace(/"/g,'')+'"]';
+},true);
+
+/* ---------- covers: classes and pages get the same look as Home (title inside the picture) ---------- */
+function pageCoverOverlay(c){
+ var eb=c.kind?spaceById(pageSpace(c)).name:[c.code,c.day,c.room].filter(Boolean).join(' · ');
+ var pins=c.kind?'':(c.links||[]).filter(function(l){return l.pinned}).map(function(l){
+   return '<a class="h4pill" href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a>'}).join('');
+ return '<div class="h4ov cpov"><div class="h4hi">'+(eb?'<p class="h4hello">'+esc(eb)+'</p>':'')+'<h1 class="h4day cpovt">'+esc(c.name)+'</h1></div>'+(pins?'<div class="h4pills">'+pins+'</div>':'')+'</div>';
+}
+
+/* ---------- Home widgets: sizes, a phone layout of its own, and drag to move ----------
+   Sizes: small (a third on a computer, half the width on a phone), medium (half), large (full).
+   S.homeW[space] is the computer layout and S.homeW[space+'@phone'] the phone one; the phone starts
+   as a copy of the computer layout until you change it there. */
+function zwPhone(){return window.innerWidth<=700}
+function zwKey(sp){return zwPhone()?sp+'@phone':sp}
+homeWidgets=function(sp){
+ var H=S.homeW||{},L=H[zwKey(sp)];
+ if(!(L&&L.length)&&zwPhone())L=H[sp];
+ if(L&&L.length)return L.filter(function(w){return WDEF[w.type]});
+ return (DEFAULT_W[sp]||[]).filter(function(d){return WDEF[d[0]]}).map(function(d){return {id:'w-'+d[0],type:d[0],col:d[1],size:d[2]||'full'}});
+};
+setHomeWidgets=function(sp,L){S.homeW=Object.assign({},S.homeW||{});S.homeW[zwKey(sp)]=L;save()};
+var ZW_SIZES=[['small','Small'],['half','Medium'],['full','Large']];
+function zwSizes(type){
+ if({comingup:1,week:1,classes:1,month:1,resources:1,music:1}[type])return ['half','full'];
+ return ['small','half','full'];
+}
+function zwSize(w){var s=w.size||'full';if(zwSizes(w.type).indexOf(s)<0)s='full';return s}
+// a compact version of a widget for the small size
+function zSmall(w,d,sp){
+ var t=today(),td=iso(t),c=d.page?firstPage(sp,d.page):null;
+ var card=function(title,big,sub,href,extra){return zWCard(w,d,title,'','<div class="zsm">'+(extra||'')+'<b class="zsmb">'+big+'</b>'+(sub?'<span class="zsms">'+sub+'</span>':'')+'</div>',href)};
+ switch(w.type){
+  case 'nextdue':
+   var o=zOpenTasks().sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0})[0];
+   if(!o)return '<section class="zsmnd" style="background:'+zNdColor(null)+'"><span>Next due</span><b>All clear</b><small>Nothing coming up</small></section>';
+   var cd=cpCountdown(o.t.due);
+   return '<section class="zsmnd'+(cd.n<0?' late':'')+'" style="background:'+(cd.n<0?'#9c4a41':zNdColor(o))+'" data-open="'+o.c.id+'" role="button" tabindex="0"><span>Next due</span><b>'+(cd.n===0?'Today':cd.n<0?Math.abs(cd.n)+'d late':cd.n===1?'1 day':cd.n+' days')+'</b><small>'+esc(o.t.title)+'</small></section>';
+  case 'term':
+   var td2=S.termDates||{},a=parseISO(td2.start),z=parseISO(td2.end);
+   if(!a||!z)return null;
+   var tot=Math.max(1,Math.ceil(daysBetween(a,z)/7)),wk=Math.min(tot,Math.max(1,Math.floor(daysBetween(a,t)/7)+1));
+   return zWCard(w,Object.assign({},d,{ico:'target'}),'Term','','<div class="zsm row">'+zRing(wk/tot*100,'var(--wc)',58,7,'')+'<div><b class="zsmb">Week '+wk+'</b><span class="zsms">of '+tot+'</span></div></div>');
+  case 'plan':
+   var pl=allTasks().filter(function(x){return !isRefClass(x.c)&&planDay(x.t)===td}),dn=pl.filter(function(x){return x.t.done}).length;
+   return zWCard(w,Object.assign({},d,{ico:'list'}),'Today’s plan','','<div class="zsm row">'+zRing(pl.length?dn/pl.length*100:0,'var(--wc)',58,7,dn+'/'+pl.length)+'<span class="zsms">'+(pl.length?(pl.length-dn)+' left':'Nothing planned')+'</span></div>','');
+  case 'clock':return null;
+  case 'mood':
+   var mc=moodPage(sp),cm=moodOf(mc,td);
+   if(cm)return zWCard(w,Object.assign({},d),'Mood','','<div class="zsm"><span class="zsmface" style="'+zcv(MOODS[cm.v].k)+'">'+moodFace(cm.v,40)+'</span><span class="zsms">Feeling '+MOODS[cm.v].n.toLowerCase()+' today</span></div>',mc?mc.id:'');
+   return zWCard(w,d,'Mood','','<div class="zsm"><span class="zsms" style="margin-bottom:6px">How are you today?</span>'+moodPicker(mc,td,false).replace('class="zmoods"','class="zmoods sm"')+'</div>',mc?mc.id:'');
+  case 'payday':case 'bills':case 'money':
+   var bc=firstPage(sp,'budget');if(!bc)return card(d.name,'–','No budget page yet');
+   var bb=zBudget(bc);
+   if(w.type==='payday'){var nx=zPayNext(bb);if(!nx)return card(d.name,'–','Add your pay day',bc.id);var pc=cpCountdown(nx.d);
+    return card('Pay day',pc.n===0?'Today':pc.n+' day'+(pc.n===1?'':'s'),esc(parseISO(nx.d).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})),bc.id)}
+   if(w.type==='bills'){var nb2=zBillsIn(bb,zAddDays(td,-31),zAddDays(td,45)).filter(function(o){return !o.paid})[0];if(!nb2)return card('Bills','All paid','Nothing due soon',bc.id);var bcd=cpCountdown(nb2.d);
+    return card('Next bill',money(nb2.x.amount),esc(nb2.x.title)+' · '+(bcd.n<0?bcd.t:bcd.n===0?'today':bcd.n===1?'tomorrow':'in '+bcd.t),bc.id)}
+   return zWCard(w,d,'In and out','','<div class="zsm row">'+zDonut([{v:bb.inc,col:ZC.sage[1]},{v:bb.spent,col:ZC.peach[1]}],58,9)+'<div><b class="zsmb">'+(bb.inc-bb.spent>=0?'+':'−')+money(Math.abs(bb.inc-bb.spent))+'</b><span class="zsms">kept this month</span></div></div>',bc.id);
+  case 'todo':case 'groceries':
+   if(!c)return card(d.name,'–','No page yet');
+   var op=c.tasks.filter(function(x){return !x.done});if(w.type==='todo')op.sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:1});
+   return card(esc(c.name),op.length,op.length?esc(op[0].title):(w.type==='todo'?'All done':'List is empty'),c.id);
+  case 'projects':
+   if(!c)return card(d.name,'–','No page yet');
+   var P=c.items.filter(function(x){return x.t==='proj'&&x.status!=='done'}),avg=P.length?Math.round(P.reduce(function(s,p){return s+zProjProgress(p)},0)/P.length):0;
+   return zWCard(w,d,esc(c.name),'','<div class="zsm row">'+zRing(avg,'var(--wc)',58,7,avg+'%')+'<div><b class="zsmb">'+P.length+'</b><span class="zsms">active</span></div></div>',c.id);
+  case 'progress':
+   var ws=iso(weekStart(0)),we=iso(weekStart(1)),L=allTasks().filter(function(x){return !isRefClass(x.c)&&x.t.due&&x.t.due>=ws&&x.t.due<we&&!x.ev}),dd=L.filter(function(x){return x.t.done}).length;
+   return zWCard(w,d,d.name,'','<div class="zsm row">'+zRing(L.length?dd/L.length*100:0,'var(--wc)',58,7,dd+'/'+L.length)+'<span class="zsms">'+(L.length-dd)+' left</span></div>');
+  case 'habits':
+   if(!c)return card(d.name,'–','No page yet');
+   var H=zHabits(c).filter(function(h){return zHabitOn(h,td)}),got=H.filter(function(h){return zHabitDone(c,h,td)}).length;
+   return zWCard(w,d,d.name,'','<div class="zsm row">'+zRing(H.length?got/H.length*100:0,'var(--wc)',58,7,got+'/'+H.length)+'<span class="zsms">'+(H.length&&got===H.length?'All done':'today')+'</span></div>',c.id);
+  case 'budget':
+   if(!c)return card(d.name,'–','No page yet');
+   var b=zBudget(c),spent=w.show==='spent';
+   return zWCard(w,d,spent?'Spent':'Left','','<div class="zsm row">'+zDonut(zSpendSegs(c,b),58,9)+'<div><b class="zsmb">'+money(spent?b.spent:b.left)+'</b><span class="zsms">'+esc(t.toLocaleDateString('en-CA',{month:'long'}))+'</span></div></div>',c.id);
+  case 'savings':
+   if(!c)return card(d.name,'–','No page yet');
+   var g=c.items.filter(function(x){return x.t==='goal'}).sort(function(a2,z2){return (+z2.target||0)-(+a2.target||0)})[0];
+   if(!g)return card(d.name,'–','No goal yet',c.id);
+   var gp=g.target?Math.min(100,Math.round((+g.saved||0)/g.target*100)):0;
+   return zWCard(w,d,esc(g.title),'','<div class="zsm row">'+zRing(gp,'var(--wc)',58,7,gp+'%')+'<div><b class="zsmb">'+money(g.saved)+'</b><span class="zsms">of '+money(g.target)+'</span></div></div>',c.id);
+  case 'reading':
+   if(!c)return card(d.name,'–','No page yet');
+   var R=c.items.filter(function(x){return x.t==='read'&&x.status==='doing'})[0];
+   if(!R)return card(d.name,'–','Nothing in progress',c.id);
+   return zWCard(w,d,d.name,'','<button class="zsmread" data-zact="readedit:'+c.id+':'+R.id+'">'+(R.cover?'<img src="'+esc(R.cover)+'" alt="">':'<span class="wdreadph">'+zI(ZIC.book,18)+'</span>')+'<span><b>'+esc(R.title)+'</b>'+(R.progress?'<span class="zbar"><i style="width:'+R.progress+'%"></i></span>':'')+'</span></button>',c.id);
+  case 'birthdays':
+   var nb=zBirthdays(sp)[0];
+   if(!nb)return card(d.name,'–','None yet');
+   var cd2=cpCountdown(nb.next);
+   return zWCard(w,d,'Birthdays','','<div class="zsm"><b class="zsmb">'+(cd2.n===0?'Today':cd2.n===1?'Tomorrow':cd2.n+' days')+'</b><span class="zsms">'+esc(nb.t.title)+'</span></div>','');
+  case 'apps':
+   if(!c)return card(d.name,'–','No page yet');
+   var A=(c.links||[]).slice(0,4);
+   return zWCard(w,d,esc(c.name),'',A.length?'<div class="wdapps sm">'+A.map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1" title="'+esc(l.title)+'">'+linkIcon(l.url,l.title,l.icon)+'</a>'}).join('')+'</div>':'<span class="zsms">No apps yet</span>',c.id);
+  case 'shifts':
+   if(!c)return card(d.name,'–','No page yet');
+   var SH=c.items.filter(function(x){return x.t==='shift'}),ws2=iso(weekStart(0)),we2=iso(weekStart(1));
+   return card('Hours',Math.round(SH.filter(function(x){return x.date>=ws2&&x.date<we2}).reduce(function(s,x){return s+zHours(x)},0)*10)/10,'this week',c.id);
+  case 'notes':
+   if(!c)return card(d.name,'–','No page yet');
+   var N=c.items.filter(function(x){return x.t==='note'}).sort(function(a3,z3){return (z3.date||'')<(a3.date||'')?-1:1});
+   return card(esc(c.name),N.length,N[0]?esc(N[0].title||'Untitled'):'No notes yet',c.id);
+ }
+ return null;
+}
+function zNdColor(o){
+ var sp=curSpace(),nd=(S.ndColor&&S.ndColor[sp])||'menu';
+ if(nd==='class'&&o)return palHex(o.c.color);
+ if(/^#/.test(nd))return nd;
+ return chromeHex('sideBg');
+}
+viewSpaceHome=function(){
+ var sp=curSpace(),L=view.zwLive||homeWidgets(sp),edit=!!view.homeEdit,ph=zwPhone();
+ var slot=function(w,i){var d=WDEF[w.type],sz=zwSize(w),html='';
+  if(sz==='small'){try{html=zSmall(w,d,sp)}catch(e){html=null}}
+  if(!html)html=zWidgetHtml(w,sp);
+  if(!html&&!edit)return '';
+  return '<div class="zw zw-'+(sz)+' zw-'+w.type+(view.zwDragId===w.id?' zwph':'')+'" style="order:'+i+'" data-wid="'+w.id+'">'
+   +(edit?'<button class="zwx" data-zact="wdel:'+w.id+'" aria-label="Remove '+esc(d.name)+'">×</button><button class="zwm" data-zact="wmenu:'+w.id+'" aria-label="Size, colour and more for '+esc(d.name)+'">'+zI(ZIC.dots,14)+'</button>':'')
+   +(html||'<div class="zcard zempty" style="padding:18px">'+esc(d.name)+' (nothing to show yet)</div>')+'</div>'};
+ // on a phone (and iPad) everything is one list; on a computer, main and side columns
+ var main=L.map(function(w,i){return (ph||w.col!=='side')?slot(w,i):''}).join(''),side=ph?'':L.map(function(w,i){return w.col==='side'?slot(w,i):''}).join('');
+ var bar=edit?'<div class="zedit"><b>Edit Home</b><span>'+(ph?'Your phone layout. Drag to move. Your computer keeps its own.':'Drag widgets to move them. ⋯ changes size and colour. Your phone keeps its own layout.')+'</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
+ return bar+'<div class="zhome'+(edit?' edit':'')+(ph?' ph':'')+'"><div class="zmain">'+main+'</div><aside class="zside">'+side+'</aside></div>';
+};
+ZACT.wadd=function(type){var sp=curSpace(),L=homeWidgets(sp).slice(),d=WDEF[type];L.unshift({id:'w-'+type+'-'+uid().slice(1,5),type:type,col:d.col,size:d.size});setHomeWidgets(sp,L);view.modal=null;render();window.scrollTo({top:0,behavior:'smooth'})};
+ZM.zwmenu={html:function(m){
+ var sp=curSpace(),w=homeWidgets(sp).filter(function(x){return x.id===m.wid})[0];if(!w)return null;var d=WDEF[w.type];
+ var seg=function(k,opts,cur){return '<div class="zseg">'+opts.map(function(o){return '<button class="'+(cur===o[0]?'on':'')+'" data-zact="wset:'+w.id+':'+k+':'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div>'};
+ var h='<h3>'+esc(d.name)+'</h3>';
+ var szs=zwSizes(w.type);
+ h+='<div class="field"><label>Size</label>'+seg('size',ZW_SIZES.filter(function(s){return szs.indexOf(s[0])>-1}),zwSize(w))+'</div>';
+ if(w.type==='budget')h+='<div class="field"><label>Show</label>'+seg('show',[['left','Money left'],['spent','Money spent']],w.show==='spent'?'spent':'left')+'</div>';
+ if(!d.legacy){
+  var col=w.color||d.soft;
+  h+='<div class="field"><label>Colour</label><div class="zsws">'+ZC_KEYS.map(function(k){return '<button type="button" class="zsw'+(col===k?' on':'')+'" style="background:'+ZC[k][1]+'" data-zact="wset:'+w.id+':color:'+k+'" aria-label="'+k+'"></button>'}).join('')+'</div></div>'
+   +'<div class="field"><label>Background</label>'+seg('tint',[['0','White'],['1','Tinted']],w.tint?'1':'0')+'</div>'
+   +'<div class="field"><label>Picture</label><div style="display:flex;gap:10px;align-items:center">'+(w.cover?'<span class="zthumb" style="background-image:url('+w.cover+')"></span>':'')
+   +'<label class="fakebtn"><input type="file" accept="image/*" data-zwcover="'+w.id+'" style="display:none">'+(w.cover?'Change picture':'Add a picture')+'</label>'+(w.cover?'<button class="ghost" data-zact="wset:'+w.id+':cover:">Remove</button>':'')+'</div></div>';
+ }
+ if(w.type==='nextdue'){var nd=(S.ndColor&&S.ndColor[sp])||'menu',lab=sp==='school'?'Match the class':sp==='personal'?'Match the person':'Match the page';
+  h+='<div class="field"><label>Card colour</label><div class="zndopts">'
+   +'<button class="'+(nd==='menu'?'on':'')+'" data-zact="ndcol:menu"><i style="background:'+chromeHex('sideBg')+'"></i>Match the menu</button>'
+   +'<button class="'+(nd==='class'?'on':'')+'" data-zact="ndcol:class"><i style="background:conic-gradient(#A99CBF,#94AC9C,#C0A490,#93A9B8,#A99CBF)"></i>'+lab+'</button></div>'
+   +'<div class="zsws" style="margin-top:8px">'+['#8C867E','#957A6A','#A88B70','#A49264','#7C9180','#6F8A9B','#8A7D99','#A27F8C','#A2766F'].map(function(hx){return '<button type="button" class="zsw'+(nd===hx?' on':'')+'" style="background:'+hx+'" data-zact="ndcol:'+hx+'" aria-label="Always this colour"></button>'}).join('')+'</div></div>';
+ }
+ if(!zwPhone())h+='<div class="field"><label>Column on a computer</label>'+seg('col',[['main','Main'],['side','Side']],w.col==='side'?'side':'main')+'</div>';
+ h+='<p class="hint" style="margin:2px 0 8px">To move it, drag it on Home.</p><div class="sheetlist"><button class="danger" data-zact="wdel:'+w.id+'">Remove from Home</button></div>';
+ return h;
+}};
+
+/* drag a widget to move it: press and hold (phone/iPad, also starts Edit Home), or drag with the mouse in
+   Edit Home. The widget lifts and follows your finger; the others slide out of the way. */
+var ZD=null;
+function zdStart(id,x,y){
+ var el=document.querySelector('.zhome [data-wid="'+id+'"]');if(!el)return false;
+ var r=el.getBoundingClientRect(),gh=el.cloneNode(true);
+ gh.classList.add('zghost');gh.removeAttribute('data-wid');
+ gh.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;margin:0;z-index:300;pointer-events:none;order:0;transform-origin:'+(x-r.left)+'px '+(y-r.top)+'px';
+ document.body.appendChild(gh);
+ ZD={id:id,dx:x-r.left,dy:y-r.top,gh:gh,L:homeWidgets(curSpace()).map(function(w){return Object.assign({},w)}),x:x,y:y,raf:0,last:0};
+ view.zwLive=ZD.L;view.zwDragId=id;r6Draw();
+ document.body.classList.add('zdragging');
+ try{window.getSelection().removeAllRanges()}catch(e){}
+ ZD.raf=requestAnimationFrame(zdLoop);
+ return true;
+}
+function r6Draw(){view.renderNow=1;try{render()}finally{view.renderNow=0}}
+function zdMove(x,y){
+ if(!ZD)return;ZD.x=x;ZD.y=y;
+ ZD.gh.style.left=(x-ZD.dx)+'px';ZD.gh.style.top=(y-ZD.dy)+'px';
+ if(Date.now()-ZD.last<90)return;
+ var hit=document.elementFromPoint(x,y),L=ZD.L,ids=L.map(function(w){return w.id}),i=ids.indexOf(ZD.id);if(i<0)return;
+ var me=L[i],tw=hit&&hit.closest&&hit.closest('.zhome .zw[data-wid]'),N=null,ph=zwPhone();
+ if(tw){
+  var tid=tw.getAttribute('data-wid');if(tid===ZD.id)return;
+  var r=tw.getBoundingClientRect(),home=document.querySelector('.zhome'),hw=home?home.getBoundingClientRect().width:r.width;
+  var j=ids.indexOf(tid),wide=r.width>hw*0.62,before=wide?(y<r.top+r.height/2):(x<r.left+r.width/2);
+  N=L.slice();N.splice(i,1);var j2=N.map(function(w){return w.id}).indexOf(tid);
+  var me2=Object.assign({},me);if(!ph&&window.innerWidth>=1200)me2.col=L[j].col;
+  N.splice(before?j2:j2+1,0,me2);
+ }else if(!ph&&window.innerWidth>=1200&&hit&&hit.closest){
+  var side=hit.closest('.zside'),mainc=hit.closest('.zmain');
+  if((side&&me.col!=='side')||(mainc&&me.col==='side')){N=L.slice();N.splice(i,1);N.push(Object.assign({},me,{col:side?'side':'main'}))}
+ }
+ if(!N)return;
+ if(N.map(function(w){return w.id+w.col}).join()===L.map(function(w){return w.id+w.col}).join())return;
+ ZD.last=Date.now();
+ var first={};document.querySelectorAll('.zhome .zw[data-wid]').forEach(function(el){first[el.getAttribute('data-wid')]=el.getBoundingClientRect()});
+ ZD.L=N;view.zwLive=N;r6Draw();
+ if(r6Motion())document.querySelectorAll('.zhome .zw[data-wid]').forEach(function(el){var a=first[el.getAttribute('data-wid')];if(!a||!el.animate)return;var b=el.getBoundingClientRect(),dx=a.left-b.left,dy=a.top-b.top;if(Math.abs(dx)<1&&Math.abs(dy)<1)return;el.animate([{transform:'translate('+dx+'px,'+dy+'px)'},{transform:'translate(0,0)'}],{duration:240,easing:'cubic-bezier(.2,.7,.2,1)'})});
+}
+function zdLoop(){
+ if(!ZD)return;var y=ZD.y,h=window.innerHeight,v=0;
+ if(y<90)v=-Math.ceil((90-y)/7);else if(y>h-90)v=Math.ceil((y-(h-90))/7);
+ if(v){window.scrollBy(0,v);ZD.last=0;zdMove(ZD.x,ZD.y)}
+ ZD.raf=requestAnimationFrame(zdLoop);
+}
+function zdEnd(){
+ if(!ZD)return;var d=ZD;ZD=null;cancelAnimationFrame(d.raf);r6Swallow=Date.now();
+ var el=document.querySelector('.zhome [data-wid="'+d.id+'"]');
+ var fin=function(){if(d.gh.parentNode)d.gh.remove();view.zwLive=null;view.zwDragId=null;document.body.classList.remove('zdragging');setHomeWidgets(curSpace(),d.L);r6Draw()};
+ if(el&&d.gh.animate&&r6Motion()){var r=el.getBoundingClientRect();var a=d.gh.animate([{left:d.gh.style.left,top:d.gh.style.top},{left:r.left+'px',top:r.top+'px'}],{duration:170,easing:'ease-out',fill:'forwards'});a.onfinish=fin;setTimeout(function(){if(d.gh.parentNode)fin()},400)}
+ else fin();
+}
+(function(){
+ /* touch: the redraws during a drag replace the widget under the finger, and a finger's move events keep
+    going to the element it first touched even after it leaves the page, so we listen on that element */
+ var t=null;
+ var mv=function(e){
+  if(!t)return;var p=e.touches[0];if(!p)return;
+  if(!t.armed){if(Math.abs(p.clientX-t.x)>9||Math.abs(p.clientY-t.y)>9)stop();return}
+  if(e.cancelable)e.preventDefault();zdMove(p.clientX,p.clientY);
+ };
+ var stop=function(){if(!t)return;clearTimeout(t.tm);var el=t.el;el.removeEventListener('touchmove',mv);el.removeEventListener('touchend',end);el.removeEventListener('touchcancel',end);t=null};
+ var end=function(){if(!t)return;var a=t.armed;stop();if(a)zdEnd()};
+ document.addEventListener('touchstart',function(e){
+  if(e.touches.length!==1||ZD){if(t)stop();return}
+  var w=e.target.closest&&e.target.closest('.zhome .zw[data-wid]');if(!w||e.target.closest('.zwx,.zwm'))return;
+  var edit=!!view.homeEdit;if(!edit&&e.target.closest('input,textarea,select,iframe'))return;
+  if(t)stop();
+  var p=e.touches[0];t={id:w.getAttribute('data-wid'),x:p.clientX,y:p.clientY,armed:false,el:e.target};
+  t.el.addEventListener('touchmove',mv,{passive:false});t.el.addEventListener('touchend',end);t.el.addEventListener('touchcancel',end);
+  t.tm=setTimeout(function(){
+   if(!t)return;t.armed=true;
+   try{navigator.vibrate&&navigator.vibrate(12)}catch(err){}
+   if(!view.homeEdit){view.homeEdit=true;r6Draw()}
+   if(!zdStart(t.id,t.x,t.y))stop();
+  },edit?150:430);
+ },{passive:true});
+ document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('.zhome .zw')&&!e.target.closest('a,input,textarea'))e.preventDefault()});
+ document.addEventListener('mousedown',function(e){
+  if(e.button!==0||!view.homeEdit||ZD)return;var w=e.target.closest&&e.target.closest('.zhome .zw[data-wid]');if(!w||e.target.closest('.zwx,.zwm'))return;
+  e.preventDefault();
+  var sx=e.clientX,sy=e.clientY,id=w.getAttribute('data-wid'),on=false;
+  var mv=function(ev){if(!on){if(Math.abs(ev.clientX-sx)+Math.abs(ev.clientY-sy)<5)return;on=zdStart(id,sx,sy);if(!on)return}zdMove(ev.clientX,ev.clientY)};
+  var up=function(){document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);if(on)zdEnd()};
+  document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+ });
+})();
+
+/* ---------- Budget: money in, money out, spending pies, bills with due dates, pay day ----------
+   Bills: items t:'bill' {title,amount,due (first due date),rep,cat,paid:{date:1}}. Ticking a bill paid
+   also adds it to spending (an item with a fixed id, so two devices can't add it twice).
+   Pay: items t:'pay' {title,due (a pay date),rep,amount}. Both show on the calendar. */
+function zMonthOf(c){var m=view.zbMonth;return (m&&/^\d{4}-\d\d$/.test(m))?m:zMonth()}
+zBudget=function(c,mo){
+ mo=mo||zMonth();
+ var cats=c.items.filter(function(x){return x.t==='cat'}),sp=c.items.filter(function(x){return x.t==='spend'&&(x.date||'').slice(0,7)===mo});
+ var spent=0,inc=0,byCat={};sp.forEach(function(x){var a=+x.amount||0;if(x.income)inc+=a;else{spent+=a;byCat[x.cat||'']=(byCat[x.cat||'']||0)+a}});
+ var total=cats.reduce(function(s,x){return s+(+x.limit||0)},0);
+ return {mo:mo,cats:cats,sp:sp,spent:spent,inc:inc,byCat:byCat,total:total,left:total-spent,goals:c.items.filter(function(x){return x.t==='goal'}),
+  bills:c.items.filter(function(x){return x.t==='bill'}),pays:c.items.filter(function(x){return x.t==='pay'})};
+};
+function zCatCol(x){return (ZC[x&&x.color]||ZC.grey)[1]}
+function zSpendSegs(c,b){
+ var segs=b.cats.map(function(x){return {v:b.byCat[x.id]||0,col:zCatCol(x),label:x.title}});
+ if(b.byCat['']) segs.push({v:b.byCat[''],col:'#B9B3A9',label:'Other'});
+ return segs;
+}
+function zMoShift(mo,n){var y=+mo.slice(0,4),m=+mo.slice(5,7)-1+n;var d=new Date(y,m,1);return iso(d).slice(0,7)}
+function zMoName(mo,long){return new Date(+mo.slice(0,4),+mo.slice(5,7)-1,1).toLocaleDateString('en-CA',long?{month:'long',year:'numeric'}:{month:'short'})}
+function zMoEnd(mo){var y=+mo.slice(0,4),m=+mo.slice(5,7);return iso(new Date(y,m,0))}
+function zBillsIn(b,from,to){
+ var out=[];b.bills.forEach(function(x){zOcc(x.due,x.rep||'month',from,to).forEach(function(k){out.push({x:x,d:k,paid:!!(x.paid&&x.paid[k])})})});
+ return out.sort(function(a,z){return a.d<z.d?-1:a.d>z.d?1:0});
+}
+function zPayNext(b){
+ var td=iso(today()),best=null;
+ b.pays.forEach(function(p){var n=zNextOcc(p.due,p.rep||'2week',td);if(n&&(!best||n<best.d))best={p:p,d:n,prev:zPrevOcc(p.due,p.rep||'2week',n)}});
+ return best;
+}
+function zPayCard(c,b,compact){
+ var nx=zPayNext(b);
+ if(!nx)return '<div class="zpay empty"><p class="zsoft">Add your pay day and Doable counts down to it.</p><button class="zbtn" data-zact="paynew:'+c.id+'">+ Add pay day</button></div>';
+ var cd=cpCountdown(nx.d),per=nx.prev?Math.max(1,daysBetween(parseISO(nx.prev),parseISO(nx.d))):14,gone=nx.prev?daysBetween(parseISO(nx.prev),today()):0;
+ var pct=Math.max(4,Math.min(100,Math.round(gone/per*100)));
+ return '<div class="zpay'+(compact?' compact':'')+'" data-zact="payedit:'+c.id+':'+nx.p.id+'" role="button" tabindex="0">'+zRing(cd.n===0?100:pct,'var(--wc)',compact?74:96,compact?8:10,'')
+  +'<div class="zpaynum"><b>'+(cd.n===0?'Today':cd.n)+'</b>'+(cd.n===0?'':'<small>day'+(cd.n===1?'':'s')+'</small>')+'</div>'
+  +'<div class="zpaytx"><span class="zsoft">'+(cd.n===0?'It’s pay day':'until pay day')+'</span><b>'+esc(parseISO(nx.d).toLocaleDateString('en-CA',{weekday:'long',month:'short',day:'numeric'}))+'</b>'
+  +'<span class="zsoft">'+esc(zRepName(nx.p.rep||'2week'))+(nx.p.amount?' · '+money(nx.p.amount):'')+'</span></div></div>';
+}
+function zBillRow(c,o){
+ var late=!o.paid&&o.d<iso(today()),cd=cpCountdown(o.d);
+ return '<div class="zrow zbill'+(o.paid?' done':'')+'"><button class="zck'+(o.paid?' y':'')+'" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'" aria-label="'+(o.paid?'Mark not paid':'Mark paid')+'">'+(o.paid?zI(ZIC.check,12):'')+'</button>'
+  +'<button class="zrt" data-zact="billedit:'+c.id+':'+o.x.id+'">'+esc(o.x.title)+'<small>'+esc(parseISO(o.d).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}))+(o.x.rep&&o.x.rep!=='once'?' · '+esc(zRepName(o.x.rep).toLowerCase()):'')+'</small></button>'
+  +(o.paid?'<span class="zdue">Paid</span>':'<span class="zdue'+(late?' late':cd.n<=3?' soon':'')+'">'+esc(late?cd.t:cd.n===0?'Today':cd.n===1?'Tomorrow':'in '+cd.t)+'</span>')
+  +'<b class="zamt">'+money(o.x.amount)+'</b></div>';
+}
+zBudgetPage=function(c){
+ var mo=zMonthOf(c),b=zBudget(c,mo),pb=zBudget(c,zMoShift(mo,-1)),cur=mo===zMonth();
+ var pct=b.total?Math.round(b.spent/b.total*100):0;
+ var nav='<div class="zbnav"><button class="zbtn ghost" data-zact="bmon:-1" aria-label="Previous month">‹</button><b>'+esc(zMoName(mo,true))+'</b><button class="zbtn ghost" data-zact="bmon:1" aria-label="Next month"'+(cur?' disabled':'')+'>›</button>'
+  +(cur?'':'<button class="zlink" data-zact="bmon:0">This month</button>')
+  +'<span class="zgrow"></span><button class="zbtn" data-zact="spendnew:'+c.id+'">+ Spending</button><button class="zbtn ghost" data-zact="spendnew:'+c.id+':in">+ Money in</button><button class="zbtn ghost" data-zact="billnew:'+c.id+'">+ Bill</button></div>';
+ var diff=function(now,before,goodUp){if(!before)return '';var d=now-before,up=d>0;if(Math.abs(d)<0.5)return 'Same as '+esc(zMoName(zMoShift(mo,-1)));return '<span class="'+((up===goodUp)?'zgood':'zbad')+'">'+(up?'↑ ':'↓ ')+money(Math.abs(d))+'</span> vs '+esc(zMoName(zMoShift(mo,-1)))};
+ var saved=b.goals.reduce(function(s,g){return s+(+g.saved||0)},0);
+ var stats='<div class="zstats">'
+  +zStat('arrowin','sage','Money in',money(b.inc),diff(b.inc,pb.inc,true)||'Paycheques and gifts')
+  +zStat('arrowout','peach','Money out',money(b.spent),diff(b.spent,pb.spent,false)||'Everything you spent')
+  +zStat('wallet','mist','Left to spend',money(b.left),b.total?pct+'% of '+money(b.total)+' used':'Add category limits')
+  +zStat('piggy','lavender','Saved',money(saved),b.inc?'Kept this month: '+money(b.inc-b.spent):'Across your goals')+'</div>';
+ var segs=zSpendSegs(c,b);
+ var pie=zCard('Where it went','target',esc(zMoName(mo)),b.spent?'<div class="zpie">'+zDonut(segs,150,18,money(b.spent),'spent')
+   +zLegend(segs.filter(function(s){return s.v>0}).sort(function(a,z){return z.v-a.v}).map(function(s){return {col:s.col,label:s.label,val:Math.round(s.v/b.spent*100)+'%'}}))+'</div>'
+  :'<p class="zempty">Nothing spent '+(cur?'yet this month':'that month')+'. Your spending pie shows here.</p>');
+ var inout=zCard('In and out','wallet','',(b.inc||b.spent)?'<div class="zpie">'+zDonut([{v:b.inc,col:ZC.sage[1]},{v:b.spent,col:ZC.peach[1]}],150,18,(b.inc-b.spent>=0?'+':'−')+money(Math.abs(b.inc-b.spent)).replace('−',''),b.inc-b.spent>=0?'kept':'over')
+   +zLegend([{col:ZC.sage[1],label:'Money in',val:money(b.inc)},{col:ZC.peach[1],label:'Money out',val:money(b.spent)}])+'</div>'
+  :'<p class="zempty">Add money in and spending to compare them.</p>');
+ var cats=zCard('Budget by category','list','<button class="zlink" data-zact="catnew:'+c.id+'">+ Category</button>',b.cats.length?b.cats.map(function(x){var s=b.byCat[x.id]||0,p=x.limit?Math.min(100,Math.round(s/x.limit*100)):0,over=x.limit&&s>x.limit;
+   return '<button class="zcat'+(over?' over':'')+'" style="'+zcv(x.color||'grey')+'" data-zact="catedit:'+c.id+':'+x.id+'"><span class="zic small">'+zI(ZIC.wallet,13)+'</span><span>'+esc(x.title)+'</span><span class="zsoft">'+money(s)+' / '+money(x.limit)+'</span><span class="zbar"><i style="width:'+p+'%"></i></span></button>'}).join(''):'<p class="zempty">Add categories with a monthly limit.</p>');
+ var mEnd=zMoEnd(mo),bl=zBillsIn(b,mo+'-01',mEnd),due=bl.filter(function(o){return !o.paid}).reduce(function(s,o){return s+(+o.x.amount||0)},0);
+ var bills=zCard('Bills','bill',(bl.length?money(due)+' still to pay · ':'')+'<button class="zlink" data-zact="billnew:'+c.id+'">+ Bill</button>',
+  bl.length?bl.map(function(o){return zBillRow(c,o)}).join(''):'<p class="zempty">Add your bills with their due dates, like rent or your phone. They show on your calendar too.</p>','zlist');
+ var pay=zCard('Pay day','payday',b.pays.length?'<button class="zlink" data-zact="paynew:'+c.id+'">+ Another</button>':'',zPayCard(c,b),'',zcv('sage'));
+ // last six months, money in and out side by side
+ var months=[];for(var i=5;i>=0;i--)months.push(zMoShift(mo,-i));
+ var vals=months.map(function(m){var x=zBudget(c,m);return {m:m,a:x.inc,o:x.spent}}),mx=Math.max.apply(null,vals.map(function(v){return Math.max(v.a,v.o)}).concat([1]));
+ var bars=zCard('Last six months','cal','<span class="zlegi"><i style="background:'+ZC.sage[1]+'"></i>In <i style="background:'+ZC.peach[1]+'"></i>Out</span>','<div class="zbars">'+vals.map(function(v){
+   return '<div class="zbc'+(v.m===mo?' on':'')+'" title="'+esc(zMoName(v.m,true))+': in '+money(v.a)+', out '+money(v.o)+'"><div class="zbcb"><i class="in" style="height:'+(v.a/mx*100)+'%"></i><i class="out" style="height:'+(v.o/mx*100)+'%"></i></div><span>'+esc(zMoName(v.m))+'</span></div>'}).join('')+'</div>');
+ var rec=b.sp.slice().sort(function(a,z){return (z.date||'')<(a.date||'')?-1:1});
+ var catBy={};b.cats.forEach(function(x){catBy[x.id]=x});
+ var recent=zCard(cur?'This month':esc(zMoName(mo,true)),'list',rec.length?rec.length+'':'',rec.length?rec.slice(0,view.zbAll?200:8).map(function(x){var ct=catBy[x.cat];
+   return '<button class="zsp" data-zact="spendedit:'+c.id+':'+x.id+'"><span>'+esc(x.title||'Spending')+'<small>'+esc(x.date?parseISO(x.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'')+'</small></span>'+(x.income?zTag('Money in','sage'):ct?zTag(ct.title,ct.color||'grey'):'')+'<b'+(x.income?' class="in"':'')+'>'+(x.income?'+':'−')+money(x.amount)+'</b></button>'}).join('')
+   +(rec.length>8&&!view.zbAll?'<button class="zlink" data-zact="ball">Show all '+rec.length+'</button>':''):'<p class="zempty">Nothing added. Tap + Spending after you buy something, or + Money in when you get paid.</p>');
+ return nav+stats+'<div class="zg2">'+pie+inout+'</div><div class="zg2">'+pay+bills+'</div><div class="zg2">'+cats+bars+'</div>'+recent
+  +'<div class="zh2row"><h2 class="zh2">Goals and savings</h2><button class="zbtn" data-zact="goalnew:'+c.id+'">+ Add a goal</button></div>'
+  +(b.goals.length?'<div class="zg3">'+b.goals.map(function(g){return zGoalCard(c,g)}).join('')+'</div>':'<p class="zempty">Save toward something: a trip, a laptop, a rainy-day fund. Add a picture to keep it in mind.</p>');
+};
+ZACT.bmon=function(n){n=+n;view.zbMonth=n===0?null:zMoShift(view.zbMonth||zMonth(),n);if(view.zbMonth&&view.zbMonth>zMonth())view.zbMonth=null;view.zbAll=false;render()};
+ZACT.ball=function(){view.zbAll=true;render()};
+ZACT.spendnew=function(cid,kind){zOpen('zspend',{cid:cid,inc:kind==='in'})};
+var _r6Spend=ZM.zspend.html;
+ZM.zspend.html=function(m){
+ var h=_r6Spend(m);
+ if(m.inc&&!m.id)h=h.replace('<h3>Add spending</h3>','<h3>Add money in</h3>').replace('placeholder="Loblaws"','placeholder="Paycheque"').replace('id="zs5"','id="zs5" checked');
+ return h.replace(/<div style="display:flex;gap:10px">/g,'<div class="zfrow">');
+};
+// bills
+ZACT.billnew=function(cid){zOpen('zbill',{cid:cid})};
+ZACT.billedit=function(cid,id){zOpen('zbill',{cid:cid,id:id})};
+ZM.zbill={html:function(m){var c=classById(m.cid);if(!c)return null;var x=m.id&&zItem(c,m.id),cats=c.items.filter(function(i){return i.t==='cat'});
+ var catDef=x?x.cat:((cats.filter(function(k){return /bill/i.test(k.title)})[0]||{}).id||'');
+ return '<h3>'+(x?'Edit bill':'Add a bill')+'</h3><div class="field"><label for="zb1">Bill</label><input id="zb1" value="'+esc(x?x.title:'')+'" placeholder="Phone, rent, Netflix"></div>'
+  +'<div class="zfrow"><div class="field"><label for="zb2">Amount ($)</label><input id="zb2" type="number" min="0" step="0.01" inputmode="decimal" value="'+esc(x?x.amount:'')+'"></div>'
+  +'<div class="field"><label for="zb3">'+(x?'First due date':'Next due date')+'</label><input id="zb3" type="date" value="'+esc(x?x.due:iso(today()))+'"></div></div>'
+  +'<div class="zfrow"><div class="field"><label for="zb4">Repeats</label><select id="zb4">'+REPS.map(function(r){return '<option value="'+r[0]+'"'+(((x&&x.rep)||'month')===r[0]?' selected':'')+'>'+r[1]+'</option>'}).join('')+'</select></div>'
+  +'<div class="field"><label for="zb5">Category</label><select id="zb5"><option value="">None</option>'+cats.map(function(k){return '<option value="'+k.id+'"'+(catDef===k.id?' selected':'')+'>'+esc(k.title)+'</option>'}).join('')+'</select></div></div>'
+  +'<label class="zcheck"><input type="checkbox" id="zb6"'+(x&&x.cal===false?'':' checked')+'> Show it on my calendar</label>'
+  +'<p class="hint" style="margin:6px 0 0">When you tick a bill paid, it’s added to your spending for that month.</p>';
+},save:function(m){var c=classById(m.cid);if(!c)return;var t=zv('zb1'),a=parseFloat(zv('zb2'));if(!t||!(a>=0))return;var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:'bill',paid:{}};c.items.push(x)}
+ x.title=t;x.amount=Math.round(a*100)/100;x.due=zv('zb3')||iso(today());x.rep=zv('zb4');x.cat=zv('zb5');x.cal=document.getElementById('zb6').checked;touch(x);save();view.modal=null;render()},
+ del:function(m){return m.id?'billdel:'+m.cid+':'+m.id:''}};
+ZACT.billdel=function(cid,id){var c=classById(cid);if(!c||!confirm('Delete this bill? Spending already added for it stays.'))return;c.items=c.items.filter(function(x){return x.id!==id});save();view.modal=null;render()};
+ZACT.billpaid=function(cid,id,d){
+ var c=classById(cid),x=c&&zItem(c,id);if(!x)return;
+ x.paid=Object.assign({},x.paid||{});var sid='bp-'+id+'-'+d;
+ if(x.paid[d]){delete x.paid[d];c.items=c.items.filter(function(i){return i.id!==sid})}
+ else{x.paid[d]=1;if(!zItem(c,sid))c.items.push(touch({id:sid,t:'spend',title:x.title,amount:+x.amount||0,cat:x.cat||'',date:d<=iso(today())?d:iso(today()),bill:id}))}
+ touch(x);save();render();
+};
+// pay day
+ZACT.paynew=function(cid){zOpen('zpay',{cid:cid})};
+ZACT.payedit=function(cid,id){zOpen('zpay',{cid:cid,id:id})};
+ZM.zpay={html:function(m){var c=classById(m.cid);if(!c)return null;var x=m.id&&zItem(c,m.id);
+ return '<h3>'+(x?'Pay day':'Add your pay day')+'</h3><div class="field"><label for="zy1">Name</label><input id="zy1" value="'+esc(x?x.title:'Pay day')+'"></div>'
+  +'<div class="zfrow"><div class="field"><label for="zy2">A pay date</label><input id="zy2" type="date" value="'+esc(x?x.due:iso(today()))+'"></div>'
+  +'<div class="field"><label for="zy3">How often</label><select id="zy3">'+REPS.filter(function(r){return r[0]!=='once'&&r[0]!=='year'}).map(function(r){return '<option value="'+r[0]+'"'+(((x&&x.rep)||'2week')===r[0]?' selected':'')+'>'+r[1]+'</option>'}).join('')+'</select></div></div>'
+  +'<div class="field"><label for="zy4">Usual amount ($, optional)</label><input id="zy4" type="number" min="0" step="0.01" inputmode="decimal" value="'+esc(x&&x.amount?x.amount:'')+'"></div>'
+  +'<label class="zcheck"><input type="checkbox" id="zy5"'+(x&&x.cal===false?'':' checked')+'> Show pay days on my calendar</label>';
+},save:function(m){var c=classById(m.cid);if(!c)return;var d=zv('zy2');if(!d)return;var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:'pay'};c.items.push(x)}
+ x.title=zv('zy1')||'Pay day';x.due=d;x.rep=zv('zy3');x.amount=parseFloat(zv('zy4'))||0;x.cal=document.getElementById('zy5').checked;touch(x);save();view.modal=null;render()},
+ del:function(m){return m.id?'itemdel:'+m.cid+':'+m.id:''}};
+
+/* bills and pay days on the calendar (and Home's week), as events of the budget page */
+var _r6AllTasks=allTasks;
+allTasks=function(){
+ var out=_r6AllTasks();
+ if(view.noEv)return out;
+ var from=zAddDays(iso(today()),-62),to=zAddDays(iso(today()),400);
+ if(view.calMonth){var a=view.calMonth+'-01';if(a<from)from=zAddDays(a,-7);var e=zMoEnd(view.calMonth);if(e>to)to=zAddDays(e,7)}
+ S.classes.forEach(function(c){
+  if(c.kind!=='budget')return;
+  (c.items||[]).forEach(function(x){
+   if((x.t!=='bill'&&x.t!=='pay')||x.cal===false||!x.due)return;
+   var cc={id:c.id,name:x.t==='bill'?'Bills':'Pay day',short:x.t==='bill'?'Bills':'Pay day',color:x.t==='bill'?'sand':'sage',space:c.space,kind:'budget'};
+   zOcc(x.due,x.rep||(x.t==='bill'?'month':'2week'),from,to).forEach(function(k){
+    out.push({t:{id:x.id+'@'+k,title:x.t==='bill'?x.title+' · '+money(x.amount):(x.title||'Pay day')+(x.amount?' · +'+money(x.amount):''),due:k,done:x.t==='bill'?!!(x.paid&&x.paid[k]):k<iso(today()),bill:x.t==='bill',pay:x.t==='pay'},c:cc,kind:'task',ev:true});
+   });
+  });
+ });
+ return out;
+};
+zOpenTasks=function(){return allTasks().filter(function(x){return !x.t.done&&x.t.due&&!x.t.pay&&!isRefClass(x.c)})};
+// ticking a bill anywhere (calendar, Home) marks it paid; a pay day opens the budget
+window.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-tick*="@"]');if(!b)return;
+ e.preventDefault();e.stopPropagation();
+ var id=b.getAttribute('data-tick'),cid=b.getAttribute('data-c'),k=id.split('@'),c=classById(cid),x=c&&zItem(c,k[0]);
+ if(!x)return;
+ if(x.t==='bill'){view.r6pop='[data-tick="'+id+'"]';ZACT.billpaid(cid,k[0],k[1])}else go('class',cid);
+},true);
+var _r6TaskEdit=ZACT.taskedit;
+ZACT.taskedit=function(cid,tid){
+ if(tid&&tid.indexOf('@')>0){var x=zItem(classById(cid),tid.split('@')[0]);if(x)zOpen(x.t==='bill'?'zbill':'zpay',{cid:cid,id:x.id});return}
+ return _r6TaskEdit.apply(this,arguments);
+};
+
+/* ---------- Mood tracker: one tap a day, a month of soft colours, and a mood mix ----------
+   Items t:'mood' with id 'mood|YYYY-MM-DD' {d,v (1 awful .. 5 great),note}, one per day, so two
+   devices can't make two moods for the same day. */
+var MOODS=[null,{n:'Awful',k:'brick'},{n:'Low',k:'peach'},{n:'Okay',k:'sand'},{n:'Good',k:'sage'},{n:'Great',k:'mist'}];
+function moodFace(v,sz){
+ var mouth={1:'M8.2 16.6c1.1-1.5 2.4-2.2 3.8-2.2s2.7.7 3.8 2.2',2:'M8.6 15.8c1-.8 2.1-1.2 3.4-1.2s2.4.4 3.4 1.2',3:'M8.8 15.2h6.4',4:'M8.6 14.2c1 1 2.1 1.5 3.4 1.5s2.4-.5 3.4-1.5',5:'M8 13.6c1 1.9 2.4 2.9 4 2.9s3-1 4-2.9'}[v]||'M8.8 15.2h6.4';
+ return '<svg viewBox="0 0 24 24" width="'+(sz||24)+'" height="'+(sz||24)+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><circle cx="9" cy="10" r="1.05" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.05" fill="currentColor" stroke="none"/><path d="'+mouth+'"/></svg>';
+}
+function moodOf(c,d){return c?zItem(c,'mood|'+d):null}
+function moodPage(sp,create){
+ var c=firstPage(sp,'mood');
+ if(!c&&create){var id='pg-'+sp+'-mood';c=classById(id);if(!c){c=newPage(sp,'mood','Mood tracker',id,spacePages(sp).length);S.classes.push(c)}}
+ return c;
+}
+function moodPicker(c,d,big){
+ var cur=moodOf(c,d),v=cur?cur.v:0;
+ return '<div class="zmoods'+(big?' big':'')+'">'+[1,2,3,4,5].map(function(i){var M=MOODS[i];
+  return '<button class="zmf'+(v===i?' on':'')+(v&&v!==i?' dim':'')+'" style="'+zcv(M.k)+'" data-zact="moodset:'+(c?c.id:'new')+':'+d+':'+i+'" aria-pressed="'+(v===i)+'" aria-label="'+M.n+'">'+moodFace(i,big?34:24)+(big?'<span>'+M.n+'</span>':'')+'</button>'}).join('')+'</div>';
+}
+ZACT.moodset=function(cid,d,v){
+ v=+v;var c=cid==='new'?moodPage(curSpace(),true):classById(cid);if(!c)return;
+ var id='mood|'+d,x=zItem(c,id);
+ if(x&&x.v===v&&!x.note){c.items=c.items.filter(function(i){return i.id!==id})}
+ else if(x){x.v=v;touch(x)}
+ else c.items.push(touch({id:id,t:'mood',d:d,v:v}));
+ save();render();
+};
+function zMoodPage(c){
+ var td=iso(today()),day=view.zmoodDay&&view.zmoodDay<=td?view.zmoodDay:td,cur=moodOf(c,day),dd=parseISO(day);
+ var top='<section class="zcard zmoodday" style="'+zcv(cur?MOODS[cur.v].k:'grey')+'"><div class="zmdh"><button class="zbtn ghost" data-zact="moodday:-1" aria-label="Day before">‹</button><div><span class="zsoft">'+(day===td?'Today':esc(dd.toLocaleDateString('en-CA',{weekday:'long'})))+'</span><h2>'+(day===td?'How are you feeling?':esc(dd.toLocaleDateString('en-CA',{month:'long',day:'numeric'})))+'</h2></div><button class="zbtn ghost" data-zact="moodday:1" aria-label="Day after"'+(day===td?' disabled':'')+'>›</button></div>'
+  +moodPicker(c,day,true)
+  +(cur?'<textarea class="znotes" data-zmoodnote="'+c.id+':'+day+'" rows="2" placeholder="Anything on your mind? (optional)">'+esc(cur.note||'')+'</textarea>':'<p class="zsoft" style="text-align:center;margin:6px 0 0">Tap the face that fits. You can add a note after.</p>')+'</section>';
+ // this month as a calendar of colours
+ var t=today(),y=t.getFullYear(),m=t.getMonth(),n=new Date(y,m+1,0).getDate(),lead=(new Date(y,m,1).getDay()+6)%7,cells='',cnt=[0,0,0,0,0,0],sum=0,k=0;
+ for(var i=0;i<lead;i++)cells+='<i class="e"></i>';
+ for(var dn=1;dn<=n;dn++){var key=iso(new Date(y,m,dn)),mo=moodOf(c,key);
+  if(mo){cnt[mo.v]++;sum+=mo.v;k++}
+  cells+='<button class="zmcell'+(mo?' y':'')+(key===td?' t':'')+(key>td?' fut':'')+'" '+(mo?'style="'+zcv(MOODS[mo.v].k)+'" ':'')+(key<=td?'data-zact="moodpick:'+key+'"':'disabled')+' title="'+esc(new Date(y,m,dn).toLocaleDateString('en-CA',{month:'short',day:'numeric'}))+(mo?': '+MOODS[mo.v].n:'')+'">'+(mo?moodFace(mo.v,18):'<span>'+dn+'</span>')+'</button>'}
+ var cal=zCard(esc(t.toLocaleDateString('en-CA',{month:'long'})),'cal',k?k+' day'+(k===1?'':'s')+' logged':'','<div class="zmcal"><div class="zmwk">'+['M','T','W','T','F','S','S'].map(function(x){return '<span>'+x+'</span>'}).join('')+'</div><div class="zmgrid">'+cells+'</div></div>');
+ var avg=k?Math.round(sum/k):0;
+ var mix=zCard('Mood mix','smile','This month',k?'<div class="zpie">'+zDonut([5,4,3,2,1].map(function(v){return {v:cnt[v],col:ZC[MOODS[v].k][1]}}),140,16,moodFace(avg,30),MOODS[avg].n.toLowerCase()+' on average')
+   +zLegend([5,4,3,2,1].filter(function(v){return cnt[v]}).map(function(v){return {col:ZC[MOODS[v].k][1],label:MOODS[v].n,val:cnt[v]+' day'+(cnt[v]===1?'':'s')}}))+'</div>':'<p class="zempty">Log a few days and your mood mix shows here.</p>');
+ // the last 30 days as soft bars
+ var bars='';for(var j=29;j>=0;j--){var kk=zAddDays(td,-j),mm=moodOf(c,kk);bars+='<i style="height:'+(mm?mm.v*20:4)+'%;background:'+(mm?ZC[MOODS[mm.v].k][1]:'var(--line)')+'" title="'+esc(parseISO(kk).toLocaleDateString('en-CA',{month:'short',day:'numeric'}))+(mm?': '+MOODS[mm.v].n:'')+'"></i>'}
+ var trend=zCard('Last 30 days','target','','<div class="zmtrend">'+bars+'</div>');
+ return top+'<div class="zg2">'+cal+mix+'</div>'+trend;
+}
+ZACT.moodday=function(n){var td=iso(today()),d=zAddDays(view.zmoodDay||td,+n);view.zmoodDay=d>td?td:d;render()};
+ZACT.moodpick=function(d){view.zmoodDay=d;render();window.scrollTo({top:0,behavior:'smooth'})};
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;var a=t.getAttribute('data-zmoodnote');if(!a)return;var q=a.split(':'),c=classById(q[0]),x=moodOf(c,q[1]);if(!x)return;x.note=t.value;touch(x);save()});
+
+/* ---------- To do with sections (like chapters in a class), and Shopping list by store ----------
+   Sections live in c.sections [{id,name,ord}]; each task has sec (an id, or '' for the top group). */
+function zSecs(c){return (c.sections||[]).slice().sort(function(a,b){return (a.ord||0)-(b.ord||0)})}
+function zSecShut(id){try{return localStorage.getItem('hub:zsec:'+id)==='1'}catch(e){return false}}
+function zAddRow(c,sec,gro,ph){
+ var key=c.id+(sec?'-'+sec:'');
+ return '<div class="zadd"><input id="zadd-'+key+'" data-zenter="taskadd:'+c.id+':'+(sec||'')+'" placeholder="'+esc(ph)+'" autocomplete="off">'
+  +(gro?'':'<input type="date" id="zaddd-'+key+'" aria-label="Due date">')+'<button class="zbtn" data-zact="taskadd:'+c.id+':'+(sec||'')+'">Add</button></div>';
+}
+zListPage=function(c){
+ var gro=c.kind==='groceries',secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var open=c.tasks.filter(function(t){return !t.done}),done=c.tasks.filter(function(t){return t.done});
+ if(!gro)open.sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:(a.due||'9')>(b.due||'9')?1:0});
+ var inSec=function(sid){return open.filter(function(t){return sid?t.sec===sid:!(t.sec&&ids[t.sec])})};
+ var top=inSec(''),body=zAddRow(c,'',gro,gro?(secs.length?'Add an item (any store)':'Add an item, like oat milk'):'Add a task');
+ body+=top.length?top.map(function(t){return zTaskRow(c,t)}).join(''):(secs.length?'':'<p class="zempty">'+(gro?'Your list is empty. Add what you need, then tick things off in the store.':'Nothing to do. Add a task above.')+'</p>');
+ var groups=secs.map(function(s){var L=inSec(s.id),shut=zSecShut(s.id);
+  return '<details class="zsec"'+(shut?'':' open')+' data-zsecfold="'+s.id+'"><summary><span class="zsecic">'+zI(gro?ZIC.store:ZIC.folder,14)+'</span><b>'+esc(s.name)+'</b><em>'+L.length+'</em><button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename or remove '+esc(s.name)+'">'+zI(ZIC.dots,14)+'</button><span class="zsecchev">'+CP_ICO.chev+'</span></summary>'
+   +'<div class="zsecb">'+L.map(function(t){return zTaskRow(c,t)}).join('')+zAddRow(c,s.id,gro,gro?'Add to '+s.name:'Add a task to '+s.name)+'</div></details>'}).join('');
+ if(done.length)groups+='<details class="zdone"'+(gro?' open':'')+'><summary>'+(gro?'In the cart':'Done')+' · '+done.length+'</summary>'+done.map(function(t){return zTaskRow(c,t)}).join('')
+  +'<button class="zlink" data-zact="cleardone:'+c.id+'">'+(gro?'Clear the ticked items':'Clear finished tasks')+'</button></details>';
+ var meta=open.length+(gro?' to buy':' to do')+' · <button class="zlink" data-zact="secnew:'+c.id+'">'+(gro?'+ Add a store':'+ Section')+'</button>';
+ return zCard(gro?'Shopping list':'Tasks',gro?'cart':'check',meta,body+groups,'zlist');
+};
+document.addEventListener('toggle',function(e){var d=e.target;if(!d||!d.getAttribute||!d.getAttribute('data-zsecfold'))return;try{localStorage.setItem('hub:zsec:'+d.getAttribute('data-zsecfold'),d.open?'0':'1')}catch(err){}},true);
+ZACT.taskadd=function(cid,sec){
+ if(typeof sec!=='string')sec='';
+ var c=classById(cid),key=cid+(sec?'-'+sec:''),t=zv('zadd-'+key);if(!c||!t)return;
+ var due=zv('zaddd-'+key),x=touch({id:uid(),title:t,due:due,done:false});if(sec)x.sec=sec;
+ if(due&&S.autoPlan)x.plan=[due];
+ c.tasks.push(x);save();render();
+ setTimeout(function(){var i=document.getElementById('zadd-'+key);if(i)i.focus()},30);
+};
+ZACT.secnew=function(cid){zOpen('zsec',{cid:cid})};
+ZACT.secedit=function(cid,sid,el,e){if(e){e.preventDefault();e.stopPropagation()}zOpen('zsec',{cid:cid,sid:sid})};
+ZM.zsec={html:function(m){var c=classById(m.cid);if(!c)return null;var gro=c.kind==='groceries',s=m.sid&&(c.sections||[]).filter(function(x){return x.id===m.sid})[0];
+ var L=zSecs(c),i=s?L.indexOf(s):-1;
+ return '<h3>'+(s?(gro?'Store':'Section'):(gro?'Add a store':'Add a section'))+'</h3><div class="field"><label for="zq1">Name</label><input id="zq1" value="'+esc(s?s.name:'')+'" placeholder="'+(gro?'Costco, the pharmacy':'Content creation, errands')+'"></div>'
+  +(gro?'<p class="hint" style="margin:-4px 0 8px">Items you add under a store are grouped together, so you can shop one store at a time.</p>':'<p class="hint" style="margin:-4px 0 8px">Group tasks that belong together. Each section has its own Add box.</p>')
+  +(s&&L.length>1?'<div class="sheetlist">'+(i>0?'<button data-zact="secmove:'+c.id+':'+s.id+':-1">Move up</button>':'')+(i<L.length-1?'<button data-zact="secmove:'+c.id+':'+s.id+':1">Move down</button>':'')+'</div>':'');
+},save:function(m){var c=classById(m.cid);if(!c)return;var n=zv('zq1');if(!n)return;c.sections=c.sections||[];
+ var s=m.sid&&c.sections.filter(function(x){return x.id===m.sid})[0];
+ if(!s){var mx=c.sections.reduce(function(a,x){return Math.max(a,x.ord||0)},0);s={id:uid(),ord:mx+1};c.sections.push(s)}
+ s.name=n;touch(s);save();view.modal=null;render()},
+ del:function(m){return m.sid?'secdel:'+m.cid+':'+m.sid:''}};
+ZACT.secmove=function(cid,sid,dir){var c=classById(cid);if(!c)return;var L=zSecs(c),i=L.map(function(x){return x.id}).indexOf(sid),j=i+(+dir);if(i<0||j<0||j>=L.length)return;
+ var s=L.splice(i,1)[0];L.splice(j,0,s);L.forEach(function(x,k){if(x.ord!==k){x.ord=k;touch(x)}});save();render()};
+ZACT.secdel=function(cid,sid){var c=classById(cid);if(!c)return;var gro=c.kind==='groceries';
+ if(!confirm('Remove this '+(gro?'store':'section')+'? Its '+(gro?'items':'tasks')+' stay, at the top of the list.'))return;
+ c.sections=c.sections.filter(function(x){return x.id!==sid});c.tasks.forEach(function(t){if(t.sec===sid){t.sec='';touch(t)}});save();view.modal=null;render()};
+// the edit task pop-up can move a task to another section or store
+var _r6TaskHtml=ZM.ztask.html,_r6TaskSave=ZM.ztask.save;
+ZM.ztask.html=function(m){
+ var h=_r6TaskHtml(m);if(h==null)return h;
+ var c=classById(m.cid),t=c&&zTask(c,m.tid),secs=c?zSecs(c):[];
+ h=h.replace(/<div style="display:flex;gap:10px">/g,'<div class="zfrow">').replace(/<div class="field" style="flex:1">/g,'<div class="field">');
+ if(secs.length&&(c.kind==='todo'||c.kind==='groceries'))h=h.replace('<div class="field"><label for="zt4">','<div class="field"><label for="zt7">'+(c.kind==='groceries'?'Store':'Section')+'</label><select id="zt7"><option value="">'+(c.kind==='groceries'?'Any store':'None')+'</option>'+secs.map(function(s){return '<option value="'+s.id+'"'+(t.sec===s.id?' selected':'')+'>'+esc(s.name)+'</option>'}).join('')+'</select></div><div class="field"><label for="zt4">');
+ return h;
+};
+ZM.ztask.save=function(m){var el=document.getElementById('zt7'),c=classById(m.cid),t=c&&zTask(c,m.tid);if(el&&t)t.sec=el.value;return _r6TaskSave(m)};
+
+/* ---------- Reading & watch list: in progress up top, then up next, then finished; covers from the web ---------- */
+zReadingPage=function(c){
+ var all=c.items.filter(function(x){return x.t==='read'}),f=view.zread||'all',q=(view.zreadQ||'').trim().toLowerCase();
+ if(f==='doing'||f==='done')f='all';
+ var L=all.filter(function(x){return (f==='all'||x.type===f)&&(!q||(x.title+' '+(x.by||'')).toLowerCase().indexOf(q)>-1)});
+ var cnt=function(k){return all.filter(function(x){return x.type===k}).length};
+ var bar='<div class="zrdbar"><label class="zsearch">'+zI(ZIC.search,15)+'<input id="zreadq" data-zreadq="1" placeholder="Search your list" value="'+esc(view.zreadQ||'')+'" autocomplete="off"></label><div class="ztabs">'+[['all','All '+all.length],['book','Books '+cnt('book')],['show','Shows '+cnt('show')],['film','Films '+cnt('film')]].map(function(t){return '<button class="'+(f===t[0]?'on':'')+'" data-zact="readf:'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div><button class="zbtn" data-zact="readnew:'+c.id+'">+ Add</button></div>';
+ var cover=function(x,cls){var hue=Math.abs(String(x.title).split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%360;
+  return x.cover?'<img class="'+cls+'" src="'+esc(x.cover)+'" alt="" loading="lazy">':'<span class="'+cls+' zbkph" style="background:linear-gradient(160deg,hsl('+hue+',18%,76%),hsl('+hue+',16%,58%))"><b>'+esc(x.title)+'</b></span>'};
+ var stars=function(x){return x.rating?'<span class="zstars">'+'★★★★★'.slice(0,x.rating)+'<i>'+'★★★★★'.slice(x.rating)+'</i></span>':''};
+ var typeName={book:'Book',show:'Show',film:'Film'};
+ var doing=L.filter(function(x){return x.status==='doing'}),want=L.filter(function(x){return x.status!=='doing'&&x.status!=='done'}),fin=L.filter(function(x){return x.status==='done'}).sort(function(a,z){return (z.fin||z.savedAt||'')<(a.fin||a.savedAt||'')?-1:1});
+ var h=bar;
+ if(!all.length)return h+'<div class="zrdempty">'+zI(ZIC.book,28)+'<p>Add a book, show or film you want to get to, or one you’re into right now. Search and Doable finds the cover.</p><button class="zbtn" data-zact="readnew:'+c.id+'">+ Add your first one</button></div>';
+ if(doing.length)h+='<h2 class="zh2 zrdh">In progress <em>'+doing.length+'</em></h2><div class="zrdrow">'+doing.map(function(x){
+   return '<button class="zrd" data-zact="readedit:'+c.id+':'+x.id+'">'+cover(x,'zrdc')+'<span class="zrdt"><small>'+esc(typeName[x.type]||'Book')+'</small><b>'+esc(x.title)+'</b>'+(x.by?'<span class="zsoft">'+esc(x.by)+'</span>':'')
+    +'<span class="zrdp"><span class="zbar"><i style="width:'+(x.progress||0)+'%"></i></span><em>'+(x.progress||0)+'%</em></span></span></button>'}).join('')+'</div>';
+ if(want.length)h+='<h2 class="zh2 zrdh">Up next <em>'+want.length+'</em></h2><div class="zgal">'+want.map(function(x){
+   return '<button class="zbk" data-zact="readedit:'+c.id+':'+x.id+'">'+cover(x,'')+'<b>'+esc(x.title)+'</b>'+(x.by?'<small>'+esc(x.by)+'</small>':'')+'</button>'}).join('')+'</div>';
+ if(fin.length)h+='<details class="zrdfin"'+(fin.length<=12||view.zread==='done'?' open':'')+'><summary><h2 class="zh2 zrdh">Finished <em>'+fin.length+'</em></h2></summary><div class="zgal">'+fin.map(function(x){
+   return '<button class="zbk fin" data-zact="readedit:'+c.id+':'+x.id+'">'+cover(x,'')+'<b>'+esc(x.title)+'</b>'+(x.by?'<small>'+esc(x.by)+'</small>':'')+stars(x)+'</button>'}).join('')+'</div></details>';
+ if(!L.length)h+='<p class="zempty">Nothing matches.</p>';
+ return h;
+};
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-zreadq'))return;view.zreadQ=t.value;var s=t.selectionStart;render();var n=document.getElementById('zreadq');if(n){n.focus();try{n.setSelectionRange(s,s)}catch(err){}}});
+ZACT.readnew=function(cid){zOpen('zread',{cid:cid,type:view.zread&&RSTAT[view.zread]?view.zread:'book'})};
+ZACT.readedit=function(cid,id){var x=zItem(classById(cid),id);if(x)zOpen('zread',{cid:cid,id:id,cover:x.cover,type:x.type||'book'})};
+ZM.zread={wide:true,html:function(m){var x=m.id&&zItem(classById(m.cid),m.id),ty=m.type||(x&&x.type)||'book',st=x?x.status:'want';
+ var lab={book:['Want to read','Reading','Finished'],show:['Want to watch','Watching','Finished'],film:['Want to watch','Watching','Watched']}[ty];
+ var res=m.results;
+ return '<h3>'+(x?'Edit':'Add to your list')+'</h3><div class="zseg zrdtype">'+RTYPES.map(function(r){return '<button type="button" class="'+(ty===r[0]?'on':'')+'" data-zact="readtype:'+r[0]+'">'+r[1]+'</button>'}).join('')+'</div>'
+  +'<div class="zrdform"><div class="zrdcov">'+(m.cover?'<img src="'+esc(m.cover)+'" alt="">':'<span>'+zI(ZIC.img,22)+'</span>')
+  +'<label class="zlink">'+(m.cover?'Use my own picture':'Add a picture')+'<input type="file" accept="image/*" data-zmcover="1" style="display:none"></label>'+(m.cover?'<button type="button" class="zlink" data-zact="mcoveroff">Remove</button>':'')+'</div>'
+  +'<div class="zrdfields"><div class="field"><label for="zr1">Title</label><div class="zfind"><input id="zr1" value="'+esc(x?x.title:(m.q||''))+'" data-zenter="readfind" placeholder="'+(ty==='book'?'The Midnight Library':ty==='show'?'Abbott Elementary':'Little Women')+'" autocomplete="off"><button type="button" class="zbtn" data-zact="readfind">'+zI(ZIC.search,14)+' Find cover</button></div></div>'
+  +(res==='loading'?'<p class="zsoft">Looking…</p>':res&&res.length?'<div class="zres">'+res.map(function(r,i){return '<button type="button" class="zresi'+(m.cover===r.cover?' on':'')+'" data-zact="readpick:'+i+'"><img src="'+esc(r.cover)+'" alt=""><b>'+esc(r.title)+'</b><small>'+esc([r.by,r.year].filter(Boolean).join(' · '))+'</small></button>'}).join('')+'</div>':res&&res.err?'<p class="zsoft">'+esc(res.err)+'</p>':'')
+  +'<div class="field"><label for="zr2">'+(ty==='book'?'Author':'Where to watch, or who made it')+'</label><input id="zr2" value="'+esc(x?x.by||'':(m.by||''))+'"></div>'
+  +'<div class="zfrow"><div class="field"><label for="zr3">Status</label><select id="zr3">'+['want','doing','done'].map(function(s,i){return '<option value="'+s+'"'+(st===s?' selected':'')+'>'+lab[i]+'</option>'}).join('')+'</select></div>'
+  +'<div class="field"><label for="zr4">Rating</label><select id="zr4">'+[0,1,2,3,4,5].map(function(n){return '<option value="'+n+'"'+((x?x.rating||0:0)===n?' selected':'')+'>'+(n?'★'.repeat(n):'None')+'</option>'}).join('')+'</select></div></div>'
+  +'<div class="field"><label for="zr5">How far through: <span id="zr5v">'+esc(x?x.progress||0:0)+'%</span></label><input id="zr5" type="range" min="0" max="100" step="5" value="'+esc(x?x.progress||0:0)+'" oninput="document.getElementById(\'zr5v\').textContent=this.value+\'%\'"></div></div></div>';
+},save:function(m){var c=classById(m.cid);if(!c)return;var t=zv('zr1');if(!t)return;var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:'read'};c.items.push(x)}
+ var was=x.status;x.type=m.type||'book';x.title=t;x.by=zv('zr2');x.status=zv('zr3');x.rating=+zv('zr4')||0;x.progress=+zv('zr5')||0;
+ if(x.status==='done'){x.progress=100;if(was!=='done')x.fin=iso(today())}
+ if(m.cover)x.cover=m.cover;else delete x.cover;touch(x);save();view.modal=null;render()},
+ del:function(m){return m.id?'itemdel:'+m.cid+':'+m.id:''}};
+ZACT.readtype=function(ty){var m=view.modal;if(!m)return;m.q=zv('zr1');m.by=zv('zr2');m.type=ty;m.results=null;render()};
+ZACT.readfind=async function(){
+ var m=view.modal;if(!m||m.kind!=='zread')return;var q=zv('zr1');if(!q)return;
+ m.q=q;m.by=zv('zr2');m.results='loading';render();
+ var r;try{r=await zCoverSearch(q,m.type||'book')}catch(e){r=null}
+ if(view.modal!==m)return;
+ m.results=r&&r.length?r:{err:r?'No covers found. Check the spelling, or add your own picture.':'Couldn’t reach the cover search. Check your connection, or add your own picture.'};
+ render();
+};
+ZACT.readpick=function(i){
+ var m=view.modal;if(!m||!m.results||!m.results[i])return;var r=m.results[i];
+ m.cover=r.cover;m.q=r.title;m.by=r.by||zv('zr2');render();
+ var a=document.getElementById('zr1'),b=document.getElementById('zr2');if(a)a.value=r.title;if(b&&r.by)b.value=r.by;
+};
+// books: Open Library; shows: TVmaze; films: the iTunes store (all free, no account needed)
+function zJsonp(url,ms){return new Promise(function(res,rej){var cb='zjp'+Date.now()+Math.floor(Math.random()*1e4),s=document.createElement('script'),done=false;
+ window[cb]=function(d){done=true;res(d);cleanup()};var cleanup=function(){try{delete window[cb]}catch(e){window[cb]=undefined}if(s.parentNode)s.remove()};
+ s.onerror=function(){if(!done){rej(new Error('jsonp'));cleanup()}};s.src=url+(url.indexOf('?')>-1?'&':'?')+'callback='+cb;document.head.appendChild(s);
+ setTimeout(function(){if(!done){rej(new Error('timeout'));cleanup()}},ms||8000)})}
+async function zCoverSearch(q,type){
+ var enc=encodeURIComponent(q);
+ if(type==='show'){
+  var r=await fetch('https://api.tvmaze.com/search/shows?q='+enc);var d=await r.json();
+  return (d||[]).filter(function(x){return x.show&&x.show.image}).slice(0,8).map(function(x){var s=x.show;return {title:s.name,by:(s.network&&s.network.name)||(s.webChannel&&s.webChannel.name)||'',year:(s.premiered||'').slice(0,4),cover:String(s.image.medium||s.image.original).replace(/^http:/,'https:')}});
+ }
+ if(type==='film'){
+  // (the store's own "movie" filter answers with nothing, so search everything and keep the films)
+  var j=await zJsonp('https://itunes.apple.com/search?limit=50&term='+enc);
+  return ((j&&j.results)||[]).filter(function(x){return x.artworkUrl100&&x.kind==='feature-movie'}).slice(0,8).map(function(x){return {title:x.trackName,by:x.artistName||'',year:(x.releaseDate||'').slice(0,4),cover:x.artworkUrl100.replace(/100x100bb/,'400x600bb')}});
+ }
+ // books: Apple Books first (quick covers), Open Library if it finds nothing
+ var out=[];
+ try{var j2=await zJsonp('https://itunes.apple.com/search?media=ebook&limit=16&term='+enc);
+  out=((j2&&j2.results)||[]).filter(function(x){return x.artworkUrl100&&!/summary|conversation starters|study guide|workbook/i.test(x.trackName)}).slice(0,8).map(function(x){
+   var t=String(x.trackName||''),short=t.replace(/\s*[:(].*$/,'');return {title:short.length>=3?short:t,by:x.artistName||'',year:(x.releaseDate||'').slice(0,4),cover:x.artworkUrl100.replace(/100x100bb/,'400x600bb')}})}catch(e){}
+ if(!out.length){var r2=await fetch('https://openlibrary.org/search.json?limit=16&fields=title,author_name,first_publish_year,cover_i&q='+enc);var d2=await r2.json();
+  out=((d2&&d2.docs)||[]).filter(function(x){return x.cover_i}).slice(0,8).map(function(x){return {title:x.title,by:(x.author_name||[])[0]||'',year:x.first_publish_year||'',cover:'https://covers.openlibrary.org/b/id/'+x.cover_i+'-M.jpg'}})}
+ return out;
+}
+
+/* ---------- Calendar: a Birthdays & anniversaries list, notes when you add an event, clearer people ---------- */
+function zBirthdays(sp){
+ var c=calPage(sp);if(!c)return [];var td=iso(today()),ppl={};(c.contacts||[]).forEach(function(p){ppl[p.id]=p});
+ return (c.tasks||[]).filter(function(t){return t.rep==='year'&&t.due}).map(function(t){
+  var nx=nextYearly(t.due),y0=+t.due.slice(0,4),yrs=+nx.slice(0,4)-y0;
+  return {t:t,c:c,next:nx,years:y0>1900&&yrs>0?yrs:0,p:t.who&&ppl[t.who]};
+ }).sort(function(a,b){return a.next<b.next?-1:a.next>b.next?1:0});
+}
+function zBdList(sp){
+ var L=zBirthdays(sp),td=iso(today());
+ var head='<div class="zbdhead"><div><h2 class="zh2">Birthdays &amp; anniversaries</h2><p class="zsoft">Everything that comes back every year, in order. The years show when you saved the first date.</p></div><button class="zbtn" data-zact="bdnew">+ Add one</button></div>';
+ if(!L.length)return '<section class="zcard zbdlist">'+head+'<p class="zempty">None yet. Add a birthday or anniversary and tick “Repeats every year”.</p></section>';
+ var cur='',h='';
+ L.forEach(function(b){
+  var mk=b.next.slice(0,7);if(mk!==cur){cur=mk;h+='<div class="zbdmon">'+esc(parseISO(b.next).toLocaleDateString('en-CA',{month:'long',year:parseISO(b.next).getFullYear()!==today().getFullYear()?'numeric':undefined}))+'</div>'}
+  var cd=cpCountdown(b.next),isBd=!/anniv|wedding|married/i.test(b.t.title),col=b.p?defPal(b.p.color).bar:'#C0A0AA';
+  var yrs=b.years?(isBd?'Turns '+b.years:b.years+' year'+(b.years===1?'':'s')):'';
+  h+='<button class="zbdrow'+(cd.n===0?' today':'')+'" data-zact="taskedit:'+b.c.id+':'+b.t.id+'"><span class="zav" style="background:'+col+'">'+zI(isBd?ZIC.cake:ZIC.heart,16)+'</span>'
+   +'<span class="zbdtx"><b>'+esc(b.t.title)+'</b><small>'+esc(parseISO(b.next).toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+(yrs?' · '+esc(yrs):'')+(b.p?' · '+esc(b.p.name):'')+'</small></span>'
+   +'<em>'+esc(cd.n===0?'Today':cd.n===1?'Tomorrow':'in '+cd.t)+'</em></button>';
+ });
+ return '<section class="zcard zbdlist">'+head+h+'</section>';
+}
+ZACT.bdnew=function(){var c=calPage(curSpace(),true);zOpen('zevent',{cid:c.id,isNew:true,due:iso(today()),rep:true})};
+ZACT.caltab=function(t){view.calTab=t==='bd'?'bd':'';render()};
+ZACT.calbd=function(){view.calTab='bd';go('calendar')};
+var _r6Cal=viewCalendar;
+viewCalendar=function(){
+ var sp=curSpace();
+ if(sp==='school')return _r6Cal();
+ var tabs='<div class="zseg zcaltabs"><button class="'+(view.calTab==='bd'?'':'on')+'" data-zact="caltab:cal">'+zI(ZIC.cal,14)+' Calendar</button><button class="'+(view.calTab==='bd'?'on':'')+'" data-zact="caltab:bd">'+zI(ZIC.cake,14)+' Birthdays &amp; anniversaries</button></div>';
+ if(view.calTab==='bd')return tabs+zBdList(sp);
+ var h=_r6Cal();
+ // People: say plainly what it is for
+ h=h.replace('<span class="zsoft">People</span>','<span class="zsoft">Colour by person</span>')
+  .replace('>+ Add person</button>','>+ Add a person</button>');
+ var cal=calPage(sp);
+ if(sp==='personal'&&cal&&!(cal.contacts||[]).length)h=h.replace('<div class="zcalbar zppl">','<div class="zcalbar zppl"><p class="zpplhint">Add the people in your life, like your kids or your partner, and give each one a colour. Pick a person when you add an event, and tap a name to show or hide their events.</p>');
+ return tabs+h;
+};
+ZM.zevent={html:function(m){var c=classById(m.cid);if(!c)return null;var ppl=c.contacts||[];
+ return '<h3>'+(m.rep?'Add a birthday or anniversary':'Add an event')+'</h3><div class="field"><label for="ze1">What</label><input id="ze1" placeholder="'+(m.rep?'Mom’s birthday':'Dentist, soccer practice, Mom’s birthday')+'"></div>'
+  +'<div class="zfrow"><div class="field"><label for="ze2">'+(m.rep?'Date (with the year it started, if you know it)':'Date')+'</label><input id="ze2" type="date" value="'+esc(m.due)+'"></div>'+(m.rep?'':'<div class="field"><label for="ze3">Time (optional)</label><input id="ze3" type="time"></div>')+'</div>'
+  +(ppl.length?'<div class="field"><label for="ze5">Who is it for</label><select id="ze5"><option value="">Everyone</option>'+ppl.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>'}).join('')+'</select></div>':'')
+  +'<label class="zcheck"><input type="checkbox" id="ze6"'+(m.rep?' checked':'')+'> Repeats every year (a birthday or anniversary)</label>'
+  +'<div class="field"><label for="ze4">Notes</label><textarea id="ze4" rows="3" placeholder="Address, what to bring, gift ideas"></textarea></div>';
+},save:function(m){var c=classById(m.cid);if(!c)return;var t=zv('ze1');if(!t)return;
+ c.tasks.push(touch({id:uid(),title:t,due:zv('ze2'),time:zv('ze3'),who:zv('ze5'),rep:document.getElementById('ze6').checked?'year':'',notes:zv('ze4'),done:false}));save();view.modal=null;render()},saveLabel:'Add'};
+// the birthdays widget: tap its header (or Calendar ›) to open the list
+var _r6NewWidget=zNewWidget;
+zNewWidget=function(w,d,sp){
+ var t=today(),td=iso(t);
+ if(w.type==='birthdays'){
+  var B=zBirthdays(sp).filter(function(b){return daysBetween(t,parseISO(b.next))<=60});
+  return zWCardLink(w,d,d.name,'Calendar ›','calbd',B.length?B.slice(0,4).map(function(b){var cd=cpCountdown(b.next),col=b.p?defPal(b.p.color).bar:defPal('rose').bar;
+   return '<div class="wdbd" data-zact="taskedit:'+b.c.id+':'+b.t.id+'" role="button" tabindex="0"><span class="zav" style="background:'+col+'">'+esc((b.t.title||'?').charAt(0).toUpperCase())+'</span><span><b>'+esc(b.t.title)+'</b><small>'+esc(parseISO(b.next).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}))+(b.years?' · '+(/anniv|wedding|married/i.test(b.t.title)?b.years+' yrs':'turns '+b.years):'')+'</small></span><em>'+esc(cd.n===0?'Today':cd.n===1?'Tomorrow':cd.t)+'</em></div>'}).join('')
+   :'<p class="zsoft">No birthdays in the next two months. <button class="zlink" data-zact="bdnew">Add one</button></p>');
+ }
+ if(w.type==='mood'){
+  var mc=moodPage(sp),days='';
+  for(var i=6;i>=0;i--){var k=zAddDays(td,-i),mo=moodOf(mc,k);days+='<span class="wdmd'+(k===td?' t':'')+'" title="'+esc(parseISO(k).toLocaleDateString('en-CA',{weekday:'long'}))+'"'+(mo?' style="'+zcv(MOODS[mo.v].k)+'"':'')+'>'+(mo?moodFace(mo.v,16):'')+'<small>'+esc(parseISO(k).toLocaleDateString('en-CA',{weekday:'narrow'}))+'</small></span>'}
+  var cur=moodOf(mc,td);
+  return zWCard(w,d,cur?'Feeling '+MOODS[cur.v].n.toLowerCase():'How are you today?','',moodPicker(mc,td,false)+'<div class="wdmweek">'+days+'</div>',mc?mc.id:'');
+ }
+ if(w.type==='payday'||w.type==='bills'||w.type==='money'){
+  var bc=firstPage(sp,'budget');if(!bc)return zWCard(w,d,d.name,'',zNoPage('budget',sp));
+  var b=zBudget(bc);
+  if(w.type==='payday')return zWCard(w,d,d.name,'',zPayCard(bc,b,true),bc.id);
+  if(w.type==='bills'){var bl=zBillsIn(b,zAddDays(td,-31),zAddDays(td,30)).filter(function(o){return !o.paid||o.d>=td}).slice(0,4);
+   return zWCard(w,d,d.name,'',bl.length?bl.map(function(o){return zBillRow(bc,o)}).join(''):'<p class="zsoft">No bills coming up. <button class="zlink" data-zact="billnew:'+bc.id+'">Add a bill</button></p>',bc.id)}
+  return zWCard(w,d,d.name,esc(t.toLocaleDateString('en-CA',{month:'long'})),'<div class="zpie sm">'+zDonut([{v:b.inc,col:ZC.sage[1]},{v:b.spent,col:ZC.peach[1]}],96,12,(b.inc-b.spent>=0?'+':'−')+money(Math.abs(b.inc-b.spent)),'')
+   +zLegend([{col:ZC.sage[1],label:'In',val:money(b.inc)},{col:ZC.peach[1],label:'Out',val:money(b.spent)}])+'</div>',bc.id);
+ }
+ if(w.type==='budget'){
+  var c=firstPage(sp,'budget');if(!c)return zWCard(w,d,d.name,'',zNoPage('budget',sp));
+  var b2=zBudget(c),spent=w.show==='spent',pct=b2.total?Math.round(b2.spent/b2.total*100):0;
+  return zWCard(w,d,esc(c.name),esc(t.toLocaleDateString('en-CA',{month:'long'})),'<div class="zrow2">'+zDonut(zSpendSegs(c,b2),84,11,spent?'':pct+'%','')+'<div><div class="zbig">'+(spent?money(b2.spent)+' spent':money(b2.left)+' left')+'</div><div class="zsoft">'+(spent?money(b2.left)+' left of '+money(b2.total):money(b2.spent)+' of '+money(b2.total)+' spent')+'</div></div></div>'
+   +'<button class="zlink" data-zact="spendnew:'+c.id+'">+ Add spending</button>',c.id);
+ }
+ return _r6NewWidget(w,d,sp);
+};
+// a widget whose header goes somewhere through an action (not a page)
+function zWCardLink(w,d,title,meta,act,body){
+ var h=zWCard(w,d,title,meta,body);
+ return h.replace('<div class="wdh">','<div class="wdh" data-zact="'+act+'" role="button" tabindex="0">');
+}
+// new widgets and page types
+Object.assign(WDEF,{
+ mood:{name:'Mood',desc:'One tap a day, and your week in faces',sp:['work','personal'],ico:'smile',soft:'rose',col:'main',size:'half'},
+ payday:{name:'Pay day',desc:'Days until you get paid',sp:['work','personal'],ico:'payday',soft:'sage',col:'side',size:'full'},
+ bills:{name:'Bills',desc:'Bills due soon, tick them paid',sp:['personal'],ico:'bill',soft:'sand',col:'main',size:'half'},
+ money:{name:'Money in and out',desc:'This month, as a pie',sp:['personal'],ico:'wallet',soft:'mist',col:'main',size:'half'}
+});
+WDEF.groceries.name='Shopping list';WDEF.groceries.desc='Your list, by store';
+WDEF.budget.desc='Money left or spent this month, as a pie';
+KINDS.mood={name:'Mood tracker',tpl:'Mood tracker',desc:'How you feel each day, with a month of colours',ico:'smile',col:'rose'};
+KINDS.groceries.name='Shopping list';KINDS.groceries.tpl='Shopping list';KINDS.groceries.desc='Groceries and anything else, sorted by store';
+PAGE_PAL.mood='rose';
+TEMPLATES.personal.splice(3,0,'mood');TEMPLATES.work.push('mood');
+STARTER.personal.forEach(function(p){if(p[0]==='groceries')p[1]='Shopping list'});
+var _r6ViewPage=viewPage;
+viewPage=function(c){
+ if(c.kind!=='mood')return _r6ViewPage(c);
+ return '<div class="zpage" style="'+zcv(zSoftOf(c))+'">'+zMoodPage(c)
+  +cpSetHead('Page settings','pg')+'<button data-zact="pageedit:'+c.id+'">Rename or recolour</button>'+coverControls(c.id,c)
+  +'<button class="cpdelcls" data-zact="pagedel:'+c.id+'">Delete page</button></div></div>';
+};
+
+/* ---------- Plan my week: events and due dates show on their day, and a plain explanation ----------
+   Due = when it's due. Planned = the day you'll work on it. Mom expected adding something due tomorrow
+   to plan it for tomorrow, so that is now a setting (S.autoPlan) and the page says how it works. */
+viewPlan=function(){
+ view.noEv=true;var all;try{all=allTasks().filter(function(x){return !isRefClass(x.c)})}finally{view.noEv=false}
+ var evs=allTasks().filter(function(x){return x.ev&&!isRefClass(x.c)});
+ var col=cpVarRefs(['kplan','ktray']),real=cpSiteColors('plan'),t=today(),off=view.planWeek||0,td=iso(t);
+ var ws=weekStart(off),days=[];for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(iso(d))}
+ var we=new Date(ws);we.setDate(ws.getDate()+6);
+ var label=off===0?'This week':off===1?'Next week':off===-1?'Last week':'Week of '+ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+ var range=ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+' – '+we.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+ var byDay={};days.forEach(function(d){byDay[d]=[]});
+ all.forEach(function(x){var d=planDay(x.t);if(d&&byDay[d])byDay[d].push(x)});
+ var horizon=new Date(we);horizon.setDate(we.getDate()+14);
+ var tray=all.filter(function(x){
+  if(x.t.done)return false;var pd=planDay(x.t);
+  if(pd&&(byDay[pd]||pd>=iso(weekStart(0))))return false;
+  if(!x.t.due)return x.kind==='task';
+  return parseISO(x.t.due)<=horizon;
+ }).sort(function(a,b){return (a.t.due||'9')<(b.t.due||'9')?-1:1});
+ var planned=0;days.forEach(function(d){planned+=byDay[d].length});
+ var help='';try{if(localStorage.getItem('hub:planhelp')!=='0')help='<div class="zplanhelp"><span class="zic">'+zI(ZIC.list,16)+'</span><div><b>How planning works</b><p><b>Due</b> is when something is due. <b>Plan</b> is the day you’ll work on it, which you choose. Things you add show up under <b>To plan</b>; drag one onto a day (or tap it and pick a day). Events and due dates show on their day in grey so you can plan around them.</p></div><button class="zmini" data-zact="planhelp" aria-label="Hide this">×</button></div>'}catch(e){}
+ var W='<section class="cpsec" id="p-week">'+cpHead('kplan',col.kplan,label,planned?planned+' planned':'',esc(range)+(window.matchMedia&&matchMedia('(hover:none)').matches?' · tap any item to choose its day':' · drag work onto a day, or click it to choose a day'),
+   '<div class="cpseg"><button data-planwk="-1" aria-label="Previous week">‹</button><button data-planwk="0">This week</button><button data-planwk="1" aria-label="Next week">›</button></div>');
+ W+='<div class="cpweek">'+days.map(function(d){
+  var dd=parseISO(d),isT=d===td,past=dd<t;
+  var dueHere=all.filter(function(x){return x.t.due===d&&!x.t.done&&planDay(x.t)!==d});
+  var evHere=evs.filter(function(x){return x.t.due===d}).sort(function(a,b){return (a.t.time||'')<(b.t.time||'')?-1:1});
+  var info=evHere.map(function(x){return '<button class="zpinfo ev" data-zact="taskedit:'+x.c.id+':'+x.t.id+'"><i style="background:'+palHex(x.c.color)+'"></i><span>'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em> ':'')+esc(x.t.title)+'</span></button>'}).join('')
+   +dueHere.map(function(x){return '<button class="zpinfo due" data-planpick="'+planKey(x)+'" title="Due this day. Tap to choose a day to work on it."><i style="background:'+palHex(x.c.color)+'"></i><span><em>Due</em> '+esc(x.t.title)+'</span></button>'}).join('');
+  return '<div class="cpwday'+(isT?' today':'')+(past?' past':'')+'" data-planday="'+d+'">'
+   +'<div class="cpwhead"><span class="cpwname">'+esc(dd.toLocaleDateString('en-CA',{weekday:'short'}))+'</span><span class="cpwnum">'+dd.getDate()+'</span></div>'
+   +'<div class="cpwlist">'+byDay[d].map(function(x){return planCard(x,d)}).join('')+(info?'<div class="zpinfos">'+info+'</div>':'')
+   +(!byDay[d].length&&!info?'<div class="cpwempty">'+(isT?'Nothing planned today':'Free')+'</div>':'')+'</div></div>';
+ }).join('')+'</div></section>';
+ var T='<section class="cpsec" id="p-tray">'+cpHead('ktray',col.ktray,'To plan',tray.length?tray.length+'':'',tray.length?'Not on a day yet. Drag each one to the day you’ll work on it':'Everything coming up has a day','');
+ T+=tray.length?'<div class="cptray">'+tray.map(function(x){return planCard(x,'')}).join('')+'</div>':'<div class="cpempty">Nothing to plan right now. Tasks and assignments you add will appear here, so you can give each one a day to work on it.</div>';
+ T+='</section>';
+ var G=cpSetHead('Planner settings','plan')+'<button data-zact="autoplan">Plan new to-dos on their due date: '+(S.autoPlan?'On':'Off')+'</button>'+(help?'':'<button data-zact="planhelpon">How planning works</button>')+'<button data-secopen="1">Colours</button></div>';
+ return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+help+W+T+G+'</div></div>';
+};
+ZACT.planhelp=function(){try{localStorage.setItem('hub:planhelp','0')}catch(e){}render()};
+ZACT.planhelpon=function(){try{localStorage.removeItem('hub:planhelp')}catch(e){}render();window.scrollTo({top:0,behavior:'smooth'})};
+ZACT.autoplan=function(){S.autoPlan=!S.autoPlan;save();render()};
+SETTINGS_KEYS.push('autoPlan','spaceMail');
+
+/* ---------- calendar import in Work and Personal: into your calendar (events) or a to-do page (tasks) ---------- */
+var _r6IcsOpen=openIcsModal;
+openIcsModal=function(cid){
+ if(curSpace()==='school')return _r6IcsOpen(cid);
+ var c=calPage(curSpace(),true);save();
+ ics={events:[],target:c.id,showPast:false,newName:'',space:curSpace()};
+ xmOpen(icsPickHtml());
+};
+var _r6IcsGuess=icsGuess;
+icsGuess=function(ev){return (ics&&ics.space)?null:_r6IcsGuess(ev)};
+var _r6IcsDup=icsDup;
+icsDup=function(cid,ev){var c=classById(cid);if(c&&c.kind){var t=ev.title.toLowerCase();return (c.tasks||[]).some(function(x){return (x.title||'').toLowerCase()===t&&(x.due||'')===ev.due})}return _r6IcsDup(cid,ev)};
+var _r6IcsList=icsListHtml;
+icsListHtml=function(){
+ if(!(ics&&ics.space))return _r6IcsList();
+ var h=_r6IcsList(),sp=ics.space,cal=calPage(sp,true);
+ var opts='<option value="'+cal.id+'"'+(ics.target===cal.id?' selected':'')+'>My calendar (as events)</option>'+spacePages(sp).filter(function(c){return c.kind==='todo'}).map(function(c){return '<option value="'+c.id+'"'+(ics.target===c.id?' selected':'')+'>'+esc(c.name)+' (as tasks)</option>'}).join('');
+ return h.replace(/<select id="xmTarget">[\s\S]*?<\/select>/,'<select id="xmTarget">'+opts+'</select>').replace(/<p style="font-size:13px;margin:-2px 0 10px">[\s\S]*?<\/p>/,'');
+};
+var _r6IcsGo=XM.icsgo;
+XM.icsgo=function(){
+ if(!(ics&&ics.space))return _r6IcsGo();
+ var t0=iso(today()),c=classById(ics.target);if(!c)return;
+ var pick=ics.events.filter(function(ev){return ev.sel&&(ics.showPast||ev.due>=t0)}),added=0;
+ pick.forEach(function(ev){if(icsDup(c.id,ev))return;c.tasks.push(touch({id:uid(),title:ev.title,due:ev.due,time:ev.time,notes:ev.notes,done:false}));added++});
+ save();
+ xmOpen('<h2>Done</h2><p>Added <b>'+added+'</b> '+(c.kind==='cal'?'event':'task')+(added===1?'':'s')+' to <b>'+esc(c.kind==='cal'?'your calendar':c.name)+'</b>.</p><div class="xacts"><button class="xbtn primary" data-xm="close">Done</button></div>');
+ ics=null;render();
+};
+
+/* ---------- an email account for each space ----------
+   S.spaceMail = {school:{addr,kind:'outlook'|'google'}, work:..., personal:...}. Email links and buttons
+   (Gmail, Outlook, a professor's Email button) open with that space's account. On phones they open
+   the website with the right account, since the Gmail and Outlook apps can't be told which account to use. */
+function zMailGuess(addr){return /@(gmail|googlemail)\.com$/i.test(addr)?'google':'outlook'}
+function zMailFor(sp){var m=S.spaceMail&&S.spaceMail[sp];return m&&m.addr?m:null}
+function zMailUrl(href,m){
+ var u;try{u=new URL(href,location.href)}catch(e){return null}
+ var host=u.hostname,a=m.addr,enc=encodeURIComponent(a);
+ var compose=/outlook\.office(365)?\.com$/.test(host)&&/deeplink\/compose/.test(u.pathname);
+ if(compose){
+  if(m.kind==='google')return 'https://mail.google.com/mail/u/'+enc+'/?view=cm&fs=1&to='+encodeURIComponent(u.searchParams.get('to')||'')+'&su='+encodeURIComponent(u.searchParams.get('subject')||'');
+  u.searchParams.set('login_hint',a);return u.toString();
+ }
+ if(/^mail\.google\.com$/.test(host)){
+  if(m.kind!=='google')return null;
+  var rest=u.pathname.replace(/^\/mail(\/u\/[^/]+)?\/?/,'');
+  return 'https://mail.google.com/mail/u/'+enc+'/'+rest+u.search+u.hash;
+ }
+ if(/^(outlook\.office(365)?\.com|outlook\.live\.com)$/.test(host)){
+  if(m.kind!=='outlook')return null;
+  u.searchParams.set('login_hint',a);return u.toString();
+ }
+ if(/^gmail\.com$|^www\.gmail\.com$/.test(host)&&m.kind==='google')return 'https://mail.google.com/mail/u/'+enc+'/';
+ return null;
+}
+window.addEventListener('click',function(e){
+ var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;
+ var m=zMailFor(curSpace());if(!m)return;
+ var href=a.getAttribute('href'),nu=zMailUrl(href,m);if(!nu||nu===href)return;
+ var app=a.getAttribute('data-phoneapp');
+ a.setAttribute('href',nu);if(app!=null)a.removeAttribute('data-phoneapp');
+ setTimeout(function(){a.setAttribute('href',href);if(app!=null)a.setAttribute('data-phoneapp',app)},120);
+},true);
+ZACT.mailset=function(){zOpen('zmail')};
+ZM.zmail={html:function(){
+ var M=S.spaceMail||{};
+ return '<h3>Email for each space</h3><p class="hint" style="margin:-4px 0 12px">Email links and Email buttons open with the account you set here, so School opens your school email and Personal opens your own. On a phone they open in the browser, since the mail apps can’t be told which account to use.</p>'
+  +spacesOn().map(function(s){var m=M[s.id]||{};
+   return '<div class="zmailrow"><i style="background:'+spaceSideBg(s.id)+'">'+spaceIco(s.id,14)+'</i><div class="field" style="margin:0;flex:1"><label for="zml-'+s.id+'">'+s.name+'</label><input id="zml-'+s.id+'" type="email" inputmode="email" autocomplete="off" placeholder="'+(s.id==='school'?'you@school.ca':'you@gmail.com')+'" value="'+esc(m.addr||'')+'"></div>'
+    +'<div class="field" style="margin:0;width:150px"><label for="zmk-'+s.id+'">Kind</label><select id="zmk-'+s.id+'"><option value="">Guess for me</option><option value="google"'+(m.kind==='google'&&m.set?' selected':'')+'>Gmail / Google</option><option value="outlook"'+(m.kind==='outlook'&&m.set?' selected':'')+'>Outlook / Microsoft</option></select></div></div>'}).join('');
+},save:function(){
+ var M=Object.assign({},S.spaceMail||{});
+ spacesOn().forEach(function(s){var a=zv('zml-'+s.id),k=zv('zmk-'+s.id);if(!a){delete M[s.id];return}M[s.id]={addr:a,kind:k||zMailGuess(a),set:!!k}});
+ S.spaceMail=M;save();view.modal=null;render();
+},saveLabel:'Save'};
+
+/* ---------- a short tour of what Doable does (after sign-up, and from Settings > Look and feel) ---------- */
+var TOUR=[
+ {t:'Welcome to Doable',p:'One calm place for school, work and everything else in your life.',art:'logo'},
+ {t:'Three spaces, one app',p:'Switch between School, Work and Personal from the pill under your name. Each has its own Home, pages and colours, like separate profiles.',art:'spaces'},
+ {t:'A Home that’s yours',p:'Press and hold any widget to move it. Tap ⋯ to make it small, medium or large, or change its colour. Your phone keeps its own layout.',art:'widgets'},
+ {t:'Plan your week',p:'A due date says when it’s due. Plan picks the day you’ll actually work on it. Drag things onto a day, and tick them off.',art:'plan'},
+ {t:'Mark up your PDFs',p:'Open any PDF to highlight, write with your Apple Pencil and add notes. It saves on its own.',art:'pdf'},
+ {t:'On all your devices',p:'Make an account and sign in on your phone, iPad and computer. Everything stays in sync.',art:'sync'}
+];
+function tourArt(k){
+ if(k==='logo')return '<div class="ztart logo">'+DOABLE_LOGO+'<span class="f1"></span><span class="f2"></span><span class="f3"></span></div>';
+ if(k==='spaces')return '<div class="ztart spaces">'+SPACES.map(function(s,i){return '<span class="zts" style="--d:'+(i*120)+'ms;background:'+spaceSideBg(s.id)+'">'+spaceIco(s.id,16)+s.name+'</span>'}).join('')+'</div>';
+ if(k==='widgets')return '<div class="ztart widgets"><span class="w a">'+zRing(68,'#708F77',54,7,'')+'</span><span class="w b">'+zDonut([{v:3,col:'#63869C'},{v:2,col:'#9E7D61'},{v:1,col:'#83708F'}],54,8)+'</span><span class="w c"><i></i><i></i><i></i></span><span class="w d"><b>12</b><small>days</small></span></div>';
+ if(k==='plan')return '<div class="ztart plan">'+['M','T','W','T','F'].map(function(d,i){return '<span class="pd'+(i===2?' on':'')+'"><small>'+d+'</small>'+(i===1||i===2?'<i style="background:'+['#C0A490','#94AC9C'][i-1]+'"></i>':'')+(i===2?'<i style="background:#A99CBF"></i>':'')+'</span>'}).join('')+'</div>';
+ if(k==='pdf')return '<div class="ztart pdf"><span class="pg"><i></i><i class="hl"></i><i></i><i class="hl s"></i><i></i><svg viewBox="0 0 80 30" class="ink"><path d="M4 20c8-14 14 8 22-4s12 6 20-2 10 4 18-6" fill="none" stroke="#5C7183" stroke-width="2.4" stroke-linecap="round"/></svg></span></div>';
+ return '<div class="ztart sync"><span class="lap"><i></i></span><span class="ph"><i></i></span><span class="ok">'+zI(ZIC.check,16)+'</span></div>';
+}
+function tourOpen(){view.tour=0;tourPaint()}
+function tourPaint(){
+ var el=document.getElementById('ztour');
+ if(view.tour==null){if(el)el.remove();return}
+ var i=view.tour,s=TOUR[i],last=i===TOUR.length-1;
+ if(!el){el=document.createElement('div');el.id='ztour';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','A tour of Doable');document.body.appendChild(el)}
+ el.innerHTML='<div class="ztcard"><button class="ztskip" data-tour="end">Skip</button><div class="ztartw">'+tourArt(s.art)+'</div><h2>'+esc(s.t)+'</h2><p>'+esc(s.p)+'</p>'
+  +'<div class="ztdots">'+TOUR.map(function(x,j){return '<i class="'+(j===i?'on':'')+'"></i>'}).join('')+'</div>'
+  +'<div class="ztbtns">'+(i?'<button data-tour="back">Back</button>':'<span></span>')+'<button class="go" data-tour="'+(last?'end':'next')+'">'+(last?'Let’s go':'Next')+'</button></div></div>';
+}
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-tour]');if(!b)return;var a=b.getAttribute('data-tour');
+ if(a==='next')view.tour=Math.min(TOUR.length-1,view.tour+1);else if(a==='back')view.tour=Math.max(0,view.tour-1);
+ else{view.tour=null;try{localStorage.setItem('hub:tour','done')}catch(err){}}
+ tourPaint();
+});
+document.addEventListener('keydown',function(e){if(view.tour==null||!document.getElementById('ztour'))return;if(e.key==='ArrowRight'){view.tour=Math.min(TOUR.length-1,view.tour+1);tourPaint()}else if(e.key==='ArrowLeft'){view.tour=Math.max(0,view.tour-1);tourPaint()}else if(e.key==='Escape'){view.tour=null;try{localStorage.setItem('hub:tour','done')}catch(err){}tourPaint()}});
+ZACT.tour=function(){view.modal=null;render();tourOpen()};
+var _r6OnbClose=onbClose;
+onbClose=function(flag){
+ _r6OnbClose.apply(this,arguments);
+ var seen=null;try{seen=localStorage.getItem('hub:tour')}catch(e){}
+ if(!seen)setTimeout(tourOpen,450);
+};
+
+/* ---------- Spotify: say plainly when Spotify won't let someone in ----------
+   Spotify keeps new apps in "development mode": only people Jae adds in the Spotify dashboard (User
+   Management, up to 25) can connect. Everyone else gets a 403 from Spotify after logging in. */
+var _r6SpApi=spApi;
+spApi=async function(method,path,body){
+ var r=await _r6SpApi(method,path,body);
+ if(r&&r.status===403&&method==='GET'&&/^\/me\/player/.test(path)){
+  var msg=String((r.data&&r.data.error&&r.data.error.message)||'');
+  if(/regist|developer|not.*allow|user/i.test(msg)||!msg){view.spErr='notallowed';spPaint()}
+ }else if(r&&r.status===200&&view.spErr){view.spErr=null}
+ return r;
+};
+var _r6SpCard=spCard;
+spCard=function(){
+ if(view.spErr==='notallowed')return '<section class="hsp h4music h4musicmini" id="h-music"><span class="h4mart">'+MUSIC_NOTE+'</span><div class="h4mtx"><b>Spotify didn’t let you in yet</b><span>Spotify only lets Doable connect people who’ve been added by the person who runs Doable. Ask them to add the email you use for Spotify, or <button class="h4inl" data-r6sp="paste">paste a playlist</button> instead.</span></div><button class="h4btn" data-r6sp="off">Disconnect</button></section>';
+ return _r6SpCard();
+};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-r6sp]');if(!b)return;var a=b.getAttribute('data-r6sp');view.spErr=null;spSetTok(null);view.sp=null;if(a==='paste')view.musicEdit=true;render()});
+
+/* ---------- PDF markup: no Save button; a quiet "Saved" appears after it saves on its own ---------- */
+mkSaveLabel=function(){
+ if(!MK||!MK.f)return '';
+ return {saving:'Saving…',saved:'Saved',local:'Saved',fail:'Not saved yet'}[MK.saveState]||'';
+};
+var _r6MkCommitNow=mkCommitNow,r6MkT=null;
+mkCommitNow=function(){
+ var had=!!mkSavePending;_r6MkCommitNow.apply(this,arguments);
+ if(had&&MK){mkSetSave('saved');clearTimeout(r6MkT);r6MkT=setTimeout(function(){if(MK&&MK.saveState==='saved')mkSetSave('')},2600)}
+};
+
+/* ---------- colours: "Your classes" only belongs to School's Home ---------- */
+(function(){var home=CP_SITE_ROWS.home;try{Object.defineProperty(CP_SITE_ROWS,'home',{configurable:true,enumerable:true,get:function(){return curSpace()==='school'?home:home.filter(function(r){return r[0]!=='hcls'})}})}catch(e){}})();
+
+/* ---------- Groceries is now Shopping list (once, only if you never renamed it) ---------- */
+function r6Migrate(){
+ S.spacesInit=S.spacesInit||{};
+ if(S.spacesInit.shop)return;
+ if(sbUser&&!S.everSynced)return;
+ S.classes.forEach(function(c){if(c.kind==='groceries'&&c.name==='Groceries'){c.name='Shopping list';touch(c)}});
+ S.spacesInit=Object.assign({},S.spacesInit,{shop:true});save();
+}
+var _r6Load=load;
+load=async function(){await _r6Load();try{r6Migrate()}catch(e){}render()};
 
 try{spBoot()}catch(e){}
 load();
