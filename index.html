@@ -3135,7 +3135,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v146';
+var BUILD='v147';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -11496,10 +11496,18 @@ function pageCoverOverlay(c){
    S.homeW[space] is the computer layout and S.homeW[space+'@phone'] the phone one; the phone starts
    as a copy of the computer layout until you change it there. */
 function zwPhone(){return window.innerWidth<=700}
-function zwKey(sp){return zwPhone()?sp+'@phone':sp}
+// iPads (and other tablets) get their own layout too: a touch screen wider than a phone
+function zwTablet(){
+ if(zwPhone())return false;
+ var ua=navigator.userAgent||'',ipad=/iPad/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var coarse=false;try{coarse=matchMedia('(pointer: coarse)').matches}catch(e){}
+ return ipad||(coarse&&/Android|Tablet/i.test(ua));
+}
+function zwDevice(){return zwPhone()?'phone':zwTablet()?'tablet':'computer'}
+function zwKey(sp){var d=zwDevice();return d==='computer'?sp:sp+'@'+d}
 homeWidgets=function(sp){
  var H=S.homeW||{},L=H[zwKey(sp)];
- if(!(L&&L.length)&&zwPhone())L=H[sp];
+ if(!(L&&L.length)&&!/^computer$/.test(zwDevice()))L=H[sp]; // a new phone or iPad layout starts as a copy of the computer one
  if(L&&L.length)return L.filter(function(w){return WDEF[w.type]});
  return (DEFAULT_W[sp]||[]).filter(function(d){return WDEF[d[0]]}).map(function(d){return {id:'w-'+d[0],type:d[0],col:d[1],size:d[2]||'full'}});
 };
@@ -11608,7 +11616,7 @@ viewSpaceHome=function(){
    +(html||'<div class="zcard zempty" style="padding:18px">'+esc(d.name)+' (nothing to show yet)</div>')+'</div>'};
  // on a phone (and iPad) everything is one list; on a computer, main and side columns
  var main=L.map(function(w,i){return (ph||w.col!=='side')?slot(w,i):''}).join(''),side=ph?'':L.map(function(w,i){return w.col==='side'?slot(w,i):''}).join('');
- var bar=edit?'<div class="zedit"><b>Edit widgets</b><span>'+(ph?'Your phone layout. Drag to move. Your computer keeps its own.':'Drag widgets to move them. ⋯ changes size and colour. Your phone keeps its own layout.')+'</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
+ var bar=edit?'<div class="zedit"><b>Edit widgets</b><span>'+(ph?'Your phone layout. Drag to move. Your computer and iPad keep their own.':zwTablet()?'Your iPad layout. Drag to move, ⋯ for size and colour. Your phone and computer keep their own.':'Drag widgets to move them. ⋯ changes size and colour. Your phone and iPad keep their own layouts.')+'</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
  return bar+'<div class="zhome'+(edit?' edit':'')+(ph?' ph':'')+'"><div class="zmain">'+main+'</div><aside class="zside">'+side+'</aside></div>';
 };
 ZACT.wadd=function(type){var sp=curSpace(),L=homeWidgets(sp).slice(),d=WDEF[type];L.unshift({id:'w-'+type+'-'+uid().slice(1,5),type:type,col:d.col,size:d.size});setHomeWidgets(sp,L);view.modal=null;render();window.scrollTo({top:0,behavior:'smooth'})};
@@ -12325,7 +12333,7 @@ ZM.zmail={html:function(){
 var TOUR=[
  {t:'Welcome to Doable',p:'One calm place for school, work and everything else in your life.',art:'logo'},
  {t:'Three spaces, one app',p:'Switch between School, Work and Personal from the pill under your name. Each has its own Home, pages and colours, like separate profiles.',art:'spaces'},
- {t:'A Home that’s yours',p:'Press and hold any widget to move it. Tap ⋯ to make it small, medium or large, or change its colour. Your phone keeps its own layout.',art:'widgets'},
+ {t:'A Home that’s yours',p:'Press and hold any widget to move it. Tap ⋯ to make it small, medium or large, or change its colour. Your phone, iPad and computer each keep their own layout.',art:'widgets'},
  {t:'Plan your week',p:'A due date says when it’s due. Plan picks the day you’ll actually work on it. Drag things onto a day, and tick them off.',art:'plan'},
  {t:'Mark up your PDFs',p:'Open any PDF to highlight, write with your Apple Pencil and add notes. It saves on its own.',art:'pdf'},
  {t:'On all your devices',p:'Make an account and sign in on your phone, iPad and computer. Everything stays in sync.',art:'sync'}
@@ -12920,7 +12928,7 @@ ZM.zwgal={wide:true,html:function(){
  var L=Object.keys(WDEF).filter(function(k){var s=WDEF[k].sp;return s==='all'||s.indexOf(sp)>-1});
  var card=function(k){var d=WDEF[k],on=have[k];return '<div class="zgw'+(on?' on':'')+'"><b>'+esc(d.name)+'</b><small>'+esc(d.desc)+'</small>'
   +(on?'<button class="zbtn ghost" data-zact="wdelt:'+k+'">Remove</button>':'<button class="zbtn" data-zact="wadd:'+k+'">+ Add</button>')+'</div>'};
- return '<h3>Widgets on '+esc(spaceById(sp).name)+' Home</h3><p class="hint" style="margin:-4px 0 12px">Keep the ones you like and remove the rest. Each space, and your phone, has its own Home.</p>'
+ return '<h3>Widgets on '+esc(spaceById(sp).name)+' Home</h3><p class="hint" style="margin:-4px 0 12px">Keep the ones you like and remove the rest. Each space has its own Home, and your phone, iPad and computer each keep their own layout.</p>'
   +'<p class="lab">ON HOME</p><div class="zgws">'+L.filter(function(k){return have[k]}).map(card).join('')+'</div>'
   +(L.some(function(k){return !have[k]})?'<p class="lab" style="margin-top:14px">MORE WIDGETS</p><div class="zgws">'+L.filter(function(k){return !have[k]}).map(card).join('')+'</div>':'');
 },closeLabel:'Done'};
