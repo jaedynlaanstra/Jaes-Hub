@@ -2788,6 +2788,20 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 /* default widgets (no colour picked): lighter than the page so they stand out, with a soft lift */
 .wd.tinted.wdef{background:color-mix(in srgb,var(--sideBg) 5%,var(--card));box-shadow:0 1px 2px rgba(30,25,20,.04),0 10px 24px -16px rgba(30,25,20,.22)}
 .wd.tinted.wdef .zadd input,.wd.tinted.wdef .wdio>div,.wd.tinted.wdef .wdbdh{background:color-mix(in srgb,var(--sideBg) 6%,var(--card))}
+/* Reading & Watchlist: choose what you track */
+.zrdsetup{padding:22px 22px 20px;display:flex;flex-direction:column;gap:10px}
+.zrdsetup .zh2{margin:0}
+.zrdopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px}
+.zrdopt{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;border:1.5px solid var(--line);background:var(--card);border-radius:16px;padding:16px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important;transition:border-color .2s,background .2s,transform .2s}
+.zrdopt:hover{transform:translateY(-2px)}
+.zrdopt b{font-weight:500;font-size:16px}.zrdopt small{font-size:12.5px;color:var(--ink3);line-height:1.4}
+.zrdopt i{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;color:#fff}
+.zrdopt.on{border-color:var(--wc);background:color-mix(in srgb,var(--wt) 55%,var(--card))}
+.zrdopt.on i{background:var(--wc);border-color:var(--wc)}
+.zrdsetb{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+.zbtn.dark{background:#33312C;color:#fff;border-color:#33312C}
+.zrdchange{align-self:flex-start;margin-top:4px}
+@media(max-width:700px){.zrdopts{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -12956,6 +12970,79 @@ document.addEventListener('click',function(e){
  }
  applyTheme();save();render();
 },true);
+
+
+/* ---------- Reading & Watchlist: track only what you like (books, shows, films) ----------
+   c.track = ['book','show','film'] (any of them). A new page asks first; a page with things in it
+   but no choice yet tracks the types it already has. The page's default name follows the choice
+   (Reading list / Watchlist / Reading & Watchlist) unless you renamed it. */
+CLASS_KEYS.push('track');
+KINDS.reading.name='Reading & Watchlist';KINDS.reading.tpl='Reading & Watchlist';KINDS.reading.desc='Books, shows or films. Track only the ones you like';
+WDEF.reading.name='Reading & watching';WDEF.reading.desc='What you’re reading or watching right now';
+var READ_NAMES=['Reading & watch list','Reading & Watchlist','Reading list','Watchlist'];
+function rdTrack(c){
+ if(c.track&&c.track.length)return c.track;
+ var have={};c.items.forEach(function(x){if(x.t==='read')have[x.type||'book']=1});
+ var L=['book','show','film'].filter(function(k){return have[k]});
+ return L.length?L:null;
+}
+function rdName(tr){var b=tr.indexOf('book')>-1,w=tr.indexOf('show')>-1||tr.indexOf('film')>-1;return b&&w?'Reading & Watchlist':b?'Reading list':'Watchlist'}
+var RD_LABEL={book:['Books','book',ZIC.book],show:['Shows','show',ZIC.film],film:['Films','film',ZIC.film]};
+function rdAddLabel(tr){if(tr.length===1)return tr[0]==='book'?'+ Add a book':tr[0]==='show'?'+ Add a show':'+ Add a film';return tr.indexOf('book')<0?'+ Add a show or film':'+ Add'}
+var _r9Reading=zReadingPage;
+zReadingPage=function(c){
+ var tr=rdTrack(c);
+ if(!tr||view.rdSetup===c.id){
+  var pick=view.rdPick||(c.track&&c.track.slice())||[];
+  return '<section class="zcard zrdsetup"><h2 class="zh2">What would you like to keep track of?</h2><p class="zsoft">Pick one or more. You can change this any time.</p><div class="zrdopts">'
+   +[['book','Books','Things you’re reading or want to read','book'],['show','Shows','Series you’re watching','film'],['film','Films','Movies you want to see','film']].map(function(o){var on=pick.indexOf(o[0])>-1;
+     return '<button class="zrdopt'+(on?' on':'')+'" data-zact="rdpick:'+o[0]+'" aria-pressed="'+on+'"><span class="zic">'+zI(ZIC[o[3]],20)+'</span><b>'+o[1]+'</b><small>'+o[2]+'</small><i>'+(on?zI(ZIC.check,13):'')+'</i></button>'}).join('')
+   +'</div><div class="zrdsetb">'+(view.rdSetup===c.id?'<button class="zbtn ghost" data-zact="rdcancel">Cancel</button>':'')+'<button class="zbtn dark" data-zact="rdsave:'+c.id+'"'+(pick.length?'':' disabled')+'>Done</button></div></section>';
+ }
+ if(view.zread&&view.zread!=='all'&&tr.indexOf(view.zread)<0)view.zread='all';
+ var h=_r9Reading(c);
+ // only the tabs, wording and add button for what you track (no tabs at all when you track one thing)
+ if(tr.length===1)h=h.replace(new RegExp('<button class="[^"]*" data-zact="readf:'+tr[0]+'">[^<]*</button>'),'');
+ ['book','show','film'].forEach(function(k){if(tr.indexOf(k)<0)h=h.replace(new RegExp('<button class="[^"]*" data-zact="readf:'+k+'">[^<]*</button>'),'')});
+ if(tr.length===1)h=h.replace(/<button class="[^"]*" data-zact="readf:all">[^<]*<\/button>/,'');
+ h=h.replace('data-zact="readnew:'+c.id+'">+ Add</button>','data-zact="readnew:'+c.id+'">'+rdAddLabel(tr)+'</button>')
+  .replace('Add a book, show or film you want to get to, or one you’re into right now. Search and Doable finds the cover.',tr.length===1&&tr[0]==='book'?'Add a book you’re reading or want to read. Search and Doable finds the cover.':tr.indexOf('book')<0?'Add a show or film you’re watching or want to see. Search and Doable finds the poster.':'Add something you’re reading or watching. Search and Doable finds the cover.')
+  .replace('<button class="zbtn" data-zact="readnew:'+c.id+'">+ Add your first one</button>','<button class="zbtn" data-zact="readnew:'+c.id+'">'+rdAddLabel(tr).replace('+ Add','+ Add your first')+'</button>')
+  .replace('placeholder="Search your list"','placeholder="Search"');
+ return h+'<button class="zlink zrdchange" data-zact="rdchange:'+c.id+'">Change what I track ('+tr.map(function(k){return RD_LABEL[k][0].toLowerCase()}).join(', ')+')</button>';
+};
+ZACT.rdpick=function(k){var c=classById(view.classId);var p=(view.rdPick||(c&&c.track&&c.track.slice())||[]).slice();var i=p.indexOf(k);if(i>-1)p.splice(i,1);else p.push(k);view.rdPick=p;render()};
+ZACT.rdchange=function(cid){var c=classById(cid);view.rdSetup=cid;view.rdPick=(rdTrack(c)||[]).slice();render();window.scrollTo({top:0,behavior:'smooth'})};
+ZACT.rdcancel=function(){view.rdSetup=null;view.rdPick=null;render()};
+ZACT.rdsave=function(cid){var c=classById(cid),p=view.rdPick||[];if(!c||!p.length)return;p=['book','show','film'].filter(function(k){return p.indexOf(k)>-1});
+ c.track=p;if(READ_NAMES.indexOf(c.name)>-1)c.name=rdName(p);touch(c);view.rdSetup=null;view.rdPick=null;view.zread='all';save();render()};
+// the add pop-up only offers the types you track (and no type switch when there's just one)
+var _r9ReadNew=ZACT.readnew;
+ZACT.readnew=function(cid){var c=classById(cid),tr=c&&rdTrack(c)||['book','show','film'];var ty=view.zread&&tr.indexOf(view.zread)>-1?view.zread:tr[0];zOpen('zread',{cid:cid,type:ty})};
+var _r9ReadHtml=ZM.zread.html;
+ZM.zread.html=function(m){
+ var h=_r9ReadHtml(m);if(!h)return h;var c=classById(m.cid),tr=c&&rdTrack(c)||['book','show','film'];
+ ['book','show','film'].forEach(function(k){if(tr.indexOf(k)<0&&k!==m.type)h=h.replace(new RegExp('<button type="button" class="[^"]*" data-zact="readtype:'+k+'">[^<]*</button>'),'')});
+ if(tr.length===1)h=h.replace(/<div class="zseg zrdtype">[\s\S]*?<\/div>/,'');
+ var x=m.id&&zItem(c,m.id);
+ if(!x)h=h.replace('<h3>Add to your list</h3>','<h3>'+(m.type==='book'?'Add a book':m.type==='show'?'Add a show':'Add a film')+'</h3>');
+ return h;
+};
+// the Home widget says reading, watching or both
+var _r9NW=zNewWidget;
+zNewWidget=function(w,d,sp){
+ var h=_r9NW(w,d,sp);
+ if(w.type!=='reading')return h;
+ var c=firstPage(sp,'reading'),tr=c&&rdTrack(c);if(!tr)return h;
+ var b=tr.indexOf('book')>-1,wt=tr.indexOf('show')>-1||tr.indexOf('film')>-1;
+ return h.replace('<span class="wdt">'+esc(d.name)+'</span>','<span class="wdt">'+(b&&wt?'Reading & watching':b?'Reading now':'Watching now')+'</span>');
+};
+// pages saved with the old lowercase name get the new one (once, only if never renamed)
+function r9Migrate(){S.spacesInit=S.spacesInit||{};if(S.spacesInit.rd9)return;if(sbUser&&!S.everSynced)return;
+ S.classes.forEach(function(c){if(c.kind==='reading'&&c.name==='Reading & watch list'){c.name='Reading & Watchlist';touch(c)}});
+ S.spacesInit=Object.assign({},S.spacesInit,{rd9:true});save()}
+var _r9Load=load;
+load=async function(){await _r9Load();try{r9Migrate()}catch(e){}render()};
 
 try{spBoot()}catch(e){}
 load();
