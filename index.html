@@ -12921,6 +12921,39 @@ document.addEventListener('click',function(e){
 function pageCoverOverlay2(){var t=PAGE_TITLES[view.page]||'',eb=curSpace()==='school'?(S.term||''):spaceById(curSpace()).name;
  return '<div class="h4ov cpov"><div class="h4hi">'+(eb?'<p class="h4hello">'+esc(eb)+'</p>':'')+'<h1 class="h4day cpovt">'+esc(t)+'</h1></div></div>'}
 
+
+/* ---------- Presets, Saved colours and Reset to default cover each space too ----------
+   They only changed S.theme, but Work and Personal take their menu colour from S.spaceTheme (and widgets
+   now have their own colours), so in those spaces nothing seemed to happen. */
+function r8SideKeys(o){var r={};Object.keys(o||{}).forEach(function(k){if(/^side/.test(k))r[k]=o[k]});return r}
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-preset],[data-saved],[data-resetpal]');if(!b)return;
+ var sp=curSpace();S.theme=S.theme||{};
+ if(b.hasAttribute('data-resetpal')){
+  e.preventDefault();e.stopPropagation();
+  if(!confirm('Put every colour back to the original, in every space? This includes menu colours, page colours and widget colours. Saved combinations are kept.'))return;
+  S.theme={saved:(S.theme&&S.theme.saved)||[]};S.spaceTheme={};S.ndColor={};
+  var H=Object.assign({},S.homeW||{});Object.keys(H).forEach(function(k){H[k]=(H[k]||[]).map(function(w){var n=Object.assign({},w);delete n.color;delete n.tint;return n})});S.homeW=H;
+  applyTheme();save();render();return;
+ }
+ var src=null;
+ if(b.hasAttribute('data-preset')&&b.getAttribute('data-preset')!=='')src=PRESETS[+b.getAttribute('data-preset')];
+ if(b.hasAttribute('data-saved')&&b.getAttribute('data-saved')!=='')src=(S.theme.saved||[])[+b.getAttribute('data-saved')];
+ if(!src)return;
+ e.preventDefault();e.stopPropagation();
+ var chrome=src.chrome?JSON.parse(JSON.stringify(src.chrome)):null;
+ S.theme.colors=src.colors?JSON.parse(JSON.stringify(src.colors)):null;
+ if(sp==='school')S.theme.chrome=chrome;
+ else{
+  // the menu colour goes to this space; School keeps its own menu colour
+  var keepSchool=r8SideKeys(S.theme.chrome),rest={};Object.keys(chrome||{}).forEach(function(k){if(!/^side/.test(k))rest[k]=chrome[k]});
+  S.theme.chrome=Object.assign(rest,keepSchool);
+  S.spaceTheme=Object.assign({},S.spaceTheme||{});var side=r8SideKeys(chrome);
+  if(Object.keys(side).length)S.spaceTheme[sp]=side;else delete S.spaceTheme[sp];
+ }
+ applyTheme();save();render();
+},true);
+
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
