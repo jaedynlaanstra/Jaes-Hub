@@ -2785,6 +2785,9 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .icshow li{margin:2px 0}
 .icshow details p{font-size:13px;margin:0 0 10px;line-height:1.5}
 .icsnote{font-size:12.5px;color:var(--ink3,#8f8a82);margin:8px 0 0;line-height:1.45}
+/* default widgets (no colour picked): lighter than the page so they stand out, with a soft lift */
+.wd.tinted.wdef{background:color-mix(in srgb,var(--sideBg) 5%,var(--card));box-shadow:0 1px 2px rgba(30,25,20,.04),0 10px 24px -16px rgba(30,25,20,.22)}
+.wd.tinted.wdef .zadd input,.wd.tinted.wdef .wdio>div,.wd.tinted.wdef .wdbdh{background:color-mix(in srgb,var(--sideBg) 6%,var(--card))}
 </style>
 </head>
 <body>
@@ -12811,7 +12814,7 @@ function zwVars(w,d){
 }
 zWCard=function(w,d,title,meta,body,href,extra){
  var tint=w.tint==null?true:!!w.tint,dark=!!d.dark&&w.tint==null&&!w.color;
- return '<section class="wd'+(tint&&!dark?' tinted':'')+(dark?' dark':'')+(extra?' '+extra:'')+'" style="'+zwVars(w,d)+'">'+(w.cover?'<div class="wdcover" style="background-image:url('+w.cover+')"></div>':'')
+ return '<section class="wd'+(tint&&!dark?' tinted':'')+(dark?' dark':'')+(!w.color&&!dark?' wdef':'')+(extra?' '+extra:'')+'" style="'+zwVars(w,d)+'">'+(w.cover?'<div class="wdcover" style="background-image:url('+w.cover+')"></div>':'')
   +'<div class="wdh"'+(href?' data-open="'+href+'" role="button" tabindex="0"':'')+'><span class="wdic">'+zI(ZIC[d.ico]||ZIC.list,w.cover?18:15)+'</span><span class="wdt">'+title+'</span>'+(meta?'<span class="wdm">'+meta+'</span>':'')+'</div><div class="wdb">'+body+'</div></section>';
 };
 // the older School widgets (Coming up, the month, Today's plan...) take a colour too, once you pick one
