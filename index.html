@@ -2802,12 +2802,9 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .zbtn.dark{background:#33312C;color:#fff;border-color:#33312C}
 .zrdchange{align-self:flex-start;margin-top:4px}
 @media(max-width:700px){.zrdopts{grid-template-columns:1fr}}
-/* the menu: logo, picture, space pill, highlight boxes and the bottom group all start on the same line */
-.side .dbrand,.side .me{padding-left:0}
-.side .zpill{margin-left:0}
-.side .slabel{padding-left:12px}
-.side .sidefoot{padding:6px 0}
-.side .sidehide{right:4px}
+/* the space pill under your name reaches the same right edge as the menu items below it */
+.side .zpill .zpillbtn{width:100%;max-width:none;justify-content:flex-start}
+.side .zpill .zpillbtn b{margin-left:auto;margin-right:2px}
 /* the quote card: a little deeper than the other widgets (and the page) */
 .wd.wdquote.wdef{background:color-mix(in srgb,var(--sideBg) 17%,var(--card))}
 </style>
@@ -13065,6 +13062,14 @@ QUOTES=QUOTES.concat([['A journey of a thousand miles begins with a single step.
  ['It’s okay to start again.',''],['Make room for what matters.',''],['Be the energy you want to attract.',''],['Small habits, big changes.',''],['Trust the process.',''],
  ['You have survived every hard day so far.',''],['Write it down. Then let it go.',''],['Choose progress over pressure.','']]);
 zQuote=function(){var t=today(),n=Math.round((t-new Date(t.getFullYear(),0,1))/864e5)+t.getFullYear()*7;return QUOTES[n%QUOTES.length]};
+
+
+/* the space pill's right end lines up exactly with the menu items' highlight boxes (measured, since the
+   menu's scrollbar takes a different amount of room on each device) */
+function r9PillFit(){var p=document.querySelector('.side .zpill .zpillbtn'),b=document.querySelector('.side .sidescroll .sitem');if(!p||!b)return;var w=b.getBoundingClientRect().right-p.getBoundingClientRect().left;if(w>80)p.style.width=Math.round(w)+'px'}
+var _r9Render=render;
+render=function(){var before=app.firstElementChild;_r9Render.apply(this,arguments);if(app.firstElementChild!==before){r9PillFit();setTimeout(r9PillFit,30)}};
+window.addEventListener('resize',r9PillFit);
 
 try{spBoot()}catch(e){}
 load();
