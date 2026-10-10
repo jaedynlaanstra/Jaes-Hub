@@ -3135,7 +3135,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v145';
+var BUILD='v146';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -3384,9 +3384,33 @@ function idbDo(mode,fn){
   r.onerror=function(){rej(r.error)};
  });
 }
+/* this device's copy of your hub. v146: it lives in IndexedDB (the same big store as your files) because
+   localStorage only holds about 5 MB, and pictures (covers, widget pictures) filled it ("storage is full").
+   The copy is kept as {at,json}; localStorage is only a fallback if IndexedDB can't be used, and is cleared
+   once IndexedDB has the copy, which frees that space. Writes are queued so an older copy never lands last. */
+var stWriting=false,stPending=false;
 function persistLocal(){
- try{sset('hub:state',JSON.stringify(S)).catch(function(){view.storageOk=false})}
- catch(e){view.storageOk=false}
+ if(!LOCAL){try{sset('hub:state',JSON.stringify(S)).catch(function(){view.storageOk=false})}catch(e){view.storageOk=false}return}
+ if(stWriting){stPending=true;return}
+ stWriting=true;stPending=false;
+ var json;try{json=JSON.stringify(S)}catch(e){stWriting=false;return}
+ var at=Date.now();
+ (async function(){
+  var ok=false;
+  try{await idbReady;if(IDB){await idbDo('readwrite',function(st){return st.put({at:at,json:json},'__hubstate')});ok=true}}catch(e){ok=false}
+  if(ok){try{if(localStorage.getItem('hub:state')!=null){localStorage.removeItem('hub:state');localStorage.removeItem('hub:stateat')}}catch(e){}}
+  else{try{localStorage.setItem('hub:state',json);localStorage.setItem('hub:stateat',String(at));ok=true}catch(e){ok=false}}
+  var was=view.storageOk;view.storageOk=ok;if(was!==ok)try{render()}catch(e){}
+ })().finally(function(){stWriting=false;if(stPending)persistLocal()});
+}
+// the newest of the IndexedDB copy and any localStorage copy (older versions saved only to localStorage)
+async function loadLocalState(){
+ if(!LOCAL){var r0=await sget('hub:state');return r0&&r0.value||''}
+ var a=null,b='',bAt=0;
+ try{await idbReady;if(IDB)a=await idbDo('readonly',function(st){return st.get('__hubstate')})}catch(e){}
+ try{b=localStorage.getItem('hub:state')||'';bAt=+(localStorage.getItem('hub:stateat')||0)}catch(e){}
+ if(a&&a.json&&(!b||(bAt&&a.at>=bAt)))return a.json;
+ return b||(a&&a.json)||'';
 }
 /* ---------- change tracking: stamps edits and records deletions so both sync ---------- */
 var LISTS=['assignments','tasks','contacts','links','sections','files'];
@@ -3485,8 +3509,8 @@ async function dropFile(cid,i){
 }
 async function load(){
  try{
-  var r=await sget('hub:state');
-  if(r&&r.value){var p=JSON.parse(r.value);if(p&&p.classes){S=p;migrate()}}
+  var raw=await loadLocalState();
+  if(raw){var p=JSON.parse(raw);if(p&&p.classes){S=p;migrate()}}
  }catch(e){}
  normalize();
  ensureIds();
