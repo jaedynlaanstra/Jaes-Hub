@@ -2812,6 +2812,14 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .zedbtn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:99px;padding:8px 15px;font:inherit;font-size:13.5px;font-weight:500;color:var(--sideBright,#fff);background:var(--sideBg);box-shadow:0 6px 14px -8px rgba(0,0,0,.4);cursor:pointer;min-height:0!important;transition:transform .2s,filter .2s}
 .zedbtn:hover{transform:translateY(-1px);filter:brightness(1.08)}
 @media(max-width:700px){.zhtools{margin:-4px 0 -6px}}
+/* the menu: everything on the same two edges, 24px from the screen and 24px from the page.
+   The pill, the page boxes and the bottom group are all exactly the same width */
+.side{padding-left:14px!important;padding-right:14px!important}
+.side .sidescroll{margin:0;padding:0 10px;scrollbar-width:none}
+.side .sidescroll::-webkit-scrollbar{display:none}
+.side .zpill{margin-left:10px;margin-right:10px}
+.side .zpill .zpillbtn{width:100%!important}
+.side .sidefoot{margin:12px 10px 0;padding:6px 0}
 </style>
 </head>
 <body>
@@ -13073,7 +13081,7 @@ zQuote=function(){var t=today(),n=Math.round((t-new Date(t.getFullYear(),0,1))/8
 
 /* the space pill's right end lines up exactly with the menu items' highlight boxes (measured, since the
    menu's scrollbar takes a different amount of room on each device) */
-function r9PillFit(){var p=document.querySelector('.side .zpill .zpillbtn'),b=document.querySelector('.side .sidescroll .sitem');if(!p||!b)return;var w=b.getBoundingClientRect().right-p.getBoundingClientRect().left;if(w>80)p.style.width=Math.round(w)+'px'}
+function r9PillFit(){return;var p=document.querySelector('.side .zpill .zpillbtn'),b=document.querySelector('.side .sidescroll .sitem');if(!p||!b)return;var w=b.getBoundingClientRect().right-p.getBoundingClientRect().left;if(w>80)p.style.width=Math.round(w)+'px'}
 var _r9Render=render;
 render=function(){var before=app.firstElementChild;_r9Render.apply(this,arguments);if(app.firstElementChild!==before){r9PillFit();setTimeout(r9PillFit,30)}};
 window.addEventListener('resize',r9PillFit);
