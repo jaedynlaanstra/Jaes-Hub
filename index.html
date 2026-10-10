@@ -2827,6 +2827,320 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .h4band .hcorner .coveredit{background:rgba(255,255,255,.16);color:#fff;box-shadow:none;font-size:12px;padding:5px 10px}
 .h4band .hcorner .coveredit:hover{background:rgba(255,255,255,.26)}
 @media(max-width:900px){.hcorner,.h4band .hcorner{top:calc(env(safe-area-inset-top,0px) + 12px);right:12px}}
+/* ===== v148 round 9: phone fixes, pay days, shopping list + wishlist, Plan my week, Budget 1c ===== */
+/* Class info on a phone: the cards keep their full height and the sheet scrolls (they were squashed and cut off) */
+.cpis>*{flex-shrink:0}
+/* date and time boxes never run past their card (an iPhone draws them wider than the box) */
+input[type=date],input[type=time]{min-width:0;max-width:100%;box-sizing:border-box}
+@supports(-webkit-touch-callout:none){
+ input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;min-height:42px;text-align:left}
+ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{text-align:left}
+}
+/* words that don't fit fade out at the end; boxes and rows keep their normal size */
+.zfw{position:relative;display:block;min-width:0}
+.zfw>input,.zfw>textarea{width:100%;box-sizing:border-box}
+.zfw::after{content:'';position:absolute;pointer-events:none;opacity:0;transition:opacity .15s;border-radius:0 10px 10px 0;
+ right:1px;top:1px;bottom:1px;width:46px;background:linear-gradient(90deg,transparent,var(--inbg,#fff) 75%)}
+.zfw.zfwv::after{left:1px;right:1px;top:auto;width:auto;height:30px;border-radius:0 0 10px 10px;background:linear-gradient(180deg,transparent,var(--inbg,#fff) 80%)}
+.zfw.over:not(:focus-within)::after{opacity:1}
+.modal textarea#zt4{resize:none}
+.zfade1{display:block;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+.zrt{min-width:0}
+.zrtt{display:block;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+.zrow>.zdue,.zrow>.zamt,.zrow>.zprice{flex:none}
+/* the add box on a phone: the words get the whole first line, the date and Add go under it */
+.zadd>.zfw{flex:1 1 auto}
+.zdatew{position:relative;display:block;min-width:0;flex:0 0 150px}
+.zdatew>input{width:100%}
+.zdph{display:none}
+@supports(-webkit-touch-callout:none){
+ .zdatew.empty .zdph{display:block;position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;font-size:15px}
+ .zdatew.empty>input{color:transparent}
+}
+@media(max-width:700px){
+ .zadd{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+ .zadd>.zfw:first-child{grid-column:1/-1}
+ .zadd.nodate>.zfw:first-child{grid-column:auto}
+ .zadd .zdatew{flex:none}
+ .zadd input{font-size:16px}
+}
+/* dropdowns in two-across pop-up rows get the whole line on a phone, so long choices aren't cut off */
+@media(max-width:700px){.zfrow>.field:has(select){flex-basis:100%}}
+/* a missing field, and the little message under it */
+.zbad{border-color:#B5584C!important;box-shadow:0 0 0 3px rgba(181,88,76,.14)!important}
+.zerr{color:#9c4a41;font-size:13px;margin:6px 0 0}
+/* toast */
+#ztoast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translate(-50%,24px);opacity:0;pointer-events:none;z-index:300;
+ background:#2E2B27;color:#fff;border-radius:99px;padding:10px 18px;display:flex;align-items:center;gap:12px;font-size:14px;box-shadow:0 12px 30px -10px rgba(0,0,0,.4);
+ transition:opacity .25s,transform .35s cubic-bezier(.2,.8,.2,1);max-width:calc(100vw - 32px);white-space:nowrap}
+#ztoast span{overflow:hidden;text-overflow:ellipsis}
+#ztoast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#ztoast button{background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:99px;padding:6px 14px;margin-right:-8px;font:inherit;font-size:13.5px;min-height:0!important;cursor:pointer}
+@media(max-width:700px){#ztoast{bottom:calc(env(safe-area-inset-bottom,0px) + 86px)}}
+
+/* the phone menu: a springy slide in, a quick slide out (a fade with Reduce Motion), nothing peeking past its corner */
+@media(max-width:900px){
+ .side{padding-top:20px!important;transition:none!important}
+ .side.open.zsin{animation:zsidein .38s cubic-bezier(.2,.9,.25,1.04) both}
+ .side.open.zsout{animation:zsideout .23s cubic-bezier(.5,0,.75,0) both}
+ .backdrop.zsin{animation:zbg .3s ease both}
+ .backdrop.zsout{animation:zbgout .23s ease both}
+ body.q9menu .menubtn,body.q9menu .homebtn,body.q9menu .zpill-top,body.q9menu .hcorner,body.q9menu .coveredit,body.q9menu .bancov,body.q9menu .mbar,body.q9menu .pickbtn{z-index:1!important}
+}
+@keyframes zsidein{from{transform:translateX(calc(-100% - 24px))}to{transform:none}}
+@keyframes zsideout{from{transform:none}to{transform:translateX(calc(-100% - 24px))}}
+@keyframes zbgout{from{opacity:1}to{opacity:0}}
+@keyframes zsfade{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+@keyframes zsfadeout{from{opacity:1}to{opacity:0;transform:translateX(-16px)}}
+@media(max-width:900px) and (prefers-reduced-motion:reduce){
+ .side.open.zsin{animation:zsfade .24s ease both}
+ .side.open.zsout{animation:zsfadeout .2s ease both}
+ .backdrop.zsin{animation:zbg .24s ease both}
+}
+
+/* ---------- Shopping list: To buy | Wishlist ---------- */
+.zshoptabs{display:flex;gap:4px;padding:4px;background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:16px;margin:0 0 14px;max-width:440px}
+.zshoptabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;border:none;background:none;border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;color:var(--ink2);cursor:pointer;min-height:0!important;transition:background .2s,color .2s,box-shadow .2s}
+.zshoptabs button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 10px -4px rgba(0,0,0,.2)}
+.zshoptabs em{font-style:normal;font-size:12px;min-width:20px;height:20px;border-radius:10px;display:inline-grid;place-items:center;background:color-mix(in srgb,var(--ink) 8%,transparent);padding:0 6px}
+.zwgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;padding:4px 0}
+@media(max-width:700px){.zwgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}}
+.zwi{display:flex;flex-direction:column;border-radius:20px;background:var(--card);border:1px solid var(--line);overflow:hidden;min-width:0;transition:transform .2s,box-shadow .2s}
+.zwi:hover{transform:translateY(-2px);box-shadow:0 12px 26px -16px rgba(0,0,0,.28)}
+.zwi.got{opacity:.62}
+.zwplate{position:relative;height:96px;display:grid;place-items:center}
+.zwpbtn{border:none;background:none;padding:0;cursor:pointer;min-height:0!important;border-radius:14px}
+.zwplate .zlogo{border-radius:14px;box-shadow:0 8px 18px -10px rgba(0,0,0,.35)}
+.zwopen{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.88);display:grid;place-items:center;color:var(--ink2)}
+.zwbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.zwt{white-space:normal;border:none;background:none;padding:0;text-align:left;font:inherit;font-size:14.5px;color:var(--ink);cursor:pointer;min-height:2.6em!important;line-height:1.3;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.zwhost{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+.zwfoot{margin-top:auto;padding-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.zwprice{font-size:15px;font-weight:500;color:#9A6580}
+.zwgot{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:99px;padding:5px 10px;font:inherit;font-size:12.5px;cursor:pointer;min-height:0!important}
+.zwgot:hover{border-color:#9A6580;color:#9A6580}
+.zwgot.y{background:#E6EDE6;border-color:#E6EDE6;color:#708F77;padding:5px 7px}
+.zw2buy{display:inline-flex;align-items:center;gap:6px;margin-top:6px}
+
+/* ---------- Plan my week ---------- */
+.zplan{display:flex;flex-direction:column;gap:16px;min-width:0}
+.zphelp{display:flex;gap:10px;flex-wrap:wrap;position:relative;padding-right:34px}
+.zphs{flex:1 1 180px;display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px;font-size:13.5px;color:var(--ink2);line-height:1.35}
+.zphs b{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--cp-kplan-bg);color:var(--cp-kplan-title);font-weight:600;font-size:13px}
+.zphs em{font-style:normal;color:var(--ink);font-weight:500}
+.zphelp>.zmini{position:absolute;top:0;right:0}
+@media(max-width:700px){.zphelp{flex-direction:column;gap:6px}.zphs{flex:none;padding:8px 12px}}
+.zphero{background:var(--cp-kplan-c);color:var(--cp-kplan-on);border-radius:26px;padding:18px 18px 16px;position:relative;overflow:hidden;box-shadow:0 16px 36px -24px rgba(0,0,0,.5)}
+.zphero::before,.zphero::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
+.zphero::before{right:-70px;top:-90px;width:240px;height:240px}
+.zphero::after{right:90px;top:-140px;width:210px;height:210px;background:rgba(255,255,255,.05)}
+.zphtop{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.zphti p{margin:0;font-size:13px;opacity:.82}
+.zphti h2{margin:2px 0 0;font-size:24px;font-weight:var(--wh,500);letter-spacing:-.01em;color:inherit}
+.zphnav{display:flex;gap:6px;flex:none}
+.zphnav button{height:36px;min-width:36px;border-radius:18px;border:none;background:rgba(255,255,255,.17);color:inherit;display:grid;place-items:center;font:inherit;font-size:13.5px;padding:0 10px;cursor:pointer;min-height:0!important;transition:background .2s}
+.zphnav button:hover{background:rgba(255,255,255,.28)}
+.zphstats{position:relative;z-index:1;display:flex;align-items:center;gap:14px;margin:14px 0 16px}
+.zphring{position:relative;width:58px;height:58px;flex:none}
+.zphring .zring circle:first-child{stroke-opacity:.22}
+.zphring b{position:absolute;inset:0;display:grid;place-items:center;font-size:13.5px;font-weight:600}
+.zphst{display:flex;flex-direction:column;gap:7px;min-width:0}
+.zphst>b{font-size:16.5px;font-weight:500}
+.zphchips{display:flex;flex-wrap:wrap;gap:6px}
+.zphchips span{font-size:12.5px;background:rgba(255,255,255,.17);border-radius:99px;padding:3px 10px;white-space:nowrap}
+.zphchips span.warn{background:rgba(255,255,255,.94);color:var(--cp-kplan-title)}
+.zpdays{position:relative;z-index:1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.zpd{display:flex;flex-direction:column;align-items:center;gap:6px;border:none;background:rgba(255,255,255,.1);border-radius:18px;padding:8px 2px 9px;color:inherit;font:inherit;cursor:pointer;min-height:0!important;min-width:0;transition:background .2s,transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .2s}
+.zpd:hover{background:rgba(255,255,255,.2)}
+.zpdtop{display:flex;flex-direction:column;align-items:center;gap:5px}
+.zpdn{font-size:12px;opacity:.85}
+.zpd b{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:500}
+.zpd.t b{box-shadow:inset 0 0 0 1.6px currentColor}
+.zpd.on{background:#fff;color:var(--cp-kplan-title);transform:translateY(-3px);box-shadow:0 10px 20px -12px rgba(0,0,0,.45)}
+.zpd.on b{background:var(--cp-kplan-c);color:var(--cp-kplan-on);box-shadow:none}
+.zpd.past:not(.on){opacity:.62}
+.zpd.dropover{outline:2px dashed rgba(255,255,255,.85);outline-offset:-3px}
+.zpddots{display:flex;gap:3px;height:7px;align-items:center}
+.zpddots i{width:7px;height:7px;border-radius:50%;box-shadow:0 0 0 1.5px rgba(255,255,255,.75)}
+.zpd.on .zpddots i{box-shadow:none}
+.zpddots i.d{opacity:.4}
+.zpddots em{font-style:normal;font-size:10px;line-height:1}
+.zpdmini{display:none}
+@media(min-width:1000px){
+ .zpdays{gap:8px}
+ .zpd{align-items:stretch;text-align:left;padding:10px 10px 12px;min-height:150px;gap:9px}
+ .zpdtop{flex-direction:row;justify-content:space-between;align-items:center}
+ .zpddots{display:none}
+ .zpdmini{display:flex;flex-direction:column;gap:6px;min-width:0}
+ .zpdmini span{display:block;font-size:12.5px;line-height:1.3;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+ .zpdmini span>i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle;position:relative;top:-1px;box-shadow:0 0 0 1.5px rgba(255,255,255,.75)}
+ .zpd.on .zpdmini span>i{box-shadow:none}
+ .zpdmini .d{text-decoration:line-through;opacity:.6}
+ .zpdmini small{font-size:11.5px;opacity:.7}
+}
+.zpgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:900px){.zpgrid{grid-template-columns:minmax(0,1fr)}}
+.zpday,.zptray{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px 16px 12px;min-width:0}
+.zpday.zswap{animation:zin .35s cubic-bezier(.2,.7,.2,1)}
+.zpday.dropover{outline:2px dashed var(--cp-kplan-c);outline-offset:-4px}
+.zpdh{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.zpdh h3{margin:0;font-size:22px;font-weight:var(--wh,500);letter-spacing:-.01em}
+.zpdh p{margin:2px 0 0;font-size:13px;color:var(--ink3)}
+.zpcount{font-size:12.5px;color:var(--cp-kplan-title);background:var(--cp-kplan-bg);border-radius:99px;padding:4px 10px;white-space:nowrap}
+.zpl{padding:10px 10px 10px 12px;border-radius:16px;background:var(--cp-kplan-wash);border:1px solid var(--cp-kplan-line);margin-bottom:8px}
+.zplrow{display:flex;align-items:center;gap:12px}
+.zptick{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--pc);background:var(--card);cursor:pointer;min-height:0!important;padding:0;display:grid;place-items:center;transition:background .2s}
+.zptick:hover{background:color-mix(in srgb,var(--pc) 15%,var(--card))}
+.zpl.done .zptick{background:var(--pc)}
+.zpl.done .zptick::after{content:'';width:10px;height:5px;border:2px solid #fff;border-top:0;border-right:0;transform:translate(0,-1px) rotate(-45deg)}
+.zplb{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.zplt{border:none;background:none;padding:0;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer;min-height:0!important;line-height:1.3;
+ white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+.zpl.done .zplt{color:var(--ink3);text-decoration:line-through}
+.zplm{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.zpdue{font-size:12px;color:var(--ink3);white-space:nowrap}
+.zpdue.hot{color:#97724F;font-weight:500}
+.zpdue.late{color:#9c4a41;font-weight:500}
+.zplmv{flex:none;width:36px;height:36px;border-radius:50%;border:none;background:var(--card);color:var(--ink2);display:grid;place-items:center;cursor:pointer;min-height:0!important;box-shadow:0 0 0 1px var(--line);transition:background .2s,color .2s}
+.zpl.open .zplmv{background:var(--cp-kplan-c);color:var(--cp-kplan-on);box-shadow:none}
+.zplpick{margin-top:10px;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--line);animation:zin .25s ease}
+.zplpick>p{margin:0 0 2px;font-size:12.5px;color:var(--ink3)}
+.zpchips{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:10px}
+.zpc{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:5px 0 6px;font:inherit;color:var(--ink);cursor:pointer;min-height:0!important;min-width:0;transition:background .15s,transform .15s,border-color .15s}
+.zpc span{font-size:11px;color:var(--ink3)}
+.zpc b{font-size:14.5px;font-weight:500}
+.zpc:hover:not(:disabled){border-color:var(--cp-kplan-c);transform:translateY(-1px)}
+.zpc:active:not(:disabled){transform:scale(.93)}
+.zpc.t{border-color:var(--ink3)}
+.zpc.on{background:var(--cp-kplan-c);border-color:var(--cp-kplan-c);color:var(--cp-kplan-on)}
+.zpc.on span{color:inherit;opacity:.85}
+.zpc.isdue::after,.zpdl{content:'';position:absolute;top:4px;right:5px;width:6px;height:6px;border-radius:50%;background:#C27D6B}
+.zpdl{position:relative;display:inline-block;top:-1px;right:auto;margin:0 2px}
+.zpc:disabled{opacity:.32;cursor:default}
+.zpchipsx{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
+.zptrh{display:flex;align-items:center;gap:10px;margin-bottom:4px;min-height:36px}
+.zptrh h3{margin:0;font-size:19px;font-weight:var(--wh,500)}
+.zptrh em{font-style:normal;font-size:12.5px;background:var(--cp-ktray-bg);color:var(--cp-ktray-title);border-radius:99px;padding:3px 9px}
+.zpauto{margin-left:auto;display:inline-flex;align-items:center;gap:6px;border:none;border-radius:99px;padding:8px 14px;background:var(--cp-ktray-c);color:var(--cp-ktray-on);font:inherit;font-size:13.5px;cursor:pointer;min-height:0!important;white-space:nowrap;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 18px -10px var(--cp-ktray-c)}
+.zpauto:hover{transform:translateY(-1px)}
+.zptrsub{margin:0 0 12px;font-size:13px;color:var(--ink3)}
+.zpt{padding:12px;border-radius:16px;border:1px solid var(--line);margin-bottom:10px;background:var(--card);transition:box-shadow .2s,transform .2s}
+.zpt:hover{box-shadow:0 10px 22px -16px rgba(0,0,0,.28)}
+.zptop{display:flex;gap:10px;align-items:flex-start}
+.zpdot{width:10px;height:10px;border-radius:50%;background:var(--pc);flex:none;margin-top:5px}
+.zpt .zplb>b{font-weight:450;font-size:15px;line-height:1.3;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+.zpmore{display:block;margin:2px auto 6px}
+@media(hover:hover){.zpl[draggable=true],.zpt[draggable=true]{cursor:grab}}
+.zpempty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:20px 10px 16px;color:var(--ink3);font-size:13.5px;line-height:1.4}
+.zpempty .zic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--cp-kplan-bg,#F0EDE3);color:var(--cp-kplan-title,#7a6a50);margin-bottom:4px}
+.zpempty b{color:var(--ink);font-weight:500;font-size:15px}
+.zpempty .zbtn{margin-top:8px}
+.zpalso{margin-top:8px;padding-top:10px;border-top:1px dashed var(--line)}
+.zpalso>p{margin:0 0 4px;font-size:12.5px;color:var(--ink3)}
+.zpinfo2{display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:7px 0;font:inherit;font-size:14px;color:var(--ink2);text-align:left;cursor:pointer;min-height:0!important}
+.zpinfo2>i{width:8px;height:8px;border-radius:50%;flex:none}
+.zpinfo2 em{font-style:normal;color:var(--ink3);flex:none}
+.zpinfo2 span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.zpplanit{flex:none;font-weight:500;font-size:12.5px;color:var(--cp-kplan-title);background:var(--cp-kplan-bg);border-radius:99px;padding:3px 10px}
+
+/* ---------- Budget, layout 1c ---------- */
+.zbhw{display:flex;flex-direction:column;gap:16px;min-width:0}
+.zbhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.zbmo{display:flex;align-items:center;gap:6px}
+.zbmo b{font-size:17px;font-weight:500;min-width:128px;text-align:center}
+.zbmo>button:not(.zlink){width:34px;height:34px;border-radius:50%;border:1px solid #ece8e0;background:var(--card);font:inherit;font-size:18px;color:var(--ink2);cursor:pointer;min-height:0!important;display:grid;place-items:center}
+.zbmo>button:disabled{opacity:.35;cursor:default}
+.zbadds{display:flex;gap:8px;flex-wrap:wrap}
+.zb1.zbdesk{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.zbleft{display:flex;flex-direction:column;gap:18px;min-width:0}
+.zbrail{display:flex;flex-direction:column;gap:14px;background:#eceee6;background:color-mix(in srgb,var(--sideBg,#6f8468) 9%,#f6f5f1);border-radius:26px;padding:16px 14px}
+.zbhero{background:var(--card);border:1px solid #ece8e0;border-radius:30px;padding:28px;display:flex;align-items:center;gap:34px}
+.zbring{position:relative;flex:none}
+.zbring svg{display:block}
+.zbringc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.zbringc b{font-size:44px;font-weight:500;letter-spacing:-1px;color:#3b3a33;line-height:1.05}
+.zbringc small{font-size:12.5px;color:#8d8a7c;margin-top:4px}
+.zbtiles{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;min-width:0}
+.zbtile{border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.zbtile.in{background:#e6efe3}.zbtile.out{background:#f1e4dc}.zbtile.sav{background:#e9e4f1}.zbtile.use{background:#e6ebf0}
+.zbtl{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#5d5a4e}
+.zbtile b{font-size:24px;font-weight:500;color:#3b3a33;letter-spacing:-.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zbtile small{font-size:12px;color:#8d8a7c}
+.zbtile small .zgood{color:#5f8a62}.zbtile small .zbad2{color:#a35d50}
+.zbcard{background:var(--card);border:1px solid #ece8e0;border-radius:24px;padding:18px;min-width:0}
+.zbrail .zbcard{border-color:transparent;border-radius:22px;padding:16px}
+.zbch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.zbch h3{margin:0;font-size:15.5px;font-weight:500;color:#3b3a33}
+.zbcats{display:flex;flex-direction:column}
+.zbcat{display:flex;align-items:center;gap:12px;font:inherit;font-size:13.5px;border:none;background:none;padding:9px 0;cursor:pointer;min-height:0!important;text-align:left;color:var(--ink)}
+.zbcn{width:110px;flex:none;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+.zbtrack{flex:1;height:10px;border-radius:5px;background:#efece6;overflow:hidden;min-width:40px}
+.zbtrack i{display:block;height:100%;border-radius:5px;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.main.enter .zbtrack i{animation:zgrow .9s cubic-bezier(.3,.7,.2,1) both .15s}
+.zbcv{width:104px;flex:none;text-align:right;color:#8d8a7c;font-size:13px;white-space:nowrap}
+.zbcat.over .zbcv{color:#a35d50}
+.zbsix{display:flex;gap:18px;align-items:flex-end;height:110px;padding-top:6px}
+.zbsc{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;font-size:11.5px;color:#8d8a7c}
+.zbsc i{display:block;width:100%;max-width:46px;background:#e3d4c6;border-radius:6px}
+.zbsc.on i{background:#c9a98d}
+.zbsc.on{color:#3b3a33;font-weight:500}
+.main.enter .zbsc i{animation:zgrowh .8s cubic-bezier(.3,.7,.2,1) both .2s}
+.zbpay{border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.zbpay .zbtl{color:inherit;opacity:.85}
+.zbpay>b{font-size:40px;font-weight:500;letter-spacing:-1px;line-height:1.1}
+.zbpay small{font-size:13px;opacity:.88}
+.zbpay.empty{cursor:default}.zbpay.empty p{margin:6px 0 10px;font-size:14px;opacity:.9}
+.zbpay.empty .zbtn{align-self:flex-start;background:rgba(255,255,255,.92);color:#3b3a33;border-color:transparent}
+.zbwent{display:flex;align-items:center;gap:14px}
+.zbwent .zdc b{font-size:13px}
+.zbwl{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+.zbwl span{display:flex;align-items:center;gap:7px;font-size:13px;min-width:0}
+.zbwl span i{width:8px;height:8px;border-radius:50%;flex:none}
+.zbwl span em{font-style:normal;color:#8d8a7c;margin-left:auto}
+.zbrail .zsp{padding:8px 0}
+.zbgoals{margin-top:6px}
+.zb1.zbph{display:flex;flex-direction:column;gap:14px;padding-bottom:84px}
+.zbhero.ph{flex-direction:column;gap:14px;padding:22px 18px 18px;border-radius:30px}
+.zbhero.ph .zbringc b{font-size:42px}
+.zbmini{display:flex;gap:18px;font-size:13.5px;color:#5d5a4e;flex-wrap:wrap;justify-content:center}
+.zbmini span{display:inline-flex;align-items:center;gap:5px}
+.zbph .zbpay{flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:12px}
+.zbph .zbpay .zbtl{flex-basis:100%}
+.zbph .zbpay>b{font-size:30px}
+.zbph .zbpay small{margin-left:auto;text-align:right;max-width:55%}
+.zbph .zbpay.empty small{margin:0}
+.zbchips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -2px;padding:2px}
+.zbchips::-webkit-scrollbar{display:none}
+.zbchips button{flex:none;border:none;border-radius:20px;padding:8px 15px;background:var(--card);box-shadow:0 0 0 1px #ece8e0;font:inherit;font-size:13.5px;color:var(--ink2);cursor:pointer;min-height:0!important;transition:background .2s,color .2s}
+.zbchips button.on{background:#3b3a33;color:#fff;box-shadow:none}
+.zbph .zbcard{border-radius:22px;padding:16px}
+.zbph .zbcn{width:96px}
+.zbph .zbcv{width:92px}
+.zbfab{position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:40;width:56px;height:56px;border-radius:50%;border:none;
+ background:var(--sideBg,#6f8468);color:#fff;display:grid;place-items:center;cursor:pointer;min-height:0!important;box-shadow:0 12px 26px -10px rgba(0,0,0,.45);transition:transform .2s}
+.zbfab:active{transform:scale(.92)}
+.zbaddl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.zbaddl button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px;font:inherit;cursor:pointer;min-height:0!important;color:var(--ink)}
+.zbaddl button:hover{border-color:var(--ink3)}
+.zbaddl .zic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--wt);color:var(--wc);margin-bottom:4px}
+.zbaddl b{font-weight:500;font-size:15px}
+.zbaddl small{font-size:12.5px;color:var(--ink3)}
+.zbpay small span+span::before{content:' · '}
+.zbph .zbpay small{display:flex;flex-direction:column;gap:2px}
+.zbph .zbpay small span+span::before{content:none}
+.zbhead.ph .zbadds{display:none}
+.zbrail .zbill .zdue{display:none}
+.zbrail .zbill{gap:10px}
+.zbrail .zbill .zrt{overflow:hidden}
+/* pay day preview in the pay day pop-up */
+.zpaypv{margin:-2px 0 12px}
+.zpaypv:empty{display:none}
+.zpaypv>b{display:block;font-size:12.5px;font-weight:500;color:var(--ink3);margin-bottom:6px}
+.zpaypv>div{display:flex;flex-wrap:wrap;gap:6px}
+.zpaypv span{display:inline-flex;flex-direction:column;background:#E6EDE6;color:#4f6b55;border-radius:12px;padding:6px 10px;font-size:13px}
+.zpaypv span.mv{background:#F0EDE3;color:#7a6a45}
+.zpaypv small{font-size:11px;opacity:.85}
 </style>
 </head>
 <body>
@@ -3135,7 +3449,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v147';
+var BUILD='v148';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -13147,6 +13461,514 @@ render=function(){
  b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>Edit widgets</span>';
  box.appendChild(b);box.appendChild(cb);
 };
+
+/* ======================= ROUND 9 (v148): phone polish, pay days, Shopping list + Wishlist, Plan my week, Budget 1c =======================
+   Jae's notes (2026-10-10): Class info cut off on the phone, bills glitching and not saving, a 15th-and-30th pay day
+   that moves off weekends and holidays, the Wishlist folded into the Shopping list, a clearer and livelier Plan my
+   week, long task names cut off, a white corner behind the phone menu, no menu animation, and the Budget page in
+   Jae's approved "1c" layout (a big ring, fun cards, fewer lists). */
+
+ZIC.sparkle=ZIC.sparkle||'<path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z"/><path d="M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>';
+ZIC.sun=ZIC.sun||'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>';
+ZIC.extlink=ZIC.extlink||'<path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>';
+
+/* ---------- small helpers: money typed any way, a toast, and pointing at a missing field ---------- */
+// "$1,234.50", "85,5", " 85 " -> "1234.5" / "85.5" / "85"; '' when there is no number
+function zNum(s){
+ s=String(s==null?'':s).replace(/[\s$]/g,'');
+ if(!s)return '';
+ if(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s))s=s.replace(/,/g,'');
+ else if(s.indexOf('.')<0&&/,\d{1,2}$/.test(s))s=s.replace(',','.'); // a keypad with a comma
+ s=s.replace(/,/g,'');
+ var n=parseFloat(s);return isFinite(n)?String(n):'';
+}
+var _q9Zv=zv;
+zv=function(id){var e=document.getElementById(id);if(e&&e.getAttribute('data-money'))return zNum(e.value);return _q9Zv(id)};
+function zToast(msg,act){
+ var t=document.getElementById('ztoast');
+ if(!t){t=document.createElement('div');t.id='ztoast';t.setAttribute('role','status');document.body.appendChild(t);
+  t.addEventListener('click',function(e){if(e.target.closest('button'))setTimeout(function(){t.classList.remove('show')},50)})}
+ t.innerHTML='<span>'+msg+'</span>'+(act||'');t.classList.remove('show');void t.offsetWidth;t.classList.add('show');
+ clearTimeout(zToast.tm);zToast.tm=setTimeout(function(){t.classList.remove('show')},act?6000:3200);
+}
+var ZNEED={zb1:'Give the bill a name, like Rogers or rent.',zt1:'Give it a name first.',zw1:'Say what it is first.',zy2:'Pick one of your pay dates.',zr1:'Type a title first.',zs1:'Say what it was first.'};
+function zNeed(id,msg){
+ var el=document.getElementById(id);if(!el)return;
+ var f=el.closest('.field')||el.parentNode;el.classList.add('zbad');
+ var p=f.querySelector('.zerr');if(!p){p=document.createElement('p');p.className='zerr';f.appendChild(p)}
+ p.textContent=msg;try{el.focus()}catch(e){}
+ el.addEventListener('input',function h(){el.classList.remove('zbad');if(p.parentNode)p.remove();el.removeEventListener('input',h)});
+}
+// a pop-up whose Save didn't close it is missing something: say what, instead of doing nothing
+var _q9SaveModal=saveModal;
+saveModal=function(){
+ var m=view.modal;_q9SaveModal.apply(this,arguments);
+ if(!m||view.modal!==m||!ZM[m.kind])return;
+ var md=document.querySelector('.modal');if(!md)return;
+ var miss=[].slice.call(md.querySelectorAll('input,textarea')).filter(function(i){return i.id&&ZNEED[i.id]&&!String(i.value).trim()})[0];
+ if(miss)zNeed(miss.id,ZNEED[miss.id]);
+};
+
+/* ---------- pop-ups: money boxes take "$85" or "85,50", text that doesn't fit fades out, background redraws leave it alone ---------- */
+var _q9ZModal=zModal;
+zModal=function(m){
+ var h=_q9ZModal(m);
+ // a number box rejects "$85" or a comma on an iPhone and then the bill silently didn't save
+ return h.replace(/<input([^>]*?) type="number"([^>]*?) step="0\.01"([^>]*)>/g,function(all,a,b,c2){
+  return '<input'+a+' type="text" inputmode="decimal" data-money="1" autocomplete="off"'+(b+c2).replace(/\s(min|inputmode)="[^"]*"/g,'')+'>'});
+};
+var _q9ModalHtml=modalHtml,q9ModalGen=null,q9ModalObj=null;
+modalHtml=function(){var s=_q9ModalHtml.apply(this,arguments);q9ModalGen=s;q9ModalObj=view.modal;return s};
+// boxes keep their normal size (Jae: no odd sizes); words that don't fit fade out at the end, and the fade
+// lifts while you type in the box. .zfw wraps the box; .over is set when its text is longer than the box
+function zFadeCheck(root){
+ (root||document).querySelectorAll('.zfw').forEach(function(w){
+  var f=w.firstElementChild;if(!f)return;
+  var over=f.tagName==='TEXTAREA'?f.scrollHeight>f.clientHeight+2:f.scrollWidth>f.clientWidth+1;
+  w.classList.toggle('over',over);
+  if(over&&!w.style.getPropertyValue('--inbg')){var bg=getComputedStyle(f).backgroundColor;if(bg&&bg!=='rgba(0, 0, 0, 0)')w.style.setProperty('--inbg',bg)}
+ });
+}
+['input','focusout'].forEach(function(ev){document.addEventListener(ev,function(e){var w=e.target&&e.target.parentNode;if(w&&w.classList&&w.classList.contains('zfw'))zFadeCheck(w.parentNode)},true)});
+// task / item / event names and notes
+var _q9TaskHtml=ZM.ztask.html;
+ZM.ztask.html=function(m){
+ var h=_q9TaskHtml(m);if(h==null)return h;
+ h=h.replace(/(<input id="zt1" [^>]*>)/,'<span class="zfw">$1</span>');
+ return h.replace(/(<textarea id="zt4" rows="3">[\s\S]*?<\/textarea>)/,'<span class="zfw zfwv">$1</span>');
+};
+// the row's name in its own span, so Home's widgets can stop it at two lines
+var _q9TaskRow=zTaskRow;
+zTaskRow=function(c,t){return _q9TaskRow(c,t).replace(/(<button class="zrt"[^>]*>)([^<]+)/,'$1<span class="zrtt">$2</span>')};
+// the add box: on a phone the words get the whole first line, the date and Add sit under it
+var _q9AddRow=zAddRow;
+zAddRow=function(c,sec,gro,ph){
+ var h=_q9AddRow(c,sec,gro,ph).replace('<div class="zadd">','<div class="zadd'+(gro?' nodate':'')+'">').replace(/(<input id="zadd-[^>]*>)/,'<span class="zfw">$1</span>');
+ return h.replace(/(<input type="date"[^>]*>)/,'<span class="zdatew empty">$1<span class="zdph" aria-hidden="true">Due date</span></span>');
+};
+document.addEventListener('input',function(e){var w=e.target&&e.target.closest&&e.target.closest('.zdatew');if(w)w.classList.toggle('empty',!e.target.value)});
+document.addEventListener('change',function(e){var w=e.target&&e.target.closest&&e.target.closest('.zdatew');if(w)w.classList.toggle('empty',!e.target.value)});
+
+/* ---------- pay days: 15th and 30th, moved off weekends and holidays ---------- */
+REPS.splice(4,0,['semi15','Twice a month (15th and 30th)']);
+var WDMOVE=[['near','Move it to the closest weekday'],['before','Move it to the weekday before'],['after','Move it to the weekday after'],['','Keep the date']];
+// Ontario and bank holidays (the days pay can't land on), worked out for any year
+var _caHol={};
+function caHolidays(y){
+ if(_caHol[y])return _caHol[y];var H={};
+ var add=function(d){H[iso(d)]=1};
+ var nth=function(m,n){var d=new Date(y,m,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);d.setDate(d.getDate()+7*(n-1));return d}; // nth Monday
+ var obs=function(m,dd){var d=new Date(y,m,dd);if(d.getDay()===6)d.setDate(d.getDate()+2);else if(d.getDay()===0)d.setDate(d.getDate()+1);return d};
+ add(new Date(y,0,1));add(obs(0,1));
+ add(nth(1,3)); // Family Day
+ var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);
+ add(new Date(y,Math.floor((h+l-7*m+114)/31)-1,((h+l-7*m+114)%31)+1-2)); // Good Friday
+ var v=new Date(y,4,24);while(v.getDay()!==1)v.setDate(v.getDate()-1);add(v); // Victoria Day
+ add(new Date(y,6,1));add(obs(6,1)); // Canada Day
+ add(nth(7,1));add(nth(8,1)); // Civic Holiday, Labour Day
+ add(new Date(y,8,30));add(obs(8,30)); // Truth and Reconciliation
+ add(nth(9,2)); // Thanksgiving
+ add(new Date(y,10,11));add(obs(10,11)); // Remembrance Day
+ add(new Date(y,11,25));add(new Date(y,11,26));
+ var x=new Date(y,11,25).getDay();if(x===6){add(new Date(y,11,27));add(new Date(y,11,28))}else if(x===0)add(new Date(y,11,27));else if(x===5)add(new Date(y,11,28));
+ return (_caHol[y]=H);
+}
+function zBizDay(k){var d=parseISO(k),w=d.getDay();return w!==0&&w!==6&&!caHolidays(d.getFullYear())[k]}
+function zMoveDay(k,mode){
+ if(!mode||zBizDay(k))return k;
+ for(var n=1;n<10;n++){
+  var b=zAddDays(k,-n),a=zAddDays(k,n);
+  if(mode==='before'){if(zBizDay(b))return b}
+  else if(mode==='after'){if(zBizDay(a))return a}
+  else{if(zBizDay(b))return b;if(zBizDay(a))return a} // closest (a tie goes to the earlier day)
+ }
+ return k;
+}
+var _q9Occ=zOcc;
+function zOccRaw(start,rep,from,to){
+ if(rep!=='semi15')return _q9Occ(start,rep,from,to);
+ var out=[],d=parseISO(start);if(!d||!from||!to||from>to)return out;
+ var f2=parseISO(from),y0=f2.getFullYear(),m0=f2.getMonth();
+ if(y0*12+m0<d.getFullYear()*12+d.getMonth()){y0=d.getFullYear();m0=d.getMonth()}
+ for(var i=0;i<60;i++){
+  var yy=y0+Math.floor((m0+i)/12),mm=(m0+i)%12,last=new Date(yy,mm+1,0).getDate();
+  if(iso(new Date(yy,mm,1))>to)break;
+  [15,Math.min(30,last)].forEach(function(dd){var k=iso(new Date(yy,mm,dd));if(k>=from&&k<=to&&k>=start)out.push(k)});
+ }
+ return out;
+}
+zOcc=function(start,rep,from,to,move){
+ if(!move)return zOccRaw(start,rep,from,to);
+ // fixed days of the month: the date you typed may already be a moved one, so look a few days back
+ var st=(rep==='semi'||rep==='semi15')?zAddDays(start,-4):start,seen={},out=[];
+ zOccRaw(st,rep,zAddDays(from,-7),zAddDays(to,7)).forEach(function(k){var mv=zMoveDay(k,move);if(mv>=from&&mv<=to&&!seen[mv]){seen[mv]=1;out.push(mv)}});
+ return out.sort();
+};
+zNextOcc=function(start,rep,from,move){return zOcc(start,rep,from,zAddDays(from,400),move)[0]||''};
+zPrevOcc=function(start,rep,before,move){var L=zOcc(start,rep,zAddDays(before,-400),zAddDays(before,-1),move);return L[L.length-1]||''};
+zPayNext=function(b){
+ var td=iso(today()),best=null;
+ b.pays.forEach(function(p){var r=p.rep||'2week',n=zNextOcc(p.due,r,td,p.wd);if(n&&(!best||n<best.d))best={p:p,d:n,prev:zPrevOcc(p.due,r,n,p.wd)}});
+ return best;
+};
+// pay days that move show on the calendar on the day they really land
+var _q9AllTasks=allTasks;
+allTasks=function(){
+ var out=_q9AllTasks();
+ if(view.noEv)return out;
+ var moved=[];S.classes.forEach(function(c){if(c.kind!=='budget')return;(c.items||[]).forEach(function(x){if(x.t==='pay'&&x.wd&&x.cal!==false&&x.due)moved.push(x)})});
+ if(!moved.length)return out;
+ var ids={},tmpl={};moved.forEach(function(x){ids[x.id]=1});
+ out=out.filter(function(e){var k=e.t&&e.t.pay&&String(e.t.id).split('@')[0];if(k&&ids[k]){if(!tmpl[k])tmpl[k]=e;return false}return true});
+ var td=iso(today()),from=zAddDays(td,-62),to=zAddDays(td,400);
+ if(view.calMonth){var a=view.calMonth+'-01';if(a<from)from=zAddDays(a,-7);var e2=zMoEnd(view.calMonth);if(e2>to)to=zAddDays(e2,7)}
+ moved.forEach(function(x){var t0=tmpl[x.id];if(!t0)return;
+  zOcc(x.due,x.rep||'2week',from,to,x.wd).forEach(function(k){out.push({t:Object.assign({},t0.t,{id:x.id+'@'+k,due:k,done:k<td}),c:t0.c,kind:'task',ev:true})});
+ });
+ return out;
+};
+function zShortDay(k){return parseISO(k).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}).replace(/\./g,'')}
+ZM.zpay={html:function(m){var c=classById(m.cid);if(!c)return null;var x=m.id&&zItem(c,m.id),wd=x?(x.wd||''):'near',rep=(x&&x.rep)||'2week';
+ return '<h3>'+(x?'Pay day':'Add your pay day')+'</h3><div class="field"><label for="zy1">Name</label><input id="zy1" value="'+esc(x?x.title:'Pay day')+'"></div>'
+  +'<div class="zfrow"><div class="field"><label for="zy2">A pay date</label><input id="zy2" type="date" value="'+esc(x?x.due:iso(today()))+'"></div>'
+  +'<div class="field"><label for="zy3">How often</label><select id="zy3">'+REPS.filter(function(r){return r[0]!=='once'&&r[0]!=='year'}).map(function(r){return '<option value="'+r[0]+'"'+(rep===r[0]?' selected':'')+'>'+r[1]+'</option>'}).join('')+'</select></div></div>'
+  +'<div class="field"><label for="zy6">When it lands on a weekend or holiday</label><select id="zy6">'+WDMOVE.map(function(r){return '<option value="'+r[0]+'"'+(wd===r[0]?' selected':'')+'>'+r[1]+'</option>'}).join('')+'</select></div>'
+  +'<div class="zpaypv" id="zypv"></div>'
+  +'<div class="field"><label for="zy4">Usual amount ($, optional)</label><input id="zy4" type="number" min="0" step="0.01" inputmode="decimal" value="'+esc(x&&x.amount?x.amount:'')+'"></div>'
+  +'<label class="zcheck"><input type="checkbox" id="zy5"'+(x&&x.cal===false?'':' checked')+'> Show pay days on my calendar</label>';
+},save:function(m){var c=classById(m.cid);if(!c)return;var d=zv('zy2');if(!d)return;var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:'pay'};c.items.push(x)}
+ x.title=zv('zy1')||'Pay day';x.due=d;x.rep=zv('zy3');x.wd=zv('zy6');x.amount=parseFloat(zv('zy4'))||0;x.cal=document.getElementById('zy5').checked;touch(x);save();view.modal=null;render()},
+ del:function(m){return m.id?'itemdel:'+m.cid+':'+m.id:''}};
+// "Next pay days: Thu Oct 15 · Fri Oct 30 · Mon Nov 16 (moved from Sun Nov 15)"
+function zPayPreview(){
+ var el=document.getElementById('zypv');if(!el)return;
+ var d=zv('zy2'),r=zv('zy3'),w=zv('zy6'),td=iso(today());if(!d){el.innerHTML='';return}
+ var L=zOcc(d,r,td,zAddDays(td,150),w).slice(0,4),from={};
+ if(w)zOccRaw((r==='semi'||r==='semi15')?zAddDays(d,-4):d,r,zAddDays(td,-7),zAddDays(td,160)).forEach(function(k){var mv=zMoveDay(k,w);if(mv!==k)from[mv]=k});
+ el.innerHTML=L.length?'<b>Your next pay days</b><div>'+L.map(function(k){return '<span'+(from[k]?' class="mv"':'')+'>'+esc(zShortDay(k))+(from[k]?'<small>moved from '+esc(zShortDay(from[k]))+'</small>':'')+'</span>'}).join('')+'</div>':'';
+}
+['change','input'].forEach(function(ev){document.addEventListener(ev,function(e){if(view.modal&&view.modal.kind==='zpay'&&e.target&&/^zy[236]$/.test(e.target.id))zPayPreview()})});
+// a bill with no amount yet (it changes each month) still saves, at $0
+ZM.zbill.save=function(m){var c=classById(m.cid);if(!c)return;var t=zv('zb1');if(!t)return;var a=parseFloat(zv('zb2'));if(!(a>=0))a=0;
+ var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:'bill',paid:{}};c.items.push(x)}
+ x.title=t;x.amount=Math.round(a*100)/100;x.due=zv('zb3')||iso(today());x.rep=zv('zb4');x.cat=zv('zb5');x.cal=document.getElementById('zb6').checked;touch(x);save();view.modal=null;render();
+ zToast('Bill saved: '+esc(t));
+};
+
+/* ---------- the Wishlist lives in the Shopping list now (a second tab) ---------- */
+TEMPLATES.work=TEMPLATES.work.filter(function(k){return k!=='wishlist'});
+TEMPLATES.personal=TEMPLATES.personal.filter(function(k){return k!=='wishlist'});
+KINDS.groceries.desc='What to buy by store, plus a wishlist';
+function q9MergeWish(){
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.wishm)return;
+ if(sbUser&&!S.everSynced)return; // wait for the first sync, like the starter pages
+ var W=S.classes.filter(function(c){return c.kind==='wishlist'});
+ W.forEach(function(w){
+  var shop=firstPage(w.space,'groceries');
+  if(!shop){w.kind='groceries';w.color=PAGE_PAL.groceries;if(w.name==='Wishlist')w.name='Shopping list';touch(w);try{localStorage.setItem('hub:shoptab:'+w.id,'wish')}catch(e){};return}
+  shop.items=shop.items||[];
+  (w.items||[]).forEach(function(x){if(x.t==='wish'&&!zItem(shop,x.id))shop.items.push(touch(Object.assign({},x)))});
+  touch(shop);
+  S.classes=S.classes.filter(function(c){return c.id!==w.id});
+  if(view.classId===w.id){view.classId=shop.id;try{localStorage.setItem('hub:shoptab:'+shop.id,'wish')}catch(e){}}
+ });
+ S.spacesInit=Object.assign({},S.spacesInit,{wishm:true});
+ save();
+}
+function shopTab(c){try{return localStorage.getItem('hub:shoptab:'+c.id)==='wish'?'wish':'list'}catch(e){return 'list'}}
+ZACT.shoptab=function(cid,t){try{localStorage.setItem('hub:shoptab:'+cid,t)}catch(e){}view.r6enter=1;render()};
+var _q9ListPage=zListPage;
+zListPage=function(c){
+ if(c.kind!=='groceries')return _q9ListPage(c);
+ var tab=shopTab(c),W=(c.items||[]).filter(function(x){return x.t==='wish'&&!x.got}).length,N=c.tasks.filter(function(t){return !t.done}).length;
+ var bar='<div class="zshoptabs" role="tablist">'
+  +'<button role="tab" aria-selected="'+(tab==='list')+'" class="'+(tab==='list'?'on':'')+'" data-zact="shoptab:'+c.id+':list">'+zI(ZIC.cart,17)+'<span>To buy</span><em>'+N+'</em></button>'
+  +'<button role="tab" aria-selected="'+(tab==='wish')+'" class="'+(tab==='wish'?'on':'')+'" data-zact="shoptab:'+c.id+':wish">'+zI(ZIC.heart,17)+'<span>Wishlist</span><em>'+W+'</em></button></div>';
+ return bar+(tab==='wish'?zWishBlock(c):_q9ListPage(c));
+};
+function zWishHue(s){return Math.abs(String(s||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%360}
+function zWishBlock(c){
+ var L=(c.items||[]).filter(function(x){return x.t==='wish'}),open=L.filter(function(x){return !x.got}),got=L.filter(function(x){return x.got});
+ var tot=open.reduce(function(s,x){return s+(+x.price||0)},0);
+ var tile=function(x){var host=x.url?cpHost(x.url):'',hue=zWishHue(host||x.title);
+  return '<div class="zwi'+(x.got?' got':'')+'">'
+   +'<div class="zwplate" style="background:linear-gradient(155deg,hsl('+hue+',26%,95%),hsl('+hue+',20%,89%))"><button class="zwpbtn" data-zact="wishedit:'+c.id+':'+x.id+'" aria-label="Edit '+esc(x.title)+'">'+zLogo(host||x.title,46,host?null:'heart',host)+'</button>'
+   +(x.url?'<a class="zwopen" href="'+esc(x.url)+'" target="_blank" rel="noopener" aria-label="Open the link">'+zI(ZIC.extlink,15)+'</a>':'')+'</div>'
+   +'<div class="zwbody"><button class="zwt" data-zact="wishedit:'+c.id+':'+x.id+'">'+esc(x.title)+'</button>'+(host?'<span class="zwhost">'+esc(host)+'</span>':'')
+   +'<div class="zwfoot"><span class="zwprice">'+(x.price?money(x.price):'')+'</span><button class="zwgot'+(x.got?' y':'')+'" data-zact="wishgot:'+c.id+':'+x.id+'" aria-label="'+(x.got?'Not got it yet':'Got it')+'">'+zI(ZIC.check,14)+(x.got?'':'<span>Got it</span>')+'</button></div></div></div>';
+ };
+ var meta=(open.length?open.length+' thing'+(open.length===1?'':'s')+(tot?' · '+money(tot):'')+' · ':'')+'<button class="zlink" data-zact="wishnew:'+c.id+'">+ Add</button>';
+ var body=open.length?'<div class="zwgrid">'+open.map(tile).join('')+'</div>'
+  :'<div class="zpempty"><span class="zic">'+zI(ZIC.heart,20)+'</span><b>Your wishlist is empty</b><span>Things you’d love to have one day. Add a link and Doable shows the store’s logo.</span><button class="zbtn" data-zact="wishnew:'+c.id+'">+ Add something</button></div>';
+ if(got.length)body+='<details class="zdone"><summary>Got it · '+got.length+'</summary><div class="zwgrid">'+got.map(tile).join('')+'</div></details>';
+ return zCard('Wishlist','heart',meta,body,'zlist zwcard');
+}
+var _q9WishHtml=ZM.zwish.html;
+ZM.zwish.html=function(m){var h=_q9WishHtml(m),c=classById(m.cid);
+ if(m.id&&c&&c.kind==='groceries')h+='<button type="button" class="zlink zw2buy" data-zact="wish2buy:'+m.cid+':'+m.id+'">'+zI(ZIC.cart,15)+' Move it to To buy</button>';
+ return h;
+};
+ZACT.wish2buy=function(cid,id){var c=classById(cid),x=c&&zItem(c,id);if(!x)return;
+ c.tasks.push(touch({id:uid(),title:x.title,done:false}));c.items=c.items.filter(function(i){return i.id!==id});save();view.modal=null;render();zToast('Moved to To buy')};
+var _q9WishGot=ZACT.wishgot;
+ZACT.wishgot=function(cid,id){var x=zItem(classById(cid),id);_q9WishGot(cid,id);if(x&&x.got)zToast('Enjoy it!')};
+
+/* ---------- Plan my week, redone: one colourful week card, the chosen day, and "Needs a day" with one-tap days ----------
+   Same data as before (x.t.plan = [day]). Nothing needs dragging or a pop-up: every unplanned item has its own row
+   of days; tap one and it's planned. "Plan it for me" spreads things due soon over the free days before they're due. */
+function pkEnc(k){return String(k).replace(/:/g,'~')}
+function pkDec(k){return String(k).replace(/~/g,':')}
+function planData(){
+ view.noEv=true;var all;try{all=allTasks().filter(function(x){return !isRefClass(x.c)&&!x.ev})}finally{view.noEv=false}
+ var evs=allTasks().filter(function(x){return x.ev&&!isRefClass(x.c)});
+ var td=iso(today()),off=view.planWeek||0,ws=weekStart(off),days=[];
+ for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(iso(d))}
+ var byDay={};days.forEach(function(k){byDay[k]=[]});
+ all.forEach(function(x){var k=planDay(x.t);if(k&&byDay[k])byDay[k].push(x)});
+ var thisWs=iso(weekStart(0)),horizon=zAddDays(days[6],14);
+ var tray=all.filter(function(x){
+  if(x.t.done)return false;var pd=planDay(x.t);
+  if(pd&&(byDay[pd]||pd>=thisWs))return false;
+  if(!x.t.due)return x.kind==='task';
+  return x.t.due<=horizon;
+ }).sort(function(a,b){var p=a.t.due||'9',q=b.t.due||'9';return p<q?-1:p>q?1:0});
+ // the days you can tap to plan something: this week from today on runs into next week, so a Saturday still offers 7 days
+ var pick=days;if(off===0){pick=[];for(var j=0;j<7;j++)pick.push(zAddDays(td,j))}
+ return {all:all,evs:evs,td:td,off:off,days:days,pick:pick,byDay:byDay,tray:tray};
+}
+function zpTickAttr(x){return x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick'}
+function zpPill(x){var p=pal(x.c.color);return '<span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span>'}
+function zpDue(x,day){
+ if(!x.t.due||x.t.done)return '';var cd=cpCountdown(x.t.due);
+ if(cd.n<0)return '<span class="zpdue late">'+esc(cd.t)+'</span>';
+ if(day&&x.t.due===day)return '<span class="zpdue hot">Due this day</span>';
+ if(cd.n===0)return '<span class="zpdue hot">Due today</span>';
+ if(cd.n===1)return '<span class="zpdue">Due tomorrow</span>';
+ return '<span class="zpdue">Due '+esc(zShortDay(x.t.due))+'</span>';
+}
+function zpChips(x,days,td){
+ var key=pkEnc(planKey(x)),pd=planDay(x.t);
+ return '<div class="zpchips">'+days.map(function(k){var d=parseISO(k),on=pd===k,past=k<td,due=x.t.due===k;
+  return '<button class="zpc'+(on?' on':'')+(due?' isdue':'')+(k===td?' t':'')+'" data-zact="pset:'+key+':'+k+'"'+(past&&!on?' disabled':'')
+   +' aria-label="'+esc(d.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+(due?', the day it’s due':'')+'"><span>'+esc(d.toLocaleDateString('en-CA',{weekday:'short'}).replace('.',''))+'</span><b>'+d.getDate()+'</b></button>'}).join('')+'</div>';
+}
+function zpRow(x,day,days,td){
+ var key=planKey(x),open=view.planOpen===key,p=pal(x.c.color);
+ return '<div class="zpl'+(x.t.done?' done':'')+(open?' open':'')+'" draggable="true" data-plandrag="'+key+'" data-planfrom="'+day+'" style="--pc:'+p.bar+'">'
+  +'<div class="zplrow"><button class="zptick" data-'+zpTickAttr(x)+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="'+(x.t.done?'Mark not done':'Mark done')+'"></button>'
+  +'<div class="zplb"><button class="zplt" data-zact="pmove:'+pkEnc(key)+'">'+esc(x.t.title)+'</button><div class="zplm">'+zpPill(x)+zpDue(x,day)+stepChip(x.t)+'</div></div>'
+  +'<button class="zplmv" data-zact="pmove:'+pkEnc(key)+'" aria-label="Move to another day" aria-expanded="'+open+'">'+zI(ZIC.cal,16)+'</button></div>'
+  +(open?'<div class="zplpick"><p>Move it to another day</p>'+zpChips(x,days,td)+'<div class="zpchipsx"><button class="zlink" data-zact="poff:'+pkEnc(key)+'">Take it off this day</button><button class="zlink" data-planpick="'+key+'">A later week</button></div></div>':'')
+  +'</div>';
+}
+function zpTrayRow(x,days,td){
+ var p=pal(x.c.color);
+ return '<div class="zpt" draggable="true" data-plandrag="'+planKey(x)+'" style="--pc:'+p.bar+'"><div class="zptop"><i class="zpdot"></i><div class="zplb"><b>'+esc(x.t.title)+'</b><div class="zplm">'+zpPill(x)+(zpDue(x,'')||'<span class="zpdue">No due date</span>')+stepChip(x.t)+'</div></div></div>'+zpChips(x,days,td)+'</div>';
+}
+viewPlan=function(){
+ var P=planData(),td=P.td,days=P.days,pick=P.pick,byDay=P.byDay,all=P.all,evs=P.evs,off=P.off,real=cpSiteColors('plan');
+ var sel=view.planSel;if(days.indexOf(sel)<0)sel=days.indexOf(td)>-1?td:days[0];view.planSel=sel;
+ var fd=function(k,o){return parseISO(k).toLocaleDateString('en-CA',o).replace(/\./g,'')};
+ var plannedN=0,doneN=0;days.forEach(function(k){byDay[k].forEach(function(x){plannedN++;if(x.t.done)doneN++})});
+ var dueWeek=all.filter(function(x){return x.t.due&&x.t.due>=days[0]&&x.t.due<=days[6]&&!x.t.done}).length;
+ var lim=[zAddDays(days[6],3),pick[6]].sort()[1],canAuto=pick[6]>=td&&P.tray.some(function(x){return x.t.due&&x.t.due<=lim});
+ var label=off===0?'This week':off===1?'Next week':off===-1?'Last week':off>1?'In '+off+' weeks':(-off)+' weeks ago';
+ var sameMo=parseISO(days[0]).getMonth()===parseISO(days[6]).getMonth();
+ var range=fd(days[0],{month:'short',day:'numeric'})+' – '+fd(days[6],sameMo?{day:'numeric'}:{month:'short',day:'numeric'});
+ var chevL='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>',chevR=chevL.replace('m15 6-6 6 6 6','m9 6 6 6-6 6');
+ var pct=plannedN?Math.round(doneN/plannedN*100):0;
+ var stat=plannedN?(doneN===plannedN?'All '+plannedN+' done. Lovely work':doneN+' of '+plannedN+' done'):(P.tray.length?'Nothing planned yet':'A clear week');
+ var help='';try{if(localStorage.getItem('hub:planhelp')!=='0')help='<div class="zphelp"><div class="zphs"><b>1</b><span>New tasks and assignments wait under <em>Needs a day</em></span></div><div class="zphs"><b>2</b><span>Tap a day to choose when you’ll work on each one</span></div><div class="zphs"><b>3</b><span>Tick it off on that day. Due dates never change</span></div><button class="zmini" data-zact="planhelp" aria-label="Hide these tips">×</button></div>'}catch(e){}
+ var dayBtn=function(k){var d=parseISO(k),L=byDay[k];
+  return '<button class="zpd'+(k===sel?' on':'')+(k===td?' t':'')+(k<td?' past':'')+'" data-zact="psel:'+k+'" data-planday="'+k+'" aria-pressed="'+(k===sel)+'" aria-label="'+esc(fd(k,{weekday:'long',month:'long',day:'numeric'}))+', '+L.length+' planned">'
+   +'<span class="zpdtop"><span class="zpdn">'+esc(fd(k,{weekday:'short'}))+'</span><b>'+d.getDate()+'</b></span>'
+   +'<span class="zpddots">'+L.slice(0,4).map(function(x){return '<i style="background:'+palHex(x.c.color)+'"'+(x.t.done?' class="d"':'')+'></i>'}).join('')+(L.length>4?'<em>+'+(L.length-4)+'</em>':'')+'</span>'
+   +'<span class="zpdmini">'+L.slice(0,3).map(function(x){return '<span'+(x.t.done?' class="d"':'')+'><i style="background:'+palHex(x.c.color)+'"></i>'+esc(x.t.title)+'</span>'}).join('')+(L.length>3?'<small>+'+(L.length-3)+' more</small>':'')+(!L.length?'<small>Free</small>':'')+'</span></button>'};
+ var hero='<section class="zphero"><div class="zphtop"><div class="zphti"><p>'+esc(label)+'</p><h2>'+esc(range)+'</h2></div><div class="zphnav">'
+  +'<button data-zact="pwk:-1" aria-label="Previous week">'+chevL+'</button>'+(off?'<button class="zphtoday" data-zact="pwk:0">This week</button>':'')+'<button data-zact="pwk:1" aria-label="Next week">'+chevR+'</button></div></div>'
+  +'<div class="zphstats"><div class="zphring">'+zRing(pct,'currentColor',58,7,null)+'<b>'+(plannedN?pct+'%':'–')+'</b></div>'
+  +'<div class="zphst"><b>'+esc(stat)+'</b><div class="zphchips">'+(P.tray.length?'<span class="warn">'+P.tray.length+' need'+(P.tray.length===1?'s':'')+' a day</span>':'')+(dueWeek?'<span>'+dueWeek+' due this week</span>':'')+(plannedN?'<span>'+plannedN+' planned</span>':'')+'</div></div></div>'
+  +'<div class="zpdays">'+days.map(dayBtn).join('')+'</div></section>';
+ // the chosen day
+ var L=byDay[sel].slice().sort(function(a,b){return (a.t.done?1:0)-(b.t.done?1:0)}),isT=sel===td,tom=sel===zAddDays(td,1);
+ var name=isT?'Today':tom?'Tomorrow':fd(sel,{weekday:'long'}),sub=(isT||tom)?fd(sel,{weekday:'long',month:'long',day:'numeric'}):fd(sel,{month:'long',day:'numeric'});
+ var dueHere=all.filter(function(x){return x.t.due===sel&&!x.t.done&&planDay(x.t)!==sel});
+ var evHere=evs.filter(function(x){return x.t.due===sel}).sort(function(a,b){return (a.t.time||'')<(b.t.time||'')?-1:1});
+ var also='';
+ if(evHere.length||dueHere.length)also='<div class="zpalso"><p>Also on this day</p>'
+  +evHere.map(function(x){return '<button class="zpinfo2" data-zact="taskedit:'+x.c.id+':'+x.t.id+'"><i style="background:'+palHex(x.c.color)+'"></i>'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em>':'')+'<span>'+esc(x.t.title)+'</span></button>'}).join('')
+  +dueHere.map(function(x){var key=planKey(x),op=view.planOpen===key,pd=planDay(x.t);
+   return '<div class="zpdueh"><button class="zpinfo2" data-zact="pmove:'+pkEnc(key)+'"><i style="background:'+palHex(x.c.color)+'"></i><em>Due</em><span>'+esc(x.t.title)+'</span><b class="zpplanit">'+(pd?'On '+esc(fd(pd,{weekday:'short'})):'Plan it')+'</b></button>'+(op?'<div class="zplpick">'+zpChips(x,pick,td)+'</div>':'')+'</div>'}).join('')+'</div>';
+ var panel='<section class="zpday" data-planday="'+sel+'"><div class="zpdh"><div><h3>'+esc(name)+'</h3><p>'+esc(sub)+'</p></div>'+(L.length?'<span class="zpcount">'+L.filter(function(x){return x.t.done}).length+' of '+L.length+' done</span>':'')+'</div>'
+  +(L.length?L.map(function(x){return zpRow(x,sel,pick,td)}).join('')
+   :'<div class="zpempty"><span class="zic">'+zI(ZIC.sun,20)+'</span><b>Nothing planned'+(isT?' for today':' yet')+'</b><span>'+(P.tray.length?'Pick this day for something under Needs a day, and it shows up here.':'A free day. Enjoy it.')+'</span></div>')
+  +also+'</section>';
+ // things without a day yet
+ var showAll=view.planAll,list=showAll?P.tray:P.tray.slice(0,8);
+ var tray='<section class="zptray"><div class="zptrh"><h3>Needs a day</h3>'+(P.tray.length?'<em>'+P.tray.length+'</em>':'')
+  +(canAuto?'<button class="zpauto" data-zact="pauto">'+zI(ZIC.sparkle,15)+'<span>Plan it for me</span></button>':'')+'</div>'
+  +(P.tray.length?'<p class="zptrsub">Tap the day you’ll work on each one. <i class="zpdl"></i> marks the day it’s due.</p>'+list.map(function(x){return zpTrayRow(x,pick,td)}).join('')
+    +(P.tray.length>list.length?'<button class="zlink zpmore" data-zact="pall">Show '+(P.tray.length-list.length)+' more</button>':'')
+   :'<div class="zpempty"><span class="zic">'+zI(ZIC.check,20)+'</span><b>Everything has a day</b><span>New tasks and assignments wait here until you give them one.</span></div>')
+  +'</section>';
+ var G=cpSetHead('Planner settings','plan')+'<button data-zact="autoplan">Plan new to-dos on their due date: '+(S.autoPlan?'On':'Off')+'</button>'+(help?'':'<button data-zact="planhelpon">Show the tips again</button>')+'<button data-secopen="1">Colours</button></div>';
+ return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain"><div class="zplan">'+help+hero+'<div class="zpgrid">'+panel+tray+'</div>'+G+'</div></div></div>';
+};
+CP_SITE_ROWS.plan=[['kplan','The week'],['ktray','Needs a day']];
+ZACT.psel=function(k){view.planSel=k;view.planOpen=null;render()};
+ZACT.pwk=function(n){n=+n;view.planWeek=n===0?0:(view.planWeek||0)+n;view.planSel=null;view.planOpen=null;view.planAll=false;view.r6enter=1;render()};
+ZACT.pmove=function(k){k=pkDec(k);view.planOpen=view.planOpen===k?null:k;render()};
+ZACT.pall=function(){view.planAll=true;render()};
+function zpItem(k){var p=pkDec(k).split(':');return planItem(p[0],p[1],p.slice(2).join(':'))}
+ZACT.pset=function(k,day){
+ var x=zpItem(k);if(!x)return;var was=planDay(x.t)||'';
+ planToggle(x,day,true);save();view.planOpen=null;view.planUndo=[{k:planKey(x),prev:was}];
+ view.r6pop='[data-zact="psel:'+day+'"]';render();
+ zToast('Planned for '+esc(day===iso(today())?'today':parseISO(day).toLocaleDateString('en-CA',{weekday:'long'})),'<button data-zact="pundo">Undo</button>');
+};
+ZACT.poff=function(k){var x=zpItem(k);if(!x)return;var was=planDay(x.t);if(was)planToggle(x,was,false);save();view.planOpen=null;view.planUndo=[{k:planKey(x),prev:was||''}];render();zToast('Back under Needs a day','<button data-zact="pundo">Undo</button>')};
+ZACT.pundo=function(){
+ (view.planUndo||[]).forEach(function(u){var p=u.k.split(':'),x=planItem(p[0],p[1],p.slice(2).join(':'));if(!x)return;if(u.prev)x.t.plan=[u.prev];else delete x.t.plan;touch(x.t)});
+ view.planUndo=null;save();render();
+};
+// spread things due soon over the days before they're due: the least busy day wins
+ZACT.pauto=function(){
+ var P=planData(),td=P.td,avail=P.pick.filter(function(k){return k>=td});if(!avail.length)return;
+ var load={};avail.forEach(function(k){load[k]=0});P.all.forEach(function(x){var k=planDay(x.t);if(!x.t.done&&k in load)load[k]++});
+ var lim=[zAddDays(P.days[6],3),P.pick[6]].sort()[1],U=[],n=0;
+ P.tray.filter(function(x){return x.t.due&&x.t.due<=lim}).forEach(function(x){
+  var cand=avail.filter(function(k){return k<x.t.due});if(!cand.length)cand=[avail[0]];
+  var late=x.t.due>avail[avail.length-1],best=cand[0];
+  cand.forEach(function(k){if(load[k]<load[best]||(load[k]===load[best]&&!late&&k>best))best=k});
+  U.push({k:planKey(x),prev:planDay(x.t)||''});planToggle(x,best,true);load[best]++;n++;
+ });
+ if(!n){zToast('Nothing due soon needs a day.');return}
+ view.planUndo=U;save();view.r6enter=1;render();
+ zToast('Planned '+n+' thing'+(n===1?'':'s')+' across your week','<button data-zact="pundo">Undo</button>');
+};
+
+/* ---------- Budget, layout 1c (Jae's approved design): a big "left to spend" ring with four tiles, categories and
+   six months on the left, a rail with pay day, where it went, bills and this month on the right. On a phone (and
+   iPad) it's one column: the ring card, the pay day, then chips that switch what's underneath. ---------- */
+var ZB1={brown:'#a07e62',green:'#e6efe3',track:'#efece6',tin:'#e6efe3',tout:'#f1e4dc',tsav:'#e9e4f1',tuse:'#e6ebf0',bar:'#c9a98d'};
+function zbRing(pct,sz,w,big,cap,over){
+ var r=(sz-w)/2,C=2*Math.PI*r,p=Math.max(0,Math.min(100,pct));
+ return '<div class="zbring" style="width:'+sz+'px;height:'+sz+'px"><svg width="'+sz+'" height="'+sz+'" viewBox="0 0 '+sz+' '+sz+'" aria-hidden="true">'
+  +'<circle cx="'+sz/2+'" cy="'+sz/2+'" r="'+r+'" fill="none" stroke="'+ZB1.green+'" stroke-width="'+w+'"/>'
+  +(p>0?'<circle class="zseg" cx="'+sz/2+'" cy="'+sz/2+'" r="'+r+'" fill="none" stroke="'+(over?'#B66A5E':ZB1.brown)+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(C*p/100).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 '+sz/2+' '+sz/2+')"/>':'')
+  +'</svg><div class="zbringc"><b>'+big+'</b><small>'+cap+'</small></div></div>';
+}
+function zbTile(cls,ico,label,val,sub){return '<div class="zbtile '+cls+'"><span class="zbtl">'+zI(ZIC[ico]||ZIC.list,14)+label+'</span><b>'+val+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div>'}
+function zbChip(){try{return localStorage.getItem('hub:zbchip')||'cats'}catch(e){return 'cats'}}
+ZACT.zbchip=function(k){try{localStorage.setItem('hub:zbchip',k)}catch(e){}render()};
+ZACT.zbadd=function(cid){zOpen('zbadd',{cid:cid})};
+ZM.zbadd={html:function(m){return '<h3>Add to your budget</h3><div class="zbaddl">'
+ +'<button data-zact="spendnew:'+m.cid+'"><span class="zic" style="'+zcv('peach')+'">'+zI(ZIC.arrowout,18)+'</span><b>Spending</b><small>Something you bought</small></button>'
+ +'<button data-zact="spendnew:'+m.cid+':in"><span class="zic" style="'+zcv('sage')+'">'+zI(ZIC.arrowin,18)+'</span><b>Money in</b><small>A paycheque, a gift, a refund</small></button>'
+ +'<button data-zact="billnew:'+m.cid+'"><span class="zic" style="'+zcv('sand')+'">'+zI(ZIC.bill,18)+'</span><b>Bill</b><small>Rent, your phone, a subscription</small></button>'
+ +'<button data-zact="goalnew:'+m.cid+'"><span class="zic" style="'+zcv('lavender')+'">'+zI(ZIC.piggy||ZIC.wallet,18)+'</span><b>Savings goal</b><small>A trip, a laptop, a rainy-day fund</small></button></div>'},closeLabel:'Cancel'};
+zBudgetPage=function(c){
+ var mo=zMonthOf(c),b=zBudget(c,mo),pb=zBudget(c,zMoShift(mo,-1)),cur=mo===zMonth();
+ var used=b.total?b.spent/b.total*100:0,over=b.total&&b.spent>b.total,saved=b.goals.reduce(function(s,g){return s+(+g.saved||0)},0);
+ var side=chromeHex('sideBg'),sideOn=contrast(side,'#ffffff')>=2.6?'#ffffff':'#26221d';
+ var head='<div class="zbhead'+(window.innerWidth>=1100?'':' ph')+'"><div class="zbmo"><button data-zact="bmon:-1" aria-label="Previous month">‹</button><b>'+esc(zMoName(mo,true))+'</b><button data-zact="bmon:1" aria-label="Next month"'+(cur?' disabled':'')+'>›</button>'+(cur?'':'<button class="zlink" data-zact="bmon:0">This month</button>')+'</div>'
+  +'<div class="zbadds"><button class="zbtn" data-zact="spendnew:'+c.id+'">+ Spending</button><button class="zbtn ghost" data-zact="spendnew:'+c.id+':in">+ Money in</button><button class="zbtn ghost" data-zact="billnew:'+c.id+'">+ Bill</button></div></div>';
+ var diff=function(now,before,goodUp){if(!before)return '';var d=now-before;if(Math.abs(d)<0.5)return 'Same as '+esc(zMoName(zMoShift(mo,-1)));return '<span class="'+(((d>0)===goodUp)?'zgood':'zbad2')+'">'+(d>0?'↑ ':'↓ ')+money(Math.abs(d))+'</span> vs '+esc(zMoName(zMoShift(mo,-1)))};
+ var big=b.total?(over?money(b.spent-b.total):money(b.left)):money(b.spent),cap=b.total?(over?'over budget':'left to spend'):'spent';
+ var ringBig=zbRing(b.total?used:0,220,26,big,cap,over),ringPh=zbRing(b.total?used:0,210,24,big,b.total?(over?'over your '+money(b.total):'left of '+money(b.total)):'spent this month',over);
+ var tiles='<div class="zbtiles">'+zbTile('in','arrowin','Money in',money(b.inc),diff(b.inc,pb.inc,true))+zbTile('out','arrowout','Money out',money(b.spent),diff(b.spent,pb.spent,false))
+  +zbTile('sav','sparkle','Saved',money(saved),b.goals.length?b.goals.length+' goal'+(b.goals.length===1?'':'s'):'')+zbTile('use','target','Used',b.total?Math.round(used)+'%':'–',b.total?'of '+money(b.total):'Add category limits')+'</div>';
+ var hero='<section class="zbhero">'+ringBig+tiles+'</section>';
+ var heroPh='<section class="zbhero ph">'+ringPh+'<div class="zbmini"><span title="Money in">'+zI(ZIC.arrowin,14)+money(b.inc)+'</span><span title="Money out">'+zI(ZIC.arrowout,14)+money(b.spent)+'</span><span title="Saved">'+zI(ZIC.sparkle,14)+money(saved)+'</span></div></section>';
+ var catBy={};b.cats.forEach(function(x){catBy[x.id]=x});
+ var cats='<section class="zbcard zbcats"><div class="zbch"><h3>Budget by category</h3><button class="zlink" data-zact="catnew:'+c.id+'">+ Category</button></div>'
+  +(b.cats.length?b.cats.map(function(x){var s=b.byCat[x.id]||0,p=x.limit?Math.min(100,Math.round(s/x.limit*100)):0,ov=x.limit&&s>x.limit,col=(ZC[x.color]||ZC.grey)[1];
+    return '<button class="zbcat'+(ov?' over':'')+'" data-zact="catedit:'+c.id+':'+x.id+'"><span class="zbcn">'+esc(x.title)+'</span><span class="zbtrack"><i style="width:'+p+'%;background:'+(ov?'#B66A5E':col)+'"></i></span><span class="zbcv">'+money(s)+' / '+money(x.limit)+'</span></button>'}).join('')
+   :'<p class="zempty">Add categories with a monthly limit, like groceries or eating out.</p>')+'</section>';
+ var months=[];for(var i=5;i>=0;i--)months.push(zMoShift(mo,-i));
+ var vals=months.map(function(m){return {m:m,o:zBudget(c,m).spent}}),mx=Math.max.apply(null,vals.map(function(v){return v.o}).concat([1]));
+ var six='<section class="zbcard"><div class="zbch"><h3>Last six months</h3><span class="zsoft">Money out</span></div><div class="zbsix">'+vals.map(function(v){
+   return '<div class="zbsc'+(v.m===mo?' on':'')+'" title="'+esc(zMoName(v.m,true))+': '+money(v.o)+'"><i style="height:'+Math.max(3,Math.round(v.o/mx*100))+'%"></i><span>'+esc(zMoName(v.m))+'</span></div>'}).join('')+'</div></section>';
+ // pay day: the menu colour, white words
+ var nx=zPayNext(b),pay;
+ if(!nx)pay='<section class="zbpay empty" style="background:'+side+';color:'+sideOn+'"><span class="zbtl">'+zI(ZIC.payday,14)+'Pay day</span><p>Add your pay day and Doable counts down to it.</p><button class="zbtn" data-zact="paynew:'+c.id+'">+ Add pay day</button></section>';
+ else{var cd=cpCountdown(nx.d);
+  pay='<section class="zbpay" style="background:'+side+';color:'+sideOn+'" data-zact="payedit:'+c.id+':'+nx.p.id+'" role="button" tabindex="0"><span class="zbtl">'+zI(ZIC.payday,14)+esc(nx.p.title||'Pay day')+'</span>'
+   +'<b>'+(cd.n===0?'Today':cd.n+' day'+(cd.n===1?'':'s'))+'</b><small><span>'+esc(parseISO(nx.d).toLocaleDateString('en-CA',{weekday:'long',month:'short',day:'numeric'}).replace(/\./g,''))+'</span><span>'+esc(zRepName(nx.p.rep||'2week').toLowerCase().replace(/^twice a month \((.*)\)$/,'the $1'))+(nx.p.amount?' · '+money(nx.p.amount):'')+'</span></small></section>'}
+ var segs=zSpendSegs(c,b).filter(function(s){return s.v>0}).sort(function(a,z){return z.v-a.v});
+ var went='<section class="zbcard"><div class="zbch"><h3>Where it went</h3></div>'+(b.spent?'<div class="zbwent">'+zDonut(segs,92,14,money(b.spent),'')
+   +'<div class="zbwl">'+segs.slice(0,4).map(function(s){return '<span><i style="background:'+s.col+'"></i>'+esc(s.label)+'<em>'+Math.round(s.v/b.spent*100)+'%</em></span>'}).join('')+'</div></div>'
+  :'<p class="zempty">Nothing spent '+(cur?'yet':'that month')+'.</p>')+'</section>';
+ var bl=zBillsIn(b,mo+'-01',zMoEnd(mo)),due=bl.filter(function(o){return !o.paid}).reduce(function(s,o){return s+(+o.x.amount||0)},0);
+ var bills='<section class="zbcard zlist"><div class="zbch"><h3>Bills</h3><span class="zsoft">'+(bl.length&&due?money(due)+' to pay · ':'')+'<button class="zlink" data-zact="billnew:'+c.id+'">+ Bill</button></span></div>'
+  +(bl.length?bl.map(function(o){return zBillRow(c,o)}).join(''):'<p class="zempty">Add your bills with their due dates, like rent or your phone. They show on your calendar too.</p>')+'</section>';
+ var rec=b.sp.slice().sort(function(a,z){return (z.date||'')<(a.date||'')?-1:1});
+ var trans='<section class="zbcard"><div class="zbch"><h3>'+(cur?'This month':esc(zMoName(mo,true)))+'</h3>'+(rec.length?'<span class="zsoft">'+rec.length+'</span>':'')+'</div>'
+  +(rec.length?rec.slice(0,view.zbAll?200:6).map(function(x){var ct=catBy[x.cat];
+    return '<button class="zsp" data-zact="spendedit:'+c.id+':'+x.id+'">'+zLogo(x.title||'',32,x.income?'arrowin':'wallet')+'<span>'+esc(x.title||'Spending')+'<small>'+esc(x.date?parseISO(x.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}).replace(/\./g,''):'')+(ct&&!x.income?' · '+esc(ct.title):'')+'</small></span><b'+(x.income?' class="in"':'')+'>'+(x.income?'+':'−')+money(x.amount)+'</b></button>'}).join('')
+    +(rec.length>6&&!view.zbAll?'<button class="zlink" data-zact="ball">Show all '+rec.length+'</button>':'')
+   :'<p class="zempty">Nothing added. Tap + Spending after you buy something, or + Money in when you get paid.</p>')+'</section>';
+ var goals='<section class="zbgoals"><div class="zh2row"><h2 class="zh2">Goals and savings</h2><button class="zbtn" data-zact="goalnew:'+c.id+'">+ Add a goal</button></div>'
+  +(b.goals.length?'<div class="zg3">'+b.goals.map(function(g){return zGoalCard(c,g)}).join('')+'</div>':'<p class="zempty">Save toward something: a trip, a laptop, a rainy-day fund. Add a picture to keep it in mind.</p>')+'</section>';
+ // computer: two columns. Phone and iPad: the ring card, pay day, chips, then what the chip shows
+ var desk='<div class="zb1 zbdesk"><div class="zbleft">'+hero+cats+six+'</div><aside class="zbrail">'+pay+went+bills+trans+'</aside></div>'+goals;
+ var ch=zbChip(),CH=[['cats','Categories'],['bills','Bills'],['spent','Spending'],['goals','Goals']];
+ var phBody=ch==='bills'?bills:ch==='spent'?went+trans:ch==='goals'?goals:cats+six;
+ var ph='<div class="zb1 zbph">'+heroPh+pay+'<div class="zbchips" role="tablist">'+CH.map(function(k){return '<button role="tab" aria-selected="'+(ch===k[0])+'" class="'+(ch===k[0]?'on':'')+'" data-zact="zbchip:'+k[0]+'">'+k[1]+'</button>'}).join('')+'</div>'+phBody
+  +'<button class="zbfab" data-zact="zbadd:'+c.id+'" aria-label="Add spending, money in, a bill or a goal">'+zI(ZIC.plus,24)+'</button></div>';
+ return '<div class="zbhw">'+head+(window.innerWidth>=1100?desk:ph)+'</div>';
+};
+// redraw when the window crosses the computer / phone layout
+(function(){var was=window.innerWidth>=1100;window.addEventListener('resize',function(){var now=window.innerWidth>=1100;if(now!==was){was=now;var c=view.classId&&classById(view.classId);if(c&&c.kind==='budget')render()}})})();
+
+/* ---------- the phone menu: slides in and out every time (also with Reduce Motion, as a gentle fade) ----------
+   Round 8's slide used a CSS transition that a quick second redraw (or Reduce Motion) cancelled. Now it is a
+   keyframe animation that a redraw picks up where it left off. The menu button and the corner buttons go under
+   the dimmed background while the menu is open (one of them was peeking out past its rounded corner). */
+var q9MenuWas=false,q9MenuAt=0,q9CloseAt=0,q9LastSel=null;
+window.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-menu="0"]');if(!b||!view.menu||!narrowScreen())return;
+ e.preventDefault();e.stopPropagation();
+ if(q9CloseAt)return;
+ q9CloseAt=Date.now();
+ var sd=document.querySelector('aside.side'),bd=document.querySelector('.backdrop');
+ [sd,bd].forEach(function(el){if(!el)return;el.classList.remove('zsin');el.style.animationDelay='';void el.offsetWidth;el.classList.add('zsout')});
+ setTimeout(function(){q9CloseAt=0;view.menu=false;view.renderNow=true;try{render()}finally{view.renderNow=false}},230);
+},true);
+function q9After(ent){
+ var narrow=narrowScreen(),sd=document.querySelector('aside.side'),bd=document.querySelector('.backdrop');
+ document.body.classList.toggle('q9menu',!!view.menu&&narrow);
+ if(view.menu&&narrow&&sd){
+  var cls=q9CloseAt?'zsout':'zsin',since=Date.now()-(q9CloseAt||q9MenuAt);
+  if(q9CloseAt||since<420)[sd,bd].forEach(function(el){if(!el)return;el.classList.add(cls);el.style.animationDelay=(-since)+'ms'});
+ }
+ zFadeCheck();
+ document.querySelectorAll('.zdatew').forEach(function(w){var i=w.querySelector('input');w.classList.toggle('empty',!(i&&i.value))});
+ zPayPreview();
+ var pd=document.querySelector('.zpday');
+ if(pd&&q9LastSel&&view.planSel!==q9LastSel&&r6Motion())pd.classList.add('zswap');
+ q9LastSel=view.page==='plan'?view.planSel:null;
+ if(ent&&r6Motion()){var mn=document.querySelector('.main');if(mn)[].slice.call(mn.querySelectorAll('.zphero,.zphelp,.zpday,.zptray,.zshoptabs,.zwi,.zbhero,.zbcard,.zbpay,.zbchips')).slice(0,20).forEach(function(el,i){
+  el.style.animationDelay=(i*45)+'ms';el.classList.add('ain');setTimeout(function(){el.classList.remove('ain');el.style.animationDelay=''},1500)})}
+}
+var _q9Render=render;
+render=function(){
+ // a background redraw (a sync finishing, a timer) that wouldn't change the open pop-up leaves it alone, so the
+ // keyboard, the date wheel and what you're typing aren't interrupted (Jae: adding a bill "glitched")
+ if(!window.event&&!view.renderNow&&view.modal&&view.modal===q9ModalObj&&document.querySelector('.modal')){
+  var g=null;try{g=_q9ModalHtml()}catch(e){}
+  if(g!==null&&g===q9ModalGen)return;
+ }
+ try{q9MergeWish()}catch(e){}
+ var opening=!!view.menu&&!q9MenuWas;
+ if(typeof r8MenuWas!=='undefined')r8MenuWas=!!view.menu; // round 8's transition slide is replaced by the one above
+ var ent=view.r6enter;
+ _q9Render.apply(this,arguments);
+ q9MenuWas=!!view.menu;
+ if(opening)q9MenuAt=Date.now();
+ q9After(ent);
+};
+
 
 try{spBoot()}catch(e){}
 load();
