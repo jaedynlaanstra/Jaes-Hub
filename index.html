@@ -2740,6 +2740,51 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .zrdcov.wide img,.zrdcov.wide>span{aspect-ratio:1;width:130px}
 .zrdcov.wide{width:130px}
 .zresi.wide img{aspect-ratio:1}
+/* ===== v144 round 8: colours over icons, covers everywhere, header tint, menu slide ===== */
+/* the title band on Home-type pages: a light shade of the menu colour (it was a fixed beige) */
+:root{--hdr:color-mix(in srgb,var(--sideBg) 13%,var(--pagebg,#FBFAF8));--hdrInk:color-mix(in srgb,var(--sideBg) 72%,#1c1915);--hdrInk2:color-mix(in srgb,var(--sideBg) 62%,#8f8a82);--hdrBar:var(--sideBg)}
+/* widget icons only when "Show icons" is on */
+.zhome.noico .wdic,.zhome.noico .zichip,.zhome.noico .wdgt>.zic,.zhome.noico .wdhb>.zic,.zhome.noico .wdproj2>.zic,.zhome.noico .wdmeal>.zic,.zhome.noico .wdio .zichip{display:none}
+.zhome.noico .wdh{padding-top:15px}
+.zhome.noico .wdcover+.wdh{padding-top:12px}
+/* tinted widgets read as soft colour cards */
+.wd.tinted{background:color-mix(in srgb,var(--wt) 80%,var(--card));border-color:transparent}
+.wd.tinted .zrow{border-bottom-color:color-mix(in srgb,var(--wc) 12%,transparent)}
+.wd.tinted .zadd input,.wd.tinted .wdio>div,.wd.tinted .wdbdh{background:color-mix(in srgb,var(--card) 70%,transparent)}
+.wd.tinted .zck{background:color-mix(in srgb,var(--card) 80%,transparent)}
+/* older School widgets with a colour picked */
+.zw[data-wcol]>:not(button){background:var(--wbg)!important;border-color:transparent!important}
+.zw[data-wcol] .hb2 .hd,.zw[data-wcol] .cplines{background:transparent}
+/* colour choices: menu colour first, any colour last */
+.zsw.menu{position:relative}
+.zsw.menu::after{content:'';position:absolute;inset:9px;border-radius:50%;background:rgba(255,255,255,.8)}
+.zsw.any{position:relative;display:inline-block;background:conic-gradient(#c9a3a0,#d6c39a,#a9c29f,#98b4c6,#b3a4c9,#c9a3a0);overflow:hidden;cursor:pointer}
+.zsw.any input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;padding:0;border:none}
+/* a pencil on every title band without a cover */
+.banner .bancov{top:14px;right:14px}
+@media(max-width:900px){.banner .bancov{top:calc(env(safe-area-inset-top,0px) + 12px);right:12px}}
+.coveredit{background:rgba(255,255,255,.9)}
+/* the phone menu slides in and out, a little springy */
+@media(max-width:900px){
+ .side{transition:transform .3s cubic-bezier(.22,.9,.24,1)!important;will-change:transform}
+ .backdrop{animation:zbg .25s ease;transition:opacity .25s ease}
+ .backdrop.out{opacity:0}
+}
+@media(prefers-reduced-motion:reduce){.side{transition:none!important}.backdrop{animation:none}}
+/* the colour panel's handle stays at the top while you scroll inside the panel, so it can always be dragged */
+@media(min-width:701px){.pickhead{position:sticky;top:-18px;z-index:3;background:var(--card);margin:-18px -18px 10px;padding:12px 18px 8px;border-radius:16px 16px 0 0;touch-action:none}}
+/* spending rows with a logo in front */
+.zsp>span.zlogo{flex:none;display:inline-grid;font-size:13px}
+.zsp>.zlogo+span{flex:1;min-width:0;display:flex;flex-direction:column;font-size:14.5px}
+/* calendar import: how-to for each kind of calendar */
+.icshow{margin:4px 0 12px}
+.icshowl{font-size:13.5px;margin:0 0 6px}
+.icshow details{border:1px solid var(--line,#e7e3dc);border-radius:10px;margin:0 0 6px;padding:0 12px}
+.icshow summary{cursor:pointer;padding:9px 0;font-size:14px;font-weight:500}
+.icshow ol{margin:0 0 10px;padding-left:20px;font-size:13.5px;line-height:1.5}
+.icshow li{margin:2px 0}
+.icshow details p{font-size:13px;margin:0 0 10px;line-height:1.5}
+.icsnote{font-size:12.5px;color:var(--ink3,#8f8a82);margin:8px 0 0;line-height:1.45}
 </style>
 </head>
 <body>
@@ -3048,7 +3093,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v143';
+var BUILD='v144';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -4335,9 +4380,25 @@ function icsDup(cid,ev){
  var t=ev.title.toLowerCase();
  return (c.assignments||[]).some(function(a){return (a.title||'').toLowerCase()===t&&(a.due||'')===ev.due});
 }
+// step-by-step: how to get an .ics file out of each kind of calendar
+var ICS_HOW=[
+ ['Google Calendar','<ol><li>On a computer, go to <b>calendar.google.com</b> (the phone app can’t export).</li><li>Click the <b>gear</b> at the top right, then <b>Settings</b>.</li><li>On the left, click <b>Import &amp; export</b>, then <b>Export</b>. A .zip file downloads.</li><li>Open the .zip (double-click it). Inside is one .ics file per calendar. Choose that file below.</li></ol><p>Just one calendar: in Settings, click its name on the left (under “Settings for my calendars”), then <b>Export calendar</b>.</p>'],
+ ['Apple Calendar (Mac)','<ol><li>Open the <b>Calendar</b> app on your Mac.</li><li>In the list on the left, click the calendar you want.</li><li>In the menu bar choose <b>File</b>, then <b>Export</b>, then <b>Export…</b>, and save the file.</li><li>Choose that .ics file below.</li></ol>'],
+ ['iPhone or iPad Calendar','<p>The iPhone Calendar app can’t save a file, so use iCloud:</p><ol><li>Go to <b>icloud.com/calendar</b> and sign in (a computer is easiest).</li><li>Next to the calendar’s name on the left, click the <b>share</b> icon and turn on <b>Public Calendar</b>. Click <b>Copy Link</b>.</li><li>Paste the link into your browser’s address bar, change <b>webcal://</b> at the start to <b>https://</b>, and press Enter. The .ics file downloads.</li><li>Choose it below. You can turn Public Calendar off again afterwards.</li></ol>'],
+ ['Outlook or Microsoft 365 (school or work email)','<ol><li>Go to <b>outlook.office.com</b> (school or work) or <b>outlook.live.com</b> (personal) and sign in.</li><li>Click the <b>gear</b> (Settings), then <b>Calendar</b>, then <b>Shared calendars</b>.</li><li>Under <b>Publish a calendar</b>, pick the calendar and <b>Can view all details</b>, then <b>Publish</b>.</li><li>Copy the <b>ICS</b> link, paste it into your browser’s address bar and press Enter. The .ics file downloads. Choose it below.</li></ol><p>Outlook app on Windows: <b>File</b>, then <b>Save Calendar</b>. Microsoft Teams uses your Outlook calendar, so use these same steps.</p>'],
+ ['FanshaweOnline, D2L or Brightspace','<ol><li>Open <b>Calendar</b> (on your homepage or inside a course).</li><li>Find <b>Subscribe</b> (at the bottom of the calendar, or in its ⋯ menu) and choose <b>All courses</b>.</li><li>Copy the link, paste it into your browser’s address bar (change <b>webcal://</b> to <b>https://</b> if it starts that way) and press Enter. The .ics file downloads.</li><li>Choose it below. Doable can then put each event in the right class.</li></ol>'],
+ ['Canvas','<ol><li>Open <b>Calendar</b> in Canvas.</li><li>At the bottom right, click <b>Calendar Feed</b> and copy the link.</li><li>Paste it into your browser’s address bar and press Enter. The .ics file downloads. Choose it below.</li></ol>'],
+ ['Moodle','<ol><li>Open <b>Calendar</b>, then click <b>Export calendar</b> (or <b>Import or export calendars</b>, then <b>Export</b>).</li><li>Pick <b>All events</b> and a time range, then <b>Export</b>. Choose the downloaded .ics file below.</li></ol>'],
+ ['Yahoo Calendar','<ol><li>On a computer, open Yahoo Calendar and hover over the calendar’s name on the left.</li><li>Click the small arrow, then <b>Share</b>, and copy the <b>ICS</b> link.</li><li>Paste it into your browser’s address bar and press Enter. Choose the downloaded file below.</li></ol>'],
+ ['Something else','<p>Look for <b>Export</b>, <b>Download</b>, <b>Subscribe</b> or <b>Add to calendar (.ics)</b> in its settings. If you get a link instead of a file, paste the link into your browser’s address bar (changing <b>webcal://</b> to <b>https://</b>) and it usually downloads the file.</p>']
+];
+function icsHowTo(){
+ return '<div class="icshow"><p class="icshowl">How do I get the file? Pick your calendar:</p>'+ICS_HOW.map(function(x){return '<details><summary>'+x[0]+'</summary>'+x[1]+'</details>'}).join('')
+  +'<p class="icsnote">On a phone, the file lands in <b>Downloads</b> (iPhone: the Files app). This copies the events once; import again later for new ones and Doable skips the ones you already have.</p></div>';
+}
 function icsPickHtml(msg){
  return '<h2>Import from a calendar</h2><p>Bring due dates in from Google Calendar or any calendar that can export an <b>.ics</b> file. You pick which events to keep.</p>'
-  +'<details><summary>How do I get the file?</summary><p><b>Google Calendar:</b> on a computer, open calendar.google.com, click the gear, then <b>Settings</b>, then <b>Import &amp; export</b>, then <b>Export</b>. Unzip the download and choose the .ics file for the calendar you want.</p><p><b>School calendars</b> (like D2L or Brightspace), <b>Outlook</b> and <b>Apple Calendar</b> all have an export or download option that produces an .ics file.</p></details>'
+  +icsHowTo()
   +'<input type="file" id="xmIcs" accept=".ics,text/calendar" style="margin-bottom:8px">'
   +'<p class="xmsg" id="xmMsg">'+esc(msg||'')+'</p><div class="xacts"><button class="xbtn" data-xm="close">Cancel</button></div>';
 }
@@ -5201,6 +5262,7 @@ function render(){
  var eyebrow=c?(c.kind?spaceById(c.space).name:[c.code,c.day,c.room].filter(Boolean).join(' \u00b7 ')):(curSpace()==='school'?S.term:spaceById(curSpace()).name);
  var sub='';
  var ovPage=!!(c&&c.cover&&(view.page==='class'||view.page==='page')&&view.repos!==coverKey(c));
+ var pco=(!c&&typeof pageCoverOwner==='function')?pageCoverOwner(false):null,ovPg2=!!(pco&&pco.cover&&view.repos!==coverKey(null));
 
  var body='';
  if(view.page==='home')body=viewHome();
@@ -5220,21 +5282,21 @@ function render(){
   +((S.sideHidden&&!narrowScreen())?'':sidebar(c))
   +((S.sideHidden&&!narrowScreen())?'<button class="sideshow" data-side="1" title="Show the menu" aria-label="Show the menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>':'')
   +(view.menu?'<div class="backdrop" data-menu="0"></div>':'')
-  +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?homeOwner().cover:''));
+  +(function(){var hasCov=!!(c?c.cover:(view.page==='home'?homeOwner().cover:(pco&&pco.cover)));
      if(view.page==='home')return '<main class="main hhome nohead'+(hasCov?' hascover':'')+'">';
      // v142: classes and pages with a cover put their title inside the picture, the same as Home
-     return '<main class="main'+(hasCov?' hascover':'')+(ovPage?' cvov':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
+     return '<main class="main'+(hasCov?' hascover':'')+(ovPage||ovPg2?' cvov':'')+((bannerSize()==='hidden'&&!hasCov)?' nohead':'')+'">';})()
   +'<button class="menubtn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +spacePill('top')
   +(view.page==='home'?'':'<button class="homebtn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')
-  +coverBlock(c,view.page==='home'?homeGreeting(true):(ovPage?pageCoverOverlay(c):''))+(view.page==='home'||ovPage?'<div style="display:none">':'')
+  +coverBlock(c,view.page==='home'?homeGreeting(true):(ovPage?pageCoverOverlay(c):(ovPg2?pageCoverOverlay2():'')))+(view.page==='home'||ovPage||ovPg2?'<div style="display:none">':'')
   +'<div class="banner sz-'+bannerSize()+(view.picker&&bannerSize()==='hidden'?' editing':'')+'" style="background:var(--s-banner-bg,'+head.bg+')">'+pencil('banner')
   +(view.picker&&bannerSize()==='hidden'?'<span class="hiddennote">Header hidden on this page. Use the pencil to bring it back.</span>':'')
 
   +'<p class="eyebrow" style="color:var(--s-banner-line,'+head.ink2+')">'+esc(eyebrow)+'</p>'
   +'<h1 style="color:var(--s-banner-ink,'+head.ink+')">'+esc(title)+'</h1>'
   +(sub?'<p class="sub" style="color:'+head.ink2+'">'+esc(sub)+'</p>':'')
-  +'</div>'+(view.page==='home'||ovPage?'</div>':'')
+  +'</div>'+(view.page==='home'||ovPage||ovPg2?'</div>':'')
   +'<div class="body">'+body+'</div></main></div>'
   +(view.storageOk?'':'<p class="hint" style="margin:12px 40px">Saving failed, most likely because storage is full. Delete a few uploaded files and try again.</p>')
   +'</div>'
@@ -5259,7 +5321,7 @@ function bannerSize(){return (S.banners&&S.banners[pageKey()])||S.bannerAll||'la
 function coverKey(c){return c?'cover:'+c.id:'cover:home'}
 function coverOwner(key){return key==='cover:home'?S:classById(key.split(':')[1])}
 function coverBlock(c,overlay){
- var owner=c||(view.page==='home'?homeOwner():null);
+ var owner=c||(view.page==='home'?homeOwner():(typeof pageCoverOwner==='function'?pageCoverOwner(false):null));
  if(!owner)return '';
  var cv=owner.cover;
  if(!cv)return '';
@@ -5272,7 +5334,7 @@ function coverBlock(c,overlay){
   +(fit?'<img class="coverblur" src="'+cv+'" alt="">':'')
   +'<img class="pagecover" src="'+cv+'" style="object-fit:'+(fit?'contain':'cover')+';object-position:50% '+pos+'%;transform:scale('+(z/100)+')" alt="">'
   +(on?'<span class="coverhint">'+(fit?'Showing the whole picture':'Drag the picture up or down')+'</span>':'')
-  +(on?'':(overlay||'')+'<button class="coveredit" data-coversheet="'+(c?c.id:homeOwnerId())+'" aria-label="Edit the cover picture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Edit cover</span></button>')
+  +(on?'':(overlay||'')+'<button class="coveredit" data-coversheet="'+(c?c.id:(view.page==='home'?homeOwnerId():pageCoverId()))+'" aria-label="Change the cover picture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Edit cover</span></button>')
   +'</div>';
  if(on){
   h+='<div class="coverbar">'
@@ -12725,6 +12787,139 @@ function r7Migrate(){
 }
 var _r7Load=load;
 load=async function(){await _r7Load();try{r7Migrate()}catch(e){}render()};
+
+
+/* ======================= ROUND 8 (v144): colours over icons, keep or remove widgets, covers everywhere =======================
+   Widgets are soft colours by default (a light shade of the menu colour), and every widget's colour can
+   be changed, any colour. Icons on Home widgets are off unless you switch on "Show icons" (S.homeIcons).
+   Every page can have a cover (Calendar, Plan my week, People and Applications too), with a pencil
+   button to add or change it. The default space colours come from the Doable logo. The page title band
+   is a light shade of the menu colour. The phone menu slides in and out. */
+
+/* ---------- the logo's three colours as the default space colours (deepened so white text reads) ---------- */
+SPACE_DEF.school=Object.assign({},SPACE_DEF.school,{sideBg:'#7B6E91'});
+SPACE_DEF.work={sideBg:'#94775A',sideInk:'#F1E8DE',sideBright:'#FFFDFA',sideSoft:'#E0CFBC',page:'#F7F3EE'};
+SPACE_DEF.personal={sideBg:'#6F8469',sideInk:'#E5ECE2',sideBright:'#FBFDFA',sideSoft:'#C5D3C1',page:'#F1F4EF'};
+CHROME.forEach(function(c){if(c.key==='sideBg')c.def='#7B6E91';else if(c.key==='sideInk')c.def='#EAE5F0';else if(c.key==='sideBright')c.def='#FFFFFF';else if(c.key==='sideSoft')c.def='#D2C9DD'});
+
+/* ---------- widget colours: the menu colour by default, or any colour you like ---------- */
+function zwVars(w,d){
+ var col=w.color||'';
+ if(!col||col==='menu')return '--wt:color-mix(in srgb,var(--sideBg) 15%,var(--card));--wc:color-mix(in srgb,var(--sideBg) 88%,#000)';
+ if(/^#/.test(col))return '--wt:color-mix(in srgb,'+col+' 20%,var(--card));--wc:color-mix(in srgb,'+col+' 85%,#000)';
+ return zcv(col);
+}
+zWCard=function(w,d,title,meta,body,href,extra){
+ var tint=w.tint==null?true:!!w.tint,dark=!!d.dark&&w.tint==null&&!w.color;
+ return '<section class="wd'+(tint&&!dark?' tinted':'')+(dark?' dark':'')+(extra?' '+extra:'')+'" style="'+zwVars(w,d)+'">'+(w.cover?'<div class="wdcover" style="background-image:url('+w.cover+')"></div>':'')
+  +'<div class="wdh"'+(href?' data-open="'+href+'" role="button" tabindex="0"':'')+'><span class="wdic">'+zI(ZIC[d.ico]||ZIC.list,w.cover?18:15)+'</span><span class="wdt">'+title+'</span>'+(meta?'<span class="wdm">'+meta+'</span>':'')+'</div><div class="wdb">'+body+'</div></section>';
+};
+// the older School widgets (Coming up, the month, Today's plan...) take a colour too, once you pick one
+var _r8Slot=viewSpaceHome;
+viewSpaceHome=function(){
+ var h=_r8Slot(),sp=curSpace(),L=view.zwLive||homeWidgets(sp);
+ L.forEach(function(w){var d=WDEF[w.type];if(!d||!d.legacy||!w.color||w.type==='nextdue'||w.type==='music')return;
+  var bg=/^#/.test(w.color)?'color-mix(in srgb,'+w.color+' 22%,var(--card))':(ZC[w.color]||ZC.grey)[0];
+  h=h.replace(new RegExp('style="order:(\\d+)" data-wid="'+w.id.replace(/[^\w-]/g,'')+'"'),'style="order:$1;--wbg:'+bg+'" data-wid="'+w.id+'" data-wcol="1"');});
+ return h.replace('<div class="zhome','<div class="zhome'+(S.homeIcons?'':' noico'));
+};
+// in Edit Home: show icons, and (on a computer) the widget menu has colours for every widget
+var _r8Menu=ZM.zwmenu.html;
+ZM.zwmenu.html=function(m){
+ var h=_r8Menu(m);if(!h)return h;var sp=curSpace(),w=homeWidgets(sp).filter(function(x){return x.id===m.wid})[0];if(!w)return h;var d=WDEF[w.type];
+ if(w.type==='nextdue'||w.type==='music')return h;
+ var cur=w.color||'menu';
+ var pick='<div class="field"><label>Colour</label><div class="zsws"><button type="button" class="zsw menu'+(cur==='menu'?' on':'')+'" style="background:'+chromeHex('sideBg')+'" data-zact="wset:'+w.id+':color:" aria-label="Match the menu" title="Match the menu"></button>'
+  +ZC_KEYS.map(function(k){return '<button type="button" class="zsw'+(cur===k?' on':'')+'" style="background:'+ZC[k][1]+'" data-zact="wset:'+w.id+':color:'+k+'" aria-label="'+k+'"></button>'}).join('')
+  +'<label class="zsw any'+(/^#/.test(cur)?' on':'')+'" style="'+(/^#/.test(cur)?'background:'+cur:'')+'" title="Any colour"><input type="color" data-zwcolor="'+w.id+'" value="'+(/^#/.test(cur)?cur:'#9a8fb0')+'"></label></div><p class="hint" style="margin:6px 0 0">The first one matches your menu colour.</p></div>';
+ // replace the old colour row (new widgets) or add one (older widgets)
+ if(/<div class="field"><label>Colour<\/label>[\s\S]*?<\/div><\/div>/.test(h))h=h.replace(/<div class="field"><label>Colour<\/label>[\s\S]*?<\/div><\/div>/,pick);
+ else h=h.replace(/(<div class="field"><label>Size<\/label>[\s\S]*?<\/div><\/div>)/,'$1'+pick);
+ return h;
+};
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;var id=t.getAttribute('data-zwcolor');if(id)ZACT.wset(id,'color',t.value)});
+ZACT.wicons=function(){S.homeIcons=!S.homeIcons;save();render()};
+SETTINGS_KEYS.push('homeIcons');
+var _r8Home=viewHome;
+viewHome=function(){
+ var h=_r8Home();
+ return h.replace('<button data-zact="wedit">Edit Home</button>','<button data-zact="wedit">Edit Home</button><button data-zact="wicons">Show icons: '+(S.homeIcons?'On':'Off')+'</button>');
+};
+// keep or remove: the Add widget list shows what's on Home with a Remove button, and what isn't with + Add
+ZACT.wdelt=function(type){var sp=curSpace(),L=homeWidgets(sp).filter(function(w){return w.type!==type});setHomeWidgets(sp,L);render()};
+ZM.zwgal={wide:true,html:function(){
+ var sp=curSpace(),have={};homeWidgets(sp).forEach(function(w){have[w.type]=1});
+ var L=Object.keys(WDEF).filter(function(k){var s=WDEF[k].sp;return s==='all'||s.indexOf(sp)>-1});
+ var card=function(k){var d=WDEF[k],on=have[k];return '<div class="zgw'+(on?' on':'')+'"><b>'+esc(d.name)+'</b><small>'+esc(d.desc)+'</small>'
+  +(on?'<button class="zbtn ghost" data-zact="wdelt:'+k+'">Remove</button>':'<button class="zbtn" data-zact="wadd:'+k+'">+ Add</button>')+'</div>'};
+ return '<h3>Widgets on '+esc(spaceById(sp).name)+' Home</h3><p class="hint" style="margin:-4px 0 12px">Keep the ones you like and remove the rest. Each space, and your phone, has its own Home.</p>'
+  +'<p class="lab">ON HOME</p><div class="zgws">'+L.filter(function(k){return have[k]}).map(card).join('')+'</div>'
+  +(L.some(function(k){return !have[k]})?'<p class="lab" style="margin-top:14px">MORE WIDGETS</p><div class="zgws">'+L.filter(function(k){return !have[k]}).map(card).join('')+'</div>':'');
+},closeLabel:'Done'};
+var _r8Space=viewSpaceHome;
+viewSpaceHome=function(){
+ var h=_r8Space();
+ return h.replace('<button class="zebtn" data-zact="wgal">+ Add widget</button>','<button class="zebtn" data-zact="wgal">Add or remove</button><button class="zebtn" data-zact="wicons">Icons: '+(S.homeIcons?'On':'Off')+'</button>');
+};
+
+/* ---------- covers on every page, and a pencil to add or change them ---------- */
+var COVER_PAGES={calendar:1,plan:1,professors:1,apps:1};
+function pageCoverId(){return 'pc-'+curSpace()+'-'+view.page}
+function pageCoverOwner(create){
+ if(!COVER_PAGES[view.page])return null;
+ var k=curSpace()+'-'+view.page;S.spaceHome=S.spaceHome||{};
+ if(!S.spaceHome[k]){if(!create)return null;S.spaceHome[k]={}}
+ return S.spaceHome[k];
+}
+var _r8CoverOwnerById=coverOwnerById;
+coverOwnerById=function(id){var m=/^pc-(\w+)-(\w+)$/.exec(id||'');if(m){S.spaceHome=S.spaceHome||{};var k=m[1]+'-'+m[2];S.spaceHome[k]=S.spaceHome[k]||{};return S.spaceHome[k]}return _r8CoverOwnerById(id)};
+coverKey=function(c){return c?'cover:'+c.id:'cover:'+(view.page==='home'?homeOwnerId():pageCoverId())};
+var PAGE_TITLES={calendar:'Calendar',plan:'Plan my week',professors:'People',apps:'Applications'};
+function pencilSvg(){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'}
+// after each redraw: a cover for Calendar & co., and a pencil on title bands that have no cover yet
+var _r8Render=render;
+render=function(){
+ var before=app.firstElementChild;
+ _r8Render.apply(this,arguments);
+ if(app.firstElementChild===before)return;
+ var mn=document.querySelector('.main');if(!mn)return;
+ var banner=mn.querySelector('.banner'),cv=mn.querySelector('.coverwrap');
+ // no cover yet: a pencil button in the title band
+ var hasCover=!!mn.querySelector('.coverwrap');
+ if(!hasCover&&banner&&!banner.querySelector('.bancov')&&(view.page==='class'||view.page==='page'||COVER_PAGES[view.page])){
+  var id=(view.page==='class'||view.page==='page')?view.classId:pageCoverId();
+  var b=document.createElement('button');b.className='coveredit bancov';b.setAttribute('data-coversheet',id);b.setAttribute('aria-label','Add a cover picture');b.innerHTML=pencilSvg()+'<span>Add a cover</span>';
+  banner.appendChild(b);
+ }
+};
+// the Edit cover button: always the pencil, so people see they can change it
+var _r8CB2=coverBlock;
+coverBlock=function(c,overlay){return _r8CB2(c,overlay).replace('<span>Edit cover</span>','<span>Change cover</span>')};
+
+/* ---------- the phone menu slides in and out ---------- */
+var r8MenuWas=false;
+var _r8Render2=render;
+render=function(){
+ var before=app.firstElementChild;
+ _r8Render2.apply(this,arguments);
+ if(app.firstElementChild===before)return;
+ var sd=document.querySelector('aside.side');
+ if(view.menu&&!r8MenuWas&&sd&&narrowScreen()&&r6Motion()){
+  // start it closed (no transition), then open it on the next frame so it slides in
+  sd.style.setProperty('transition','none','important');sd.classList.remove('open');void sd.offsetWidth;sd.style.removeProperty('transition');
+  setTimeout(function(){var cur=document.querySelector('aside.side');if(view.menu&&cur)cur.classList.add('open')},20);
+ }
+ r8MenuWas=!!view.menu;
+};
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-menu="0"]');if(!b||!view.menu||!narrowScreen()||!r6Motion())return;
+ var sd=document.querySelector('aside.side.open'),bd=document.querySelector('.backdrop');if(!sd)return;
+ e.preventDefault();e.stopPropagation();
+ sd.classList.remove('open');if(bd)bd.classList.add('out');
+ setTimeout(function(){view.menu=false;render()},260);
+},true);
+function pageCoverOverlay2(){var t=PAGE_TITLES[view.page]||'',eb=curSpace()==='school'?(S.term||''):spaceById(curSpace()).name;
+ return '<div class="h4ov cpov"><div class="h4hi">'+(eb?'<p class="h4hello">'+esc(eb)+'</p>':'')+'<h1 class="h4day cpovt">'+esc(t)+'</h1></div></div>'}
 
 try{spBoot()}catch(e){}
 load();
