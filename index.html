@@ -2527,6 +2527,219 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .ztart.sync .ph i{position:absolute;inset:7px;border-radius:9px;background:#EDE7F1}
 .ztart.sync .ok{position:absolute;left:104px;top:100px;width:36px;height:36px;border-radius:50%;background:#7F9179;color:#fff;display:grid;place-items:center;box-shadow:0 6px 14px -6px rgba(0,0,0,.4);animation:zpop .6s cubic-bezier(.3,1.4,.5,1) both .3s}
 @media(prefers-reduced-motion:reduce){.ztart *,.ztcard,#ztour{animation:none!important}.ztart.pdf .pg>i.hl{background-size:100% 100%}.ztart.pdf .ink{stroke-dashoffset:0}}
+/* ===== v143 round 7: richer widgets, logos, round days, Events, Meal prep ===== */
+.dbrand{gap:8px;padding:0 10px 14px}
+.dbrand .dlg{width:24px;height:24px}
+.dbrand span{font-size:16.5px}
+/* logos and icon chips */
+.zlogo{position:relative;display:inline-grid;place-items:center;border-radius:50%;flex:none;overflow:hidden;font-size:12px;font-weight:600}
+.zlogo b{font-weight:600;font-size:inherit}
+.zlogo.img{background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.07)}
+.zlogo img{width:64%;height:64%;object-fit:contain;border-radius:4px}
+.zlogo>i{display:none;font-style:normal}
+.zlogo:not(.img)>i{display:grid;place-items:center;position:absolute;inset:0;background:var(--lb);color:var(--lc)}
+.zichip{width:26px;height:26px;border-radius:9px;display:inline-grid;place-items:center;flex:none}
+.zsp .zlogo{margin-right:2px}
+/* bigger numbers and little stat headers in widgets */
+.wdnum{display:block;font-family:var(--fh,inherit);font-size:30px;line-height:1.05;font-weight:var(--wh,500);color:var(--ink);letter-spacing:-.01em}
+.wdnum small{font-size:17px;color:var(--ink3);font-weight:400}
+.wdstat{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 4px}
+.wdstat>div:first-child span{font-size:12.5px;color:var(--ink3)}
+.wdstat .late{color:#A34A3F;font-style:normal}
+.wdmini{display:flex;align-items:center;gap:8px}
+.wdmini span{display:flex;flex-direction:column;line-height:1.15}
+.wdmini b{font-weight:500;font-size:14px}.wdmini small{font-size:11.5px;color:var(--ink3)}
+/* the soft line chart */
+.zspark{position:relative;width:100%;margin:4px 0}
+.zspark svg{display:block;width:100%;height:100%;overflow:visible}
+.zspark>i{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--card);border:2.5px solid var(--sc);transform:translate(-50%,-50%);box-sizing:border-box}
+.main.enter .zspark .zsl{stroke-dasharray:1200;animation:zline 1.2s ease both .2s}
+@keyframes zline{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
+/* soft column bars */
+.zcols{display:flex;align-items:stretch;gap:8px;margin-top:6px}
+.zcol1{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.zcol1 .trk{position:relative;flex:1;width:100%;max-width:26px;border-radius:8px;background:color-mix(in srgb,var(--cc) 12%,transparent);overflow:hidden}
+.zcol1 .trk i,.zcol1 .trk u{position:absolute;left:0;right:0;bottom:0;border-radius:8px;text-decoration:none}
+.zcol1 .trk i{background:color-mix(in srgb,var(--cc) 70%,var(--card))}
+.zcol1 .trk u{background:color-mix(in srgb,var(--cc) 24%,transparent)}
+.zcol1.on .trk i{background:var(--cc)}
+.zcol1 small{font-size:11px;color:var(--ink3)}
+.zcol1.on small{color:var(--ink);font-weight:600}
+.main.enter .zcol1 .trk i,.main.enter .zcol1 .trk u{animation:zgrowh .8s cubic-bezier(.3,.7,.2,1) both .2s}
+/* half-circle gauge */
+.zgauge{position:relative;display:flex;flex-direction:column;align-items:center;flex:none;color:var(--ink)}
+.zgauge svg{display:block}
+.zgauge b{position:absolute;bottom:14px;font-family:var(--fh,inherit);font-size:22px;font-weight:var(--wh,500)}
+.zgauge small{font-size:11.5px;color:var(--ink3);margin-top:-12px}
+.main.enter .zgv{animation:zdraw 1.1s cubic-bezier(.3,.7,.2,1) both .15s}
+/* the round Mon-Sun days */
+.zrdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.zrday{display:flex;flex-direction:column;align-items:center;gap:5px;border:none;background:none;padding:2px 0;font:inherit;color:var(--ink);cursor:pointer;min-height:0!important}
+.zrday span{font-size:12px;color:var(--ink3)}
+.zrday.t span{color:var(--ink);font-weight:600}
+.zrday b{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:0 0 0 1px var(--line),0 3px 8px -4px rgba(0,0,0,.14);font-size:15px;font-weight:500;transition:background .2s,color .2s,transform .2s}
+.zrday:hover b{transform:translateY(-1px)}
+.zrday.on b{background:#2E2B27;color:#fff;box-shadow:0 8px 16px -8px rgba(0,0,0,.45)}
+.zrday em{display:flex;gap:3px;height:5px}
+.zrday em i{width:5px;height:5px;border-radius:50%}
+@media(max-width:380px){.zrday b{width:34px;height:34px;font-size:14px}}
+/* Home's week card on every screen size, with round days */
+.zw-week{display:flex!important}
+.hwk2{display:block!important;background:var(--card);border:1px solid var(--line);border-radius:18px!important;padding:14px 16px 8px}
+.hwk2seg{display:flex;background:#F3F1EC;border-radius:10px;padding:3px;gap:3px;margin:0 0 12px;max-width:360px}
+.hwk2seg button{flex:1;border:none;background:none;font:inherit;font-size:13px;color:var(--ink2);border-radius:8px;padding:6px 0;min-height:0!important;cursor:pointer}
+.hwk2seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.hwk2days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.hwk2d{display:flex;flex-direction:column;align-items:center;cursor:pointer;font:inherit;color:var(--ink);min-height:0!important}
+.hwk2d .dots{display:flex;gap:3px;height:6px;align-items:center}
+.hwk2d .dots i{width:6px;height:6px;border-radius:50%}
+.hwk2list{margin-top:12px}
+.hwk2head{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;color:var(--ink2);padding:2px 4px 4px}
+.hwk2head span{font-size:12px;color:var(--ink3)}
+.hwk2list .empty{font-size:13.5px;color:var(--ink3);padding:8px 4px 10px}
+@media(min-width:701px){.hwk2d b{width:46px;height:46px;font-size:17px!important}}
+/* Plan my week: day numbers in circles, today filled */
+.cpwnum{width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;background:var(--card);box-shadow:0 0 0 1px var(--line)}
+.cpwday.today .cpwnum{background:#2E2B27;color:#fff;box-shadow:none}
+/* widget kinds */
+.wd.dark{background:var(--sideBg);border-color:transparent;color:#fff}
+.wd.dark .wdt{color:#fff}.wd.dark .wdic{background:rgba(255,255,255,.14);color:#fff}.wd.dark .wdm{color:rgba(255,255,255,.7)}
+.wdhab2{display:flex;align-items:center;gap:16px}
+.wdring{display:flex;flex-direction:column;align-items:center;gap:4px;flex:none}
+.wdring small{font-size:12.5px;color:var(--wc);font-weight:500}
+.wdhbl{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.wdhb{display:flex;align-items:center;gap:9px;min-width:0}
+.wdhbn{flex:1;min-width:0;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wdhbw{display:flex;gap:3px}
+.wdhbw i{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--wc) 14%,var(--card))}
+.wdhbw i.y{background:var(--wc)}.wdhbw i.t{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--wc) 60%,transparent)}.wdhbw i.f{opacity:.4}
+.wdhb .zhd{width:28px;height:28px}
+.wdbud{display:flex;align-items:center;gap:16px}
+.wdbudt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.wdbudt .zleg{margin-top:8px;min-width:0;gap:4px}
+.wdbudt .zlegr{font-size:12.5px}
+.wdbva{display:flex;flex-direction:column;gap:7px;margin-top:6px;padding-top:10px;border-top:1px solid var(--line)}
+.wdbvr{display:grid;grid-template-columns:96px 1fr 70px;align-items:center;gap:10px;font-size:12.5px}
+.wdbvr span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2)}
+.wdbvr em{font-style:normal;text-align:right;color:var(--ink2)}
+.wdio{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wdio>div{display:flex;align-items:center;gap:9px;background:var(--paper);border-radius:12px;padding:8px 10px;min-width:0}
+.wdio span{display:flex;flex-direction:column;min-width:0}
+.wdio small{font-size:11.5px;color:var(--ink3)}.wdio b{font-weight:500;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wdproj2{display:flex;align-items:center;gap:11px;border:none;background:none;padding:2px 0;font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:0!important;width:100%}
+.wdproj2 .zic{width:36px;height:36px;border-radius:11px}
+.wdpc{width:36px;height:36px;border-radius:11px;background-size:cover;background-position:center;flex:none}
+.wdpm{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.wdpm b{font-weight:500;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wdpm em{font-style:normal;font-size:12px;color:var(--wc);font-weight:500}
+.wdpm small{font-size:11.5px;color:var(--ink3)}
+.wdrhero{display:flex;gap:14px;align-items:center;border:none;background:none;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:0!important;width:100%}
+.wdrhero img,.wdrhero .wdreadph{width:76px;height:112px;border-radius:9px;object-fit:cover;flex:none;box-shadow:0 8px 18px -8px rgba(0,0,0,.35)}
+.wdrhero>span{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.wdrhero small{font-size:11.5px;color:var(--wc);font-weight:500;text-transform:none}
+.wdrhero b{font-family:var(--fh,inherit);font-size:18px;font-weight:var(--wh,500);line-height:1.25}
+.wdrmore{display:flex;gap:8px;margin-top:4px}
+.wdrmore button{border:none;padding:0;background:none;cursor:pointer;min-height:0!important}
+.wdrmore img,.wdrmore span{width:36px;height:54px;border-radius:6px;object-fit:cover;display:grid;place-items:center;background:var(--wt);color:var(--wc);box-shadow:0 3px 8px -4px rgba(0,0,0,.3)}
+.wdsave{display:flex;align-items:center;gap:16px}
+.wdsave>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wdsave .zlink{margin-top:6px;text-align:left}
+.wdbdh{display:flex;align-items:center;gap:12px;background:color-mix(in srgb,var(--wt) 60%,var(--card));border-radius:14px;padding:10px 12px;cursor:pointer}
+.wdbav{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.wdbdh>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column}
+.wdbdh b{font-weight:500;font-size:15px}.wdbdh small{font-size:12px;color:var(--ink3)}
+.wdbdh em{font-style:normal;font-size:12px;background:var(--card);color:var(--wc);border-radius:99px;padding:3px 10px;white-space:nowrap;font-weight:500}
+.wdbd{cursor:pointer}
+.wdstore{display:flex;align-items:center;gap:8px;padding:8px 0 2px;font-size:12.5px;color:var(--ink2)}
+.wdstore b{font-weight:500}.wdstore em{font-style:normal;color:var(--ink3)}
+/* quote of the day */
+.wdquote .wdh{display:none}
+.wdq{position:relative;padding:6px 70px 6px 2px;min-height:110px}
+.wdq.sm{padding-right:4px;min-height:0}
+.wdqm{display:block;font-family:Georgia,serif;font-size:48px;line-height:.6;color:var(--wc);opacity:.6;margin:10px 0 4px}
+.wdq p{margin:0;font-family:var(--fh,inherit);font-size:17px;line-height:1.4;color:var(--ink)}
+.wdq.sm p{font-size:14px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.wdq small{display:block;margin-top:8px;font-size:12.5px;color:var(--ink3)}
+.wdleaf{position:absolute;right:0;bottom:-6px;width:62px;height:72px;color:var(--wc)}
+/* current streak (dark card) */
+.wdstreak{display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 0 2px}
+.wdflame{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);color:#D9E4CF;box-shadow:0 0 0 8px rgba(255,255,255,.05)}
+.wdstreak b{font-family:var(--fh,inherit);font-size:40px;font-weight:var(--wh,500);line-height:1;margin-top:10px}
+.wdstreak small{font-size:13px;opacity:.8}
+.wdstreak em{font-style:normal;font-size:13px;color:#D9E4CF;margin-top:6px}
+.wdstreak.sm b{font-size:30px;margin-top:6px}.wdstreak.sm .wdflame{width:44px;height:44px;box-shadow:none}
+.wdsweek{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px}
+.wdsweek span{display:flex;flex-direction:column;align-items:center;gap:4px}
+.wdsweek small{font-size:11px;opacity:.7}
+.wdsweek i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1.5px solid rgba(255,255,255,.35)}
+.wdsweek .y i{background:#A9C29A;border-color:#A9C29A;color:#25301F}
+.wdsweek .p i{border-color:#A9C29A;border-style:dashed}
+.wdsweek .t small{opacity:1;font-weight:600}
+/* at a glance */
+.wdglance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.wdgt{--wt:#ECEBE9;--wc:#7A756E;background:color-mix(in srgb,var(--wt) 75%,var(--card));border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:3px;min-width:0;cursor:pointer}
+.wdgt .zic{background:var(--card);margin-bottom:4px}
+.wdgt b{font-family:var(--fh,inherit);font-size:22px;font-weight:var(--wh,500);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wdgt small{font-size:12px;color:var(--ink2)}
+.wdgt .zbar{margin-top:6px;background:color-mix(in srgb,var(--wc) 16%,var(--card))}
+@media(max-width:700px){.wdglance{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* today's meals */
+.wdmeals{display:flex;flex-direction:column;gap:8px}
+.wdmeal{display:flex;align-items:center;gap:11px;border:none;background:none;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:0!important}
+.wdmeal img,.wdmeal .zic{width:42px;height:42px;border-radius:12px;object-fit:cover;flex:none}
+.wdmeal>span{display:flex;flex-direction:column;min-width:0}
+.wdmeal small{font-size:11.5px;color:var(--ink3)}.wdmeal b{font-weight:500;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wdmealsm{min-height:150px;background:linear-gradient(to top,rgba(20,16,12,.65),rgba(20,16,12,.05) 70%),var(--wt,#EDE9E5);background-size:cover;background-position:center;color:#fff;justify-content:flex-end;padding:14px;cursor:pointer;box-sizing:border-box}
+.wdmealsm span{font-size:12px;opacity:.85}.wdmealsm b{font-weight:500;font-size:15px;line-height:1.25}
+.wdmealsm:not([style]){color:var(--ink)}
+/* calendar: events */
+.zevbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.zevbtns .zseg{min-width:200px}
+.zevweek{padding:6px 0 10px;border-bottom:1px solid var(--line)}
+.zevday{display:flex;align-items:center;gap:12px;padding:16px 2px 6px;font-size:14px;font-weight:500}
+.zevday em{font-style:normal;font-weight:400;font-size:12.5px;color:var(--ink3);margin-left:8px}
+.zevdn{width:44px;height:44px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--paper);line-height:1}
+.zevdn b{font-size:16px;font-weight:600}.zevdn small{font-size:10.5px;color:var(--ink3);margin-top:2px}
+.zevdn.t{background:#2E2B27;color:#fff}.zevdn.t small{color:rgba(255,255,255,.75)}
+.zevrow{display:flex;align-items:center;gap:12px;width:100%;border:none;border-bottom:1px solid var(--line);background:none;padding:10px 2px 10px 56px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.zevrow>i{width:8px;height:8px;border-radius:50%;flex:none}
+@media(max-width:700px){.zevrow{padding-left:2px}}
+/* meal prep */
+.zmmsg{margin:0;padding:10px 14px;border-radius:12px;background:#E6EDE6;color:#4E6A55;font-size:13.5px}
+.zmgridw{padding:14px}
+.zmgrid7{display:grid;grid-template-columns:92px repeat(7,minmax(0,1fr));gap:8px;align-items:stretch}
+.zmgh{display:flex;flex-direction:column;align-items:center;gap:4px;padding-bottom:4px}
+.zmgh small{font-size:12px;color:var(--ink3)}
+.zmgh b{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:0 0 0 1px var(--line);font-weight:500}
+.zmgh.t small{color:var(--ink);font-weight:600}.zmgh.t b{background:#2E2B27;color:#fff;box-shadow:none}
+.zmslot{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink2)}
+.zmc{position:relative;min-height:74px;border-radius:12px;border:1px solid var(--line);background:var(--card);background-size:cover;background-position:center;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;text-align:left;font:inherit;color:var(--ink);cursor:pointer;overflow:hidden;min-height:74px!important;min-width:0}
+.zmc b{font-weight:500;font-size:12.5px;line-height:1.25;position:relative;z-index:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.zmc small{font-size:11px;color:var(--ink3);position:relative;z-index:1}
+.zmc.pic{border:none;color:#fff}
+.zmc.pic::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(20,16,12,.7),rgba(20,16,12,0) 75%)}
+.zmc.pic small{color:rgba(255,255,255,.85)}
+.zmc.empty{align-items:center;justify-content:center;border-style:dashed;color:var(--ink3);font-size:20px;background:transparent}
+.zmc.empty:hover{background:var(--paper);color:var(--ink)}
+.zmday{display:none;padding:14px}
+.zmdlist{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.zmdrow{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:stretch}
+@media(max-width:900px){.zmgridw{display:none}.zmday{display:block}}
+.zrcps{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px}
+.zrcp{display:flex;flex-direction:column;gap:5px;border:none;background:none;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:0!important}
+.zrcpi{width:100%;aspect-ratio:4/3;border-radius:14px;background-size:cover;background-position:center;box-shadow:0 8px 18px -10px rgba(0,0,0,.35)}
+.zrcpi.ph{display:grid;place-items:center;background:var(--wt);color:var(--wc);box-shadow:none}
+.zrcp b{font-weight:500;font-size:14.5px}.zrcp small{font-size:12px;color:var(--ink3)}
+@media(hover:hover){.zrcp{transition:transform .22s}.zrcp:hover{transform:translateY(-3px)}}
+@media(max-width:700px){.zrcps{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+.zmpl{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto}
+.zmpi{display:flex;align-items:center;gap:11px;border:none;background:none;border-radius:12px;padding:6px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.zmpi:hover,.zmpi.on{background:var(--paper)}
+.zmpi img,.zmpi .zic{width:44px;height:44px;border-radius:10px;object-fit:cover;flex:none}
+.zmpi span{display:flex;flex-direction:column}.zmpi b{font-weight:500;font-size:14px}.zmpi small{font-size:12px;color:var(--ink3)}
+.zrdcov.wide img,.zrdcov.wide>span{aspect-ratio:1;width:130px}
+.zrdcov.wide{width:130px}
+.zresi.wide img{aspect-ratio:1}
 </style>
 </head>
 <body>
@@ -2835,7 +3048,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v142';
+var BUILD='v143';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10756,7 +10969,7 @@ ZM.zwmenu={html:function(m){
  if(!d.legacy){
   var col=w.color||d.soft;
   h+='<div class="field"><label>Colour</label><div class="zsws">'+ZC_KEYS.map(function(k){return '<button type="button" class="zsw'+(col===k?' on':'')+'" style="background:'+ZC[k][1]+'" data-zact="wset:'+w.id+':color:'+k+'" aria-label="'+k+'"></button>'}).join('')+'</div></div>'
-   +'<div class="field"><label>Background</label>'+seg('tint',[['0','White'],['1','Tinted']],w.tint?'1':'0')+'</div>'
+   +'<div class="field"><label>Background</label>'+seg('tint',[['0','White'],['1','Tinted']],(w.tint==null?!!d.tintDef:!!w.tint)?'1':'0')+'</div>'
    +'<div class="field"><label>Picture</label><div style="display:flex;gap:10px;align-items:center">'+(w.cover?'<span class="zthumb" style="background-image:url('+w.cover+')"></span>':'')
    +'<label class="fakebtn"><input type="file" accept="image/*" data-zwcover="'+w.id+'" style="display:none">'+(w.cover?'Change picture':'Add a picture')+'</label>'+(w.cover?'<button class="ghost" data-zact="wset:'+w.id+':cover:">Remove</button>':'')+'</div></div>';
  }
@@ -11279,7 +11492,7 @@ ZM.zwmenu={html:function(m){
  if(!d.legacy){
   var col=w.color||d.soft;
   h+='<div class="field"><label>Colour</label><div class="zsws">'+ZC_KEYS.map(function(k){return '<button type="button" class="zsw'+(col===k?' on':'')+'" style="background:'+ZC[k][1]+'" data-zact="wset:'+w.id+':color:'+k+'" aria-label="'+k+'"></button>'}).join('')+'</div></div>'
-   +'<div class="field"><label>Background</label>'+seg('tint',[['0','White'],['1','Tinted']],w.tint?'1':'0')+'</div>'
+   +'<div class="field"><label>Background</label>'+seg('tint',[['0','White'],['1','Tinted']],(w.tint==null?!!d.tintDef:!!w.tint)?'1':'0')+'</div>'
    +'<div class="field"><label>Picture</label><div style="display:flex;gap:10px;align-items:center">'+(w.cover?'<span class="zthumb" style="background-image:url('+w.cover+')"></span>':'')
    +'<label class="fakebtn"><input type="file" accept="image/*" data-zwcover="'+w.id+'" style="display:none">'+(w.cover?'Change picture':'Add a picture')+'</label>'+(w.cover?'<button class="ghost" data-zact="wset:'+w.id+':cover:">Remove</button>':'')+'</div></div>';
  }
@@ -11466,7 +11679,7 @@ zBudgetPage=function(c){
  var rec=b.sp.slice().sort(function(a,z){return (z.date||'')<(a.date||'')?-1:1});
  var catBy={};b.cats.forEach(function(x){catBy[x.id]=x});
  var recent=zCard(cur?'This month':esc(zMoName(mo,true)),'list',rec.length?rec.length+'':'',rec.length?rec.slice(0,view.zbAll?200:8).map(function(x){var ct=catBy[x.cat];
-   return '<button class="zsp" data-zact="spendedit:'+c.id+':'+x.id+'"><span>'+esc(x.title||'Spending')+'<small>'+esc(x.date?parseISO(x.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'')+'</small></span>'+(x.income?zTag('Money in','sage'):ct?zTag(ct.title,ct.color||'grey'):'')+'<b'+(x.income?' class="in"':'')+'>'+(x.income?'+':'−')+money(x.amount)+'</b></button>'}).join('')
+   return '<button class="zsp" data-zact="spendedit:'+c.id+':'+x.id+'">'+zLogo(x.title||'',32,x.income?'arrowin':'wallet')+'<span>'+esc(x.title||'Spending')+'<small>'+esc(x.date?parseISO(x.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'')+'</small></span>'+(x.income?zTag('Money in','sage'):ct?zTag(ct.title,ct.color||'grey'):'')+'<b'+(x.income?' class="in"':'')+'>'+(x.income?'+':'−')+money(x.amount)+'</b></button>'}).join('')
    +(rec.length>8&&!view.zbAll?'<button class="zlink" data-zact="ball">Show all '+rec.length+'</button>':''):'<p class="zempty">Nothing added. Tap + Spending after you buy something, or + Money in when you get paid.</p>');
  return nav+stats+'<div class="zg2">'+pie+inout+'</div><div class="zg2">'+pay+bills+'</div><div class="zg2">'+cats+bars+'</div>'+recent
   +'<div class="zh2row"><h2 class="zh2">Goals and savings</h2><button class="zbtn" data-zact="goalnew:'+c.id+'">+ Add a goal</button></div>'
@@ -11619,7 +11832,7 @@ zListPage=function(c){
  var top=inSec(''),body=zAddRow(c,'',gro,gro?(secs.length?'Add an item (any store)':'Add an item, like oat milk'):'Add a task');
  body+=top.length?top.map(function(t){return zTaskRow(c,t)}).join(''):(secs.length?'':'<p class="zempty">'+(gro?'Your list is empty. Add what you need, then tick things off in the store.':'Nothing to do. Add a task above.')+'</p>');
  var groups=secs.map(function(s){var L=inSec(s.id),shut=zSecShut(s.id);
-  return '<details class="zsec"'+(shut?'':' open')+' data-zsecfold="'+s.id+'"><summary><span class="zsecic">'+zI(gro?ZIC.store:ZIC.folder,14)+'</span><b>'+esc(s.name)+'</b><em>'+L.length+'</em><button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename or remove '+esc(s.name)+'">'+zI(ZIC.dots,14)+'</button><span class="zsecchev">'+CP_ICO.chev+'</span></summary>'
+  return '<details class="zsec"'+(shut?'':' open')+' data-zsecfold="'+s.id+'"><summary>'+(gro?zLogo(s.name,28,'store',s.site):'<span class="zsecic">'+zI(ZIC.folder,14)+'</span>')+'<b>'+esc(s.name)+'</b><em>'+L.length+'</em><button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename or remove '+esc(s.name)+'">'+zI(ZIC.dots,14)+'</button><span class="zsecchev">'+CP_ICO.chev+'</span></summary>'
    +'<div class="zsecb">'+L.map(function(t){return zTaskRow(c,t)}).join('')+zAddRow(c,s.id,gro,gro?'Add to '+s.name:'Add a task to '+s.name)+'</div></details>'}).join('');
  if(done.length)groups+='<details class="zdone"'+(gro?' open':'')+'><summary>'+(gro?'In the cart':'Done')+' · '+done.length+'</summary>'+done.map(function(t){return zTaskRow(c,t)}).join('')
   +'<button class="zlink" data-zact="cleardone:'+c.id+'">'+(gro?'Clear the ticked items':'Clear finished tasks')+'</button></details>';
@@ -12063,6 +12276,455 @@ function r6Migrate(){
 }
 var _r6Load=load;
 load=async function(){await _r6Load();try{r6Migrate()}catch(e){}render()};
+
+
+/* ======================= ROUND 7 (v143): livelier widgets, logos, Events, round days, Meal prep =======================
+   Jae: widgets felt bland; wants charts and pictures, store and brand logos (without filling up the
+   Supabase account), an Events tab on the calendar, the round Mon-Sun days everywhere, and Meal prep.
+   Logos and icons are worked out from names each time they're drawn (Google's free site-icon service),
+   so nothing extra is saved; recipe photos and book covers are saved only as short web addresses. */
+
+/* ---------- more icons ---------- */
+Object.assign(ZIC,{
+ phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+ sparkle:'<path d="M12 3l1.8 4.6L18.5 9l-4.7 1.6L12 15l-1.8-4.4L5.5 9l4.7-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>',
+ utensils:'<path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v5M9 3v5"/><path d="M17 21V3c-2.2 1-3.5 3.6-3.5 7 0 2 1.2 3 3.5 3"/>',
+ car:'<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/>',
+ leaf:'<path d="M5 19C5 10 10 5 20 4c-1 10-6 15-15 15z"/><path d="M5 19l8-8"/>',
+ quote:'<path d="M9 7H5v6h4l-2 4M19 7h-4v6h4l-2 4"/>',
+ trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M9 17h6"/>',
+ chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+ bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+ gift:'<rect x="3" y="8" width="18" height="5" rx="1"/><path d="M5 13v8h14v-8M12 8v13M12 8c-3 0-5-1-5-3s3-2 5 3c2-5 5-5 5-3s-2 3-5 3"/>'
+});
+
+/* ---------- logos: a shop, bill or app's own logo from its name ---------- */
+var BRANDS={'costco':'costco.ca','walmart':'walmart.ca','loblaws':'loblaws.ca','no frills':'nofrills.ca','nofrills':'nofrills.ca','metro':'metro.ca','sobeys':'sobeys.com','food basics':'foodbasics.ca','freshco':'freshco.com',
+ 'superstore':'realcanadiansuperstore.ca','real canadian superstore':'realcanadiansuperstore.ca','zehrs':'zehrs.ca','farm boy':'farmboy.ca','fortinos':'fortinos.ca','longos':'longos.com',"longo's":'longos.com','t&t':'tntsupermarket.com','giant tiger':'gianttiger.com',
+ 'whole foods':'wholefoodsmarket.com',"trader joe's":'traderjoes.com','aldi':'aldi.us','lidl':'lidl.com','kroger':'kroger.com','target store':'target.com','shoppers':'shoppersdrugmart.ca','shoppers drug mart':'shoppersdrugmart.ca','rexall':'rexall.ca',
+ 'canadian tire':'canadiantire.ca','dollarama':'dollarama.com','winners':'winners.ca','homesense':'homesense.ca','marshalls':'marshalls.ca','ikea':'ikea.com','home depot':'homedepot.ca','lowes':'lowes.ca',"lowe's":'lowes.ca','rona':'rona.ca',
+ 'best buy':'bestbuy.ca','staples':'staples.ca','indigo':'indigo.ca','chapters':'indigo.ca','amazon':'amazon.ca','sephora':'sephora.com','lululemon':'lululemon.com','zara':'zara.com','h&m':'hm.com','old navy':'oldnavy.gapcanada.ca','gap':'gap.com','aritzia':'aritzia.com',
+ 'petsmart':'petsmart.ca','pet valu':'petvalu.com','lcbo':'lcbo.com','beer store':'thebeerstore.ca','michaels':'michaels.com','bulk barn':'bulkbarn.ca','sport chek':'sportchek.ca','apple':'apple.com','etsy':'etsy.com','temu':'temu.com','shein':'shein.com',
+ 'starbucks':'starbucks.ca','tim hortons':'timhortons.ca','tims':'timhortons.ca',"mcdonald's":'mcdonalds.com','mcdonalds':'mcdonalds.com','subway':'subway.com','uber eats':'ubereats.com','ubereats':'ubereats.com','uber':'uber.com','doordash':'doordash.com','skip the dishes':'skipthedishes.com','skipthedishes':'skipthedishes.com','chipotle':'chipotle.com','a&w':'aw.ca','wendys':'wendys.com',"wendy's":'wendys.com','pizza pizza':'pizzapizza.ca','dominos':'dominos.ca',"domino's":'dominos.ca',
+ 'netflix':'netflix.com','spotify':'spotify.com','disney':'disneyplus.com','disney+':'disneyplus.com','crave':'crave.ca','amazon prime':'primevideo.com','prime video':'primevideo.com','hulu':'hulu.com','hbo max':'max.com','hbo':'max.com','paramount':'paramountplus.com','apple tv':'tv.apple.com','apple music':'music.apple.com','youtube':'youtube.com','youtube premium':'youtube.com','icloud':'icloud.com','google one':'one.google.com',
+ 'adobe':'adobe.com','canva':'canva.com','chatgpt':'openai.com','claude':'claude.ai','microsoft':'microsoft.com','microsoft 365':'office.com','xbox':'xbox.com','playstation':'playstation.com','nintendo':'nintendo.com','audible':'audible.ca','kindle':'amazon.ca','duolingo':'duolingo.com','notion':'notion.so',
+ 'rogers':'rogers.com','bell canada':'bell.ca','bell mobility':'bell.ca','bell internet':'bell.ca','telus':'telus.com','fido':'fido.ca','koodo':'koodomobile.com','freedom':'freedommobile.ca','virgin':'virginplus.ca','public mobile':'publicmobile.ca','chatr':'chatrwireless.com','shaw':'shaw.ca','videotron':'videotron.com',
+ 'hydro one':'hydroone.com','london hydro':'londonhydro.com','enbridge':'enbridgegas.com','osap':'osap.gov.on.ca','td bank':'td.com','td visa':'td.com','rbc':'rbc.com','cibc':'cibc.com','scotiabank':'scotiabank.com','bmo':'bmo.com','tangerine':'tangerine.ca','wealthsimple':'wealthsimple.com','paypal':'paypal.com','venmo':'venmo.com',
+ 'presto':'prestocard.ca','air canada':'aircanada.com','westjet':'westjet.com','via rail':'viarail.ca','airbnb':'airbnb.com','goodlife':'goodlifefitness.com','planet fitness':'planetfitness.ca','gym':'','fanshawe':'fanshawec.ca'};
+var BRAND_KEYS=Object.keys(BRANDS).filter(function(k){return BRANDS[k]}).sort(function(a,b){return b.length-a.length});
+function zBrandDomain(name,site){
+ if(site){var s=String(site).trim().replace(/^https?:\/\//,'').replace(/\/.*$/,'');if(/\.[a-z]{2,}$/i.test(s))return s}
+ var n=' '+String(name||'').toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9&+' ]+/g,' ').replace(/\s+/g,' ').trim()+' ';
+ var m=/([a-z0-9-]+\.(com|ca|net|org|co|io|ai|so|tv))/.exec(n);if(m)return m[1];
+ for(var i=0;i<BRAND_KEYS.length;i++){var k=BRAND_KEYS[i];if(n.indexOf(' '+k+' ')>-1)return BRANDS[k]}
+ return '';
+}
+function zHueOf(s){return ZC_KEYS[Math.abs(String(s||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%ZC_KEYS.length]}
+// a round logo: the brand's own icon when known, otherwise a soft letter (or the icon passed in)
+function zLogo(name,sz,ico,site){
+ sz=sz||28;var dom=zBrandDomain(name,site),k=ZC[zHueOf(name)],letter=esc(String(name||'?').trim().charAt(0).toUpperCase()||'?');
+ var fb=ico?zI(ZIC[ico]||ZIC.list,Math.round(sz*.55)):'<b>'+letter+'</b>';
+ if(!dom)return '<span class="zlogo" style="width:'+sz+'px;height:'+sz+'px;background:'+k[0]+';color:'+k[1]+'">'+fb+'</span>';
+ return '<span class="zlogo img" style="width:'+sz+'px;height:'+sz+'px;--lb:'+k[0]+';--lc:'+k[1]+'"><img src="https://www.google.com/s2/favicons?domain='+encodeURIComponent(dom)+'&sz=128" alt="" loading="lazy" onerror="this.parentNode.classList.remove(\'img\');this.remove()"><i>'+fb+'</i></span>';
+}
+// an icon for a task or event from the words in it (no saving: worked out each time)
+var KW_ICO=[[/birthday|bday|party|celebrat/i,'cake'],[/anniversar|wedding|date night/i,'heart'],[/dentist|doctor|appointment|clinic|hospital|physio|\bvet\b|pharmacy|prescription/i,'pill'],
+ [/gym|workout|\brun\b|running|yoga|exercise|soccer|hockey|practice|swim|pilates|walk/i,'dumbbell'],[/\bcall\b|phone|\btext\b|facetime/i,'phone'],[/pay|bill|rent|invoice|bank|tax|budget|mortgage/i,'wallet'],
+ [/grocer|shopping|\bbuy\b|store|costco|pick up|order/i,'cart'],[/read|book|library|study|exam|quiz|homework|assignment|essay|lab\b|lecture|class/i,'book'],[/meet|meeting|interview|team|1:1|sync|standup|zoom|teams/i,'people'],
+ [/flight|trip|travel|vacation|airport|hotel|pack/i,'plane'],[/clean|laundry|dishes|vacuum|tidy|chores/i,'sparkle'],[/cook|dinner|lunch|breakfast|meal|recipe|bake|brunch/i,'utensils'],[/email|mail|send|reply/i,'mail'],
+ [/video|film|edit|record|post|content|youtube|tiktok|instagram|reel|photo/i,'film'],[/\bcar\b|oil change|\bgas\b|tires|mechanic/i,'car'],[/plant|garden|water the/i,'leaf'],[/sleep|nap|\bbed\b/i,'moon'],
+ [/music|concert|guitar|piano|song/i,'music'],[/gift|present/i,'gift'],[/coffee|tea\b/i,'coffee'],[/write|journal|notes/i,'pen'],[/project|launch|deadline|report|presentation/i,'target']];
+function zTaskIco(title){var t=String(title||'');for(var i=0;i<KW_ICO.length;i++)if(KW_ICO[i][0].test(t))return KW_ICO[i][1];return ''}
+function zIcoChip(ico,soft,sz){if(!ico)return '';var k=ZC[soft||'grey'];return '<span class="zichip" style="background:'+k[0]+';color:'+k[1]+(sz?';width:'+sz+'px;height:'+sz+'px':'')+'">'+zI(ZIC[ico],Math.round((sz||26)*.55))+'</span>'}
+var ICO_SOFT={cake:'rose',heart:'rose',pill:'mist',dumbbell:'sage',phone:'sand',wallet:'sand',cart:'sage',book:'lavender',people:'mist',plane:'mist',sparkle:'lavender',utensils:'peach',mail:'mist',film:'lavender',car:'grey',leaf:'sage',moon:'lavender',music:'rose',gift:'rose',coffee:'clay',pen:'clay',target:'brick'};
+
+/* ---------- small charts ---------- */
+// a soft line chart with a filled area under it, ending in a dot
+function zSpark(vals,h,col){
+ vals=(vals||[]).map(function(v){return +v||0});if(vals.length<2)return '';
+ h=h||56;var W=300,mx=Math.max.apply(null,vals),mn=Math.min.apply(null,vals.concat([0])),rg=(mx-mn)||1,n=vals.length;
+ var P=vals.map(function(v,i){return [i/(n-1)*W,h-5-(v-mn)/rg*(h-12)]});
+ var d='M'+P[0][0].toFixed(1)+' '+P[0][1].toFixed(1);
+ for(var i=1;i<n;i++){var a=P[i-1],b=P[i],cx=(a[0]+b[0])/2;d+=' C'+cx.toFixed(1)+' '+a[1].toFixed(1)+' '+cx.toFixed(1)+' '+b[1].toFixed(1)+' '+b[0].toFixed(1)+' '+b[1].toFixed(1)}
+ var id='zg'+Math.random().toString(36).slice(2,8),last=P[n-1];
+ return '<div class="zspark" style="height:'+h+'px;--sc:'+col+'"><svg viewBox="0 0 '+W+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".26"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs>'
+  +'<path d="'+d+' L'+W+' '+h+' L0 '+h+' Z" fill="url(#'+id+')"/><path class="zsl" d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>'
+  +'<i style="left:'+(last[0]/W*100)+'%;top:'+(last[1]/h*100)+'%"></i></div>';
+}
+// soft column bars with a pale track behind each (labels under)
+function zCols(vals,labels,col,hi,h){
+ var mx=Math.max.apply(null,(vals||[]).concat([1]));h=h||84;
+ return '<div class="zcols" style="height:'+h+'px;--cc:'+col+'">'+vals.map(function(v,i){return '<div class="zcol1'+(i===hi?' on':'')+'"><span class="trk"><i style="height:'+Math.max(v?6:0,v/mx*100)+'%"></i></span><small>'+esc(labels[i]||'')+'</small></div>'}).join('')+'</div>';
+}
+// a half-circle gauge
+function zGauge(pct,col,w,label,sub){
+ w=w||130;var r=w/2-9,C=Math.PI*r,p=Math.max(0,Math.min(100,pct||0)),h=w/2+6;
+ return '<div class="zgauge" style="width:'+w+'px"><svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" aria-hidden="true"><path d="M9 '+(w/2)+' A'+r+' '+r+' 0 0 1 '+(w-9)+' '+(w/2)+'" fill="none" stroke="currentColor" stroke-opacity=".1" stroke-width="12" stroke-linecap="round"/>'
+  +'<path class="zgv" d="M9 '+(w/2)+' A'+r+' '+r+' 0 0 1 '+(w-9)+' '+(w/2)+'" fill="none" stroke="'+col+'" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+(C*p/100).toFixed(1)+' '+C.toFixed(1)+'"/></svg>'
+  +(label!=null?'<b>'+label+'</b>':'')+(sub?'<small>'+sub+'</small>':'')+'</div>';
+}
+// the round Mon-Sun days (Jae's screenshot): today's name bold, the chosen day filled dark
+function zRoundDays(startIso,sel,attr,dots){
+ var td=iso(today()),h='<div class="zrdays">';
+ for(var i=0;i<7;i++){var k=zAddDays(startIso,i),d=parseISO(k),dd=(dots&&dots[k])||[];
+  h+='<button class="zrday'+(k===td?' t':'')+(k===sel?' on':'')+'" '+(attr?attr+'="'+k+'"':'')+' aria-pressed="'+(k===sel)+'"><span>'+esc(d.toLocaleDateString('en-CA',{weekday:'short'}).replace('.',''))+'</span><b>'+d.getDate()+'</b><em>'+dd.slice(0,3).map(function(c){return '<i style="background:'+c+'"></i>'}).join('')+'</em></button>'}
+ return h+'</div>';
+}
+
+/* ---------- widgets with more to look at: big numbers, rings, line and bar charts, covers, logos ---------- */
+zWCard=function(w,d,title,meta,body,href,extra){
+ var col=w.color||d.soft||'grey',tint=w.tint==null?!!d.tintDef:!!w.tint,dark=!!d.dark&&w.tint==null;
+ return '<section class="wd'+(tint&&!dark?' tinted':'')+(dark?' dark':'')+(extra?' '+extra:'')+'" style="'+zcv(col)+'">'+(w.cover?'<div class="wdcover" style="background-image:url('+w.cover+')"></div>':'')
+  +'<div class="wdh"'+(href?' data-open="'+href+'" role="button" tabindex="0"':'')+'><span class="wdic">'+zI(ZIC[d.ico]||ZIC.list,w.cover?18:15)+'</span><span class="wdt">'+title+'</span>'+(meta?'<span class="wdm">'+meta+'</span>':'')+'</div><div class="wdb">'+body+'</div></section>';
+};
+var _r7TaskRow=zTaskRow;
+zTaskRow=function(c,t){var h=_r7TaskRow(c,t);if(c.kind==='groceries')return h;var ic=zTaskIco(t.title);return ic?h.replace('<button class="zrt"',zIcoChip(ic,ICO_SOFT[ic],26)+'<button class="zrt"'):h};
+var _r7BillRow=zBillRow;
+zBillRow=function(c,o){return _r7BillRow(c,o).replace('<button class="zrt"',zLogo(o.x.title,30,'bill',o.x.site)+'<button class="zrt"')};
+var WK_L=['M','T','W','T','F','S','S'];
+function zWeekKeys(){var ws=iso(weekStart(0)),L=[];for(var i=0;i<7;i++)L.push(zAddDays(ws,i));return L}
+var QUOTES=[['We are what we repeatedly do. Excellence, then, is not an act, but a habit.','Will Durant, on Aristotle'],['Small steps every day.',''],['It always seems impossible until it’s done.','Nelson Mandela'],['Done is better than perfect.',''],
+ ['The secret of getting ahead is getting started.','Mark Twain'],['You don’t have to see the whole staircase, just take the first step.','Martin Luther King Jr.'],['Rest is not idleness.','John Lubbock'],['Progress, not perfection.',''],
+ ['Little by little, one travels far.','J.R.R. Tolkien'],['Be gentle with yourself. You’re doing the best you can.',''],['What we plant in the soil of contemplation, we shall reap in the harvest of action.','Meister Eckhart'],['Well begun is half done.','Aristotle'],
+ ['Start where you are. Use what you have. Do what you can.','Arthur Ashe'],['Slow progress is still progress.',''],['The best time to plant a tree was 20 years ago. The second best time is now.','Proverb'],['One day or day one. You decide.',''],
+ ['Do the hard thing first.',''],['A year from now you’ll wish you had started today.','Karen Lamb'],['Focus on being productive instead of busy.','Tim Ferriss'],['Make it simple, make it doable.','']];
+function zQuote(){var t=today(),n=Math.floor((t-new Date(t.getFullYear(),0,0))/864e5);return QUOTES[n%QUOTES.length]}
+var LEAF_ART='<svg class="wdleaf" viewBox="0 0 80 90" aria-hidden="true"><path d="M40 88V40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M40 52C24 52 14 40 13 24c17 1 27 11 27 28z" fill="currentColor" opacity=".5"/><path d="M40 44c0-18 10-30 28-32-1 19-11 31-28 32z" fill="currentColor" opacity=".75"/><path d="M40 66c13 0 22-8 24-21-14 0-23 8-24 21z" fill="currentColor" opacity=".35"/></svg>';
+function zTodayStats(sp){
+ var td=iso(today()),ws=iso(weekStart(0)),we=iso(weekStart(1)),open=0,doneWk=0,dueWk=0;
+ allTasks().forEach(function(x){if(isRefClass(x.c)||x.ev)return;if(!x.t.done)open++;if(x.t.due>=ws&&x.t.due<we){dueWk++;if(x.t.done)doneWk++}});
+ return {open:open,doneWk:doneWk,dueWk:dueWk};
+}
+var _r7NW=zNewWidget;
+zNewWidget=function(w,d,sp){
+ var t=today(),td=iso(t),c=d.page?firstPage(sp,d.page):null,big=(w.size||'full')==='full';
+ switch(w.type){
+ case 'todo':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('todo',sp));
+  var open=c.tasks.filter(function(x){return !x.done}).sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:1});
+  var ws=iso(weekStart(0)),we=iso(weekStart(1)),wk=c.tasks.filter(function(x){return x.due&&x.due>=ws&&x.due<we}),wd=wk.filter(function(x){return x.done}).length,late=open.filter(function(x){return x.due&&x.due<td}).length;
+  var head='<div class="wdstat"><div><b class="wdnum">'+open.length+'</b><span>'+(open.length===1?'thing':'things')+' left'+(late?' · <em class="late">'+late+' late</em>':'')+'</span></div>'
+   +(wk.length?'<div class="wdmini">'+zRing(wd/wk.length*100,'var(--wc)',46,6,'')+'<span><b>'+wd+'/'+wk.length+'</b><small>this week</small></span></div>':'')+'</div>';
+  return zWCard(w,d,esc(c.name),'',head+(open.length?open.slice(0,big?6:4).map(function(x){return zTaskRow(c,x)}).join('')+(open.length>(big?6:4)?'<button class="zlink" data-open="'+c.id+'">+'+(open.length-(big?6:4))+' more</button>':''):'<p class="zsoft">Nothing to do. Nice.</p>')
+   +'<div class="zadd zqm"><input id="zadd-'+c.id+'" data-zenter="taskadd:'+c.id+'" placeholder="Add a task" autocomplete="off"></div>',c.id);
+ }
+ case 'groceries':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('groceries',sp));
+  var op=c.tasks.filter(function(x){return !x.done}),secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+  var groups=[{id:'',name:'Any store'}].concat(secs).map(function(s){return {s:s,L:op.filter(function(x){return s.id?x.sec===s.id:!(x.sec&&ids[x.sec])})}}).filter(function(g){return g.L.length});
+  var shown=0,max=big?8:5,body=groups.map(function(g){if(shown>=max)return '';var L=g.L.slice(0,max-shown);shown+=L.length;
+   return (secs.length?'<div class="wdstore">'+(g.s.id?zLogo(g.s.name,22,'store',g.s.site):'<span class="zlogo" style="width:22px;height:22px;background:var(--wt);color:var(--wc)">'+zI(ZIC.cart,12)+'</span>')+'<b>'+esc(g.s.name)+'</b><em>'+g.L.length+'</em></div>':'')+L.map(function(x){return zTaskRow(c,x)}).join('')}).join('');
+  return zWCard(w,d,esc(c.name),op.length+' to buy',(body||'<p class="zsoft">Your list is empty.</p>')+(op.length>max?'<button class="zlink" data-open="'+c.id+'">+'+(op.length-max)+' more</button>':'')+'<div class="zadd zqm"><input id="zadd-'+c.id+'" data-zenter="taskadd:'+c.id+'" placeholder="Add an item" autocomplete="off"></div>',c.id);
+ }
+ case 'habits':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('habits',sp));
+  var H=zHabits(c).filter(function(h){return zHabitOn(h,td)}),got=H.filter(function(h){return zHabitDone(c,h,td)}).length,pct=H.length?Math.round(got/H.length*100):0,wkK=zWeekKeys();
+  if(!H.length)return zWCard(w,d,d.name,'','<p class="zsoft">No habits for today. <button class="zlink" data-open="'+c.id+'">Add one</button></p>',c.id);
+  var cheer=pct===100?'All done!':pct>=75?'Great job!':pct>=40?'Keep going':'Let’s start';
+  var rows=H.slice(0,big?6:4).map(function(h){var y=zHabitDone(c,h,td);
+   return '<div class="wdhb" style="'+zcv(h.color||'sage')+'"><span class="zic small">'+zI(ZIC[h.ico]||ZIC.check,13)+'</span><span class="wdhbn">'+esc(h.title)+'</span>'
+    +(big?'<span class="wdhbw">'+wkK.map(function(k){var dn=zHabitDone(c,h,k);return '<i class="'+(dn?'y':'')+(k===td?' t':'')+(k>td?' f':'')+'"></i>'}).join('')+'</span>':'')
+    +'<button class="zhd'+(y?' y':'')+'" data-zact="htick:'+c.id+':'+h.id+':'+td+'" aria-label="'+esc(h.title)+(y?', done':'')+'">'+(y?zI(ZIC.check,13):'')+'</button></div>'}).join('');
+  return zWCard(w,d,d.name,got+' of '+H.length,'<div class="wdhab2"><div class="wdring">'+zRing(pct,'var(--wc)',big?104:86,10,pct+'%')+'<small>'+cheer+'</small></div><div class="wdhbl">'+rows+'</div></div>',c.id);
+ }
+ case 'budget':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('budget',sp));
+  var b=zBudget(c),spent=w.show==='spent',pc=b.total?Math.round(b.spent/b.total*100):0,segs=zSpendSegs(c,b).filter(function(s){return s.v>0}).sort(function(a,z){return z.v-a.v});
+  var main='<div class="wdbud">'+zDonut(zSpendSegs(c,b),big?118:100,13,pc+'%','used')+'<div class="wdbudt"><span class="zsoft">'+(spent?'Spent':'Left to spend')+'</span><b class="wdnum">'+money(spent?b.spent:b.left)+'</b><span class="zsoft">of '+money(b.total)+'</span>'
+   +zLegend(segs.slice(0,3).map(function(s){return {col:s.col,label:s.label,val:money(s.v)}}))+'</div></div>';
+  var bars=big&&b.cats.length?'<div class="wdbva">'+b.cats.slice(0,6).map(function(x){var s=b.byCat[x.id]||0,p=x.limit?Math.min(100,s/x.limit*100):0;return '<div class="wdbvr"><span>'+esc(x.title)+'</span><span class="zbar" style="'+zcv(x.color||'grey')+'"><i style="width:'+p+'%"></i></span><em>'+money(s)+'</em></div>'}).join('')+'</div>':'';
+  return zWCard(w,d,esc(c.name),esc(t.toLocaleDateString('en-CA',{month:'long'})),main+bars+'<button class="zlink" data-zact="spendnew:'+c.id+'">+ Add spending</button>',c.id);
+ }
+ case 'money':case 'spending':{
+  var bc=firstPage(sp,'budget');if(!bc)return zWCard(w,d,d.name,'',zNoPage('budget',sp));
+  var bb=zBudget(bc),days=[],labels=[];
+  if(w.type==='spending'){
+   var wk2=zWeekKeys(),tot=0;wk2.forEach(function(k,i){var s=bc.items.filter(function(x){return x.t==='spend'&&!x.income&&x.date===k}).reduce(function(a,x){return a+(+x.amount||0)},0);days.push(s);tot+=s});
+   return zWCard(w,d,d.name,'This week','<div class="wdstat"><div><b class="wdnum">'+money(tot)+'</b><span>spent this week</span></div><div class="wdmini"><span><b>'+money(tot/Math.max(1,Math.min(7,(t.getDay()+6)%7+1)))+'</b><small>a day</small></span></div></div>'
+    +zCols(days,WK_L,ZC.peach[1],wk2.indexOf(td),big?110:86),bc.id);
+  }
+  var md=t.getDate(),cum=0;for(var i=1;i<=md;i++){var k2=iso(new Date(t.getFullYear(),t.getMonth(),i));cum+=bc.items.filter(function(x){return x.t==='spend'&&!x.income&&x.date===k2}).reduce(function(a,x){return a+(+x.amount||0)},0);days.push(cum)}
+  var net=bb.inc-bb.spent;
+  return zWCard(w,d,d.name,esc(t.toLocaleDateString('en-CA',{month:'long'})),'<div class="wdio"><div class="in">'+zIcoChip('arrowin','sage',30)+'<span><small>Money in</small><b>'+money(bb.inc)+'</b></span></div><div class="out">'+zIcoChip('arrowout','peach',30)+'<span><small>Money out</small><b>'+money(bb.spent)+'</b></span></div></div>'
+   +zSpark(days.length>1?days:[0,0],big?70:56,ZC.peach[1])+'<div class="zsoft">'+(net>=0?'You kept '+money(net)+' so far':'Over by '+money(-net))+' this month</div>',bc.id);
+ }
+ case 'payday':{
+  var pb=firstPage(sp,'budget');if(!pb)return zWCard(w,d,d.name,'',zNoPage('budget',sp));
+  return zWCard(w,d,d.name,'',zPayCard(pb,zBudget(pb),!big),pb.id);
+ }
+ case 'mood':{
+  var mc=moodPage(sp),vals=[],wkK2=zWeekKeys(),cur=moodOf(mc,td),last=3;
+  for(var j=13;j>=0;j--){var mm=moodOf(mc,zAddDays(td,-j));if(mm)last=mm.v;vals.push(mm?mm.v:last)}
+  var any=mc&&mc.items.some(function(x){return x.t==='mood'});
+  var week='<div class="wdmweek">'+wkK2.map(function(k,i){var mo=moodOf(mc,k);return '<span class="wdmd'+(k===td?' t':'')+'"'+(mo?' style="'+zcv(MOODS[mo.v].k)+'"':'')+'>'+(mo?moodFace(mo.v,16):'')+'<small>'+WK_L[i]+'</small></span>'}).join('')+'</div>';
+  return zWCard(w,d,cur?'Feeling '+MOODS[cur.v].n.toLowerCase():'How are you today?',any?'2 weeks':'',moodPicker(mc,td,false)+(any?zSpark(vals,big?64:48,'var(--wc)'):'')+week,mc?mc.id:'');
+ }
+ case 'progress':{
+  var ws3=zWeekKeys(),dueN=[],doneN=[],tot2=0,dn2=0;
+  ws3.forEach(function(k){var L=allTasks().filter(function(x){return !isRefClass(x.c)&&!x.ev&&x.t.due===k});dueN.push(L.length);var dd=L.filter(function(x){return x.t.done}).length;doneN.push(dd);tot2+=L.length;dn2+=dd});
+  var mx=Math.max.apply(null,dueN.concat([1]));
+  var cols='<div class="zcols" style="height:'+(big?110:88)+'px;--cc:var(--wc)">'+ws3.map(function(k,i){return '<div class="zcol1'+(k===td?' on':'')+'"><span class="trk"><u style="height:'+(dueN[i]/mx*100)+'%"></u><i style="height:'+(dueN[i]?doneN[i]/mx*100:0)+'%"></i></span><small>'+WK_L[i]+'</small></div>'}).join('')+'</div>';
+  return zWCard(w,d,d.name,'Mon to Sun','<div class="wdstat"><div><b class="wdnum">'+dn2+'<small>/'+tot2+'</small></b><span>done this week</span></div><div class="wdmini">'+zRing(tot2?dn2/tot2*100:0,'var(--wc)',46,6,'')+'<span><b>'+(tot2?Math.round(dn2/tot2*100):0)+'%</b><small>complete</small></span></div></div>'+cols);
+ }
+ case 'projects':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('projects',sp));
+  var P=c.items.filter(function(x){return x.t==='proj'&&x.status!=='done'}).sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:1}),doneP=c.items.filter(function(x){return x.t==='proj'&&x.status==='done'}).length;
+  return zWCard(w,d,esc(c.name),P.length+' active'+(doneP?' · '+doneP+' done':''),P.length?P.slice(0,big?5:3).map(function(p){var pr=zProjProgress(p),st=PSTAT.filter(function(s){return s[0]===(p.status||'todo')})[0],hue=zHueOf(p.title);
+   return '<button class="wdproj2" data-zact="projfrom:'+c.id+':'+p.id+'" style="'+zcv(hue)+'">'+(p.cover?'<span class="wdpc" style="background-image:url('+p.cover+')"></span>':'<span class="zic">'+zI(ZIC.folder,15)+'</span>')
+    +'<span class="wdpm"><span class="zrowb"><b>'+esc(p.title)+'</b><em>'+pr+'%</em></span><span class="zbar"><i style="width:'+pr+'%"></i></span><small>'+esc(st[1])+(p.due?' · due '+esc(parseISO(p.due).toLocaleDateString('en-CA',{month:'short',day:'numeric'})):'')+'</small></span></button>'}).join('')
+   :'<p class="zsoft">No projects in progress. <button class="zlink" data-open="'+c.id+'">Start one</button></p>',c.id);
+ }
+ case 'reading':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('reading',sp));
+  var R=c.items.filter(function(x){return x.t==='read'&&x.status==='doing'}),r0=R[0];
+  if(!r0){var nx=c.items.filter(function(x){return x.t==='read'&&x.status!=='done'})[0];
+   return zWCard(w,d,d.name,'',nx?'<button class="wdrhero" data-zact="readedit:'+c.id+':'+nx.id+'">'+(nx.cover?'<img src="'+esc(nx.cover)+'" alt="">':'<span class="wdreadph">'+zI(ZIC.book,20)+'</span>')+'<span><small>Up next</small><b>'+esc(nx.title)+'</b><span class="zsoft">'+esc(nx.by||'')+'</span></span></button>':'<p class="zsoft">Nothing on your list yet. <button class="zlink" data-open="'+c.id+'">Add a book or show</button></p>',c.id)}
+  var verb=r0.type==='book'?'Continue reading':'Continue watching';
+  return zWCard(w,d,d.name,R.length>1?R.length+' in progress':'','<button class="wdrhero" data-zact="readedit:'+c.id+':'+r0.id+'">'+(r0.cover?'<img src="'+esc(r0.cover)+'" alt="">':'<span class="wdreadph">'+zI(ZIC.book,20)+'</span>')
+   +'<span><small>'+verb+'</small><b>'+esc(r0.title)+'</b><span class="zsoft">'+esc(r0.by||'')+'</span><span class="zrdp"><span class="zbar"><i style="width:'+(r0.progress||0)+'%"></i></span><em>'+(r0.progress||0)+'%</em></span></span></button>'
+   +(R.length>1?'<div class="wdrmore">'+R.slice(1,big?6:4).map(function(x){return '<button data-zact="readedit:'+c.id+':'+x.id+'" title="'+esc(x.title)+'">'+(x.cover?'<img src="'+esc(x.cover)+'" alt="">':'<span>'+esc(x.title.charAt(0))+'</span>')+'</button>'}).join('')+'</div>':''),c.id);
+ }
+ case 'savings':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('budget',sp));
+  var g=c.items.filter(function(x){return x.t==='goal'}).sort(function(a,z){return (+z.target||0)-(+a.target||0)})[0];
+  if(!g)return zWCard(w,d,d.name,'','<p class="zsoft">No savings goal yet. <button class="zlink" data-zact="goalnew:'+c.id+'">Add one</button></p>');
+  var w2=Object.assign({},w);if(!w2.cover&&g.cover)w2.cover=g.cover;var gp=g.target?Math.min(100,Math.round((+g.saved||0)/g.target*100)):0;
+  return zWCard(w2,d,esc(g.title),g.date?esc(parseISO(g.date).toLocaleDateString('en-CA',{month:'short',year:'numeric'})):'Goal','<div class="wdsave">'+zGauge(gp,'var(--wc)',big?150:128,gp+'%','saved')+'<div><b class="wdnum">'+money(g.saved)+'</b><span class="zsoft">of '+money(g.target)+'</span><button class="zlink" data-zact="goalmoney:'+c.id+':'+g.id+'">+ Add money</button></div></div>',c.id);
+ }
+ case 'birthdays':{
+  var B=zBirthdays(sp).filter(function(b){return daysBetween(t,parseISO(b.next))<=90});
+  if(!B.length)return zWCardLink(w,d,d.name,'Calendar ›','calbd','<p class="zsoft">No birthdays in the next three months. <button class="zlink" data-zact="bdnew">Add one</button></p>');
+  var b0=B[0],cd0=cpCountdown(b0.next),isBd=!/anniv|wedding|married/i.test(b0.t.title),col0=b0.p?defPal(b0.p.color).bar:defPal('rose').bar;
+  var hero='<div class="wdbdh" data-zact="taskedit:'+b0.c.id+':'+b0.t.id+'" role="button" tabindex="0"><span class="wdbav" style="background:'+col0+'">'+zI(isBd?ZIC.cake:ZIC.heart,22)+'</span><span><b>'+esc(b0.t.title)+'</b><small>'+esc(parseISO(b0.next).toLocaleDateString('en-CA',{weekday:'long',month:'short',day:'numeric'}))+(b0.years?' · '+(isBd?'turns '+b0.years:b0.years+' years'):'')+'</small></span><em>'+esc(cd0.n===0?'Today!':cd0.n===1?'Tomorrow':'in '+cd0.t)+'</em></div>';
+  return zWCardLink(w,d,d.name,'Calendar ›','calbd',hero+B.slice(1,big?5:3).map(function(b){var cd=cpCountdown(b.next),col=b.p?defPal(b.p.color).bar:defPal('rose').bar;
+   return '<div class="wdbd" data-zact="taskedit:'+b.c.id+':'+b.t.id+'" role="button" tabindex="0"><span class="zav" style="background:'+col+'">'+esc((b.t.title||'?').charAt(0).toUpperCase())+'</span><span><b>'+esc(b.t.title)+'</b><small>'+esc(parseISO(b.next).toLocaleDateString('en-CA',{month:'short',day:'numeric'}))+'</small></span><em>'+esc(cd.n===1?'Tomorrow':cd.t)+'</em></div>'}).join(''));
+ }
+ case 'shifts':{
+  if(!c)return zWCard(w,d,d.name,'',zNoPage('shifts',sp));
+  var SH=c.items.filter(function(x){return x.t==='shift'}),wk3=zWeekKeys(),hrs=wk3.map(function(k){return SH.filter(function(x){return x.date===k}).reduce(function(s,x){return s+zHours(x)},0)}),th=hrs.reduce(function(a,b){return a+b},0);
+  var nx2=SH.filter(function(x){return x.date>=td}).sort(function(a,z){return a.date<z.date?-1:1})[0];
+  return zWCard(w,d,esc(c.name),'','<div class="wdstat"><div><b class="wdnum">'+Math.round(th*10)/10+'<small> h</small></b><span>this week</span></div><div class="wdmini"><span><b>'+(nx2?esc(parseISO(nx2.date).toLocaleDateString('en-CA',{weekday:'short'})):'–')+'</b><small>'+(nx2&&nx2.start?esc(fmtTime(nx2.start)):'next shift')+'</small></span></div></div>'+zCols(hrs,WK_L,'var(--wc)',wk3.indexOf(td),big?100:80),c.id);
+ }
+ case 'quote':{
+  var q=zQuote();
+  return zWCard(w,d,'','','<div class="wdq"><span class="wdqm">“</span><p>'+esc(q[0])+'</p>'+(q[1]?'<small>– '+esc(q[1])+'</small>':'')+LEAF_ART+'</div>','','wdquote');
+ }
+ case 'streak':{
+  var hc=firstPage(sp,'habits');if(!hc)return zWCard(w,d,d.name,'',zNoPage('habits',sp));
+  var HH=zHabits(hc),best=0;HH.forEach(function(h){var s=zStreak(hc,h);if(s>best)best=s});
+  var wk4=zWeekKeys(),circ=wk4.map(function(k,i){var on=HH.filter(function(h){return zHabitOn(h,k)}),y=on.length&&on.every(function(h){return zHabitDone(hc,h,k)}),part=!y&&on.some(function(h){return zHabitDone(hc,h,k)});
+   return '<span class="'+(y?'y':part?'p':'')+(k===td?' t':'')+'"><small>'+WK_L[i]+'</small><i>'+(y?zI(ZIC.check,11):'')+'</i></span>'}).join('');
+  return zWCard(w,d,'Current streak','','<div class="wdstreak"><span class="wdflame">'+zI(ZIC.flame,26)+'</span><b>'+best+'</b><small>day'+(best===1?'':'s')+'</small><em>'+(best?'Keep going!':'Tick a habit to start')+'</em></div><div class="wdsweek">'+circ+'</div>',hc.id);
+ }
+ case 'glance':{
+  var st=zTodayStats(sp),hc2=firstPage(sp,'habits'),bc2=firstPage(sp,'budget'),mc2=moodPage(sp);
+  var hab=null;if(hc2){var H2=zHabits(hc2).filter(function(h){return zHabitOn(h,td)});if(H2.length)hab=Math.round(H2.filter(function(h){return zHabitDone(hc2,h,td)}).length/H2.length*100)}
+  var mvals=[];if(mc2)for(var m3=0;m3<7;m3++){var mo3=moodOf(mc2,zAddDays(td,-m3));if(mo3)mvals.push(mo3.v)}
+  var mavg=mvals.length?Math.round(mvals.reduce(function(a,b){return a+b},0)/mvals.length):0;
+  var tile=function(ico,soft,big2,label,extra,go){return '<div class="wdgt" style="'+zcv(soft)+'"'+(go?' '+go+' role="button" tabindex="0"':'')+'><span class="zic">'+zI(ZIC[ico],15)+'</span><b>'+big2+'</b><small>'+label+'</small>'+(extra||'')+'</div>'};
+  var bb2=bc2?zBudget(bc2):null;
+  return zWCard(w,d,'At a glance',esc(t.toLocaleDateString('en-CA',{weekday:'long'})),'<div class="wdglance">'
+   +tile('check','sand',st.open,'to do',st.dueWk?'<span class="zbar"><i style="width:'+Math.round(st.doneWk/st.dueWk*100)+'%"></i></span>':'',firstPage(sp,'todo')?'data-open="'+firstPage(sp,'todo').id+'"':'')
+   +(hc2?tile('flame','sage',hab==null?'–':hab+'%','habits today',hab!=null?'<span class="zbar"><i style="width:'+hab+'%"></i></span>':'','data-open="'+hc2.id+'"'):'')
+   +(bc2?tile('wallet','mist',money(bb2.spent),'spent in '+esc(t.toLocaleDateString('en-CA',{month:'short'})),bb2.total?'<span class="zbar"><i style="width:'+Math.min(100,Math.round(bb2.spent/bb2.total*100))+'%"></i></span>':'','data-open="'+bc2.id+'"'):'')
+   +tile('smile',mavg?MOODS[mavg].k:'rose',mavg?MOODS[mavg].n:'–','mood this week','',mc2?'data-open="'+mc2.id+'"':'data-zact="mkpage:mood"')+'</div>');
+ }
+ case 'meals':{
+  var ml=firstPage(sp,'meals');if(!ml)return zWCard(w,d,d.name,'',zNoPage('meals',sp));
+  return zWCard(w,d,'Today’s meals',esc(t.toLocaleDateString('en-CA',{weekday:'long'})),'<div class="wdmeals">'+MEAL_SLOTS.filter(function(s){return big||s[0]!=='s'}).map(function(s){var m=zMealAt(ml,td,s[0]),r=m&&m.rid&&zItem(ml,m.rid);
+   return '<button class="wdmeal" data-zact="mealpick:'+ml.id+':'+td+':'+s[0]+'">'+(r&&r.img?'<img src="'+esc(r.img)+'" alt="">':'<span class="zic">'+zI(ZIC[s[2]],15)+'</span>')+'<span><small>'+s[1]+'</small><b>'+esc(r?r.title:(m&&m.text)||'Nothing planned')+'</b></span></button>'}).join('')+'</div>',ml.id);
+ }
+ }
+ return _r7NW(w,d,sp);
+};
+var _r7Small=zSmall;
+zSmall=function(w,d,sp){
+ var t=today(),td=iso(t);
+ if(w.type==='quote'){var q=zQuote();return zWCard(w,d,'','','<div class="wdq sm"><span class="wdqm">“</span><p>'+esc(q[0])+'</p></div>','','wdquote')}
+ if(w.type==='streak'){var hc=firstPage(sp,'habits');if(!hc)return null;var best=0;zHabits(hc).forEach(function(h){var s=zStreak(hc,h);if(s>best)best=s});
+  return zWCard(w,d,'Streak','','<div class="wdstreak sm"><span class="wdflame">'+zI(ZIC.flame,20)+'</span><b>'+best+'</b><small>day'+(best===1?'':'s')+'</small></div>',hc.id)}
+ if(w.type==='spending'){var bc=firstPage(sp,'budget');if(!bc)return null;var wk=zWeekKeys(),days=wk.map(function(k){return bc.items.filter(function(x){return x.t==='spend'&&!x.income&&x.date===k}).reduce(function(a,x){return a+(+x.amount||0)},0)});
+  return zWCard(w,d,'This week','','<div class="zsm"><b class="zsmb">'+money(days.reduce(function(a,b){return a+b},0))+'</b>'+zCols(days,WK_L,ZC.peach[1],wk.indexOf(td),56)+'</div>',bc.id)}
+ if(w.type==='meals'){var ml=firstPage(sp,'meals');if(!ml)return null;var m=zMealAt(ml,td,'d'),r=m&&m.rid&&zItem(ml,m.rid);
+  return '<section class="wd wdmealsm"'+(r&&r.img?' style="background-image:url('+esc(r.img)+')"':'')+' data-open="'+ml.id+'" role="button" tabindex="0"><span>Tonight</span><b>'+esc(r?r.title:(m&&m.text)||'Nothing planned yet')+'</b></section>'}
+ return _r7Small(w,d,sp);
+};
+var _r7Sizes=zwSizes;
+zwSizes=function(type){return type==='glance'?['half','full']:_r7Sizes(type)};
+Object.assign(WDEF,{
+ quote:{name:'Quote of the day',desc:'A calm thought each day',sp:'all',ico:'quote',soft:'sage',col:'side',size:'full',tintDef:true},
+ streak:{name:'Current streak',desc:'Your habit streak and the week in ticks',sp:['work','personal'],ico:'flame',soft:'sage',col:'side',size:'full',dark:true,page:'habits'},
+ spending:{name:'Spending this week',desc:'A bar for each day',sp:['personal'],ico:'chart',soft:'peach',col:'main',size:'half',page:'budget'},
+ glance:{name:'At a glance',desc:'To-dos, habits, spending and mood in one row',sp:['work','personal'],ico:'sparkle',soft:'grey',col:'main',size:'full'},
+ meals:{name:'Today’s meals',desc:'What’s for breakfast, lunch and dinner',sp:['personal'],ico:'utensils',soft:'peach',col:'side',size:'full',page:'meals'}
+});
+WDEF.payday.tintDef=true;WDEF.money.tintDef=false;
+DEFAULT_W.personal=[['glance','main','full'],['nextdue','main','half'],['money','main','half'],['habits','main','half'],['todo','main','half'],['week','main','full'],['groceries','main','half'],['reading','main','half'],['streak','side'],['payday','side'],['birthdays','side'],['quote','side'],['savings','side'],['music','side']];
+DEFAULT_W.work=[['glance','main','full'],['nextdue','main','half'],['progress','main','half'],['projects','main','half'],['todo','main','half'],['week','main','full'],['apps','main','full'],['plan','side'],['quote','side'],['month','side'],['notes','side'],['music','side']];
+
+/* ---------- Calendar: an Events tab (everything coming up that isn't a due date or a birthday) ---------- */
+function zEvList(sp){
+ var td=iso(today()),past=!!view.evPast,end=zAddDays(td,120);
+ var L=allTasks().filter(function(x){return x.ev&&!x.t.rep&&!isRefClass(x.c)&&(past?x.t.due<td:(x.t.due>=td&&x.t.due<=end))})
+  .sort(function(a,b){var k=a.t.due===b.t.due?((a.t.time||'')<(b.t.time||'')?-1:1):(a.t.due<b.t.due?-1:1);return past?-k:k});
+ var wk=zWeekKeys(),dots={};L.forEach(function(x){(dots[x.t.due]=dots[x.t.due]||[]).push(palHex(x.c.color))});
+ var head='<div class="zbdhead"><div><h2 class="zh2">Events</h2><p class="zsoft">Appointments, plans, bills and pay days'+(past?', most recent first':' coming up')+'.</p></div><div class="zevbtns"><div class="zseg"><button class="'+(past?'':'on')+'" data-zact="evpast:0">Coming up</button><button class="'+(past?'on':'')+'" data-zact="evpast:1">Past</button></div><button class="zbtn" data-zact="evnew">+ Add event</button></div></div>';
+ var strip=past?'':'<div class="zevweek">'+zRoundDays(wk[0],td,'data-evday',dots)+'</div>';
+ if(!L.length)return '<section class="zcard zbdlist">'+head+strip+'<p class="zempty">'+(past?'No past events.':'Nothing coming up. Add an appointment or plan.')+'</p></section>';
+ var cur='',h='';
+ L.forEach(function(x){
+  if(x.t.due!==cur){cur=x.t.due;var d=parseISO(cur),cd=cpCountdown(cur);h+='<div class="zevday" id="ev-'+cur+'"><span class="zevdn'+(cur===td?' t':'')+'"><b>'+d.getDate()+'</b><small>'+esc(d.toLocaleDateString('en-CA',{month:'short'}))+'</small></span><span>'+esc(cur===td?'Today':cd.n===1?'Tomorrow':d.toLocaleDateString('en-CA',{weekday:'long'}))+'<em>'+esc(cd.n>1&&!past?'in '+cd.t:'')+'</em></span></div>'}
+  var ic=x.t.bill||x.t.pay?'':zTaskIco(x.t.title),pp=defPal(x.c.color),logo=x.t.bill?zLogo(x.t.title.split(' · ')[0],34,'bill'):x.t.pay?zIcoChip('payday','sage',34):(ic?zIcoChip(ic,ICO_SOFT[ic],34):'<span class="zichip" style="background:'+pp.bg+';color:'+pp.bar+';width:34px;height:34px">'+zI(ZIC.cal,17)+'</span>');
+  h+='<button class="zevrow" data-zact="taskedit:'+x.c.id+':'+x.t.id+'">'+logo+'<span class="zbdtx"><b>'+esc(x.t.title)+'</b><small>'+esc((x.t.time?fmtTime(x.t.time):'All day')+(x.c.person?' · '+x.c.name:x.t.bill?' · Bill':x.t.pay?' · Pay day':''))+(x.t.notes?' · '+esc(String(x.t.notes).split('\n')[0]).slice(0,60):'')+'</small></span><i style="background:'+pp.bar+'"></i></button>';
+ });
+ return '<section class="zcard zbdlist">'+head+strip+h+'</section>';
+}
+ZACT.evpast=function(v){view.evPast=v==='1';render()};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-evday]');if(!b)return;var el=document.getElementById('ev-'+b.getAttribute('data-evday'));if(el)el.scrollIntoView({behavior:'smooth',block:'center'})});
+var _r7Cal=viewCalendar;
+viewCalendar=function(){
+ var sp=curSpace();if(sp==='school')return _r7Cal();
+ var T=view.calTab||'';
+ var tabs='<div class="zseg zcaltabs">'+[['cal','Calendar','cal'],['ev','Events','clock'],['bd','Birthdays','cake']].map(function(x){var on=(x[0]==='cal'&&!T)||T===x[0];return '<button class="'+(on?'on':'')+'" data-zact="caltab:'+x[0]+'">'+zI(ZIC[x[2]],14)+' '+x[1]+'</button>'}).join('')+'</div>';
+ if(T==='ev')return tabs+zEvList(sp);
+ if(T==='bd')return tabs+zBdList(sp);
+ return _r7Cal().replace(/<div class="zseg zcaltabs">[\s\S]*?<\/div>/,tabs);
+};
+ZACT.caltab=function(t){view.calTab=t==='bd'||t==='ev'?t:'';render()};
+
+/* ---------- Meal prep: plan the week's meals, keep recipes (with photos), send ingredients to the list ----------
+   Items on the page: t:'recipe' {title,img (web address),mins,serves,ingr:[lines],how,tags,src};
+   t:'meal' with id 'meal|YYYY-MM-DD|slot' {d,slot,rid (a recipe) or text}; t:'prep' {title,done,wk}.
+   "Find recipe" searches TheMealDB (free): photo, ingredients and method come with it. */
+var MEAL_SLOTS=[['b','Breakfast','sun'],['l','Lunch','coffee'],['d','Dinner','moon'],['s','Snacks','heart']];
+function zMealAt(c,d,slot){return c?zItem(c,'meal|'+d+'|'+slot):null}
+function zMealWeek(){return zAddDays(iso(weekStart(0)),7*(view.zmWeek||0))}
+function zRecipes(c){return c.items.filter(function(x){return x.t==='recipe'}).sort(function(a,b){return String(a.title).localeCompare(String(b.title))})}
+function zMealCell(c,d,s){
+ var m=zMealAt(c,d,s[0]),r=m&&m.rid&&zItem(c,m.rid);
+ if(!m)return '<button class="zmc empty" data-zact="mealpick:'+c.id+':'+d+':'+s[0]+'" aria-label="Add '+s[1]+'">+</button>';
+ return '<button class="zmc'+(r&&r.img?' pic':'')+'" data-zact="mealpick:'+c.id+':'+d+':'+s[0]+'"'+(r&&r.img?' style="background-image:url('+esc(r.img)+')"':'')+'><b>'+esc(r?r.title:m.text||'')+'</b>'+(r&&r.mins?'<small>'+r.mins+' min</small>':'')+'</button>';
+}
+function zMealsPage(c){
+ var ws=zMealWeek(),days=[];for(var i=0;i<7;i++)days.push(zAddDays(ws,i));
+ var td=iso(today()),sel=view.zmDay&&days.indexOf(view.zmDay)>-1?view.zmDay:(days.indexOf(td)>-1?td:ws);
+ var planned=0;days.forEach(function(d){MEAL_SLOTS.forEach(function(s){if(zMealAt(c,d,s[0]))planned++})});
+ var dots={};days.forEach(function(d){dots[d]=MEAL_SLOTS.filter(function(s){return zMealAt(c,d,s[0])}).map(function(){return ZC.peach[1]})});
+ var label=(view.zmWeek||0)===0?'This week':(view.zmWeek===1?'Next week':'Week of '+parseISO(ws).toLocaleDateString('en-CA',{month:'short',day:'numeric'}));
+ var bar='<div class="zbnav"><button class="zbtn ghost" data-zact="mealwk:-1" aria-label="Previous week">‹</button><b>'+esc(label)+'</b><button class="zbtn ghost" data-zact="mealwk:1" aria-label="Next week">›</button>'+((view.zmWeek||0)?'<button class="zlink" data-zact="mealwk:0">This week</button>':'')
+  +'<span class="zgrow"></span><button class="zbtn" data-zact="mealshop:'+c.id+'">'+zI(ZIC.cart,14)+' Add ingredients to my list</button><button class="zbtn ghost" data-zact="recipenew:'+c.id+'">+ Recipe</button></div>';
+ var msg=view.zmMsg?'<p class="zmmsg">'+esc(view.zmMsg)+'</p>':'';
+ // computer: the whole week as a grid; phone: round days, then the chosen day
+ var grid='<section class="zcard zmgridw"><div class="zmgrid7"><span></span>'+days.map(function(d){var dd=parseISO(d);return '<span class="zmgh'+(d===td?' t':'')+'"><small>'+esc(dd.toLocaleDateString('en-CA',{weekday:'short'}))+'</small><b>'+dd.getDate()+'</b></span>'}).join('')
+  +MEAL_SLOTS.map(function(s){return '<span class="zmslot">'+zI(ZIC[s[2]],14)+s[1]+'</span>'+days.map(function(d){return zMealCell(c,d,s)}).join('')}).join('')+'</div></section>';
+ var phone='<section class="zcard zmday">'+zRoundDays(ws,sel,'data-zmday',dots)+'<div class="zmdlist">'+MEAL_SLOTS.map(function(s){return '<div class="zmdrow"><span class="zmslot">'+zI(ZIC[s[2]],14)+s[1]+'</span>'+zMealCell(c,sel,s)+'</div>'}).join('')+'</div></section>';
+ var prep=c.items.filter(function(x){return x.t==='prep'&&x.wk===ws}),pd=prep.filter(function(x){return x.done}).length;
+ var stats=zCard('This week','utensils','',
+  '<div class="zrow2">'+zRing(planned/28*100,'var(--wc)',76,9,planned+'')+'<div><div class="zbig">'+planned+' of 28</div><div class="zsoft">meals planned</div></div></div>','',zcv('peach'));
+ var prepC=zCard('Prep list','list',prep.length?pd+' of '+prep.length:'',(prep.length?prep.map(function(x){return '<div class="zrow'+(x.done?' done':'')+'"><button class="zck'+(x.done?' y':'')+'" data-zact="prepdone:'+c.id+':'+x.id+'" aria-label="Done">'+(x.done?zI(ZIC.check,12):'')+'</button><span class="zrt">'+esc(x.title)+'</span><button class="zmini" data-zact="prepdel:'+c.id+':'+x.id+'" aria-label="Remove">×</button></div>'}).join(''):'<p class="zsoft">Things to do on prep day, like chop veggies or cook rice.</p>')
+  +'<div class="zadd"><input id="zprep-'+c.id+'" data-zenter="prepadd:'+c.id+'" placeholder="Add a prep step" autocomplete="off"><button class="zbtn" data-zact="prepadd:'+c.id+'">Add</button></div>');
+ var R=zRecipes(c);
+ var recipes='<div class="zh2row"><h2 class="zh2">Recipes</h2><button class="zbtn" data-zact="recipenew:'+c.id+'">+ Add a recipe</button></div>'
+  +(R.length?'<div class="zrcps">'+R.map(function(r){var hue=zHueOf(r.title);return '<button class="zrcp" data-zact="recipeedit:'+c.id+':'+r.id+'">'+(r.img?'<span class="zrcpi" style="background-image:url('+esc(r.img)+')"></span>':'<span class="zrcpi ph" style="'+zcv(hue)+'">'+zI(ZIC.utensils,26)+'</span>')
+   +'<b>'+esc(r.title)+'</b><small>'+esc([r.mins?r.mins+' min':'',(r.ingr||[]).length?(r.ingr||[]).length+' ingredients':'',r.tags||''].filter(Boolean).join(' · '))+'</small></button>'}).join('')+'</div>'
+   :'<div class="zrdempty">'+zI(ZIC.utensils,28)+'<p>Save the meals you make. Search a dish and Doable brings its photo, ingredients and steps.</p><button class="zbtn" data-zact="recipenew:'+c.id+'">+ Add your first recipe</button></div>');
+ return bar+msg+grid+phone+'<div class="zg2">'+stats+prepC+'</div>'+recipes;
+}
+ZACT.mealwk=function(n){n=+n;view.zmWeek=n===0?0:(view.zmWeek||0)+n;view.zmDay=null;view.zmMsg='';render()};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-zmday]');if(!b)return;view.zmDay=b.getAttribute('data-zmday');render()});
+ZACT.prepadd=function(cid){var c=classById(cid),v=zv('zprep-'+cid);if(!c||!v)return;c.items.push(touch({id:uid(),t:'prep',title:v,done:false,wk:zMealWeek()}));save();render();setTimeout(function(){var i=document.getElementById('zprep-'+cid);if(i)i.focus()},30)};
+ZACT.prepdone=function(cid,id){var x=zItem(classById(cid),id);if(x){x.done=!x.done;touch(x);save();render()}};
+ZACT.prepdel=function(cid,id){var c=classById(cid);if(!c)return;c.items=c.items.filter(function(x){return x.id!==id});save();render()};
+// choose a meal for a slot: one of your recipes, or a quick note
+ZACT.mealpick=function(cid,d,slot){zOpen('zmealpick',{cid:cid,d:d,slot:slot,q:''})};
+ZM.zmealpick={html:function(m){
+ var c=classById(m.cid);if(!c)return null;var s=MEAL_SLOTS.filter(function(x){return x[0]===m.slot})[0],cur=zMealAt(c,m.d,m.slot),q=(m.q||'').toLowerCase();
+ var R=zRecipes(c).filter(function(r){return !q||r.title.toLowerCase().indexOf(q)>-1});
+ return '<h3>'+s[1]+', '+esc(parseISO(m.d).toLocaleDateString('en-CA',{weekday:'long',month:'short',day:'numeric'}))+'</h3>'
+  +(zRecipes(c).length?'<label class="zsearch" style="margin-bottom:10px">'+zI(ZIC.search,15)+'<input id="zmpq" data-zmpq="1" placeholder="Search your recipes" value="'+esc(m.q||'')+'" autocomplete="off"></label><div class="zmpl">'
+   +R.map(function(r){return '<button class="zmpi'+(cur&&cur.rid===r.id?' on':'')+'" data-zact="mealset:'+r.id+'">'+(r.img?'<img src="'+esc(r.img)+'" alt="">':'<span class="zic">'+zI(ZIC.utensils,15)+'</span>')+'<span><b>'+esc(r.title)+'</b><small>'+esc(r.mins?r.mins+' min':'')+'</small></span></button>'}).join('')+'</div>':'<p class="hint">No recipes yet. Type a quick meal below, or add recipes on the page.</p>')
+  +'<div class="field" style="margin-top:12px"><label for="zmpt">Or just type it</label><div class="zfind"><input id="zmpt" data-zenter="mealtext" placeholder="Leftovers, eat out, toast and eggs" value="'+esc(cur&&!cur.rid?cur.text||'':'')+'"><button class="zbtn" data-zact="mealtext">Set</button></div></div>'
+  +(cur?'<button class="zlink danger" data-zact="mealclear">Clear this meal</button>':'');
+},closeLabel:'Done'};
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-zmpq')||!view.modal)return;view.modal.q=t.value;var s=t.selectionStart;render();var n=document.getElementById('zmpq');if(n){n.focus();try{n.setSelectionRange(s,s)}catch(err){}}});
+function zMealSet(o){var m=view.modal;if(!m)return;var c=classById(m.cid);if(!c)return;var id='meal|'+m.d+'|'+m.slot,x=zItem(c,id);
+ if(o===null){c.items=c.items.filter(function(i){return i.id!==id})}
+ else{if(!x){x={id:id,t:'meal',d:m.d,slot:m.slot};c.items.push(x)}delete x.rid;delete x.text;Object.assign(x,o);touch(x)}
+ save();view.modal=null;render()}
+ZACT.mealset=function(rid){zMealSet({rid:rid})};
+ZACT.mealtext=function(){var v=zv('zmpt');if(v)zMealSet({text:v})};
+ZACT.mealclear=function(){zMealSet(null)};
+// put this week's ingredients on the shopping list (skips anything already on it)
+ZACT.mealshop=function(cid){
+ var c=classById(cid);if(!c)return;var ws=zMealWeek(),want=[];
+ for(var i=0;i<7;i++)MEAL_SLOTS.forEach(function(s){var m=zMealAt(c,zAddDays(ws,i),s[0]),r=m&&m.rid&&zItem(c,m.rid);if(r)(r.ingr||[]).forEach(function(g){g=String(g).trim();if(g)want.push(g)})});
+ if(!want.length){view.zmMsg='No recipes with ingredients are planned this week yet.';render();return}
+ var sp=pageSpace(c),L=firstPage(sp,'groceries');
+ if(!L){L=newPage(sp,'groceries','Shopping list',null,spacePages(sp).length);S.classes.push(L)}
+ var have={};L.tasks.forEach(function(t){if(!t.done)have[String(t.title).toLowerCase()]=1});
+ var n=0;want.forEach(function(g){var k=g.toLowerCase();if(have[k])return;have[k]=1;L.tasks.push(touch({id:uid(),title:g,done:false}));n++});
+ save();view.zmMsg=n?'Added '+n+' ingredient'+(n===1?'':'s')+' to '+L.name+'.':'Everything is already on '+L.name+'.';render();
+};
+// recipes
+ZACT.recipenew=function(cid){zOpen('zrecipe',{cid:cid})};
+ZACT.recipeedit=function(cid,id){var r=zItem(classById(cid),id);if(r)zOpen('zrecipe',{cid:cid,id:id,img:r.img})};
+ZM.zrecipe={wide:true,html:function(m){var c=classById(m.cid);if(!c)return null;var r=m.id&&zItem(c,m.id),res=m.results;
+ var v=function(k,def){return m.fill&&m.fill[k]!=null?m.fill[k]:(r?r[k]:def)};
+ return '<h3>'+(r?'Recipe':'Add a recipe')+'</h3><div class="zrdform"><div class="zrdcov wide">'+(m.img?'<img src="'+esc(m.img)+'" alt="">':'<span>'+zI(ZIC.img,22)+'</span>')
+  +'<label class="zlink">'+(m.img?'Use my own picture':'Add a picture')+'<input type="file" accept="image/*" data-zmrimg="1" style="display:none"></label>'+(m.img?'<button type="button" class="zlink" data-zact="rimgoff">Remove</button>':'')+'</div>'
+  +'<div class="zrdfields"><div class="field"><label for="zp1">Name</label><div class="zfind"><input id="zp1" value="'+esc(v('title',''))+'" data-zenter="recipefind" placeholder="Chicken stir fry" autocomplete="off"><button type="button" class="zbtn" data-zact="recipefind">'+zI(ZIC.search,14)+' Find recipe</button></div></div>'
+  +(res==='loading'?'<p class="zsoft">Looking…</p>':res&&res.length?'<div class="zres">'+res.map(function(x,i){return '<button type="button" class="zresi wide" data-zact="recipepick:'+i+'"><img src="'+esc(x.img)+'/preview" alt=""><b>'+esc(x.title)+'</b><small>'+esc([x.area,x.cat].filter(Boolean).join(' · '))+'</small></button>'}).join('')+'</div>':res&&res.err?'<p class="zsoft">'+esc(res.err)+'</p>':'')
+  +'<div class="zfrow"><div class="field"><label for="zp2">Minutes</label><input id="zp2" type="number" min="0" inputmode="numeric" value="'+esc(v('mins',''))+'"></div><div class="field"><label for="zp3">Serves</label><input id="zp3" type="number" min="0" inputmode="numeric" value="'+esc(v('serves',''))+'"></div><div class="field"><label for="zp4">Tags</label><input id="zp4" value="'+esc(v('tags',''))+'" placeholder="Quick, veggie"></div></div>'
+  +'<div class="field"><label for="zp5">Ingredients (one per line)</label><textarea id="zp5" rows="6" placeholder="2 chicken breasts&#10;1 red pepper">'+esc((v('ingr',[])||[]).join('\n'))+'</textarea></div>'
+  +'<div class="field"><label for="zp6">How to make it</label><textarea id="zp6" rows="5">'+esc(v('how',''))+'</textarea></div>'
+  +(v('src','')?'<a class="zlink" href="'+esc(v('src',''))+'" target="_blank" rel="noopener">Open the original recipe ↗</a>':'')+'</div></div>';
+},save:function(m){var c=classById(m.cid);if(!c)return;var t=zv('zp1');if(!t)return;var r=m.id&&zItem(c,m.id);if(!r){r={id:uid(),t:'recipe'};c.items.push(r)}
+ r.title=t;r.mins=+zv('zp2')||0;r.serves=+zv('zp3')||0;r.tags=zv('zp4');r.ingr=document.getElementById('zp5').value.split('\n').map(function(x){return x.trim()}).filter(Boolean);r.how=document.getElementById('zp6').value.trim();
+ if(m.fill&&m.fill.src)r.src=m.fill.src;if(m.img)r.img=m.img;else delete r.img;touch(r);save();view.modal=null;render()},
+ del:function(m){return m.id?'itemdel:'+m.cid+':'+m.id:''}};
+ZACT.rimgoff=function(){if(view.modal){view.modal.img='';render()}};
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-zmrimg')||!t.files||!t.files[0]||!view.modal)return;var m=view.modal;shrinkImage(t.files[0],900,function(url){m.img=url;if(view.modal===m)render()})});
+ZACT.recipefind=async function(){
+ var m=view.modal;if(!m||m.kind!=='zrecipe')return;var q=zv('zp1');if(!q)return;m.results='loading';render();
+ var out=null;try{var r=await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s='+encodeURIComponent(q));var d=await r.json();
+  out=((d&&d.meals)||[]).slice(0,8).map(function(x){var ing=[];for(var i=1;i<=20;i++){var g=(x['strIngredient'+i]||'').trim(),me=(x['strMeasure'+i]||'').trim();if(g)ing.push((me?me+' ':'')+g)}
+   return {title:x.strMeal,img:x.strMealThumb,cat:x.strCategory,area:x.strArea,ingr:ing,how:(x.strInstructions||'').trim(),src:x.strSource||x.strYoutube||''}})}catch(e){}
+ if(view.modal!==m)return;
+ m.results=out&&out.length?out:{err:out?'No recipes found by that name. Try one or two words, like “pasta” or “curry”, or type your own.':'Couldn’t reach the recipe search. Check your connection, or type your own.'};render();
+};
+ZACT.recipepick=function(i){
+ var m=view.modal;if(!m||!m.results||!m.results[i])return;var x=m.results[i];
+ m.img=x.img;m.fill={title:x.title,ingr:x.ingr,how:x.how,tags:[x.area,x.cat].filter(Boolean).join(', '),src:x.src};m.results=null;render();
+ var set=function(id,val){var el=document.getElementById(id);if(el)el.value=val};set('zp1',x.title);set('zp5',x.ingr.join('\n'));set('zp6',x.how);set('zp4',m.fill.tags);
+};
+KINDS.meals={name:'Meal prep',tpl:'Meal prep',desc:'Plan the week’s meals, save recipes, send ingredients to your list',ico:'utensils',col:'clay'};
+PAGE_PAL.meals='clay';
+if(TEMPLATES.personal.indexOf('meals')<0)TEMPLATES.personal.splice(TEMPLATES.personal.indexOf('groceries')+1,0,'meals');
+var _r7ViewPage=viewPage;
+viewPage=function(c){
+ if(c.kind!=='meals')return _r7ViewPage(c);
+ return '<div class="zpage" style="'+zcv('peach')+'">'+zMealsPage(c)
+  +cpSetHead('Page settings','pg')+'<button data-zact="pageedit:'+c.id+'">Rename or recolour</button>'+coverControls(c.id,c)
+  +'<button class="cpdelcls" data-zact="pagedel:'+c.id+'">Delete page</button></div></div>';
+};
+
+/* ---------- stores get their website (for the logo); spending rows show logos too ---------- */
+var _r7SecHtml=ZM.zsec.html,_r7SecSave=ZM.zsec.save;
+ZM.zsec.html=function(m){var h=_r7SecHtml(m);var c=classById(m.cid);if(!h||!c||c.kind!=='groceries')return h;var s=m.sid&&(c.sections||[]).filter(function(x){return x.id===m.sid})[0];
+ return h.replace('<p class="hint" style="margin:-4px 0 8px">','<div class="field"><label for="zq2">Website (optional, for its logo)</label><input id="zq2" value="'+esc(s&&s.site||'')+'" placeholder="Most big stores find their logo on their own"></div><p class="hint" style="margin:-4px 0 8px">')};
+ZM.zsec.save=function(m){var el=document.getElementById('zq2'),c=classById(m.cid),site=el?el.value.trim():null,before=c?(c.sections||[]).length:0;_r7SecSave(m);
+ if(site!=null&&c){var s=m.sid?(c.sections||[]).filter(function(x){return x.id===m.sid})[0]:c.sections[c.sections.length-1];if(s&&(s.site||'')!==site){if(site)s.site=site;else delete s.site;touch(s);save();render()}}};
+
+/* ---------- the round week on Home on every screen size (it was phone-only), added once if missing ---------- */
+function r7Migrate(){
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.wk7)return;if(sbUser&&!S.everSynced)return;
+ var H=S.homeW||{},changed=false;
+ Object.keys(H).forEach(function(k){var L=H[k];if(L&&L.length&&!L.some(function(w){return w.type==='week'})){L=L.slice();L.splice(Math.min(1,L.length),0,{id:'w-week',type:'week',col:'main',size:'full'});H[k]=L;changed=true}});
+ if(changed)S.homeW=Object.assign({},H);
+ S.spacesInit=Object.assign({},S.spacesInit,{wk7:true});save();
+}
+var _r7Load=load;
+load=async function(){await _r7Load();try{r7Migrate()}catch(e){}render()};
 
 try{spBoot()}catch(e){}
 load();
