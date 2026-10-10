@@ -2807,6 +2807,11 @@ span.zrdc{display:grid;place-items:center;font-size:11px;padding:6px;box-sizing:
 .side .zpill .zpillbtn b{margin-left:auto;margin-right:2px}
 /* the quote card: a little deeper than the other widgets (and the page) */
 .wd.wdquote.wdef{background:color-mix(in srgb,var(--sideBg) 17%,var(--card))}
+/* the Edit widgets button above the widgets on Home */
+.zhtools{display:flex;justify-content:flex-end;margin:-6px 0 -10px}
+.zedbtn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:99px;padding:8px 15px;font:inherit;font-size:13.5px;font-weight:500;color:var(--sideBright,#fff);background:var(--sideBg);box-shadow:0 6px 14px -8px rgba(0,0,0,.4);cursor:pointer;min-height:0!important;transition:transform .2s,filter .2s}
+.zedbtn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+@media(max-width:700px){.zhtools{margin:-4px 0 -6px}}
 </style>
 </head>
 <body>
@@ -6418,10 +6423,11 @@ function viewHome(){
   h+='<div class="panel" style="margin-bottom:22px;padding:22px 24px">'
    +'<h2 style="font-size:20px;margin-bottom:6px">Welcome</h2>'
    +'<div class="field" style="max-width:340px;margin:12px 0 16px"><label for="hubName">What should this hub be called?</label><input id="hubName" data-setname="owner" maxlength="40" placeholder="e.g. Sam\'s hub" value="'+esc(S.owner==='My hub'?'':S.owner)+'"></div>'
-   +'<p style="color:var(--ink2);margin-bottom:14px">Load your backup to bring everything in, or start fresh by adding a class.</p>'
+   +'<p style="color:var(--ink2);margin-bottom:14px">New to Doable? Start from scratch. Used it before? Load your backup to bring everything in.</p>'
    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-   +'<label class="fakebtn" style="background:#33312C;color:#fff;border-color:#33312C"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
-   +'<button data-add="class">Add a class</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
+   +'<button data-zact="fresh" style="background:#33312C;color:#fff;border-color:#33312C">Start from scratch</button>'
+   +'<label class="fakebtn"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
+   +'<button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
  }
  // no cover picture: the hello sits in a band in the menu colour instead
  h=(S.cover?'':homeGreeting(false))+h+homeAccountCard()+homeInstallCard();
@@ -11032,7 +11038,7 @@ function viewSpaceHome(){
    +(edit?'<button class="zwx" data-zact="wdel:'+w.id+'" aria-label="Remove '+esc(d.name)+'">×</button><button class="zwm" data-zact="wmenu:'+w.id+'" aria-label="Options for '+esc(d.name)+'">'+zI(ZIC.dots,14)+'</button>':'')
    +(html||'<div class="zcard zempty" style="padding:18px">'+esc(d.name)+' (nothing to show yet)</div>')+'</div>'};
  var main=L.map(function(w,i){return w.col!=='side'?slot(w,i):''}).join(''),side=L.map(function(w,i){return w.col==='side'?slot(w,i):''}).join('');
- var bar=edit?'<div class="zedit"><b>Edit Home</b><span>Drag widgets to move them, or use ⋯. Tap × to remove.</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
+ var bar=edit?'<div class="zedit"><b>Edit widgets</b><span>Drag widgets to move them, or use ⋯. Tap × to remove.</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
  return bar+'<div class="zhome'+(edit?' edit':'')+'"><div class="zmain">'+main+'</div><aside class="zside">'+side+'</aside></div>';
 }
 ZACT.wedit=function(){view.homeEdit=true;render();window.scrollTo({top:0,behavior:'smooth'})};
@@ -11166,17 +11172,18 @@ coverOwner=function(key){return coverOwnerById(key.slice(6))};
 // widgets can be turned into... Home
 viewHome=function(){
  var real=cpHomeColors(),sp=curSpace(),ho=homeOwner(),h='';
- if(sp==='school'&&!S.classes.filter(function(c){return !c.kind&&c.id!==REF_CID}).length){
+ if(sp==='school'&&!S.welcomed&&!S.classes.filter(function(c){return !c.kind&&c.id!==REF_CID}).length){
   h+='<div class="panel" style="margin-bottom:22px;padding:22px 24px">'
    +'<h2 style="font-size:20px;margin-bottom:6px">Welcome</h2>'
    +'<div class="field" style="max-width:340px;margin:12px 0 16px"><label for="hubName">What should we call you?</label><input id="hubName" data-setname="owner" maxlength="40" placeholder="e.g. Sam" value="'+esc(S.owner==='My hub'?'':S.owner)+'"></div>'
-   +'<p style="color:var(--ink2);margin-bottom:14px">Load your backup to bring everything in, or start fresh by adding a class.</p>'
+   +'<p style="color:var(--ink2);margin-bottom:14px">New to Doable? Start from scratch. Used it before? Load your backup to bring everything in.</p>'
    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-   +'<label class="fakebtn" style="background:#33312C;color:#fff;border-color:#33312C"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
-   +'<button data-add="class">Add a class</button><button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
+   +'<button data-zact="fresh" style="background:#33312C;color:#fff;border-color:#33312C">Start from scratch</button>'
+   +'<label class="fakebtn"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
+   +'<button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
  }
  h=(ho.cover?'':homeGreeting(false))+h+homeAccountCard()+homeInstallCard();
- var G=cpSetHead('Home settings','home')+'<button data-zact="wedit">Edit Home</button>'+coverControls(homeOwnerId(),ho)+'<button data-secopen="1">Colours</button></div>';
+ var G=cpSetHead('Home settings','home')+'<button data-zact="wedit">Edit widgets</button>'+coverControls(homeOwnerId(),ho)+'<button data-secopen="1">Colours</button></div>';
  return h+'<div class="zhomewrap" style="'+cpVarStyle(real)+'">'+viewSpaceHome()+G+'</div>';
 };
 /* calendar: tick other spaces to show them here too; Personal adds people and yearly events */
@@ -11562,7 +11569,7 @@ viewSpaceHome=function(){
    +(html||'<div class="zcard zempty" style="padding:18px">'+esc(d.name)+' (nothing to show yet)</div>')+'</div>'};
  // on a phone (and iPad) everything is one list; on a computer, main and side columns
  var main=L.map(function(w,i){return (ph||w.col!=='side')?slot(w,i):''}).join(''),side=ph?'':L.map(function(w,i){return w.col==='side'?slot(w,i):''}).join('');
- var bar=edit?'<div class="zedit"><b>Edit Home</b><span>'+(ph?'Your phone layout. Drag to move. Your computer keeps its own.':'Drag widgets to move them. ⋯ changes size and colour. Your phone keeps its own layout.')+'</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
+ var bar=edit?'<div class="zedit"><b>Edit widgets</b><span>'+(ph?'Your phone layout. Drag to move. Your computer keeps its own.':'Drag widgets to move them. ⋯ changes size and colour. Your phone keeps its own layout.')+'</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
  return bar+'<div class="zhome'+(edit?' edit':'')+(ph?' ph':'')+'"><div class="zmain">'+main+'</div><aside class="zside">'+side+'</aside></div>';
 };
 ZACT.wadd=function(type){var sp=curSpace(),L=homeWidgets(sp).slice(),d=WDEF[type];L.unshift({id:'w-'+type+'-'+uid().slice(1,5),type:type,col:d.col,size:d.size});setHomeWidgets(sp,L);view.modal=null;render();window.scrollTo({top:0,behavior:'smooth'})};
@@ -12865,7 +12872,7 @@ SETTINGS_KEYS.push('homeIcons');
 var _r8Home=viewHome;
 viewHome=function(){
  var h=_r8Home();
- return h.replace('<button data-zact="wedit">Edit Home</button>','<button data-zact="wedit">Edit Home</button><button data-zact="wicons">Show icons: '+(S.homeIcons?'On':'Off')+'</button>');
+ return h.replace('<button data-zact="wedit">Edit widgets</button>','<button data-zact="wedit">Edit widgets</button><button data-zact="wicons">Show icons: '+(S.homeIcons?'On':'Off')+'</button>');
 };
 // keep or remove: the Add widget list shows what's on Home with a Remove button, and what isn't with + Add
 ZACT.wdelt=function(type){var sp=curSpace(),L=homeWidgets(sp).filter(function(w){return w.type!==type});setHomeWidgets(sp,L);render()};
@@ -13070,6 +13077,16 @@ function r9PillFit(){var p=document.querySelector('.side .zpill .zpillbtn'),b=do
 var _r9Render=render;
 render=function(){var before=app.firstElementChild;_r9Render.apply(this,arguments);if(app.firstElementChild!==before){r9PillFit();setTimeout(r9PillFit,30)}};
 window.addEventListener('resize',r9PillFit);
+
+
+/* Welcome card: "Start from scratch" (clearer than "Add a class"); and a visible Edit widgets button on Home */
+SETTINGS_KEYS.push('welcomed');
+ZACT.fresh=function(){var n=document.getElementById('hubName');if(n&&n.value.trim()){S.owner=n.value.trim()}S.welcomed=true;save();render();window.scrollTo({top:0,behavior:'smooth'})};
+var _r10Space=viewSpaceHome;
+viewSpaceHome=function(){
+ var h=_r10Space();if(view.homeEdit)return h;
+ return '<div class="zhtools"><button class="zedbtn" data-zact="wedit"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>Edit widgets</button></div>'+h;
+};
 
 try{spBoot()}catch(e){}
 load();
