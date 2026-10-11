@@ -7236,7 +7236,7 @@ function sidebar(c){
  });
  h+='<p class="slabel">\u00a0</p>'+sideItem('data-add','class','Add a class',false);
  h+='</div>';
- h+='<div class="sidefoot">'+(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
+ h+='<div class="sidefoot">'+(q42ShowGet()?sideItem('data-go','install','Get the app',view.page==='install'):'')+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
 function sideItem(attr,key,label,on){
@@ -12121,7 +12121,7 @@ function spaceSidebar(){
   h+='<div class="sitem'+(on?' on':'')+'" data-open="'+c.id+'"><span class="sdot" style="background:'+palHex(c.color)+'"></span><span class="nm2">'+esc(c.name)+'</span></div>';
  });
  h+='<p class="slabel"> </p>'+sideItem('data-znew','1','+ New page',false)+'</div>';
- h+='<div class="sidefoot">'+(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
+ h+='<div class="sidefoot">'+(q42ShowGet()?sideItem('data-go','install','Get the app',view.page==='install'):'')+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
 function sideMe(){
@@ -13061,7 +13061,7 @@ spaceSidebar=function(){
   h+='<div class="sitem sico'+(on?' on':'')+'" data-open="'+c.id+'"><span class="sic pg" style="--pgc:'+pp.bar+'">'+zI(ZIC[k.ico]||ZIC.note,15)+'</span><span class="nm2">'+esc(c.name)+'</span></div>';
  });
  h+=sideItem('data-znew','1','New page',false)+'</div>';
- h+='<div class="sidefoot">'+(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
+ h+='<div class="sidefoot">'+(q42ShowGet()?sideItem('data-go','install','Get the app',view.page==='install'):'')+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 };
 var _r6Sidebar=sidebar;
@@ -18096,6 +18096,8 @@ var _q42Sync=syncOnce;
 syncOnce=async function(){var r=await _q42Sync.apply(this,arguments);try{q42Meta()}catch(e){}return r};
 
 /* Android: Chrome offers a one-tap install; keep its offer so the guide can show an Install button */
+/* the menu's Get the app item: only on a phone or iPad that is using Doable in the browser, never in the installed app or on a computer */
+function q42ShowGet(){try{return !isInstalledApp()&&onbPlatform()!=='desktop'}catch(e){return false}}
 var q42Bip=null;
 window.addEventListener('beforeinstallprompt',function(e){q42Bip=e;if(view.page==='install'||(onb&&onb.step===3))q42Redraw()});
 window.addEventListener('appinstalled',function(){q42Bip=null;q42Redraw()});
