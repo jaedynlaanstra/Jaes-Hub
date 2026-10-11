@@ -3633,6 +3633,118 @@ body.zdepth .z5grp,body.zdepth .z5top{background-image:linear-gradient(180deg,rg
 .q17rstat b{color:var(--ink);font-size:15px;font-weight:600;margin-right:3px}
 .q17sm ul{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px;width:100%}
 .q17sm li{font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+/* ===== v155 round 16: Apple-style widgets and recipe cards ===== */
+.q18w{position:relative;border-radius:26px;background:var(--card);border:1px solid var(--line);overflow:hidden;color:var(--ink);box-sizing:border-box;height:100%;min-height:150px;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 12px 28px -20px rgba(60,45,30,.3);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.q18w:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 18px 34px -20px rgba(60,45,30,.38)}
+.q18circle{aspect-ratio:1;border-radius:50%;width:100%;max-width:230px;height:auto;min-height:0;margin:0 auto;display:grid;place-items:center}
+.q18dark{border:none;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 14px 30px -18px rgba(0,0,0,.55)}
+.q18free{margin:6px 0;font-size:13px;opacity:.7}
+.zhome .zw-aclock,.zhome .zw-water,.zhome .zw-focus{display:flex;align-items:center;justify-content:center}
+/* clock */
+.q18clock svg{width:88%;height:88%;overflow:visible}
+.q18clock line{stroke:var(--ink3);stroke-width:1;stroke-linecap:round}
+.q18clock line.b{stroke:var(--ink);stroke-width:1.8}
+.q18clock text{font-size:7.5px;fill:var(--ink3);font-family:inherit}
+.q18clock .hh,.q18clock .mh,.q18clock .sh{transform-origin:50px 50px;transform-box:view-box}
+.q18clock .hh{stroke:var(--ink);stroke-width:3.6}
+.q18clock .mh{stroke:var(--ink);stroke-width:2.4}
+.q18clock .sh{stroke:#D9634F;stroke-width:1;animation:q18sec 60s linear infinite}
+.q18clock .dot{fill:#D9634F}
+@keyframes q18sec{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.q18clock .hh,.q18clock .mh{transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+/* Today agenda */
+.q18agenda{display:flex;gap:16px;padding:18px;min-height:190px}
+.q18ad{display:flex;flex-direction:column;flex:none;min-width:84px}
+.q18ad span{font-size:13.5px;color:var(--ink2)}
+.q18ad b{font-size:54px;font-weight:500;letter-spacing:-2px;line-height:1;margin-top:2px}
+.q18ad small{margin-top:auto;font-size:12.5px;color:var(--ink3)}
+.q18al{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.q18ev{display:flex;flex-direction:column;gap:2px;border:none;border-radius:14px;padding:10px 12px;color:#fff;text-align:left;font:inherit;cursor:pointer;min-height:0!important;transition:transform .2s}
+.q18ev:hover{transform:translateX(3px)}
+.q18ev b{font-weight:500;font-size:14px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.q18ev small{font-size:11.5px;opacity:.75}
+.q18ev.done{opacity:.5}
+.q18now{position:relative;display:flex;align-items:center;gap:6px;height:12px}
+.q18now::before{content:'';position:absolute;left:8px;right:0;top:50%;height:1.5px;background:#D9634F}
+.q18now i{position:relative;width:9px;height:9px;border-radius:50%;background:#D9634F;animation:q18pulse 2s ease-in-out infinite}
+.q18now span{position:relative;margin-left:auto;font-size:10.5px;color:#D9634F;background:var(--card);padding:0 4px}
+@keyframes q18pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,99,79,.45)}50%{box-shadow:0 0 0 6px rgba(217,99,79,0)}}
+/* dark Today checklist */
+.q18tl{padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px;min-height:190px}
+.q18th{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.q18th b{font-size:15px;font-weight:500}.q18th span{font-size:22px;font-weight:500}
+.q18ck{display:flex;align-items:center;gap:10px;border:none;background:none;color:#fff;font:inherit;font-size:13.5px;padding:3px 0;text-align:left;cursor:pointer;min-height:0!important}
+.q18ck i{width:16px;height:16px;border-radius:5px;border:1.6px solid rgba(255,255,255,.55);flex:none;transition:background .2s,border-color .2s}
+.q18ck.y i{background:var(--cc);border-color:var(--cc);box-shadow:inset 0 0 0 3px rgba(0,0,0,.18)}
+.q18ck.y span{opacity:.5;text-decoration:line-through}
+.q18ck span{white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.q18bar{margin-top:auto;height:6px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}
+.q18bar u{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#E7A6C9,#C79AE0);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+/* water */
+.q18water{background:#F2F7FB;border-color:#E2EDF5}
+.q18wave{position:absolute;inset:0;border-radius:50%;overflow:hidden}
+.q18wave svg{position:absolute;left:0;width:200%;height:110%;transition:top 1s cubic-bezier(.2,.8,.2,1)}
+.q18wave .w1{fill:#7FB3E0;opacity:.55;animation:q18wave 6s linear infinite}
+.q18wave .w2{fill:#5A9BD8;animation:q18wave 4s linear infinite reverse}
+@keyframes q18wave{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.q18wt{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;color:#25415a;text-shadow:0 1px 6px rgba(255,255,255,.6)}
+.q18wt small{font-size:11.5px;opacity:.75}.q18wt b{font-size:28px;font-weight:600;letter-spacing:-.5px}.q18wt span{font-size:11px;opacity:.75}
+.q18wp,.q18wm{position:absolute;z-index:3;width:34px;height:34px;border-radius:50%;border:none;background:#fff;color:#2F6EA8;font-size:20px;line-height:1;cursor:pointer;min-height:0!important;box-shadow:0 6px 14px -6px rgba(0,0,0,.35);transition:transform .15s}
+.q18wp{bottom:9%;right:24%}.q18wm{bottom:9%;left:24%;font-size:18px}
+.q18wp:active,.q18wm:active{transform:scale(.88)}
+/* wallet */
+.q18wallet{padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:170px;cursor:pointer}
+.q18stack{position:relative;height:62px}
+.q18stack i{position:absolute;left:calc(var(--i)*10px);top:calc(var(--i)*12px);width:76%;height:44px;border-radius:9px;box-shadow:0 -2px 8px rgba(0,0,0,.25);transform:rotate(calc(var(--i)*-3deg));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.q18wallet:hover .q18stack i{transform:rotate(calc(var(--i)*-6deg)) translateY(calc(var(--i)*-3px))}
+.q18wb small{display:block;font-size:11px;letter-spacing:.02em;opacity:.7}
+.q18wb b{display:block;font-size:24px;font-weight:600;letter-spacing:-.5px;margin-top:2px}
+.q18wb span{display:block;font-size:11.5px;opacity:.7;margin-top:2px}
+/* focus timer */
+.q18focus svg{position:absolute;inset:6%;width:88%;height:88%;transform:rotate(-90deg)}
+.q18focus .tr{fill:none;stroke:color-mix(in srgb,var(--sideBg,#6f8468) 14%,transparent);stroke-width:6}
+.q18focus .pr{fill:none;stroke:var(--sideBg,#6f8468);stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 1s linear}
+.q18fb{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;border:none;background:none;font:inherit;color:var(--ink);cursor:pointer;min-height:0!important}
+.q18fb small{font-size:11.5px;color:var(--ink3)}.q18fb b{font-size:28px;font-weight:500;letter-spacing:-.5px;font-variant-numeric:tabular-nums}.q18fb span{font-size:10.5px;color:var(--ink3)}
+.q18focus.run .q18fb small{color:var(--sideBg)}
+.q18focus.run{animation:q18breathe 4s ease-in-out infinite}
+@keyframes q18breathe{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--sideBg,#6f8468) 0%,transparent)}50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--sideBg,#6f8468) 12%,transparent)}}
+.q18fr{position:absolute;z-index:3;bottom:10%;width:28px;height:28px;border-radius:50%;border:none;background:var(--card);color:var(--ink2);cursor:pointer;min-height:0!important;box-shadow:0 3px 8px rgba(0,0,0,.15)}
+@media(prefers-reduced-motion:reduce){.q18wave svg,.q18focus.run,.q18now i{animation:none!important}}
+/* gallery labels and the New tag */
+.q18lab{margin:14px 0 8px;font-size:13.5px;font-weight:500;color:var(--ink2)}
+.q18new{font-style:normal;font-size:10.5px;font-weight:600;color:#fff;background:#D9634F;border-radius:99px;padding:1px 7px;margin-left:4px;vertical-align:middle}
+/* profile card: dark, round photo, no pattern */
+.q19prof{border:none!important;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 14px 30px -18px rgba(0,0,0,.55)}
+.q19prof::before{display:none!important}
+.q19prof .q17av{box-shadow:0 0 0 4px rgba(255,255,255,.22),0 14px 26px -12px rgba(0,0,0,.5);background:rgba(255,255,255,.14)}
+.q19prof .q17av>span{color:#fff}
+.q19prof b{color:#fff;font-size:20px}
+.q19prof .q17tag{color:rgba(255,255,255,.72)}
+/* menu: Pages / Classes open and close */
+.q19lab{display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-radius:10px;-webkit-user-select:none;user-select:none}
+.q19lab:hover{opacity:1;color:var(--sideInk,#fff)}
+.q19chev{display:grid;place-items:center;transition:transform .25s}
+.q19chev svg{width:14px;height:14px}
+.q19lab.shut .q19chev{transform:rotate(-90deg)}
+.q19hide{display:none!important}
+.q19in{animation:zin .3s cubic-bezier(.2,.7,.2,1) both}
+/* recipe cards */
+.q18recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+@media(max-width:700px){.q18recs{grid-template-columns:minmax(0,1fr)}}
+.q18rec{position:relative;display:flex;align-items:center;min-height:132px!important;border:1px solid var(--line);border-radius:24px;background:var(--card);padding:18px 0 18px 20px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;overflow:hidden;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.q18rec.tint{background:var(--rt);border-color:transparent}
+.q18rec:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(0,0,0,.35)}
+.q18rtx{position:relative;z-index:2;flex:1;min-width:0;padding-right:118px;display:flex;flex-direction:column;gap:12px}
+.q18rtx b{font-size:17px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal}
+.q18rcs{display:flex;flex-wrap:wrap;gap:8px}
+.q18rc{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.85);border-radius:12px;padding:6px 10px;font-size:12.5px;color:var(--ink2)}
+.q18rec:not(.tint) .q18rc{background:#F4F2EE}
+.q18plate{position:absolute;right:-34px;top:50%;width:150px;height:150px;margin-top:-75px;border-radius:50%;background-size:cover;background-position:center;
+ box-shadow:0 0 0 6px rgba(255,255,255,.65),0 14px 26px -12px rgba(0,0,0,.45);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.q18rec:hover .q18plate{transform:rotate(14deg) scale(1.03)}
+.q18plate.none{display:grid;place-items:center;background:#EFE7DF;color:#9E7D61;padding-right:20px;box-sizing:border-box}
 </style>
 </head>
 <body>
@@ -3941,7 +4053,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v154';
+var BUILD='v155';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -15688,6 +15800,179 @@ zBudgetPage=function(c){
 };
 var _q17Add=ZM.zbadd.html;
 ZM.zbadd.html=function(m){return _q17Add(m).replace(/<\/div>$/,'<button data-zact="cardnew:'+m.cid+'"><span class="zic" style="'+zcv('denim')+'">'+zI(ZIC.wallet,18)+'</span><b>Card</b><small>A bank or credit card</small></button></div>')};
+
+/* ======================= ROUND 16 (v155): Apple-style widgets and recipe cards =======================
+   Jae: "Think similar to Apple and what kind of widgets they may have. They don't always have to be
+   rectangles... legit, professional, interactive with movement, really cool... EASY TO USE."
+   New widgets (round and pill shapes, all live): analog clock, Today agenda with a "now" line, a dark Today
+   checklist, a water tracker with a moving wave, a wallet of your budget cards, and a focus timer.
+   Recipes (Meal prep) are cards like Jae's picture: title, time chips, the food on a round plate. */
+SETTINGS_KEYS.push('water');
+function q18Deep(){var q=rgb2hsl.apply(null,hex2rgb(chromeHex('sideBg')));return hsl2hex(q[0],Math.min(q[1],22),20)}
+function q18Shape(w,cls,inner,attrs){return '<section class="q18w '+cls+'"'+(attrs||'')+'>'+inner+'</section>'}
+var Q18={};
+/* analog clock: the second hand sweeps, the others move every 20 seconds */
+Q18.aclock=function(w){
+ var n=new Date(),s=n.getSeconds()+n.getMilliseconds()/1000,m=n.getMinutes()+s/60,h=(n.getHours()%12)+m/60,ticks='';
+ for(var i=0;i<60;i++){var a=i*6,big=i%5===0;ticks+='<line x1="50" y1="'+(big?7:6)+'" x2="50" y2="'+(big?13:9)+'" transform="rotate('+a+' 50 50)" class="'+(big?'b':'')+'"/>'}
+ return q18Shape(w,'q18circle q18clock','<svg viewBox="0 0 100 100" aria-label="'+esc(n.toLocaleTimeString('en-CA',{hour:'numeric',minute:'2-digit'}))+'">'+ticks
+  +'<text x="50" y="68" text-anchor="middle">'+esc(n.toLocaleDateString('en-CA',{month:'short',day:'numeric'}).replace('.',''))+'</text>'
+  +'<line class="hh" x1="50" y1="50" x2="50" y2="27" style="transform:rotate('+(h*30)+'deg)"/><line class="mh" x1="50" y1="50" x2="50" y2="16" style="transform:rotate('+(m*6)+'deg)"/>'
+  +'<line class="sh" x1="50" y1="58" x2="50" y2="12" style="animation-delay:-'+s.toFixed(2)+'s"/><circle cx="50" cy="50" r="2.6" class="dot"/></svg>',' data-q18clock="1"');
+};
+/* Today: the date big on the left, today's events and due work on the right, a red line for "now" */
+function q18Today(){
+ var td=iso(today()),A=allTasks().filter(function(x){return !isRefClass(x.c)&&(x.t.due===td||planDay(x.t)===td)});
+ return A.sort(function(a,b){return (a.t.time||'00:00')<(b.t.time||'00:00')?-1:1});
+}
+Q18.agenda=function(w){
+ var n=new Date(),now=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2),L=q18Today(),deep=q18Deep(),line=false,rows='';
+ L.slice(0,4).forEach(function(x){
+  if(!line&&x.t.time&&x.t.time>now){line=true;rows+='<div class="q18now"><i></i><span>'+esc(fmtTime(now))+'</span></div>'}
+  rows+='<button class="q18ev'+(x.t.done&&!x.ev?' done':'')+'" style="background:'+deep+'" data-zact="taskedit:'+x.c.id+':'+x.t.id+'"><b>'+esc(x.t.title)+'</b><small>'+(x.t.time?esc(fmtTime(x.t.time)):x.ev?'All day':'Due today')+' · '+esc(classLabel(x.c))+'</small></button>';
+ });
+ if(L.length&&!line)rows+='<div class="q18now"><i></i><span>'+esc(fmtTime(now))+'</span></div>';
+ return q18Shape(w,'q18agenda','<div class="q18ad"><span>'+esc(n.toLocaleDateString('en-CA',{weekday:'long'}))+'</span><b>'+n.getDate()+'</b><small>'+(L.length?L.length+' thing'+(L.length===1?'':'s')+' today':'A free day')+'</small></div>'
+  +'<div class="q18al">'+(rows||'<p class="q18free">Nothing on today. Enjoy it.</p>')+(L.length>4?'<button class="zlink" data-go="calendar">+'+(L.length-4)+' more</button>':'')+'</div>');
+};
+/* a dark Today checklist with a progress bar */
+Q18.todaylist=function(w){
+ var L=q18Today().filter(function(x){return !x.ev}),dn=L.filter(function(x){return x.t.done}).length,pct=L.length?Math.round(dn/L.length*100):0;
+ return q18Shape(w,'q18dark q18tl','<div class="q18th"><b>Today</b><span>'+(L.length-dn)+'</span></div>'
+  +(L.length?L.slice(0,5).map(function(x){var a=x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick';return '<button class="q18ck'+(x.t.done?' y':'')+'" data-'+a+'="'+x.t.id+'" data-c="'+x.c.id+'"><i style="--cc:'+palHex(x.c.color)+'"></i><span>'+esc(x.t.title)+'</span></button>'}).join('')
+   :'<p class="q18free">Nothing due or planned today.</p>')
+  +'<div class="q18bar"><u style="width:'+pct+'%"></u></div>',' style="background:'+q18Deep()+'"');
+};
+/* water: tap + to add a glass (250 ml); the wave rises toward your goal (2 L) */
+function q18Water(){var W=S.water||{};return +W[iso(today())]||0}
+ZACT.q18water=function(n){var td=iso(today()),W=Object.assign({},S.water||{});W[td]=Math.max(0,(+W[td]||0)+(+n));
+ Object.keys(W).forEach(function(k){if(k<zAddDays(td,-40))delete W[k]});S.water=W;view.r6pop='.q18water';save();render()};
+Q18.water=function(w){
+ var ml=q18Water(),goal=2000,p=Math.min(1,ml/goal),y=(1-p)*100;
+ var wave=function(cls,dy){return '<svg class="'+cls+'" viewBox="0 0 200 100" preserveAspectRatio="none" style="top:'+(y+dy)+'%"><path d="M0 10 Q25 0 50 10 T100 10 T150 10 T200 10 V100 H0z"/></svg>'};
+ return q18Shape(w,'q18circle q18water','<div class="q18wave">'+wave('w1',-4)+wave('w2',-2)+'</div><div class="q18wt"><small>Water</small><b>'+(ml>=1000?(ml/1000).toFixed(ml%1000?2:0).replace(/0$/,'')+' L':ml+' ml')+'</b><span>'+(ml>=goal?'Goal reached':'of 2 L')+'</span></div>'
+  +'<button class="q18wp" data-zact="q18water:250" aria-label="Add a glass of water">+</button>'+(ml?'<button class="q18wm" data-zact="q18water:-250" aria-label="Take a glass off">−</button>':''));
+};
+/* wallet: your budget cards, stacked, with what's in the bank */
+Q18.wallet=function(w,sp){
+ var b=firstPage(sp,'budget'),C=b?q17Cards(b):[];
+ var bank=C.filter(function(x){return x.kind!=='credit'}).reduce(function(s,x){return s+(+x.balance||0)},0),owe=C.filter(function(x){return x.kind==='credit'}).reduce(function(s,x){return s+(+x.balance||0)},0);
+ var cols=(C.length?C:[{color:'butter'},{color:'terracotta'},{color:'denim'}]).slice(0,3).map(function(x){return palHex(x.color||'denim')});
+ return q18Shape(w,'q18dark q18wallet','<div class="q18stack">'+cols.map(function(c,i){return '<i style="background:'+c+';--i:'+i+'"></i>'}).join('')+'</div>'
+  +(C.length?'<div class="q18wb"><small>Balance</small><b>'+money(bank)+'</b>'+(owe?'<span>'+money(owe)+' owing on credit</span>':'')+'</div>':'<div class="q18wb"><small>Wallet</small><b>Add your cards</b><span>On your Budget page</span></div>'),
+  ' style="background:'+q18Deep()+'"'+(b?' data-open="'+b.id+'" role="button" tabindex="0"':''));
+};
+/* focus timer: tap to start or pause a 25-minute focus session; the ring drains as time passes */
+function q18F(){try{return JSON.parse(localStorage.getItem('hub:focus')||'{}')}catch(e){return {}}}
+function q18FSet(f){try{localStorage.setItem('hub:focus',JSON.stringify(f))}catch(e){}}
+function q18FLeft(f){return f.end?Math.max(0,f.end-Date.now()):(f.left!=null?f.left:25*60000)}
+ZACT.q18focus=function(){var f=q18F();if(f.end){f.left=q18FLeft(f);delete f.end}else{f.end=Date.now()+q18FLeft(f);delete f.left}q18FSet(f);render()};
+ZACT.q18reset=function(){q18FSet({});render()};
+Q18.focus=function(w){
+ var f=q18F(),left=q18FLeft(f),run=!!f.end,p=left/(25*60000),r=44,C=2*Math.PI*r,mm=Math.floor(left/60000),ss=Math.floor(left%60000/1000);
+ return q18Shape(w,'q18circle q18focus'+(run?' run':''),'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="'+r+'" class="tr"/><circle cx="50" cy="50" r="'+r+'" class="pr" style="stroke-dasharray:'+(C*p).toFixed(1)+' '+C.toFixed(1)+'"/></svg>'
+  +'<button class="q18fb" data-zact="q18focus" aria-label="'+(run?'Pause':'Start')+' focus"><small>'+(run?'Focusing':left<25*60000?'Paused':'Focus')+'</small><b data-q18left="1">'+mm+':'+('0'+ss).slice(-2)+'</b><span>'+(run?'Tap to pause':'Tap to start')+'</span></button>'
+  +(left<25*60000?'<button class="q18fr" data-zact="q18reset" aria-label="Reset">↺</button>':''),' data-q18focus="1"');
+};
+// keep the clock hands and the timer moving without redrawing the page
+setInterval(function(){
+ if(view.page!=='home')return;
+ var n=new Date(),s=n.getSeconds()+n.getMilliseconds()/1000,m=n.getMinutes()+s/60,h=(n.getHours()%12)+m/60;
+ document.querySelectorAll('[data-q18clock] .hh').forEach(function(e){e.style.transform='rotate('+(h*30)+'deg)'});
+ document.querySelectorAll('[data-q18clock] .mh').forEach(function(e){e.style.transform='rotate('+(m*6)+'deg)'});
+ var f=q18F();if(f.end){var left=q18FLeft(f),r=44,C=2*Math.PI*r;
+  document.querySelectorAll('[data-q18left]').forEach(function(e){e.textContent=Math.floor(left/60000)+':'+('0'+Math.floor(left%60000/1000)).slice(-2)});
+  document.querySelectorAll('[data-q18focus] .pr').forEach(function(e){e.style.strokeDasharray=(C*left/(25*60000)).toFixed(1)+' '+C.toFixed(1)});
+  if(!left){q18FSet({});try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}zToast('Focus session done. Time for a break.');render()}}
+},1000);
+Object.assign(WDEF,{
+ aclock:{name:'Clock',desc:'A round clock with a moving second hand',sp:'all',legacy:1,col:'side',size:'small',q18:1},
+ agenda:{name:'Today',desc:'The date, today’s events and due work, with a line for now',sp:'all',legacy:1,col:'main',size:'half',q18:1},
+ todaylist:{name:'Today’s checklist',desc:'What’s due or planned today, to tick off',sp:'all',legacy:1,col:'main',size:'small',q18:1},
+ water:{name:'Water',desc:'Tap + for each glass; the wave fills up to 2 L',sp:'all',legacy:1,col:'side',size:'small',q18:1},
+ wallet:{name:'Wallet',desc:'Your budget cards and what’s in the bank',sp:['personal','work'],legacy:1,col:'side',size:'small',q18:1},
+ focus:{name:'Focus timer',desc:'A 25-minute focus session, tap to start',sp:'all',legacy:1,col:'side',size:'small',q18:1}
+});
+['aclock','agenda','todaylist','water','wallet','focus'].forEach(function(k){WDEF[k].r=function(){return ''}});
+var _q18Sizes=zwSizes;
+zwSizes=function(type){return {aclock:['small'],water:['small'],focus:['small'],wallet:['small','half'],todaylist:['small','half'],agenda:['half','full']}[type]||_q18Sizes(type)};
+var _q18WH=zWidgetHtml;
+zWidgetHtml=function(w,sp){var d=WDEF[w.type];if(d&&d.q18&&Q18[w.type])return Q18[w.type](w,sp);return _q18WH(w,sp)};
+var _q18Small=zSmall;
+zSmall=function(w,d,sp){if(d&&d.q18)return null;return _q18Small(w,d,sp)};
+// the gallery: plain labels, the new ones first with a "New" tag
+var _q18Gal=ZM.zwgal.html;
+ZM.zwgal.html=function(m){var h=_q18Gal(m);
+ h=h.replace('<p class="lab">ON HOME</p>','<p class="q18lab">On your Home</p>').replace('<p class="lab" style="margin-top:14px">MORE WIDGETS</p>','<p class="q18lab">More widgets</p>');
+ ['aclock','agenda','todaylist','water','wallet','focus'].forEach(function(k){h=h.replace('<b>'+esc(WDEF[k].name)+'</b>','<b>'+esc(WDEF[k].name)+' <em class="q18new">New</em></b>')});
+ return h};
+// a few of them join every Home once: the clock and water (or focus) as two circles, and Today
+function q18Migrate(){
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.apple1)return;if(sbUser&&!S.everSynced)return;
+ var H=S.homeW||{},ch=false;
+ Object.keys(H).forEach(function(k){var L=H[k];if(!L||!L.length||L.some(function(w){return w.type==='aclock'}))return;var sp=k.split('@')[0];L=L.slice();
+  var pi=L.findIndex(function(w){return w.type==='profile'}),at=pi>-1?pi+1:Math.max(0,L.findIndex(function(w){return w.col==='side'}));
+  L.splice(at,0,{id:'w-aclock',type:'aclock',col:'side',size:'small'},{id:'w-'+(sp==='personal'?'water':'focus'),type:sp==='personal'?'water':'focus',col:'side',size:'small'});
+  var mi=L.findIndex(function(w){return w.col!=='side'});L.splice(Math.min(L.length,(mi<0?0:mi)+2),0,{id:'w-agenda',type:'agenda',col:'main',size:'half'});
+  H[k]=L;ch=true});
+ if(ch)S.homeW=Object.assign({},H);
+ S.spacesInit=Object.assign({},S.spacesInit,{apple1:true});save();
+}
+['school','work','personal'].forEach(function(sp){var D=DEFAULT_W[sp];if(!D||D.some(function(d){return d[0]==='aclock'}))return;var i=D.findIndex(function(d){return d[0]==='profile'});i=i<0?D.findIndex(function(d){return d[1]==='side'}):i+1;D.splice(i<0?D.length:i,0,['aclock','side','small'],[sp==='personal'?'water':'focus','side','small']);D.splice(2,0,['agenda','main','half'])});
+var _q18Load=load;
+load=async function(){await _q18Load();try{q18Migrate()}catch(e){}render()};
+
+/* ---------- recipes as cards: title, time chips, and the food on a round plate ---------- */
+var Q18HAT='<path d="M7 14.5V20h10v-5.5"/><path d="M7 14.5a4 4 0 0 1-1.2-7.6A4.5 4.5 0 0 1 12 4a4.5 4.5 0 0 1 6.2 2.9A4 4 0 0 1 17 14.5z"/><path d="M7 17h10"/>';
+var Q18CLOCHE='<path d="M4 17h16"/><path d="M5.5 17a6.5 6.5 0 0 1 13 0"/><path d="M12 8.5V7"/><path d="M3 20h18"/>';
+var Q18PPL='<circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 5.5a3 3 0 0 1 0 5.6M18 14.3c1.5.6 2.5 2.2 2.5 4.7"/>';
+function q18RecipeCards(c){
+ var R=zRecipes(c);
+ var head='<div class="zh2row"><h2 class="zh2">Recipes</h2><button class="zbtn" data-zact="recipenew:'+c.id+'">+ Add a recipe</button></div>';
+ if(!R.length)return head+'<div class="zrdempty">'+zI(ZIC.utensils,28)+'<p>Save the meals you make. Paste a link from a food blog, or search a dish, and Doable brings its photo, ingredients and steps.</p><button class="zbtn" data-zact="recipenew:'+c.id+'">+ Add your first recipe</button></div>';
+ var chip=function(ico,t){return '<span class="q18rc">'+zI(ico,15)+t+'</span>'};
+ return head+'<div class="q18recs">'+R.map(function(r,i){var k=ZC[zHueOf(r.title)]||ZC.sage,tint=i%2===0;
+  var chips=(r.prep?chip(Q18HAT,r.prep+' mins'):'')+(r.cook?chip(Q18CLOCHE,r.cook+' mins'):'')+(!r.prep&&!r.cook&&r.mins?chip(Q18CLOCHE,r.mins+' mins'):'')+(r.serves?chip(Q18PPL,'Serves '+r.serves):'');
+  return '<button class="q18rec'+(tint?' tint':'')+'" style="--rt:'+k[0]+'" data-zact="recipeedit:'+c.id+':'+r.id+'"><span class="q18rtx"><b>'+esc(r.title)+'</b><span class="q18rcs">'+(chips||chip(ZIC.utensils,'Your recipe'))+'</span></span>'
+   +(r.img?'<span class="q18plate" style="background-image:url('+esc(r.img)+')"></span>':'<span class="q18plate none">'+zI(ZIC.utensils,30)+'</span>')+'</button>'}).join('')+'</div>';
+}
+var _q18Meals=zMealsPage;
+zMealsPage=function(c){var h=_q18Meals(c),i=h.indexOf('<div class="zh2row"><h2 class="zh2">Recipes');return i<0?h:h.slice(0,i)+q18RecipeCards(c)};
+// prep and cook times in the recipe pop-up
+var _q18RH=ZM.zrecipe.html,_q18RS=ZM.zrecipe.save;
+ZM.zrecipe.html=function(m){var h=_q18RH(m),c=classById(m.cid),r=m.id&&c&&zItem(c,m.id);if(!h)return h;
+ return h.replace('<label for="zp2">Minutes</label>','<label for="zp2">Total minutes</label>').replace('<div class="field"><label for="zp5">','<div class="zfrow"><div class="field"><label for="zp8">Prep (min)</label><input id="zp8" type="number" min="0" inputmode="numeric" value="'+esc(r&&r.prep||'')+'"></div><div class="field"><label for="zp9">Cook (min)</label><input id="zp9" type="number" min="0" inputmode="numeric" value="'+esc(r&&r.cook||'')+'"></div></div><div class="field"><label for="zp5">')};
+ZM.zrecipe.save=function(m){var c=classById(m.cid),p=+zv('zp8')||0,k=+zv('zp9')||0,before={};if(c)(c.items||[]).forEach(function(i){before[i.id]=1});
+ _q18RS(m);if(!c)return;var r=m.id?zItem(c,m.id):(c.items||[]).filter(function(i){return i.t==='recipe'&&!before[i.id]})[0];if(!r)return;
+ var ch=false;if((r.prep||0)!==p){if(p)r.prep=p;else delete r.prep;ch=true}if((r.cook||0)!==k){if(k)r.cook=k;else delete r.cook;ch=true}if(p+k&&!r.mins){r.mins=p+k;ch=true}if(ch){touch(r);save();render()}};
+
+
+
+/* ---------- profile card: round photo, "Hi, Jae!", a darker card, no pattern (Jae's notes) ---------- */
+q17Profile=function(){
+ var nm=firstName();
+ return '<section class="q17prof q19prof" style="background:'+q18Deep()+'"><label class="q17av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+esc(String(nm).charAt(0).toUpperCase())+'</span>')+'<i>'+zI('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',12)+'</i></label>'
+  +'<b>Hi, '+esc(nm)+'!</b><button class="q17tag'+(S.tagline?'':' add')+'" data-zact="z6me">'+esc(S.tagline||'Add a line about you')+'</button></section>';
+};
+WDEF.profile.r=function(){return q17Profile()};
+
+/* ---------- the menu: tap "Pages" (or "Classes") to open or close that list; the page you're on stays ---------- */
+function q19SideKey(l){return 'hub:sideshut:'+curSpace()+':'+l.textContent.trim().toLowerCase()}
+function q19Side(){
+ document.querySelectorAll('.side .slabel').forEach(function(l){
+  var shut=false;try{shut=localStorage.getItem(q19SideKey(l))==='1'}catch(e){}
+  if(!l.classList.contains('q19lab')){l.classList.add('q19lab');l.setAttribute('role','button');l.setAttribute('tabindex','0');l.insertAdjacentHTML('beforeend','<span class="q19chev">'+CP_ICO.chev+'</span>')}
+  l.setAttribute('aria-expanded',String(!shut));l.classList.toggle('shut',shut);
+  for(var n=l.nextElementSibling;n&&!n.classList.contains('slabel');n=n.nextElementSibling)n.classList.toggle('q19hide',shut&&!n.classList.contains('on')&&!n.querySelector('.on'));
+ });
+}
+function q19Toggle(l){var k=q19SideKey(l),shut=false;try{shut=localStorage.getItem(k)==='1';localStorage.setItem(k,shut?'0':'1')}catch(e){}
+ q19Side();if(shut){for(var n=l.nextElementSibling;n&&!n.classList.contains('slabel');n=n.nextElementSibling){n.classList.add('q19in');(function(el){setTimeout(function(){el.classList.remove('q19in')},400)})(n)}}}
+document.addEventListener('click',function(e){var l=e.target.closest&&e.target.closest('.side .q19lab');if(!l)return;e.preventDefault();e.stopPropagation();q19Toggle(l)},true);
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.classList&&e.target.classList.contains('q19lab')){e.preventDefault();q19Toggle(e.target)}});
+var _q19Render=render;
+render=function(){var before=app.firstElementChild;var r=_q19Render.apply(this,arguments);if(app.firstElementChild!==before)q19Side();return r};
 
 try{spBoot()}catch(e){}
 load();
