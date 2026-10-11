@@ -4345,6 +4345,71 @@ body.q36dragging{user-select:none;-webkit-user-select:none}
 .q36grid>.q36sec.zbcats>.zbcat{flex:1 1 auto;align-items:center}
 .q36grid>.q36sec[data-q36="six"]>.zbsix{flex:1 1 auto;height:auto!important;min-height:140px}
 .q36grid>.q36sec[data-q36="went"]>.zbwent{flex:1 1 auto}
+/* v185: Make now cooking card, servings, timers */
+.q39mk{position:absolute;left:20px;bottom:14px;z-index:3;display:inline-flex;align-items:center;gap:5px;border:none;border-radius:99px;padding:6px 12px;background:#2b2a27;color:#fff;font:inherit;font-size:12px;cursor:pointer;min-height:0!important;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s}
+.q18rec:hover .q39mk,.q18rec:focus-within .q39mk{opacity:1;transform:none}
+@media(hover:none){.q39mk{opacity:1;transform:none}}
+.q18rec .q18rtx{padding-bottom:22px}
+.q39mkb{display:inline-flex;align-items:center;gap:6px;margin:-4px 0 12px}
+body.q39lock{overflow:hidden}
+#q39cook{position:fixed;inset:0;z-index:9000;background:rgba(30,26,22,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);overflow-y:auto;padding:28px 16px 120px;animation:zfade .2s ease}
+.q39card{max-width:980px;margin:0 auto;background:var(--card,#fff);border-radius:28px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.5);animation:q39in .32s cubic-bezier(.2,.9,.3,1)}
+@keyframes q39in{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+.q39hero{position:relative;height:230px;background:#c9b8a6 center/cover no-repeat;display:flex;align-items:flex-end}
+.q39shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.65))}
+.q39x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.9);color:#222;display:grid;place-items:center;cursor:pointer;z-index:2;min-height:0!important}
+.q39ht{position:relative;padding:22px 28px;color:#fff;min-width:0}
+.q39ht h2{margin:0 0 10px;font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.q39chips{display:flex;flex-wrap:wrap;gap:8px}
+.q39chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:99px;padding:6px 12px;font-size:13px}
+.q39serv{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:16px 28px;border-bottom:1px solid var(--line)}
+.q39sl{font-size:13px;color:var(--ink3);margin-right:4px}
+.q39so{position:relative;display:inline-flex}
+.q39so>button:first-child{border:1px solid var(--line);background:var(--card);border-radius:99px;min-width:46px;padding:7px 14px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;min-height:0!important}
+.q39so.on>button:first-child{background:#2b2a27;border-color:#2b2a27;color:#fff}
+.q39sx{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;border:none;background:#9c4a41;color:#fff;font-size:12px;line-height:1;display:none;place-items:center;padding:0;cursor:pointer;min-height:0!important}
+@media(hover:hover){.q39so:hover .q39sx{display:grid}}@media(hover:none){.q39so.on .q39sx{display:grid}}
+.q39add{width:34px;height:34px;border-radius:50%;border:1.5px dashed var(--line2,#ccc);background:none;font-size:18px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.q39step{display:inline-flex;align-items:center;gap:6px;margin-left:auto;background:color-mix(in srgb,var(--ink) 5%,transparent);border-radius:99px;padding:3px}
+.q39step button{width:30px;height:30px;border-radius:50%;border:none;background:var(--card);font-size:16px;cursor:pointer;min-height:0!important;color:var(--ink)}
+.q39step b{min-width:28px;text-align:center;font-size:15px}
+.q39reset{border:none;background:none;font:inherit;font-size:12.5px;color:var(--ink3);text-decoration:underline;cursor:pointer;min-height:0!important}
+.q39body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:0}
+.q39body>section{padding:22px 28px}
+.q39ing{background:color-mix(in srgb,var(--ink) 3%,transparent);border-right:1px solid var(--line)}
+.q39body h3{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-size:18px;font-weight:600}
+.q39body h3 em{font-style:normal;font-size:13px;color:var(--ink3);font-weight:400}
+.q39ing ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.q39ing li button{display:flex;align-items:flex-start;gap:10px;width:100%;border:none;background:none;padding:7px 4px;font:inherit;font-size:15px;line-height:1.4;text-align:left;color:var(--ink);cursor:pointer;border-radius:8px;min-height:0!important}
+.q39ing li button:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.q39ing li i{width:20px;height:20px;flex:none;border-radius:6px;border:1.8px solid var(--line2,#c9c3b8);margin-top:1px;position:relative;transition:background .15s}
+.q39ing li.got i{background:#6f8469;border-color:#6f8469}
+.q39ing li.got i::after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.q39ing li.got span{color:var(--ink3);text-decoration:line-through}
+.q39amt{font-weight:650;color:var(--ink)}
+.q39how ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.q39sh{font-size:13px;font-weight:600;color:var(--ink3);margin-top:8px}
+.q39st{display:flex;gap:14px;align-items:flex-start;padding:12px;border-radius:16px;transition:background .2s}
+.q39st.on{background:color-mix(in srgb,var(--sideBg,#6f8469) 12%,transparent)}
+.q39st.past p{color:var(--ink3)}
+.q39num{width:34px;height:34px;flex:none;border-radius:50%;border:none;background:color-mix(in srgb,var(--ink) 8%,transparent);font:inherit;font-weight:600;font-size:14px;color:var(--ink);cursor:pointer;min-height:0!important}
+.q39st.on .q39num{background:var(--sideBg,#6f8469);color:#fff}
+.q39st p{margin:5px 0 0;font-size:16.5px;line-height:1.55;color:var(--ink)}
+.q39tms{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.q39tbtn,.q39plus{display:inline-flex;align-items:center;gap:5px;border:none;border-radius:99px;padding:6px 11px;background:#fff3e0;color:#9a5a12;font:inherit;font-size:12.5px;font-weight:500;cursor:pointer;min-height:0!important}
+.q39plus{margin-left:auto;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink2)}
+.q39none{color:var(--ink3);font-size:14px}
+.q39src{display:block;padding:0 28px 22px;font-size:13.5px;color:var(--ink2)}
+@media(max-width:760px){.q39body{grid-template-columns:minmax(0,1fr)}.q39ing{border-right:none;border-bottom:1px solid var(--line)}.q39hero{height:190px}.q39ht h2{font-size:24px}.q39serv,.q39body>section,.q39ht{padding-left:18px;padding-right:18px}.q39step{margin-left:0}#q39cook{padding:10px 8px 120px}}
+#q39dock{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);transform:translateX(-50%);z-index:9500;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 24px)}
+.q39tm{display:flex;align-items:center;gap:8px;background:#2b2a27;color:#fff;border-radius:99px;padding:6px 6px 6px 14px;box-shadow:0 12px 28px -10px rgba(0,0,0,.5);animation:q39in .25s ease}
+.q39tm b{font-size:16px;font-variant-numeric:tabular-nums;min-width:52px}
+.q39tl{font-size:12px;opacity:.7;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q39tm button{width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;min-height:0!important}
+.q39tm.paused b{opacity:.6}
+.q39tm.done{background:#b0503f;animation:q39pulse 1s ease-in-out infinite}
+@keyframes q39pulse{50%{transform:scale(1.05)}}
+@keyframes zfade{from{opacity:0}to{opacity:1}}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4673,7 +4738,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v184';
+var BUILD='v185';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17855,6 +17920,99 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 var _q38Render=render;
 render=function(){var r=_q38Render.apply(this,arguments);try{q38Cards()}catch(e){}return r};
 window.addEventListener('resize',function(){document.querySelectorAll('.q17crow').forEach(q38Upd)});
+
+
+/* ======================= v185: recipes — servings you choose, a "Make now" cooking card, and timers =======================
+   Jae: "different options for how many people it feeds... toggle between 12, 16, 24 etc servings. Make it customizable",
+   "a 'make now' button that makes a pretty looking recipe card pop up that shows the recipe very clearly", and a timer.
+   r.serves = what the recipe makes; r.serveOpts = your serving buttons (synced with the recipe). The cooking card lives on
+   <body> (outside the app, so redraws never touch it); timers keep running after it closes, in a dock at the bottom. */
+var Q39FR={'½':.5,'⅓':1/3,'⅔':2/3,'¼':.25,'¾':.75,'⅛':.125,'⅜':.375,'⅝':.625,'⅞':.875};
+function q39Num(t){t=String(t).trim();var m;
+ if((m=/^(\d+)\s+(\d+)\/(\d+)$/.exec(t)))return +m[1]+m[2]/m[3];
+ if((m=/^(\d+)\/(\d+)$/.exec(t)))return m[1]/m[2];
+ if((m=/^(\d*)\s*([½⅓⅔¼¾⅛⅜⅝⅞])$/.exec(t)))return (+m[1]||0)+Q39FR[m[2]];
+ return parseFloat(t)}
+function q39Fmt(v){if(!isFinite(v))return '';var w=Math.floor(v+1e-9),f=v-w;
+ if(f<0.04)return String(w);if(f>0.96)return String(w+1);
+ var opts=[[1/8,'⅛'],[1/4,'¼'],[1/3,'⅓'],[1/2,'½'],[2/3,'⅔'],[3/4,'¾'],[7/8,'⅞']];
+ for(var i=0;i<opts.length;i++)if(Math.abs(f-opts[i][0])<0.04)return (w?w+' ':'')+opts[i][1];
+ return String(Math.round(v*10)/10)}
+var Q39Q='(?:\\d+\\s+\\d+\\/\\d+|\\d+\\/\\d+|\\d*\\s*[½⅓⅔¼¾⅛⅜⅝⅞]|\\d+(?:\\.\\d+)?)';
+function q39Scale(line,k){if(k===1)return esc(line);var rx=new RegExp('^(\\s*)('+Q39Q+')(\\s*(?:-|–|to)\\s*('+Q39Q+'))?');
+ var m=rx.exec(line);if(!m)return esc(line);
+ var a=q39Fmt(q39Num(m[2])*k),b=m[4]?q39Fmt(q39Num(m[4])*k):'';
+ return '<b class="q39amt">'+esc(a+(b?'–'+b:''))+'</b>'+esc(line.slice(m[0].length))}
+function q39Steps(how){var n=0;return String(how||'').split(/\n+/).map(function(l){return l.trim()}).filter(Boolean).map(function(l){
+ if(/^—.*—$/.test(l))return {head:l.replace(/—/g,'').trim()};n++;return {n:n,t:l.replace(/^\d+[.)]\s*/,'')}})}
+function q39Times(t){var out=[],rx=/(\d+(?:\.\d+)?)(?:\s*(?:-|–|to)\s*(\d+(?:\.\d+)?))?\s*(hours?|hrs?|h\b|minutes?|mins?|seconds?|secs?)/gi,m;
+ while((m=rx.exec(t))){var v=+m[1],u=m[3].toLowerCase(),sec=/^h/.test(u)?v*3600:/^s/.test(u)?v:v*60;if(sec>=10&&sec<=86400)out.push({label:m[0],sec:Math.round(sec)})}return out}
+// ---------- timers (keep running when the card closes) ----------
+var Q39T=[],q39Tick=0;
+function q39Beep(){try{var A=window.AudioContext||window.webkitAudioContext,a=new A();[0,.35,.7].forEach(function(t){var o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.value=880;g.gain.setValueAtTime(.0001,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.3,a.currentTime+t+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t+.3);o.connect(g);g.connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+.32)})}catch(e){}
+ try{navigator.vibrate&&navigator.vibrate([300,150,300,150,300])}catch(e){}}
+function q39Left(t){return t.end?Math.max(0,Math.round((t.end-Date.now())/1000)):t.left}
+function q39Clock(s){var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+('0'+m).slice(-2):m)+':'+('0'+x).slice(-2)}
+function q39Dock(){var d=document.getElementById('q39dock');if(!Q39T.length){if(d)d.remove();return}
+ if(!d){d=document.createElement('div');d.id='q39dock';document.body.appendChild(d)}
+ d.innerHTML=Q39T.map(function(t,i){var l=q39Left(t);return '<div class="q39tm'+(l===0?' done':'')+(t.end?'':' paused')+'"><span class="q39tl">'+esc(t.name)+'</span><b>'+(l===0?'Done!':q39Clock(l))+'</b>'
+  +(l===0?'':'<button type="button" data-q39t="pause:'+i+'" aria-label="'+(t.end?'Pause':'Resume')+'">'+(t.end?zI('<path d="M8 5v14M16 5v14"/>',14):zI('<path d="M7 4l12 8-12 8z"/>',14))+'</button>')+'<button type="button" data-q39t="x:'+i+'" aria-label="Stop timer">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',14)+'</button></div>'}).join('')}
+function q39Start(name,sec){Q39T.push({name:name,end:Date.now()+sec*1000,left:sec,rang:false});q39Dock();if(!q39Tick)q39Tick=setInterval(function(){
+ Q39T.forEach(function(t){if(t.end&&!t.rang&&q39Left(t)===0){t.rang=true;q39Beep();zToast('⏱ '+esc(t.name)+' is done')}});q39Dock();if(!Q39T.length){clearInterval(q39Tick);q39Tick=0}},1000);zToast('Timer started: '+q39Clock(sec))}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q39t]');if(!b)return;var p=b.getAttribute('data-q39t').split(':'),t=Q39T[+p[1]];if(!t)return;
+ if(p[0]==='x')Q39T.splice(+p[1],1);else if(t.end){t.left=q39Left(t);t.end=0}else t.end=Date.now()+t.left*1000;q39Dock()});
+// ---------- the cooking card ----------
+var Q39={cid:null,id:null,serv:null,mult:1,step:0,got:{}},q39Wake=null;
+function q39R(){var c=classById(Q39.cid);return c&&zItem(c,Q39.id)}
+function q39Opts(r){var b=+r.serves||0;if(Array.isArray(r.serveOpts)&&r.serveOpts.length)return r.serveOpts.slice();return b?[b,b*2,b*3]:[]}
+function q39Paint(){var r=q39R(),el=document.getElementById('q39cook');if(!r||!el){q39Close();return}
+ var base=+r.serves||0,serv=Q39.serv||base,k=base?serv/base:Q39.mult,opts=q39Opts(r);
+ var chip=function(ico,t){return '<span class="q39chip">'+zI(ico,15)+t+'</span>'};
+ var steps=q39Steps(r.how),ingr=r.ingr||[];
+ var servRow=base?'<div class="q39serv"><span class="q39sl">Servings</span>'+opts.map(function(v,i){return '<span class="q39so'+(v===serv?' on':'')+'"><button type="button" data-q39="serv:'+v+'">'+v+'</button><button type="button" class="q39sx" data-q39="rmserv:'+i+'" aria-label="Remove '+v+'">×</button></span>'}).join('')
+   +'<button type="button" class="q39add" data-q39="addserv" aria-label="Add a serving size">+</button><span class="q39step"><button type="button" data-q39="dec" aria-label="Fewer">−</button><b>'+serv+'</b><button type="button" data-q39="inc" aria-label="More">+</button></span>'+(serv!==base?'<button type="button" class="q39reset" data-q39="serv:'+base+'">Original ('+base+')</button>':'')+'</div>'
+  :'<div class="q39serv"><span class="q39sl">Batch</span>'+[.5,1,2,3].map(function(v){return '<span class="q39so'+(v===Q39.mult?' on':'')+'"><button type="button" data-q39="mult:'+v+'">'+(v===.5?'½':v)+'×</button></span>'}).join('')+'<button type="button" class="q39reset" data-q39="setbase">Set how many it serves</button></div>';
+ el.innerHTML='<div class="q39card" role="dialog" aria-label="'+esc(r.title)+'">'
+  +'<div class="q39hero"'+(r.img?' style="background-image:url(\''+esc(r.img).replace(/'/g,'%27')+'\')"':'')+'><div class="q39shade"></div><button type="button" class="q39x" data-q39="close" aria-label="Close">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',18)+'</button>'
+  +'<div class="q39ht"><h2>'+esc(r.title)+'</h2><div class="q39chips">'+(r.prep?chip(Q18HAT,'Prep '+r.prep+' min'):'')+(r.cook?chip(Q18CLOCHE,'Cook '+r.cook+' min'):'')+(!r.prep&&!r.cook&&r.mins?chip(Q18CLOCHE,r.mins+' min'):'')+(base?chip(Q18PPL,'Serves '+serv):'')+'</div></div></div>'
+  +servRow
+  +'<div class="q39body"><section class="q39ing"><h3>Ingredients <em>'+ingr.length+'</em></h3>'+(ingr.length?'<ul>'+ingr.map(function(l,i){return '<li class="'+(Q39.got[i]?'got':'')+'"><button type="button" data-q39="got:'+i+'"><i></i><span>'+q39Scale(l,k)+'</span></button></li>'}).join('')+'</ul>':'<p class="q39none">No ingredients yet. Add them in the recipe.</p>')+'</section>'
+  +'<section class="q39how"><h3>Steps <button type="button" class="q39plus" data-q39="timer">'+zI('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',15)+' Timer</button></h3>'+(steps.length?'<ol>'+steps.map(function(s,i){if(s.head)return '<li class="q39sh">'+esc(s.head)+'</li>';var tm=q39Times(s.t);
+   return '<li class="q39st'+(Q39.step===s.n?' on':'')+(Q39.step>s.n?' past':'')+'"><button type="button" class="q39num" data-q39="step:'+s.n+'">'+s.n+'</button><div><p>'+esc(s.t)+'</p>'+(tm.length?'<div class="q39tms">'+tm.map(function(t){return '<button type="button" class="q39tbtn" data-q39="start:'+t.sec+':'+s.n+'">'+zI('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',14)+' '+esc(t.label)+'</button>'}).join('')+'</div>':'')+'</div></li>'}).join('')+'</ol>':'<p class="q39none">No steps yet. Add them in the recipe.</p>')+'</section></div>'
+  +(r.src?'<a class="q39src" href="'+esc(r.src)+'" target="_blank" rel="noopener">Open the original recipe ↗</a>':'')+'</div>';
+}
+function q39Open(cid,id){Q39={cid:cid,id:id,serv:null,mult:1,step:0,got:{}};var el=document.getElementById('q39cook');if(!el){el=document.createElement('div');el.id='q39cook';document.body.appendChild(el)}
+ view.modal=null;render();q39Paint();el.classList.add('open');document.body.classList.add('q39lock');
+ try{if(navigator.wakeLock)navigator.wakeLock.request('screen').then(function(w){q39Wake=w}).catch(function(){})}catch(e){}}
+function q39Close(){var el=document.getElementById('q39cook');if(el)el.remove();document.body.classList.remove('q39lock');try{if(q39Wake)q39Wake.release()}catch(e){}q39Wake=null}
+ZACT.q39make=function(cid,id){q39Open(cid,id)};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('q39cook'))q39Close()});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#q39cook [data-q39]');
+ if(!b){if(e.target&&e.target.id==='q39cook')q39Close();return}
+ var p=b.getAttribute('data-q39').split(':'),r=q39R();if(!r)return;var base=+r.serves||0,serv=Q39.serv||base;
+ var keep=function(){touch(r);save()};
+ switch(p[0]){
+  case 'close':q39Close();return;
+  case 'serv':Q39.serv=+p[1];break;
+  case 'dec':Q39.serv=Math.max(1,serv-1);break;
+  case 'inc':Q39.serv=serv+1;break;
+  case 'mult':Q39.mult=+p[1];break;
+  case 'addserv':var n=parseInt(window.prompt('Add a serving size (how many people)',''),10);if(n>0){var o=q39Opts(r);if(o.indexOf(n)<0)o.push(n);o.sort(function(a,z){return a-z});r.serveOpts=o;keep();Q39.serv=n}break;
+  case 'rmserv':var o2=q39Opts(r);o2.splice(+p[1],1);r.serveOpts=o2;keep();break;
+  case 'setbase':var nb=parseInt(window.prompt('How many people does this recipe serve as written?',''),10);if(nb>0){r.serves=nb;keep();Q39.serv=nb}break;
+  case 'got':Q39.got[p[1]]=!Q39.got[p[1]];break;
+  case 'step':Q39.step=Q39.step===+p[1]?0:+p[1];break;
+  case 'start':q39Start((r.title||'Recipe')+' · step '+p[2],+p[1]);return;
+  case 'timer':var mm=parseFloat(window.prompt('Timer for how many minutes?','10'));if(mm>0)q39Start(r.title||'Timer',Math.round(mm*60));return;
+ }
+ q39Paint();
+});
+// "Make now" on every recipe card and at the top of the recipe pop-up
+var _q39Card=q24Card;
+q24Card=function(c,r){var h=_q39Card(c,r);
+ return h.replace(/^<button class="q18rec"/,'<div class="q18rec" role="button" tabindex="0"').replace(/<\/button>$/,'<button type="button" class="q39mk" data-zact="q39make:'+c.id+':'+r.id+'">'+zI('<path d="M7 4l12 8-12 8z"/>',12)+' Make now</button></div>')};
+var _q39RH=ZM.zrecipe.html;
+ZM.zrecipe.html=function(m){var h=_q39RH(m);if(!h||!m.id)return h;return h.replace(/(<h3>[^<]*<\/h3>)/,'$1<button type="button" class="zbtn q39mkb" data-zact="q39make:'+m.cid+':'+m.id+'">'+zI('<path d="M7 4l12 8-12 8z"/>',13)+' Make now</button>')};
 
 try{spBoot()}catch(e){}
 load();
