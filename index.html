@@ -4576,6 +4576,23 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .pickpanel .pickhead{padding-right:48px!important}
 .q44x{top:50%!important;right:12px!important;width:30px!important;height:30px!important;transform:translateY(-50%)!important}
 
+/* v198: phones: below the clock bar, a Save bar with no gap, tidy recipe picture links, a reachable × on the cooking card */
+.q51end{padding:8px 28px 28px;display:flex;justify-content:center}
+.q51end button{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:99px;background:#2E2B27;color:#fff;font:inherit;font-size:15px;padding:13px 26px;cursor:pointer;min-height:0!important}
+#q51x{display:none}
+@media(max-width:760px){
+ #q51x{display:grid;place-items:center;position:fixed;top:calc(env(safe-area-inset-top,0px) + 18px);right:18px;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.95);color:#222;z-index:9002;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;padding:0;min-height:0!important}
+ #q39cook .q39x{display:none!important}
+ #q39cook{padding-top:calc(env(safe-area-inset-top,0px) + 10px)!important;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 110px)!important}
+}
+@media(max-width:700px){
+ .modal{max-height:calc(100vh - 24px - env(safe-area-inset-top,0px));max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px))}
+ .modal .acts{bottom:calc(-20px - env(safe-area-inset-bottom,0px));padding-bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
+ .zrdcov.wide{width:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px 16px}
+ .zrdcov.wide img,.zrdcov.wide>span{width:110px}
+ .zrdcov.wide .zlink{white-space:nowrap}
+}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4904,7 +4921,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v197';
+var BUILD='v198';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19067,6 +19084,14 @@ document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttri
  f.c.cardCol=Object.assign({},f.c.cardCol||{});f.c.cardCol[f.k]=t.value.toLowerCase();touch(f.c);save();render()});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q50rs]');if(!b)return;e.preventDefault();e.stopPropagation();var f=q50Find(b.getAttribute('data-q50rs'));if(!f.c||!f.c.cardCol)return;
  f.c.cardCol=Object.assign({},f.c.cardCol);delete f.c.cardCol[f.k];touch(f.c);save();if(f.el)f.el.style.removeProperty('background');render()},true);
+
+/* ===== v198: recipes on the phone (Jae made muffins: the card couldn't be closed, the sizing was off) =====
+   The Make now card and pop-ups started under the iPhone's clock bar (the app draws under it, viewport-fit=cover),
+   where taps don't reach the app, so the × couldn't be pressed. Pop-ups and the card now start below it, the card's
+   × stays on screen while you scroll, and the card ends with a "Done cooking" button. */
+var _q51Open=q39Open;
+var _q51Close=q39Close;q39Close=function(){var x=document.getElementById('q51x');if(x)x.remove();return _q51Close.apply(this,arguments)};
+q39Open=function(){var r=_q51Open.apply(this,arguments);try{if(!document.getElementById('q51x')){var bx=document.createElement('button');bx.id='q51x';bx.type='button';bx.setAttribute('aria-label','Close the recipe');bx.innerHTML=zI('<path d="M6 6l12 12M18 6 6 18"/>',18);bx.addEventListener('click',function(){q39Close()});document.body.appendChild(bx)}}catch(e){}try{var card=document.querySelector('#q39cook .q39card');if(card&&!card.querySelector('.q51end'))card.insertAdjacentHTML('beforeend','<div class="q51end"><button type="button" data-q39="close">'+zI(ZIC.check,16)+' Done cooking</button></div>')}catch(e){}return r};
 
 try{spBoot()}catch(e){}
 load();
