@@ -3879,8 +3879,10 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .h4up .h4colh{border-bottom-color:var(--cp-hup-line,var(--line))}
 .h4up .h4link{color:var(--cp-hup-title,var(--ink2))}
 /* ===== v157 round 18: Jae's widget designs (2a-2f), Today small, water, smooth menu ===== */
-.zw-small>.q18w.sq{aspect-ratio:1;min-height:0;height:auto}
-.zhome .zw-small{align-self:start}
+/* every widget in a row is the same height; the new square ones are at least as tall as they are wide */
+.zw-small>.q18w.sq{min-height:100cqw;height:100%}
+.zhome .zw{display:flex;flex-direction:column}
+.zhome .zw>:not(.zwx):not(.zwm):not(.q17pen){flex:1 1 auto;min-height:0}
 .zhome .zw{container-type:inline-size}
 .q21rh,.q21feat,.q21nx,.q21th,.q21pill{flex-shrink:0}
 /* To do: dark */
@@ -4014,8 +4016,16 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .q21agev b{font-size:13px!important}
 .q21agf{font-size:11.5px;color:var(--ink3)}
 .q21ag .q18free{margin-top:auto}
-.q21fl{left:31%;bottom:18%!important}.q21fr{right:31%;bottom:18%!important;font-size:12px;font-weight:600}
-.q18focus .q18fb{transform:translateY(-16%)}
+/* focus timer: everything inside the ring scales with the circle, so nothing overlaps at any size */
+.q18focus{container-type:inline-size}
+.q21fc{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:4cqw}
+.q18focus .q18fb{transform:none;gap:1cqw}
+.q18focus .q18fb small{font-size:max(10px,6.8cqw)}
+.q18focus .q18fb b{font-size:max(18px,19cqw);line-height:1}
+.q21frow{display:flex;gap:5cqw}
+.q21frow button{width:max(24px,15cqw);height:max(24px,15cqw);border-radius:50%;border:none;background:color-mix(in srgb,var(--ink) 7%,transparent);color:var(--ink2);font:inherit;font-size:max(11px,7cqw);font-weight:600;display:grid;place-items:center;padding:0;cursor:pointer;min-height:0!important;transition:transform .15s,background .2s}
+.q21frow button:hover{background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.q21frow button:active{transform:scale(.88)}
 .zptray.dropover,#p-tray.dropover{outline:2px dashed color-mix(in srgb,var(--sideBg) 55%,transparent);outline-offset:-6px}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
@@ -4345,7 +4355,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v157';
+var BUILD='v158';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -16591,9 +16601,9 @@ ZACT.q21fadd=function(){var f=q18F(),add=5*60000;f.total=q21FTotal(f)+add;if(f.e
 Q18.focus=function(w){
  var f=q18F(),left=q18FLeft(f),run=!!f.end,started=run||f.left!=null,tot=q21FTotal(f),p=Math.min(1,left/tot),r=44,C=2*Math.PI*r,mm=Math.floor(left/60000),ss=Math.floor(left%60000/1000);
  return q18Shape(w,'q18circle q18focus'+(run?' run':''),'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="'+r+'" class="tr"/><circle cx="50" cy="50" r="'+r+'" class="pr" style="stroke-dasharray:'+(C*p).toFixed(1)+' '+C.toFixed(1)+'"/></svg>'
-  +'<button class="q18fb" data-zact="q18focus" aria-label="'+(run?'Pause':'Start')+' focus"><small>'+(run?'Focusing':started?'Paused':'Focus')+'</small><b data-q18left="1">'+mm+':'+('0'+ss).slice(-2)+'</b><span>'+(run?'Tap to pause':'Tap to start')+'</span></button>'
-  +(started?'<button class="q18fr q21fl" data-zact="q18reset" aria-label="Reset">↺</button><button class="q18fr q21fr" data-zact="q21fadd" aria-label="Add 5 minutes">+5</button>'
-   :'<button class="q18fr q21fl" data-zact="q21flen:-5" aria-label="5 minutes shorter">−</button><button class="q18fr q21fr" data-zact="q21flen:5" aria-label="5 minutes longer">+</button>'),' data-q18focus="1"');
+  +'<div class="q21fc"><button class="q18fb" data-zact="q18focus" aria-label="'+(run?'Pause':'Start')+' focus"><small>'+(run?'Focusing':started?'Paused':'Tap to start')+'</small><b data-q18left="1">'+mm+':'+('0'+ss).slice(-2)+'</b></button>'
+  +'<div class="q21frow">'+(started?'<button data-zact="q18reset" aria-label="Reset" title="Reset">↺</button><button data-zact="q21fadd" aria-label="Add 5 minutes" title="Add 5 minutes">+5</button>'
+   :'<button data-zact="q21flen:-5" aria-label="5 minutes shorter" title="5 minutes shorter">−</button><button data-zact="q21flen:5" aria-label="5 minutes longer" title="5 minutes longer">+</button>')+'</div></div>',' data-q18focus="1"');
 };
 WDEF.focus.desc='A focus session you can set from 5 minutes to 3 hours, tap to start';
 
