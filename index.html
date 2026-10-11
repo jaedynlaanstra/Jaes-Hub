@@ -3141,6 +3141,76 @@ input[type=date],input[type=time]{min-width:0;max-width:100%;box-sizing:border-b
 .zpaypv span{display:inline-flex;flex-direction:column;background:#E6EDE6;color:#4f6b55;border-radius:12px;padding:6px 10px;font-size:13px}
 .zpaypv span.mv{background:#F0EDE3;color:#7a6a45}
 .zpaypv small{font-size:11px;opacity:.85}
+/* ===== v149 round 10: the Budget 1c look on every page ===== */
+.z1ph{padding-bottom:0!important}
+.zbtile small{white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.zbringc b svg{display:block}
+.zbpay.noact{cursor:default}
+.zbpay small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.zbph .zbpay small{display:flex}
+.zbph .zbpay small span{white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.zbleft>.zcard,.zbleft>section.zcard{margin:0}
+.zbleft .zprj,.zbleft .zboard{min-width:0}
+.z1note{margin:8px 0 0;font-size:13px}
+.z1bar{width:100%;box-sizing:border-box}
+.z1bar .zlogo{flex:none;border-radius:8px}
+.z1bar .zbcn{width:96px}
+.zbrail .z1bar .zbcv{width:auto;min-width:56px}
+.zbrail .z1bar{flex-wrap:wrap;row-gap:7px;padding:8px 0}
+.zbrail .z1bar .zbcn{flex:1;width:auto;min-width:0}
+.zbrail .z1bar .zbcv{order:2}
+.zbrail .z1bar .zbtrack{order:3;flex-basis:100%;height:8px}
+/* soft columns with the done part filled in */
+.z1cols .z1colb{display:block;position:relative;width:100%;max-width:40px;background:#efe9e2;border-radius:7px;overflow:hidden}
+.z1cols .z1colb i{position:absolute;left:0;right:0;bottom:0;max-width:none;width:auto;border-radius:0;background:#c9a98d}
+.zbsc.on .z1colb{background:#e9ddd0}
+.zbrail .zbsix{gap:8px;height:96px}
+/* a simple row: a little icon, words that fade, a quiet value */
+.z1li{display:flex;align-items:center;gap:10px;width:100%;padding:8px 0;border:none;border-bottom:1px solid #f0ede7;background:none;font:inherit;font-size:14px;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.z1li:last-child{border-bottom:none}
+.z1li>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.z1li>em{font-style:normal;font-size:12.5px;color:#8d8a7c;flex:none}
+.z1li.done>span{color:var(--ink3);text-decoration:line-through}
+.z1li .zlogo{flex:none;border-radius:8px}
+.z1ck{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;background:#e6efe3;color:#708F77;font-style:normal}
+/* habits: tick today's habits straight from the card */
+.z1hab{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;margin-bottom:6px;border:none;border-radius:14px;background:var(--wt);font:inherit;font-size:14px;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important;transition:background .2s}
+.z1hab .zic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--card);color:var(--wc);flex:none}
+.z1hab b{flex:1;min-width:0;font-weight:450;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.z1hab i{width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;border:2px solid var(--wc);color:transparent;transition:background .2s,color .2s}
+.z1hab.y i{background:var(--wc);color:#fff}
+.z1hab.y b{color:var(--ink3)}
+/* projects due soon */
+.z1proj{display:flex;flex-direction:column;gap:6px;width:100%;padding:9px 0;border:none;border-bottom:1px solid #f0ede7;background:none;font:inherit;text-align:left;cursor:pointer;min-height:0!important;color:var(--ink)}
+.z1proj:last-child{border-bottom:none}
+.z1proj>span:first-child{display:flex;flex-direction:column;min-width:0}
+.z1proj b{font-weight:450;font-size:14px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.z1proj small{font-size:12px;color:#8d8a7c}
+.z1proj .zbtrack{flex:none;display:block;height:7px;width:100%}
+/* reading: what you're on now */
+.z1now{display:flex;gap:14px;align-items:center;width:100%;border:none;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;min-height:0!important;color:var(--ink)}
+.z1now img,.z1nowph{width:72px;height:104px;border-radius:10px;object-fit:cover;flex:none;box-shadow:0 10px 20px -12px rgba(0,0,0,.45)}
+.z1nowph{display:grid;place-items:center;background:#EAE6ED;color:#83708F}
+.z1nowt{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.z1nowt b{font-weight:500;font-size:15px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.z1nowt small{font-size:12.5px;color:#8d8a7c}
+.z1nowt em{font-style:normal;font-size:12px;color:#8d8a7c}
+/* meal prep: tonight's dinner as a photo card */
+.z1tonight{position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;width:100%;min-height:150px;border:none;border-radius:22px;padding:16px;background-size:cover;background-position:center;color:#fff;font:inherit;text-align:left;cursor:pointer;overflow:hidden;min-height:150px!important}
+.z1tonight.img::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 25%,rgba(0,0,0,.6))}
+.z1tonight>*{position:relative}
+.z1tonight>span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;opacity:.9}
+.z1tonight>b{font-size:22px;font-weight:500;line-height:1.2}
+.z1tonight>small{font-size:12.5px;opacity:.85}
+.z1li.empty>em{color:var(--ink3)}
+/* plain placeholder covers: the title wraps inside the cover instead of running off it */
+.zbkph{overflow:hidden}
+.zbkph b{white-space:normal!important;overflow-wrap:break-word;text-align:center;padding:0 8px;max-width:100%;box-sizing:border-box;line-height:1.2}
+.zrdc.zbkph b{font-size:10px}
+/* the ‹ › arrows, centred */
+button.zchev{display:inline-grid!important;place-items:center;padding:0!important;line-height:0}
+.zbmo>button.zchev,.zbnav>button.zchev{width:34px;height:34px;border-radius:50%}
+.zbmo>button.zchev:disabled{opacity:.35}
 </style>
 </head>
 <body>
@@ -3449,7 +3519,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v148';
+var BUILD='v149';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -13968,6 +14038,256 @@ render=function(){
  if(opening)q9MenuAt=Date.now();
  q9After(ent);
 };
+
+
+/* ======================= ROUND 10 (v149): Budget 1c's feel on every page =======================
+   Jae loved the 1c Budget ("obsessed") and asked for the other pages to feel the same: a big ring card with
+   colourful tiles, a rail of small cards beside it on a computer, and on a phone the ring card, one
+   highlight card, then chips that switch what's underneath. Fewer long lists, more fun widgets.
+   The shared pieces are z1Hero / z1Page / z1Card / z1Accent / z1Cols / z1Bar; each page builds its own. */
+
+/* ---------- shared pieces ---------- */
+function z1Wide(){return window.innerWidth>=1100}
+function z1Ring(pct,sz,w,big,cap,col,track){
+ var r=(sz-w)/2,C=2*Math.PI*r,p=Math.max(0,Math.min(100,pct||0)),h=sz/2;
+ return '<div class="zbring" style="width:'+sz+'px;height:'+sz+'px"><svg width="'+sz+'" height="'+sz+'" viewBox="0 0 '+sz+' '+sz+'" aria-hidden="true">'
+  +'<circle cx="'+h+'" cy="'+h+'" r="'+r+'" fill="none" style="stroke:'+track+'" stroke-width="'+w+'"/>'
+  +(p>0?'<circle class="zseg" cx="'+h+'" cy="'+h+'" r="'+r+'" fill="none" style="stroke:'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(C*p/100).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 '+h+' '+h+')"/>':'')
+  +'</svg><div class="zbringc"><b>'+big+'</b><small>'+cap+'</small></div></div>';
+}
+// o: pct, big, cap, capPh, col, track, tiles [[tint,icon,label,value,sub]], mini [[icon,text]]
+function z1Hero(o){
+ if(z1Wide())return '<section class="zbhero">'+z1Ring(o.pct,220,26,o.big,o.cap,o.col,o.track)+'<div class="zbtiles">'+o.tiles.map(function(t){return zbTile.apply(null,t)}).join('')+'</div></section>';
+ return '<section class="zbhero ph">'+z1Ring(o.pct,200,22,o.big,o.capPh||o.cap,o.col,o.track)
+  +(o.mini&&o.mini.length?'<div class="zbmini">'+o.mini.map(function(m){return '<span>'+zI(ZIC[m[0]]||ZIC.check,14)+m[1]+'</span>'}).join('')+'</div>':'')+'</section>';
+}
+function z1Card(title,right,body,cls){return '<section class="zbcard'+(cls?' '+cls:'')+'"><div class="zbch"><h3>'+title+'</h3>'+(right||'')+'</div>'+body+'</section>'}
+// the one card in the menu colour with white words (like Budget's pay day)
+function z1Accent(label,ico,big,small,act){
+ var side=chromeHex('sideBg'),on=contrast(side,'#ffffff')>=2.6?'#ffffff':'#26221d';
+ return '<section class="zbpay'+(act?'':' noact')+'" style="background:'+side+';color:'+on+'"'+(act?' data-zact="'+act+'" role="button" tabindex="0"':'')+'><span class="zbtl">'+zI(ZIC[ico]||ZIC.check,14)+esc(label)+'</span><b>'+big+'</b>'+(small?'<small>'+small+'</small>':'')+'</section>';
+}
+// soft columns: cols [{label, v (total), d (done), on, title}]
+function z1Cols(cols){
+ var mx=Math.max.apply(null,cols.map(function(x){return x.v}).concat([1]));
+ return '<div class="zbsix z1cols">'+cols.map(function(x){var hT=Math.round(x.v/mx*100);
+  return '<div class="zbsc'+(x.on?' on':'')+'" title="'+esc(x.title||'')+'"><span class="z1colb" style="height:'+Math.max(4,hT)+'%"><i style="height:'+(x.v?Math.round(x.d/x.v*100):0)+'%"></i></span><span>'+esc(x.label)+'</span></div>'}).join('')+'</div>';
+}
+function z1Bar(label,pct,col,right,act,lead){
+ var tg=act?'button':'div';
+ return '<'+tg+' class="zbcat z1bar"'+(act?' data-zact="'+act+'"':'')+'>'+(lead||'')+'<span class="zbcn">'+esc(label)+'</span><span class="zbtrack"><i style="width:'+Math.max(0,Math.min(100,pct))+'%;background:'+col+'"></i></span><span class="zbcv">'+right+'</span></'+tg+'>';
+}
+function z1Chip(key,keys,def){var v=null;try{v=localStorage.getItem('hub:z1:'+key)}catch(e){}return keys.indexOf(v)>-1?v:(def||keys[0])}
+ZACT.z1chip=function(key,k){try{localStorage.setItem('hub:z1:'+key,k)}catch(e){}render()};
+// computer: hero + left column, rail on the right. Phone: hero, a pinned card, chips, the chosen chip
+function z1Page(o){
+ if(z1Wide())return '<div class="zbhw">'+(o.top||'')+'<div class="zb1 zbdesk"><div class="zbleft">'+o.hero+(o.left||'')+'</div><aside class="zbrail">'+(o.rail||'')+'</aside></div>'+(o.below||'')+'</div>';
+ var C=o.chips||[],ks=C.map(function(x){return x[0]}),ch=ks.length?z1Chip(o.key,ks,o.chipDef):'';
+ var bar=ks.length>1?'<div class="zbchips" role="tablist">'+C.map(function(x){return '<button role="tab" aria-selected="'+(ch===x[0])+'" class="'+(ch===x[0]?'on':'')+'" data-zact="'+(o.chipAct||'z1chip:'+o.key)+':'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>':'';
+ return '<div class="zbhw">'+(o.top||'')+'<div class="zb1 zbph z1ph">'+o.hero+(o.pin||'')+bar+C.filter(function(x){return x[0]===ch}).map(function(x){return x[2]}).join('')+'</div>'+(o.below||'')+'</div>';
+}
+function z1Soft(c){var k=zSoftOf(c);return ZC[k]&&k!=='grey'?ZC[k]:ZC.sand}
+function z1When(due){var cd=cpCountdown(due);return cd.n<0?cd.t:cd.n===0?'Today':cd.n===1?'Tomorrow':cd.n+' days'}
+function z1Li(title,right,act,cls,lead){return '<button class="z1li'+(cls?' '+cls:'')+'"'+(act?' data-zact="'+act+'"':'')+'>'+(lead||'')+'<span>'+title+'</span>'+(right?'<em>'+right+'</em>':'')+'</button>'}
+ZIC.star=ZIC.star||'<path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>';
+ZIC.cloud=ZIC.cloud||'<path d="M7 18h10a4 4 0 0 0 .6-8A6 6 0 0 0 6.2 9.5 4.3 4.3 0 0 0 7 18z"/>';
+function z1ByDue(a,b){var p=a.due||'9',q=b.due||'9';return p<q?-1:p>q?1:0}
+
+/* ---------- To do ---------- */
+var _q10List=zListPage;
+zListPage=function(c){
+ if(c.kind==='todo')return z1Todo(c);
+ if(c.kind==='groceries')return z1Shop(c);
+ return _q10List(c);
+};
+function z1Todo(c){
+ var td=iso(today()),ws=iso(weekStart(0)),we=zAddDays(ws,6),T=c.tasks||[],open=T.filter(function(t){return !t.done}),done=T.filter(function(t){return t.done});
+ var late=open.filter(function(t){return t.due&&t.due<td}).sort(z1ByDue),tdy=open.filter(function(t){return t.due===td});
+ var wk=T.filter(function(t){return t.due&&t.due>=ws&&t.due<=we}),wkd=wk.filter(function(t){return t.done});
+ var pct=T.length?Math.round(done.length/T.length*100):0,Z=z1Soft(c);
+ var hero=z1Hero({pct:pct,big:String(open.length),cap:open.length===1?'thing to do':'things to do',col:Z[1],track:Z[0],
+  tiles:[['sav','sun','Due today',String(tdy.length),tdy.length?esc(tdy[0].title):'Nothing due today'],
+   ['out','clock','Late',String(late.length),late.length?'Oldest: '+esc(cpCountdown(late[0].due).t):'All caught up'],
+   ['use','cal','This week',wk.length?wkd.length+' of '+wk.length:'0',wk.length?'done this week':'Nothing due this week'],
+   ['in','check','Done',String(done.length),pct+'% of everything']],
+  mini:[['clock',late.length+' late'],['sun',tdy.length+' today'],['check',done.length+' done']]});
+ var nx=open.filter(function(t){return t.due}).sort(z1ByDue)[0];
+ var next=nx?z1Accent('Next up','clock',esc(z1When(nx.due)),'<span>'+esc(nx.title)+'</span><span>'+esc(zShortDay(nx.due))+'</span>','taskedit:'+c.id+':'+nx.id)
+  :z1Accent('Next up','check','All clear',open.length?'Nothing has a due date':'Nothing left to do','');
+ var cols=[];for(var i=0;i<7;i++){var k=zAddDays(ws,i),L=T.filter(function(t){return t.due===k});
+  cols.push({label:parseISO(k).toLocaleDateString('en-CA',{weekday:'short'}).replace('.',''),v:L.length,d:L.filter(function(t){return t.done}).length,on:k===td,title:L.length?L.filter(function(t){return t.done}).length+' of '+L.length+' done':'Nothing due'})}
+ var week=z1Card('This week','<span class="zsoft">'+(wk.length?wkd.length+' of '+wk.length+' done':'Nothing due')+'</span>',z1Cols(cols));
+ var secs=zSecs(c),secC='';
+ if(secs.length){var mxs=Math.max.apply(null,secs.map(function(s){return open.filter(function(t){return t.sec===s.id}).length}).concat([1]));
+  secC=z1Card('Sections','',secs.map(function(s){var n=open.filter(function(t){return t.sec===s.id}).length;return z1Bar(s.name,n/mxs*100,Z[1],n+' to do')}).join(''))}
+ var rec=done.slice().sort(function(a,b){return (b.savedAt||'')<(a.savedAt||'')?-1:1}).slice(0,5);
+ var recent=z1Card('Recently done',done.length?'<button class="zlink" data-zact="cleardone:'+c.id+'">Clear</button>':'',
+  rec.length?rec.map(function(t){return z1Li(esc(t.title),t.due?esc(zShortDay(t.due)):'','taskedit:'+c.id+':'+t.id,'done','<i class="z1ck">'+zI(ZIC.check,12)+'</i>')}).join(''):'<p class="zempty">Ticked tasks show up here.</p>');
+ var list=_q10List(c);
+ return z1Page({key:c.id+'-todo',hero:hero,left:list,rail:next+week+secC+recent,pin:next,
+  chips:[['list','To do',list],['week','This week',week+secC],['done','Done',recent]]});
+}
+
+/* ---------- Shopping list ---------- */
+function z1Shop(c){
+ var T=c.tasks||[],open=T.filter(function(t){return !t.done}),cart=T.filter(function(t){return t.done}),secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var W=(c.items||[]).filter(function(x){return x.t==='wish'&&!x.got}),wtot=W.reduce(function(s,x){return s+(+x.price||0)},0);
+ var pct=T.length?Math.round(cart.length/T.length*100):0,Z=ZC.sage;
+ var hero=z1Hero({pct:pct,big:String(open.length),cap:'to buy',col:Z[1],track:Z[0],
+  tiles:[['in','cart','To buy',String(open.length),secs.length?'across '+secs.length+' store'+(secs.length===1?'':'s'):'Add stores to group them'],
+   ['use','check','In the cart',String(cart.length),T.length?pct+'% ticked off':'Tick things as you shop'],
+   ['sav','heart','Wishlist',String(W.length),wtot?money(wtot)+' in total':'Things you’d love'],
+   ['out','store','Stores',String(secs.length),secs.length?esc(secs.map(function(s){return s.name}).join(', ')):'Costco, the pharmacy…']],
+  mini:[['cart',open.length+' to buy'],['check',cart.length+' in the cart'],['heart',W.length+' wished for']]});
+ // what the groceries category of your budget says this month
+ var bp=firstPage(c.space,'budget'),gb='';
+ if(bp){var cat=(bp.items||[]).filter(function(x){return x.t==='cat'&&/grocer|food/i.test(x.title||'')})[0];
+  if(cat){var bb=zBudget(bp,zMonth()),sp=bb.byCat[cat.id]||0,lim=+cat.limit||0,lft=lim-sp;
+   gb=z1Card('Grocery budget','<button class="zlink" data-open="'+bp.id+'">Budget ›</button>',z1Bar(esc(today().toLocaleDateString('en-CA',{month:'long'})),lim?sp/lim*100:0,lft<0?'#B66A5E':Z[1],money(sp)+' / '+money(lim))
+    +'<p class="zsoft z1note">'+(lim?(lft>=0?money(lft)+' left for groceries this month':money(-lft)+' over this month'):'Give the category a limit to see what’s left')+'</p>')}}
+ var groups=secs.map(function(s){return {name:s.name,site:s.site,n:open.filter(function(t){return t.sec===s.id}).length}});
+ var anyN=open.filter(function(t){return !(t.sec&&ids[t.sec])}).length;if(anyN)groups.unshift({name:'Any store',n:anyN,any:true});
+ var mxg=Math.max.apply(null,groups.map(function(g){return g.n}).concat([1]));
+ var stores=z1Card('By store','<button class="zlink" data-zact="secnew:'+c.id+'">+ Store</button>',groups.length?groups.map(function(g){return z1Bar(g.name,g.n/mxg*100,Z[1],g.n+' item'+(g.n===1?'':'s'),'',g.any?'<span class="zlogo" style="width:24px;height:24px;background:'+Z[0]+';color:'+Z[1]+'">'+zI(ZIC.cart,13)+'</span>':zLogo(g.name,24,'store',g.site))}).join('')
+  :'<p class="zempty">Add a store to group your list, so you can shop one store at a time.</p>');
+ var peek=z1Card('Wishlist','<button class="zlink" data-zact="shoptab:'+c.id+':wish">See all ›</button>',W.length?W.slice(0,3).map(function(x){var host=x.url?cpHost(x.url):'';
+   return z1Li(esc(x.title),x.price?money(x.price):'','wishedit:'+c.id+':'+x.id,'',zLogo(host||x.title,28,host?null:'heart',host))}).join(''):'<p class="zempty">Nothing on your wishlist yet.</p>');
+ if(z1Wide())return z1Page({hero:hero,left:_q10List(c),rail:gb+stores+peek});
+ var raw='list';try{raw=localStorage.getItem('hub:shoptab:'+c.id)||'list'}catch(e){}
+ return z1Page({key:c.id,hero:hero,chipAct:'shoptab:'+c.id,chipDef:raw,
+  chips:[['list','To buy',_q9ListPage(c)],['wish','Wishlist',zWishBlock(c)],['stores','Stores',stores+gb]]});
+}
+// the phone's Stores chip reuses the same remembered tab
+var _q10ShopTab=ZACT.shoptab;
+ZACT.shoptab=function(cid,t){try{localStorage.setItem('hub:shoptab:'+cid,t)}catch(e){}try{localStorage.setItem('hub:z1:'+cid,t)}catch(e){}view.r6enter=1;render()};
+
+/* ---------- Habit tracker ---------- */
+var _q10Hab=zHabitsPage;
+zHabitsPage=function(c){
+ var H=zHabits(c),td=iso(today()),orig=_q10Hab(c),i0=orig.indexOf('<section class="zcard zhab">');
+ if(i0<0)return orig;
+ var rest=orig.slice(i0),ie=rest.indexOf('</section>')+10,rows=rest.slice(0,ie),heat=rest.slice(ie);
+ var todayH=H.filter(function(h){return zHabitOn(h,td)}),doneT=todayH.filter(function(h){return zHabitDone(c,h,td)}).length;
+ var ws=iso(weekStart(0)),sch=0,got=0;for(var k=ws;k<=td;k=zAddDays(k,1))H.forEach(function(h){if(zHabitOn(h,k)){sch++;if(zHabitDone(c,h,k))got++}});
+ var t=today(),m0=iso(new Date(t.getFullYear(),t.getMonth(),1)),perfect=0,checks=0;
+ for(var d=m0;d<=td;d=zAddDays(d,1)){var s2=0,g2=0;H.forEach(function(h){if(zHabitOn(h,d)){s2++;if(zHabitDone(c,h,d))g2++}});checks+=g2;if(s2&&g2===s2)perfect++}
+ var best=null;H.forEach(function(h){var b=zBest(c,h);if(!best||b>best.n)best={n:b,h:h}});
+ var wkp=sch?Math.round(got/sch*100):0,Z=ZC.sage;
+ var hero=z1Hero({pct:todayH.length?doneT/todayH.length*100:0,big:doneT+'/'+todayH.length,cap:'done today',col:Z[1],track:Z[0],
+  tiles:[['in','check','Habits',String(H.length),H.length?todayH.length+' on today':'Add your first one'],
+   ['use','target','This week',wkp+'%',got+' of '+sch+' check-ins'],
+   ['sav','sun','Perfect days',String(perfect),'this month'],
+   ['out','flame','Check-ins',String(checks),'this month']],
+  mini:[['flame',(best&&best.n?best.n:0)+' best streak'],['target',wkp+'% this week'],['sun',perfect+' perfect days']]});
+ var acc=best&&best.n?z1Accent('Best streak','flame',best.n+' day'+(best.n===1?'':'s'),esc(best.h.title),'habitedit:'+c.id+':'+best.h.id):z1Accent('Best streak','flame','0 days','Tick a habit a few days in a row','');
+ var quick=z1Card('Today','<span class="zsoft">'+doneT+' of '+todayH.length+'</span>',todayH.length?todayH.map(function(h){var y=zHabitDone(c,h,td);
+   return '<button class="z1hab'+(y?' y':'')+'" style="'+zcv(h.color||'sage')+'" data-zact="htick:'+c.id+':'+h.id+':'+td+'" aria-pressed="'+y+'"><span class="zic">'+zI(ZIC[h.ico]||ZIC.check,16)+'</span><b>'+esc(h.title)+'</b><i>'+zI(ZIC.check,13)+'</i></button>'}).join('')
+  :'<p class="zempty">Nothing on for today.</p>');
+ var mxs=Math.max.apply(null,H.map(function(h){return zBest(c,h)}).concat([1]));
+ var streaks=z1Card('Streaks','',H.length?H.map(function(h){var st=zStreak(c,h);return z1Bar(h.title,st/mxs*100,(ZC[h.color]||Z)[1],st+' day'+(st===1?'':'s'),'habitedit:'+c.id+':'+h.id)}).join(''):'<p class="zempty">Your streaks show here.</p>');
+ var cols=[];for(var j=6;j>=0;j--){var dk=zAddDays(td,-j),s3=0,g3=0;H.forEach(function(h){if(zHabitOn(h,dk)){s3++;if(zHabitDone(c,h,dk))g3++}});
+  cols.push({label:parseISO(dk).toLocaleDateString('en-CA',{weekday:'short'}).replace('.',''),v:s3,d:g3,on:dk===td,title:g3+' of '+s3})}
+ var last7=z1Card('Last 7 days','',z1Cols(cols));
+ return z1Page({key:c.id+'-hab',hero:hero,left:rows+heat,rail:acc+quick+streaks+last7,pin:quick,
+  chips:[['week','This week',rows],['streaks','Streaks',acc+streaks+last7],['month','Month',heat]]});
+};
+
+/* ---------- Projects ---------- */
+var _q10Proj=zProjectsPage;
+zProjectsPage=function(c){
+ var board=_q10Proj(c);
+ if(view.zproj&&zItem(c,view.zproj))return board; // a project is open: the board and its panel get the full width
+ var P=c.items.filter(function(x){return x.t==='proj'}),td=iso(today()),Z=ZC.lavender;
+ var by=function(s){return P.filter(function(p){return (p.status||'todo')===s})};
+ var st=0,sd=0;P.forEach(function(p){(p.steps||[]).forEach(function(x){st++;if(x.done)sd++})});
+ var pct=st?Math.round(sd/st*100):(P.length?Math.round(by('done').length/P.length*100):0);
+ var soon=P.filter(function(p){return p.due&&(p.status||'todo')!=='done'&&p.due<=zAddDays(td,21)}).sort(z1ByDue);
+ var hero=z1Hero({pct:pct,big:pct+'%',cap:st?'of subtasks done':'of projects done',col:Z[1],track:Z[0],
+  tiles:[['use','folder','Not started',String(by('todo').length),''],['sav','clock','In progress',String(by('doing').length),''],
+   ['in','check','Done',String(by('done').length),''],['out','cal','Due soon',String(soon.length),soon.length?esc(soon[0].title):'Nothing in the next 3 weeks']],
+  mini:[['clock',by('doing').length+' in progress'],['check',by('done').length+' done'],['cal',soon.length+' due soon']]});
+ var nx=soon[0];
+ var acc=nx?z1Accent('Next deadline','cal',esc(z1When(nx.due)),'<span>'+esc(nx.title)+'</span><span>'+esc(zShortDay(nx.due))+'</span>','projopen:'+c.id+':'+nx.id)
+  :z1Accent('Next deadline','cal','None yet','Give a project a due date to count down to it','');
+ var soonC=z1Card('Due soon','',soon.length?soon.map(function(p){var pr=zProjProgress(p);return '<button class="z1proj" data-zact="projopen:'+c.id+':'+p.id+'"><span><b>'+esc(p.title)+'</b><small>'+esc(zShortDay(p.due))+' · '+pr+'%</small></span><span class="zbtrack"><i style="width:'+pr+'%;background:'+Z[1]+'"></i></span></button>'}).join(''):'<p class="zempty">Nothing due in the next three weeks.</p>');
+ var tags={};P.forEach(function(p){if(p.tag)tags[p.tag]=(tags[p.tag]||0)+1});var tk=Object.keys(tags).sort(function(a,b){return tags[b]-tags[a]});
+ var tagC=tk.length?z1Card('By tag','',tk.map(function(k){return z1Bar(k,tags[k]/P.length*100,Z[1],tags[k]+'')}).join('')):'';
+ return z1Page({key:c.id+'-proj',hero:hero,left:board,rail:acc+soonC+tagC,pin:acc,chips:[['board','Board',board],['soon','Due soon',soonC+tagC]]});
+};
+
+/* ---------- Reading & Watchlist ---------- */
+var _q10Read=zReadingPage;
+zReadingPage=function(c){
+ var tr=rdTrack(c),orig=_q10Read(c);
+ if(!tr||view.rdSetup===c.id)return orig;
+ var all=c.items.filter(function(x){return x.t==='read'}),doing=all.filter(function(x){return x.status==='doing'}),fin=all.filter(function(x){return x.status==='done'}),want=all.filter(function(x){return x.status!=='doing'&&x.status!=='done'});
+ var yr=String(today().getFullYear()),finY=fin.filter(function(x){return String(x.fin||x.savedAt||'').slice(0,4)===yr}).length;
+ var rated=all.filter(function(x){return x.rating}),avg=rated.length?rated.reduce(function(s,x){return s+x.rating},0)/rated.length:0,Z=ZC.lavender;
+ var onlyBooks=tr.length===1&&tr[0]==='book',onlyWatch=tr.indexOf('book')<0;
+ var hero=z1Hero({pct:all.length?fin.length/all.length*100:0,big:String(finY),cap:'finished in '+yr,col:Z[1],track:Z[0],
+  tiles:[['sav','book',onlyWatch?'Watching':onlyBooks?'Reading':'In progress',String(doing.length),doing.length?esc(doing[0].title):'Nothing started'],
+   ['use','list','Up next',String(want.length),want.length?esc(want[0].title):'Add something you want to get to'],
+   ['in','check','Finished',String(fin.length),'all time'],
+   ['out','star','Your rating',avg?avg.toFixed(1)+' ★':'–',rated.length?rated.length+' rated':'Rate what you finish']],
+  mini:[['book',doing.length+' on the go'],['list',want.length+' up next'],['check',fin.length+' finished']]});
+ var nw=doing[0],now='';
+ if(nw){var p=nw.progress||0;now=z1Card(nw.type==='book'?'Now reading':'Now watching','','<button class="z1now" data-zact="readedit:'+c.id+':'+nw.id+'">'+(nw.cover?'<img src="'+esc(nw.cover)+'" alt="">':'<span class="z1nowph">'+zI(ZIC.book,22)+'</span>')
+  +'<span class="z1nowt"><b>'+esc(nw.title)+'</b>'+(nw.by?'<small>'+esc(nw.by)+'</small>':'')+'<span class="zbtrack"><i style="width:'+p+'%;background:'+Z[1]+'"></i></span><em>'+p+'% through</em></span></button>')}
+ var mix='';if(tr.length>1){var segs=[['book','Books','lavender'],['show','Shows','mist'],['film','Films','peach']].filter(function(t){return tr.indexOf(t[0])>-1}).map(function(t){return {v:all.filter(function(x){return (x.type||'book')===t[0]}).length,col:ZC[t[2]][1],label:t[1]}});
+  if(all.length)mix=z1Card('Your list','','<div class="zbwent">'+zDonut(segs,92,14,String(all.length),'')+'<div class="zbwl">'+segs.map(function(s){return '<span><i style="background:'+s.col+'"></i>'+s.label+'<em>'+s.v+'</em></span>'}).join('')+'</div></div>')}
+ var top3=rated.slice().sort(function(a,b){return b.rating-a.rating}).slice(0,3);
+ var fav=top3.length?z1Card('Favourites','',top3.map(function(x){return z1Li(esc(x.title),'★'.repeat(x.rating),'readedit:'+c.id+':'+x.id)}).join('')):'';
+ return z1Page({hero:hero,left:orig,rail:(now||z1Accent('Up next','book',String(want.length),'things on your list','readnew:'+c.id))+mix+fav,pin:now,chips:[['all','',orig]]});
+};
+
+/* ---------- Meal prep ---------- */
+var _q10Meals=zMealsPage;
+zMealsPage=function(c){
+ var h=_q10Meals(c),iG=h.indexOf('<section class="zcard zmgridw">'),iP=h.indexOf('<section class="zcard zmday">'),iS=h.indexOf('<div class="zg2">',iP),iR=h.indexOf('<div class="zh2row"><h2 class="zh2">Recipes');
+ if(iG<0||iP<0||iS<0||iR<0)return h;
+ var nav=h.slice(0,iG),grid=h.slice(iG,iP),phone=h.slice(iP,iS),mid=h.slice(iS,iR),recipes=h.slice(iR);
+ var j=mid.indexOf('<section class="zcard',mid.indexOf('<section class="zcard')+5),prep=j>-1?mid.slice(j,mid.lastIndexOf('</div>')):'';
+ var ws=zMealWeek(),td=iso(today()),days=[];for(var i=0;i<7;i++)days.push(zAddDays(ws,i));
+ var planned=0,ingr=0;days.forEach(function(d){MEAL_SLOTS.forEach(function(s){var m=zMealAt(c,d,s[0]);if(m){planned++;var r=m.rid&&zItem(c,m.rid);if(r)ingr+=(r.ingr||[]).length}})});
+ var tdyN=MEAL_SLOTS.filter(function(s){return zMealAt(c,td,s[0])}).length,R=zRecipes(c);
+ var P=c.items.filter(function(x){return x.t==='prep'&&x.wk===ws}),pd=P.filter(function(x){return x.done}).length,Z=ZC.peach;
+ var hero=z1Hero({pct:planned/28*100,big:String(planned),cap:'of 28 meals planned',col:Z[1],track:Z[0],
+  tiles:[['out','sun','Today',tdyN+' of 4','meals planned today'],['sav','utensils','Recipes',String(R.length),R.length?'saved to cook again':'Find one by name'],
+   ['in','check','Prep',P.length?pd+' of '+P.length:'0',P.length?'steps done':'Add prep steps'],['use','cart','Ingredients',String(ingr),'for this week’s recipes']],
+  mini:[['utensils',planned+' planned'],['sun',tdyN+' today'],['check',pd+'/'+P.length+' prep']]});
+ var dn=zMealAt(c,td,'d'),dr=dn&&dn.rid&&zItem(c,dn.rid),dName=dr?dr.title:(dn&&dn.text)||'';
+ var tonight='<button class="z1tonight'+(dr&&dr.img?' img':'')+'"'+(dr&&dr.img?' style="background-image:url('+esc(dr.img)+')"':' style="background:'+chromeHex('sideBg')+'"')+' data-zact="mealpick:'+c.id+':'+td+':d"><span>'+zI(ZIC.moon||ZIC.sun,14)+'Tonight</span><b>'+esc(dName||'Nothing planned yet')+'</b><small>'+(dName?(dr&&dr.mins?dr.mins+' min':'Tap to change'):'Tap to pick dinner')+'</small></button>';
+ var todayC=z1Card('Today','',MEAL_SLOTS.map(function(s){var m=zMealAt(c,td,s[0]),r=m&&m.rid&&zItem(c,m.rid);return z1Li(m?esc(r?r.title:m.text||''):'<span class="zsoft">Nothing yet</span>',s[1],'mealpick:'+c.id+':'+td+':'+s[0],m?'':'empty','<i class="z1ck" style="background:'+Z[0]+';color:'+Z[1]+'">'+zI(ZIC[s[2]]||ZIC.sun,12)+'</i>')}).join(''));
+ if(z1Wide())return z1Page({top:nav,hero:hero,left:grid+recipes,rail:tonight+todayC+prep});
+ return z1Page({key:c.id+'-meals',top:nav,hero:hero,pin:phone,chips:[['tonight','Tonight',tonight+todayC],['prep','Prep',prep],['recipes','Recipes',recipes]]});
+};
+
+/* ---------- Mood ---------- */
+var _q10Mood=zMoodPage;
+zMoodPage=function(c){
+ var h=_q10Mood(c),i1=h.indexOf('<div class="zg2">');if(i1<0)return h;
+ var pick=h.slice(0,i1),inner=h.slice(i1+17),iMix=inner.indexOf('<section class="zcard',5),iTr=inner.lastIndexOf('<section class="zcard');
+ if(iMix<0||iTr<=iMix)return h;
+ var cal=inner.slice(0,iMix),mixH=inner.slice(iMix,inner.lastIndexOf('</div>',iTr)),trend=inner.slice(iTr);
+ var td=iso(today()),t=today(),m0=iso(new Date(t.getFullYear(),t.getMonth(),1)),k=0,sum=0,good=0,low=0,dn=t.getDate();
+ for(var d=m0;d<=td;d=zAddDays(d,1)){var mo=moodOf(c,d);if(mo){k++;sum+=mo.v;if(mo.v>=4)good++;if(mo.v<=2)low++}}
+ var streak=0,dd=moodOf(c,td)?td:zAddDays(td,-1);while(moodOf(c,dd)){streak++;dd=zAddDays(dd,-1)}
+ var avg=k?Math.round(sum/k):0,Z=ZC.rose;
+ var hero=z1Hero({pct:k/dn*100,big:avg?moodFace(avg,z1Wide()?64:58):'–',cap:avg?'mostly '+MOODS[avg].n.toLowerCase()+' this month':'log a few days',col:Z[1],track:Z[0],
+  tiles:[['sav','cal','Days logged',String(k),'of '+dn+' this month'],['in','smile','Good days',String(good),'good or great'],
+   ['out','cloud','Low days',String(low),'low or awful'],['use','flame','In a row',streak+' day'+(streak===1?'':'s'),'logged in a row']],
+  mini:[['cal',k+' logged'],['smile',good+' good'],['flame',streak+' in a row']]});
+ return z1Page({key:c.id+'-mood',top:pick,hero:hero,left:cal+trend,rail:mixH,chips:[['month','Month',cal],['mix','Mood mix',mixH],['trend','30 days',trend]]});
+};
+
+/* ---------- the ‹ › arrows sit in the middle of their circles (the text glyphs sat low) ---------- */
+var Z1CHEV={'‹':'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg>',
+ '›':'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg>'};
+function q10Chevs(){document.querySelectorAll('.main button,.modal button').forEach(function(b){var t=b.textContent.trim();if(b.children.length===0&&Z1CHEV[t]){b.innerHTML=Z1CHEV[t];b.classList.add('zchev')}})}
+var _q10Render=render;
+render=function(){var before=app.firstElementChild;_q10Render.apply(this,arguments);if(app.firstElementChild!==before)q10Chevs()};
+// redraw when the window crosses the computer / phone layout on any page
+(function(){var was=z1Wide();window.addEventListener('resize',function(){var now=z1Wide();if(now!==was){was=now;var c=view.classId&&classById(view.classId);if(c&&c.kind)render()}})})();
 
 
 try{spBoot()}catch(e){}
