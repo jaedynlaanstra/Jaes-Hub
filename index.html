@@ -4463,7 +4463,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v163';
+var BUILD='v164';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17082,6 +17082,18 @@ ZM.zwmenu.html=function(m){
 var _q24Hab=q22Hab;q22Hab=function(w,sp){var h=_q24Hab(w,sp);if(h&&w.color)h=h.replace('background:'+q18Deep(),'background:'+q20Deep(q20Hex(w)));return h};
 var _q24Sp=q22Spent;q22Spent=function(w,sp){var h=_q24Sp(w,sp);if(h&&w.color)h=h.replace(/--a:#[0-9a-fA-F]{6}/,'--a:'+q20Hex(w));return h};
 var _q24Ag=q21Agenda;q21Agenda=function(w){var h=_q24Ag(w);if(h&&w.color)h=h.split('background:'+q18Deep()).join('background:'+q20Deep(q20Hex(w)));return h};
+
+
+/* ---------- the menu colour's "any colour" picker changes the menu live while you drag (it waited until you let go) ----------
+   Only the colours are re-applied while dragging (no redraw, which would close the picker); letting go saves. */
+var q25Raf=0;
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-z4menu'))return;
+ if(q17PageCol()&&S.menuMatch!==false)S.menuMatch=false;
+ var v=t.value;if(q25Raf)cancelAnimationFrame(q25Raf);
+ var go=function(){q25Raf=0;setThemeColour('chrome','sideBg',v);var l=t.closest('.z4cust');if(l){l.style.setProperty('--cur',v);l.style.background=v}};
+ if(document.hidden)go();else q25Raf=requestAnimationFrame(go);
+},true);
+document.addEventListener('change',function(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-z4menu')&&q17PageCol()&&S.menuMatch!==false)S.menuMatch=false},true);
 
 try{spBoot()}catch(e){}
 load();
