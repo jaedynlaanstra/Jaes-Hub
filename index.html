@@ -4340,6 +4340,11 @@ body.q36dragging{user-select:none;-webkit-user-select:none}
 .q38car.canr .q17crow{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
 .q38car.canl.canr .q17crow{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent)}
 .q38car.canl:not(.canr) .q17crow{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px);mask-image:linear-gradient(90deg,transparent,#000 40px)}
+/* sections side by side are the same height; the shorter one fills it instead of leaving empty space at the bottom */
+.q36grid>.q36sec.zbcats,.q36grid>.q36sec[data-q36="six"],.q36grid>.q36sec[data-q36="went"]{display:flex;flex-direction:column}
+.q36grid>.q36sec.zbcats>.zbcat{flex:1 1 auto;align-items:center}
+.q36grid>.q36sec[data-q36="six"]>.zbsix{flex:1 1 auto;height:auto!important;min-height:140px}
+.q36grid>.q36sec[data-q36="went"]>.zbwent{flex:1 1 auto}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4668,7 +4673,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v183';
+var BUILD='v184';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
