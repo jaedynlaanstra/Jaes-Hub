@@ -4227,6 +4227,8 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .q28mid .q28kind+.q28net{margin-left:8px}
 .q28mid{margin-top:4px}
 .zbringc .q30sub{display:block;font-size:11.5px;opacity:.7;margin-top:2px}
+body.q31nosq .sic.pg{background:none!important;width:22px;height:22px;border-radius:0;opacity:.85}
+body.q31nosq .sitem.on .sic.pg,body.q31nosq .sitem:hover .sic.pg{opacity:1}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4555,7 +4557,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v172';
+var BUILD='v174';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17471,13 +17473,24 @@ var _q30Ring=zbRing;
 zbRing=function(pct,sz,w,big,cap,over){
  if(!q17Bud)return _q30Ring(pct,sz,w,big,cap,over);
  var b=q17Bud.b,t=+b.total||0,sp=+b.spent||0,ov=t&&sp>t,spentView=q17Bud.c.bview==='spent',sub='';
- if(!t){big=money(sp);cap='spent this month';pct=0}
- else if(ov){big=money(sp-t);cap='over budget';sub='you’ve spent '+money(sp)+' of '+money(t);pct=100;over=true}
- else if(spentView){big=money(sp);cap='spent so far';sub='of your '+money(t)+' budget';pct=sp/t*100}
- else{big=money(t-sp);cap='left to spend';sub='of your '+money(t)+' budget';pct=(t-sp)/t*100}
+ if(!t){big=money(sp);cap='spent';pct=0}
+ else if(ov){big=money(sp-t);cap='over budget';pct=100;over=true}
+ else if(spentView){big=money(sp);cap='spent';pct=sp/t*100}
+ else{big=money(t-sp);cap='left of '+money(t);pct=(t-sp)/t*100}
  var h=_q17Ring.call(this,pct,sz,w,big,cap,over);
  return sub?h.replace('<small>'+cap+'</small>','<small>'+cap+'</small><small class="q30sub">'+sub+'</small>'):h;
 };
+
+
+/* ---------- menu: the coloured squares behind page icons can be switched off (S.menuIconSq, synced; Colours panel) ---------- */
+SETTINGS_KEYS.push('menuIconSq');
+ZACT.q31sq=function(v){S.menuIconSq=v==='1';save();render()};
+var _q31Pick=pickerHtml;
+pickerHtml=function(){var h=_q31Pick();if(!view.picker||h.indexOf('<div class="z4pk">')<0)return h;var on=S.menuIconSq!==false;
+ var row='<div class="z4pkrow"><p><b>Menu icons</b><span>Coloured squares behind your pages’ icons in the menu</span></p><span class="z4seg q17seg"><button class="'+(on?'on':'')+'" data-zact="q31sq:1">Coloured squares</button><button class="'+(on?'':'on')+'" data-zact="q31sq:0">Plain icons</button></span></div>';
+ return h.replace(/(<div class="z4pk">[\s\S]*?)(<\/div><details)/,function(a,p1,p2){return p1+row+p2})};
+var _q31Render=render;
+render=function(){var r=_q31Render.apply(this,arguments);document.body.classList.toggle('q31nosq',S.menuIconSq===false);return r};
 
 try{spBoot()}catch(e){}
 load();
