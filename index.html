@@ -4436,6 +4436,54 @@ body.q39lock{overflow:hidden}
 .q42inst button{flex:none;background:#33312C;color:#fff;border:none;border-radius:99px;padding:10px 18px;font:inherit;font-size:14.5px;cursor:pointer}
 .q42or{margin:10px 0 0;font-size:13px;color:var(--ink3,#A29D93)}
 
+/* v189: Get the app ×, the tour, recipe tags, Paste and how-to */
+.sitem.q43get{position:relative}
+.q43gx{margin-left:auto;flex:none;width:24px;height:24px;min-height:0!important;padding:0;border:none;border-radius:50%;background:transparent;color:inherit;opacity:.55;font-size:17px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.q43gx:hover{opacity:1;background:rgba(255,255,255,.16)}
+#q43t{position:fixed;inset:0;z-index:10000;cursor:default}
+.q43hole{position:fixed;border-radius:14px;box-shadow:0 0 0 200vmax rgba(28,24,20,.58);transition:left .35s cubic-bezier(.3,.8,.3,1),top .35s cubic-bezier(.3,.8,.3,1),width .35s cubic-bezier(.3,.8,.3,1),height .35s cubic-bezier(.3,.8,.3,1);pointer-events:none}
+.q43hole::after{content:'';position:absolute;inset:-4px;border-radius:17px;border:2px solid #fff;animation:q43pulse 1.8s ease-in-out infinite}
+.q43hole.none::after{display:none}
+@keyframes q43pulse{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.35;transform:scale(1.04)}}
+.q43card{position:fixed;background:#fff;color:#2E2B27;border-radius:20px;padding:18px 18px 14px;box-shadow:0 24px 60px -18px rgba(0,0,0,.45);transition:left .35s cubic-bezier(.3,.8,.3,1),top .35s cubic-bezier(.3,.8,.3,1);box-sizing:border-box;font-family:var(--fb,inherit)}
+.q43arr{position:absolute;width:14px;height:14px;background:#fff;transform:rotate(45deg);border-radius:3px}
+.q43arr.below{margin-left:-7px}.q43arr.above{margin-left:-7px}.q43arr.right{margin-top:-7px}
+.q43skip{position:absolute;top:12px;right:12px;border:none;background:none;color:#8A857C;font:inherit;font-size:13px;cursor:pointer;min-height:0!important;padding:4px 6px}
+.q43body{position:relative}
+.q43t{display:block;font-size:18px;font-weight:500;margin:0 70px 6px 0;line-height:1.3}
+.q43body p{margin:0 0 14px;font-size:14.5px;line-height:1.5;color:#5F5A52}
+.q43foot{display:flex;align-items:center;gap:8px}
+.q43n{margin-right:auto;font-size:12.5px;color:#9A958C}
+.q43back,.q43next{border-radius:99px;padding:9px 16px;font:inherit;font-size:14px;cursor:pointer;min-height:0!important}
+.q43back{background:none;border:1px solid #DDD8CF;color:#4A463F}
+.q43next{background:#2E2B27;border:none;color:#fff}
+@media(prefers-reduced-motion:reduce){.q43hole,.q43card{transition:none}.q43hole::after{animation:none}}
+/* recipe tags */
+.q43tf label small{font-weight:400;color:var(--ink3);margin-left:6px;font-size:12px}
+.q43tl{display:flex;flex-wrap:wrap;gap:8px}
+.q43tag{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line2,#D9D4CA);background:var(--card,#fff);color:var(--ink2);border-radius:99px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;min-height:0!important}
+.q43tag.on{border-color:transparent;font-weight:500}
+.q43tag.add{border-style:dashed;color:var(--ink3)}
+.q43ctags{display:flex;flex-wrap:wrap;gap:5px;margin-top:-4px}
+.q43ctags span{font-size:11.5px;border-radius:99px;padding:3px 9px;white-space:nowrap}
+.q43ctags .more{background:#F1EEE9;color:#8A857C}
+/* recipe link: Paste, how-to, blocked sites */
+.q43pst{display:inline-flex;align-items:center;gap:5px;flex:none;border:1px solid var(--line2,#D9D4CA)!important;background:var(--card,#fff)!important}
+.q43howb{display:inline-flex;align-items:center;gap:6px;margin-top:8px;border:none;background:none;padding:2px 0;color:var(--ink3);font:inherit;font-size:13px;cursor:pointer;min-height:0!important;text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,currentColor 40%,transparent)}
+.q43how{position:relative;margin-top:8px;background:var(--paper,#FBFAF8);border:1px solid var(--line,#E4E0D7);border-radius:14px;padding:14px 40px 6px 14px}
+.q43how b{display:block;font-size:14.5px;font-weight:500;margin-bottom:8px}
+.q43how p{margin:0 0 10px;font-size:13.5px;line-height:1.5;color:var(--ink2)}
+.q43how p span{display:block;font-weight:500;color:var(--ink);font-size:13px}
+.q43hx{position:absolute;top:8px;right:8px;width:28px;height:28px;min-height:0!important;border:none;border-radius:50%;background:transparent;color:var(--ink3);font-size:19px;line-height:1;cursor:pointer}
+.q43hx:hover{background:rgba(0,0,0,.05)}
+.q43fb{margin-top:10px;background:#FBF6EE;border:1px solid #EFE3CF;border-radius:14px;padding:14px}
+.q43fb b{display:block;font-size:14.5px;font-weight:500;margin-bottom:4px;color:#5A4A35}
+.q43fb p{margin:0 0 10px;font-size:13.5px;line-height:1.5;color:#6B5E4D}
+.q43fbr .zbtn{display:inline-flex;align-items:center;gap:6px}
+.q43fb textarea{margin-top:10px;width:100%;box-sizing:border-box;font-size:16px}
+.q43ok{display:flex;align-items:center;gap:6px;margin:8px 0 0!important;color:#4F7A55!important}
+@media(max-width:600px){.zfind:has(#zp7){flex-wrap:wrap}.zfind:has(#zp7)>input{flex:1 1 100%;min-width:0}.zfind:has(#zp7)>button{flex:1 1 0;justify-content:center}}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4764,7 +4812,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v188';
+var BUILD='v189';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -18137,6 +18185,265 @@ installGuideHtml=function(plat){
  }
  return tabs+'<div class="ig">'+body+'</div>';
 };
+
+/* ===== v189: a guided tour with arrows, recipe tags, Paste + how-to on recipe links, blocked sites, Get the app × ===== */
+
+/* ---------- "Get the app" in the menu: stays until you close it with its × (per device); never in the installed app ---------- */
+function q43GetHidden(){try{return localStorage.getItem('hub:getappx')==='1'}catch(e){return false}}
+q42ShowGet=function(){try{return !isInstalledApp()&&!q43GetHidden()}catch(e){return false}};
+var _q43SideItem=sideItem;
+sideItem=function(attr,key,label,on){
+ if(attr==='data-go'&&key==='install')return '<div class="sitem sico q43get'+(on?' on':'')+'" data-go="install"><span class="sic">'+zI(ZIC.mobile,17)+'</span><span class="nm2">'+esc(label)+'</span><button type="button" class="q43gx" data-q43gx="1" aria-label="Hide Get the app" title="Hide this">×</button></div>';
+ return _q43SideItem(attr,key,label,on);
+};
+window.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q43gx]');if(!b)return;
+ e.preventDefault();e.stopPropagation();
+ try{localStorage.setItem('hub:getappx','1')}catch(err){}
+ if(view.page==='install')go('home');else render();
+ zToast('Hidden. You can still find it in Settings.');
+},true);
+
+/* ---------- the tour: a spotlight on the real buttons, with an arrow and a card ----------
+   Starts by itself the first time a new person reaches Home (a new account, or a signed-out person who went
+   through the welcome), once per account (synced S.toured) and per device (hub:tour). Settings > Take the tour
+   replays it. On phones the menu opens for the menu steps and closes again for the Home steps. */
+SETTINGS_KEYS.push('toured');
+var Q43={on:false,i:0,steps:[],dir:1,el:null,timer:null,auto:false,openedMenu:false};
+function q43Steps(){
+ var school=curSpace()==='school';
+ return [
+  {t:'Welcome to Doable',p:'Here’s a quick look around, so you know where everything is. It only takes a minute.'},
+  {s:'.menubtn[data-menu="1"]',phone:1,t:'Your menu',p:'Tap here any time to open the menu. Every page lives in it.'},
+  {s:'.side .zpillbtn',menu:1,t:'Your spaces',p:'School, Work and Personal each keep their own pages, like separate profiles. Tap here to switch, or to add or remove a space.'},
+  {s:'.side .q19lab',menu:1,t:school?'Your classes':'Your pages',p:school?'Each class has its own page for assignments, files and links. Tap one to open it.':'To-do lists, budget, meal prep and more. Tap one to open it. Tap the word Pages to fold the list away.'},
+  {s:school?'.side [data-add="class"]':'.side [data-znew]',menu:1,t:school?'Add a class':'Add a page',p:school?'Add each of your classes here.':'Add another page here: pick from to-do list, budget, shopping list, meal prep, habit tracker and more.'},
+  {s:'.side [data-go="calendar"]',menu:1,t:'Calendar',p:'Your events, birthdays and everything that’s due, in one place.'},
+  {s:'.side [data-opencolours]',menu:1,t:'Colours',p:'Change the colour of the menu, your pages and your widgets.'},
+  {s:'.side [data-add="settings"]',menu:1,t:'Settings',p:'Your account, syncing and how things look. You can take this tour again from here.'},
+  {s:'.side [data-go="install"]',menu:1,t:'Get the app',p:'Steps to put Doable on your phone’s home screen, so it opens like a real app. Tap its × to hide it.'},
+  {s:'.hcorner [data-zact="wedit"]',t:'Edit widgets',p:'Add, remove, move and resize the cards on your Home. Tap Done when you’re finished.'},
+  {s:'.hcorner [data-coversheet]',t:'Cover picture',p:'Add or change the picture at the top. Every page can have its own.'},
+  {s:'.zhome .zw',t:'Widgets',p:'Each card shows a bit of one page. Tap it to open that page. Ticks and + buttons work right on the card.'},
+  {t:'You’re all set',p:'Find this tour again any time in Settings, under Look and feel.',end:1}
+ ];
+}
+function q43Vis(el){if(!el)return false;var r=el.getBoundingClientRect();return r.width>0&&r.height>0&&r.right>4&&r.left<innerWidth-4}
+function q43Target(st){if(!st.s)return null;var L=document.querySelectorAll(st.s);for(var i=0;i<L.length;i++)if(q43Vis(L[i])||(st.menu&&narrowScreen()))return L[i];return null}
+function q43Start(){
+ if(Q43.on)return;
+ view.modal=null;view.zpill=false;
+ if(view.page!=='home')go('home');else render();
+ Q43.on=true;Q43.steps=q43Steps();Q43.i=0;Q43.dir=1;Q43.openedMenu=false;
+ var el=document.getElementById('q43t');if(!el){el=document.createElement('div');el.id='q43t';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','A tour of Doable');document.body.appendChild(el)}
+ el.innerHTML='<div class="q43hole"></div><div class="q43card"><i class="q43arr"></i><button type="button" class="q43skip" data-q43="end">Skip tour</button><div class="q43body"></div></div>';
+ Q43.el=el;clearInterval(Q43.timer);Q43.timer=setInterval(q43Place,250);
+ setTimeout(q43Show,350);
+}
+tourOpen=q43Start;
+function q43End(){
+ Q43.on=false;clearInterval(Q43.timer);
+ var el=document.getElementById('q43t');if(el)el.remove();
+ if(Q43.openedMenu&&view.menu){view.menu=false;render()}
+ try{localStorage.setItem('hub:tour','done')}catch(e){}
+ if(!S.toured){S.toured=1;save()}
+}
+function q43Show(){
+ if(!Q43.on)return;
+ var st=Q43.steps[Q43.i];if(!st){q43End();return}
+ var phone=narrowScreen();
+ // steps that don't apply here are passed over
+ if((st.phone&&!phone)||(st.menu&&!phone&&S.sideHidden)){return q43Step(Q43.dir)}
+ var wantMenu=phone&&!!st.menu;
+ if(phone&&!!view.menu!==wantMenu){view.menu=wantMenu;if(wantMenu)Q43.openedMenu=true;render();setTimeout(function(){q43Fill(st)},wantMenu?650:420);return}
+ q43Fill(st);
+}
+function q43Fill(st){
+ if(!Q43.on)return;
+ if(st.s){var t=q43Target(st);if(!t)return q43Step(Q43.dir);
+  var r=t.getBoundingClientRect();if(r.top<70||r.bottom>innerHeight-20){try{t.scrollIntoView({block:'center'})}catch(e){}}}
+ var real=Q43.steps.filter(function(x,j){return !(x.phone&&!narrowScreen())}),n=real.indexOf(st)+1;
+ var b=Q43.el.querySelector('.q43body');
+ b.innerHTML='<b class="q43t">'+esc(st.t)+'</b><p>'+esc(st.p)+'</p><div class="q43foot"><span class="q43n">'+n+' of '+real.length+'</span>'
+  +(Q43.i?'<button type="button" class="q43back" data-q43="back">Back</button>':'')
+  +'<button type="button" class="q43next" data-q43="'+(st.end?'end':'next')+'">'+(st.end?'Done':Q43.i?'Next':'Show me')+'</button></div>';
+ Q43.el.querySelector('.q43skip').style.display=st.end?'none':'';
+ Q43.cur=st;q43Place();
+ var nb=Q43.el.querySelector('.q43next');if(nb)try{nb.focus({preventScroll:true})}catch(e){}
+}
+function q43Step(d){Q43.dir=d;Q43.i+=d;if(Q43.i<0)Q43.i=0;if(Q43.i>=Q43.steps.length){q43End();return}q43Show()}
+function q43Place(){
+ if(!Q43.on||!Q43.el||!Q43.cur)return;
+ var st=Q43.cur,hole=Q43.el.querySelector('.q43hole'),card=Q43.el.querySelector('.q43card'),arr=Q43.el.querySelector('.q43arr');
+ var W=innerWidth,H=innerHeight,cw=Math.min(330,W-32);card.style.width=cw+'px';
+ var t=st.s?q43Target(st):null;
+ if(!t){hole.style.cssText='left:'+(W/2)+'px;top:'+(H/2)+'px;width:0;height:0';hole.classList.add('none');arr.style.display='none';
+  card.style.left=Math.round((W-cw)/2)+'px';card.style.top=Math.round(Math.max(16,(H-card.offsetHeight)/2))+'px';return}
+ hole.classList.remove('none');
+ var r=t.getBoundingClientRect(),pad=6;
+ hole.style.cssText='left:'+(r.left-pad)+'px;top:'+(r.top-pad)+'px;width:'+(r.width+pad*2)+'px;height:'+(r.height+pad*2)+'px';
+ var ch=card.offsetHeight,gap=18,x,y,side;
+ if(r.right+gap+cw+16<=W&&r.left<W/2&&r.height<160){side='right';x=r.right+gap;y=r.top+r.height/2-ch/2}
+ else if(r.bottom+gap+ch+16<=H){side='below';y=r.bottom+gap;x=r.left+r.width/2-cw/2}
+ else{side='above';y=r.top-gap-ch;x=r.left+r.width/2-cw/2}
+ x=Math.max(16,Math.min(W-cw-16,x));y=Math.max(16,Math.min(H-ch-16,y));
+ card.style.left=Math.round(x)+'px';card.style.top=Math.round(y)+'px';
+ arr.style.display='';arr.className='q43arr '+side;
+ if(side==='right')arr.style.cssText='top:'+Math.max(18,Math.min(ch-18,r.top+r.height/2-y))+'px;left:-7px';
+ else arr.style.cssText='left:'+Math.max(18,Math.min(cw-18,r.left+r.width/2-x))+'px;'+(side==='below'?'top:-7px':'bottom:-7px');
+}
+document.addEventListener('click',function(e){
+ if(!Q43.on)return;var b=e.target.closest&&e.target.closest('[data-q43]');
+ if(e.target.closest&&e.target.closest('#q43t')){e.preventDefault();e.stopPropagation()}
+ if(!b)return;var a=b.getAttribute('data-q43');
+ if(a==='next')q43Step(1);else if(a==='back')q43Step(-1);else q43End();
+},true);
+document.addEventListener('keydown',function(e){if(!Q43.on)return;
+ if(e.key==='Escape'){e.preventDefault();q43End()}else if(e.key==='ArrowRight'){e.preventDefault();if(Q43.cur&&Q43.cur.end)q43End();else q43Step(1)}else if(e.key==='ArrowLeft'){e.preventDefault();if(Q43.i)q43Step(-1)}},true);
+window.addEventListener('resize',function(){if(Q43.on)q43Place()});
+// start by itself for new people
+function q43New(){
+ if(S.toured)return false;
+ try{if(localStorage.getItem('hub:tour'))return false}catch(e){}
+ if(sbUser){if(!q21Pulled)return false;var made=Date.parse(sbUser.created_at||'');return made&&Date.now()-made<14*864e5}
+ try{return !!localStorage.getItem('hub:onb')}catch(e){return false}
+}
+var _q43Render=render;
+render=function(){
+ var r=_q43Render.apply(this,arguments);
+ if(!Q43.on&&!Q43.auto&&view.page==='home'&&!view.modal&&!document.getElementById('onb')&&!document.getElementById('ztour')){
+  var ok=false;try{ok=q43New()}catch(e){}
+  if(ok){Q43.auto=true;setTimeout(function(){if(!Q43.on&&view.page==='home'&&!view.modal&&!document.getElementById('onb'))q43Start();else Q43.auto=false},1200)}
+ }
+ return r;
+};
+
+/* ---------- recipe tags: a page's own list (c.recTags), tap to add them to a recipe, shown on the cards ---------- */
+CLASS_KEYS.push('recTags');
+var Q43TAGS=['BBQ','Crock pot','Quick','Vegetarian','Make ahead','Freezer friendly'];
+function q43Split(s){return String(s||'').split(',').map(function(x){return x.trim()}).filter(Boolean)}
+function q43Tags(c){
+ var L=(c&&Array.isArray(c.recTags)?c.recTags:Q43TAGS).slice(),low=L.map(function(x){return x.toLowerCase()});
+ if(c)zRecipes(c).forEach(function(r){q43Split(r.tags).forEach(function(t){if(low.indexOf(t.toLowerCase())<0){L.push(t);low.push(t.toLowerCase())}})});
+ return L;
+}
+function q43TagCol(t){var p=ZC[zHueOf(String(t).toLowerCase())]||ZC.sand||['#EFEAE3','#8A7F72'];return 'background:'+p[0]+';color:'+p[1]}
+var _q43RecHtml=ZM.zrecipe.html;
+ZM.zrecipe.html=function(m){
+ var h=_q43RecHtml(m);if(!h)return h;var c=classById(m.cid),r=m.id&&c&&zItem(c,m.id);
+ if(!m.q43tags)m.q43tags=q43Split(m.fill&&m.fill.tags!=null?m.fill.tags:(r?r.tags:''));
+ var on=m.q43tags.map(function(x){return x.toLowerCase()}),all=q43Tags(c);
+ m.q43tags.forEach(function(t){if(all.map(function(x){return x.toLowerCase()}).indexOf(t.toLowerCase())<0)all.push(t)});
+ var tags='<div class="field q43tf"><label>Tags <small>tap to add or take off</small></label><input type="hidden" id="zp4" value="'+esc(m.q43tags.join(', '))+'"><div class="q43tl">'
+  +all.map(function(t){var y=on.indexOf(t.toLowerCase())>-1;return '<button type="button" class="q43tag'+(y?' on':'')+'" data-q43tag="'+esc(t)+'" aria-pressed="'+y+'"'+(y?' style="'+q43TagCol(t)+'"':'')+'>'+(y?zI(ZIC.check,12):'')+esc(t)+'</button>'}).join('')
+  +'<button type="button" class="q43tag add" data-zact="q43tagnew">+ New tag</button></div></div>';
+ h=h.replace(/<div class="field"><label for="zp4">Tags<\/label><input id="zp4"[^>]*><\/div>/,'');
+ h=h.replace('<div class="field"><label for="zp5">',tags+'<div class="field"><label for="zp5">');
+ // the link row: a Paste button beside it, and a "how do I copy a link?" helper under it
+ h=h.replace(/(<input id="zp7"[^>]*>)(<button type="button" class="zbtn" data-zact="z4reclink">)/,'$1<button type="button" class="zbtn ghost q43pst" data-zact="q43paste">'+zI('<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/>',14)+'Paste</button>$2');
+ var how='<button type="button" class="q43howb" data-zact="q43how">'+zI('<circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4M12 16.6v.01"/>',14)+'How do I copy a recipe link?</button>'
+  +(m.q43how?'<div class="q43how" role="note"><button type="button" class="q43hx" data-zact="q43how" aria-label="Close">×</button><b>How to copy a recipe link</b>'
+   +'<p><span>iPhone or iPad</span>Open the recipe in Safari. Tap Share (the square with the arrow pointing up; on newer iPhones tap ⋯ first), then tap Copy. Come back here and tap Paste.</p>'
+   +'<p><span>Android</span>Open the recipe in Chrome. Tap the three dots at the top right, then Share, then Copy link. Come back here and tap Paste.</p>'
+   +'<p><span>Computer</span>Click the address bar at the top of the recipe page, then press Cmd and C on a Mac (Ctrl and C on Windows). Come back here and click Paste.</p></div>':'');
+ // a site that won't share its recipe: copy the words instead, and Doable sorts them out
+ var blocked=m.linkState==='err'||m.linkState==='part';
+ var fb=blocked?'<div class="q43fb"><b>This site won’t share its recipe with apps</b><p>You can still bring it in. On the recipe’s page, select the ingredients and the steps, copy them, then come back and tap the button below. Doable sorts them into Ingredients and How to make it.</p>'
+  +'<div class="q43fbr"><button type="button" class="zbtn" data-zact="q43ptext">'+zI('<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/>',14)+'Paste the recipe’s words</button></div>'
+  +'<textarea id="q43txt" rows="3" placeholder="Or press and hold here, then tap Paste"></textarea>'+(m.q43done?'<p class="q43ok">'+zI(ZIC.check,13)+esc(m.q43done)+'</p>':'')+'</div>':'';
+ var i=h.indexOf('<label for="zp7">');if(i>-1){var j=h.indexOf('<div class="zfrow">',i);if(j>-1)h=h.slice(0,j)+how+fb+h.slice(j)}
+ return h;
+};
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q43tag]');if(!b||!view.modal||view.modal.kind!=='zrecipe')return;
+ var m=view.modal,t=b.getAttribute('data-q43tag'),L=m.q43tags||[],k=L.map(function(x){return x.toLowerCase()}).indexOf(t.toLowerCase());
+ if(k>-1)L.splice(k,1);else L.push(t);m.q43tags=L;render();
+});
+ZACT.q43tagnew=function(){var m=view.modal;if(!m)return;var c=classById(m.cid);var n=(window.prompt('Name the new tag (like BBQ or Crock pot)','')||'').trim();if(!n||!c)return;
+ var L=q43Tags(c);if(L.map(function(x){return x.toLowerCase()}).indexOf(n.toLowerCase())<0){L.push(n);c.recTags=L;touch(c);save()}
+ m.q43tags=m.q43tags||[];if(m.q43tags.map(function(x){return x.toLowerCase()}).indexOf(n.toLowerCase())<0)m.q43tags.push(n);render()};
+ZACT.q43how=function(){var m=view.modal;if(m){m.q43how=!m.q43how;render()}};
+// Edit tags (from the Recipes tab, beside Edit categories)
+ZACT.q43tagsed=function(cid){zOpen('q43tags',{cid:cid,del:{}})};
+ZACT.q43tdel=function(i){var m=view.modal;if(m){m.del[i]=1;render()}};
+ZM.q43tags={html:function(m){var c=classById(m.cid);if(!c)return null;var L=q43Tags(c);
+ return '<h3>Recipe tags</h3><p class="hint" style="margin:-4px 0 12px">Rename, remove or add your own. Removing a tag takes it off every recipe.</p>'
+  +L.map(function(t,i){return m.del[i]?'':'<div class="q24crow"><input id="q43t'+i+'" value="'+esc(t)+'" aria-label="Tag name"><button type="button" class="zbtn ghost" data-zact="q43tdel:'+i+'" aria-label="Remove '+esc(t)+'">×</button></div>'}).join('')
+  +'<div class="field" style="margin-top:12px"><label for="q43tnew">Add a tag</label><input id="q43tnew" placeholder="BBQ, Crock pot, Kids love it"></div>'},
+ save:function(m){var c=classById(m.cid);if(!c)return;var L=q43Tags(c),ren={},out=[];
+  L.forEach(function(t,i){var k=t.toLowerCase();if(m.del[i]){ren[k]='';return}var e=document.getElementById('q43t'+i),v=(e&&e.value.trim())||t;if(out.map(function(x){return x.toLowerCase()}).indexOf(v.toLowerCase())<0)out.push(v);if(v!==t)ren[k]=v});
+  var nw=((document.getElementById('q43tnew')||{}).value||'').split(',').map(function(x){return x.trim()}).filter(Boolean);
+  nw.forEach(function(v){if(out.map(function(x){return x.toLowerCase()}).indexOf(v.toLowerCase())<0)out.push(v)});
+  c.recTags=out;touch(c);
+  zRecipes(c).forEach(function(r){var T=q43Split(r.tags),ch=false;T=T.map(function(t){var k=t.toLowerCase();if(k in ren){ch=true;return ren[k]}return t}).filter(Boolean);if(ch){r.tags=T.join(', ');touch(r)}});
+  save();view.modal=null;render()}};
+var _q43Cards=q18RecipeCards;
+q18RecipeCards=function(c){var h=_q43Cards(c);return h.replace('Edit categories</button>','Edit categories</button><button class="q24edit" data-zact="q43tagsed:'+c.id+'">'+zI('<path d="M3 12V4h8l9 9-8 8z"/><circle cx="7.5" cy="8.5" r="1.4"/>',13)+'Edit tags</button>')};
+var _q43Card=q24Card;
+q24Card=function(c,r){var h=_q43Card(c,r),T=q43Split(r.tags);if(!T.length)return h;
+ var tg='<span class="q43ctags">'+T.slice(0,4).map(function(t){return '<span style="'+q43TagCol(t)+'">'+esc(t)+'</span>'}).join('')+(T.length>4?'<span class="more">+'+(T.length-4)+'</span>':'')+'</span>';
+ var k=h.indexOf('<button type="button" class="q39mk"');return k>-1?h.slice(0,k)+tg+h.slice(k):h};
+
+/* ---------- Paste: the link from the clipboard; and, for sites that block apps, the recipe's own words ---------- */
+async function q43Clip(){try{if(navigator.clipboard&&navigator.clipboard.readText)return await navigator.clipboard.readText()}catch(e){}return null}
+ZACT.q43paste=async function(){
+ var m=view.modal;if(!m||m.kind!=='zrecipe')return;var v=await q43Clip();
+ if(v==null){var l=document.getElementById('zp7');if(l)l.focus();zToast('Your phone didn’t let Doable read the copied link. Press and hold in the link box, then tap Paste.');return}
+ v=v.trim();var u=(/(https?:\/\/\S+)/i.exec(v)||[])[1]||(q24IsUrl(v)?v:'');
+ if(!u){zToast(v?'That isn’t a link. Copy the recipe page’s web address first.':'Nothing is copied yet. Copy the recipe’s link first.');return}
+ q24Pull(u);
+};
+ZACT.q43ptext=async function(){
+ var m=view.modal;if(!m)return;var v=await q43Clip();
+ if(v==null){var t=document.getElementById('q43txt');if(t)t.focus();zToast('Press and hold in the box under the button, then tap Paste.');return}
+ if(!v.trim()){zToast('Nothing is copied yet. Copy the ingredients and steps on the recipe page first.');return}
+ q43Apply(v);
+};
+document.addEventListener('paste',function(e){var t=e.target;if(!t||t.id!=='q43txt')return;setTimeout(function(){if(t.value.trim())q43Apply(t.value)},30)});
+// turn copied recipe words into the fields
+function q43Parse(txt){
+ var L=String(txt||'').replace(/\r/g,'').split('\n').map(function(x){return x.replace(/\s+/g,' ').trim()}).filter(Boolean);
+ var junk=/^(deselect all|select all|advertisement|ad|original recipe \(.*|\d\/2x|1x|2x|4x|½x|jump to recipe|print( recipe)?|pin( recipe)?|save( recipe)?|rate( this recipe)?|photo by.*|.*food studios|dotdash meredith.*|watch now|play video)$/i;
+ L=L.filter(function(x){return !junk.test(x)&&!/^(\d\/2x|1x|2x|4x)( (\d\/2x|1x|2x|4x))*$/i.test(x)});
+ var isIng=function(x){return /^ingredients?\b:?$/i.test(x)||/^ingredients? for\b/i.test(x)};
+ var isStep=function(x){return /^(directions|instructions|method|steps|preparation|how to make( it)?|to make)\b:?$/i.test(x)};
+ var isStop=function(x){return /^(nutrition( facts)?|notes?|recipe notes|tips|cook’?'?s notes?|reviews?|comments?|you'?’?ll also love|related|more recipes|storage|equipment)\b:?/i.test(x)};
+ var all=L.join(' '),o={ingr:[],how:''};
+ var num=function(re){var k=re.exec(all);if(!k)return 0;var n=+k[1]||0;if(/h/i.test(k[2]||''))n*=60;if(k[3])n+=+k[3];return n};
+ o.prep=num(/prep(?:aration)? time:?\s*(\d+)\s*(hrs?|hours?|mins?|minutes?)(?:\s*(\d+)\s*mins?)?/i);
+ o.cook=num(/cook(?:ing)? time:?\s*(\d+)\s*(hrs?|hours?|mins?|minutes?)(?:\s*(\d+)\s*mins?)?/i);
+ o.mins=num(/total time:?\s*(\d+)\s*(hrs?|hours?|mins?|minutes?)(?:\s*(\d+)\s*mins?)?/i)||(o.prep+o.cook);
+ var sv=/(?:servings|serves|yield|makes):?\s*(\d+)/i.exec(all);o.serves=sv?+sv[1]:0;
+ var a=-1,b=-1;L.forEach(function(x,i){if(a<0&&isIng(x))a=i;if(b<0&&i>a&&a>-1&&isStep(x))b=i});
+ var steps=[];
+ if(a>-1){
+  var end=b>-1?b:L.length;
+  for(var i=a+1;i<end;i++){if(isStop(L[i]))break;o.ingr.push(L[i])}
+  if(b>-1)for(var j=b+1;j<L.length;j++){if(isStop(L[j]))break;steps.push(L[j])}
+  var head=L.slice(0,a).filter(function(x){return x.length>2&&x.length<90&&!/:/.test(x)&&!/^(by|updated|published)\b/i.test(x)});o.title=head[0]||'';
+ }else{
+  // no headings: short lines that start with an amount are ingredients, longer sentences are steps
+  L.forEach(function(x){if(/^([\d½⅓⅔¼¾⅛]|a |an |one |two |pinch|dash)/i.test(x)&&x.length<80)o.ingr.push(x);else if(x.length>=40)steps.push(x)});
+ }
+ // "Step 1" on its own line belongs to the sentence after it
+ steps=steps.filter(function(x){return !/^step \d+:?$/i.test(x)}).map(function(x){return x.replace(/^(step )?\d+[.)]\s*/i,'')});
+ o.how=steps.map(function(x,i){return (i+1)+'. '+x}).join('\n');
+ return o;
+}
+function q43Apply(txt){
+ var m=view.modal;if(!m||m.kind!=='zrecipe')return;var o=q43Parse(txt);
+ if(!o.ingr.length&&!o.how){zToast('Couldn’t find ingredients or steps in that. Try copying just the ingredients and the steps.');return}
+ var put=function(id,v){var e=document.getElementById(id);if(e&&v!=null&&v!==''&&v!==0)e.value=v};
+ var n=document.getElementById('zp1');if(n&&(!n.value.trim()||q24IsUrl(n.value))&&o.title)n.value=o.title;
+ put('zp5',o.ingr.join('\n'));put('zp6',o.how);put('zp3',o.serves);put('zp8',o.prep);put('zp9',o.cook);put('zp2',o.mins);
+ var ns=o.how?o.how.split('\n').length:0;
+ m.q43done='Sorted: '+o.ingr.length+' ingredient'+(o.ingr.length===1?'':'s')+' and '+ns+' step'+(ns===1?'':'s')+'. Check them over, then Save.';
+ var t=document.getElementById('q43txt');if(t)t.value='';
+ render();zToast(m.q43done);
+}
+// the picked tags go into the (hidden) Tags field just before saving
+var _q43RecSave=ZM.zrecipe.save;
+ZM.zrecipe.save=function(m){var e=document.getElementById('zp4');if(e&&m&&m.q43tags)e.value=m.q43tags.join(', ');return _q43RecSave.apply(this,arguments)};
 
 try{spBoot()}catch(e){}
 load();
