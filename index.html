@@ -4149,6 +4149,17 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
   box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(70,55,40,.05),0 16px 34px -24px rgba(70,55,40,.35)}
 }
 @media(max-width:1199px){.q25pseg{display:none!important}}
+.zshow,.zshow.cur{color:var(--ink)!important;opacity:1!important}
+.zcalbar.zppl{position:relative;padding-right:44px}
+.q26x{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:none;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink2);font-size:17px;line-height:1;display:grid;place-items:center;padding:0;cursor:pointer;min-height:0!important}
+.q26x:hover{background:color-mix(in srgb,var(--ink) 11%,transparent)}
+.q26ppl{display:inline-flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.q26ppl:empty{display:none}
+.q26ppl .zpc{display:inline-flex!important;flex-direction:row!important;width:auto!important;height:auto!important;align-items:center;gap:6px;border-radius:99px;padding:2px 10px 2px 2px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:13px;color:var(--ink);cursor:pointer;min-height:0!important;overflow:visible}
+.q26ppl .zpc i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-style:normal;font-size:11px;font-weight:600}
+.q26ppl .zpc.off{opacity:.45}
+.q26ppl+.zbtn{margin-left:auto!important}.q26ppl:not(:empty)+.zbtn{margin-left:0!important}.q26ppl~[data-zact="evnew"]{margin-left:0!important}
+.q26bdrow{display:flex;align-items:center;gap:12px}.q26bdpv{width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;transition:background .15s}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4477,7 +4488,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v165';
+var BUILD='v167';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17171,6 +17182,44 @@ viewSpaceHome=function(){var h=_q25VSH.apply(this,arguments);
  var seg='<span class="q20dseg q25pseg" role="group" aria-label="Side panel"><em>Side panel</em><button class="'+(S.sidePanel?'':'on')+'" data-zact="q25panel:0">Off</button><button class="'+(S.sidePanel?'on':'')+'" data-zact="q25panel:1">On</button></span>';
  return h.replace('<span class="q20dseg" role="group" aria-label="Card depth">',seg+'<span class="q20dseg" role="group" aria-label="Card depth">');
 };
+
+
+/* ---------- calendar (Work/Personal): no colour dots beside School / Work / Personal; the people card can be
+   closed, and then "+ Add a person" (and anyone you've added) sits beside "+ Add event" (Jae, 2026-10-11) ---------- */
+SETTINGS_KEYS.push('calPplOff');
+ZACT.q26ppl=function(v){S.calPplOff=v==='1';save();render()};
+var _q26Cal=viewCalendar;
+viewCalendar=function(){
+ var h=_q26Cal.apply(this,arguments);
+ h=h.replace(/(<label class="zshow[^"]*"><input[^>]*>)<i style="background:[^"]*"><\/i>/g,'$1');
+ var m=/<div class="zcalbar zppl">([\s\S]*?)<\/div>/.exec(h);if(!m)return h;
+ if(!S.calPplOff)return h.replace('<div class="zcalbar zppl">','<div class="zcalbar zppl"><button class="q26x" data-zact="q26ppl:1" aria-label="Close this and move Add a person up beside Add event" title="Close">×</button>');
+ var chips=(m[1].match(/<button class="zpc(?! add)[\s\S]*?<\/button>/g)||[]).join('');
+ h=h.replace(m[0],'');
+ return h.replace('<button class="zbtn" data-zact="evnew">','<span class="q26ppl">'+chips+'</span><button class="zbtn ghost" data-zact="pplnew">+ Add a person</button><button class="zbtn" data-zact="evnew">');
+};
+
+
+/* ---------- every colour wheel is live (Jae: "cant see it changing colour in real time as I am going through the
+   colour picker", e.g. birthday icons). The pickers that only applied on letting go (birthday icon, habit and
+   category colours, page colour) now apply about 9 times a second while you drag. A redraw would normally
+   replace the picker and close it, so the redraw puts the very same picker element back. ---------- */
+var Q26LIVE='[data-q24bdc],[data-zsoftc],[data-z4cc]',q26In=null,q26T=0;
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.matches||!t.matches('input[type=color]')||!t.matches(Q26LIVE))return;
+ q26In=t;var l=t.closest('label');if(l)l.style.background=t.value;
+ if(q26T)return;q26T=setTimeout(function(){q26T=0;if(!q26In||!document.contains(q26In))return;var ev=new Event('change',{bubbles:true});ev.q26=1;q26In.dispatchEvent(ev)},110)},true);
+document.addEventListener('change',function(e){if(!e.q26&&e.target===q26In)setTimeout(function(){q26In=null},0)},true);
+var _q26Render=render;
+render=function(){
+ var keep=q26In&&document.contains(q26In)?q26In:null,sel=null;
+ if(keep)sel='input[type=color]'+[].slice.call(keep.attributes).filter(function(a){return /^data-/.test(a.name)}).map(function(a){return '['+a.name+'="'+String(a.value).replace(/"/g,'\\"')+'"]'}).join('');
+ var r=_q26Render.apply(this,arguments);
+ if(keep&&!document.contains(keep)){var nw=document.querySelector(sel);if(nw&&nw!==keep){nw.replaceWith(keep);var l=keep.closest('label');if(l)l.style.background=keep.value}}
+ return r;
+};
+// the birthday colour row shows the icon itself, so you can see the colour as you pick it
+var _q26ColRow=q24ColRow;
+q24ColRow=function(cur){var h=_q26ColRow(cur);return h.replace('<div class="zsws">','<div class="q26bdrow"><span class="zav q26bdpv" style="background:'+(cur||Q24BD[0])+'">'+zI(ZIC.cake,16)+'</span><div class="zsws">').replace(/<\/div><\/div>$/,'</div></div></div>')};
 
 try{spBoot()}catch(e){}
 load();
