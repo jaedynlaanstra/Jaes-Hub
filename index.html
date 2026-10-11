@@ -3211,6 +3211,101 @@ input[type=date],input[type=time]{min-width:0;max-width:100%;box-sizing:border-b
 button.zchev{display:inline-grid!important;place-items:center;padding:0!important;line-height:0}
 .zbmo>button.zchev,.zbnav>button.zchev{width:34px;height:34px;border-radius:50%}
 .zbmo>button.zchev:disabled{opacity:.35}
+/* ===== v150 round 11: group cards on To do, and the 1c feel on Notes, Applications, Calendar, Plan and Home ===== */
+/* To do groups: each one its own card, with a header you can't miss */
+.z2list{display:flex;flex-direction:column;gap:14px;min-width:0}
+.z2add{padding:14px 16px 10px!important}
+.z2addrow{display:flex;gap:8px;align-items:center;margin:0!important}
+.z2addrow>.zfw{flex:1 1 auto}
+.z2gsel{flex:0 0 160px;min-width:0;height:42px;border-radius:12px}
+.z2addfoot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px}
+@media(max-width:700px){
+ .z2addrow{display:grid!important;grid-template-columns:minmax(0,1fr) auto}
+ .z2addrow>.zfw{grid-column:1/-1}
+ .z2addrow .z2gsel{grid-column:1/-1;flex:none;width:100%;order:1}
+ .z2addrow .zdatew{order:2}
+ .z2addrow>.zbtn{order:3}
+}
+.z2grp{background:var(--card);border:1px solid #ece8e0;border-radius:22px;overflow:hidden}
+.z2gh{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--gt,#f4f2ee);border-bottom:1px solid color-mix(in srgb,var(--gc,#8d8a7c) 18%,transparent);cursor:pointer;list-style:none;min-width:0}
+.z2gh::-webkit-details-marker{display:none}
+.z2grp:not([open])>.z2gh{border-bottom-color:transparent}
+.z2gt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.z2gt b{font-size:16.5px;font-weight:500;color:#3b3a33;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.z2gt small{font-size:12.5px;color:#6f6b5f}
+.z2late{color:#9c4a41;font-weight:500}
+.z2badge{display:inline-grid;place-items:center;border-radius:12px;flex:none;font-size:14px;font-weight:600;letter-spacing:.02em}
+.z2badge.none{background:rgba(255,255,255,.7);color:#8d8a7c}
+.z2gh .zlogo{border-radius:12px;flex:none}
+.z2gh .zmini{flex:none}
+.z2gh .zsecchev{flex:none;display:grid;place-items:center;color:#8d8a7c;transition:transform .2s}
+.z2gh .zsecchev svg{width:16px;height:16px}
+.z2grp:not([open]) .zsecchev{transform:rotate(-90deg)}
+.z2ring{flex:none}
+.z2gb{padding:4px 16px 12px}
+.z2gb .zadd{margin-top:8px}
+.z2gtag{display:inline-block;margin-left:8px;font-size:11.5px;color:#8d8a7c;background:#f1efea;border-radius:99px;padding:1px 8px;text-decoration:none}
+.z2done .z2gh{background:#f4f2ee}
+.z2plain{padding:6px 16px 10px!important}
+/* Notes: a gallery of note cards */
+.z2notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+@media(max-width:700px){.z2notes{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}}
+.z2note{display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid #ece8e0;border-radius:18px;padding:14px;background:linear-gradient(180deg,var(--nt) 0,var(--nt) 6px,var(--card) 6px);font:inherit;color:var(--ink);cursor:pointer;min-height:150px!important;min-width:0;transition:transform .2s,box-shadow .2s}
+.z2note:hover{transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(0,0,0,.3)}
+.z2nd{font-size:12px;color:var(--nc)}
+.z2note b{white-space:normal;font-size:15.5px;font-weight:500;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.z2nb{font-size:13px;color:#7a766b;line-height:1.45;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;white-space:normal}
+.z2pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.z2page{position:relative;border:1px solid #ece8e0;border-radius:16px;background:repeating-linear-gradient(0deg,transparent 0 17px,#efece6 17px 18px),var(--card)}
+.z2page a{display:flex;flex-direction:column;gap:4px;padding:14px;color:var(--ink);text-decoration:none;min-height:110px}
+.z2page b{font-weight:500;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.z2page small{font-size:12px;color:#8d8a7c}
+.z2pp{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#EAE6ED;color:#83708F;margin-bottom:4px}
+.z2page .cpdots{position:absolute;top:8px;right:8px}
+.z2hr{white-space:nowrap}
+.z2quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.z2quick button{display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid #ece8e0;background:var(--card);border-radius:16px;padding:12px;font:inherit;font-size:13.5px;color:var(--ink);cursor:pointer;min-height:0!important;text-align:left}
+.z2quick .zic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--wt);color:var(--wc)}
+.z2accb{font-size:26px!important;letter-spacing:-.3px!important;line-height:1.2!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+a.z2acclink{display:flex;text-decoration:none}
+/* Applications: most used, as links */
+a.z1li.z2app{text-decoration:none}
+.z2app .cplinkicon,.z2app>img,.z2app>span:first-child:not(:only-child){flex:none}
+.z2app>:first-child{width:28px;height:28px;flex:none}
+/* Calendar: the next seven days */
+.z2day{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid #f0ede7}
+.z2day:last-child{border-bottom:none}
+.z2dd{flex:none;width:40px;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.z2dd b{font-size:19px;font-weight:500;color:#3b3a33}
+.z2dd small{font-size:11.5px;color:#8d8a7c}
+.z2day>div{flex:1;min-width:0;display:flex;flex-direction:column}
+.z2ev{width:100%;box-sizing:border-box;display:flex;align-items:center;gap:8px;border:none;background:none;padding:4px 0;font:inherit;font-size:13.5px;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important;min-width:0}
+.z2ev i{width:8px;height:8px;border-radius:50%;flex:none}
+.z2ev span{min-width:0;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.z2ev em{font-style:normal;color:#8d8a7c}
+.z2ev.done span{text-decoration:line-through;color:var(--ink3)}
+/* Plan my week: the days on a white card */
+.z2plan .zbhw{gap:16px}
+.z2week{padding:12px!important}
+.z2week .zpdays{gap:6px}
+.z2week .zpd{background:#f6f5f1;color:#3b3a33}
+.z2week .zpd:hover{background:#efede7}
+.z2week .zpd.t b{box-shadow:inset 0 0 0 1.6px var(--cp-kplan-c)}
+.z2week .zpd.on{background:var(--cp-kplan-c);color:var(--cp-kplan-on);box-shadow:0 10px 20px -12px rgba(0,0,0,.4)}
+.z2week .zpd.on b{background:#fff;color:var(--cp-kplan-c)}
+.z2week .zpddots i,.z2week .zpdmini span>i{box-shadow:none}
+.z2week .zpd.dropover{outline-color:var(--cp-kplan-c)}
+.z2plan .zbrail .zptray{background:var(--card);border:none;border-radius:22px;padding:14px 12px 8px}
+.z2plan .zbrail .zpchips{gap:3px}
+.z2plan .zbrail .zpc span{font-size:10px}
+.z2plan .zbrail .zptrh{flex-wrap:wrap;row-gap:8px}
+.z2plan .zbrail .zptrh h3{white-space:nowrap}
+.z2plan .zbrail .zpauto{margin-left:0;flex-basis:100%;justify-content:center;padding:8px 12px;font-size:13px}
+.z2plan .zbleft .zpday{border-color:#ece8e0}
+@media(min-width:1100px){.z2plan .zbrail{position:sticky;top:12px}}
+/* Home: the Today card sits in its widget slot */
+.z2home .zbhero{margin:0}
+.z2home .zbhero.ph{border:none;background:transparent;padding:6px 0 0}
 </style>
 </head>
 <body>
@@ -3519,7 +3614,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v149';
+var BUILD='v150';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -14288,6 +14383,214 @@ var _q10Render=render;
 render=function(){var before=app.firstElementChild;_q10Render.apply(this,arguments);if(app.firstElementChild!==before)q10Chevs()};
 // redraw when the window crosses the computer / phone layout on any page
 (function(){var was=z1Wide();window.addEventListener('resize',function(){var now=z1Wide();if(now!==was){was=now;var c=view.classId&&classById(view.classId);if(c&&c.kind)render()}})})();
+
+
+/* ======================= ROUND 11 (v150): groups as clear cards, and the 1c feel on Notes, Applications,
+   Calendar, Plan my week and Home =======================
+   Jae: "make sure that I can see clear dividers in my task page for my groups. For example, I love putting in
+   clients for work and then under each client saying what is due." To-do sections are now called groups and
+   each one is its own card with a header (badge, what's open, late and next due, a small ring). */
+
+/* ---------- To do: every group is its own card ---------- */
+function z2Badge(name,sz){
+ var dom=typeof zBrandDomain==='function'?zBrandDomain(name):null;
+ if(dom)return zLogo(name,sz);
+ var k=ZC[zHueOf(name)]||ZC.grey,w=String(name||'?').trim().split(/\s+/),ini=(w[0]||'?').charAt(0)+(w[1]?w[1].charAt(0):'');
+ return '<span class="z2badge" style="width:'+sz+'px;height:'+sz+'px;background:'+k[0]+';color:'+k[1]+'">'+esc(ini.toUpperCase())+'</span>';
+}
+function z2MiniRing(pct,col){var r=11,C=2*Math.PI*r;return '<svg class="z2ring" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="'+r+'" fill="none" stroke="#ece8e0" stroke-width="4"/>'+(pct>0?'<circle cx="14" cy="14" r="'+r+'" fill="none" style="stroke:'+col+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+(C*pct/100).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 14 14)"/>':'')+'</svg>'}
+function z2TodoList(c){
+ var td=iso(today()),secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var T=c.tasks||[],open=T.filter(function(t){return !t.done}).sort(z1ByDue),done=T.filter(function(t){return t.done});
+ var inG=function(sid){return open.filter(function(t){return sid?t.sec===sid:!(t.sec&&ids[t.sec])})};
+ var key=c.id;
+ // one box to add a task, with a group picker (it remembers the last group you picked)
+ var lastG='';try{lastG=localStorage.getItem('hub:z2grp:'+c.id)||''}catch(e){}if(!ids[lastG])lastG='';
+ var add='<section class="zcard z2add"><div class="zadd z2addrow"><span class="zfw"><input id="zadd-'+key+'" data-zenter="z2add:'+c.id+'" placeholder="Add a task'+(secs.length?', then pick its group':'')+'" autocomplete="off"></span>'
+  +'<span class="zdatew empty"><input type="date" id="zaddd-'+key+'" aria-label="Due date"><span class="zdph" aria-hidden="true">Due date</span></span>'
+  +(secs.length?'<select id="z2g-'+key+'" class="z2gsel" aria-label="Group"><option value="">No group</option>'+secs.map(function(s){return '<option value="'+s.id+'"'+(lastG===s.id?' selected':'')+'>'+esc(s.name)+'</option>'}).join('')+'</select>':'')
+  +'<button class="zbtn" data-zact="z2add:'+c.id+'">Add</button></div>'
+  +'<div class="z2addfoot"><span class="zsoft">'+open.length+' to do'+(secs.length?' in '+secs.length+' group'+(secs.length===1?'':'s'):'')+'</span><button class="zlink" data-zact="secnew:'+c.id+'">+ New group</button></div></section>';
+ var grp=function(s){
+  var L=s?inG(s.id):inG(''),all=T.filter(function(t){return s?t.sec===s.id:!(t.sec&&ids[t.sec])}),dn=all.filter(function(t){return t.done}).length;
+  var late=L.filter(function(t){return t.due&&t.due<td}).length,nx=L.filter(function(t){return t.due})[0],k=s?(ZC[zHueOf(s.name)]||ZC.grey):ZC.grey;
+  var shut=s&&zSecShut(s.id);
+  var meta=[L.length+' to do'];if(late)meta.push('<span class="z2late">'+late+' late</span>');if(nx)meta.push('next due '+esc(nx.due===td?'today':zShortDay(nx.due)));
+  return '<details class="z2grp" '+(s?'data-zsecfold="'+s.id+'"':'')+(shut?'':' open')+' style="--gt:'+k[0]+';--gc:'+k[1]+'"><summary class="z2gh">'
+   +(s?z2Badge(s.name,40):'<span class="z2badge none" style="width:40px;height:40px">'+zI(ZIC.list,18)+'</span>')
+   +'<span class="z2gt"><b>'+esc(s?s.name:'Not in a group')+'</b><small>'+meta.join(' · ')+'</small></span>'
+   +(all.length?z2MiniRing(all.length?dn/all.length*100:0,k[1]):'')
+   +(s?'<button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename, move or remove '+esc(s.name)+'">'+zI(ZIC.dots,16)+'</button>':'')
+   +'<span class="zsecchev">'+CP_ICO.chev+'</span></summary>'
+   +'<div class="z2gb">'+(L.length?L.map(function(t){return zTaskRow(c,t)}).join(''):'<p class="zempty">Nothing due'+(s?' for '+esc(s.name):'')+'. Add a task below.</p>')
+   +zAddRow(c,s?s.id:'',false,s?'Add a task for '+s.name:'Add a task')+'</div></details>';
+ };
+ var h=add;
+ if(!secs.length){
+  h+='<section class="zcard z2plain">'+(open.length?open.map(function(t){return zTaskRow(c,t)}).join(''):'<p class="zempty">Nothing to do. Add a task above, or make a group for each client or project.</p>')+'</section>';
+ }else{
+  if(inG('').length)h+=grp(null);
+  h+=secs.map(grp).join('');
+ }
+ if(done.length)h+='<details class="z2grp z2done"><summary class="z2gh"><span class="z2badge none" style="width:40px;height:40px">'+zI(ZIC.check,18)+'</span><span class="z2gt"><b>Done</b><small>'+done.length+' finished</small></span><span class="zsecchev">'+CP_ICO.chev+'</span></summary><div class="z2gb">'
+  +done.map(function(t){var s=t.sec&&ids[t.sec]&&secs.filter(function(x){return x.id===t.sec})[0];return zTaskRow(c,t).replace('</button><span class="zdue',(s?'<span class="z2gtag">'+esc(s.name)+'</span>':'')+'</button><span class="zdue')}).join('')
+  +'<button class="zlink" data-zact="cleardone:'+c.id+'">Clear finished tasks</button></div></details>';
+ return '<div class="z2list">'+h+'</div>';
+}
+ZACT.z2add=function(cid){
+ var c=classById(cid),t=zv('zadd-'+cid);if(!c||!t)return;
+ var g=zv('z2g-'+cid),due=zv('zaddd-'+cid),x=touch({id:uid(),title:t,due:due,done:false});if(g)x.sec=g;if(due&&S.autoPlan)x.plan=[due];
+ try{localStorage.setItem('hub:z2grp:'+cid,g||'')}catch(e){}
+ c.tasks.push(x);save();render();setTimeout(function(){var i=document.getElementById('zadd-'+cid);if(i)i.focus()},30);
+};
+// "Section" is called "group" on to-do pages
+var _q11SecHtml=ZM.zsec.html;
+ZM.zsec.html=function(m){var h=_q11SecHtml(m),c=classById(m.cid);if(!h||!c||c.kind!=='todo')return h;
+ return h.replace('<h3>Section</h3>','<h3>Group</h3>').replace('<h3>Add a section</h3>','<h3>Add a group</h3>').replace('placeholder="Content creation, errands"','placeholder="A client, a project, errands"')
+  .replace('Group tasks that belong together. Each section has its own Add box.','Make one for each client or project, then add what’s due under it. Each group gets its own card.')};
+var _q11SecDel=ZACT.secdel;
+ZACT.secdel=function(cid,sid){var c=classById(cid);if(c&&c.kind==='todo'){if(!confirm('Remove this group? Its tasks stay, under “Not in a group”.'))return;c.sections=c.sections.filter(function(x){return x.id!==sid});c.tasks.forEach(function(t){if(t.sec===sid){t.sec='';touch(t)}});save();view.modal=null;render();return}return _q11SecDel.apply(this,arguments)};
+// the To do page uses the group cards (z1Todo built its list from the old one)
+var _q11Z1Todo=z1Todo;
+z1Todo=function(c){
+ var h=_q11Z1Todo(c),old=_q10List(c),neu=z2TodoList(c);
+ h=h.split(old).join(neu);
+ return h.replace('<h3>Sections</h3>','<h3>Groups</h3>').replace('>To do</button>','>To do</button>');
+};
+
+/* ---------- Notes ---------- */
+var _q11Notes=zNotesPage;
+zNotesPage=function(c){
+ var L=c.items.filter(function(x){return x.t==='note'}).sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1}),F=FILES[c.id]||[];
+ var td=iso(today()),ws=iso(weekStart(0)),mo=td.slice(0,7),Z=z1Soft(c);
+ var wk=L.filter(function(x){return (x.date||'')>=ws}).length,mn=L.filter(function(x){return (x.date||'').slice(0,7)===mo}).length;
+ var words=L.reduce(function(s,x){return s+((x.body||'').trim()?(x.body||'').trim().split(/\s+/).length:0)},0),tot=L.length+F.length;
+ var hero=z1Hero({pct:tot?Math.max(6,mn/Math.max(1,L.length)*100):0,big:String(tot),cap:tot===1?'note':'notes and pages',col:Z[1],track:Z[0],
+  tiles:[['sav','note','This week',String(wk),'typed notes'],['use','cal','This month',String(mn),esc(today().toLocaleDateString('en-CA',{month:'long'}))],
+   ['in','pen','Handwritten',String(F.length),F.length?'pages to write on':'Start one with your Pencil'],['out','list','Words',words.toLocaleString('en-CA'),'written so far']],
+  mini:[['note',L.length+' typed'],['pen',F.length+' handwritten'],['list',words.toLocaleString('en-CA')+' words']]});
+ var tile=function(x){var k=ZC[zHueOf(x.title||x.id)]||ZC.grey;return '<button class="z2note" data-zact="noteedit:'+c.id+':'+x.id+'" style="--nt:'+k[0]+';--nc:'+k[1]+'"><span class="z2nd">'+esc(x.date?zShortDay(x.date):'')+'</span><b>'+esc(x.title||'Untitled')+'</b><span class="z2nb">'+esc((x.body||'').slice(0,220))+'</span></button>'};
+ var pages=F.map(function(f,i){return '<div class="z2page"><a href="#" data-mkopen="'+i+'" data-c="'+c.id+'"><span class="z2pp">'+zI(ZIC.pen,20)+'</span><b>'+esc(f.name)+'</b><small>Handwritten</small></a><button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">'+CP_ICO.more+'</button></div>'}).join('');
+ var adds='<span class="zsoft z2hr"><button class="zlink" data-zact="notenew:'+c.id+'">+ Typed note</button> · <button class="zlink" data-zact="notepen:'+c.id+'">+ Handwritten page</button></span>';
+ var notesC=z1Card('Notes',adds,L.length?'<div class="z2notes">'+L.map(tile).join('')+'</div>':'<p class="zempty">Type a note, like what was said in a meeting and what to do next.</p>');
+ var pagesC=z1Card('Handwritten pages','<button class="zlink" data-zact="notepen:'+c.id+'">+ New page</button>',F.length?'<div class="z2pages">'+pages+'</div>':'<p class="zempty">Pages you write on with your Pencil or finger show here.</p>');
+ var last=L[0],acc=last?z1Accent('Latest note','note',esc(last.title||'Untitled'),esc(last.date?zShortDay(last.date):''),'noteedit:'+c.id+':'+last.id):z1Accent('Latest note','note','None yet','Your newest note shows here','notenew:'+c.id);
+ acc=acc.replace('<b>','<b class="z2accb">');
+ var cols=[];for(var i=5;i>=0;i--){var m=zMoShift(mo,-i);cols.push({label:zMoName(m),v:L.filter(function(x){return (x.date||'').slice(0,7)===m}).length,d:0,on:m===mo})}
+ cols.forEach(function(x){x.d=x.v});
+ var months=z1Card('Last six months','',z1Cols(cols));
+ var quick=z1Card('Start something','','<div class="z2quick"><button data-zact="notenew:'+c.id+'"><span class="zic" style="'+zcv('sand')+'">'+zI(ZIC.note,18)+'</span>Typed note</button><button data-zact="notepen:'+c.id+'"><span class="zic" style="'+zcv('lavender')+'">'+zI(ZIC.pen,18)+'</span>Handwritten page</button></div>');
+ return z1Page({key:c.id+'-notes',hero:hero,left:notesC+pagesC,rail:acc+quick+months,pin:acc,chips:[['notes','Notes',notesC],['pages','Handwritten',pagesC],['months','Months',quick+months]]});
+};
+
+/* ---------- Applications / Resources ---------- */
+function z2AppUse(){try{return JSON.parse(localStorage.getItem('hub:appuse')||'{}')}catch(e){return {}}}
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.zapp a[href],.z2app a[href]');if(!a)return;var u=z2AppUse(),k=a.getAttribute('href');u[k]={n:((u[k]&&u[k].n)||0)+1,at:Date.now()};try{localStorage.setItem('hub:appuse',JSON.stringify(u))}catch(err){}},true);
+var _q11Apps=zAppsPage;
+zAppsPage=function(c){
+ var L=c.links||[],F=FILES[c.id]||[],U=z2AppUse(),Z=z1Soft(c);
+ var used=L.map(function(l,i){return {l:l,i:i,n:(U[l.url]&&U[l.url].n)||0,at:(U[l.url]&&U[l.url].at)||0}});
+ var top=used.filter(function(x){return x.n}).sort(function(a,b){return b.n-a.n}),lastO=used.filter(function(x){return x.at}).sort(function(a,b){return b.at-a.at})[0];
+ var opens=used.reduce(function(s,x){return s+x.n},0);
+ var ago=function(t){var m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' days ago'};
+ var hero=z1Hero({pct:L.length?100:0,big:String(L.length),cap:L.length===1?'app or site':'apps and sites',col:Z[1],track:Z[0],
+  tiles:[['in','grid','Apps and sites',String(L.length),L.length?'one tap to open':'Add the ones you use most'],['use','note','Files',String(F.length),F.length?'handbooks and forms':'Upload a handbook or form'],
+   ['sav','star','Most used',top[0]?esc(top[0].l.title):'–',top[0]?top[0].n+' open'+(top[0].n===1?'':'s')+' on this device':'Shows once you open a few'],['out','clock','Last opened',lastO?esc(lastO.l.title):'–',lastO?ago(lastO.at):'Nothing opened yet']],
+  mini:[['grid',L.length+' apps'],['note',F.length+' files'],['star',opens+' opens']]});
+ var orig=_q11Apps(c),i2=orig.indexOf('<section class="zcard',5),appsC=i2>0?orig.slice(0,i2):orig,filesC=i2>0?orig.slice(i2):'';
+ var mostC=z1Card('Most used','',top.length?top.slice(0,5).map(function(x){return '<a class="z1li z2app" href="'+esc(x.l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(x.l.url,x.l.title,x.l.icon)+'<span>'+esc(x.l.title)+'</span><em>'+x.n+'</em></a>'}).join(''):'<p class="zempty">The apps you open most on this device show up here.</p>');
+ var acc=lastO?'<a class="zbpay z2acclink" href="'+esc(lastO.l.url)+'" target="_blank" rel="noopener" data-phoneapp="1" style="background:'+chromeHex('sideBg')+';color:#fff"><span class="zbtl">'+zI(ZIC.clock,14)+'Open again</span><b class="z2accb">'+esc(lastO.l.title)+'</b><small>Last opened '+ago(lastO.at)+'</small></a>'
+  :z1Accent('Your apps','grid',String(L.length),'Tap one to open it','');
+ return z1Page({key:c.id+'-apps',hero:hero,left:appsC+filesC,rail:acc+mostC,pin:acc,chips:[['apps','Apps',appsC],['files','Files',filesC],['most','Most used',mostC]]});
+};
+
+/* ---------- Calendar: a ring for today and a rail with what's next ---------- */
+var _q11Cal=viewCalendar;
+viewCalendar=function(){
+ var orig=_q11Cal(),sp=curSpace(),td=iso(today()),ws=iso(weekStart(0)),we=zAddDays(ws,6),end=zAddDays(td,7);
+ var A=allTasks().filter(function(x){return !isRefClass(x.c)&&x.t.due});
+ var tdy=A.filter(function(x){return x.t.due===td}),wk=A.filter(function(x){return x.t.due>=ws&&x.t.due<=we}),wkd=wk.filter(function(x){return x.t.done});
+ var late=A.filter(function(x){return !x.ev&&!x.t.done&&x.t.due<td});
+ var up=A.filter(function(x){return x.t.due>=td&&x.t.due<=end&&!(x.t.done&&!x.ev)}).sort(function(a,b){var p=a.t.due+(a.t.time||'99'),q=b.t.due+(b.t.time||'99');return p<q?-1:p>q?1:0});
+ var bd=A.filter(function(x){return x.t.rep==='year'&&x.t.due>=td}).sort(function(a,b){return a.t.due<b.t.due?-1:1});
+ var Z=ZC.mist,lbl=function(x){return esc(x.t.title)},col=function(x){return palHex(x.c.color)};
+ var hero=z1Hero({pct:wk.length?wkd.length/wk.length*100:0,big:String(tdy.length),cap:tdy.length===1?'thing today':'things today',col:Z[1],track:Z[0],
+  tiles:[['sav','sun','Today',String(tdy.length),tdy.length?lbl(tdy[0]):'A free day'],['use','cal','This week',String(wk.length),wk.length?wkd.length+' done or past':'Nothing on'],
+   ['out','clock','Late',String(late.length),late.length?lbl(late[0]):'All caught up'],
+   sp==='personal'?['in','cake','Next birthday',bd[0]?esc(bd[0].t.title.replace(/[’']s birthday$/i,'')):'–',bd[0]?esc(zShortDay(bd[0].t.due)):'Add birthdays to see them']:['in','list','Next 7 days',String(up.length),'events and due dates']],
+  mini:[['sun',tdy.length+' today'],['cal',wk.length+' this week'],['clock',late.length+' late']]});
+ var nx=up.filter(function(x){return !x.t.done||x.ev})[0];
+ var acc=nx?z1Accent('Next up','clock',esc(nx.t.due===td?(nx.t.time?fmtTime(nx.t.time):'Today'):z1When(nx.t.due)),'<span>'+lbl(nx)+'</span><span>'+esc(zShortDay(nx.t.due))+(nx.t.time&&nx.t.due!==td?' · '+esc(fmtTime(nx.t.time)):'')+'</span>','taskedit:'+nx.c.id+':'+nx.t.id)
+  :z1Accent('Next up','check','All clear','Nothing in the next week','');
+ var byDay={};up.forEach(function(x){(byDay[x.t.due]=byDay[x.t.due]||[]).push(x)});
+ var agenda=z1Card('Next 7 days','',Object.keys(byDay).length?Object.keys(byDay).sort().map(function(k){
+   return '<div class="z2day"><span class="z2dd"><b>'+parseISO(k).getDate()+'</b><small>'+esc(k===td?'Today':parseISO(k).toLocaleDateString('en-CA',{weekday:'short'}).replace('.',''))+'</small></span><div>'
+    +byDay[k].map(function(x){return '<button class="z2ev'+(x.t.done&&!x.ev?' done':'')+'" data-zact="taskedit:'+x.c.id+':'+x.t.id+'"><i style="background:'+col(x)+'"></i><span>'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em> ':'')+lbl(x)+'</span></button>'}).join('')+'</div></div>'}).join('')
+  :'<p class="zempty">Nothing in the next seven days.</p>');
+ var bdC=sp==='personal'?z1Card('Birthdays coming up','<button class="zlink" data-zact="caltab:bd">All ›</button>',bd.length?bd.slice(0,3).map(function(x){return z1Li(lbl(x),esc(z1When(x.t.due)),'taskedit:'+x.c.id+':'+x.t.id,'','<i class="z1ck" style="background:#F0E6EB;color:#9A6580">'+zI(ZIC.cake,12)+'</i>')}).join(''):'<p class="zempty">Add birthdays and anniversaries to count down to them.</p>'):'';
+ return z1Page({key:'cal-'+sp,hero:hero,left:orig,rail:acc+agenda+bdC,pin:acc,chips:[['month','Month',orig],['next','Next 7 days',agenda+bdC]]});
+};
+
+/* ---------- Plan my week: the ring card, a white week strip, the day, and Needs a day in the rail ---------- */
+var _q11Plan=viewPlan;
+viewPlan=function(){
+ var orig=_q11Plan(),P=planData(),td=P.td,days=P.days,byDay=P.byDay,off=P.off,sel=view.planSel;
+ var get=function(cls){var i=orig.indexOf('<section class="'+cls+'"');if(i<0)return '';var depth=0,re=/<section\b|<\/section>/g,m;re.lastIndex=i;while((m=re.exec(orig))){if(m[0]==='</section>'){depth--;if(!depth)return orig.slice(i,m.index+10)}else depth++}return ''};
+ var heroOld=get('zphero'),panel=get('zpday'),tray=get('zptray');
+ var hi=orig.indexOf('<div class="zphelp">'),help=hi>-1?orig.slice(hi,orig.indexOf('</button></div>',hi)+15):'';
+ var gi=orig.indexOf('<div class="cpsettings');var G=gi>-1?orig.slice(gi,orig.lastIndexOf('</div></div></div>')):'';
+ var dIdx=heroOld.indexOf('<div class="zpdays">'),strip=dIdx>-1?heroOld.slice(dIdx,heroOld.lastIndexOf('</section>')):'';
+ var plannedN=0,doneN=0;days.forEach(function(k){byDay[k].forEach(function(x){plannedN++;if(x.t.done)doneN++})});
+ var dueWeek=P.all.filter(function(x){return x.t.due&&x.t.due>=days[0]&&x.t.due<=days[6]&&!x.t.done}).length;
+ var tdL=(byDay[td]||[]),tdDone=tdL.filter(function(x){return x.t.done}).length;
+ var Z=ZC.lavender,real=cpSiteColors('plan');
+ var hero=z1Hero({pct:plannedN?doneN/plannedN*100:0,big:plannedN?doneN+'/'+plannedN:'0',cap:plannedN?'done this week':'planned so far',col:Z[1],track:Z[0],
+  tiles:[['use','cal','Planned',String(plannedN),'for this week'],['in','check','Done',String(doneN),plannedN?Math.round(doneN/plannedN*100)+'% of the plan':'Tick things off on the day'],
+   ['out','list','Needs a day',String(P.tray.length),P.tray.length?esc(P.tray[0].t.title):'Everything has a day'],['sav','clock','Due this week',String(dueWeek),'still to finish']],
+  mini:[['cal',plannedN+' planned'],['check',doneN+' done'],['list',P.tray.length+' need a day']]});
+ var label=off===0?'This week':off===1?'Next week':off===-1?'Last week':off>1?'In '+off+' weeks':(-off)+' weeks ago';
+ var fd=function(k,o){return parseISO(k).toLocaleDateString('en-CA',o).replace(/\./g,'')};
+ var sameMo=parseISO(days[0]).getMonth()===parseISO(days[6]).getMonth();
+ var nav='<div class="zbhead"><div class="zbmo"><button data-zact="pwk:-1" aria-label="Previous week">‹</button><b>'+esc(label)+' · '+esc(fd(days[0],{month:'short',day:'numeric'})+' – '+fd(days[6],sameMo?{day:'numeric'}:{month:'short',day:'numeric'}))+'</b><button data-zact="pwk:1" aria-label="Next week">›</button>'+(off?'<button class="zlink" data-zact="pwk:0">This week</button>':'')+'</div></div>';
+ var week='<section class="zbcard z2week">'+strip+'</section>';
+ var nxt=tdL.filter(function(x){return !x.t.done})[0];
+ var acc=off===0?z1Accent('Today','sun',tdL.length?tdDone+' of '+tdL.length:'Free',tdL.length?(nxt?'<span>Next: '+esc(nxt.t.title)+'</span>':'<span>All done for today</span>'):'Nothing planned for today','psel:'+td):'';
+ var css=cpVarStyle(real);
+ var wrap=function(h){return '<div class="cpsplit cpwide" style="'+css+'"><div class="cpmain"><div class="zplan z2plan">'+h+'</div></div></div>'};
+ return wrap(help+z1Page({key:'plan',top:nav,hero:hero,left:week+panel,rail:acc+tray,pin:week,chips:[['day','The day',panel],['tray','Needs a day',tray]]})+G);
+};
+
+/* ---------- Home: a "Today" ring card at the top of every space (a widget you can move or remove) ---------- */
+function z2HomeHero(){
+ var sp=curSpace(),td=iso(today()),ws=iso(weekStart(0)),we=zAddDays(ws,6);
+ view.noEv=true;var A;try{A=allTasks().filter(function(x){return !isRefClass(x.c)&&!x.ev})}finally{view.noEv=false}
+ var todays=A.filter(function(x){return x.t.due===td||planDay(x.t)===td}),tdone=todays.filter(function(x){return x.t.done});
+ var late=A.filter(function(x){return !x.t.done&&x.t.due&&x.t.due<td}),wk=A.filter(function(x){return !x.t.done&&x.t.due&&x.t.due>=td&&x.t.due<=we});
+ var hab=[],hdone=0;S.classes.forEach(function(c){if(c.kind!=='habits'||c.space!==sp)return;zHabits(c).forEach(function(h){if(zHabitOn(h,td)){hab.push(h);if(zHabitDone(c,h,td))hdone++}})});
+ var total=todays.length+hab.length,dn=tdone.length+hdone,left=total-dn;
+ var side=chromeHex('sideBg'),Z=[hsl2hex.apply(null,(function(){var q=rgb2hsl.apply(null,hex2rgb(side));return [q[0],Math.min(q[1],22),91]})()),side];
+ var hero=z1Hero({pct:total?dn/total*100:0,big:total?String(left):'0',cap:total?(left?'left for today':'all done today'):'nothing for today',col:Z[1],track:Z[0],
+  tiles:[['sav','sun','Today',String(todays.length),todays.length?esc((todays.filter(function(x){return !x.t.done})[0]||todays[0]).t.title):'Nothing due or planned'],
+   ['out','clock','Late',String(late.length),late.length?esc(late[0].t.title):'All caught up'],
+   ['use','cal','This week',String(wk.length),'still due by Sunday'],
+   hab.length?['in','flame','Habits',hdone+' of '+hab.length,'ticked today']:['in','check','Done today',String(tdone.length),tdone.length?'nicely done':'Tick things off as you go']],
+  mini:[['sun',todays.length+' today'],['clock',late.length+' late'],['cal',wk.length+' this week']]});
+ return '<div class="z2home">'+hero+'</div>';
+}
+WDEF.today1c={name:'Today',desc:'A big ring for today, with late, this week and habits',sp:'all',legacy:1,col:'main',size:'full',r:function(){return z2HomeHero()}};
+var _q11Sizes=zwSizes;
+zwSizes=function(type){return type==='today1c'?['full']:_q11Sizes(type)};
+['school','work','personal'].forEach(function(sp){if(DEFAULT_W[sp]&&!DEFAULT_W[sp].some(function(d){return d[0]==='today1c'}))DEFAULT_W[sp].unshift(['today1c','main','full'])});
+// add it once to the top of every saved layout (phone, iPad and computer)
+function q11Migrate(){
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.h1c)return;if(sbUser&&!S.everSynced)return;
+ var H=S.homeW||{},ch=false;
+ Object.keys(H).forEach(function(k){var L=H[k];if(L&&L.length&&!L.some(function(w){return w.type==='today1c'})){L=[{id:'w-today1c',type:'today1c',col:'main',size:'full'}].concat(L);H[k]=L;ch=true}});
+ if(ch)S.homeW=Object.assign({},H);
+ S.spacesInit=Object.assign({},S.spacesInit,{h1c:true});save();
+}
+var _q11Load=load;
+load=async function(){await _q11Load();try{q11Migrate()}catch(e){}render()};
 
 
 try{spBoot()}catch(e){}
