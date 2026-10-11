@@ -4402,7 +4402,8 @@ body.q39lock{overflow:hidden}
 .q39src{display:block;padding:0 28px 22px;font-size:13.5px;color:var(--ink2)}
 @media(max-width:760px){.q39body{grid-template-columns:minmax(0,1fr)}.q39ing{border-right:none;border-bottom:1px solid var(--line)}.q39hero{height:190px}.q39ht h2{font-size:24px}.q39serv,.q39body>section,.q39ht{padding-left:18px;padding-right:18px}.q39step{margin-left:0}#q39cook{padding:10px 8px 120px}}
 #q39dock{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);transform:translateX(-50%);z-index:9500;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 24px)}
-.q39tm{display:flex;align-items:center;gap:8px;background:#2b2a27;color:#fff;border-radius:99px;padding:6px 6px 6px 14px;box-shadow:0 12px 28px -10px rgba(0,0,0,.5);animation:q39in .25s ease}
+.q39tm{display:flex;align-items:center;gap:8px;background:#2b2a27;color:#fff;border-radius:99px;padding:6px 6px 6px 14px;box-shadow:0 12px 28px -10px rgba(0,0,0,.5)}
+.q39tm.fresh{animation:q39in .25s ease}
 .q39tm b{font-size:16px;font-variant-numeric:tabular-nums;min-width:52px}
 .q39tl{font-size:12px;opacity:.7;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .q39tm button{width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;min-height:0!important}
@@ -4410,6 +4411,20 @@ body.q39lock{overflow:hidden}
 .q39tm.done{background:#b0503f;animation:q39pulse 1s ease-in-out infinite}
 @keyframes q39pulse{50%{transform:scale(1.05)}}
 @keyframes zfade{from{opacity:0}to{opacity:1}}
+/* v186 */
+.q39ing li button,.q39ing li span{white-space:normal!important;min-width:0;overflow-wrap:anywhere}
+.q39ing li span{flex:1}
+.q39st p{overflow-wrap:anywhere}
+.q39mk{position:static!important;opacity:1!important;transform:none!important;align-self:flex-start;margin-top:2px}
+.q18rec .q18rtx{padding-bottom:0}
+.q40cat{margin:0 0 16px;border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+.q40cat>summary{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;list-style:none}
+.q40cat>summary::-webkit-details-marker{display:none}
+.q40l{font-size:13px;color:var(--ink3)}
+.q40cat>summary b{font-weight:500;font-size:15px}.q40cat>summary b em{font-style:normal;color:var(--ink3);font-size:12.5px}
+.q40chev{margin-left:auto;display:inline-flex;color:var(--ink3);transition:transform .2s}.q40chev svg{width:16px;height:16px}
+.q40cat[open] .q40chev{transform:rotate(180deg)}
+.q40list{padding:4px 12px 14px;margin:0!important}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4738,7 +4753,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v185';
+var BUILD='v186';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -18013,6 +18028,35 @@ q24Card=function(c,r){var h=_q39Card(c,r);
  return h.replace(/^<button class="q18rec"/,'<div class="q18rec" role="button" tabindex="0"').replace(/<\/button>$/,'<button type="button" class="q39mk" data-zact="q39make:'+c.id+':'+r.id+'">'+zI('<path d="M7 4l12 8-12 8z"/>',12)+' Make now</button></div>')};
 var _q39RH=ZM.zrecipe.html;
 ZM.zrecipe.html=function(m){var h=_q39RH(m);if(!h||!m.id)return h;return h.replace(/(<h3>[^<]*<\/h3>)/,'$1<button type="button" class="zbtn q39mkb" data-zact="q39make:'+m.cid+':'+m.id+'">'+zI('<path d="M7 4l12 8-12 8z"/>',13)+' Make now</button>')};
+
+
+/* ---------- v186: recipe fixes (Jae: words cut off; categories as a dropdown on phone and iPad) ---------- */
+// bullets / dashes / boxes at the start of an ingredient are dropped, so the amount after them scales
+var _q40Scale=q39Scale;
+q39Scale=function(line,k){return _q40Scale(String(line).replace(/^\s*(?:[•·▪▫◦‣∙*–-]|▢|☐|□)\s*/,''),k)};
+// Make now sits under the chips on the card (it was on top of them)
+q24Card=function(c,r){var h=_q39Card(c,r);
+ return h.replace(/^<button class="q18rec"/,'<div class="q18rec" role="button" tabindex="0"').replace(/<\/button>$/,'</div>')
+  .replace('</span><span class="q18plate','<button type="button" class="q39mk" data-zact="q39make:'+c.id+':'+r.id+'">'+zI('<path d="M7 4l12 8-12 8z"/>',12)+' Make now</button></span><span class="q18plate')};
+// phones and iPads: the recipe categories fold into one dropdown
+var _q40Cards=q18RecipeCards;
+q18RecipeCards=function(c){var h=_q40Cards(c);if(window.innerWidth>=1100)return h;
+ var m=/<div class="q24chips">([\s\S]*?)<\/div>/.exec(h);if(!m)return h;
+ var on=/<button class="on[^"]*"[^>]*>([\s\S]*?)<\/button>/.exec(m[1]),label=on?on[1].replace(/<em>/,' <em>'):'All';
+ return h.replace(m[0],'<details class="q40cat"><summary><span class="q40l">Category</span><b>'+label+'</b><span class="q40chev">'+CP_ICO.chev+'</span></summary><div class="q24chips q40list">'+m[1]+'</div></details>')};
+
+
+/* ---------- timers no longer blink every second: the dock is rebuilt only when timers are added, removed or
+   paused; each second just updates the numbers (rebuilding replayed the fade-in animation) ---------- */
+var q41Sig='';
+q39Dock=function(){var d=document.getElementById('q39dock');if(!Q39T.length){if(d)d.remove();q41Sig='';return}
+ if(!d){d=document.createElement('div');d.id='q39dock';document.body.appendChild(d);q41Sig=''}
+ var sig=Q39T.map(function(t){return t.name+'|'+(t.end?1:0)+'|'+(q39Left(t)===0?1:0)}).join(';');
+ if(sig===q41Sig&&d.children.length===Q39T.length){Q39T.forEach(function(t,i){var l=q39Left(t),b=d.children[i]&&d.children[i].querySelector('b');if(b)b.textContent=l===0?'Done!':q39Clock(l)});return}
+ var prev=d.children.length;q41Sig=sig;
+ d.innerHTML=Q39T.map(function(t,i){var l=q39Left(t);return '<div class="q39tm'+(i>=prev?' fresh':'')+(l===0?' done':'')+(t.end?'':' paused')+'"><span class="q39tl">'+esc(t.name)+'</span><b>'+(l===0?'Done!':q39Clock(l))+'</b>'
+  +(l===0?'':'<button type="button" data-q39t="pause:'+i+'" aria-label="'+(t.end?'Pause':'Resume')+'">'+(t.end?zI('<path d="M8 5v14M16 5v14"/>',14):zI('<path d="M7 4l12 8-12 8z"/>',14))+'</button>')+'<button type="button" data-q39t="x:'+i+'" aria-label="Stop timer">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',14)+'</button></div>'}).join('');
+};
 
 try{spBoot()}catch(e){}
 load();
