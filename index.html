@@ -4492,6 +4492,40 @@ body.q39lock{overflow:hidden}
 .q44x{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;min-height:0!important;padding:0;border-radius:50%;border:1px solid var(--line,#E4E0D7);background:var(--card,#fff);color:var(--ink2);display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
 .q44x:hover{color:var(--ink);background:var(--paper,#FBFAF8)}
 
+/* v191: cookbooks */
+.q45wrap{margin-top:4px}
+.q45shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px 18px;margin-top:6px}
+@media(max-width:700px){.q45shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px}}
+.q45bk{display:flex;flex-direction:column;gap:8px;min-width:0}
+.q45cv{position:relative;display:block;width:100%;aspect-ratio:3/4;padding:0;border:none;border-radius:6px 12px 12px 6px;overflow:hidden;cursor:pointer;background:#EEE9E2;min-height:0!important;
+ box-shadow:inset 4px 0 0 rgba(0,0,0,.08),0 14px 24px -14px rgba(40,30,20,.45),0 2px 5px rgba(40,30,20,.12);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.q45cv:hover{transform:translateY(-4px) rotate(-1deg);box-shadow:inset 4px 0 0 rgba(0,0,0,.08),0 22px 30px -16px rgba(40,30,20,.5),0 2px 5px rgba(40,30,20,.12)}
+.q45cv img{width:100%;height:100%;object-fit:cover;display:block}
+.q45cv::after{content:'';position:absolute;left:0;top:0;bottom:0;width:10px;background:linear-gradient(90deg,rgba(0,0,0,.14),rgba(255,255,255,.12) 40%,transparent);pointer-events:none}
+.q45kind{position:absolute;right:8px;bottom:8px;font-size:11px;font-weight:500;background:rgba(255,255,255,.92);color:#4A463F;border-radius:99px;padding:3px 9px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.q45ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px;text-align:center;box-sizing:border-box}
+.q45ph b{font-size:14px;font-weight:500;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.q45bt{display:flex;align-items:flex-start;gap:4px;min-width:0}
+.q45btx{flex:1;min-width:0;display:flex;flex-direction:column}
+.q45btx b{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden}
+.q45btx small{font-size:12.5px;color:var(--ink3);white-space:nowrap;overflow:hidden}
+.q45ed{flex:none;width:30px;height:30px;min-height:0!important;padding:0;border:none;border-radius:50%;background:transparent;color:var(--ink3);display:grid;place-items:center;cursor:pointer}
+.q45ed:hover{background:rgba(0,0,0,.05);color:var(--ink)}
+.q45form{display:grid;grid-template-columns:170px minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:600px){.q45form{grid-template-columns:minmax(0,1fr)}.q45pcov{width:150px;margin:0 auto}}
+.q45pcov{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+.q45pcov>img,.q45pcov>.q45ph{position:relative;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:6px 12px 12px 6px;box-shadow:0 14px 24px -14px rgba(40,30,20,.45)}
+.q45busy{position:absolute;top:0;left:0;right:0;aspect-ratio:3/4;display:grid;place-items:center;background:rgba(255,255,255,.6);border-radius:6px 12px 12px 6px}
+.q45fields{min-width:0}
+.q45seg{display:flex;margin-bottom:14px}.q45seg button{flex:1}
+.q45file{display:flex;align-items:center;gap:10px;min-width:0}.q45file .zbtn{display:inline-flex;align-items:center;gap:6px;flex:none;cursor:pointer}
+.q45file span{min-width:0;white-space:nowrap;overflow:hidden;font-size:13.5px;color:var(--ink2)}
+.q45res{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:10px;margin:10px 0}
+.q45res button{display:flex;flex-direction:column;gap:4px;padding:0;border:none;background:none;cursor:pointer;min-height:0!important;min-width:0;font:inherit}
+.q45res img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px 8px 8px 4px;box-shadow:0 6px 12px -8px rgba(0,0,0,.4)}
+@media(max-width:520px){.z4tabs:has(>:nth-child(4)) button>svg{display:none}.z4tabs:has(>:nth-child(4)) button{padding-left:10px;padding-right:10px}}
+.q45res small{font-size:11.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-align:left}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4820,7 +4854,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v190';
+var BUILD='v191';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -18480,6 +18514,124 @@ var _q44Pick=pickerHtml;
 pickerHtml=function(){var h=_q44Pick.apply(this,arguments);if(!h)return h;
  return h.replace(/(<div class="pickhead"[^>]*>[\s\S]*?)(<\/div>)/,'$1<button type="button" class="q44x" data-picker="0" aria-label="Close colours" title="Close">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',16)+'</button>$2')};
 ['pointerdown','mousedown','touchstart'].forEach(function(t){document.addEventListener(t,function(e){if(e.target.closest&&e.target.closest('.q44x'))e.stopPropagation()},true)});
+
+/* ===== v191: Cookbooks on Meal prep: PDFs, links or books on your shelf, shown by their covers =====
+   Items on the Meal prep page: t:'cbook' {title, by, kind 'pdf'|'link'|'shelf', link, fid (the PDF in FILES[page]), cover (web address or picture)}.
+   A PDF's cover is drawn from its first page; a link's cover is the page's preview picture; any cookbook can search
+   Apple Books / Open Library by name, or use your own photo. PDFs open in Doable's viewer (zoom, highlight, notes). */
+function q45On(c){try{return localStorage.getItem('hub:mealbk:'+c.id)==='1'}catch(e){return false}}
+var _q45Tab=ZACT.z4mealtab;
+ZACT.z4mealtab=function(cid,t){try{localStorage.removeItem('hub:mealbk:'+cid)}catch(e){}return _q45Tab.apply(this,arguments)};
+ZACT.q45tab=function(cid){try{localStorage.setItem('hub:mealbk:'+cid,'1')}catch(e){}view.r6enter=1;render()};
+function q45Books(c){return (c.items||[]).filter(function(x){return x.t==='cbook'}).sort(function(a,b){return String(a.title).localeCompare(String(b.title))})}
+function q45Ph(t,big){var p=ZC[zHueOf(String(t||'').toLowerCase())]||ZC.sand;return '<span class="q45ph" style="background:'+p[0]+';color:'+p[1]+'">'+zI(ZIC.utensils,big?26:18)+'<b>'+esc(t||'Cookbook')+'</b></span>'}
+function q45Shelf(c){
+ var B=q45Books(c);
+ var head='<div class="zh2row"><h2 class="zh2">Cookbooks</h2><button class="zbtn" data-zact="q45new:'+c.id+'">+ Add a cookbook</button></div>';
+ if(!B.length)return '<section class="q45wrap">'+head+'<div class="zrdempty">'+zI(ZIC.book,28)+'<p>Keep your cookbooks here: a PDF, a link to one online, or a book on your kitchen shelf. Each shows its cover.</p><button class="zbtn" data-zact="q45new:'+c.id+'">+ Add your first cookbook</button></div></section>';
+ return '<section class="q45wrap">'+head+'<div class="q45shelf">'+B.map(function(b){
+  var tag=b.kind==='pdf'?'PDF':b.kind==='link'?'Link':'';
+  return '<div class="q45bk"><button type="button" class="q45cv" data-zact="q45open:'+c.id+':'+b.id+'" aria-label="Open '+esc(b.title)+'">'+(b.cover?'<img src="'+esc(b.cover)+'" alt="" loading="lazy">':q45Ph(b.title,true))+(tag?'<span class="q45kind">'+tag+'</span>':'')+'</button>'
+   +'<div class="q45bt"><div class="q45btx"><b class="q20fade">'+esc(b.title)+'</b>'+(b.by?'<small class="q20fade">'+esc(b.by)+'</small>':'')+'</div><button type="button" class="q45ed" data-zact="q45edit:'+c.id+':'+b.id+'" aria-label="Edit '+esc(b.title)+'">'+zI('<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',16)+'</button></div></div>'}).join('')+'</div></section>';
+}
+var _q45Meals=zMealsPage;
+zMealsPage=function(c){
+ var h=_q45Meals(c),on=q45On(c);
+ var i=h.indexOf('<div class="z4tabs"');if(i<0)return h;var j=h.indexOf('</div>',i);if(j<0)return h;
+ var tabs=h.slice(i,j);
+ if(on)tabs=tabs.replace(/aria-selected="true" class="on"/g,'aria-selected="false" class=""');
+ tabs+='<button role="tab" aria-selected="'+on+'" class="'+(on?'on':'')+'" data-zact="q45tab:'+c.id+'">'+zI(ZIC.book,16)+'<span>Cookbooks</span></button>';
+ if(on)return tabs+'</div>'+q45Shelf(c);
+ return h.slice(0,i)+tabs+h.slice(j);
+};
+// open: PDF in the viewer, link in a new tab, a shelf book opens its card
+ZACT.q45open=function(cid,id){var c=classById(cid),b=zItem(c,id);if(!b)return;
+ if(b.kind==='pdf'&&b.fid){var L=FILES[cid]||[],k=L.findIndex(function(f){return f.id===b.fid});
+  if(k<0||(!L[k].data&&L[k].cloud)){zToast('This cookbook is still downloading. Give it a moment, then try again.');return}
+  mkOpen(cid,k);return}
+ if(b.kind==='link'&&b.link){window.open(/^https?:/i.test(b.link)?b.link:'https://'+b.link,'_blank','noopener');return}
+ ZACT.q45edit(cid,id)};
+// the pop-up
+var q45File=null;
+ZACT.q45new=function(cid){q45File=null;zOpen('q45book',{cid:cid,bk:'pdf'})};
+ZACT.q45edit=function(cid,id){var b=zItem(classById(cid),id);if(!b)return;q45File=null;zOpen('q45book',{cid:cid,id:id,bk:b.kind||'shelf',cover:b.cover||'',fname:''})};
+ZACT.q45kind=function(k){var m=view.modal;if(m){m.bk=k;render()}};
+ZM.q45book={wide:true,html:function(m){var c=classById(m.cid);if(!c)return null;var b=m.id&&zItem(c,m.id),v=function(k){return m[k]!=null?m[k]:(b?b[k]||'':'')};
+ var curFile=b&&b.fid&&(FILES[c.id]||[]).filter(function(f){return f.id===b.fid})[0];
+ var seg='<div class="z4seg q45seg">'+[['pdf','PDF file'],['link','Link'],['shelf','On my shelf']].map(function(k){return '<button type="button" class="'+(m.bk===k[0]?'on':'')+'" data-zact="q45kind:'+k[0]+'">'+k[1]+'</button>'}).join('')+'</div>';
+ var src=m.bk==='pdf'?'<div class="field"><label>The PDF</label><div class="q45file"><label class="zbtn">'+zI('<path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/>',14)+' '+(m.fname||curFile?'Choose a different PDF':'Choose a PDF')+'<input type="file" accept="application/pdf,.pdf" data-q45pdf="1" style="display:none"></label><span class="q20fade">'+esc(m.fname||(curFile&&curFile.name)||'')+'</span></div><p class="hint">Up to 25 MB. The cover is made from its first page.</p></div>'
+  :m.bk==='link'?'<div class="field"><label for="q45l">Link to the cookbook</label><div class="zfind"><input id="q45l" value="'+esc(v('link'))+'" placeholder="Paste a link" inputmode="url" autocomplete="off"><button type="button" class="zbtn ghost q43pst" data-zact="q45paste">Paste</button><button type="button" class="zbtn" data-zact="q45linkcov">Get the cover</button></div><p class="hint">A cookbook online, a store page or a PDF someone shared.</p></div>'
+  :'<p class="hint" style="margin:0 0 12px">For a cookbook in your kitchen. Find its cover by name below, or take a photo of it.</p>';
+ var res=m.results==='loading'?'<p class="zsoft">Looking…</p>':Array.isArray(m.results)?(m.results.length?'<div class="q45res">'+m.results.map(function(x,i){return '<button type="button" data-zact="q45pickcov:'+i+'"><img src="'+esc(x.cover)+'" alt=""><small class="q20fade">'+esc(x.title)+'</small></button>'}).join('')+'</div>':'<p class="zsoft">No covers found by that name. Try fewer words, or use your own photo.</p>'):'';
+ return '<h3>'+(b?'Cookbook':'Add a cookbook')+'</h3><div class="q45form"><div class="q45pcov">'+(m.cover?'<img src="'+esc(m.cover)+'" alt="">':q45Ph(v('title')||'Cookbook',true))+(m.busy?'<span class="q45busy"><i class="q24spin"></i></span>':'')
+  +'<label class="zlink">'+(m.cover?'Use my own picture':'Add a picture')+'<input type="file" accept="image/*" data-q45img="1" style="display:none"></label>'+(m.cover?'<button type="button" class="zlink" data-zact="q45covoff">Remove</button>':'')+'</div>'
+  +'<div class="q45fields">'+seg+src
+  +'<div class="field"><label for="q45n">Name</label><input id="q45n" value="'+esc(v('title'))+'" placeholder="Salt, Fat, Acid, Heat" autocomplete="off"></div>'
+  +'<div class="field"><label for="q45a">Author <small style="font-weight:400;color:var(--ink3)">(optional)</small></label><input id="q45a" value="'+esc(v('by'))+'" autocomplete="off"></div>'
+  +'<button type="button" class="zbtn ghost" data-zact="q45find">'+zI(ZIC.search,14)+' Find the cover by name</button>'+res
+  +(m.note?'<p class="q24st '+(m.noteOk?'ok':'err')+'" role="status"><span>'+esc(m.note)+'</span></p>':'')
+  +'</div></div>';
+},save:async function(m){
+ var c=classById(m.cid);if(!c)return;var t=zv('q45n');if(!t){zToast('Give the cookbook a name first.');var n=document.getElementById('q45n');if(n)n.focus();return}
+ var b=m.id&&zItem(c,m.id),isNew=!b;if(!b)b={id:uid(),t:'cbook'};
+ if(m.bk==='pdf'&&!q45File&&!b.fid){zToast('Choose the PDF first, or pick Link or On my shelf.');return}
+ b.title=t;b.by=zv('q45a')||'';b.kind=m.bk;
+ if(m.bk==='link'){b.link=zv('q45l')||''}else delete b.link;
+ if(m.cover)b.cover=m.cover;else delete b.cover;
+ FILES[c.id]=FILES[c.id]||[];
+ var dropOld=function(){if(!b.fid)return;var k=FILES[c.id].findIndex(function(f){return f.id===b.fid});if(k>-1)dropFile(c.id,k);delete b.fid};
+ if(m.bk==='pdf'&&q45File){
+  if(q45File.size>25000000){zToast('That PDF is '+(q45File.size/1048576).toFixed(0)+' MB. The limit is 25 MB per file.');return}
+  var rec;try{rec=await readFile(q45File)}catch(e){zToast('Couldn’t read that PDF.');return}
+  dropOld();rec.name=q45File.name;FILES[c.id].push(rec);b.fid=rec.id;saveFiles(c.id);
+ }else if(m.bk!=='pdf')dropOld();
+ if(isNew)c.items.push(b);touch(b);q45File=null;save();view.modal=null;render();if(sbUser)cloudSync(true);
+},del:function(m){return m.id?'q45del:'+m.cid+':'+m.id:''}};
+ZACT.q45del=function(cid,id){var c=classById(cid),b=zItem(c,id);if(!b||!confirm('Delete '+(b.title||'this cookbook')+'? This cannot be undone.'))return;
+ if(b.fid){var k=(FILES[cid]||[]).findIndex(function(f){return f.id===b.fid});if(k>-1)dropFile(cid,k)}
+ c.items=c.items.filter(function(x){return x.id!==id});save();view.modal=null;render()};
+ZACT.q45covoff=function(){var m=view.modal;if(m){m.cover='';render()}};
+ZACT.q45pickcov=function(i){var m=view.modal;if(!m||!Array.isArray(m.results))return;var x=m.results[+i];if(!x)return;m.cover=x.cover;
+ var n=document.getElementById('q45n'),a=document.getElementById('q45a');if(n&&!n.value.trim())n.value=x.title;if(a&&!a.value.trim()&&x.by)a.value=x.by;m.results=null;render()};
+ZACT.q45find=async function(){var m=view.modal;if(!m)return;var q=[zv('q45n'),zv('q45a')].filter(Boolean).join(' ');if(!q){zToast('Type the cookbook’s name first.');return}
+ m.results='loading';render();var out=[];try{out=await zCoverSearch(q,'book')}catch(e){}if(view.modal!==m)return;m.results=out||[];render()};
+// a PDF: keep the file, draw its first page as the cover, and use its name
+async function q45PdfCover(file){
+ var P=await loadPdfJs();if(!P)return '';
+ var buf=new Uint8Array(await file.arrayBuffer()),doc=await P.getDocument({data:buf}).promise,pg=await doc.getPage(1);
+ var vp=pg.getViewport({scale:1}),v2=pg.getViewport({scale:420/vp.width}),cv=document.createElement('canvas');cv.width=Math.round(v2.width);cv.height=Math.round(v2.height);
+ var ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+ await pg.render({canvasContext:ctx,viewport:v2,intent:'print'}).promise;try{doc.destroy()}catch(e){}
+ return cv.toDataURL('image/jpeg',.82);
+}
+document.addEventListener('change',async function(e){var t=e.target;if(!t||!t.hasAttribute)return;
+ if(t.hasAttribute('data-q45pdf')&&t.files&&t.files[0]&&view.modal&&view.modal.kind==='q45book'){
+  var m=view.modal,f=t.files[0];q45File=f;m.fname=f.name;
+  var n=document.getElementById('q45n');if(n&&!n.value.trim())n.value=f.name.replace(/\.pdf$/i,'').replace(/[-_]+/g,' ').trim();
+  m.busy=true;m.note='';render();
+  var u='';try{u=await q45PdfCover(f)}catch(err){}
+  if(view.modal!==m)return;m.busy=false;if(u&&!m.coverOwn)m.cover=u;if(!u){m.note='Couldn’t make a cover from this PDF. Find one by name, or add a picture.';m.noteOk=false}render();
+ }
+ if(t.hasAttribute('data-q45img')&&t.files&&t.files[0]&&view.modal&&view.modal.kind==='q45book'){var m2=view.modal;shrinkImage(t.files[0],700,function(url){m2.cover=url;m2.coverOwn=true;if(view.modal===m2)render()})}
+});
+// a link: the page's preview picture as the cover (and its name)
+async function q45LinkInfo(u){
+ if(!/^https?:/i.test(u))u='https://'+u;
+ try{var o=await z4LinkInfo(u);if(o&&o.img)return o}catch(e){}
+ try{var r=await fetch('https://r.jina.ai/'+u,{headers:{'X-Return-Format':'html'},signal:q24Sig(20000)});if(r.ok){var d=new DOMParser().parseFromString(await r.text(),'text/html');
+  var og=d.querySelector('meta[property="og:image"]'),tt=d.querySelector('meta[property="og:title"]');
+  return {img:og?og.getAttribute('content')||'':'',title:tt?tt.getAttribute('content')||'':q21Txt((d.querySelector('title')||{}).textContent||'')}}}catch(e){}
+ return null;
+}
+ZACT.q45linkcov=async function(){var m=view.modal;if(!m)return;var u=zv('q45l');if(!u){zToast('Paste the link first.');return}
+ m.busy=true;m.note='';render();var o=await q45LinkInfo(u);if(view.modal!==m)return;m.busy=false;
+ if(o&&o.img){if(!m.coverOwn)m.cover=o.img;m.note='Got the cover from the link.';m.noteOk=true;var n=document.getElementById('q45n');if(n&&!n.value.trim()&&o.title)n.value=o.title.replace(/\s*[|·–-]\s*[^|·–-]*$/,'').replace(/\s+by\s+.*$/i,'').replace(/\s*[:(].*$/,'').trim()}
+ else{m.note='That site didn’t share a cover. Find it by name below, or add a picture.';m.noteOk=false}
+ render()};
+ZACT.q45paste=async function(){var v=await q43Clip();if(v==null){var l=document.getElementById('q45l');if(l)l.focus();zToast('Press and hold in the link box, then tap Paste.');return}
+ var u=(/(https?:\/\/\S+)/i.exec(v||'')||[])[1];if(!u){zToast('That isn’t a link. Copy the cookbook’s web address first.');return}
+ var l2=document.getElementById('q45l');if(l2)l2.value=u;ZACT.q45linkcov()};
+document.addEventListener('paste',function(e){var t=e.target;if(!t||t.id!=='q45l')return;setTimeout(function(){if(/^https?:\/\//i.test(t.value.trim()))ZACT.q45linkcov()},30)});
 
 try{spBoot()}catch(e){}
 load();
