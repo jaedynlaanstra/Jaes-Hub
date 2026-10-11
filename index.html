@@ -4526,6 +4526,24 @@ body.q39lock{overflow:hidden}
 @media(max-width:520px){.z4tabs:has(>:nth-child(4)) button>svg{display:none}.z4tabs:has(>:nth-child(4)) button{padding-left:10px;padding-right:10px}}
 .q45res small{font-size:11.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-align:left}
 
+/* v192: order of pages, shared Look and feel rows */
+.q46list{display:flex;flex-direction:column;gap:6px}
+.q46row{display:flex;align-items:center;gap:10px;background:var(--card,#fff);border:1px solid var(--line,#E4E0D7);border-radius:14px;padding:8px 8px 8px 6px;min-width:0;touch-action:none}
+.q46row.drag{box-shadow:0 12px 26px -12px rgba(0,0,0,.35);border-color:var(--line2,#D4CFC4);position:relative;z-index:2}
+.q46h{flex:none;width:30px;height:34px;display:grid;place-items:center;color:var(--ink3);cursor:grab;touch-action:none}
+.q46dot{flex:none;width:12px;height:12px;border-radius:50%}
+.q46n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;font-size:15px}
+.q46b{flex:none;width:34px;height:34px;min-height:0!important;padding:0;border-radius:50%;border:1px solid var(--line,#E4E0D7);background:var(--card,#fff);color:var(--ink2);display:grid;place-items:center;cursor:pointer}
+.q46b:disabled{opacity:.3;cursor:default}
+.q46look{display:flex;flex-direction:column;gap:14px}
+.q46look .z4pkrow{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.q46look .z4pkrow p{margin:0}
+.q46look .z4seg{margin-left:0}
+.q46tb{display:flex!important;flex-wrap:wrap;gap:8px}
+.q46tb .zbtn{font-size:13.5px!important;color:var(--ink)!important}
+.q46colbtn{display:inline-flex;align-items:center;gap:7px;justify-content:center}
+.modal .q46look{margin-top:6px;padding-top:12px;border-top:1px solid var(--line,#E4E0D7)}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4854,7 +4872,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v191';
+var BUILD='v193';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -6915,9 +6933,32 @@ async function mkHistAdd(f,why){
  }catch(e){}
 }
 async function mkHistGet(f){try{await idbReady;return (await idbDo('readonly',function(st){return st.get('mkhist:'+f.id)}))||[]}catch(e){return []}}
-async function syncFiles(){
+/* v193: asking the cloud for the list of your files was the biggest download in the whole app (about 67 KB
+   for 136 files, on every sync: every 90s, every app switch, every save). Now the list is only fetched when
+   this device can see a file that needs work (new, changed markup, missing contents), on Sync now, and
+   as a safety check every 30 minutes. filesMiss = files the last list showed aren't in the cloud, so a
+   broken one doesn't trigger a list on every sync. */
+var filesFullAt=0,filesMiss={};
+function filesWork(){
+ var r={need:false,held:''},now=Date.now();
+ Object.keys(FILES).forEach(function(cid){
+  var cls=classById(cid),fmeta={};(cls&&cls.files||[]).forEach(function(m){fmeta[m.id]=m});
+  (FILES[cid]||[]).forEach(function(f){
+   if(f.holdUntil&&f.holdUntil>now){r.held=r.held||f.name;return}
+   var metaAt=(fmeta[f.id]&&fmeta[f.id].marksAt)||'',localAt=(f.marks&&f.marks.savedAt)||'';
+   if(f.kind==='pdf'&&localAt&&f.marksSyncedAt!==localAt)r.need=true;
+   else if(f.kind==='pdf'&&metaAt>localAt&&!filesMiss[f.id+'.m'])r.need=true;
+   else if(!f.cloud&&(f.data||f.kind==='text'))r.need=true;
+   else if(f.cloud&&!hasContent(f)&&!filesMiss[f.id])r.need=true;
+  });
+ });
+ return r;
+}
+async function syncFiles(force){
  var bucket=sb.storage.from('hub-files'),uid=sbUser.id,dirty={},remirror={},errs=0,moved=0,limitName='';
+ if(!force&&filesFullAt&&Date.now()-filesFullAt<30*60000){var fw=filesWork();if(!fw.need)return{errs:0,moved:0,limitName:fw.held}}
  var names=await listCloudNames(bucket,uid);
+ filesFullAt=Date.now();filesMiss={};
  var cids=Object.keys(FILES);
  for(var a=0;a<cids.length;a++){
   var cid=cids[a],list=FILES[cid]||[],cls=classById(cid),fmeta={};(cls&&cls.files||[]).forEach(function(m){fmeta[m.id]=m});
@@ -6931,6 +6972,8 @@ async function syncFiles(){
        older markup over the newer one from your other device, then downloaded its old copy back.) */
     var metaMarksAt=(fmeta[f.id]&&fmeta[f.id].marksAt)||'',localAt=(f.marks&&f.marks.savedAt)||'';
     var unsent=f.kind==='pdf'&&!!localAt&&f.marksSyncedAt!==localAt,behind=f.kind==='pdf'&&metaMarksAt>localAt;
+    if(behind&&!names[f.id+'.marks.json'])filesMiss[f.id+'.m']=1;
+    if(f.cloud&&!exists&&!hasContent(f))filesMiss[f.id]=1;
     if(unsent||behind){
      // fetch the cloud copy first (if there is one) and merge: nothing from either device is lost
      var cloudM=null;
@@ -7021,7 +7064,7 @@ async function cloudSync(force){
  if(result.ok){
   S.lastSync=new Date().toISOString();view.driveError=null;persistLocal();
   try{var ir=await imgPull(forceImg);view.imgInfo=imgInfoText(ir);if(ir.got)result.changed=true}catch(e){view.imgInfo='Pictures could not sync just now, it will retry.'}
-  try{fr=await syncFiles()}catch(e){fr.errs++}
+  try{fr=await syncFiles(force||forceImg)}catch(e){fr.errs++}
   setTimeout(openPendingImport,300);
  }else view.driveError=result.error;
  if(fr.limitName)view.driveError='"'+fr.limitName+'" is not syncing because you are over your file storage allowance (or the file is over 25 MB). It stays on this device. Delete some files to make room, and it will sync on its own.';
@@ -18632,6 +18675,258 @@ ZACT.q45paste=async function(){var v=await q43Clip();if(v==null){var l=document.
  var u=(/(https?:\/\/\S+)/i.exec(v||'')||[])[1];if(!u){zToast('That isn’t a link. Copy the cookbook’s web address first.');return}
  var l2=document.getElementById('q45l');if(l2)l2.value=u;ZACT.q45linkcov()};
 document.addEventListener('paste',function(e){var t=e.target;if(!t||t.id!=='q45l')return;setTimeout(function(){if(/^https?:\/\//i.test(t.value.trim()))ZACT.q45linkcov()},30)});
+
+/* ===== v192: order of pages, one "Look and feel" (Settings and the paint panel match), a fuller tour, and a short tour
+   the first time you open each page, Settings and the PDF viewer ===== */
+
+/* ---------- order of pages / classes ----------
+   Pages already sort by c.ord. School classes now do too: before each redraw the classes of School are put in
+   c.ord order (classes without one keep their place after the ordered ones). The order syncs as c.ord. */
+function q46SchoolCls(){return S.classes.filter(function(c){return !c.kind&&c.id!==REF_CID&&(!c.space||c.space==='school')})}
+function q46SortClasses(){
+ var L=q46SchoolCls();if(!L.some(function(c){return c.ord!=null}))return;
+ var slots=[];S.classes.forEach(function(c,i){if(L.indexOf(c)>-1)slots.push(i)});
+ var key=function(c){return c.ord!=null?c.ord:1e6+L.indexOf(c)};
+ var sorted=L.slice().sort(function(a,b){return key(a)-key(b)});
+ slots.forEach(function(si,k){S.classes[si]=sorted[k]});
+}
+var _q46Render=render;
+render=function(){try{q46SortClasses()}catch(e){}return _q46Render.apply(this,arguments)};
+function q46List(){var sp=curSpace();return sp==='school'?q46SchoolCls():spacePages(sp)}
+ZACT.q46order=function(){var L=q46List();view.picker=null;zOpen('q46order',{order:L.map(function(c){return c.id})})};
+ZM.q46order={html:function(m){
+ var sp=curSpace(),school=sp==='school',L=m.order.map(classById).filter(Boolean);
+ return '<h3>Order of '+(school?'classes':'pages')+'</h3><p class="hint" style="margin:-4px 0 12px">Drag the handle, or use the arrows. This is the order in your menu'+(school?' and on Home':'')+'.'+(SPACES.length>1?' You’re arranging '+esc(spaceById(sp).name)+'; switch spaces to arrange the others.':'')+'</p>'
+  +'<div class="q46list">'+L.map(function(c,i){var col=palHex(c.color);
+   return '<div class="q46row" data-q46id="'+c.id+'"><span class="q46h" aria-hidden="true" title="Drag to move">'+zI('<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01"/>',18)+'</span>'
+    +'<i class="q46dot" style="background:'+col+'"></i><span class="q46n q20fade">'+esc(c.name)+'</span>'
+    +'<button type="button" class="q46b" data-zact="q46mv:'+i+':-1" aria-label="Move '+esc(c.name)+' up"'+(i?'':' disabled')+'>'+zI('<path d="m6 15 6-6 6 6"/>',16)+'</button>'
+    +'<button type="button" class="q46b" data-zact="q46mv:'+i+':1" aria-label="Move '+esc(c.name)+' down"'+(i<L.length-1?'':' disabled')+'>'+zI('<path d="m6 9 6 6 6-6"/>',16)+'</button></div>'}).join('')+'</div>';
+},save:function(m){
+ m.order.forEach(function(id,k){var c=classById(id);if(c&&c.ord!==k){c.ord=k;touch(c)}});
+ save();view.modal=null;render();zToast('Order saved.');
+}};
+ZACT.q46mv=function(i,d){var m=view.modal;if(!m)return;i=+i;var j=i+(+d);if(j<0||j>=m.order.length)return;var t=m.order[i];m.order[i]=m.order[j];m.order[j]=t;render()};
+(function(){var drag=null;
+ document.addEventListener('pointerdown',function(e){var h=e.target.closest&&e.target.closest('.q46h');if(!h||!view.modal||view.modal.kind!=='q46order')return;
+  e.preventDefault();var row=h.closest('.q46row');drag={row:row,list:row.parentElement,id:e.pointerId};row.classList.add('drag');try{h.setPointerCapture(e.pointerId)}catch(err){}});
+ document.addEventListener('pointermove',function(e){if(!drag)return;e.preventDefault();
+  var rows=[].slice.call(drag.list.children).filter(function(r){return r!==drag.row}),y=e.clientY,before=null;
+  for(var k=0;k<rows.length;k++){var r=rows[k].getBoundingClientRect();if(y<r.top+r.height/2){before=rows[k];break}}
+  if(before)drag.list.insertBefore(drag.row,before);else drag.list.appendChild(drag.row)},{passive:false});
+ var end=function(){if(!drag)return;drag.row.classList.remove('drag');var ids=[].slice.call(drag.list.children).map(function(r){return r.getAttribute('data-q46id')});drag=null;if(view.modal&&view.modal.kind==='q46order'){view.modal.order=ids;render()}};
+ document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+})();
+
+/* ---------- Look and feel: the same controls in Settings and in the paint panel ---------- */
+SETTINGS_KEYS.push('tourSeen');Q21DEEP.tourSeen=1;
+function q46Seg(cur,opts,act){return '<span class="z4seg q17seg">'+opts.map(function(o){return '<button type="button" class="'+(cur===o[0]?'on':'')+'" data-zact="'+act+':'+o[0]+'">'+o[1]+'</button>'}).join('')+'</span>'}
+function q46Row(t,sub,ctl){return '<div class="z4pkrow q46lrow"><p><b>'+t+'</b><span>'+sub+'</span></p>'+ctl+'</div>'}
+function q46LookRows(){
+ var school=curSpace()==='school';
+ return q46Row('Order of '+(school?'classes':'pages'),'The order they appear in your menu','<button type="button" class="zbtn" data-zact="q46order">Change the order</button>')
+  +q46Row('Card style','The shading on cards and widgets',q46Seg(q20Depth(),[['flat','Flat'],['soft','Soft'],['deep','Deep']],'q20depth'))
+  +q46Row('Menu icons','Coloured squares behind your pages’ icons in the menu',q46Seg(S.menuIconSq!==false?'1':'0',[['1','Coloured squares'],['0','Plain icons']],'q31sq'))
+  +q46Row('Cover pictures','A soft picture on pages without a cover of their own',q46Seg(S.defCovers===false?'0':'1',[['1','On'],['0','Off']],'q46cov'))
+  +q46Row('Tours','A walk through the app, and the short tips on each page','<span class="q46tb"><button type="button" class="zbtn" data-zact="tour">Take the tour</button><button type="button" class="zbtn ghost" data-zact="q46tips">Show page tips again</button></span>');
+}
+ZACT.q46cov=function(v){S.defCovers=v==='1';save();render()};
+ZACT.q46tips=function(){S.tourSeen={};save();zToast('Done. Each page will show its tips again the next time you open it.')};
+// the paint panel is now called Look and feel and ends with these rows
+var _q46Pick=pickerHtml;
+pickerHtml=function(){var h=_q46Pick.apply(this,arguments);if(!h||!view.picker||view.editSurf&&view.editSurf!=='__sec')return h;
+ h=h.replace('<h3>Colours</h3>','<h3>Look and feel</h3>');
+ // the old two-choice Card style row becomes the shared one below
+ h=h.replace(/<div class="z4pkrow"><p><b>Card style<\/b>[\s\S]*?<\/span><\/div>/,'').replace(/<div class="z4pkrow"><p><b>Menu icons<\/b>[\s\S]*?<\/span><\/div>/,'');
+ var open=(view.pkAcc||{}).look!==false;
+ var blk='<details class="pkacc" data-pkacc="look"'+(open?' open':'')+'><summary><span>Pages, cards and tours</span><b class="pkchev">'+CP_ICO.chev+'</b></summary><div class="pkaccb q46look">'+q46LookRows()+'</div></details>';
+ var k=h.indexOf('<details class="pkacc"');return k>-1?h.slice(0,k)+blk+h.slice(k):h};
+// Settings > Look and feel: colours first, then the same rows
+var _q46MH=modalHtml;
+modalHtml=function(){var h=_q46MH.apply(this,arguments);if(!view.modal||view.modal.kind!=='settings')return h;
+ return h.replace(/<button data-opencolours="1">Change colours<\/button><button data-zact="tour">Take the tour<\/button>(<button data-zact="z4depth">[^<]*<\/button>)?(<button data-zact="z4covers">[^<]*<\/button>)?/,
+  '<button data-opencolours="1" class="q46colbtn">'+zI(ZIC.palette,15)+' Colours: menu, pages and widgets</button><div class="q46look">'+q46LookRows()+'</div>')
+  .replace(/(<button data-syncpics="1"[^>]*>Sync pictures<\/button><button data-sbsignout="1"[^>]*>Sign out<\/button><\/div>)/,'$1<p class="hint q46pics" style="margin:0">Photos and covers sync on their own. If a picture shows up blank on another device, tap Sync pictures on the device that has it, then on the other one.</p>')};
+// the menu item and the corner paint button say Look and feel
+var _q46SideItem=sideItem;
+sideItem=function(attr,key,label,on){if(attr==='data-opencolours'&&label==='Colours')label='Look and feel';return _q46SideItem(attr,key,label,on)};
+
+/* ---------- tours: the engine runs any list of steps; the main tour, then one per page the first time it opens ---------- */
+function q46Seen(k){return !!(S.tourSeen&&S.tourSeen[k])}
+function q46Mark(k){S.tourSeen=Object.assign({},S.tourSeen||{});S.tourSeen[k]=1;save()}
+function q43Run(steps,key){
+ if(Q43.on)return;
+ Q43.on=true;Q43.steps=steps;Q43.key=key||'main';Q43.i=0;Q43.dir=1;Q43.openedMenu=false;Q43.cur=null;
+ var el=document.getElementById('q43t');if(!el){el=document.createElement('div');el.id='q43t';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');document.body.appendChild(el)}
+ el.setAttribute('aria-label',key==='main'?'A tour of Doable':'A quick look at this page');
+ el.innerHTML='<div class="q43hole none"></div><div class="q43card"><i class="q43arr"></i><button type="button" class="q43skip" data-q43="end">'+(key==='main'?'Skip tour':'Not now')+'</button><div class="q43body"></div></div>';
+ Q43.el=el;clearInterval(Q43.timer);Q43.timer=setInterval(q43Place,250);
+ setTimeout(q43Show,250);
+}
+q43Start=function(){
+ if(Q43.on)return;view.modal=null;view.zpill=false;view.picker=null;
+ if(view.page!=='home')go('home');else render();
+ setTimeout(function(){q43Run(q43Steps(),'main')},100);
+};
+tourOpen=q43Start;
+var _q46End=q43End;
+q43End=function(){var k=Q43.key||'main';
+ if(k==='main'){_q46End();q46Mark('home');return}
+ Q43.on=false;clearInterval(Q43.timer);var el=document.getElementById('q43t');if(el)el.remove();
+ if(Q43.openedMenu&&view.menu){view.menu=false;render()}
+ q46Mark(k);
+};
+// a step can run something first (switch a tab, open the menu...) and say which steps only fit some screens
+var _q46Show=q43Show;
+q43Show=function(){if(!Q43.on)return;var st=Q43.steps[Q43.i];
+ if(st&&st.when&&!st.when()){return q43Step(Q43.dir)}
+ if(st&&st.before&&!st._ran){st._ran=1;try{st.before()}catch(e){}setTimeout(q43Show,st.wait||450);return}
+ return _q46Show()};
+// the main tour, fuller
+q43Steps=function(){
+ var school=curSpace()==='school';
+ return [
+  {t:'Welcome to Doable',p:'Here’s a quick look around, so you know where everything is. It takes about a minute, and each page shows you its own tips the first time you open it.'},
+  {s:'.menubtn[data-menu="1"]',phone:1,t:'Your menu',p:'Tap here any time to open the menu. Every page lives in it.'},
+  {s:'.side .zpillbtn',menu:1,t:'Your spaces',p:'School, Work and Personal each keep their own pages, like separate profiles. Tap here to switch, or to add or remove a space.'},
+  {s:'.side [data-go="home"]',menu:1,t:'Home',p:'Your Home shows a little of everything, with widgets you can choose.'},
+  {s:'.side [data-go="calendar"]',menu:1,t:'Calendar',p:'Events, birthdays and everything that’s due, in one place. Tap + Add event to put something on it.'},
+  {s:'.side [data-go="plan"]',menu:1,t:'Plan my week',p:'Pick which day you’ll work on each thing. Plan it for me can do it for you.'},
+  {s:'.side [data-go="professors"]',menu:1,t:'People',p:'Your professors and classmates, with their email and phone.'},
+  {s:'.side .q19lab',menu:1,t:school?'Your classes':'Your pages',p:school?'Each class has its own page for assignments, files and links. Open a PDF in a class to highlight it and write on it.':'To-do lists, budget, meal prep and more. Tap one to open it. Tap the word Pages to fold the list away.'},
+  {s:school?'.side [data-add="class"]':'.side [data-znew]',menu:1,t:school?'Add a class':'Add a page',p:school?'Add each of your classes here.':'Add another page here: to-do list, budget, shopping list, meal prep, habit tracker and more.'},
+  {s:'.side [data-opencolours]',menu:1,t:'Look and feel',p:'Colours, card style, cover pictures and the order of your '+(school?'classes':'pages')+'. The paint button in the corner opens the same thing.'},
+  {s:'.side [data-add="settings"]',menu:1,t:'Settings',p:'Your account and syncing. Everything syncs between your devices on its own; if a photo doesn’t show up on another device, Sync pictures in here fixes it.'},
+  {s:'.side [data-go="install"]',menu:1,t:'Get the app',p:'Steps to put Doable on your phone’s home screen, so it opens like a real app. Tap its × to hide it.'},
+  {s:'.hcorner [data-zact="wedit"]',t:'Edit widgets',p:'Add, remove, move and resize the cards on your Home. Tap Done when you’re finished.'},
+  {s:'.hcorner [data-coversheet]',t:'Cover picture',p:'Add or change the picture at the top. Every page can have its own.'},
+  {s:'.zhome .zw',t:'Widgets',p:'Each card shows a bit of one page. Tap it to open that page. Ticks and + buttons work right on the card.'},
+  {t:'You’re all set',p:'Each page shows its own tips the first time you open it. To see the tours again, open Look and feel.',end:1}
+ ];
+};
+
+/* ---------- page tours ---------- */
+var Q46PG={
+ budget:{n:'Budget',s:[
+  {s:'[data-zact="q32edit:1"]',t:'Edit page',p:'Move, resize or hide the sections of this page, just like the widgets on Home.'},
+  {s:'[data-zact^="q17bview"]',t:'Left to spend or Spent',p:'Choose what the big ring shows.'},
+  {s:'[data-zact="bmon:-1"]',t:'Months',p:'Look back at earlier months, or ahead.'},
+  {s:'[data-zact^="zbadd"],.q29add',t:'Add money in or out',p:'Add spending, money in, a bill or a savings goal.'},
+  {s:'[data-zact^="paynew"],.zbpay',t:'Pay day',p:'Add when you get paid, and Doable counts down to it. It shows on your calendar too.'},
+  {s:'[data-zact^="catnew"],.zbcat',t:'Categories',p:'Give each kind of spending a budget, like groceries or eating out.'},
+  {s:'.zbchip,[data-zact^="zbchip"]',t:'Sections',p:'Switch between categories, bills, spending, goals and your cards.'}]},
+ todo:{n:'To do',s:[
+  {s:'.z2addc input,[placeholder^="Add a task, then"]',t:'Add a task',p:'Type it here, pick a date if it has one, and tap Add.'},
+  {s:'.z2gsel',t:'Groups',p:'Put tasks into groups, like one per client or project.'},
+  {s:'[data-zact^="secnew"]',t:'New group',p:'Make a new group here.'},
+  {s:'.zck',t:'Tick it off',p:'Tap the circle when it’s done. Tap the name to change it, add a due date or notes.'}]},
+ groceries:{n:'Shopping list',s:[
+  {s:'[data-zact*="shoptab"]',t:'Three lists',p:'Groceries, other shopping, and a wishlist for things you’d like one day.'},
+  {s:'.z5add input,.zadd input,[placeholder^="Add a grocery"]',t:'Add an item',p:'Type it and tap Add. You don’t need to pick a store.'},
+  {s:'[data-zact*="z5sort"]',t:'Sort it',p:'By store, by aisle, or A to Z.'},
+  {s:'[data-zact^="secnew"]',t:'Stores',p:'Add the stores you shop at. Each shows its logo.'}]},
+ habits:{n:'Habit tracker',s:[
+  {s:'[data-zact^="habitnew"]',t:'Add a habit',p:'Pick a name, the days it’s for, a colour and an icon.'},
+  {s:'[data-zact^="htick"]',t:'Tick it off',p:'Tap to mark today’s habit done. Your streaks and rings fill in as you go.'}]},
+ projects:{n:'Projects',s:[
+  {s:'[data-zact^="projnew"]',t:'New project',p:'Add a project with a due date, steps, links and notes.'},
+  {s:'.zpcard,.zproj,[data-zact^="projopen"]',t:'Your projects',p:'Tap one to open it. On a computer you can drag it between Not started, In progress and Done.'}]},
+ reading:{n:'Reading',s:[
+  {s:'[data-zact^="readnew"]',t:'Add a book or show',p:'Search by name and Doable finds the cover.'},
+  {s:'[data-zact^="readedit"]',t:'Your list',p:'Tap one to update where you’re up to, rate it, or mark it finished.'},
+  {s:'[data-zact^="rdchange"]',t:'What you track',p:'Books, shows, films, or all three.'}]},
+ meals:{n:'Meal prep',s:[
+  {s:'.z4tabs',t:'Four tabs',p:'Today’s meals, the whole week, your recipes and your cookbooks.'},
+  {s:'[data-zact^="mealpick"]',t:'Plan a meal',p:'Tap to pick one of your recipes, or just type something like “leftovers”.'},
+  {s:'[data-zact*=":recipes"]',t:'Recipes',p:'Save recipes here. Paste a link and Doable brings in the photo, ingredients and steps. Tap Make now to cook with timers.'},
+  {s:'[data-zact^="q45tab"]',t:'Cookbooks',p:'Keep your cookbooks: a PDF, a link, or a book on your shelf, shown by their covers.'},
+  {s:'[data-zact^="prepadd"],[placeholder="Add a prep step"]',t:'Prep list',p:'Jot down what to do on prep day, like chop veggies or cook rice.'}]},
+ mood:{n:'Mood tracker',s:[
+  {s:'[data-zact^="moodset"]',t:'How are you today?',p:'Tap a face. You can add a note about your day too.'},
+  {s:'[data-zact^="moodpick"],.zmcell',t:'Your month',p:'Each day shows the face you picked. Tap a day to change it.'}]},
+ notes:{n:'Notes',s:[
+  {s:'[data-zact^="notenew"]',t:'Typed note',p:'Write a note with the keyboard.'},
+  {s:'[data-zact^="notepen"]',t:'Handwritten page',p:'A page of grid paper to write on with your finger or Apple Pencil.'}]},
+ apps:{n:'Applications',s:[
+  {s:'.zlink,[data-zact^="appnew"]',t:'Add a link',p:'Keep the websites and apps you use most, one tap away. The ones you open most float to the top.'}]},
+ shifts:{n:'Shifts',s:[{s:'[data-zact^="shiftnew"],.zbtn',t:'Add a shift',p:'Add your shifts and Doable adds up your hours.'}]}
+};
+var Q46CAL={n:'Calendar',s:[
+ {s:'[data-zact^="caltab"]',t:'Calendar, Events and Birthdays',p:'See the month, a list of what’s coming up, or every birthday and anniversary.'},
+ {s:'[data-zact="evnew"]',t:'Add event',p:'Add an appointment, a birthday or anything else. Birthdays can repeat every year.'},
+ {s:'[data-zact="pplnew"],[data-zact^="pplhide"]',t:'People',p:'Give each person a colour, so you can see whose things are whose. Tap a name to hide or show them.'},
+ {s:'.zcalbar input,[data-zact^="calmix"]',t:'Show other spaces',p:'Tick to see things from your other spaces here too.'}]};
+var Q46CLASS={n:'your class page',s:[
+ {s:'[data-cpjump]',t:'Jump around',p:'Go straight to Assignments, Files & links or Class info.'},
+ {s:'.cpnextc,.cpnexts',t:'Next due',p:'How many days until the next thing is due.'},
+ {s:'[data-add="assign"]',t:'Add an assignment',p:'Add its due date, how much it’s worth and steps. Tick it off when it’s done.'},
+ {s:'[data-mkopen]',t:'Mark up a PDF',p:'Tap any PDF to open it. Highlight, write on it with your finger or Apple Pencil, and add notes. It saves on its own.'},
+ {s:'[data-add="link"],[data-add="upload"],.cpbtn2',t:'Add files and links',p:'Upload PDFs and other files, or add links. Group them into chapters, like Week 1.'},
+ {s:'[data-add="note"]',t:'Note pages',p:'A page of grid paper to type or handwrite your notes on.'},
+ {s:'[data-cinfo],#cp-when,.cpfolbtn',t:'Class info',p:'When and where, your grade, the professor and a title page for your essays.'},
+ {s:'.cpsettog',t:'Class settings',p:'Rename the class, change its colour or delete it.'}]};
+var Q46PLAN={n:'Plan my week',s:[
+ {s:'[data-zact^="psel"]',t:'Your week',p:'Tap a day to see what you’ve planned for it.'},
+ {s:'[data-zact="pauto"]',t:'Plan it for me',p:'Doable spreads your work over the week, putting study days before tests.'},
+ {s:'.zptray,[data-zact^="pset"]',t:'Needs a day',p:'Tap a day under anything to plan it then. On a computer you can drag it onto a day.'}]};
+var Q46MK={n:'Markup',s:[
+ {s:'#mk [data-mk="mode:edit"]',t:'Markup',p:'Switch to Markup to write on the page. Reading lets you scroll and select text.'},
+ {s:'#mk [data-mk="tool:pen"]',before:function(){var b=document.querySelector('#mk [data-mk="mode:edit"]');if(b&&MK.mode!=='edit')b.click()},wait:700,t:'Pen',p:'Write with your finger or Apple Pencil. Once you’ve used the Pencil, one finger scrolls instead of drawing.'},
+ {s:'#mk [data-mk="tool:hi"]',t:'Highlighter',p:'Highlight lines. Hold still at the end of a stroke and it snaps straight. Tap a highlight to add a note to it.'},
+ {s:'#mk [data-mk="tool:eraser"]',t:'Eraser',p:'Rub out what you wrote.'},
+ {s:'#mk [data-mk="tool:text"]',t:'Text',p:'Tap anywhere to type on the page.'},
+ {s:'#mk [data-mk^="color:"]',t:'Colours and sizes',p:'Pick the colour and thickness for the tool you’re using.'},
+ {s:'#mk [data-mk="undo"]',t:'Undo',p:'Take back the last thing you did.'},
+ {s:'#mk [data-mk="notes"]',t:'Notes',p:'See all the notes you’ve added beside the page.'},
+ {s:'#mk [data-mk="zoomin"]',t:'Zoom',p:'Pinch with two fingers to zoom, or use these buttons.'},
+ {s:'#mk [data-mk="close"]',t:'Done',p:'Everything saves on its own, and syncs to your other devices. Tap here to close.'}]};
+var Q46SET={n:'Settings',s:[
+ {s:'.modal [data-syncnow]',t:'Sync now',p:'Everything syncs on its own. This checks your other devices right away.'},
+ {s:'.modal [data-syncpics]',t:'Sync pictures',p:'If a photo or cover shows up blank on another device, tap this on the device that has it, then on the other one.'},
+ {s:'.modal #sbEmail',t:'Your account',p:'Sign in to keep your phone and computer matched, files and photos included.'},
+ {s:'.modal .q46colbtn',t:'Look and feel',p:'Colours, card style, the order of your pages, and the tours.'},
+ {s:'.modal [data-export]',t:'Backup',p:'Save a copy of everything to your device, just in case.'}]};
+function q46PageKey(){
+ if(view.modal&&view.modal.kind==='settings')return 'settings';
+ if(view.modal||view.picker)return '';
+ if(view.page==='page'){var c=classById(view.classId);return c&&Q46PG[c.kind]?'page:'+c.kind:''}
+ if(view.page==='class')return 'class';
+ if(view.page==='calendar')return curSpace()==='school'?'':'calendar';
+ if(view.page==='plan')return 'plan';
+ return '';
+}
+function q46StepsFor(k){
+ var d=k==='settings'?Q46SET:k==='class'?Q46CLASS:k==='calendar'?Q46CAL:k==='plan'?Q46PLAN:k==='markup'?Q46MK:Q46PG[k.slice(5)];
+ if(!d)return null;
+ var intro={t:'A quick look at '+d.n,p:'A few tips to help you find your way. It takes a few seconds.'};
+ var cover=k.indexOf('page:')===0||k==='class'?[{s:'.coverwrap [data-coversheet],[data-coversheet],.bancov',t:'Cover picture',p:'Change the picture at the top of this page.'},{s:'.cpsettog',t:k==='class'?'Class settings':'Page settings',p:'Rename it, change its colour or delete it.'}]:[];
+ var L=[intro].concat(d.s.map(function(x){return Object.assign({},x)}),k==='class'?[]:cover);
+ // drop the steps whose button isn't on this screen, so the count is honest
+ if(k!=='markup')L=L.filter(function(x,i){if(!x.s||x.before)return true;return !!document.querySelector(x.s)});
+ if(L.length<2)return null;
+ L.push({t:'That’s it',p:'You can see these tips again any time from Look and feel.',end:1});
+ return L;
+}
+function q46Ready(){if(Q43.on||document.getElementById('onb')||document.getElementById('ztour'))return false;
+ try{if(q43New())return false}catch(e){}
+ return !!(S.toured||(function(){try{return localStorage.getItem('hub:tour')}catch(e){return null}})());}
+var q46Wait=null;
+function q46Check(){
+ var k=q46PageKey();if(!k||q46Seen(k)||!q46Ready())return;
+ if(q46Wait===k)return;q46Wait=k;
+ setTimeout(function(){q46Wait=null;if(q46PageKey()!==k||q46Seen(k)||!q46Ready())return;var st=q46StepsFor(k);if(st)q43Run(st,k);else q46Mark(k)},1100);
+}
+var _q46R2=render;
+render=function(){var r=_q46R2.apply(this,arguments);try{q46Check()}catch(e){}return r};
+// the PDF viewer: its own tour the first time it opens
+var _q46MkOpen=mkOpen;
+mkOpen=async function(){var r=await _q46MkOpen.apply(this,arguments);
+ setTimeout(function(){if(q46Seen('markup')||!q46Ready())return;var mk=document.getElementById('mk');if(!mk||getComputedStyle(mk).display==='none')return;var st=q46StepsFor('markup');if(st)q43Run(st,'markup')},1400);
+ return r};
+// a tour that's running stops if its page goes away (the viewer closes, you leave the page)
+setInterval(function(){if(!Q43.on||Q43.key==='main')return;var k=Q43.key;
+ if(k==='markup'){var mk=document.getElementById('mk');if(!mk||getComputedStyle(mk).display==='none')q43End();return}
+ if(k!==q46PageKey()&&!(k==='settings'&&view.modal&&view.modal.kind==='settings'))q43End()},800);
 
 try{spBoot()}catch(e){}
 load();
