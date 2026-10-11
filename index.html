@@ -3882,6 +3882,7 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 /* every widget in a row is the same height; the new square ones are at least as tall as they are wide */
 .zw-small>.q18w.sq{min-height:150px;height:100%}
 /* small widgets are short rectangles (Jae: squares were way too big), so their insides are sized to fit 150px */
+.zmain .zw-small .q18circle,.zhome.ph .zw-small .q18circle{max-width:190px}
 .q21td.sq{padding:14px 15px}
 .q21td.sq .q21big b{font-size:min(60px,27cqw)}
 .q21td.sq .q21big span{padding-bottom:2px}
@@ -4039,6 +4040,43 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .q21frow button:hover{background:color-mix(in srgb,var(--ink) 12%,transparent)}
 .q21frow button:active{transform:scale(.88)}
 .zptray.dropover,#p-tray.dropover{outline:2px dashed color-mix(in srgb,var(--sideBg) 55%,transparent);outline-offset:-6px}
+/* v161: small Habits (rings) and Spent (category bar) */
+.q22hab{border:none!important;color:#fff;padding:14px 15px;display:flex;flex-direction:column;gap:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 14px 30px -18px rgba(0,0,0,.5)}
+.q22hh{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.q22hh button{border:none;background:none;padding:0;font:inherit;font-size:15px;font-weight:500;color:#fff;cursor:pointer;min-height:0!important;min-width:0;white-space:nowrap;overflow:hidden}
+.q22hh b{font-size:15px;font-weight:600;color:rgba(255,255,255,.85);flex:none}
+.q22hab.all .q22hh b{color:#B9E3A8}
+.q22hb{flex:1;display:flex;align-items:center;gap:12px;min-height:0;min-width:0}
+.q22rings{width:min(96px,40cqw);height:min(96px,40cqw);flex:none;transform:rotate(-90deg);overflow:visible}
+.q22rings .tr{fill:none;stroke-width:8;opacity:.18}
+.q22rings .pr{fill:none;stroke-width:8;stroke-linecap:round;animation:q22draw 1.1s cubic-bezier(.2,.8,.2,1) both;transition:stroke-dasharray .8s cubic-bezier(.2,.8,.2,1)}
+@keyframes q22draw{from{stroke-dasharray:0 300}}
+.q22hl{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+.q22hk{display:flex;align-items:center;gap:8px;border:none;background:none;padding:0;font:inherit;font-size:13px;color:#fff;text-align:left;cursor:pointer;min-height:0!important;min-width:0}
+.q22hk i{width:18px;height:18px;flex:none;border-radius:50%;border:1.8px solid var(--hc);display:grid;place-items:center;color:transparent;transition:background .2s,color .2s,transform .15s}
+.q22hk:active i{transform:scale(.85)}
+.q22hk.y i{background:var(--hc);color:#1f2a24}
+.q22hk.y span{opacity:.6}
+.q22hk span{white-space:nowrap;overflow:hidden;min-width:0}
+.q22more{border:none;background:none;padding:0;font:inherit;font-size:12px;color:rgba(255,255,255,.6);text-align:left;cursor:pointer;min-height:0!important}
+.q22none{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px;font-size:13px;color:rgba(255,255,255,.7)}
+.q22none .q21btn{background:rgba(255,255,255,.14);color:#fff;margin:0}
+.q22sp{padding:14px 15px;display:flex;flex-direction:column;gap:6px;background:color-mix(in srgb,var(--a) 7%,var(--card))}
+.q22sh button{border:none;background:none;padding:0;font:inherit;font-size:13.5px;color:var(--ink2);cursor:pointer;min-height:0!important;max-width:100%;white-space:nowrap;overflow:hidden;display:block}
+.q22amt{font-size:min(32px,17cqw);font-weight:600;letter-spacing:-.03em;line-height:1.05;color:var(--ink)}
+.q22amt small{font-size:.55em;font-weight:500;color:var(--ink3);letter-spacing:0}
+.q22sp.over .q22amt{color:#A34A3F}
+.q22bar{display:flex;gap:3px;height:12px;margin-top:4px}
+.q22bar i{display:block;min-width:4px;border-radius:4px;transform-origin:left;animation:q22grow .7s cubic-bezier(.2,.8,.2,1) both}
+.q22bar i.rest{background:color-mix(in srgb,var(--ink) 8%,transparent);animation:none}
+@keyframes q22grow{from{transform:scaleX(0)}to{transform:none}}
+.q22leg{display:flex;gap:10px;min-width:0;overflow:hidden}
+.q22leg>span{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink2);min-width:0}
+.q22leg i{width:7px;height:7px;border-radius:50%;flex:none}
+.q22leg .q20fade{white-space:nowrap;overflow:hidden}
+.q22sub{margin-top:auto;font-size:11.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@container (max-width:200px){.q22leg>span:nth-child(n+3){display:none}.q22hb{gap:9px}.q22hk{font-size:12px;gap:6px}.q22hk i{width:16px;height:16px}}
+@media(prefers-reduced-motion:reduce){.q22rings .pr,.q22bar i{animation:none}}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4367,7 +4405,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v160';
+var BUILD='v161';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -16791,6 +16829,42 @@ ZM.zrecipe.html=function(m){var h=_q21RecH(m);if(!h)return h;
  var note=m.linkState==='loading'?'Reading the recipe…':m.linkState==='full'?'Got it: the photo'+(m.q21n?', '+m.q21n+' ingredients':'')+' and the steps. Check them over, then Save.':m.linkState==='part'?'Got the photo, but this site doesn’t share its recipe with apps. Copy the ingredients and steps in yourself.':m.linkState==='err'?'Couldn’t read that link. Some big sites block apps. You can still type or paste the recipe.':'';
  return h.replace(/<p class="zsoft z4lnote">[^<]*<\/p>/,note?'<p class="zsoft z4lnote">'+esc(note)+'</p>':'');
 };
+
+
+/* ======================= v161: small Habits and Spent widgets, redone (Jae: "so plain and boring") =======================
+   Habits = Apple Fitness-style rings on a dark card: one ring per habit (up to 3), filling with this week's ticks,
+   and a tick button for each beside it. Spent = Apple Card-style: the amount big, then one bar split into your
+   categories' colours (the empty part is what's left of the budget), and the top categories underneath. */
+function q22Hab(w,sp){
+ var c=firstPage(sp,'habits');if(!c)return null;
+ var td=iso(today()),ws=iso(weekStart(0)),H=zHabits(c).filter(function(h){return zHabitOn(h,td)}),got=H.filter(function(h){return zHabitDone(c,h,td)}).length;
+ var col=function(h){var p=ZC[h.color]||ZC.sage;return 'color-mix(in srgb,'+p[1]+' 78%,#fff)'};
+ var head='<div class="q22hh"><button class="q20fade" data-open="'+c.id+'">Habits</button><b>'+(H.length?got+'/'+H.length:'')+'</b></div>';
+ if(!H.length)return q18Shape(w,'q22hab sq',head+'<div class="q22none"><span>Nothing to do today.</span><button class="q21btn" data-zact="habitnew:'+c.id+'">+ Add a habit</button></div>',' style="background:'+q18Deep()+'"');
+ var R=[40,30,20],rings=H.slice(0,3).map(function(h,i){var r=R[i],L=2*Math.PI*r,on=0,due=0;
+  for(var k=0;k<7;k++){var d=zAddDays(ws,k);if(zHabitOn(h,d)){due++;if(zHabitDone(c,h,d))on++}}
+  var p=due?on/due:0;
+  return '<circle cx="50" cy="50" r="'+r+'" class="tr" style="stroke:'+col(h)+'"/><circle cx="50" cy="50" r="'+r+'" class="pr" style="stroke:'+col(h)+';stroke-dasharray:'+Math.max(p*L,p?0.1:0).toFixed(1)+' '+L.toFixed(1)+';animation-delay:'+(i*120)+'ms"/>'}).join('');
+ var rows=H.slice(0,3).map(function(h){var y=zHabitDone(c,h,td);
+  return '<button class="q22hk'+(y?' y':'')+'" data-zact="htick:'+c.id+':'+h.id+':'+td+'" style="--hc:'+col(h)+'" aria-label="'+(y?'Untick ':'Tick ')+esc(h.title)+'"><i>'+zI(ZIC.check,10)+'</i><span class="q20fade">'+esc(h.title)+'</span></button>'}).join('')
+  +(H.length>3?'<button class="q22more" data-open="'+c.id+'">+'+(H.length-3)+' more</button>':'');
+ return q18Shape(w,'q22hab sq'+(got===H.length?' all':''),head+'<div class="q22hb"><svg class="q22rings" viewBox="0 0 100 100">'+rings+'</svg><div class="q22hl">'+rows+'</div></div>',' style="background:'+q18Deep()+'"');
+}
+function q22Money(v){var m=money(v),k=/^(.*?)(\.\d\d)$/.exec(m);return k?esc(k[1])+'<small>'+esc(k[2])+'</small>':esc(m)}
+function q22Spent(w,sp){
+ var c=firstPage(sp,'budget');if(!c)return null;
+ var b=zBudget(c),spent=w.show==='spent'||c.bview==='spent',mo=today().toLocaleDateString('en-CA',{month:'long'});
+ var segs=zSpendSegs(c,b).filter(function(s){return s.v>0}).sort(function(a,z){return z.v-a.v}),base=Math.max(b.total||0,b.spent||0)||1;
+ var bar='<div class="q22bar">'+segs.map(function(s,i){return '<i style="flex:'+(s.v/base).toFixed(4)+' 1 0;background:'+s.col+';animation-delay:'+(i*70)+'ms" title="'+esc(s.label)+': '+esc(money(s.v))+'"></i>'}).join('')
+  +(b.total>b.spent?'<i class="rest" style="flex:'+((b.total-b.spent)/base).toFixed(4)+' 1 0"></i>':'')+'</div>';
+ var leg='<div class="q22leg">'+segs.slice(0,3).map(function(s){return '<span><i style="background:'+s.col+'"></i><span class="q20fade">'+esc(s.label)+'</span></span>'}).join('')+'</div>';
+ var over=b.total&&b.spent>b.total;
+ var sub=b.total?(spent?'of '+money(b.total)+' · '+(over?money(b.spent-b.total)+' over':money(b.left)+' left'):money(b.spent)+' spent of '+money(b.total)):'No budget set yet';
+ return q18Shape(w,'q22sp sq'+(over?' over':''),'<div class="q22sh"><button class="q20fade" data-open="'+c.id+'">'+(spent?'Spent in '+esc(mo):'Left to spend')+'</button></div>'
+  +'<b class="q22amt">'+q22Money(spent?b.spent:(over?-(b.spent-b.total):b.left))+'</b>'+bar+(segs.length?leg:'')+'<small class="q22sub">'+esc(sub)+'</small>',' style="--a:'+palHex(c.color)+'"');
+}
+var _q22Small=zSmall;
+zSmall=function(w,d,sp){if(w.type==='habits'){var h=q22Hab(w,sp);if(h)return h}if(w.type==='budget'){var h2=q22Spent(w,sp);if(h2)return h2}return _q22Small(w,d,sp)};
 
 try{spBoot()}catch(e){}
 load();
