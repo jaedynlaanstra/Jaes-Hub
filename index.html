@@ -3306,6 +3306,102 @@ a.z1li.z2app{text-decoration:none}
 /* Home: the Today card sits in its widget slot */
 .z2home .zbhero{margin:0}
 .z2home .zbhero.ph{border:none;background:transparent;padding:6px 0 0}
+/* ===== v151 round 12: each page its own visual ===== */
+.z3card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin-bottom:16px;min-width:0}
+.z3h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.z3h h3{margin:0;font-size:16px;font-weight:500;display:flex;align-items:center;gap:8px;color:var(--ink)}
+/* To do: stacked bars per group */
+.z3leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--ink3)}
+.z3leg span{display:inline-flex;align-items:center;gap:5px}
+.z3leg i{width:9px;height:9px;border-radius:3px}
+.z3wl{display:flex;align-items:center;gap:12px;padding:7px 0}
+.z3wn{flex:0 0 170px;display:flex;align-items:center;gap:9px;min-width:0}
+.z3wn b{font-weight:450;font-size:14px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.z3wn .z2badge{border-radius:8px;font-size:10.5px}
+.z3wn .zlogo{border-radius:8px;flex:none}
+.z3wb{flex:1;min-width:0}
+.z3stack{display:flex;gap:2px;height:16px;border-radius:6px;overflow:hidden}
+.z3stack i{display:block;min-width:4px}
+.main.enter .z3stack{animation:zgrow .9s cubic-bezier(.3,.7,.2,1) both .1s}
+.z3wl>em{flex:none;font-style:normal;font-size:12.5px;color:var(--ink3);min-width:52px;text-align:right}
+@media(max-width:700px){.z3wn{flex-basis:118px}.z3wn .z2badge,.z3wn .zlogo{display:none}}
+/* Shopping list: the cart fills up */
+.z3blocks{display:flex;flex-wrap:wrap;gap:5px}
+.z3blocks i{width:22px;height:22px;border-radius:7px;background:#EDEBE5;transition:background .3s}
+.z3blocks i.y{background:#9DBA9D}
+.main.enter .z3blocks i.y{animation:zpop .5s cubic-bezier(.3,1.4,.5,1) both}
+.z3chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-top:14px;padding-bottom:2px}
+.z3chips::-webkit-scrollbar{display:none}
+.z3chip{flex:none;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 4px;font-size:13px}
+.z3chip .zlogo{border-radius:50%;flex:none}
+.z3chip b{font-weight:450}
+.z3chip em{font-style:normal;font-size:12px;background:#E6EDE6;color:#708F77;border-radius:99px;padding:0 7px;min-width:12px;text-align:center}
+/* Habits: 12-week heatmap */
+.z3hwrap{display:flex;gap:6px}
+.z3hdays{display:grid;grid-template-rows:16px repeat(7,1fr);gap:4px;font-size:10.5px;color:var(--ink3)}
+.z3hdays span{display:flex;align-items:center;height:100%}
+.z3hwrap>div:last-child{flex:1;min-width:0}
+.z3hmon{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;height:16px;font-size:10.5px;color:var(--ink3)}
+.z3hmon span{white-space:nowrap;overflow:visible}
+.z3hgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.z3hcol{display:grid;grid-template-rows:repeat(7,1fr);gap:4px}
+.z3heat i,.z3hleg i{display:block;aspect-ratio:1;border-radius:4px;background:#EDEBE5}
+.z3heat i.l1{background:#D4E0D2}.z3heat i.l2{background:#B5CAB3}.z3heat i.l3{background:#93B091}.z3heat i.l4{background:#718F70}
+.z3heat i.lf{background:transparent;box-shadow:inset 0 0 0 1px #EDEBE5}
+.z3heat i.t{box-shadow:0 0 0 2px var(--card),0 0 0 3.5px #718F70}
+.z3hleg{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:10px;font-size:11.5px;color:var(--ink3)}
+.z3hleg i{width:12px;height:12px;aspect-ratio:auto}
+.z3hgrid,.z3hmon{grid-template-columns:repeat(12,minmax(0,22px))}
+.z3hwrap>div:last-child{flex:0 1 auto}
+.z3hleg{justify-content:flex-start}
+/* Projects: timeline */
+.z3tl{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;padding:8px 0;font:inherit;text-align:left;color:var(--ink);cursor:pointer;min-height:0!important;border-bottom:1px solid #f0ede7}
+.z3tl.head{cursor:default;border-bottom:none;padding:0 0 6px}
+.z3tl:last-of-type{border-bottom:none}
+.z3tn{flex:0 0 170px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.z3tn b{font-weight:450;font-size:14px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.z3tn small{font-size:12px;color:var(--ink3)}
+.z3tt{flex:1;position:relative;height:22px;min-width:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/6 - 1px),#f0ede7 calc(100%/6 - 1px),#f0ede7 calc(100%/6))}
+.z3axis{display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;color:var(--ink3);background:none;height:auto}
+.z3now{position:absolute;top:0;width:0;height:100%}
+.z3now em{position:absolute;top:-1px;transform:translateX(-50%);font-style:normal;font-size:10.5px;color:#fff;background:#B66A5E;border-radius:99px;padding:0 6px;white-space:nowrap}
+.z3bar{position:absolute;top:5px;height:12px;border-radius:6px;background:color-mix(in srgb,var(--pc) 22%,#fff);overflow:hidden}
+.z3bar i{display:block;height:100%;background:var(--pc);border-radius:6px}
+.z3bar.late{background:#F1E1DD}
+.z3dia{position:absolute;top:4px;width:12px;height:12px;margin-left:-6px;background:var(--pc);transform:rotate(45deg);border-radius:2px;box-shadow:0 0 0 2px var(--card)}
+.z3more{position:absolute;right:4px;top:2px;font-style:normal;color:var(--ink3);line-height:1}
+.z3wsp .zspark{min-width:0!important;width:100%;max-width:100%;overflow:hidden}
+.z3nodate{font-size:13px;color:var(--ink3);margin:10px 0 0}
+@media(max-width:700px){.z3tl{flex-wrap:wrap;gap:6px}.z3tn{flex-basis:100%}.z3tl.head .z3tn{display:none}}
+/* Reading: the shelf */
+.z3spines{display:flex;align-items:flex-end;gap:4px;overflow-x:auto;scrollbar-width:none;padding:10px 6px 0;min-height:150px}
+.z3spines::-webkit-scrollbar{display:none}
+.z3sp{position:relative;flex:none;border:none;border-radius:4px 4px 2px 2px;padding:6px 0;cursor:pointer;min-height:0!important;box-shadow:inset -2px 0 0 rgba(0,0,0,.08),inset 2px 0 0 rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.z3sp:hover{transform:translateY(-6px)}
+.z3sp span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;color:rgba(255,255,255,.95);white-space:nowrap;overflow:hidden;max-height:calc(100% - 4px);-webkit-mask-image:linear-gradient(0deg,#000 80%,transparent);mask-image:linear-gradient(0deg,#000 80%,transparent)}
+.z3sp i{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9px;color:#fff}
+.z3board{height:10px;border-radius:3px;background:linear-gradient(180deg,#D9C7B2,#C6AF95);box-shadow:0 6px 10px -6px rgba(0,0,0,.35)}
+.main.enter .z3sp{animation:zin .5s cubic-bezier(.2,.7,.2,1) both}
+/* Notes: writing */
+.z3write{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.z3wst{display:flex;gap:22px}
+.z3wst div{display:flex;flex-direction:column}
+.z3wst b{font-size:26px;font-weight:500;letter-spacing:-.5px;line-height:1.1}
+.z3wst small{font-size:12px;color:var(--ink3)}
+.z3wsp{flex:1;min-width:200px;display:flex;flex-direction:column;gap:4px}
+.z3wsp svg{width:100%}
+.z3wsp small{font-size:11.5px;color:var(--ink3)}
+.z3notes .zcb{padding-top:4px}
+/* Applications: most used bars */
+.z3use{display:flex;align-items:center;gap:10px;padding:7px 0;color:var(--ink);text-decoration:none;border-bottom:1px solid #f0ede7}
+.z3use:last-child{border-bottom:none}
+.z3use>:first-child{width:30px;height:30px;flex:none}
+.z3un{flex:0 0 130px;font-size:14px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.z3ub{flex:1;height:10px;border-radius:5px;background:#EFECE6;overflow:hidden}
+.z3ub i{display:block;height:100%;border-radius:5px;background:#9DB0BE}
+.main.enter .z3ub i{animation:zgrow .9s cubic-bezier(.3,.7,.2,1) both .15s}
+.z3use em{font-style:normal;font-size:12.5px;color:var(--ink3);min-width:22px;text-align:right}
+@media(max-width:700px){.z3un{flex-basis:96px}}
 </style>
 </head>
 <body>
@@ -3614,7 +3710,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v150';
+var BUILD='v151';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -14591,6 +14687,147 @@ function q11Migrate(){
 }
 var _q11Load=load;
 load=async function(){await _q11Load();try{q11Migrate()}catch(e){}render()};
+
+
+/* ======================= ROUND 12 (v151): every page its own look again =======================
+   Jae (2026-10-10) after v149-v150: "Now all of the pages look identical, I don't want that. I just liked that the
+   Budget one had more graphs, bars and visual aspects... I really only liked the pie chart for the budgets."
+   So the shared ring card + side rail is gone everywhere except Budget. Each page is back to its own layout
+   and gets ONE visual that fits it and no other page has: To do = stacked bars per group, Shopping list =
+   a cart that fills block by block, Habits = a 12-week heatmap, Projects = a timeline, Reading = a bookshelf,
+   Notes = a writing line, Applications = most-used bars. Calendar, Plan my week, Meal prep, Mood and Home
+   are back to how they were before v149. The group cards on To do stay (Jae asked for those). */
+
+/* ---------- back to each page's own layout ---------- */
+zHabitsPage=function(c){var h=_q10Hab(c),i=h.lastIndexOf('<section class="zcard');return (i>0?h.slice(0,i):h)+z3HabitHeat(c)};
+zProjectsPage=function(c){var b=_q10Proj(c);if(view.zproj&&zItem(c,view.zproj))return b;return z3Timeline(c)+b};
+zReadingPage=function(c){var h=_q10Read(c),tr=rdTrack(c);if(!tr||view.rdSetup===c.id)return h;
+ var shelf=z3Shelf(c);if(!shelf)return h;
+ return /<details class="zrdfin"/.test(h)?h.replace(/<details class="zrdfin"[\s\S]*?<\/details>/,shelf):h.replace('<button class="zlink zrdchange"',shelf+'<button class="zlink zrdchange"')};
+zMealsPage=_q10Meals;
+zMoodPage=_q10Mood;
+viewCalendar=_q11Cal;
+viewPlan=_q11Plan;
+zListPage=function(c){
+ if(c.kind==='todo')return z3TodoViz(c)+z2TodoList(c);
+ if(c.kind==='groceries'){var gl=_q10List(c);return shopTab(c)==='list'?gl.replace(/(<div class="zshoptabs"[\s\S]*?<\/button><\/div>)/,function(m){return m+z3Cart(c)}):gl}
+ return _q10List(c);
+};
+var _q12Apps=_q11Apps;
+zAppsPage=function(c){var h=_q12Apps(c),i=h.indexOf('<section class="zcard',5);return i>0?h.slice(0,i)+z3MostUsed(c)+h.slice(i):h+z3MostUsed(c)};
+// Home: the "Today" ring card comes off again (and isn't offered as a widget)
+q11Migrate=function(){};
+delete WDEF.today1c;
+Object.keys(DEFAULT_W).forEach(function(sp){DEFAULT_W[sp]=DEFAULT_W[sp].filter(function(d){return d[0]!=='today1c'})});
+function q12Migrate(){
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.h1coff)return;if(sbUser&&!S.everSynced)return;
+ var H=S.homeW||{},ch=false;
+ Object.keys(H).forEach(function(k){var L=H[k];if(L&&L.some(function(w){return w.type==='today1c'})){H[k]=L.filter(function(w){return w.type!=='today1c'});ch=true}});
+ if(ch)S.homeW=Object.assign({},H);
+ S.spacesInit=Object.assign({},S.spacesInit,{h1coff:true});save();
+}
+var _q12Load=load;
+load=async function(){await _q12Load();try{q12Migrate()}catch(e){}render()};
+
+/* ---------- To do: a stacked bar for each group (late, this week, later, done) ---------- */
+var Z3C={late:'#C98F86',wk:'#D8BD8C',later:'#DDD8CE',done:'#A8C1A8'};
+function z3TodoViz(c){
+ var td=iso(today()),we=zAddDays(iso(weekStart(0)),6),secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var T=c.tasks||[];if(!T.length)return '';
+ var R=[null].concat(secs).map(function(s){
+  var L=T.filter(function(t){return s?t.sec===s.id:!(t.sec&&ids[t.sec])});
+  if(!s&&secs.length&&!L.length)return null;
+  var late=L.filter(function(t){return !t.done&&t.due&&t.due<td}).length,wk=L.filter(function(t){return !t.done&&t.due&&t.due>=td&&t.due<=we}).length,dn=L.filter(function(t){return t.done}).length;
+  return {s:s,n:L.length,late:late,wk:wk,later:L.length-late-wk-dn,dn:dn};
+ }).filter(Boolean);
+ var mx=Math.max.apply(null,R.map(function(r){return r.n}).concat([1]));
+ var seg=function(v,k,lab){return v?'<i style="flex:'+v+';background:'+Z3C[k]+'" title="'+v+' '+lab+'"></i>':''};
+ var rows=R.map(function(r){var nm=r.s?r.s.name:(secs.length?'Not in a group':'All tasks');
+  return '<div class="z3wl"><span class="z3wn">'+(r.s?z2Badge(r.s.name,26):'<span class="z2badge none" style="width:26px;height:26px">'+zI(ZIC.list,13)+'</span>')+'<b>'+esc(nm)+'</b></span>'
+   +'<span class="z3wb"><span class="z3stack" style="width:'+Math.max(8,r.n/mx*100)+'%">'+seg(r.late,'late','late')+seg(r.wk,'wk','due this week')+seg(r.later,'later','later')+seg(r.dn,'done','done')+'</span></span>'
+   +'<em>'+(r.n-r.dn)+' open</em></div>'}).join('');
+ var leg=[['late','Late'],['wk','This week'],['later','Later'],['done','Done']].map(function(x){return '<span><i style="background:'+Z3C[x[0]]+'"></i>'+x[1]+'</span>'}).join('');
+ return '<section class="z3card z3work"><div class="z3h"><h3>'+(secs.length?'Your groups at a glance':'At a glance')+'</h3><div class="z3leg">'+leg+'</div></div>'+rows+'</section>';
+}
+
+/* ---------- Shopping list: the cart fills up, one block per item; stores as chips ---------- */
+function z3Cart(c){
+ var T=(c.tasks||[]).slice();if(!T.length)return '';
+ var dn=T.filter(function(t){return t.done}).length,secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ T.sort(function(a,b){return (b.done?1:0)-(a.done?1:0)});
+ var blocks=T.slice(0,72).map(function(t){return '<i class="'+(t.done?'y':'')+'" title="'+esc(t.title)+'"></i>'}).join('');
+ var chips=secs.map(function(s){var n=T.filter(function(t){return !t.done&&t.sec===s.id}).length;return '<span class="z3chip">'+zLogo(s.name,22,'store',s.site)+'<b>'+esc(s.name)+'</b><em>'+n+'</em></span>'}).join('');
+ var any=T.filter(function(t){return !t.done&&!(t.sec&&ids[t.sec])}).length;if(secs.length&&any)chips='<span class="z3chip"><span class="zlogo" style="width:22px;height:22px;background:#E6EDE6;color:#708F77">'+zI(ZIC.cart,12)+'</span><b>Any store</b><em>'+any+'</em></span>'+chips;
+ var msg=dn===T.length?'Everything’s in the cart':dn?dn+' of '+T.length+' in the cart':T.length+' thing'+(T.length===1?'':'s')+' to get';
+ return '<section class="z3card z3cart"><div class="z3h"><h3>'+zI(ZIC.cart,17)+' '+esc(msg)+'</h3><span class="zsoft">'+(T.length?Math.round(dn/T.length*100):0)+'%</span></div><div class="z3blocks">'+blocks+'</div>'+(chips?'<div class="z3chips">'+chips+'</div>':'')+'</section>';
+}
+
+/* ---------- Habits: the last 12 weeks as a heatmap (darker = more habits done that day) ---------- */
+function z3HabitHeat(c){
+ var H=zHabits(c),td=iso(today());if(!H.length)return '';
+ var start=iso(weekStart(-11)),cols='',months='',lastM=-1;
+ for(var w=0;w<12;w++){var ws=zAddDays(start,w*7),m=parseISO(ws).getMonth();
+  months+='<span>'+(m!==lastM?esc(parseISO(ws).toLocaleDateString('en-CA',{month:'short'}).replace('.','')):'')+'</span>';lastM=m;
+  var cells='';for(var d=0;d<7;d++){var k=zAddDays(ws,d),s=0,g=0;H.forEach(function(h){if(zHabitOn(h,k)){s++;if(zHabitDone(c,h,k))g++}});
+   var lv=k>td?-1:!s?0:g===0?0:Math.ceil(g/s*4);
+   cells+='<i class="l'+(lv<0?'f':lv)+(k===td?' t':'')+'" title="'+esc(parseISO(k).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}))+(k<=td&&s?': '+g+' of '+s:'')+'"></i>'}
+  cols+='<div class="z3hcol">'+cells+'</div>'}
+ var tot=0;for(var k2=start;k2<=td;k2=zAddDays(k2,1))H.forEach(function(h){if(zHabitDone(c,h,k2))tot++});
+ return '<section class="z3card z3heat"><div class="z3h"><h3>Last 12 weeks</h3><span class="zsoft">'+tot+' check-ins</span></div>'
+  +'<div class="z3hwrap"><div class="z3hdays"><span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span></div><div><div class="z3hmon">'+months+'</div><div class="z3hgrid">'+cols+'</div></div></div>'
+  +'<div class="z3hleg"><span>Less</span><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i><span>More</span></div></section>';
+}
+
+/* ---------- Projects: a timeline of the next six weeks ---------- */
+function z3Timeline(c){
+ var P=c.items.filter(function(x){return x.t==='proj'&&(x.status||'todo')!=='done'});if(!P.length)return '';
+ var td=iso(today()),start=iso(weekStart(0)),span=42,pos=function(k){return Math.max(0,Math.min(100,daysBetween(parseISO(start),parseISO(k))/span*100))};
+ var dated=P.filter(function(p){return p.due}).sort(function(a,b){return a.due<b.due?-1:1}),undated=P.filter(function(p){return !p.due});
+ var axis='';for(var w=0;w<6;w++)axis+='<span>'+esc(parseISO(zAddDays(start,w*7)).toLocaleDateString('en-CA',{month:'short',day:'numeric'}).replace('.',''))+'</span>';
+ var tp=pos(td);
+ var rows=dated.map(function(p){var pr=zProjProgress(p),late=p.due<td,a=late?Math.max(0,pos(p.due)):tp,b=pos(p.due),beyond=p.due>zAddDays(start,span);
+  var col=(p.status||'todo')==='doing'?'#83708F':'#8C8A84';
+  return '<button class="z3tl" data-zact="projopen:'+c.id+':'+p.id+'"><span class="z3tn"><b>'+esc(p.title)+'</b><small>'+(late?'<span class="z2late">'+esc(cpCountdown(p.due).t)+'</span>':esc(zShortDay(p.due)))+' · '+pr+'%</small></span>'
+   +'<span class="z3tt"><span class="z3bar'+(late?' late':'')+'" style="left:'+Math.min(a,b)+'%;width:'+Math.max(2.5,Math.abs(b-a))+'%;--pc:'+col+'"><i style="width:'+pr+'%"></i></span>'+(beyond?'<em class="z3more">›</em>':'')+'<span class="z3dia" style="left:'+b+'%;--pc:'+(late?'#B66A5E':col)+'"></span></span></button>'}).join('');
+ return '<section class="z3card z3time"><div class="z3h"><h3>Timeline</h3><span class="zsoft">The next six weeks</span></div>'
+  +'<div class="z3tl head"><span class="z3tn"></span><span class="z3tt z3axis">'+axis+'<span class="z3now" style="left:'+tp+'%"><em>Today</em></span></span></div>'
+  +(rows||'<p class="zempty">Give your projects due dates to see them on the timeline.</p>')
+  +(undated.length?'<p class="z3nodate">No date yet: '+undated.map(function(p){return '<button class="zlink" data-zact="projopen:'+c.id+':'+p.id+'">'+esc(p.title)+'</button>'}).join(', ')+'</p>':'')+'</section>';
+}
+
+/* ---------- Reading & Watchlist: what you've finished, as spines on a shelf ---------- */
+function z3Shelf(c){
+ var F=c.items.filter(function(x){return x.t==='read'&&x.status==='done'}).sort(function(a,b){return String(b.fin||b.savedAt||'')<String(a.fin||a.savedAt||'')?-1:1});
+ if(!F.length)return '';
+ var yr=String(today().getFullYear()),thisY=F.filter(function(x){return String(x.fin||x.savedAt||'').slice(0,4)===yr}).length;
+ var spines=F.slice(0,40).map(function(x){var hsh=Math.abs(String(x.title).split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7)),hue=hsh%360,ht=104+hsh%34,wd=32+hsh%10;
+  return '<button class="z3sp" data-zact="readedit:'+c.id+':'+x.id+'" style="height:'+ht+'px;width:'+wd+'px;background:linear-gradient(90deg,hsl('+hue+',22%,62%),hsl('+hue+',24%,70%) 40%,hsl('+hue+',22%,64%))" title="'+esc(x.title)+(x.rating?' · '+'★'.repeat(x.rating):'')+'"><span>'+esc(x.title)+'</span>'+(x.rating>=4?'<i>★</i>':'')+'</button>'}).join('');
+ return '<section class="z3card z3shelf"><div class="z3h"><h3>Your shelf</h3><span class="zsoft">'+F.length+' finished · '+thisY+' this year</span></div><div class="z3spines">'+spines+'</div><div class="z3board"></div></section>';
+}
+
+/* ---------- Notes: how much you've been writing ---------- */
+zNotesPage=function(c){
+ var L=c.items.filter(function(x){return x.t==='note'}).sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1}),F=FILES[c.id]||[];
+ var words=L.reduce(function(s,x){return s+((x.body||'').trim()?(x.body||'').trim().split(/\s+/).length:0)},0);
+ var ws=iso(weekStart(0)),wk=[];for(var i=11;i>=0;i--){var a=zAddDays(ws,-7*i),b=zAddDays(a,6);wk.push(L.filter(function(x){return x.date>=a&&x.date<=b}).length)}
+ var write='<section class="z3card z3write"><div class="z3wst"><div><b>'+L.length+'</b><small>typed note'+(L.length===1?'':'s')+'</small></div><div><b>'+words.toLocaleString('en-CA')+'</b><small>words</small></div><div><b>'+F.length+'</b><small>handwritten</small></div></div>'
+  +'<div class="z3wsp">'+(L.length?zSpark(wk,64,'#9E8B61'):'')+'<small>Notes per week, the last 12 weeks</small></div></section>';
+ var tile=function(x){var k=ZC[zHueOf(x.title||x.id)]||ZC.grey;return '<button class="z2note" data-zact="noteedit:'+c.id+':'+x.id+'" style="--nt:'+k[0]+';--nc:'+k[1]+'"><span class="z2nd">'+esc(x.date?zShortDay(x.date):'')+'</span><b>'+esc(x.title||'Untitled')+'</b><span class="z2nb">'+esc((x.body||'').slice(0,220))+'</span></button>'};
+ var pages=F.map(function(f,i){return '<div class="z2page"><a href="#" data-mkopen="'+i+'" data-c="'+c.id+'"><span class="z2pp">'+zI(ZIC.pen,20)+'</span><b>'+esc(f.name)+'</b><small>Handwritten</small></a><button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">'+CP_ICO.more+'</button></div>'}).join('');
+ return (L.length||F.length?write:'')
+  +zCard(esc(c.name),'note','<button class="zlink" data-zact="notenew:'+c.id+'">+ Typed note</button> · <button class="zlink" data-zact="notepen:'+c.id+'">+ Handwritten page</button>',
+   L.length?'<div class="z2notes">'+L.map(tile).join('')+'</div>':'<p class="zempty">Type a note, or start a page to write on with your Pencil.</p>','z3notes')
+  +(F.length?zCard('Handwritten pages','pen','','<div class="z2pages">'+pages+'</div>'):'');
+};
+
+/* ---------- Applications: the ones you open most, as bars with their icons ---------- */
+function z3MostUsed(c){
+ var L=c.links||[],U=z2AppUse(),R=L.map(function(l){return {l:l,n:(U[l.url]&&U[l.url].n)||0}}).filter(function(x){return x.n}).sort(function(a,b){return b.n-a.n}).slice(0,6);
+ if(!L.length)return '';
+ var mx=R.length?R[0].n:1;
+ return zCard('Most used','star','On this device',R.length?R.map(function(x){return '<a class="z3use" href="'+esc(x.l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(x.l.url,x.l.title,x.l.icon)+'<span class="z3un">'+esc(x.l.title)+'</span><span class="z3ub"><i style="width:'+Math.max(6,x.n/mx*100)+'%"></i></span><em>'+x.n+'</em></a>'}).join('')
+  :'<p class="zempty">Open a few of your apps from here and the ones you use most show up as bars.</p>','z3usec');
+}
 
 
 try{spBoot()}catch(e){}
