@@ -4298,7 +4298,9 @@ body.q31nosq .sitem.on .sic.pg,body.q31nosq .sitem:hover .sic.pg{opacity:1}
 .q36grid>.q36sec{margin:0!important;min-width:0;position:relative;container-type:inline-size}
 .q36grid>.zbgoals{grid-column:1/-1}
 .q36grid .zbpay{height:auto}
-.q36grid.editing>.q36sec{cursor:grab;touch-action:none;animation:zjig .6s ease-in-out infinite alternate;outline:none!important}
+.q36grid.editing>.q36sec{cursor:grab;touch-action:none;animation:zwob .6s ease-in-out infinite;outline:none!important}
+.q36grid.editing>.q36sec>*:not(.q36x):not(.q36m){pointer-events:none}
+@media(prefers-reduced-motion:reduce){.q36grid.editing>.q36sec{animation:none}}
 .q36grid.editing>.q36sec:nth-child(2n){animation-delay:-.3s}
 .q36sec.q36drag{z-index:50;opacity:.85;animation:none!important;box-shadow:0 24px 50px -16px rgba(0,0,0,.45);cursor:grabbing;transition:none}
 body.q36dragging{user-select:none;-webkit-user-select:none}
