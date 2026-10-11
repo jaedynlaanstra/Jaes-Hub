@@ -4568,6 +4568,14 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .secrow.q49flash{animation:q49flash 1.6s ease}
 @keyframes q49flash{0%,40%{background:color-mix(in srgb,var(--sideBg,#7B6E91) 18%,transparent);border-radius:12px}100%{background:transparent}}
 
+/* v197: card colours and pencils; the Look and feel × lined up */
+.q50pen{top:10px!important;right:10px!important;overflow:hidden}
+.q50pen input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0}
+.q50rs{position:absolute;top:13px;right:48px;z-index:9;border:1px solid var(--line2,#ddd);background:var(--card);color:var(--ink2);border-radius:99px;padding:3px 10px;font:inherit;font-size:12px;cursor:pointer;min-height:0!important;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.q50col{border-color:transparent!important}
+.pickpanel .pickhead{padding-right:48px!important}
+.q44x{top:50%!important;right:12px!important;width:30px!important;height:30px!important;transform:translateY(-50%)!important}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4896,7 +4904,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v196';
+var BUILD='v197';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19028,6 +19036,37 @@ window.addEventListener('click',function(e){
  setTimeout(function(){var inp=document.querySelector('.pickpanel input[data-secc="'+key+'"]');if(!inp)return;var row=inp.closest('.secrow')||inp;
   try{row.scrollIntoView({block:'center'})}catch(err){}row.classList.remove('q49flash');void row.offsetWidth;row.classList.add('q49flash');inp.click()},60);
 },true);
+
+/* ===== v197: a colour for each card on every page (Budget and the other pages), picked from a pencil on the card =====
+   Jae: with Look and feel open on Budget there were no pencils. Cards are named by their Budget section (data-q36)
+   or, on other pages, by their title; the colour is kept per page in c.cardCol {name:'#hex'} (synced).
+   A light colour shows exactly as picked; a darker one becomes a soft tint so the words and charts stay readable. */
+CLASS_KEYS.push('cardCol');
+function q50Cards(){
+ var c=view.page==='page'?classById(view.classId):null;if(!c)return [];var out=[],seen={};
+ var used=[];
+ if(c.kind==='budget'){var mn=document.querySelector('.main');var f=mn?q28Find(mn):{};Object.keys(f).forEach(function(k){if(f[k]){out.push({el:f[k],k:'b:'+k});used.push(f[k])}});seen.b=1}
+ document.querySelectorAll('.main section.zcard,.main .zcard').forEach(function(el){if(used.some(function(u){return u===el||u.contains(el)}))return;var t=el.querySelector(':scope>.zch .zct,:scope .zch .zct');var n=t&&t.textContent.trim();if(!n)return;var k='t:'+n;if(!seen[k]){seen[k]=1;out.push({el:el,k:k})}});
+ return out;
+}
+function q50Bg(hex){return q48Light(hex)?hex:'color-mix(in srgb,'+hex+' 28%,var(--card,#fff))'}
+function q50Paint(){
+ var c=view.page==='page'?classById(view.classId):null;if(!c)return;var col=c.cardCol||{};
+ q50Cards().forEach(function(o){var h=col[o.k];if(h&&/^#[0-9a-f]{6}$/i.test(h)){o.el.style.setProperty('background',q50Bg(h),'important');o.el.classList.add('q50col')}});
+ if(!view.picker)return;
+ q50Cards().forEach(function(o){if(o.el.querySelector(':scope>.q50pen'))return;o.el.classList.add('q49host');
+  var cur=col[o.k]||'#ffffff',lab=document.createElement('label');lab.className='q17pen q50pen';lab.title='Change this card’s colour';
+  lab.innerHTML=Q49PEN+'<input type="color" value="'+cur+'" data-q50cc="'+c.id+'|'+o.k.replace(/"/g,'')+'" aria-label="Change this card’s colour">';o.el.appendChild(lab);
+  if(col[o.k]){var r=document.createElement('button');r.type='button';r.className='q50rs';r.setAttribute('data-q50rs',c.id+'|'+o.k);r.textContent='Reset';r.title='Back to the usual colour';o.el.appendChild(r)}});
+}
+var _q50Render=render;
+render=function(){var r=_q50Render.apply(this,arguments);try{q50Paint()}catch(e){}return r};
+function q50Find(v){var p=v.split('|'),c=classById(p[0]),k=p.slice(1).join('|');return {c:c,k:k,el:(q50Cards().filter(function(o){return o.k===k})[0]||{}).el}}
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q50cc'))return;var f=q50Find(t.getAttribute('data-q50cc'));if(f.el)f.el.style.setProperty('background',q50Bg(t.value),'important')});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q50cc'))return;var f=q50Find(t.getAttribute('data-q50cc'));if(!f.c)return;
+ f.c.cardCol=Object.assign({},f.c.cardCol||{});f.c.cardCol[f.k]=t.value.toLowerCase();touch(f.c);save();render()});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q50rs]');if(!b)return;e.preventDefault();e.stopPropagation();var f=q50Find(b.getAttribute('data-q50rs'));if(!f.c||!f.c.cardCol)return;
+ f.c.cardCol=Object.assign({},f.c.cardCol);delete f.c.cardCol[f.k];touch(f.c);save();if(f.el)f.el.style.removeProperty('background');render()},true);
 
 try{spBoot()}catch(e){}
 load();
