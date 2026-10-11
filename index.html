@@ -4135,6 +4135,20 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .zhome.q24pv{display:flex!important;justify-content:center;padding:14px;border-radius:18px;background:var(--pagebg,#f4f2ee);pointer-events:none;grid-template-columns:none!important}
 .zhome.q24pv .zw{max-width:100%;flex:none;min-width:0}
 .zhome.q24pv .zw-full,.zhome.q24pv .zw-half{width:100%!important}
+/* v165: copy / paste beside colour codes */
+.q25cp{display:inline-flex;gap:3px;flex:none;vertical-align:middle;margin-left:4px}
+.q25cp button{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink2);display:grid;place-items:center;padding:0;cursor:pointer;min-height:0!important}
+.q25cp button:hover{background:color-mix(in srgb,var(--ink) 6%,var(--card))}
+.q25cp button:active{transform:scale(.9)}
+.q25hexrow{display:flex;align-items:center;gap:4px;margin-top:10px}
+.q25hexrow input{width:110px;flex:none}
+.q25cp{gap:2px;margin-left:3px}.q25cp button{width:22px;height:22px;border-radius:7px}
+@media(min-width:1200px){
+ .zhome.q25panel{grid-template-columns:minmax(0,1fr) 332px;align-items:stretch}
+ .zhome.q25panel>.zside{background:color-mix(in srgb,var(--sideBg) 13%,var(--card));border-radius:28px;padding:16px;align-self:stretch;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(70,55,40,.05),0 16px 34px -24px rgba(70,55,40,.35)}
+}
+@media(max-width:1199px){.q25pseg{display:none!important}}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4463,7 +4477,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v164';
+var BUILD='v165';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17094,6 +17108,69 @@ document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttrib
  if(document.hidden)go();else q25Raf=requestAnimationFrame(go);
 },true);
 document.addEventListener('change',function(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-z4menu')&&q17PageCol()&&S.menuMatch!==false)S.menuMatch=false},true);
+
+
+/* ======================= v165: dark widgets show their colour; live colour wheel for widgets; copy / paste hex =======================
+   Jae: "the dark widgets aren't changing colour" (their deep shade capped saturation so low that every colour
+   came out the same near-black), the widget colour wheel showed nothing until you let go, and wants Copy and
+   Paste beside hex codes. */
+q18Deep=function(){var q=rgb2hsl.apply(null,hex2rgb(chromeHex('sideBg')));return hsl2hex(q[0],Math.min(q[1]*1.15,36),22)};
+q20Deep=function(hex){var q=rgb2hsl.apply(null,hex2rgb(hex));return hsl2hex(q[0],Math.min(Math.max(q[1],16)*1.2,42),24)};
+// live: the preview in the widget menu and the widget itself follow the wheel as you drag; letting go saves
+function q25WidgetHtml(w){var sp=curSpace(),d=WDEF[w.type],sz=zwSize(w),h=null;try{if(sz==='small')h=zSmall(w,d,sp);if(!h)h=zWidgetHtml(w,sp)}catch(e){h=null}return h}
+function q25Live(id,col){
+ var w0=homeWidgets(curSpace()).filter(function(x){return x.id===id})[0];if(!w0)return;
+ var w=Object.assign({},w0,{color:col}),h=q25WidgetHtml(w);if(!h)return;var d=WDEF[w.type];
+ var bg=d&&d.legacy&&w.type!=='nextdue'&&w.type!=='music'?'color-mix(in srgb,'+col+' 22%,var(--card))':'';
+ [document.querySelector('.q24pv .zw'),document.querySelector('.zhome:not(.q24pv) [data-wid="'+id+'"]')].forEach(function(z){if(!z)return;
+  var card=[].slice.call(z.children).filter(function(e){return !/\b(zwx|zwm|q17pen)\b/.test(e.className)})[0];
+  var tmp=document.createElement('div');tmp.innerHTML=h;var nw=tmp.firstElementChild;if(!nw)return;
+  if(card)z.replaceChild(nw,card);else z.appendChild(nw);
+  if(bg){z.style.setProperty('--wbg',bg);z.setAttribute('data-wcol','1')}});
+ var any=document.querySelector('.modal label.zsw.any');if(any)any.style.background=col;
+ var hx=document.querySelector('[data-q25whex="'+id+'"]');if(hx&&document.activeElement!==hx)hx.value=col;
+}
+var q25Raf2=0;
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;var id=t.getAttribute('data-zwcolor');if(!id)return;
+ var v=t.value;if(q25Raf2)cancelAnimationFrame(q25Raf2);var go=function(){q25Raf2=0;q25Live(id,v)};if(document.hidden)go();else q25Raf2=requestAnimationFrame(go)});
+// the widget menu gets a hex box too (type or paste a code; it shows live, and saves when you leave the box)
+var _q25Menu=ZM.zwmenu.html;
+ZM.zwmenu.html=function(m){var h=_q25Menu(m);if(!h)return h;var w=homeWidgets(curSpace()).filter(function(x){return x.id===m.wid})[0];if(!w)return h;
+ var cur=/^#/.test(w.color||'')?w.color:(w.color&&ZC[w.color]?ZC[w.color][1]:chromeHex('sideBg'));
+ return h.replace('<p class="hint" style="margin:6px 0 0">The first one matches your menu colour.</p>','<div class="q25hexrow"><input type="text" class="sechex" value="'+esc(cur)+'" data-q25whex="'+w.id+'" spellcheck="false" aria-label="Colour code"></div><p class="hint" style="margin:6px 0 0">The first one matches your menu colour. Type or paste a colour code to use any colour.</p>');
+};
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute)return;var id=t.getAttribute('data-q25whex');if(!id)return;var v=t.value.trim();if(v[0]!=='#')v='#'+v;if(/^#[0-9a-f]{6}$/i.test(v))q25Live(id,v)});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;var id=t.getAttribute('data-q25whex');if(!id)return;var v=t.value.trim();if(v[0]!=='#')v='#'+v;if(/^#[0-9a-f]{6}$/i.test(v))ZACT.wset(id,'color',v.toLowerCase())});
+// Copy and Paste beside every colour code box
+var Q25HEX='[data-sechex],[data-chhex],[data-pagebghex],[data-surfparthex],[data-themechromehex],[data-themehex],[data-q25whex]';
+var Q25IC={copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',paste:'<rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 4h6v3H9z"/>'};
+function q25Hex(){document.querySelectorAll(Q25HEX).forEach(function(inp){var n=inp.nextElementSibling;if(n&&n.classList.contains('q25cp'))return;
+ inp.insertAdjacentHTML('afterend','<span class="q25cp"><button type="button" data-q25copy="1" title="Copy colour code" aria-label="Copy colour code">'+zI(Q25IC.copy,13)+'</button><button type="button" data-q25paste="1" title="Paste a colour code" aria-label="Paste a colour code">'+zI(Q25IC.paste,13)+'</button></span>')})}
+var _q25Render=render;
+render=function(){var r=_q25Render.apply(this,arguments);try{q25Hex()}catch(e){}return r};
+function q25Set(inp,v){inp.value=v;inp.dispatchEvent(new Event('input',{bubbles:true}));inp.dispatchEvent(new Event('change',{bubbles:true}))}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q25copy],[data-q25paste]');if(!b)return;e.preventDefault();e.stopPropagation();
+ var inp=b.parentNode.previousElementSibling;if(!inp)return;
+ if(b.hasAttribute('data-q25copy')){var v=inp.value.trim();var ok=function(){zToast('Copied '+esc(v))};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,function(){inp.select();try{document.execCommand('copy');ok()}catch(err){}});else{inp.select();try{document.execCommand('copy');ok()}catch(err){}}return}
+ var use=function(txt){var m=/#?([0-9a-f]{6}|[0-9a-f]{3})\b/i.exec(String(txt||''));if(!m){zToast('That isn’t a colour code. Copy one like #7B6E91 first.');return}
+  var hx=m[1];if(hx.length===3)hx=hx.split('').map(function(ch){return ch+ch}).join('');q25Set(inp,'#'+hx.toLowerCase());zToast('Pasted #'+hx.toLowerCase())};
+ if(navigator.clipboard&&navigator.clipboard.readText)navigator.clipboard.readText().then(use,function(){inp.focus();inp.select();zToast('Press ⌘V (or long-press and Paste) to paste')});
+ else{inp.focus();inp.select();zToast('Press ⌘V (or long-press and Paste) to paste')}
+},true);
+
+
+/* ---------- a background panel behind the right-hand widget column (Jae: "an option to turn on and off a side bar
+   on the right side... there is no rectangle background behind it"). S.sidePanel (synced), switch in the Edit
+   widgets bar; computers only (under 1200px the column joins the main list). ---------- */
+SETTINGS_KEYS.push('sidePanel');
+ZACT.q25panel=function(v){S.sidePanel=v==='1';save();render()};
+var _q25VSH=viewSpaceHome;
+viewSpaceHome=function(){var h=_q25VSH.apply(this,arguments);
+ if(S.sidePanel)h=h.replace('<div class="zhome','<div class="zhome q25panel');
+ var seg='<span class="q20dseg q25pseg" role="group" aria-label="Side panel"><em>Side panel</em><button class="'+(S.sidePanel?'':'on')+'" data-zact="q25panel:0">Off</button><button class="'+(S.sidePanel?'on':'')+'" data-zact="q25panel:1">On</button></span>';
+ return h.replace('<span class="q20dseg" role="group" aria-label="Card depth">',seg+'<span class="q20dseg" role="group" aria-label="Card depth">');
+};
 
 try{spBoot()}catch(e){}
 load();
