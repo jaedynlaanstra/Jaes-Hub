@@ -4425,6 +4425,10 @@ body.q39lock{overflow:hidden}
 .q40chev{margin-left:auto;display:inline-flex;color:var(--ink3);transition:transform .2s}.q40chev svg{width:16px;height:16px}
 .q40cat[open] .q40chev{transform:rotate(180deg)}
 .q40list{padding:4px 12px 14px;margin:0!important}
+/* the cooking card's title sits on the dark photo: always white (a page heading colour was overriding it) */
+.q39ht h2{color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.q39ht .q39chip{color:#fff!important}
+.q39shade{background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.25) 40%,rgba(0,0,0,.7))!important}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4753,7 +4757,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v186';
+var BUILD='v187';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
