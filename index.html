@@ -4148,8 +4148,7 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
     widgets keep their size; only the main area gets a little narrower, nothing is stretched or reordered */
  .zhome.q25panel{grid-template-columns:minmax(0,1fr) 348px}
  .zhome.q25panel>.zside{position:relative;isolation:isolate;align-self:stretch;padding:24px;align-content:start}
- .zhome.q25panel>.zside::before{content:'';position:absolute;inset:0;z-index:-1;border-radius:28px;background:color-mix(in srgb,var(--sideBg) 13%,var(--card));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(70,55,40,.05),0 16px 34px -24px rgba(70,55,40,.35);pointer-events:none}
+ .zhome.q25panel>.zside::before{content:'';position:absolute;inset:0;z-index:-1;border-radius:28px;background:var(--q34p,color-mix(in srgb,var(--sideBg) 13%,var(--card)));box-shadow:none;pointer-events:none}
 }
 @media(max-width:1199px){.q25pseg{display:none!important}}
 .zshow,.zshow.cur{color:var(--ink)!important;opacity:1!important}
@@ -4281,6 +4280,10 @@ body.q31nosq .sitem.on .sic.pg,body.q31nosq .sitem:hover .sic.pg{opacity:1}
  .zhome{gap:24px!important}.zhome .zmain{gap:24px!important}.zhome .zside{gap:24px!important}
 
 }
+.q34pc{display:inline-flex;align-items:center;gap:6px;flex:none}
+.q34dot{position:relative;width:26px;height:26px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.7);cursor:pointer;flex:none}
+.q34dot input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.q34auto{padding:6px 10px!important;font-size:12px!important}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4609,7 +4612,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v176';
+var BUILD='v177';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17658,6 +17661,19 @@ function q33Open(){
 }
 function q33Close(){if(!q33P||!q33P.classList.contains('open'))return;q33P.classList.remove('open');q27.dispatchEvent(new Event('change'))}
 q27.showPicker=function(){q33Open()};q27.click=function(){q33Open()};
+
+
+/* ---------- side panel colour: a colour dot beside "Side panel" in the Edit widgets bar (S.sidePanelCol, synced; Auto = a tint of the menu colour) ---------- */
+SETTINGS_KEYS.push('sidePanelCol');
+ZACT.q34auto=function(){delete S.sidePanelCol;save();render()};
+var _q34VSH=viewSpaceHome;
+viewSpaceHome=function(){var h=_q34VSH.apply(this,arguments),col=S.sidePanelCol;
+ if(S.sidePanel&&col)h=h.replace('<div class="zhome q25panel','<div style="--q34p:'+col+'" class="zhome q25panel');
+ if(S.sidePanel){var cur=col||'#e9eef0';
+  h=h.replace('<button class="'+(S.sidePanel?'on':'')+'" data-zact="q25panel:1">On</button></span>','<button class="on" data-zact="q25panel:1">On</button></span><span class="q34pc"><label class="q34dot" title="Side panel colour" style="background:'+(col||'color-mix(in srgb,var(--sideBg) 13%,var(--card))')+'"><input type="color" data-q34panel="1" value="'+cur+'" aria-label="Side panel colour"></label>'+(col?'<button class="zebtn q34auto" data-zact="q34auto" title="Back to a tint of your menu colour">Auto</button>':'')+'</span>')}
+ return h};
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q34panel'))return;var z=document.querySelector('.zhome.q25panel');if(z)z.style.setProperty('--q34p',t.value);var l=t.closest('label');if(l)l.style.background=t.value});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q34panel'))return;S.sidePanelCol=t.value;save();render()});
 
 try{spBoot()}catch(e){}
 load();
