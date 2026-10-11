@@ -4144,9 +4144,12 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .q25hexrow input{width:110px;flex:none}
 .q25cp{gap:2px;margin-left:3px}.q25cp button{width:22px;height:22px;border-radius:7px}
 @media(min-width:1200px){
- .zhome.q25panel{grid-template-columns:minmax(0,1fr) 332px;align-items:stretch}
- .zhome.q25panel>.zside{background:color-mix(in srgb,var(--sideBg) 13%,var(--card));border-radius:28px;padding:16px;align-self:stretch;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(70,55,40,.05),0 16px 34px -24px rgba(70,55,40,.35)}
+ /* the panel: 24px of padding inside (same as the gaps between widgets); the column grows by 48px so the right-hand
+    widgets keep their size; only the main area gets a little narrower, nothing is stretched or reordered */
+ .zhome.q25panel{grid-template-columns:minmax(0,1fr) 348px}
+ .zhome.q25panel>.zside{position:relative;isolation:isolate;align-self:stretch;padding:24px;align-content:start}
+ .zhome.q25panel>.zside::before{content:'';position:absolute;inset:0;z-index:-1;border-radius:28px;background:color-mix(in srgb,var(--sideBg) 13%,var(--card));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(70,55,40,.05),0 16px 34px -24px rgba(70,55,40,.35);pointer-events:none}
 }
 @media(max-width:1199px){.q25pseg{display:none!important}}
 .zshow,.zshow.cur{color:var(--ink)!important;opacity:1!important}
@@ -4243,6 +4246,41 @@ body.q31nosq .sitem.on .sic.pg,body.q31nosq .sitem:hover .sic.pg{opacity:1}
 .q32big .zbsix{height:220px}
 .q28below .zbwl{max-width:380px;flex:1}.q28below .zbwent{justify-content:flex-start}
 .q28row-l .q17cadd{width:130px}.q28row-m .q17cadd{width:110px}.q28row-s .q17cadd{width:92px;font-size:12px}.q28row-sq .q17cadd{width:96px;font-size:12px}
+/* v176: tones, Doable's colour picker, roomier small widgets */
+.q33ink{color:#2a2620!important}
+.q33ink :is(.q21th>button,.q22hh button,.q20rt,.q22hk,.q21td .q20rt){color:#2a2620!important}
+.q33ink :is(.q21big span,.q21left,.q21foot,.q21due,.q21more,.q22more,.q22none,.q22hh b,.q21ring span,.q18th b){color:rgba(42,38,32,.62)!important}
+.q33ink .q21pill{background:rgba(0,0,0,.06)}
+.q33ink .q21row{border-top-color:rgba(0,0,0,.08)}
+.q33ink .q20ck{border-color:rgba(42,38,32,.45)!important}
+.q33ink .q20ck i{background:var(--a)}
+.q33ink .q20ck i::after{border-color:#fff}
+.q33ink .q21ckd{background:rgba(42,38,32,.7);color:#fff}
+.q33ink .q21ring .tr{stroke:rgba(0,0,0,.1)}.q33ink .q21ring .pr{stroke:color-mix(in srgb,var(--a) 85%,#000)}
+.q33ink .q22hk i{border-color:color-mix(in srgb,var(--hc) 70%,#000)}.q33ink .q22hk.y i{color:#fff;background:color-mix(in srgb,var(--hc) 75%,#000)}
+.q33ink .q21add{border-top-color:rgba(0,0,0,.08)}.q33ink .q21add input{color:#2a2620}.q33ink .q21add input::placeholder{color:rgba(42,38,32,.5)}.q33ink .q21add .q20plus{background:rgba(0,0,0,.1);color:#2a2620}
+.q33ink .q18ck{color:#2a2620}.q33ink .q18ck i{border-color:rgba(42,38,32,.45)}.q33ink .q18bar{background:rgba(0,0,0,.08)}
+.q33t:hover .q22hk:hover,.q33ink .q20rt:hover{background:rgba(0,0,0,.05)!important}
+.q33t.q33ink{border:1px solid var(--line)!important}
+#q33pick{position:fixed;z-index:10000;width:248px;padding:12px;border-radius:18px;background:var(--card,#fff);border:1px solid var(--line,#e6e1d8);box-shadow:0 18px 40px -12px rgba(0,0,0,.35);display:none;flex-direction:column;gap:10px;color:var(--ink)}
+#q33pick.open{display:flex;animation:zpop .18s ease}
+#q33pick.sheet{left:10px!important;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);top:auto!important;width:auto}
+.q33sv{position:relative;height:150px;border-radius:12px;cursor:crosshair;touch-action:none}
+.q33sv i{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 2px 6px rgba(0,0,0,.3);pointer-events:none}
+.q33hue{position:relative;height:14px;border-radius:99px;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;touch-action:none}
+.q33hue i{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.3);pointer-events:none}
+.q33row{display:flex;align-items:center;gap:6px}
+.q33sw{width:28px;height:28px;border-radius:8px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.q33hex{flex:1;min-width:0;font:inherit;font-size:13px;padding:6px 8px!important;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);min-height:0!important}
+.q33row button{border:1px solid var(--line);background:var(--card);border-radius:8px;height:30px;min-width:30px;padding:0 8px;display:grid;place-items:center;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.q33row .q33ok{background:#2b2a27;color:#fff;border-color:#2b2a27}
+.q21td.sq,.q22hab.sq,.q22sp.sq{padding:16px 18px!important}
+.zw-sq .q21td.sq,.zw-sq .q22hab.sq,.zw-sq .q22sp.sq{padding:14px 15px!important}
+/* Home spacing: 24px between widgets, between the columns and inside the side panel (was 16/18). Jae likes the 40px side margins, so those stay */
+@media(min-width:901px){
+ .zhome{gap:24px!important}.zhome .zmain{gap:24px!important}.zhome .zside{gap:24px!important}
+
+}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4571,7 +4609,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v175';
+var BUILD='v176';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17557,6 +17595,69 @@ render=function(){var r=_q32Render.apply(this,arguments);
  return r};
 // leaving the Budget page ends editing
 var _q32Go=go;go=function(){view.q32edit=false;return _q32Go.apply(this,arguments)};
+
+
+/* ======================= v176: light or dark widgets; Doable's own colour picker; roomier small To do =======================
+   Jae: "make it so that I can have widgets be light or dark... the habit widget and to do widget cant be the exact
+   colour I make it because they are dark"; "the colour picker was very far in the top right corner" (the computer's
+   own picker opens wherever the system puts it); "the 'to do' text on the small icon feels really close to the corner". */
+// ---- tone: Dark (deep shade) | Your colour (exactly the colour, text adapts) | Light (a soft tint, dark text)
+var Q33TONE={todo:1,habits:1,todaylist:1};
+function q33Tone(w,h){
+ var t=w&&w.tone;if(!h||!t||t==='dark')return h;
+ var col=w.color&&/^#/.test(w.color)?w.color:(w.color&&ZC[w.color]?ZC[w.color][1]:chromeHex('sideBg'));
+ var bg=t==='exact'?col:'color-mix(in srgb,'+col+' 16%,var(--card))',ink=t==='light'||contrast(col,'#ffffff')<2.6;
+ h=h.replace(/(<section class="q18w [^"]*"[^>]*style="[^"]*?)background:[^;"]+/,'$1background:'+bg);
+ return h.replace('<section class="q18w ','<section class="q18w q33t'+(ink?' q33ink':'')+' ');
+}
+var _q33Todo=q21Todo;q21Todo=function(w,sp){return q33Tone(w,_q33Todo(w,sp))};Q20.todo=q21Todo;
+var _q33Hab=q22Hab;q22Hab=function(w,sp){return q33Tone(w,_q33Hab(w,sp))};
+var _q33TL=Q18.todaylist;Q18.todaylist=function(w,sp){return q33Tone(w,_q33TL(w,sp))};
+var _q33Menu=ZM.zwmenu.html;
+ZM.zwmenu.html=function(m){var h=_q33Menu(m);if(!h)return h;var w=homeWidgets(curSpace()).filter(function(x){return x.id===m.wid})[0];if(!w||!Q33TONE[w.type])return h;
+ var cur=w.tone||'dark',f='<div class="field"><label>Style</label><div class="zseg">'+[['dark','Dark'],['exact','Your colour'],['light','Light']].map(function(o){return '<button class="'+(cur===o[0]?'on':'')+'" data-zact="wset:'+w.id+':tone:'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div><p class="hint" style="margin:6px 0 0">Your colour uses exactly the colour picked below.</p></div>';
+ return h.replace(/(<div class="field"><label>Colour<\/label>)/,f+'$1');
+};
+// ---- Doable's own colour picker, beside the circle you tapped (replaces the system picker everywhere)
+function q33Hsv(hex){var a=hex2rgb(hex).map(function(x){return x/255}),mx=Math.max.apply(null,a),mn=Math.min.apply(null,a),d=mx-mn,h=0;
+ if(d){if(mx===a[0])h=((a[1]-a[2])/d)%6;else if(mx===a[1])h=(a[2]-a[0])/d+2;else h=(a[0]-a[1])/d+4;h*=60;if(h<0)h+=360}
+ return [h,mx?d/mx:0,mx]}
+function q33Hex(h,s,v){var c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c,r=[0,0,0];
+ if(h<60)r=[c,x,0];else if(h<120)r=[x,c,0];else if(h<180)r=[0,c,x];else if(h<240)r=[0,x,c];else if(h<300)r=[x,0,c];else r=[c,0,x];
+ return '#'+r.map(function(t){return ('0'+Math.round((t+m)*255).toString(16)).slice(-2)}).join('')}
+var q33P=null,q33St={h:0,s:0,v:0};
+function q33Build(){
+ if(q33P)return q33P;q33P=document.createElement('div');q33P.id='q33pick';q33P.setAttribute('role','dialog');q33P.setAttribute('aria-label','Pick a colour');
+ q33P.innerHTML='<div class="q33sv"><i></i></div><div class="q33hue"><i></i></div><div class="q33row"><span class="q33sw"></span><input class="q33hex" spellcheck="false" maxlength="7" aria-label="Colour code"><button type="button" class="q33cp" title="Copy" aria-label="Copy colour code">'+zI(Q25IC.copy,13)+'</button><button type="button" class="q33ps" title="Paste" aria-label="Paste a colour code">'+zI(Q25IC.paste,13)+'</button><button type="button" class="q33ok">Done</button></div>';
+ document.body.appendChild(q33P);
+ var sv=q33P.querySelector('.q33sv'),hue=q33P.querySelector('.q33hue');
+ var drag=function(el,fn){el.addEventListener('pointerdown',function(e){e.preventDefault();el.setPointerCapture(e.pointerId);fn(e);var mv=function(ev){fn(ev)},up=function(){el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up)};el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)})};
+ drag(sv,function(e){var r=sv.getBoundingClientRect();q33St.s=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));q33St.v=Math.max(0,Math.min(1,1-(e.clientY-r.top)/r.height));q33Emit()});
+ drag(hue,function(e){var r=hue.getBoundingClientRect();q33St.h=Math.max(0,Math.min(359.9,(e.clientX-r.left)/r.width*360));q33Emit()});
+ var hx=q33P.querySelector('.q33hex');
+ hx.addEventListener('input',function(){var v=hx.value.trim();if(v[0]!=='#')v='#'+v;if(/^#[0-9a-f]{6}$/i.test(v)){var t=q33Hsv(v);q33St={h:t[0],s:t[1],v:t[2]};q33Emit(true)}});
+ q33P.querySelector('.q33ok').addEventListener('click',function(){q33Close()});
+ q33P.querySelector('.q33cp').addEventListener('click',function(){var v=hx.value;try{navigator.clipboard.writeText(v).then(function(){zToast('Copied '+esc(v))})}catch(e){}});
+ q33P.querySelector('.q33ps').addEventListener('click',function(){try{navigator.clipboard.readText().then(function(t){var m=/#?([0-9a-f]{6})\b/i.exec(t||'');if(!m){zToast('That isn’t a colour code.');return}hx.value='#'+m[1].toLowerCase();hx.dispatchEvent(new Event('input'))})}catch(e){}});
+ document.addEventListener('pointerdown',function(e){if(q33P.classList.contains('open')&&!q33P.contains(e.target))q33Close()},true);
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&q33P.classList.contains('open'))q33Close()});
+ return q33P;
+}
+function q33Paint(skipHex){var hex=q33Hex(q33St.h,q33St.s,q33St.v);
+ q33P.querySelector('.q33sv').style.background='linear-gradient(to top,#000,transparent),linear-gradient(to right,#fff,'+q33Hex(q33St.h,1,1)+')';
+ var a=q33P.querySelector('.q33sv i');a.style.left=(q33St.s*100)+'%';a.style.top=((1-q33St.v)*100)+'%';a.style.background=hex;
+ q33P.querySelector('.q33hue i').style.left=(q33St.h/360*100)+'%';q33P.querySelector('.q33sw').style.background=hex;
+ if(!skipHex)q33P.querySelector('.q33hex').value=hex;return hex}
+var q33Raf=0;
+function q33Emit(skipHex){var hex=q33Paint(skipHex);q27.value=hex;if(q33Raf)return;q33Raf=requestAnimationFrame(function(){q33Raf=0;q27.dispatchEvent(new Event('input'))});if(document.hidden){cancelAnimationFrame(q33Raf);q33Raf=0;q27.dispatchEvent(new Event('input'))}}
+function q33Open(){
+ var p=q33Build(),hex=/^#[0-9a-f]{6}$/i.test(q27.value)?q27.value:'#888888',t=q33Hsv(hex);q33St={h:t[0],s:t[1],v:t[2]};q33Paint();
+ p.classList.add('open');var W=248,H=p.offsetHeight||250,ax=parseFloat(q27.style.left)||0,ay=parseFloat(q27.style.top)||0,vw=innerWidth,vh=innerHeight;
+ if(vw<600){p.classList.add('sheet');p.style.left='';p.style.top=''}
+ else{p.classList.remove('sheet');var x=Math.min(Math.max(10,ax-W/2+12),vw-W-10),y=ay+36;if(y+H>vh-10)y=Math.max(10,ay-H-10);p.style.left=x+'px';p.style.top=y+'px'}
+}
+function q33Close(){if(!q33P||!q33P.classList.contains('open'))return;q33P.classList.remove('open');q27.dispatchEvent(new Event('change'))}
+q27.showPicker=function(){q33Open()};q27.click=function(){q33Open()};
 
 try{spBoot()}catch(e){}
 load();
