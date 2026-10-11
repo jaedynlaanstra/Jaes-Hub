@@ -3880,7 +3880,19 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .h4up .h4link{color:var(--cp-hup-title,var(--ink2))}
 /* ===== v157 round 18: Jae's widget designs (2a-2f), Today small, water, smooth menu ===== */
 /* every widget in a row is the same height; the new square ones are at least as tall as they are wide */
-.zw-small>.q18w.sq{min-height:100cqw;height:100%}
+.zw-small>.q18w.sq{min-height:150px;height:100%}
+/* small widgets are short rectangles (Jae: squares were way too big), so their insides are sized to fit 150px */
+.q21td.sq{padding:14px 15px}
+.q21td.sq .q21big b{font-size:min(60px,27cqw)}
+.q21td.sq .q21big span{padding-bottom:2px}
+.q21td.sq .q21pill{margin-top:10px}.q21td.sq .q21pill .q21row{padding:7px 0}
+.q21td.sq.ring .q21ring{margin-top:4px;min-height:70px}.q21td.sq.ring .q21ring b{font-size:min(30px,14cqw)}.q21td.sq.ring .q21ring span{font-size:11px;margin-top:1px}.q21td.sq .q21foot{margin-top:6px;font-size:11.5px}
+.q21rd.sq{padding:14px 15px;gap:9px}
+.q21rd.sq .q21post.big{width:64px}
+.q21rd.sq .q21rt{font-size:15.5px;-webkit-line-clamp:1}
+.q21rd.sq .q21btn{margin-top:6px;padding:6px 11px;font-size:12px;border-radius:99px}
+.q21rd.sq.next .q21post{width:40px}.q21rd.sq.next .q21bar{display:none}.q21rd.sq.next .q21nx{padding:8px 0 0;gap:0}.q21rd.sq.next .q21nx span{display:none}
+.q21ag.sq{padding:14px 15px;gap:6px}.q21ag.sq .q21agd b{font-size:min(38px,18cqw)}
 .zhome .zw{display:flex;flex-direction:column}
 .zhome .zw>:not(.zwx):not(.zwm):not(.q17pen){flex:1 1 auto;min-height:0}
 .zhome .zw{container-type:inline-size}
@@ -4355,7 +4367,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v158';
+var BUILD='v160';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -16670,11 +16682,18 @@ window.addEventListener('click',function(e){
  var shut={width:'0px',flexBasis:'0px',paddingLeft:'0px',paddingRight:'0px',minWidth:'0px'},open={width:'242px',flexBasis:'242px',paddingLeft:'14px',paddingRight:'10px',minWidth:'0px'};
  q21Sliding=true;
  if(!show){
-  var p=parts();
-  anim(p.sd,[open,shut],{fill:'forwards'});
-  if(p.sd)[].slice.call(p.sd.children).forEach(function(ch){anim(ch,[{opacity:1,transform:'none'},{opacity:0,transform:'translateX(-24px)'}],{duration:T*.6,fill:'forwards'})});
-  anim(p.fr,[{left:'242px'},{left:'0px'}],{fill:'forwards'});anim(p.fi,[{left:'0px'},{left:'12px'}],{fill:'forwards'});anim(p.mn,[{marginLeft:'0px'},{marginLeft:'12px'}],{fill:'forwards'});
-  setTimeout(function(){q21Sliding=false;S.sideHidden=true;view.menu=false;save();view.renderNow=true;try{render()}finally{view.renderNow=false}},T);
+  // redraw first (so nothing changes once the motion ends), then slide a copy of the old menu away
+  var old=parts().sd,box=old&&old.getBoundingClientRect(),ghost=null;
+  if(old){ghost=old.cloneNode(true);ghost.removeAttribute('id');ghost.setAttribute('aria-hidden','true');
+   ghost.style.cssText='position:fixed;left:'+box.left+'px;top:'+box.top+'px;width:'+box.width+'px;height:'+box.height+'px;margin:0;z-index:60;pointer-events:none;overflow:hidden;background:transparent';
+   ghost.querySelectorAll('[id]').forEach(function(e){e.removeAttribute('id')})}
+  var mnW=parts().mn&&parts().mn.getBoundingClientRect().left;
+  S.sideHidden=true;view.menu=false;save();view.renderNow=true;try{render()}finally{view.renderNow=false}
+  var p=parts(),T2=calm?180:380,ez='cubic-bezier(.4,0,.2,1)';
+  if(ghost){document.body.appendChild(ghost);var ga=anim(ghost,[{transform:'none',opacity:1},{transform:'translateX(-70px)',opacity:0}],{duration:T2,easing:ez,fill:'forwards'});setTimeout(function(){ghost.remove()},T2+30)}
+  anim(p.fr,[{left:'242px'},{left:'0px'}],{duration:T2,easing:ez});anim(p.fi,[{left:'0px'},{left:'12px'}],{duration:T2,easing:ez});
+  anim(p.mn,[{marginLeft:((mnW||242)-0)+'px'},{marginLeft:'12px'}],{duration:T2,easing:ez});
+  setTimeout(function(){q21Sliding=false},T2);
  }else{
   S.sideHidden=false;view.menu=false;save();view.renderNow=true;try{render()}finally{view.renderNow=false}
   var p2=parts();
