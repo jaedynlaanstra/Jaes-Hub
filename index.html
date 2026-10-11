@@ -4562,6 +4562,12 @@ body.q48lt .side .zpillbtn{background:rgba(0,0,0,.07)}
 body.q48lt .sidehide{background:rgba(0,0,0,.06)}
 body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 
+/* v196: card pencils on every page */
+.q49host{position:relative}
+.q49pen{top:10px!important;right:10px!important}
+.secrow.q49flash{animation:q49flash 1.6s ease}
+@keyframes q49flash{0%,40%{background:color-mix(in srgb,var(--sideBg,#7B6E91) 18%,transparent);border-radius:12px}100%{background:transparent}}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4890,7 +4896,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v195';
+var BUILD='v196';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -18996,6 +19002,32 @@ chromeHex=function(key){
 };
 var _q48Render=render;
 render=function(){var r=_q48Render.apply(this,arguments);try{document.body.classList.toggle('q48lt',q48Light(chromeHex('sideBg')))}catch(e){}return r};
+
+/* ===== v196: pencils on the cards of every page while Look and feel is open =====
+   Jae: on Plan my week the little pencils (Home has them on each widget) were missing, so it was hard to find how
+   to change "The week" card. Each card that has its own colour gets a pencil; tapping it opens that card's colour. */
+var Q49MAP={
+ plan:[['.zphero','kplan'],['.zpday','kplan'],['.zptray','ktray']],
+ calendar:[['#k-cal','kcal'],['#k-week','kweek']],
+ apps:[['#k-apps','kapp']],
+ professors:[['#k-ppl','kppl']],
+ class:[['#c-assign','asg'],['#c-files','files'],['#cp-when','when']]
+};
+var Q49PEN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>';
+function q49Pens(){
+ if(!view.picker)return;var L=Q49MAP[view.page];if(!L)return;
+ L.forEach(function(p){document.querySelectorAll('.main '+p[0]).forEach(function(el){
+  if(el.querySelector(':scope>.q49pen'))return;el.classList.add('q49host');
+  var b=document.createElement('button');b.type='button';b.className='q17pen q49pen';b.setAttribute('data-q49sec',p[1]);b.setAttribute('aria-label','Change this card’s colour');b.title='Change this card’s colour';b.innerHTML=Q49PEN;el.appendChild(b)})});
+}
+var _q49Render=render;
+render=function(){var r=_q49Render.apply(this,arguments);try{q49Pens()}catch(e){}return r};
+window.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q49sec]');if(!b)return;e.preventDefault();e.stopPropagation();
+ var key=b.getAttribute('data-q49sec');view.editSurf='__sec';render();
+ setTimeout(function(){var inp=document.querySelector('.pickpanel input[data-secc="'+key+'"]');if(!inp)return;var row=inp.closest('.secrow')||inp;
+  try{row.scrollIntoView({block:'center'})}catch(err){}row.classList.remove('q49flash');void row.offsetWidth;row.classList.add('q49flash');inp.click()},60);
+},true);
 
 try{spBoot()}catch(e){}
 load();
