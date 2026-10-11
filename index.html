@@ -3880,7 +3880,7 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .h4up .h4link{color:var(--cp-hup-title,var(--ink2))}
 /* ===== v157 round 18: Jae's widget designs (2a-2f), Today small, water, smooth menu ===== */
 /* every widget in a row is the same height; the new square ones are at least as tall as they are wide */
-.zw-small>.q18w.sq{min-height:150px;height:100%}
+.zw-small>.q18w.sq{min-height:150px!important;height:100%}
 /* small widgets are short rectangles (Jae: squares were way too big), so their insides are sized to fit 150px */
 .zmain .zw-small .q18circle,.zhome.ph .zw-small .q18circle{max-width:190px}
 .q21td.sq{padding:14px 15px}
@@ -4077,6 +4077,39 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .q22sub{margin-top:auto;font-size:11.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @container (max-width:200px){.q22leg>span:nth-child(n+3){display:none}.q22hb{gap:9px}.q22hk{font-size:12px;gap:6px}.q22hk i{width:16px;height:16px}}
 @media(prefers-reduced-motion:reduce){.q22rings .pr,.q22bar i{animation:none}}
+/* v162: Square size; white recipe cards */
+@media(min-width:1200px){
+ .zmain{grid-template-columns:repeat(8,minmax(0,1fr))}
+ .zmain .zw-small{grid-column:span 2}.zmain .zw-half{grid-column:span 4}.zmain .zw-full{grid-column:1/-1}
+ .zmain .zw-sq{grid-column:span 2}
+}
+@media(min-width:1800px){.zmain .zw-sq{grid-column:span 1}}
+.zside .zw-sq{grid-column:span 1}
+@media(max-width:1199px){.zw-sq,.zside .zw-sq{grid-column:span 1}}
+.zw-sq>.q18w{min-height:100cqw!important;height:100%}
+.zw-sq>.q18w.sq{padding:12px 13px}
+.zw-sq .q21td.sq .q21big b{font-size:min(56px,34cqw)}
+.zw-sq .q21td.sq .q21big span{display:none}
+.zw-sq .q21td.sq .q21pill{margin-top:8px;padding:0 9px}
+.zw-sq .q21td.sq .q21pill .q21row{padding:6px 0;gap:7px}
+.zw-sq .q21row .q20rt span{font-size:12.5px}
+.zw-sq .q21td.ring .q21foot{display:none}
+.zw-sq .q22hb{flex-direction:column;align-items:flex-start;gap:6px}
+.zw-sq .q22rings{width:min(70px,46cqw);height:min(70px,46cqw);align-self:center}
+.zw-sq .q22hl{display:flex;flex-direction:row;gap:6px;justify-content:center;width:100%}
+.zw-sq .q22hk span{display:none}.zw-sq .q22more{display:none}
+.zw-sq .q22sp .q22leg,.zw-sq .q22sp .q22sub{display:none}
+.zw-sq .q22amt{font-size:min(28px,19cqw)}
+.zw-sq .q22sp{justify-content:center}
+.zw-sq .q21ag .q21agf{display:none}
+.zw-sq .q21rd.sq .q21nx span,.zw-sq .q21rd.sq .q21bar{display:none}
+.zw-sq .q21rd.sq .q21lab{display:none}
+.zw-sq .q21rd.next .q21post,.zw-sq .q21rd.next .q21feat .q21rw{display:none}
+.zw-sq .q21rd.next .q21nx b{font-size:13px}
+.zw-sq .q22rings{width:min(60px,42cqw);height:min(60px,42cqw)}
+.zw-sq .q22hab{gap:6px}
+.q18rec.tint{background:var(--card);border-color:var(--line)}
+.q18rec.tint .q18rc{background:#F4F2EE}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4405,7 +4438,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v161';
+var BUILD='v162';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -16865,6 +16898,22 @@ function q22Spent(w,sp){
 }
 var _q22Small=zSmall;
 zSmall=function(w,d,sp){if(w.type==='habits'){var h=q22Hab(w,sp);if(h)return h}if(w.type==='budget'){var h2=q22Spent(w,sp);if(h2)return h2}return _q22Small(w,d,sp)};
+
+
+/* ======================= v162: a Square size, and white recipe cards =======================
+   Jae: "I definitely like the square widgets but the ones I had before were just too big... make a square
+   option that is about half the size of [the week widget]". Square (size 'sq') sits next to Small (the short
+   rectangle) for the widgets with compact designs. It is about 140-160px: one column of an 8-column grid on
+   wide windows (1800px+), a quarter of the grid below that, half the side column, half a phone row. */
+ZW_SIZES=[['sq','Square'],['small','Small'],['half','Medium'],['full','Large']];
+var Q23SQ={todo:1,reading:1,agenda:1,habits:1,budget:1};
+var _q23Sizes=zwSizes;
+zwSizes=function(type){var L=_q23Sizes(type);if(Q23SQ[type]&&L.indexOf('sq')<0)L=['sq'].concat(L);return L};
+var _q23WH=zWidgetHtml;
+zWidgetHtml=function(w,sp){
+ if(zwSize(w)==='sq'){var w2=Object.assign({},w,{size:'small'}),h=null;try{h=zSmall(w2,WDEF[w.type],sp)}catch(e){h=null}if(h)return h}
+ return _q23WH(w,sp);
+};
 
 try{spBoot()}catch(e){}
 load();
