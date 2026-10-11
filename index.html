@@ -4284,6 +4284,11 @@ body.q31nosq .sitem.on .sic.pg,body.q31nosq .sitem:hover .sic.pg{opacity:1}
 .q34dot{position:relative;width:26px;height:26px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.7);cursor:pointer;flex:none}
 .q34dot input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .q34auto{padding:6px 10px!important;font-size:12px!important}
+/* the "any colour" buttons keep a rainbow ring, so a picked custom colour still reads as your own colour */
+:is(.zsw.any,.z4cust,.zswc,.q34dot){position:relative}
+:is(.zsw.any,.z4cust,.zswc,.q34dot)::after{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;
+ background:conic-gradient(#e0828a,#e6b86e,#d9d36c,#86c48c,#6fb3d9,#9a8ce0,#d58ccf,#e0828a);
+ -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px))}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4612,7 +4617,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v177';
+var BUILD='v178';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
