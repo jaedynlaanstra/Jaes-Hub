@@ -3412,8 +3412,8 @@ body.zdepth :is(.zbtile,.zpl,.z3chip,.zshoptabs button.on,.zbchips button.on,.z4
 body.zdepth .zbpay,body.zdepth .zphero,body.zdepth .cpnexts{box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -22px 36px -24px rgba(0,0,0,.28),0 14px 30px -20px rgba(0,0,0,.4)}
 body.zdepth .zbpay::after,body.zdepth .zphero::after{pointer-events:none}
 /* default covers: a light wash at the bottom and dark words, so the soft colours stay clean */
-.coverwrap.z4def::before{background:linear-gradient(to top,rgba(255,253,248,.55),rgba(255,253,248,0) 55%)!important}
-.coverwrap.z4def .h4ov :is(h1,p,.h4hello,.h4day,.cpovt){color:var(--z4ink,#3b3a33)!important;text-shadow:none!important}
+.coverwrap.z4def::before{background:linear-gradient(to top,color-mix(in srgb,var(--z4ink,#3b3a33) 70%,transparent),color-mix(in srgb,var(--z4ink,#3b3a33) 25%,transparent) 38%,transparent 72%)!important}
+.coverwrap.z4def .h4ov :is(h1,p,.h4hello,.h4day,.cpovt){color:#fff!important;text-shadow:0 1px 10px color-mix(in srgb,var(--z4ink,#000) 50%,transparent)!important}
 .z4cols{margin:-2px 0 14px}
 .z4cols p{margin:0 0 8px;font-size:13px;color:var(--ink3)}
 .z4cols>div{display:flex;flex-wrap:wrap;gap:8px}
@@ -3441,8 +3441,8 @@ body.zdepth .zbpay::after,body.zdepth .zphero::after{pointer-events:none}
 .z4seg button{border:none;background:none;border-radius:99px;padding:4px 11px;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-height:0!important}
 .z4seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .zrdfin summary .z4seg{margin-left:auto}
-.zbk img,.zbk .zbkph,img.zrdc,.zrdc.zbkph{border-radius:3px 10px 10px 3px!important;
- box-shadow:inset 6px 0 0 rgba(0,0,0,.12),3px 3px 0 #fbf8f2,3px 3px 0 1px #e2dacc,6px 6px 0 #fbf8f2,6px 6px 0 1px #e2dacc,0 18px 24px -14px rgba(0,0,0,.45)!important}
+.zbk img,.zbk .zbkph,img.zrdc,.zrdc.zbkph{border-radius:10px!important;
+ box-shadow:0 1px 2px rgba(0,0,0,.08),0 16px 24px -14px rgba(0,0,0,.42)!important}
 .zbk{transition:transform .25s cubic-bezier(.2,.8,.2,1)}
 .zbk:hover{transform:translateY(-4px) rotate(-1deg)}
 .zbk>b,.zbk>small{display:block;max-width:100%;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
@@ -3452,6 +3452,23 @@ body.zdepth .zbpay::after,body.zdepth .zphero::after{pointer-events:none}
 @media(max-width:900px){.zpgrid{grid-template-columns:minmax(0,1fr)!important}}
 .zpgrid>.zpday,.zpgrid>.zptray{display:flex;flex-direction:column}
 .zpgrid>.zpday>.zpempty,.zpgrid>.zptray>.zpempty{flex:1;justify-content:center}
+/* mood faces: the face carries its colour, the button stays light; the name is in the mood's colour */
+.zmf{background:transparent!important}
+.zmf.on{background:color-mix(in srgb,var(--wc) 14%,var(--card))!important;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--wc) 60%,transparent)!important}
+.zmoods.big .zmf span{color:var(--wc)!important;font-weight:500}
+.zmf .zface{filter:drop-shadow(0 4px 8px color-mix(in srgb,var(--wc) 35%,transparent))}
+/* the side menu: your picture, big and centred, your name and your line */
+.h4band>label.av{display:none!important}
+.me2{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:6px 8px 16px}
+.me2av{position:relative;width:76px;height:76px;border-radius:50%;cursor:pointer;flex:none;display:grid;place-items:center;
+ background:rgba(255,255,255,.16);box-shadow:0 0 0 3px rgba(255,255,255,.28),0 10px 22px -10px rgba(0,0,0,.45);margin-bottom:6px}
+.me2av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.me2av>span{font-size:28px;font-weight:500;color:var(--sideInk,#fff)}
+.me2av i{position:absolute;right:-2px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:#fff;color:#3b3a33;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.me2n{font-size:17px;font-weight:500;color:var(--sideInk,#fff);line-height:1.2}
+.me2t{border:none;background:none;padding:0;font:inherit;font-size:12.5px;color:var(--sideInk,#fff);opacity:.72;cursor:pointer;min-height:0!important;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me2t.add{opacity:.5;text-decoration:underline;text-underline-offset:3px}
+.me2t:hover{opacity:1}
 /* Meal prep: tabs, and Today */
 .z4tabs{display:flex;gap:4px;padding:4px;background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:16px;margin:0 0 16px;max-width:520px}
 .z4tabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;border:none;background:none;border-radius:12px;padding:10px 10px;font:inherit;font-size:15px;color:var(--ink2);cursor:pointer;min-height:0!important}
@@ -3487,6 +3504,49 @@ body.zdepth .zbpay::after,body.zdepth .zphero::after{pointer-events:none}
 .z4wimg small{font-size:12px;color:var(--ink3)}
 .zwplate.photo{background-size:cover;background-position:center;height:150px}
 .zwplate.photo .zwpbtn{position:absolute;inset:0;border-radius:0}
+/* ===== v153 round 14: shopping list for groceries; depth fix ===== */
+/* soft depth: the gradient covers the whole card once (it used to repeat into the bottom border as a faint white line) */
+body.zdepth :is(.zcard,.cpsec,.cpcard,.wd,.zbcard,.zbhero,.z3card,.z2grp,.zpday,.zptray,.zstat,.cpnextc,.zgoal,.zrd,.z2note,.zwi,.zrcp,.z4meal,.z4today,.zpt,.cpwhen,.h4term,.hbox,.hb2,.zhab,.zmoodday,.cpis .cpcard,.z2add,.zbaddl button,.zmgridw,.zmday,.zbtile,.zpl,.z3chip,.zshoptabs button.on,.zbchips button.on,.z4tabs button.on,.z5grp,.z5top){
+ background-repeat:no-repeat!important;background-origin:border-box!important;background-size:100% 100%!important}
+body.zdepth .z5grp,body.zdepth .z5top{background-image:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 42%,rgba(70,55,40,.035) 100%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -16px 28px -20px rgba(70,55,40,.16),0 1px 2px rgba(70,55,40,.05),0 12px 28px -20px rgba(70,55,40,.28)}
+/* Shopping list */
+.z5tabs{max-width:560px}
+.z5top{padding:12px 14px 10px!important;margin-bottom:12px}
+.z5addtop{display:flex;gap:8px;align-items:center}
+.z5addtop>.zfw{flex:1}
+.z5addtop input{width:100%}
+.z5bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:13px}
+.z5bar .z4seg{margin-left:0}
+.z5list{display:flex;flex-direction:column;gap:10px}
+.z5grp{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.z5gh{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;list-style:none;border-bottom:1px solid transparent}
+.z5gh::-webkit-details-marker{display:none}
+.z5grp[open]>.z5gh{border-bottom-color:#f0ede7}
+.z5gh .zlogo{border-radius:9px;flex:none}
+.z5gh b{font-weight:500;font-size:15px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.z5gh em{font-style:normal;font-size:12px;background:#f1efea;color:var(--ink2);border-radius:99px;padding:1px 8px;flex:none}
+.z5gh .zmini{flex:none;order:3}
+.z5gh .zsecchev{order:4;flex:none;display:grid;place-items:center;color:var(--ink3);transition:transform .2s}
+.z5gh .zsecchev svg{width:15px;height:15px}
+.z5grp:not([open]) .zsecchev{transform:rotate(-90deg)}
+.z5gb{padding:0 12px 6px}
+.z5gb .zrow{padding:7px 0}
+.z5plus{display:inline-flex;align-items:center;gap:6px;border:none;background:none;padding:8px 2px 6px;font:inherit;font-size:13.5px;color:var(--ink3);cursor:pointer;min-height:0!important}
+.z5plus:hover{color:var(--ink)}
+.z5plus svg{width:18px;height:18px;padding:2px;border-radius:50%;background:#f1efea;box-sizing:border-box}
+.z5addin{display:flex;gap:8px;align-items:center;padding:8px 0 6px}
+.z5addin input{flex:1;min-width:0}
+.z5st{flex:none;display:inline-flex}
+.z5st .zlogo{border-radius:6px}
+.z5done{margin-top:6px}
+.z5cart{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid #f0ede7}
+.z5cart .z3blocks{flex:1;gap:4px}
+.z5cart .z3blocks i{width:14px;height:14px;border-radius:4px}
+.z5cart>span{flex:none;font-size:12.5px;color:var(--ink3)}
+@media(max-width:480px){.z5tabs{gap:2px}.z5tabs button{padding:9px 4px;gap:5px}.z5tabs button svg{display:none}.z5tabs em{min-width:16px;height:18px;font-size:11px;padding:0 5px}}
+.z5empty{padding:10px 4px}
+@media(max-width:700px){.z5tabs button{padding:9px 6px;gap:6px}.z5tabs button span{font-size:14px}}
 </style>
 </head>
 <body>
@@ -3795,7 +3855,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v152';
+var BUILD='v153';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -15155,6 +15215,143 @@ render=function(){
 var _q13MH2=modalHtml;
 modalHtml=function(){var h=_q13MH2.apply(this,arguments);
  return h.replace('<button data-zact="tour">Take the tour</button>','<button data-zact="tour">Take the tour</button><button data-zact="z4depth">Soft depth on cards: '+(S.cardDepth===false?'Off':'On')+'</button><button data-zact="z4covers">Default cover pictures: '+(S.defCovers===false?'Off':'On')+'</button>')};
+
+/* ======================= ROUND 14 (v153): the Shopping list, for groceries =======================
+   Jae: the big add box under every store spread the list apart; wants a + at the end of each store instead,
+   a way to sort, a Groceries tab, and adding things without needing a store.
+   Tabs: Groceries | Shopping | Wishlist. An item is a task on the page; t.list==='shop' puts it under
+   Shopping, anything else (all older items) is Groceries. Sort (per page, this device): by store, by aisle
+   (worked out from the item's name, or t.aisle when you add it under an aisle), or A to Z. */
+ZIC.leaf=ZIC.leaf||'<path d="M5 19c0-8 6-14 15-14 0 9-6 15-14 15"/><path d="M5 19 13 11"/>';
+ZIC.milk=ZIC.milk||'<path d="M8 3h8v3l2 3v12H6V9l2-3z"/><path d="M6 12h12"/>';
+ZIC.drum=ZIC.drum||'<path d="M15 4a5 5 0 0 1 3 9l-5 5-3-3 5-5a5 5 0 0 1 0-6z"/><path d="M10 15l-4 4"/><circle cx="5" cy="20" r="1.5"/>';
+ZIC.bread=ZIC.bread||'<path d="M5 11a4 4 0 0 1 1-7h12a4 4 0 0 1 1 7v8H5z"/>';
+ZIC.snow=ZIC.snow||'<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>';
+ZIC.jar=ZIC.jar||'<rect x="6" y="7" width="12" height="14" rx="3"/><path d="M8 3h8v4H8z"/>';
+ZIC.cupd=ZIC.cupd||'<path d="M6 8h12l-1.5 13h-9z"/><path d="M9 8 10 3h5"/>';
+ZIC.spray=ZIC.spray||'<path d="M8 8h6v13H8z"/><path d="M8 8l1-3h4v3M13 5h4l1 2"/>';
+ZIC.heartp=ZIC.heartp||'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>';
+var Z5AISLES=[
+ ['frozen','Frozen','snow','mist',/frozen|ice cream|popsicle|\bfries\b|ice pops?/i],
+ ['care','Personal care','heartp','rose',/shampoo|conditioner|toothpaste|toothbrush|deodorant|lotion|sunscreen|razor|tampon|\bpads?\b|vitamin|medicine|advil|tylenol|floss|soap bar|body wash|makeup|mascara|cotton|band.?aid/i],
+ ['home','Household','spray','grey',/paper towel|toilet paper|tissue|detergent|dish soap|dishwasher|garbage bag|trash bag|\bfoil\b|plastic wrap|cleaner|sponge|batter(y|ies)|light ?bulb|laundry|bleach|ziploc|napkins/i],
+ ['snack','Snacks and drinks','cupd','peach',/chips|cookie|chocolate|candy|juice|\bpop\b|soda|sparkling|\bwater\b|wine|beer|snack|granola bar|popcorn|pretzel|gum|kombucha/i],
+ ['bakery','Bakery','bread','sand',/bread|bagel|\bbuns?\b|tortilla|\bwraps?\b|muffin|croissant|pita|baguette|naan|english muffin|cake/i],
+ ['dairy','Dairy and eggs','milk','mist',/milk|cheese|yogh?urt|butter|cream|\beggs?\b|cottage|kefir|feta|mozzarella|parmesan/i],
+ ['meat','Meat and fish','drum','brick',/chicken|beef|pork|turkey|\bham\b|bacon|sausage|\bfish\b|salmon|shrimp|steak|ground|\bmeat|tofu|lamb|cod|tilapia/i],
+ ['produce','Produce','leaf','sage',/apple|banana|berr|grape|lemon|lime|orange|avocado|tomato|potato|onion|garlic|lettuce|spinach|kale|carrot|celery|cucumber|pepper|broccoli|cauliflower|mushroom|zucchini|cilantro|parsley|basil|\bfruit|\bveg|salad|ginger|squash|\bcorn\b|peach|pear|mango|melon|cherr|herb|green beans|asparagus|beet|cabbage|plum|kiwi/i],
+ ['pantry','Pantry','jar','clay',/rice|pasta|noodle|flour|sugar|\boil\b|vinegar|sauce|spice|\bsalt\b|beans|canned|\bcan\b|cereal|\boats\b|oatmeal|peanut butter|honey|\bjam\b|soup|broth|stock|coffee|\btea\b|\bnuts?\b|almond|crackers|ketchup|mustard|mayo|syrup|baking|cocoa|lentil|quinoa|seasoning|salsa/i],
+ ['other','Everything else','cart','grey',null]
+];
+function z5Aisle(t){if(t.aisle&&Z5AISLES.some(function(a){return a[0]===t.aisle}))return t.aisle;var s=t.title||'';for(var i=0;i<Z5AISLES.length-1;i++)if(Z5AISLES[i][4].test(s))return Z5AISLES[i][0];return 'other'}
+function z5Tab(c){var v='gro';try{v=localStorage.getItem('hub:shoptab:'+c.id)||'gro'}catch(e){}return v==='wish'?'wish':v==='shop'?'shop':'gro'}
+function z5Sort(c,tab){var v='store';try{v=localStorage.getItem('hub:shopsort:'+c.id)||'store'}catch(e){}if(v==='aisle'&&tab!=='gro')v='store';return v==='aisle'||v==='az'?v:'store'}
+function z5In(t,tab){return tab==='shop'?t.list==='shop':t.list!=='shop'}
+ZACT.shoptab=function(cid,t){if(t==='list')t='gro';try{localStorage.setItem('hub:shoptab:'+cid,t)}catch(e){}view.z5add=null;view.r6enter=1;render()};
+ZACT.z5sort=function(cid,v){try{localStorage.setItem('hub:shopsort:'+cid,v)}catch(e){}view.z5add=null;render()};
+ZACT.z5open=function(key){view.z5add=view.z5add===key?null:key;render();setTimeout(function(){var i=document.getElementById('z5in');if(i)i.focus()},40)};
+ZACT.z5add=function(cid,key){
+ var c=classById(cid);if(!c)return;var inp=key?document.getElementById('z5in'):document.getElementById('z5top-'+cid),t=inp&&inp.value.trim();if(!t)return;
+ var tab=z5Tab(c),x=touch({id:uid(),title:t,done:false});if(tab==='shop')x.list='shop';
+ if(key&&key.indexOf('s~')===0)x.sec=key.slice(2);
+ if(key&&key.indexOf('a~')===0&&key.slice(2)!=='other'&&z5Aisle({title:t})!==key.slice(2))x.aisle=key.slice(2);
+ c.tasks.push(x);save();render();
+ setTimeout(function(){var i=key?document.getElementById('z5in'):document.getElementById('z5top-'+cid);if(i){i.value='';i.focus()}},30);
+};
+ZACT.z5clear=function(cid){var c=classById(cid);if(!c)return;var tab=z5Tab(c);c.tasks=c.tasks.filter(function(t){return !(t.done&&z5In(t,tab))});save();render()};
+function z5Group(c,key,head,L,open,addLabel){
+ var adding=view.z5add===key;
+ return '<details class="z5grp"'+(open?' open':'')+(key.indexOf('s~')===0?' data-zsecfold="'+key.slice(2)+'"':'')+'><summary class="z5gh">'+head+'<em>'+L.length+'</em><span class="zsecchev">'+CP_ICO.chev+'</span></summary>'
+  +'<div class="z5gb">'+L.map(function(t){return zTaskRow(c,t)}).join('')
+  +(adding?'<div class="z5addin"><input id="z5in" data-zenter="z5add:'+c.id+':'+key+'" placeholder="'+esc(addLabel)+'" autocomplete="off"><button class="zbtn" data-zact="z5add:'+c.id+':'+key+'">Add</button><button class="zmini" data-zact="z5open:'+key+'" aria-label="Close">×</button></div>'
+   :'<button class="z5plus" data-zact="z5open:'+key+'">'+zI(ZIC.plus,15)+'<span>Add item</span></button>')+'</div></details>';
+}
+function z5Shop(c){
+ var tab=z5Tab(c),T=c.tasks||[],gro=T.filter(function(t){return z5In(t,'gro')}),shp=T.filter(function(t){return z5In(t,'shop')}),W=(c.items||[]).filter(function(x){return x.t==='wish'&&!x.got});
+ var cnt=function(L){return L.filter(function(t){return !t.done}).length};
+ var tabs='<div class="zshoptabs z5tabs" role="tablist">'
+  +[['gro','Groceries','leaf',cnt(gro)],['shop','Shopping','cart',cnt(shp)],['wish','Wishlist','heart',W.length]].map(function(x){return '<button role="tab" aria-selected="'+(tab===x[0])+'" class="'+(tab===x[0]?'on':'')+'" data-zact="shoptab:'+c.id+':'+x[0]+'">'+zI(ZIC[x[2]],16)+'<span>'+x[1]+'</span><em>'+x[3]+'</em></button>'}).join('')+'</div>';
+ if(tab==='wish')return tabs+zWishBlock(c);
+ var L=tab==='gro'?gro:shp,open=L.filter(function(t){return !t.done}),done=L.filter(function(t){return t.done}),secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var sort=z5Sort(c,tab);
+ var dn=done.length,cart=L.length?'<div class="z5cart"><div class="z3blocks">'+L.slice().sort(function(a,b){return (b.done?1:0)-(a.done?1:0)}).slice(0,60).map(function(t){return '<i class="'+(t.done?'y':'')+'" title="'+esc(t.title)+'"></i>'}).join('')+'</div><span>'+(dn===L.length?'Everything’s in the cart':dn+' of '+L.length+' in the cart')+'</span></div>':'';
+ var sorts=[['store','By store'],tab==='gro'?['aisle','By aisle']:null,['az','A to Z']].filter(Boolean);
+ var top='<section class="zcard z5top"><div class="z5addtop"><span class="zfw"><input id="z5top-'+c.id+'" data-zenter="z5add:'+c.id+':" placeholder="'+(tab==='gro'?'Add a grocery item, like oat milk':'Add something to buy, like printer ink')+'" autocomplete="off"></span><button class="zbtn" data-zact="z5add:'+c.id+':">Add</button></div>'
+  +'<div class="z5bar"><span class="z4seg">'+sorts.map(function(s){return '<button class="'+(sort===s[0]?'on':'')+'" data-zact="z5sort:'+c.id+':'+s[0]+'">'+s[1]+'</button>'}).join('')+'</span><span class="zsoft">'+open.length+' to buy'+(sort==='store'?' · <button class="zlink" data-zact="secnew:'+c.id+'">+ Add a store</button>':'')+'</span></div>'+cart+'</section>';
+ var groups='';
+ if(sort==='store'){
+  var any=open.filter(function(t){return !(t.sec&&ids[t.sec])});
+  if(any.length||!secs.length)groups+=z5Group(c,'any','<span class="zlogo" style="width:30px;height:30px;background:#E6EDE6;color:#708F77">'+zI(ZIC.cart,15)+'</span><b>'+(secs.length?'Any store':(tab==='gro'?'Groceries':'Shopping'))+'</b>',any,true,'Add an item');
+  secs.forEach(function(s){var S2=open.filter(function(t){return t.sec===s.id});
+   groups+=z5Group(c,'s~'+s.id,zLogo(s.name,30,'store',s.site)+'<b>'+esc(s.name)+'</b><button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename or remove '+esc(s.name)+'">'+zI(ZIC.dots,14)+'</button>',S2,!zSecShut(s.id),'Add to '+s.name)});
+ }else if(sort==='aisle'){
+  // in the order you walk a store: produce first, the freezer near the end
+  ['produce','bakery','meat','dairy','pantry','snack','frozen','home','care','other'].map(function(k){return Z5AISLES.filter(function(a){return a[0]===k})[0]}).forEach(function(a){var A=open.filter(function(t){return z5Aisle(t)===a[0]}).sort(function(x,y){return String(x.title).localeCompare(String(y.title))});if(!A.length)return;var k=ZC[a[3]]||ZC.grey;
+   groups+=z5Group(c,'a~'+a[0],'<span class="zlogo" style="width:30px;height:30px;background:'+k[0]+';color:'+k[1]+'">'+zI(ZIC[a[2]]||ZIC.cart,15)+'</span><b>'+a[1]+'</b>',A,true,'Add to '+a[1].toLowerCase())});
+  if(!open.length)groups+='<p class="zempty z5empty">Your list is empty. Add something above.</p>';
+ }else{
+  var AZ=open.slice().sort(function(x,y){return String(x.title).localeCompare(String(y.title))});
+  groups+=z5Group(c,'az','<span class="zlogo" style="width:30px;height:30px;background:#ECEBE9;color:#7A756E">'+zI(ZIC.list,15)+'</span><b>Everything, A to Z</b>',AZ,true,'Add an item');
+ }
+ if(done.length)groups+='<details class="zdone z5done" open><summary>In the cart · '+done.length+'</summary>'+done.map(function(t){return zTaskRow(c,t)}).join('')+'<button class="zlink" data-zact="z5clear:'+c.id+'">Clear the ticked items</button></details>';
+ return tabs+top+'<div class="z5list">'+groups+'</div>';
+}
+var _q14List=zListPage;
+zListPage=function(c){if(c.kind==='groceries')return z5Shop(c);return _q14List(c)};
+// in a row, show the store's logo when the list is sorted by aisle or A to Z
+var _q14Row=zTaskRow;
+zTaskRow=function(c,t){var h=_q14Row(c,t);if(c.kind!=='groceries'||t.done)return h;var sort=z5Sort(c,z5Tab(c));if(sort==='store'||!t.sec)return h;
+ var s=(c.sections||[]).filter(function(x){return x.id===t.sec})[0];return s?h.replace(/<\/div>$/,'<span class="z5st" title="'+esc(s.name)+'">'+zLogo(s.name,20,'store',s.site)+'</span></div>'):h};
+// the item pop-up: which tab and which aisle
+var _q14TaskHtml=ZM.ztask.html,_q14TaskSave=ZM.ztask.save;
+ZM.ztask.html=function(m){var h=_q14TaskHtml(m),c=classById(m.cid),t=c&&zTask(c,m.tid);if(!h||!c||c.kind!=='groceries'||!t)return h;
+ var ai=z5Aisle(t);
+ return h.replace('<div class="field"><label for="zt4">','<div class="zfrow"><div class="field"><label for="zt8">List</label><select id="zt8"><option value="gro"'+(t.list!=='shop'?' selected':'')+'>Groceries</option><option value="shop"'+(t.list==='shop'?' selected':'')+'>Shopping</option></select></div>'
+  +'<div class="field"><label for="zt9">Aisle</label><select id="zt9">'+Z5AISLES.map(function(a){return '<option value="'+a[0]+'"'+(ai===a[0]?' selected':'')+'>'+a[1]+'</option>'}).join('')+'</select></div></div><div class="field"><label for="zt4">');
+};
+ZM.ztask.save=function(m){var c=classById(m.cid),t=c&&zTask(c,m.tid),l=document.getElementById('zt8'),a=document.getElementById('zt9');
+ if(t&&l){if(l.value==='shop')t.list='shop';else delete t.list}
+ if(t&&a){var guess=z5Aisle({title:(document.getElementById('zt1')||{}).value||t.title});if(a.value===guess)delete t.aisle;else t.aisle=a.value}
+ return _q14TaskSave(m)};
+
+
+
+/* ---------- mood faces like Jae's picture: filled circles, blue (awful) to green (great) ---------- */
+ZC.m1=['#E6EAF8','#6E86D4'];ZC.m2=['#E3EFF7','#6AAAD2'];ZC.m3=['#FBF2D4','#E7BE38'];ZC.m4=['#ECF4DF','#97C459'];ZC.m5=['#E1F0E2','#57AB5D'];
+MOODS[1]={n:'Awful',k:'m1'};MOODS[2]={n:'Bad',k:'m2'};MOODS[3]={n:'Okay',k:'m3'};MOODS[4]={n:'Good',k:'m4'};MOODS[5]={n:'Great',k:'m5'};
+moodFace=function(v,sz){
+ v=+v||3;var col=(ZC['m'+v]||ZC.m3)[1],ink='#2F2B36';
+ var eyes={1:'<path d="M6.9 10.3q1.6 1.5 3.3 0M13.8 10.3q1.6 1.5 3.3 0"/>',5:'<path d="M6.9 10.9q1.6-1.7 3.3 0M13.8 10.9q1.6-1.7 3.3 0"/>'}[v]
+  ||'<circle cx="8.7" cy="10.1" r="1.15" fill="'+ink+'" stroke="none"/><circle cx="15.3" cy="10.1" r="1.15" fill="'+ink+'" stroke="none"/>';
+ var mouth={1:'M8.1 17.2q3.9-3.6 7.8 0',2:'M8.9 16.6q3.1-2.5 6.2 0',3:'M9.2 16.4l5.8-1',4:'M8.6 14.4q3.4 3.1 6.8 0',5:'M7.9 13.9q4.1 4.4 8.2 0'}[v];
+ return '<svg class="zface" viewBox="0 0 24 24" width="'+(sz||24)+'" height="'+(sz||24)+'" fill="none" stroke="'+ink+'" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="11.4" fill="'+col+'" stroke="none"/>'+eyes+'<path d="'+mouth+'"/></svg>';
+};
+
+/* ---------- the menu shows each page in the same colour as its cover (it used the original palette) ---------- */
+function q15MenuCols(){document.querySelectorAll('.side [data-open] .sic.pg').forEach(function(el){var c=classById(el.parentNode.getAttribute('data-open'));if(c)el.style.setProperty('--pgc',palHex(c.color))})}
+var _q15Render=render;
+render=function(){var before=app.firstElementChild;var r=_q15Render.apply(this,arguments);if(app.firstElementChild!==before)q15MenuCols();return r};
+
+
+/* ---------- your picture belongs in the side menu (like the dashboard Jae sent), not on the Home cover ----------
+   A big round picture centred at the top of the menu, your name under it and a short line you choose
+   (S.tagline, synced), like "Robert Grant, Marketing Director". Tap the picture to change it. */
+homeGreeting=_q13HG;
+SETTINGS_KEYS.push('tagline');
+function q16Me(){
+ var nm=firstName(),ini=esc(String(nm||'?').charAt(0).toUpperCase());
+ return '<div class="me2"><label class="me2av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+ini+'</span>')
+  +'<i>'+zI('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',12)+'</i></label>'
+  +'<b class="me2n">'+esc(nm)+'</b><button class="me2t'+(S.tagline?'':' add')+'" data-zact="z6me">'+esc(S.tagline||'Add a line about you')+'</button></div>';
+}
+ZACT.z6me=function(){zOpen('z6me')};
+ZM.z6me={html:function(){return '<h3>Under your name</h3><p class="hint" style="margin:-4px 0 12px">A short line that shows under your picture in the menu, like “Marketing student” or “Mom of two”.</p>'
+ +'<div class="field"><label for="z6t">Your line</label><input id="z6t" maxlength="40" value="'+esc(S.tagline||'')+'" placeholder="Marketing student"></div>'},
+ save:function(){S.tagline=zv('z6t');save();view.modal=null;render()},saveLabel:'Save'};
+function q16Side(){document.querySelectorAll('.side .me').forEach(function(el){var d=document.createElement('div');d.innerHTML=q16Me();el.replaceWith(d.firstChild)})}
+var _q16Render=render;
+render=function(){var before=app.firstElementChild;var r=_q16Render.apply(this,arguments);if(app.firstElementChild!==before)q16Side();return r};
 
 try{spBoot()}catch(e){}
 load();
