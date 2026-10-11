@@ -3402,6 +3402,91 @@ a.z1li.z2app{text-decoration:none}
 .main.enter .z3ub i{animation:zgrow .9s cubic-bezier(.3,.7,.2,1) both .15s}
 .z3use em{font-style:normal;font-size:12.5px;color:var(--ink3);min-width:22px;text-align:right}
 @media(max-width:700px){.z3un{flex-basis:96px}}
+/* ===== v152 round 13: pictures and depth ===== */
+/* soft depth: a light inner gradient on cards, a fine top highlight and a soft shadow underneath (Settings > Look and feel) */
+body.zdepth :is(.zcard,.cpsec,.cpcard,.wd,.zbcard,.zbhero,.z3card,.z2grp,.zpday,.zptray,.zstat,.cpnextc,.zgoal,.zrd,.z2note,.zwi,.zrcp,.z4meal,.z4today,.zpt,.cpwhen,.h4term,.hbox,.hb2,.zhab,.zmoodday,.cpis .cpcard,.z2add,.zbaddl button,.zmgridw,.zmday){
+ background-image:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 42%,rgba(70,55,40,.035) 100%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -16px 28px -20px rgba(70,55,40,.16),0 1px 2px rgba(70,55,40,.05),0 12px 28px -20px rgba(70,55,40,.28)}
+body.zdepth :is(.zbtile,.zpl,.z3chip,.zshoptabs button.on,.zbchips button.on,.z4tabs button.on){
+ background-image:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 55%,rgba(70,55,40,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -8px 16px -12px rgba(70,55,40,.14)}
+body.zdepth .zbpay,body.zdepth .zphero,body.zdepth .cpnexts{box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -22px 36px -24px rgba(0,0,0,.28),0 14px 30px -20px rgba(0,0,0,.4)}
+body.zdepth .zbpay::after,body.zdepth .zphero::after{pointer-events:none}
+/* default covers: a light wash at the bottom and dark words, so the soft colours stay clean */
+.coverwrap.z4def::before{background:linear-gradient(to top,rgba(255,253,248,.55),rgba(255,253,248,0) 55%)!important}
+.coverwrap.z4def .h4ov :is(h1,p,.h4hello,.h4day,.cpovt){color:var(--z4ink,#3b3a33)!important;text-shadow:none!important}
+.z4cols{margin:-2px 0 14px}
+.z4cols p{margin:0 0 8px;font-size:13px;color:var(--ink3)}
+.z4cols>div{display:flex;flex-wrap:wrap;gap:8px}
+.z4col{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;min-height:0!important;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .15s}
+.z4col:hover{transform:scale(1.08)}
+.z4col.on{box-shadow:0 0 0 2px var(--card),0 0 0 4px #3b3a33}
+.banner .bancov{right:48px!important}
+.z4pk{display:flex;flex-direction:column;gap:14px;margin:4px 0 14px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.z4pkrow p{margin:0 0 8px;display:flex;flex-direction:column;gap:1px}
+.z4pkrow b{font-size:14.5px;font-weight:500;color:var(--ink)}
+.z4pkrow span{font-size:12px;color:var(--ink3)}
+.z4pksw{display:flex;flex-wrap:wrap;gap:8px}
+.z4pksw .z4col{width:30px;height:30px}
+.z4cust{position:relative;display:inline-block;background:conic-gradient(#d98a8a,#d9c08a,#9fc29a,#8ab3d9,#b59ad9,#d98a8a)!important;overflow:hidden}
+.z4cust input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+/* Home: your picture on the cover, beside the hello */
+.h4me{display:flex;align-items:center;gap:14px;min-width:0}
+.h4av{position:relative;flex:none;width:58px;height:58px;border-radius:50%;overflow:hidden;cursor:pointer;background:rgba(255,255,255,.28);box-shadow:0 0 0 3px rgba(255,255,255,.85),0 8px 18px -8px rgba(0,0,0,.45);display:grid;place-items:center;color:#fff}
+.h4av img{width:100%;height:100%;object-fit:cover}
+.h4av svg{width:30px;height:30px;fill:currentColor;opacity:.9}
+.h4av i{position:absolute;right:2px;bottom:2px;width:18px;height:18px;border-radius:50%;background:#fff;color:#3b3a33;font-style:normal;font-size:14px;line-height:18px;text-align:center;font-weight:600}
+@media(max-width:700px){.h4av{width:48px;height:48px}}
+/* Reading: shelf or covers, and covers that look like little books */
+.z4seg{display:inline-flex;gap:2px;padding:3px;border-radius:99px;background:color-mix(in srgb,var(--ink) 6%,transparent);margin-left:10px;vertical-align:middle}
+.z4seg button{border:none;background:none;border-radius:99px;padding:4px 11px;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.z4seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.zrdfin summary .z4seg{margin-left:auto}
+.zbk img,.zbk .zbkph,img.zrdc,.zrdc.zbkph{border-radius:3px 10px 10px 3px!important;
+ box-shadow:inset 6px 0 0 rgba(0,0,0,.12),3px 3px 0 #fbf8f2,3px 3px 0 1px #e2dacc,6px 6px 0 #fbf8f2,6px 6px 0 1px #e2dacc,0 18px 24px -14px rgba(0,0,0,.45)!important}
+.zbk{transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.zbk:hover{transform:translateY(-4px) rotate(-1deg)}
+.zbk>b,.zbk>small{display:block;max-width:100%;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.zbk{min-width:0}
+/* Plan my week: Today and Needs a day are the same width and the same height (Jae: "these aren't the same size") */
+.zpgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;align-items:stretch!important}
+@media(max-width:900px){.zpgrid{grid-template-columns:minmax(0,1fr)!important}}
+.zpgrid>.zpday,.zpgrid>.zptray{display:flex;flex-direction:column}
+.zpgrid>.zpday>.zpempty,.zpgrid>.zptray>.zpempty{flex:1;justify-content:center}
+/* Meal prep: tabs, and Today */
+.z4tabs{display:flex;gap:4px;padding:4px;background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:16px;margin:0 0 16px;max-width:520px}
+.z4tabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;border:none;background:none;border-radius:12px;padding:10px 10px;font:inherit;font-size:15px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.z4tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 10px -4px rgba(0,0,0,.2)}
+.z4mnote{margin:0 0 12px;font-size:13.5px;color:var(--ink3)}
+.z4today{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 16px 12px;margin-bottom:14px}
+.z4th{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.z4th p{margin:0;font-size:13px;color:var(--ink3)}
+.z4th h2{margin:2px 0 0;font-size:22px;font-weight:var(--wh,500);letter-spacing:-.01em}
+.z4wk{display:flex;gap:6px}
+.z4wk button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);cursor:pointer;min-height:0!important;color:var(--ink2)}
+.z4meals{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-bottom:14px}
+.z4meal{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;min-width:0}
+.z4mimg{position:relative;height:170px;border:none;padding:0;background:#F0E9E3 center/cover no-repeat;cursor:pointer;min-height:0!important;color:#9E7D61;display:grid;place-items:center}
+.z4mimg.none{background:linear-gradient(160deg,#F4EDE6,#EADFD4)}
+.z4slot{position:absolute;left:12px;top:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.92);color:#3b3a33;border-radius:99px;padding:5px 10px;font-size:12.5px;box-shadow:0 4px 10px -6px rgba(0,0,0,.35)}
+.z4mb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px}
+.z4mb b{font-size:16px;font-weight:500;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.z4mb small{font-size:12.5px;color:var(--ink3)}
+.z4mact{display:flex;gap:8px;margin-top:8px}
+.z4mempty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:120px!important;border:2px dashed var(--line);border-radius:22px;background:none;font:inherit;font-size:14px;color:var(--ink3);cursor:pointer}
+.z4mempty:hover{border-color:#C79A7E;color:#9E7D61}
+.z4ing ul{list-style:none;margin:0;padding:0;columns:2;column-gap:24px}
+.z4ing li{break-inside:avoid;display:flex;flex-direction:column;padding:6px 0;border-bottom:1px solid #f0ede7}
+.z4ing li span{font-size:14px}
+.z4ing li small{font-size:11.5px;color:var(--ink3)}
+@media(max-width:700px){.z4meals{grid-template-columns:minmax(0,1fr)}.z4mimg{height:150px}.z4ing ul{columns:1}.z4tabs button span{font-size:14px}}
+/* pictures from links */
+.z4lnote{margin:6px 0 0;font-size:12.5px}
+.z4wimg{display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.z4wimg>img,.z4wimg>span{width:72px;height:72px;border-radius:14px;object-fit:cover;flex:none;background:#F0E6EB;display:grid;place-items:center;color:#9A6580}
+.z4wimg>div{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.z4wimg small{font-size:12px;color:var(--ink3)}
+.zwplate.photo{background-size:cover;background-position:center;height:150px}
+.zwplate.photo .zwpbtn{position:absolute;inset:0;border-radius:0}
 </style>
 </head>
 <body>
@@ -3710,7 +3795,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v151';
+var BUILD='v152';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -14829,6 +14914,247 @@ function z3MostUsed(c){
   :'<p class="zempty">Open a few of your apps from here and the ones you use most show up as bars.</p>','z3usec');
 }
 
+
+/* ======================= ROUND 13 (v152): pictures and depth =======================
+   Jae (2026-10-10, with a stack of Pinterest inspiration): "still a little bland", wants it to feel more
+   professionally made with more images. Built: default cover pictures for every page and class, drawn in the
+   page's own colour (soft illustrations, no storage); an optional "soft depth" look for cards (an inner
+   gradient, S.cardDepth); the profile picture on the Home cover; Reading can show finished titles as a shelf
+   or as covers (and covers look like little books); Meal prep has Today / This week / Recipes tabs with no
+   28-meal target; recipes and wishlist items can pull their photo from a link. */
+CLASS_KEYS.push('defCover');
+SETTINGS_KEYS.push('cardDepth','defCovers');
+
+/* ---------- default covers: a soft illustration in the page's colour ---------- */
+function z4Pal(hex){
+ var q=rgb2hsl.apply(null,hex2rgb(hex||'#8a8a80')),h=q[0],s=Math.max(22,Math.min(q[1]*1.25,42));
+ var f=function(dh,ss,l){return hsl2hex(((h+dh)%360+360)%360,Math.min(ss,60),l)};
+ return {bg1:f(-6,s*.9,94),bg2:f(4,s*1.05,87),h1:f(-6,s*1.05,80),h2:f(0,s*1.1,71),h3:f(8,s*1.05,61),d:f(0,s*1.1,44),l:f(0,s*.7,97),sun:f(30,55,90),w:'#FFFDF8'};
+}
+var Z4MOTIF={
+ reading:function(p){return '<g transform="translate(800 120)"><rect x="0" y="150" width="250" height="38" rx="8" fill="'+p.h3+'"/><rect x="18" y="114" width="220" height="38" rx="8" fill="'+p.h2+'"/><rect x="6" y="78" width="236" height="38" rx="8" fill="'+p.d+'"/>'
+  +'<rect x="30" y="122" width="150" height="6" rx="3" fill="'+p.l+'" opacity=".7"/><rect x="24" y="86" width="120" height="6" rx="3" fill="'+p.l+'" opacity=".7"/><rect x="270" y="20" width="44" height="168" rx="8" fill="'+p.h2+'" transform="rotate(8 292 104)"/>'
+  +'<path d="M-60 188c0-40 20-70 30-90 10 20 30 50 30 90z" fill="'+p.h3+'"/><path d="M-30 188c-30-30-50-40-70-40 10 20 30 40 70 40z" fill="'+p.h2+'"/></g>'},
+ meals:function(p){return '<g transform="translate(860 230)"><ellipse cx="0" cy="40" rx="150" ry="30" fill="'+p.h3+'" opacity=".35"/><circle r="120" fill="'+p.w+'"/><circle r="92" fill="'+p.l+'"/><circle cx="-30" cy="-10" r="30" fill="'+p.h2+'"/><circle cx="28" cy="18" r="24" fill="'+p.h3+'"/><circle cx="20" cy="-34" r="16" fill="'+p.sun+'"/>'
+  +'<path d="M-40 40c20-30 60-34 90-18" stroke="'+p.d+'" stroke-width="10" stroke-linecap="round" fill="none"/><rect x="150" y="-110" width="12" height="190" rx="6" fill="'+p.d+'"/><rect x="-176" y="-110" width="12" height="190" rx="6" fill="'+p.d+'"/><path d="M-182 -110v50a12 12 0 0 0 24 0v-50" stroke="'+p.d+'" stroke-width="6" fill="none"/>'
+  +'<path d="M-70 -150c-10-20 10-30 0-50M-30 -150c-10-20 10-30 0-50M10 -150c-10-20 10-30 0-50" stroke="'+p.w+'" stroke-width="6" stroke-linecap="round" fill="none" opacity=".8"/></g>'},
+ groceries:function(p){return '<g transform="translate(820 110)"><path d="M20 90h220l-20 190H40z" fill="'+p.d+'"/><path d="M80 90c0-60 100-60 100 0" stroke="'+p.d+'" stroke-width="12" fill="none"/>'
+  +'<path d="M70 92c-10-60 20-100 40-110 0 40-10 80-20 110z" fill="'+p.h2+'"/><path d="M110 92c10-70 50-90 70-90-10 40-30 70-50 90z" fill="'+p.h3+'"/><rect x="150" y="-10" width="26" height="110" rx="13" fill="'+p.sun+'" transform="rotate(14 163 45)"/>'
+  +'<circle cx="290" cy="250" r="34" fill="'+p.h2+'"/><circle cx="-10" cy="262" r="26" fill="'+p.h3+'"/><rect x="60" y="150" width="140" height="10" rx="5" fill="'+p.l+'" opacity=".55"/></g>'},
+ todo:function(p){return '<g transform="translate(830 70)"><rect x="0" y="20" width="230" height="290" rx="22" fill="'+p.w+'"/><rect x="70" y="0" width="90" height="40" rx="14" fill="'+p.d+'"/>'
+  +[90,150,210].map(function(y,i){return '<rect x="32" y="'+y+'" width="30" height="30" rx="9" fill="'+(i<2?p.h3:p.l)+'"/>'+(i<2?'<path d="M39 '+(y+15)+'l7 7 12-14" stroke="'+p.w+'" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>':'')+'<rect x="78" y="'+(y+9)+'" width="'+(110-i*20)+'" height="12" rx="6" fill="'+p.h1+'"/>'}).join('')
+  +'<circle cx="250" cy="300" r="46" fill="'+p.h2+'"/><path d="M230 300l14 14 26-30" stroke="'+p.w+'" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>'},
+ budget:function(p){return '<g transform="translate(820 120)">'+[0,1,2,3].map(function(i){return '<ellipse cx="60" cy="'+(230-i*26)+'" rx="62" ry="20" fill="'+(i%2?p.h3:p.h2)+'"/><ellipse cx="60" cy="'+(222-i*26)+'" rx="62" ry="20" fill="'+p.sun+'"/>'}).join('')
+  +'<rect x="150" y="60" width="200" height="130" rx="18" fill="'+p.d+'"/><rect x="150" y="90" width="200" height="22" fill="'+p.h3+'"/><rect x="172" y="140" width="70" height="12" rx="6" fill="'+p.l+'" opacity=".7"/><circle cx="310" cy="146" r="14" fill="'+p.sun+'"/></g>'},
+ habits:function(p){return '<g transform="translate(900 90)"><path d="M-50 230h100l-12 70h-76z" fill="'+p.d+'"/><path d="M0 230c0-80 6-130 0-190" stroke="'+p.h3+'" stroke-width="8" fill="none"/>'
+  +'<path d="M0 170c-60-10-80-50-80-80 40 0 70 30 80 80z" fill="'+p.h2+'"/><path d="M2 120c50-10 74-50 74-80-36 0-66 30-74 80z" fill="'+p.h3+'"/><path d="M0 70c-30-14-40-40-36-60 22 6 36 30 36 60z" fill="'+p.h2+'"/>'
+  +'<circle cx="190" cy="40" r="44" fill="'+p.sun+'"/></g>'},
+ mood:function(p){var face=function(x,y,r,c,sm){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'"/><circle cx="'+(x-r*.32)+'" cy="'+(y-r*.12)+'" r="'+r*.09+'" fill="'+p.d+'"/><circle cx="'+(x+r*.32)+'" cy="'+(y-r*.12)+'" r="'+r*.09+'" fill="'+p.d+'"/><path d="M'+(x-r*.35)+' '+(y+r*.25)+'q'+r*.35+' '+r*sm+' '+r*.7+' 0" stroke="'+p.d+'" stroke-width="'+r*.09+'" fill="none" stroke-linecap="round"/>'};
+  return face(860,200,70,p.sun,.35)+face(1010,140,52,p.h2,.3)+face(1030,290,40,p.h1,.1)},
+ projects:function(p){return '<g transform="translate(780 80)">'+[0,1,2].map(function(i){var x=i*120;return '<rect x="'+x+'" y="0" width="104" height="300" rx="18" fill="'+p.l+'" opacity=".75"/>'+[0,1,2].slice(0,3-i).map(function(j){return '<rect x="'+(x+12)+'" y="'+(20+j*84)+'" width="80" height="70" rx="12" fill="'+p.w+'"/><rect x="'+(x+24)+'" y="'+(36+j*84)+'" width="50" height="8" rx="4" fill="'+(j%2?p.h2:p.h3)+'"/><rect x="'+(x+24)+'" y="'+(56+j*84)+'" width="'+(26+j*8)+'" height="8" rx="4" fill="'+p.h1+'"/>'}).join('')}).join('')+'</g>'},
+ notes:function(p){return '<g transform="translate(830 70) rotate(-6 120 160)"><rect x="0" y="0" width="230" height="300" rx="16" fill="'+p.w+'"/><rect x="0" y="0" width="34" height="300" rx="12" fill="'+p.h3+'"/>'
+  +[60,100,140,180,220].map(function(y,i){return '<rect x="58" y="'+y+'" width="'+(140-i%2*30)+'" height="10" rx="5" fill="'+p.h1+'"/>'}).join('')+'<rect x="230" y="40" width="24" height="230" rx="10" fill="'+p.d+'" transform="rotate(28 242 155)"/><path d="M296 250l-18 34-8-38z" fill="'+p.sun+'" transform="rotate(28 242 155)"/></g>'},
+ apps:function(p){var cs=[p.d,p.h2,p.sun,p.h3,p.w,p.h2,p.h1,p.d,p.h3];return '<g transform="translate(830 70)">'+cs.map(function(c,i){return '<rect x="'+(i%3*100)+'" y="'+(Math.floor(i/3)*100)+'" width="80" height="80" rx="22" fill="'+c+'"/>'}).join('')+'</g>'},
+ shifts:function(p){return '<g transform="translate(940 200)"><circle r="130" fill="'+p.w+'"/><circle r="112" fill="'+p.l+'"/><path d="M0 0V-70M0 0l50 30" stroke="'+p.d+'" stroke-width="12" stroke-linecap="round"/><circle r="12" fill="'+p.d+'"/>'
+  +[0,1,2,3,4,5,6,7,8,9,10,11].map(function(i){var a=i*Math.PI/6;return '<circle cx="'+(Math.sin(a)*92).toFixed(1)+'" cy="'+(-Math.cos(a)*92).toFixed(1)+'" r="'+(i%3?4:7)+'" fill="'+p.h3+'"/>'}).join('')+'</g>'},
+ school:function(p){return '<g transform="translate(800 110)"><path d="M0 60c60-30 120-30 170 0v210c-50-30-110-30-170 0z" fill="'+p.w+'"/><path d="M340 60c-60-30-120-30-170 0v210c50-30 110-30 170 0z" fill="'+p.l+'"/>'
+  +[100,130,160,190].map(function(y){return '<rect x="30" y="'+y+'" width="110" height="8" rx="4" fill="'+p.h1+'"/><rect x="200" y="'+y+'" width="110" height="8" rx="4" fill="'+p.h1+'"/>'}).join('')
+  +'<rect x="380" y="20" width="22" height="200" rx="8" fill="'+p.d+'" transform="rotate(20 391 120)"/><path d="M372 230l20 30 6-34z" fill="'+p.sun+'" transform="rotate(20 391 120)"/><circle cx="-40" cy="250" r="40" fill="'+p.h2+'"/><path d="M-40 212c0-14 8-24 18-28" stroke="'+p.d+'" stroke-width="6" fill="none" stroke-linecap="round"/></g>'}
+};
+Z4MOTIF.meals2=Z4MOTIF.meals;
+function z4CoverSvg(c){
+ var p=z4Pal(palHex(c.color)),kind=c.kind||'school',m=(Z4MOTIF[kind]||Z4MOTIF.todo)(p),seed=Math.abs(String(c.id).split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7));
+ var sx=140+seed%300,sy=190+seed%40;
+ var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" preserveAspectRatio="xMaxYMax slice">'
+  +'<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+p.bg1+'"/><stop offset="1" stop-color="'+p.bg2+'"/></linearGradient></defs>'
+  +'<rect width="1200" height="400" fill="url(#g)"/><circle cx="'+sx+'" cy="'+sy+'" r="70" fill="'+p.sun+'" opacity=".9"/>'
+  +'<circle cx="'+(sx+520)+'" cy="'+(sy-20)+'" r="10" fill="'+p.w+'" opacity=".7"/><circle cx="'+(sx+600)+'" cy="'+(sy+30)+'" r="6" fill="'+p.w+'" opacity=".6"/>'
+  +'<path d="M0 300C180 250 330 280 520 300S900 250 1200 280V400H0z" fill="'+p.h1+'"/>'
+  +'<path d="M0 340C220 310 420 350 640 340S980 300 1200 330V400H0z" fill="'+p.h2+'" opacity=".85"/>'
+  +'<g transform="translate(200 118) scale(.7)">'+m+'</g><path d="M0 380C300 360 600 390 1200 370V400H0z" fill="'+p.h3+'" opacity=".5"/></svg>';
+ return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+// which pages get a default picture: classes and pages with a colour, no picture of their own, not switched off
+function z4CoverOn(c){return !!c&&(!c.kind||c.kind!=='cal')&&!c.cover&&c.defCover!==false&&S.defCovers!==false}
+var z4Temp=[];
+function z4PutCovers(list){list.forEach(function(c){if(z4CoverOn(c)){c.cover=z4CoverSvg(c);c.__defc=1;z4Temp.push(c)}})}
+function z4TakeCovers(){z4Temp.forEach(function(c){if(c.__defc){delete c.cover;delete c.__defc}});z4Temp=[]}
+// a save that happens while a default picture is showing never stores it
+var _q13Save=save;
+save=function(){var held=z4Temp.slice();z4TakeCovers();try{return _q13Save.apply(this,arguments)}finally{held.forEach(function(c){if(!c.cover&&z4CoverOn(c)){c.cover=z4CoverSvg(c);c.__defc=1;z4Temp.push(c)}})}};
+// classes on Home show their default picture too
+if(typeof homeClassesW==='function'){var _q13HC=homeClassesW;homeClassesW=function(){z4PutCovers(S.classes.filter(function(c){return !c.kind}));try{return _q13HC.apply(this,arguments)}finally{z4TakeCovers()}}}
+// the cover pop-up: a default picture can be hidden (and brought back), not moved
+ZACT.z4defoff=function(id){var c=classById(id);if(!c)return;c.defCover=false;touch(c);save();view.modal=null;render()};
+ZACT.z4defon=function(id){var c=classById(id);if(!c)return;delete c.defCover;touch(c);save();view.modal=null;render()};
+var _q13MH=modalHtml;
+modalHtml=function(){
+ var h=_q13MH.apply(this,arguments),m=view.modal;
+ if(m&&m.kind==='sheet'&&m.what==='cover'&&classById(m.cover)){var oc=classById(m.cover);
+  // the page's colour, right here: the default picture, the title band and the page all follow it
+  h=h.replace(/(<h3>[^<]*<\/h3>)/,'$1<div class="z4cols"><p>'+(oc.kind?'Page colour':'Class colour')+'</p><div>'+PALETTES.map(function(pp){return '<button class="z4col'+(oc.color===pp.id?' on':'')+'" style="background:'+palHex(pp.id)+'" data-zact="z4color:'+oc.id+':'+pp.id+'" aria-label="'+esc(pp.name)+'" title="'+esc(pp.name)+'"></button>'}).join('')+'</div></div>');
+ }
+ if(m&&m.kind==='sheet'&&m.what==='cover'){var o=classById(m.cover);
+  if(o&&o.__defc)h=h.replace(/<button data-coveract="repos:[^"]*">[^<]*<\/button>/,'').replace(/<button data-coveract="remove:[^"]*" class="danger">[^<]*<\/button>/,'<button data-zact="z4defoff:'+o.id+'">Hide the default picture</button>')
+   .replace('Choose a different picture','Use my own picture').replace('<h3>Cover picture</h3>','<h3>Cover picture</h3><p class="hint" style="margin:-6px 0 10px">This is the default picture, in this page’s colour. It changes when you change the page’s colour.</p>');
+  else if(o&&!o.cover&&o.defCover===false)h=h.replace('<div class="sheetlist">','<div class="sheetlist"><button data-zact="z4defon:'+o.id+'">Use the default picture</button>');
+ }
+ return h;
+};
+
+/* ---------- soft depth on cards (an inner gradient), on by default, switch in Settings > Look and feel ---------- */
+ZACT.z4color=function(id,col){var c=classById(id);if(!c||!col)return;c.color=col;touch(c);save();render()};
+ZACT.z4depth=function(){S.cardDepth=S.cardDepth===false;save();render()};
+ZACT.z4covers=function(){S.defCovers=S.defCovers===false;save();render()};
+
+/* ---------- Home: your picture on the cover too ---------- */
+var _q13HG=homeGreeting;
+homeGreeting=function(onCover){
+ var h=_q13HG.apply(this,arguments);if(!onCover)return h;
+ var av='<label class="av h4av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg><i>+</i>')+'</label>';
+ return h.replace('<div class="h4ov"><div class="h4hi">','<div class="h4ov"><div class="h4me">'+av+'<div class="h4hi">').replace(/(<p class="h4day"[\s\S]*?<\/p><\/div>)/,'$1</div>');
+};
+
+/* ---------- Reading: finished titles on a shelf, or as covers (your choice, per page) ---------- */
+function z4RdView(c){try{return localStorage.getItem('hub:rdview:'+c.id)==='covers'?'covers':'shelf'}catch(e){return 'shelf'}}
+ZACT.z4rdview=function(cid,v){try{localStorage.setItem('hub:rdview:'+cid,v)}catch(e){}render()};
+function z4RdSeg(c){var v=z4RdView(c);return '<span class="z4seg" role="group" aria-label="Show finished as"><button class="'+(v==='shelf'?'on':'')+'" data-zact="z4rdview:'+c.id+':shelf">Shelf</button><button class="'+(v==='covers'?'on':'')+'" data-zact="z4rdview:'+c.id+':covers">Covers</button></span>'}
+zReadingPage=function(c){
+ var h=_q10Read(c),tr=rdTrack(c);if(!tr||view.rdSetup===c.id)return h;
+ if(z4RdView(c)==='covers')return h.replace(/(<summary><h2 class="zh2 zrdh">Finished <em>\d+<\/em><\/h2>)/,'$1'+z4RdSeg(c));
+ var shelf=z3Shelf(c);if(!shelf)return h;
+ shelf=shelf.replace('<h3>Your shelf</h3>','<h3>Your shelf</h3>'+z4RdSeg(c));
+ return /<details class="zrdfin"/.test(h)?h.replace(/<details class="zrdfin"[\s\S]*?<\/details>/,shelf):h.replace('<button class="zlink zrdchange"',shelf+'<button class="zlink zrdchange"');
+};
+
+/* ---------- pictures from a link (a food blog, a store): microlink.io reads the page's preview picture ---------- */
+async function z4LinkInfo(u){
+ if(!/^https?:\/\//i.test(u))u='https://'+u;
+ var r=await fetch('https://api.microlink.io/?url='+encodeURIComponent(u));var d=await r.json();
+ if(!d||d.status!=='success'||!d.data)throw new Error('none');
+ return {img:d.data.image&&d.data.image.url||'',title:(d.data.title||'').replace(/\s*[|·–-]\s*[^|·–-]*$/,'').trim(),url:u};
+}
+// recipes: a link field that brings the photo (and the name, if you haven't typed one)
+var _q13RecHtml=ZM.zrecipe.html,_q13RecSave=ZM.zrecipe.save;
+ZM.zrecipe.html=function(m){
+ var h=_q13RecHtml(m);if(!h)return h;var c=classById(m.cid),r=m.id&&c&&zItem(c,m.id),src=(m.fill&&m.fill.src)||(r&&r.src)||'';
+ var st=m.linkState==='loading'?'<p class="zsoft z4lnote">Getting the picture…</p>':m.linkState==='err'?'<p class="zsoft z4lnote">Couldn’t get a picture from that link. You can add your own picture instead.</p>':m.linkState==='ok'?'<p class="zsoft z4lnote">Got it. The picture is from the recipe’s page.</p>':'';
+ return h.replace('<div class="zfrow"><div class="field"><label for="zp2">','<div class="field"><label for="zp7">Recipe link (from a food blog or site)</label><div class="zfind"><input id="zp7" value="'+esc(src)+'" data-zenter="z4reclink" placeholder="Paste a link" autocomplete="off" inputmode="url"><button type="button" class="zbtn" data-zact="z4reclink">'+zI(ZIC.img,14)+' Get the photo</button></div>'+st+'</div><div class="zfrow"><div class="field"><label for="zp2">');
+};
+ZACT.z4reclink=async function(){
+ var m=view.modal;if(!m||m.kind!=='zrecipe')return;var u=zv('zp7');if(!u)return;
+ var name=zv('zp1');m.linkState='loading';render();
+ var info=null;try{info=await z4LinkInfo(u)}catch(e){}
+ if(view.modal!==m)return;
+ m.fill=Object.assign({},m.fill||{},{src:info?info.url:(/^https?:/i.test(u)?u:'https://'+u)});
+ if(info&&info.img){m.img=info.img;m.linkState='ok'}else m.linkState='err';
+ render();var t=document.getElementById('zp1');if(t&&!name&&info&&info.title){t.value=info.title}
+};
+ZM.zrecipe.save=function(m){var l=document.getElementById('zp7');if(l&&l.value.trim()){var u=l.value.trim();if(!/^https?:\/\//i.test(u))u='https://'+u;m.fill=Object.assign({},m.fill||{},{src:u})}return _q13RecSave(m)};
+// wishlist: the item's photo from its link (fetched by itself when you save a link)
+var _q13WishHtml=ZM.zwish.html;
+ZM.zwish.html=function(m){
+ var c=classById(m.cid),x=m.id&&c&&zItem(c,m.id);if(m.img===undefined)m.img=x&&x.img||'';
+ var h=_q13WishHtml(m);
+ return h.replace('<div class="field"><label for="zw3">Link</label>','<div class="z4wimg">'+(m.img?'<img src="'+esc(m.img)+'" alt="">':'<span>'+zI(ZIC.img,20)+'</span>')+'<div><button type="button" class="zlink" data-zact="z4wishlink">'+(m.wl==='loading'?'Getting the photo…':m.img?'Get the photo again':'Get the photo from the link')+'</button>'+(m.img?'<button type="button" class="zlink" data-zact="z4wishimgoff">Remove photo</button>':'')+(m.wl==='err'?'<small>Couldn’t find a photo on that page.</small>':'')+'</div></div><div class="field"><label for="zw3">Link</label>');
+};
+ZACT.z4wishimgoff=function(){if(view.modal){view.modal.img='';view.modal.imgOff=true;render()}};
+ZACT.z4wishlink=async function(){var m=view.modal;if(!m||m.kind!=='zwish')return;var u=zv('zw3');if(!u)return;m.wl='loading';render();
+ var info=null;try{info=await z4LinkInfo(u)}catch(e){}if(view.modal!==m)return;m.wl=info&&info.img?'':'err';if(info&&info.img)m.img=info.img;render()};
+ZM.zwish.save=function(m){var c=classById(m.cid);if(!c)return;var t=zv('zw1');if(!t)return;var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:'wish'};c.items.push(x)}
+ var u=zv('zw3');if(u&&!/^https?:\/\//i.test(u))u='https://'+u;x.title=t;x.price=+zv('zw2')||0;x.url=u;if(m.img)x.img=m.img;else delete x.img;touch(x);save();view.modal=null;render();
+ if(u&&!x.img&&!m.imgOff){z4LinkInfo(u).then(function(info){if(info&&info.img&&!x.img){x.img=info.img;touch(x);save();render()}}).catch(function(){})}};
+zWishBlock=function(c){
+ var L=(c.items||[]).filter(function(x){return x.t==='wish'}),open=L.filter(function(x){return !x.got}),got=L.filter(function(x){return x.got});
+ var tot=open.reduce(function(s,x){return s+(+x.price||0)},0);
+ var tile=function(x){var host=x.url?cpHost(x.url):'',hue=zWishHue(host||x.title);
+  return '<div class="zwi'+(x.got?' got':'')+'">'
+   +'<div class="zwplate'+(x.img?' photo':'')+'" style="'+(x.img?'background-image:url('+esc(x.img)+')':'background:linear-gradient(155deg,hsl('+hue+',26%,95%),hsl('+hue+',20%,89%))')+'"><button class="zwpbtn" data-zact="wishedit:'+c.id+':'+x.id+'" aria-label="Edit '+esc(x.title)+'">'+(x.img?'':zLogo(host||x.title,46,host?null:'heart',host))+'</button>'
+   +(x.url?'<a class="zwopen" href="'+esc(x.url)+'" target="_blank" rel="noopener" aria-label="Open the link">'+zI(ZIC.extlink,15)+'</a>':'')+'</div>'
+   +'<div class="zwbody"><button class="zwt" data-zact="wishedit:'+c.id+':'+x.id+'">'+esc(x.title)+'</button>'+(host?'<span class="zwhost">'+esc(host)+'</span>':'')
+   +'<div class="zwfoot"><span class="zwprice">'+(x.price?money(x.price):'')+'</span><button class="zwgot'+(x.got?' y':'')+'" data-zact="wishgot:'+c.id+':'+x.id+'" aria-label="'+(x.got?'Not got it yet':'Got it')+'">'+zI(ZIC.check,14)+(x.got?'':'<span>Got it</span>')+'</button></div></div></div>';
+ };
+ var meta=(open.length?open.length+' thing'+(open.length===1?'':'s')+(tot?' · '+money(tot):'')+' · ':'')+'<button class="zlink" data-zact="wishnew:'+c.id+'">+ Add</button>';
+ var body=open.length?'<div class="zwgrid">'+open.map(tile).join('')+'</div>'
+  :'<div class="zpempty"><span class="zic">'+zI(ZIC.heart,20)+'</span><b>Your wishlist is empty</b><span>Things you’d love to have one day. Paste a link and Doable brings the photo.</span><button class="zbtn" data-zact="wishnew:'+c.id+'">+ Add something</button></div>';
+ if(got.length)body+='<details class="zdone"><summary>Got it · '+got.length+'</summary><div class="zwgrid">'+got.map(tile).join('')+'</div></details>';
+ return zCard('Wishlist','heart',meta,body,'zlist zwcard');
+};
+
+/* ---------- Meal prep: Today, This week and Recipes; no 28-meal target ---------- */
+function z4MealTab(c){try{var v=localStorage.getItem('hub:mealtab:'+c.id);return v==='week'||v==='recipes'?v:'today'}catch(e){return 'today'}}
+ZACT.z4mealtab=function(cid,t){try{localStorage.setItem('hub:mealtab:'+cid,t)}catch(e){}view.r6enter=1;render()};
+zMealsPage=function(c){
+ var h=_q10Meals(c),iG=h.indexOf('<section class="zcard zmgridw">'),iP=h.indexOf('<section class="zcard zmday">'),iS=h.indexOf('<div class="zg2">',iP),iR=h.indexOf('<div class="zh2row"><h2 class="zh2">Recipes');
+ if(iG<0||iP<0||iS<0||iR<0)return h;
+ var nav=h.slice(0,iG),grid=h.slice(iG,iP),phone=h.slice(iP,iS),mid=h.slice(iS,iR),recipes=h.slice(iR);
+ var j=mid.indexOf('<section class="zcard',mid.indexOf('<section class="zcard')+5),prep=j>-1?mid.slice(j,mid.lastIndexOf('</div>')):'';
+ var tab=z4MealTab(c),ws=zMealWeek(),td=iso(today()),days=[];for(var i=0;i<7;i++)days.push(zAddDays(ws,i));
+ var sel=view.zmDay&&days.indexOf(view.zmDay)>-1?view.zmDay:(days.indexOf(td)>-1?td:ws);
+ var planned=0;days.forEach(function(d){MEAL_SLOTS.forEach(function(s){if(zMealAt(c,d,s[0]))planned++})});
+ var tabs='<div class="z4tabs" role="tablist">'+[['today','Today','sun'],['week','This week','cal'],['recipes','Recipes','utensils']].map(function(t){return '<button role="tab" aria-selected="'+(tab===t[0])+'" class="'+(tab===t[0]?'on':'')+'" data-zact="z4mealtab:'+c.id+':'+t[0]+'">'+zI(ZIC[t[2]],16)+'<span>'+t[1]+'</span></button>'}).join('')+'</div>';
+ if(tab==='recipes')return tabs+recipes;
+ if(tab==='week'){
+  var note='<p class="z4mnote">'+(planned?planned+' meal'+(planned===1?'':'s')+' planned this week. Plan as many or as few as you like.':'Tap any + to plan a meal. Plan as many or as few as you like.')+'</p>';
+  return tabs+nav+note+grid+phone+prep;
+ }
+ // Today: everything being cooked on the chosen day, with photos
+ var dots={};days.forEach(function(d){dots[d]=MEAL_SLOTS.filter(function(s){return zMealAt(c,d,s[0])}).map(function(){return '#C79A7E'})});
+ var dname=sel===td?'Today':sel===zAddDays(td,1)?'Tomorrow':parseISO(sel).toLocaleDateString('en-CA',{weekday:'long'});
+ var cards='',ingr=[],n=0;
+ MEAL_SLOTS.forEach(function(s){var m=zMealAt(c,sel,s[0]),r=m&&m.rid&&zItem(c,m.rid),pick='mealpick:'+c.id+':'+sel+':'+s[0];
+  if(!m){cards+='<button class="z4mempty" data-zact="'+pick+'">'+zI(ZIC[s[2]],18)+'<span>Add '+s[1].toLowerCase()+'</span></button>';return}
+  n++;if(r)(r.ingr||[]).forEach(function(g){ingr.push({g:g,r:r.title})});
+  cards+='<div class="z4meal"><button class="z4mimg'+(r&&r.img?'':' none')+'" data-zact="'+(r?'recipeedit:'+c.id+':'+r.id:pick)+'"'+(r&&r.img?' style="background-image:url('+esc(r.img)+')"':'')+' aria-label="Open '+esc(r?r.title:m.text||'')+'">'+(r&&r.img?'':zI(ZIC.utensils,28))+'<span class="z4slot">'+zI(ZIC[s[2]],13)+s[1]+'</span></button>'
+   +'<div class="z4mb"><b>'+esc(r?r.title:m.text||'')+'</b><small>'+esc([r&&r.mins?r.mins+' min':'',r&&r.serves?'serves '+r.serves:'',r&&(r.ingr||[]).length?(r.ingr||[]).length+' ingredients':''].filter(Boolean).join(' · ')||(r?'Your recipe':'A quick meal'))+'</small>'
+   +'<div class="z4mact">'+(r?'<button class="zbtn" data-zact="recipeedit:'+c.id+':'+r.id+'">Recipe</button>':'')+'<button class="zbtn ghost" data-zact="'+pick+'">Change</button></div></div></div>'});
+ var ing=ingr.length?'<section class="zcard z4ing"><div class="zch"><span class="zic">'+zI(ZIC.list,16)+'</span><span class="zct">What you’ll need</span><span class="zcm">'+ingr.length+' ingredient'+(ingr.length===1?'':'s')+'</span></div><div class="zcb"><ul>'+ingr.map(function(x){return '<li><span>'+esc(x.g)+'</span><small>'+esc(x.r)+'</small></li>'}).join('')+'</ul></div></section>':'';
+ return tabs+'<section class="z4today"><div class="z4th"><div><p>'+esc(parseISO(sel).toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+'</p><h2>'+(n?'Cooking '+esc(dname.toLowerCase()==='today'?'today':'on '+dname):esc(dname)+': nothing planned yet')+'</h2></div>'
+  +'<div class="z4wk"><button data-zact="mealwk:-1" aria-label="Previous week">‹</button><button data-zact="mealwk:1" aria-label="Next week">›</button></div></div>'
+  +zRoundDays(ws,sel,'data-zmday',dots)+'</section><div class="z4meals">'+cards+'</div>'+ing+prep;
+};
+
+
+/* ---------- the Colours panel: the two choices people look for, up top and plain ----------
+   Jae: "every page has a different coloured cover that I can't figure out how to change" and "the colour
+   changer tab still feels like a confusing layout". "Page colour" used to mean the background behind the
+   cards; now the page's own colour (cover, title, highlights) and the menu colour are rows of dots at the
+   top, the background is called Background, and everything else stays in the sections below. */
+var Z4MENU=['#6F8469','#7B6E91','#94775A','#63869C','#9A6580','#8A6F5E','#5E7262','#4D5B6B','#3B3A33'];
+ZACT.z4menu=function(hex){var v=setThemeColour('chrome','sideBg','#'+hex);if(v!==false){save();render()}};
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-z4menu'))return;var v=setThemeColour('chrome','sideBg',t.value);if(v!==false){save();render()}});
+var _q13Pick=pickerHtml;
+pickerHtml=function(){
+ var h=_q13Pick();if(!view.picker||(view.editSurf&&view.editSurf!=='__sec'))return h;
+ var i=h.indexOf('<details class="pkacc" data-pkacc="page"');if(i<0)return h;
+ var c=(view.page==='class'||view.page==='page')?classById(view.classId):null,sp=curSpace(),side=chromeHex('sideBg').toLowerCase();
+ var quick='<div class="z4pk">'
+  +(c?'<div class="z4pkrow"><p><b>'+(c.kind?'Page colour':'Class colour')+'</b><span>The cover picture, the title and the highlights on '+esc(c.name)+'</span></p><div class="z4pksw">'
+   +PALETTES.map(function(pp){return '<button class="z4col'+(c.color===pp.id?' on':'')+'" style="background:'+palHex(pp.id)+'" data-zact="z4color:'+c.id+':'+pp.id+'" aria-label="'+esc(pp.name)+'" title="'+esc(pp.name)+'"></button>'}).join('')+'</div></div>':'')
+  +'<div class="z4pkrow"><p><b>Menu colour</b><span>The menu and the frame around the app'+(sp==='school'?'':' in '+esc(spaceById(sp).name))+'</span></p><div class="z4pksw">'
+   +Z4MENU.map(function(x){return '<button class="z4col'+(side===x.toLowerCase()?' on':'')+'" style="background:'+x+'" data-zact="z4menu:'+x.slice(1)+'" aria-label="Menu colour '+x+'"></button>'}).join('')
+   +'<label class="z4col z4cust'+(Z4MENU.map(function(x){return x.toLowerCase()}).indexOf(side)<0?' on':'')+'" title="Any colour" style="--cur:'+side+'"><input type="color" value="'+side+'" data-z4menu="1" aria-label="Pick any menu colour"></label></div></div></div>';
+ h=h.slice(0,i)+quick+h.slice(i);
+ return h.replace(/This page: [^<]*/,'Background and sections').replace(/Page colour<small>/g,'Background<small>')
+  .replace(/<button data-zact="pageedit:[^"]*" style="width:100%;margin-top:8px">Change this page’s colour or name<\/button>/,'')
+  .replace(/<p class="sub2">Tap a section to open it\.[^<]*<\/p>/,'<p class="sub2">The two big choices are right here. Fine-tune the rest in the sections below.</p>');
+};
+
+/* ---------- each redraw: the default cover for the page you're on, and the depth look ---------- */
+var _q13Render=render;
+render=function(){
+ var c=(view.page==='class'||view.page==='page')?classById(view.classId):null;
+ if(c&&view.repos!==coverKey(c))z4PutCovers([c]);
+ document.body.classList.toggle('zdepth',S.cardDepth!==false);
+ var def=!!(c&&c.__defc);
+ try{return _q13Render.apply(this,arguments)}finally{z4TakeCovers();
+  var cw=def&&document.querySelector('.main>.coverwrap,.main .coverwrap');if(cw){cw.classList.add('z4def');cw.style.setProperty('--z4ink',z4Pal(palHex(c.color)).d)}}
+};
+// Settings > Look and feel: the two switches
+var _q13MH2=modalHtml;
+modalHtml=function(){var h=_q13MH2.apply(this,arguments);
+ return h.replace('<button data-zact="tour">Take the tour</button>','<button data-zact="tour">Take the tour</button><button data-zact="z4depth">Soft depth on cards: '+(S.cardDepth===false?'Off':'On')+'</button><button data-zact="z4covers">Default cover pictures: '+(S.defCovers===false?'Off':'On')+'</button>')};
 
 try{spBoot()}catch(e){}
 load();
