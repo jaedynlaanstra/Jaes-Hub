@@ -18441,6 +18441,13 @@ function q43Apply(txt){
  var t=document.getElementById('q43txt');if(t)t.value='';
  render();zToast(m.q43done);
 }
+// a blocked link still leaves a name (from the web address), so Save works and the link is kept
+function q43SlugName(u){try{var p=new URL(/^https?:/i.test(u)?u:'https://'+u).pathname.split('/').filter(function(x){return x&&!/^\d+$/.test(x)&&!/^(recipe|recipes)$/i.test(x)}).pop()||'';
+ p=decodeURIComponent(p).replace(/\.(html?|php)$/i,'').replace(/[-_]+/g,' ').replace(/\b(recipe|\d{4,})\b/gi,'').replace(/\s+/g,' ').trim();return p?p.charAt(0).toUpperCase()+p.slice(1):''}catch(e){return ''}}
+var _q43Link=ZACT.z4reclink;
+ZACT.z4reclink=async function(){var m=view.modal;var u=zv('zp7');var r=await _q43Link.apply(this,arguments);
+ if(view.modal===m&&m&&(m.linkState==='err'||m.linkState==='part')){var n=document.getElementById('zp1');if(n&&(!n.value.trim()||q24IsUrl(n.value))){var t=q43SlugName(u);if(t)n.value=t}}
+ return r};
 // the picked tags go into the (hidden) Tags field just before saving
 var _q43RecSave=ZM.zrecipe.save;
 ZM.zrecipe.save=function(m){var e=document.getElementById('zp4');if(e&&m&&m.q43tags)e.value=m.q43tags.join(', ');return _q43RecSave.apply(this,arguments)};
