@@ -4160,6 +4160,8 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .q26ppl .zpc.off{opacity:.45}
 .q26ppl+.zbtn{margin-left:auto!important}.q26ppl:not(:empty)+.zbtn{margin-left:0!important}.q26ppl~[data-zact="evnew"]{margin-left:0!important}
 .q26bdrow{display:flex;align-items:center;gap:12px}.q26bdpv{width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;transition:background .15s}
+/* wishlist photos fill the top of the card (a general .photo rule for round contact pictures made them a 58px oval) */
+.zwi .zwplate.photo{width:auto;height:150px;border-radius:0;border:none;display:grid;flex-shrink:0;background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#fff}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4488,7 +4490,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v167';
+var BUILD='v168';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
