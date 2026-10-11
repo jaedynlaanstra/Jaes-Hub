@@ -4555,6 +4555,13 @@ body.q39lock{overflow:hidden}
 @media(prefers-reduced-motion:reduce){#q47alarm,.q47bell{animation:none}}
 #q47alarm{z-index:10060!important}#q39dock{z-index:10050!important}
 
+/* v195: a light menu gets dark highlights instead of white ones */
+body.q48lt .side .sitem:hover{background:rgba(0,0,0,.05)}
+body.q48lt .side .sitem.on{background:rgba(0,0,0,.08);box-shadow:none}
+body.q48lt .side .zpillbtn{background:rgba(0,0,0,.07)}
+body.q48lt .sidehide{background:rgba(0,0,0,.06)}
+body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4883,7 +4890,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v194';
+var BUILD='v195';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -18973,6 +18980,22 @@ document.addEventListener('click',function(e){if(e.target.closest&&e.target.clos
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('q47alarm'))q47Stop()});
 // the focus timer finishes wherever you are
 setInterval(function(){var f=q18F();if(!f.end||q18FLeft(f)>0)return;q18FSet({});q47Alarm('Focus session done','Time for a break.');if(view.page==='home')render()},1000);
+
+/* ===== v195: the menu shows the page colour you picked, not a dark shade of it =====
+   Jae: "I pick a light green, almost white, and it is a dark green". With "Menu colour: Match each page" the menu
+   and the frame used to be a deep shade of the page colour (q17MenuShade). Now they are the page colour itself,
+   and the menu words turn dark when that colour is light (and light when it is dark). */
+function q48Light(hex){try{return contrast('#FFFFFF',hex)<3}catch(e){return false}}
+function q48Inks(bg,key){var q=rgb2hsl.apply(null,hex2rgb(bg));
+ if(q48Light(bg))return key==='sideBright'?hsl2hex(q[0],Math.min(q[1],30),14):key==='sideInk'?hsl2hex(q[0],Math.min(q[1],28),24):hsl2hex(q[0],Math.min(q[1],22),38);
+ return key==='sideBright'?'#FFFFFF':key==='sideInk'?hsl2hex(q[0],Math.min(q[1],20),92):hsl2hex(q[0],Math.min(q[1],18),80)}
+var _q48Chrome=chromeHex;
+chromeHex=function(key){
+ if(S.menuMatch!==false&&(key==='sideBg'||key==='sideInk'||key==='sideBright'||key==='sideSoft')){var c=q17PageCol();if(c){var bg=palHex(c.color);return key==='sideBg'?bg:q48Inks(bg,key)}}
+ return _q48Chrome.apply(this,arguments);
+};
+var _q48Render=render;
+render=function(){var r=_q48Render.apply(this,arguments);try{document.body.classList.toggle('q48lt',q48Light(chromeHex('sideBg')))}catch(e){}return r};
 
 try{spBoot()}catch(e){}
 load();
