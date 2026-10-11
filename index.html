@@ -3547,6 +3547,92 @@ body.zdepth .z5grp,body.zdepth .z5top{background-image:linear-gradient(180deg,rg
 @media(max-width:480px){.z5tabs{gap:2px}.z5tabs button{padding:9px 4px;gap:5px}.z5tabs button svg{display:none}.z5tabs em{min-width:16px;height:18px;font-size:11px;padding:0 5px}}
 .z5empty{padding:10px 4px}
 @media(max-width:700px){.z5tabs button{padding:9px 6px;gap:6px}.z5tabs button span{font-size:14px}}
+/* ===== v154 round 15 ===== */
+/* cover titles: room for letters that drop below the line (g, p, y) so nothing is cut off */
+.h4day,.cpov .cpovt{padding-bottom:.16em;margin-bottom:-.16em;padding-top:.04em;overflow-wrap:anywhere}
+.cpov .cpovt{overflow:visible}
+/* the profile card on Home */
+.q17prof{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:26px 18px 20px;border-radius:22px;overflow:hidden;
+ background:var(--card);border:1px solid var(--line)}
+.q17prof::before{content:'';position:absolute;left:50%;top:-70px;width:340px;height:340px;margin-left:-170px;border-radius:50%;pointer-events:none;
+ background:repeating-radial-gradient(circle,transparent 0 30px,color-mix(in srgb,var(--sideBg,#6f8468) 4%,transparent) 30px 46px);-webkit-mask-image:linear-gradient(180deg,#000 40%,transparent 85%);mask-image:linear-gradient(180deg,#000 40%,transparent 85%)}
+.q17prof>*{position:relative}
+.q17av{width:96px;height:96px;border-radius:50%;cursor:pointer;display:grid;place-items:center;background:color-mix(in srgb,var(--sideBg,#6f8468) 22%,#fff);
+ box-shadow:0 0 0 5px var(--card),0 0 0 7px color-mix(in srgb,var(--sideBg,#6f8468) 30%,transparent),0 14px 26px -12px rgba(0,0,0,.35);margin-bottom:12px}
+.q17av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.q17av>span{font-size:34px;font-weight:500;color:var(--sideBg,#6f8468)}
+.q17av i{position:absolute;right:calc(50% - 50px);top:76px;width:26px;height:26px;border-radius:50%;background:var(--card);color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.q17prof b{font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.q17tag{border:none;background:none;padding:0;font:inherit;font-size:13.5px;color:var(--ink3);cursor:pointer;min-height:0!important}
+.q17tag.add{text-decoration:underline;text-underline-offset:3px}
+/* colour panel switches */
+.q17seg{margin:6px 0 2px!important;display:inline-flex}
+.z4pkrow>.q17seg{margin-top:0!important}
+.z4pkrow p .q17seg{align-self:flex-start}
+.zswc{position:relative;overflow:hidden;background:conic-gradient(#d98a8a,#d9c08a,#9fc29a,#8ab3d9,#b59ad9,#d98a8a)!important}
+.zswc input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+/* paint button: a pencil on every Home widget */
+.zhome .zw{position:relative}
+.q17pen{position:absolute;top:8px;right:8px;z-index:9;width:30px;height:30px;border-radius:50%;border:1px solid var(--line2,#ddd);background:var(--card);display:grid;place-items:center;cursor:pointer;min-height:0!important;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.14);animation:zpop .35s ease}
+.q17pen svg{width:14px;height:14px;color:var(--ink2)}
+/* budget colours from the page */
+.zbhw .zbtile.in{background:var(--b1,#e6efe3)}.zbhw .zbtile.out{background:var(--b2,#f1e4dc)}.zbhw .zbtile.sav{background:var(--b3,#e9e4f1)}.zbhw .zbtile.use{background:var(--b4,#e6ebf0)}
+.zbhw .zbsc i{background:var(--b6l,#e3d4c6)}.zbhw .zbsc.on i{background:var(--b6,#c9a98d)}
+.zbhead .q17seg{margin:0!important}
+/* cards */
+.q17crow{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:4px 2px 10px}
+.q17crow::-webkit-scrollbar{display:none}
+.q17card{position:relative;flex:none;width:272px;aspect-ratio:1.586;border:none;border-radius:18px;padding:16px 18px;color:#fff;font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 28px -18px rgba(0,0,0,.6);overflow:hidden;min-height:0!important}
+.q17card::after{content:'';position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.12);pointer-events:none}
+.q17ct{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.q17ct b{font-size:15px;font-weight:600}
+.q17ct small{font-size:11.5px;opacity:.85}
+.q17chip2{width:34px;height:24px;border-radius:5px;background:linear-gradient(135deg,#f3dfa7,#d4b56a);box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.q17num{font-size:16px;letter-spacing:.14em;opacity:.95}
+.q17cb{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.q17cb small{display:block;font-size:11px;opacity:.85}
+.q17cb b{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.q17lim{text-align:right;min-width:90px}
+.q17lim i{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.3);margin-top:4px;overflow:hidden}
+.q17lim u{display:block;height:100%;background:#fff;border-radius:3px}
+.q17cf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px;font-size:11px;opacity:.9;border-top:1px solid rgba(255,255,255,.22);padding-top:7px}
+.q17cadd{flex:none;width:130px;border:2px dashed var(--line);border-radius:18px;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--ink3);font:inherit;font-size:13px;cursor:pointer;min-height:0!important}
+.q17cempty{display:flex;align-items:center;gap:16px;width:100%;border:none;background:none;padding:4px 0;font:inherit;font-size:13.5px;color:var(--ink3);text-align:left;cursor:pointer;min-height:0!important}
+.q17card.ghost{width:150px;background:linear-gradient(135deg,#c9c3ba,#e2ddd5);justify-content:flex-end;padding:12px}
+.q17card.ghost .q17num{font-size:12px}
+@media(max-width:700px){.q17card{width:250px}.q17cempty{flex-direction:column;align-items:flex-start}}
+/* widgets with more in them */
+.wd .wdb{display:flex;flex-direction:column}
+.wd .wdb>.zadd.zqm{margin-top:auto}
+.q17wk{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:12px 0 8px;padding-top:10px;border-top:1px solid color-mix(in srgb,var(--wc,#888) 14%,transparent)}
+.q17d{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;color:var(--ink3)}
+.q17d.t small{color:var(--ink);font-weight:600}
+.q17d i{display:flex;flex-direction:column;gap:3px;min-height:26px;align-items:center}
+.q17d i b{width:18px;height:6px;border-radius:3px;background:var(--wc,#9E8B61)}
+.q17d i b.y{opacity:.35}
+.q17cart{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.q17cart .z3blocks{flex:1;gap:3px}.q17cart .z3blocks i{width:12px;height:12px;border-radius:4px}
+.q17cart>span{font-size:12px;color:var(--ink3);flex:none}
+.q17store{margin-bottom:8px}
+.q17sh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.q17sh .zlogo{border-radius:6px;flex:none}.q17sh b{font-size:13px;font-weight:500}.q17sh em{font-style:normal;font-size:11.5px;color:var(--ink3)}
+.q17chips{display:flex;flex-wrap:wrap;gap:6px}
+.q17chip{display:inline-flex;align-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--wc,#888) 22%,transparent);background:var(--card);border-radius:99px;padding:4px 10px 4px 6px;font:inherit;font-size:12.5px;color:var(--ink);cursor:pointer;min-height:0!important;max-width:100%}
+.q17chip i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--wc,#888);flex:none}
+.q17chip:hover i{background:color-mix(in srgb,var(--wc,#888) 25%,transparent)}
+.q17also{margin:4px 0 0;font-size:12px}
+.q17next{margin-top:12px}
+.q17next small{display:block;font-size:11.5px;color:var(--ink3);margin-bottom:6px}
+.q17next>div{display:flex;gap:8px}
+.q17next button{width:44px;height:64px;border-radius:7px;overflow:hidden;border:none;padding:0;cursor:pointer;min-height:0!important;background:var(--wt,#eee);box-shadow:0 6px 12px -8px rgba(0,0,0,.4)}
+.q17next img{width:100%;height:100%;object-fit:cover}
+.q17next span{display:grid;place-items:center;height:100%;color:var(--wc);font-weight:600}
+.q17rnudge{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;padding:12px;border:2px dashed color-mix(in srgb,var(--wc,#888) 25%,transparent);border-radius:14px;background:none;font:inherit;font-size:13px;color:var(--ink3);cursor:pointer;text-align:left;min-height:0!important}
+.q17rstat{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--ink3)}
+.q17rstat b{color:var(--ink);font-size:15px;font-weight:600;margin-right:3px}
+.q17sm ul{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px;width:100%}
+.q17sm li{font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
 </style>
 </head>
 <body>
@@ -3855,7 +3941,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v153';
+var BUILD='v154';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -15352,6 +15438,256 @@ ZM.z6me={html:function(){return '<h3>Under your name</h3><p class="hint" style="
 function q16Side(){document.querySelectorAll('.side .me').forEach(function(el){var d=document.createElement('div');d.innerHTML=q16Me();el.replaceWith(d.firstChild)})}
 var _q16Render=render;
 render=function(){var before=app.firstElementChild;var r=_q16Render.apply(this,arguments);if(app.firstElementChild!==before)q16Side();return r};
+
+/* ======================= ROUND 15 (v154): Jae's list after v153 =======================
+   Menu back as it was; the profile is a card widget in Home's right column (like the "Dr John Adam" card
+   Jae sent). Colours: many more muted choices plus any custom colour (pages, habits, widgets); the menu can
+   follow each page's colour; Budget's ring, tiles and charts follow the page colour; the paint button shows
+   a pencil on every Home widget again; card depth has a plain switch in Colours. Stores can be Groceries,
+   Shopping or both. Budget can show spent instead of left. Fuller To do / Shopping / Reading widgets. */
+
+/* ---------- the side menu goes back to how it was ---------- */
+q16Side=function(){};
+
+/* ---------- more colours, all soft, and any colour you like ---------- */
+[['blush','Blush','#D3A7A6'],['peach','Peach','#DDB596'],['butter','Butter','#D6C083'],['olive','Olive','#A3A67B'],['pine','Pine','#7E9C8A'],['seaglass','Sea glass','#8FB3AE'],
+ ['denim','Denim','#8399B5'],['slate','Slate','#8F97A3'],['plum','Plum','#A18BA7'],['mauve','Mauve','#B596A9'],['terracotta','Terracotta','#C28E76'],['mocha','Mocha','#A68F7E'],
+ ['stone','Stone','#AAA59C'],['fog','Fog','#B6C0C2'],['inkblue','Ink blue','#5F708C'],['forest','Forest','#66806C'],['wine','Wine','#9A6B78'],['charcoal','Charcoal','#6E6A66']
+].forEach(function(x){if(PALETTES.some(function(p){return p.id===x[0]}))return;var d=deriveSet(x[2]);PALETTES.push({id:x[0],name:x[1],bg:d.bg,ink:d.ink,ink2:d.ink2,bar:x[2]})});
+// a custom page colour is stored as 'x' + its hex (e.g. 'xA1B2C3'), and gets a palette made from it
+function q17Custom(){
+ var seen={};PALETTES.forEach(function(p){seen[p.id]=1});
+ (S.classes||[]).forEach(function(c){var id=c.color;if(typeof id==='string'&&/^x[0-9a-f]{6}$/i.test(id)&&!seen[id]){var d=deriveSet('#'+id.slice(1));PALETTES.push({id:id,name:'Your colour',bg:d.bg,ink:d.ink,ink2:d.ink2,bar:'#'+id.slice(1),custom:1});seen[id]=1}});
+}
+var _q17Apply=applyTheme;
+applyTheme=function(){try{q17Custom()}catch(e){}return _q17Apply.apply(this,arguments)};
+function q17Swatches(c,attr){
+ return PALETTES.filter(function(p){return !p.custom}).map(function(pp){return '<button class="z4col'+(c.color===pp.id?' on':'')+'" style="background:'+palHex(pp.id)+'" data-zact="z4color:'+c.id+':'+pp.id+'" aria-label="'+esc(pp.name)+'" title="'+esc(pp.name)+'"></button>'}).join('')
+  +'<label class="z4col z4cust'+(/^x/.test(c.color||'')?' on':'')+'" title="Any colour" style="'+(/^x/.test(c.color||'')?'background:'+palHex(c.color)+'!important':'')+'"><input type="color" value="'+palHex(c.color)+'" data-z4cc="'+c.id+'" aria-label="Pick any colour"></label>';
+}
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-z4cc'))return;var c=classById(t.getAttribute('data-z4cc'));if(!c)return;
+ c.color='x'+t.value.slice(1).toUpperCase();q17Custom();touch(c);save();render()});
+// soft colour pairs for habits, widgets, categories: more of them, and any colour through the same name ('#hex')
+var Q17ZC_BASE=ZC_KEYS.slice();
+zHueOf=function(s){return Q17ZC_BASE[Math.abs(String(s||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%Q17ZC_BASE.length]};
+[['blush','#F6EAEA','#B07C7C'],['butter','#F7F1DE','#A08A45'],['olive','#EFF0E4','#7A8052'],['pine','#E4EDE8','#5C7C69'],['seaglass','#E3F0EE','#5A8B85'],['denim','#E6ECF4','#5A7398'],['plum','#EFE8F1','#7B6383'],['terracotta','#F5E8E1','#A56A50'],['stone','#EFEDEA','#7F796F']]
+ .forEach(function(x){if(!ZC[x[0]]){ZC[x[0]]=[x[1],x[2]];ZC_KEYS.push(x[0])}});
+function q17Pair(hex){var q=rgb2hsl.apply(null,hex2rgb(hex)),s=Math.min(q[1],40);return [hsl2hex(q[0],Math.min(s,34),93),hsl2hex(q[0],Math.max(18,Math.min(s,38)),45)]}
+ZC=new Proxy(ZC,{get:function(t,k){if(typeof k==='string'&&/^#[0-9a-f]{6}$/i.test(k))return q17Pair(k);return t[k]}});
+var _q17Soft=zSoftPick;
+zSoftPick=function(cur,attr,withNone){
+ var h=_q17Soft(cur,attr,withNone),custom=/^#/.test(cur||'');
+ return h.replace(/<\/div>$/,'<label class="zsw zswc'+(custom?' on':'')+'" title="Any colour"'+(custom?' style="background:'+cur+'"':'')+'><input type="color" value="'+(custom?cur:'#9a8f80')+'" data-zsoftc="'+attr+'" aria-label="Pick any colour"></label></div>');
+};
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-zsoftc'))return;
+ var b=document.createElement('button');b.type='button';b.style.display='none';b.setAttribute(t.getAttribute('data-zsoftc'),t.value);t.parentNode.appendChild(b);b.click();if(b.parentNode)b.remove()});
+
+/* ---------- the menu can follow the page you're on ---------- */
+SETTINGS_KEYS.push('menuMatch','profileCard');
+function q17PageCol(){var c=(view.page==='class'||view.page==='page')?classById(view.classId):null;return c&&!isRefClass(c)?c:null}
+function q17MenuShade(hex){var q=rgb2hsl.apply(null,hex2rgb(hex));return hsl2hex(q[0],Math.max(14,Math.min(q[1]*1.05,36)),40)}
+var _q17Chrome=chromeHex;
+chromeHex=function(key){
+ if(key==='sideBg'&&S.menuMatch!==false){var c=q17PageCol();if(c)return q17MenuShade(palHex(c.color))}
+ return _q17Chrome.apply(this,arguments);
+};
+ZACT.q17match=function(on){S.menuMatch=on==='1'?true:false;save();render()};
+var _q17Menu=ZACT.z4menu;
+ZACT.z4menu=function(hex){if(q17PageCol()&&S.menuMatch!==false)S.menuMatch=false;return _q17Menu(hex)};
+ZACT.q17depth=function(on){S.cardDepth=on==='1';save();render()};
+
+/* ---------- Colours panel: card style and menu matching, as plain switches up top; custom page colour ---------- */
+var _q17Pick=pickerHtml;
+pickerHtml=function(){
+ var h=_q17Pick();if(!view.picker||h.indexOf('<div class="z4pk">')<0)return h;
+ var c=q17PageCol();
+ if(c)h=h.replace(/(<div class="z4pkrow"><p><b>(?:Page|Class) colour<\/b>[\s\S]*?<div class="z4pksw">)[\s\S]*?(<\/div><\/div>)/,function(a,p1,p2){return p1+q17Swatches(c)+p2});
+ var match=S.menuMatch!==false,depth=S.cardDepth!==false;
+ h=h.replace('<p><b>Menu colour</b>','<p><b>Menu colour</b><span class="z4seg q17seg"><button class="'+(match?'on':'')+'" data-zact="q17match:1">Match each page</button><button class="'+(match?'':'on')+'" data-zact="q17match:0">One colour</button></span>');
+ h=h.replace(/(<div class="z4pk">[\s\S]*?)(<\/div><details)/,function(a,p1,p2){return p1+'<div class="z4pkrow"><p><b>Card style</b><span>A soft inner shading on cards and widgets</span></p><span class="z4seg q17seg"><button class="'+(depth?'on':'')+'" data-zact="q17depth:1">Soft depth</button><button class="'+(depth?'':'on')+'" data-zact="q17depth:0">Flat</button></span></div>'+p2});
+ return h;
+};
+// the cover pop-up gets the bigger colour choice too
+var _q17MH=modalHtml;
+modalHtml=function(){var h=_q17MH.apply(this,arguments),m=view.modal;
+ if(m&&m.kind==='sheet'&&m.what==='cover'){var oc=classById(m.cover);if(oc)h=h.replace(/(<div class="z4cols"><p>[^<]*<\/p><div>)[\s\S]*?(<\/div><\/div>)/,function(a,p1,p2){return p1+q17Swatches(oc)+p2})}
+ return h};
+
+/* ---------- the paint button shows a little pencil on every Home widget (opens that widget's colours) ---------- */
+function q17Pencils(){
+ if(!view.picker||view.page!=='home')return;
+ document.querySelectorAll('.zhome .zw[data-wid]').forEach(function(w){if(w.querySelector(':scope>.q17pen'))return;var b=document.createElement('button');b.className='q17pen';b.setAttribute('data-zact','wmenu:'+w.getAttribute('data-wid'));b.setAttribute('aria-label','Change this widget’s colour');
+  b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';w.appendChild(b)});
+}
+
+/* ---------- Budget: colours from the page; show what's left or what's spent ---------- */
+CLASS_KEYS.push('bview');
+ZACT.q17bview=function(cid,v){var c=classById(cid);if(!c)return;c.bview=v;touch(c);save();render()};
+var _q17Ring=zbRing,q17Bud=null;
+zbRing=function(pct,sz,w,big,cap,over){
+ if(q17Bud&&q17Bud.c.bview==='spent'){var b=q17Bud.b;big=money(b.spent);cap=b.total?'spent of '+money(b.total):'spent this month'}
+ return _q17Ring(pct,sz,w,big,cap,over);
+};
+var _q17Bud=zBudgetPage;
+zBudgetPage=function(c){
+ var hex=palHex(c.color),q=rgb2hsl.apply(null,hex2rgb(hex)),hh=q[0],ss=Math.max(16,Math.min(q[1],34));
+ var tint=function(dh,l){return hsl2hex(((hh+dh)%360+360)%360,ss,l)};
+ var keep={b:ZB1.brown,g:ZB1.green};ZB1.brown=hsl2hex(hh,Math.max(20,Math.min(q[1]*1.1,40)),52);ZB1.green=tint(0,90);
+ q17Bud={c:c,b:zBudget(c,zMonthOf(c))};
+ var h;try{h=_q17Bud(c)}finally{ZB1.brown=keep.b;ZB1.green=keep.g;q17Bud=null}
+ var vars='--b1:'+tint(-28,91)+';--b2:'+tint(28,91)+';--b3:'+tint(60,92)+';--b4:'+tint(0,91)+';--b6:'+tint(0,66)+';--b6l:'+tint(0,85);
+ var sp=c.bview==='spent';
+ var seg='<span class="z4seg q17seg"><button class="'+(sp?'':'on')+'" data-zact="q17bview:'+c.id+':left">Left to spend</button><button class="'+(sp?'on':'')+'" data-zact="q17bview:'+c.id+':spent">Spent</button></span>';
+ return h.replace('<div class="zbhw">','<div class="zbhw" style="'+vars+'">').replace('<div class="zbadds">',seg+'<div class="zbadds">');
+};
+
+/* ---------- Shopping list: each store is for Groceries, Shopping or both ---------- */
+var _q17SecHtml=ZM.zsec.html,_q17SecSave=ZM.zsec.save;
+ZM.zsec.html=function(m){var h=_q17SecHtml(m),c=classById(m.cid);if(!h||!c||c.kind!=='groceries')return h;
+ var s=m.sid&&(c.sections||[]).filter(function(x){return x.id===m.sid})[0],v=s?(s.list||''):(z5Tab(c)==='shop'?'shop':'gro');
+ return h.replace('<p class="hint" style="margin:-4px 0 8px">','<div class="field"><label for="zq3">Show this store on</label><select id="zq3"><option value="gro"'+(v==='gro'?' selected':'')+'>Groceries</option><option value="shop"'+(v==='shop'?' selected':'')+'>Shopping</option><option value=""'+(v===''?' selected':'')+'>Both</option></select></div><p class="hint" style="margin:-4px 0 8px">');
+};
+ZM.zsec.save=function(m){var el=document.getElementById('zq3'),c=classById(m.cid),v=el?el.value:null,n=c?(c.sections||[]).length:0;_q17SecSave(m);
+ if(v==null||!c)return;var s=m.sid?(c.sections||[]).filter(function(x){return x.id===m.sid})[0]:(c.sections.length>n?c.sections[c.sections.length-1]:null);
+ if(s&&(s.list||'')!==v){if(v)s.list=v;else delete s.list;touch(s);save();render()}};
+var _q17Shop=z5Shop;
+z5Shop=function(c){
+ var tab=z5Tab(c);if(tab==='wish')return _q17Shop(c);
+ // stores that belong to the other tab (and have nothing here) are left out
+ var all=c.sections||[],hide=all.filter(function(s){return s.list&&s.list!==tab&&!(c.tasks||[]).some(function(t){return !t.done&&t.sec===s.id&&z5In(t,tab)})});
+ if(!hide.length)return _q17Shop(c);
+ var keep=c.sections;c.sections=all.filter(function(s){return hide.indexOf(s)<0});
+ try{return _q17Shop(c)}finally{c.sections=keep}
+};
+
+/* ---------- widgets with more in them ---------- */
+function q17Week(c){
+ var ws=iso(weekStart(0)),td=iso(today()),cols='';
+ for(var i=0;i<7;i++){var k=zAddDays(ws,i),L=(c.tasks||[]).filter(function(t){return t.due===k}),dn=L.filter(function(t){return t.done}).length;
+  cols+='<span class="q17d'+(k===td?' t':'')+'"><small>'+esc(parseISO(k).toLocaleDateString('en-CA',{weekday:'narrow'}))+'</small><i>'+L.slice(0,3).map(function(t){return '<b class="'+(t.done?'y':'')+'"></b>'}).join('')+'</i></span>'}
+ return '<div class="q17wk">'+cols+'</div>';
+}
+var _q17NW=zNewWidget;
+zNewWidget=function(w,d,sp){
+ var h=_q17NW(w,d,sp),c=d.page?firstPage(sp,d.page):null;if(!c||h==null)return h;
+ if(w.type==='todo')return h.replace('<div class="zadd zqm">',q17Week(c)+'<div class="zadd zqm">');
+ if(w.type==='groceries'){
+  var T=(c.tasks||[]).filter(function(t){return t.list!=='shop'}),op=T.filter(function(t){return !t.done}),dn=T.length-op.length,shopN=(c.tasks||[]).filter(function(t){return t.list==='shop'&&!t.done}).length;
+  var secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+  var groups=[{id:'',name:'Any store'}].concat(secs).map(function(s){return {s:s,L:op.filter(function(x){return s.id?x.sec===s.id:!(x.sec&&ids[x.sec])})}}).filter(function(g){return g.L.length});
+  var big=(w.size||'full')==='full',max=big?9:6,shown=0;
+  var body=groups.map(function(g){if(shown>=max)return '';var L=g.L.slice(0,max-shown);shown+=L.length;
+   return '<div class="q17store"><div class="q17sh">'+(g.s.id?zLogo(g.s.name,22,'store',g.s.site):'<span class="zlogo" style="width:22px;height:22px;background:var(--wt);color:var(--wc)">'+zI(ZIC.cart,12)+'</span>')+'<b>'+esc(g.s.name)+'</b><em>'+g.L.length+'</em></div>'
+    +'<div class="q17chips">'+L.map(function(x){return '<button class="q17chip" data-tick="'+x.id+'" data-c="'+c.id+'" title="Tick it off"><i></i>'+esc(x.title)+'</button>'}).join('')+'</div></div>'}).join('');
+  var blocks=T.length?'<div class="q17cart"><div class="z3blocks">'+T.slice().sort(function(a,b){return (b.done?1:0)-(a.done?1:0)}).slice(0,40).map(function(t){return '<i class="'+(t.done?'y':'')+'"></i>'}).join('')+'</div><span>'+dn+' of '+T.length+' in the cart</span></div>':'';
+  return zWCard(w,d,esc(c.name),op.length+' to buy',blocks+(body||'<p class="zsoft">Your grocery list is empty.</p>')+(op.length>max?'<button class="zlink" data-open="'+c.id+'">+'+(op.length-max)+' more</button>':'')
+   +(shopN?'<p class="zsoft q17also">Also '+shopN+' on your Shopping list</p>':'')+'<div class="zadd zqm"><input id="zadd-'+c.id+'" data-zenter="taskadd:'+c.id+'" placeholder="Add a grocery item" autocomplete="off"></div>',c.id);
+ }
+ if(w.type==='reading'){
+  var want=c.items.filter(function(x){return x.t==='read'&&x.status!=='doing'&&x.status!=='done'}),fin=c.items.filter(function(x){return x.t==='read'&&x.status==='done'}),yr=String(today().getFullYear());
+  var finY=fin.filter(function(x){return String(x.fin||x.savedAt||'').slice(0,4)===yr}).length;
+  var row=want.length?want:fin.slice().sort(function(a,b){return String(b.fin||b.savedAt||'')<String(a.fin||a.savedAt||'')?-1:1});
+  var more=(row.length?'<div class="q17next"><small>'+(want.length?'Up next':'Recently finished')+'</small><div>'+row.slice(0,5).map(function(x){return '<button data-zact="readedit:'+c.id+':'+x.id+'" title="'+esc(x.title)+'">'+(x.cover?'<img src="'+esc(x.cover)+'" alt="">':'<span>'+esc(String(x.title).charAt(0))+'</span>')+'</button>'}).join('')+'</div></div>'
+   :'<button class="q17rnudge" data-zact="readnew:'+c.id+'">'+zI(ZIC.plus,16)+'<span>Add what you’d like to read or watch next</span></button>')
+   +'<div class="q17rstat"><span><b>'+finY+'</b> finished this year</span><span><b>'+want.length+'</b> on your list</span></div>';
+  return h.replace(/<\/div><\/section>$/,more+'</div></section>');
+ }
+ return h;
+};
+var _q17Small=zSmall;
+zSmall=function(w,d,sp){
+ var c=d.page?firstPage(sp,d.page):null;
+ if(c&&(w.type==='todo'||w.type==='groceries')){
+  var L=(c.tasks||[]).filter(function(t){return !t.done&&(w.type!=='groceries'||t.list!=='shop')});if(w.type==='todo')L.sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:1});
+  return zWCard(w,d,esc(c.name),'','<div class="zsm q17sm"><b class="zsmb">'+L.length+'</b><span class="zsms">'+(w.type==='todo'?'left to do':'to buy')+'</span><ul>'+L.slice(0,3).map(function(t){return '<li>'+esc(t.title)+'</li>'}).join('')+'</ul></div>',c.id);
+ }
+ return _q17Small(w,d,sp);
+};
+
+/* ---------- the profile card (a Home widget, right column) ---------- */
+function q17Profile(){
+ var who=String(S.owner||'').replace(/’/g,"'").replace(/'s\s+hub$/i,'').replace(/^my hub$/i,'').trim()||firstName();
+ return '<section class="q17prof"><label class="q17av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+esc(String(who).charAt(0).toUpperCase())+'</span>')+'<i>'+zI('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',12)+'</i></label>'
+  +'<b>'+esc(who)+'</b><button class="q17tag'+(S.tagline?'':' add')+'" data-zact="z6me">'+esc(S.tagline||'Add a line about you')+'</button></section>';
+}
+WDEF.profile={name:'Your profile',desc:'Your picture, name and a line about you',sp:'all',legacy:1,col:'side',size:'full',r:function(){return q17Profile()}};
+var _q17Sizes=zwSizes;zwSizes=function(type){return type==='profile'?['full']:_q17Sizes(type)};
+['school','work','personal'].forEach(function(sp){var L=DEFAULT_W[sp];if(L&&!L.some(function(d){return d[0]==='profile'})){var i=L.findIndex(function(d){return d[1]==='side'});L.splice(i<0?L.length:i,0,['profile','side','full'])}});
+function q17Migrate(){
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.prof1)return;if(sbUser&&!S.everSynced)return;
+ var H=S.homeW||{},ch=false;
+ Object.keys(H).forEach(function(k){var L=H[k];if(L&&L.length&&!L.some(function(w){return w.type==='profile'})){L=L.slice();var i=L.findIndex(function(w){return w.col==='side'});L.splice(i<0?L.length:i,0,{id:'w-profile',type:'profile',col:'side',size:'full'});H[k]=L;ch=true}});
+ if(ch)S.homeW=Object.assign({},H);
+ S.spacesInit=Object.assign({},S.spacesInit,{prof1:true});save();
+}
+var _q17Load=load;
+load=async function(){await _q17Load();try{q17Migrate()}catch(e){}render()};
+
+var _q17Render=render;
+render=function(){var before=app.firstElementChild;var r=_q17Render.apply(this,arguments);if(app.firstElementChild!==before)q17Pencils();return r};
+
+/* ---------- Budget: your cards (bank, credit, savings) ----------
+   Items t:'card' {title, kind credit|debit|savings, last4 (only 4 digits, never the full number), balance,
+   limit (credit), due (day of the month the payment is due), color (a palette id or 'x'+hex)}.
+   Spending can say which card paid (x.card); each card shows what went on it this month. */
+var Q17KINDS=[['credit','Credit card'],['debit','Debit / chequing'],['savings','Savings']];
+function q17Cards(c){return (c.items||[]).filter(function(x){return x.t==='card'})}
+function q17CardTile(c,x,mo){
+ var hex=palHex(x.color||'denim'),q=rgb2hsl.apply(null,hex2rgb(hex)),a=hsl2hex(q[0],Math.max(18,Math.min(q[1]*1.2,42)),46),b=hsl2hex((q[0]+24)%360,Math.max(18,Math.min(q[1]*1.1,40)),62);
+ var spent=(c.items||[]).filter(function(s){return s.t==='spend'&&!s.income&&s.card===x.id&&(s.date||'').slice(0,7)===mo}).reduce(function(t,s){return t+(+s.amount||0)},0);
+ var credit=x.kind==='credit',bal=+x.balance||0,lim=+x.limit||0,used=credit&&lim?Math.min(100,Math.round(bal/lim*100)):0;
+ var due='';if(credit&&x.due){var t=today(),d=new Date(t.getFullYear(),t.getMonth(),Math.min(+x.due,28));if(d<t)d=new Date(t.getFullYear(),t.getMonth()+1,Math.min(+x.due,28));due='Payment due '+d.toLocaleDateString('en-CA',{month:'short',day:'numeric'})}
+ return '<button class="q17card" data-zact="cardedit:'+c.id+':'+x.id+'" style="background:linear-gradient(135deg,'+a+','+b+')">'
+  +'<span class="q17ct"><b>'+esc(x.title||'Card')+'</b><small>'+esc((Q17KINDS.filter(function(k){return k[0]===(x.kind||'credit')})[0]||Q17KINDS[0])[1])+'</small></span>'
+  +'<span class="q17chip2"></span><span class="q17num">•••• '+esc(x.last4||'····')+'</span>'
+  +'<span class="q17cb"><span><small>'+(credit?'Balance owing':'Balance')+'</small><b>'+money(bal)+'</b></span>'+(credit&&lim?'<span class="q17lim"><small>of '+money(lim)+'</small><i><u style="width:'+used+'%"></u></i></span>':'')+'</span>'
+  +'<span class="q17cf"><span>'+(spent?money(spent)+' spent this month':'Nothing spent this month')+'</span>'+(due?'<span>'+esc(due)+'</span>':'')+'</span></button>';
+}
+function q17CardsBlock(c,mo){
+ var L=q17Cards(c);
+ return '<section class="zbcard q17cards"><div class="zbch"><h3>Your cards</h3><button class="zlink" data-zact="cardnew:'+c.id+'">+ Add a card</button></div>'
+  +(L.length?'<div class="q17crow">'+L.map(function(x){return q17CardTile(c,x,mo)}).join('')+'<button class="q17cadd" data-zact="cardnew:'+c.id+'">'+zI(ZIC.plus,18)+'<span>Add a card</span></button></div>'
+   :'<button class="q17cempty" data-zact="cardnew:'+c.id+'"><span class="q17card ghost"><span class="q17num">•••• 1234</span></span><span>Add your bank and credit cards to see balances, limits and what you spent on each. Only the last 4 digits, never the full number.</span></button>')+'</section>';
+}
+ZACT.cardnew=function(cid){zOpen('q17card',{cid:cid,color:'denim'})};
+ZACT.cardedit=function(cid,id){var x=zItem(classById(cid),id);if(x)zOpen('q17card',{cid:cid,id:id,color:x.color||'denim'})};
+ZM.q17card={html:function(m){var c=classById(m.cid);if(!c)return null;var x=m.id&&zItem(c,m.id),k=x?x.kind||'credit':(m.kind||'credit');
+ return '<h3>'+(x?'Edit card':'Add a card')+'</h3>'
+  +'<div class="field"><label for="qc1">Name</label><input id="qc1" value="'+esc(x?x.title:'')+'" placeholder="TD Visa, RBC chequing"></div>'
+  +'<div class="zfrow"><div class="field"><label for="qc2">Kind</label><select id="qc2">'+Q17KINDS.map(function(o){return '<option value="'+o[0]+'"'+(k===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select></div>'
+  +'<div class="field"><label for="qc3">Last 4 digits (optional)</label><input id="qc3" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="'+esc(x?x.last4||'':'')+'" placeholder="1234" autocomplete="off"></div></div>'
+  +'<p class="hint" style="margin:-4px 0 10px">Never type your full card number here. Doable only keeps the last 4 digits so you can tell your cards apart.</p>'
+  +'<div class="zfrow"><div class="field"><label for="qc4">Balance ($)</label><input id="qc4" type="number" step="0.01" inputmode="decimal" value="'+esc(x?x.balance||'':'')+'"></div>'
+  +'<div class="field"><label for="qc5">Credit limit ($)</label><input id="qc5" type="number" step="0.01" inputmode="decimal" value="'+esc(x?x.limit||'':'')+'"></div>'
+  +'<div class="field"><label for="qc6">Payment due (day of month)</label><input id="qc6" type="number" min="1" max="31" inputmode="numeric" value="'+esc(x?x.due||'':'')+'"></div></div>'
+  +'<div class="field"><label>Colour</label><div class="z4pksw">'+PALETTES.filter(function(p){return !p.custom}).map(function(pp){return '<button type="button" class="z4col'+(m.color===pp.id?' on':'')+'" style="background:'+palHex(pp.id)+'" data-zact="q17cardcol:'+pp.id+'" aria-label="'+esc(pp.name)+'"></button>'}).join('')+'</div></div>';
+},save:function(m){var c=classById(m.cid);if(!c)return;var t=zv('qc1');if(!t)return;var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:'card'};c.items.push(x)}
+ var l4=String(zv('qc3')||'').replace(/\D/g,'').slice(-4);
+ x.title=t;x.kind=zv('qc2');x.last4=l4.length===4?l4:'';x.balance=parseFloat(zv('qc4'))||0;x.limit=parseFloat(zv('qc5'))||0;x.due=Math.max(0,Math.min(31,parseInt(zv('qc6'),10)||0))||'';x.color=m.color||'denim';
+ touch(x);save();view.modal=null;render()},
+ del:function(m){return m.id?'itemdel:'+m.cid+':'+m.id:''}};
+ZNEED.qc1='Give the card a name, like TD Visa.';
+ZACT.q17cardcol=function(id){if(view.modal){view.modal.color=id;render()}};
+// spending: which card paid
+var _q17SpHtml=ZM.zspend.html,_q17SpSave=ZM.zspend.save;
+ZM.zspend.html=function(m){var h=_q17SpHtml(m),c=classById(m.cid);if(!h||!c)return h;var L=q17Cards(c);if(!L.length)return h;var x=m.id&&zItem(c,m.id);
+ return h.replace('<label class="zcheck"><input type="checkbox" id="zs5"','<div class="field"><label for="zs6">Paid with</label><select id="zs6"><option value="">Not saying</option>'+L.map(function(k){return '<option value="'+k.id+'"'+(x&&x.card===k.id?' selected':'')+'>'+esc(k.title)+(k.last4?' •••• '+esc(k.last4):'')+'</option>'}).join('')+'</select></div><label class="zcheck"><input type="checkbox" id="zs5"')};
+ZM.zspend.save=function(m){var c=classById(m.cid),el=document.getElementById('zs6'),v=el?el.value:null,before={};if(c)(c.items||[]).forEach(function(i){before[i.id]=1});
+ _q17SpSave(m);if(!c||v==null)return;var x=m.id?zItem(c,m.id):(c.items||[]).filter(function(i){return i.t==='spend'&&!before[i.id]})[0];
+ if(x&&(x.card||'')!==v){if(v)x.card=v;else delete x.card;touch(x);save();render()}};
+// put the cards on the Budget page: under the ring on a computer, a Cards chip on a phone, and in the + menu
+var _q17Bud2=zBudgetPage;
+zBudgetPage=function(c){
+ var h=_q17Bud2(c),blk=q17CardsBlock(c,zMonthOf(c));
+ if(h.indexOf('zbdesk')>-1)return h.replace('<section class="zbcard zbcats">',blk+'<section class="zbcard zbcats">');
+ var on=zbChip()==='cards';
+ h=h.replace('<button role="tab" aria-selected="false" class="" data-zact="zbchip:goals">Goals</button>','<button role="tab" aria-selected="false" class="" data-zact="zbchip:goals">Goals</button><button role="tab" aria-selected="'+on+'" class="'+(on?'on':'')+'" data-zact="zbchip:cards">Cards</button>');
+ if(on){var i=h.indexOf('</div>',h.indexOf('<div class="zbchips"'));var j=h.indexOf('<button class="zbfab"');if(i>-1&&j>i)h=h.slice(0,i+6)+blk+h.slice(j)}
+ return h;
+};
+var _q17Add=ZM.zbadd.html;
+ZM.zbadd.html=function(m){return _q17Add(m).replace(/<\/div>$/,'<button data-zact="cardnew:'+m.cid+'"><span class="zic" style="'+zcv('denim')+'">'+zI(ZIC.wallet,18)+'</span><b>Card</b><small>A bank or credit card</small></button></div>')};
 
 try{spBoot()}catch(e){}
 load();
