@@ -4484,6 +4484,14 @@ body.q39lock{overflow:hidden}
 .q43ok{display:flex;align-items:center;gap:6px;margin:8px 0 0!important;color:#4F7A55!important}
 @media(max-width:600px){.zfind:has(#zp7){flex-wrap:wrap}.zfind:has(#zp7)>input{flex:1 1 100%;min-width:0}.zfind:has(#zp7)>button{flex:1 1 0;justify-content:center}}
 
+/* v190: dark words on a light "Hi" card; the Colours panel × */
+.q19prof.q44ink,.q19prof.q44ink b{color:#2E2B27!important}
+.q19prof.q44ink .q17tag{color:rgba(46,43,39,.66)!important}
+.q19prof.q44ink .q17av{box-shadow:0 0 0 4px rgba(46,43,39,.1),0 14px 26px -12px rgba(0,0,0,.3);background:rgba(46,43,39,.08)}
+.q19prof.q44ink .q17av>span{color:#2E2B27}
+.q44x{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;min-height:0!important;padding:0;border-radius:50%;border:1px solid var(--line,#E4E0D7);background:var(--card,#fff);color:var(--ink2);display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
+.q44x:hover{color:var(--ink);background:var(--paper,#FBFAF8)}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4812,7 +4820,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v189';
+var BUILD='v190';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -18451,6 +18459,27 @@ ZACT.z4reclink=async function(){var m=view.modal;var u=zv('zp7');var r=await _q4
 // the picked tags go into the (hidden) Tags field just before saving
 var _q43RecSave=ZM.zrecipe.save;
 ZM.zrecipe.save=function(m){var e=document.getElementById('zp4');if(e&&m&&m.q43tags)e.value=m.q43tags.join(', ');return _q43RecSave.apply(this,arguments)};
+
+/* ===== v190: the "Hi, Jae" card picks light or dark words from its real background; the Colours panel has an × ===== */
+function q44Rgb(s){var n=String(s||'').match(/[\d.]+/g);if(!n||n.length<3)return null;n=n.map(Number);
+ if(/^color\(/.test(s))return [n[0]*255,n[1]*255,n[2]*255,n.length>3?n[3]:1];return [n[0],n[1],n[2],n.length>3?n[3]:1]}
+function q44Lum(c){var f=function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(c[0])+.7152*f(c[1])+.0722*f(c[2])}
+function q44Ink(){
+ document.querySelectorAll('.q19prof').forEach(function(el){
+  var c=q44Rgb(getComputedStyle(el).backgroundColor);if(!c||c[3]<.5)return;
+  var dark=(1.05)/(q44Lum(c)+.05)<3;  // white words would be hard to read
+  el.classList.toggle('q44ink',dark);
+ });
+}
+var q44Q=0;function q44Soon(){if(q44Q)return;q44Q=setTimeout(function(){q44Q=0;q44Ink()},30)}
+var _q44Render=render;
+render=function(){var r=_q44Render.apply(this,arguments);q44Soon();return r};
+try{new MutationObserver(function(){if(document.querySelector('.q19prof'))q44Soon()}).observe(document.getElementById('app')||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']})}catch(e){}
+// Colours panel: an × in its top bar, always in view, so you don't have to find Done at the bottom
+var _q44Pick=pickerHtml;
+pickerHtml=function(){var h=_q44Pick.apply(this,arguments);if(!h)return h;
+ return h.replace(/(<div class="pickhead"[^>]*>[\s\S]*?)(<\/div>)/,'$1<button type="button" class="q44x" data-picker="0" aria-label="Close colours" title="Close">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',16)+'</button>$2')};
+['pointerdown','mousedown','touchstart'].forEach(function(t){document.addEventListener(t,function(e){if(e.target.closest&&e.target.closest('.q44x'))e.stopPropagation()},true)});
 
 try{spBoot()}catch(e){}
 load();
