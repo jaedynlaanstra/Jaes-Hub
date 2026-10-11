@@ -4429,6 +4429,13 @@ body.q39lock{overflow:hidden}
 .q39ht h2{color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.35)}
 .q39ht .q39chip{color:#fff!important}
 .q39shade{background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.25) 40%,rgba(0,0,0,.7))!important}
+/* v188: one-tap install on Android */
+.q42inst{display:flex;align-items:center;gap:12px;background:var(--paper,#FBFAF8);border:1px solid var(--line,#E4E0D7);border-radius:16px;padding:12px 14px;margin:10px 0 4px}
+.q42inst img{width:44px;height:44px;border-radius:10px;flex:none}
+.q42inst div{flex:1;min-width:0}.q42inst b{display:block;font-size:15px;font-weight:500;color:var(--ink,#33312C)}.q42inst span{display:block;font-size:13px;color:var(--ink2,#6B675F);line-height:1.4}
+.q42inst button{flex:none;background:#33312C;color:#fff;border:none;border-radius:99px;padding:10px 18px;font:inherit;font-size:14.5px;cursor:pointer}
+.q42or{margin:10px 0 0;font-size:13px;color:var(--ink3,#A29D93)}
+
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4757,7 +4764,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v187';
+var BUILD='v188';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -5536,7 +5543,7 @@ function buildOnb(){
    +'<button class="onbbtn" id="onbGo" data-onb="submit">'+(up?'Create account':'Sign in')+'</button>'
    +'<div class="onbrow"><button class="onblink" data-onb="mode">'+(up?'I already have an account':'New here? Create an account')+'</button>'+(up?'':'<button class="onblink" data-onb="forgot">Forgot password?</button>')+'<button class="onblink" data-onb="skip">Skip for now</button></div>';
  }else if(onb.step===2){
-  h+='<h2>Check your email</h2><p>We sent a confirmation link to <b>'+esc(onb.email)+'</b>. Open it, then come back to this page.</p>'
+  h+='<h2>Check your email</h2><p>We sent a confirmation link to <b>'+esc(onb.email)+'</b>. Open it, then come back to this page and tap the button below. If it isn\u2019t there, check your junk or spam folder.</p>'
    +'<p class="onbmsg" id="onbMsg"></p>'
    +'<button class="onbbtn" id="onbGo" data-onb="confirmed">I have confirmed my email</button>'
    +'<div class="onbrow"><button class="onblink" data-onb="resend">Send it again</button><button class="onblink" data-onb="back">Use a different email</button></div>';
@@ -5584,7 +5591,7 @@ async function onbSubmit(){
  if(up&&onb.name){S.owner=onb.name+"'s hub";save()}
  var r;
  try{
-  r=up?await c.auth.signUp({email:onb.email,password:onb.pass,options:{emailRedirectTo:redirect,data:{name:onb.name}}})
+  r=up?await c.auth.signUp({email:onb.email,password:onb.pass,options:{emailRedirectTo:redirect,data:{name:onb.name,spaces:q42Picks()}}})
       :await c.auth.signInWithPassword({email:onb.email,password:onb.pass});
  }catch(e){r={error:{message:String(e&&e.message||e)}}}
  onbBusy(false);
@@ -7229,7 +7236,7 @@ function sidebar(c){
  });
  h+='<p class="slabel">\u00a0</p>'+sideItem('data-add','class','Add a class',false);
  h+='</div>';
- h+='<div class="sidefoot">'+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
+ h+='<div class="sidefoot">'+(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
 function sideItem(attr,key,label,on){
@@ -12114,7 +12121,7 @@ function spaceSidebar(){
   h+='<div class="sitem'+(on?' on':'')+'" data-open="'+c.id+'"><span class="sdot" style="background:'+palHex(c.color)+'"></span><span class="nm2">'+esc(c.name)+'</span></div>';
  });
  h+='<p class="slabel"> </p>'+sideItem('data-znew','1','+ New page',false)+'</div>';
- h+='<div class="sidefoot">'+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
+ h+='<div class="sidefoot">'+(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
 function sideMe(){
@@ -13054,7 +13061,7 @@ spaceSidebar=function(){
   h+='<div class="sitem sico'+(on?' on':'')+'" data-open="'+c.id+'"><span class="sic pg" style="--pgc:'+pp.bar+'">'+zI(ZIC[k.ico]||ZIC.note,15)+'</span><span class="nm2">'+esc(c.name)+'</span></div>';
  });
  h+=sideItem('data-znew','1','New page',false)+'</div>';
- h+='<div class="sidefoot">'+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
+ h+='<div class="sidefoot">'+(isInstalledApp()?'':sideItem('data-go','install','Get the app',view.page==='install'))+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 };
 var _r6Sidebar=sidebar;
@@ -18060,6 +18067,73 @@ q39Dock=function(){var d=document.getElementById('q39dock');if(!Q39T.length){if(
  var prev=d.children.length;q41Sig=sig;
  d.innerHTML=Q39T.map(function(t,i){var l=q39Left(t);return '<div class="q39tm'+(i>=prev?' fresh':'')+(l===0?' done':'')+(t.end?'':' paused')+'"><span class="q39tl">'+esc(t.name)+'</span><b>'+(l===0?'Done!':q39Clock(l))+'</b>'
   +(l===0?'':'<button type="button" data-q39t="pause:'+i+'" aria-label="'+(t.end?'Pause':'Resume')+'">'+(t.end?zI('<path d="M8 5v14M16 5v14"/>',14):zI('<path d="M7 4l12 8-12 8z"/>',14))+'</button>')+'<button type="button" data-q39t="x:'+i+'" aria-label="Stop timer">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',14)+'</button></div>'}).join('');
+};
+
+/* ===== v188: the spaces picked on the welcome screen travel with the account; clearer phone install steps ===== */
+/* The confirmation email often opens in another browser (Gmail's own, for one), which never saw the welcome
+   picks, so every space showed. The picks are now saved with the account at sign-up and applied once, after
+   the first sync, on whichever device signs in (flag S.spacesInit.meta, synced). */
+function q42Picks(){
+ var p=(onb&&onb.picks)||null,ids;
+ if(p)ids=SPACES.filter(function(sx){return p[sx.id]}).map(function(sx){return sx.id});
+ else ids=spacesOn().map(function(sx){return sx.id});
+ return ids.join(',');
+}
+function q42Meta(){
+ if(!sbUser||!q21Pulled)return;
+ var md=sbUser.user_metadata||{},sp=md.spaces;if(!sp||typeof sp!=='string')return;
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.meta)return;
+ var ids=sp.split(',').filter(function(x){return SPACES.some(function(sx){return sx.id===x})});
+ S.spacesInit.meta=1;
+ if(ids.length){
+  var o={};SPACES.forEach(function(sx){o[sx.id]=ids.indexOf(sx.id)>=0});S.spacesOn=o;
+  try{if(ids.indexOf(localStorage.getItem('hub:space'))<0)localStorage.setItem('hub:space',ids[0])}catch(e){}
+ }
+ if(md.name&&(!S.owner||S.owner==='My hub'))S.owner=md.name+"'s hub";
+ save();setTimeout(function(){try{render()}catch(e){}},0);
+}
+var _q42Sync=syncOnce;
+syncOnce=async function(){var r=await _q42Sync.apply(this,arguments);try{q42Meta()}catch(e){}return r};
+
+/* Android: Chrome offers a one-tap install; keep its offer so the guide can show an Install button */
+var q42Bip=null;
+window.addEventListener('beforeinstallprompt',function(e){q42Bip=e;if(view.page==='install'||(onb&&onb.step===3))q42Redraw()});
+window.addEventListener('appinstalled',function(){q42Bip=null;q42Redraw()});
+function q42Redraw(){try{if(onb&&document.getElementById('onb'))buildOnb();else render()}catch(e){}}
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q42inst]');if(!b||!q42Bip)return;
+ var ev=q42Bip;ev.prompt();
+ ev.userChoice.then(function(c){if(c&&c.outcome==='accepted'){q42Bip=null;q42Redraw()}}).catch(function(){});
+});
+ZIC.mobile='<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M11 18.2h2"/>';
+var _q42SideItem=sideItem;
+sideItem=function(attr,key,label,on){
+ if(attr==='data-go'&&key==='install')return '<div class="sitem sico'+(on?' on':'')+'" data-go="install"><span class="sic">'+zI(ZIC.mobile,17)+'</span><span class="nm2">'+esc(label)+'</span></div>';
+ return _q42SideItem(attr,key,label,on);
+};
+installGuideHtml=function(plat){
+ guideCss();
+ var tabs='<div class="igtabs">'+[['ios','iPhone or iPad'],['android','Android'],['desktop','Computer']].map(function(t){return '<button data-xact="plat:'+t[0]+'" class="'+(plat===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>';
+ var host=esc(location.host||'this site'),icon='<div class="igmock"><img src="apple-touch-icon.png" alt=""><span>Doable</span></div>',body='';
+ if(plat==='ios'){
+  body=igStep(1,'Open this page in Safari','Safari is the blue compass icon. Chrome on iPhone works too.','<div class="igmock wide"><span>'+host+'</span></div>')
+   +igStep(2,'Tap the Share button','It is a square with an arrow pointing up, at the bottom of the screen. On newer iPhones, tap the ⋯ button at the bottom right first, then Share.','<div class="igmock">'+IG.share+'<span class="blue">Share</span></div>')
+   +igStep(3,'Tap Add to Home Screen','Scroll down the list to find it. If you only see a few choices, tap View More first.','<div class="igmock wide"><span>Add to Home Screen</span>'+IG.plus+'</div>')
+   +igStep(4,'Tap Add','It is at the top right. If you see Open as Web App, leave it switched on.','<div class="igmock"><span class="blue">Add</span></div>')
+   +igStep(5,'Open Doable from your home screen and sign in once','The iPhone keeps the app separate from Safari, so sign in one more time with the same email and password. After that it stays signed in.',icon);
+ }else if(plat==='android'){
+  body=(q42Bip?'<div class="q42inst"><img src="apple-touch-icon.png" alt=""><div><b>Your phone can install it in one tap</b><span>Tap Install, then Install again to confirm.</span></div><button data-q42inst="1">Install</button></div><p class="q42or">Or do it yourself:</p>':'')
+   +igStep(1,'Open this page in Chrome','Chrome is the round red, yellow, green and blue icon. On a Samsung phone, Samsung Internet works too.','<div class="igmock wide"><span>'+host+'</span></div>')
+   +igStep(2,'Open the menu','In Chrome, tap the three dots at the top right. In Samsung Internet, tap the three lines at the bottom right.','<div class="igmock">'+IG.dots+'<span>Menu</span></div>')
+   +igStep(3,'Tap Install app or Add to Home screen','Your phone shows one or the other. In Samsung Internet it is Add page to, then Home screen. Then tap Install or Add to confirm.','<div class="igmock wide"><span>Install app</span>'+IG.plus+'</div>')
+   +igStep(4,'Open Doable from your home screen','It opens like a normal app. You stay signed in. If it asks, use the same email and password.',icon);
+ }else{
+  var url=siteUrl();
+  body='<div class="igqr"><div class="qrbox" data-qr="'+esc(url)+'"></div><div class="qrtxt"><b>Scan this with your phone</b><span>Open your phone camera, point it at the square, and tap the link that appears. Then follow the iPhone or Android steps.</span>'
+   +'<div class="iglink">'+esc(url)+'</div><div class="igbtns"><button data-xact="copylink">Copy link</button>'+(navigator.share?'<button data-xact="sharelink">Send it to myself</button>':'')+'</div></div></div>'
+   +igStep(1,'Want it as an app on this computer too?','In Chrome or Edge, click the small install icon at the right end of the address bar. In Safari on a Mac, choose File, then Add to Dock. It also works fine in a normal tab.');
+ }
+ return tabs+'<div class="ig">'+body+'</div>';
 };
 
 try{spBoot()}catch(e){}
