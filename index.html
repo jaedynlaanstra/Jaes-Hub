@@ -4162,6 +4162,7 @@ body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255
 .q26bdrow{display:flex;align-items:center;gap:12px}.q26bdpv{width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;transition:background .15s}
 /* wishlist photos fill the top of the card (a general .photo rule for round contact pictures made them a 58px oval) */
 .zwi .zwplate.photo{width:auto;height:150px;border-radius:0;border:none;display:grid;flex-shrink:0;background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#fff}
+.q27over{font-style:normal;color:#A34A3F;font-weight:500;margin-left:4px;white-space:nowrap}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4490,7 +4491,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v168';
+var BUILD='v169';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -14924,7 +14925,7 @@ zBudgetPage=function(c){
  var catBy={};b.cats.forEach(function(x){catBy[x.id]=x});
  var cats='<section class="zbcard zbcats"><div class="zbch"><h3>Budget by category</h3><button class="zlink" data-zact="catnew:'+c.id+'">+ Category</button></div>'
   +(b.cats.length?b.cats.map(function(x){var s=b.byCat[x.id]||0,p=x.limit?Math.min(100,Math.round(s/x.limit*100)):0,ov=x.limit&&s>x.limit,col=(ZC[x.color]||ZC.grey)[1];
-    return '<button class="zbcat'+(ov?' over':'')+'" data-zact="catedit:'+c.id+':'+x.id+'"><span class="zbcn">'+esc(x.title)+'</span><span class="zbtrack"><i style="width:'+p+'%;background:'+(ov?'#B66A5E':col)+'"></i></span><span class="zbcv">'+money(s)+' / '+money(x.limit)+'</span></button>'}).join('')
+    return '<button class="zbcat'+(ov?' over':'')+'" data-zact="catedit:'+c.id+':'+x.id+'"><span class="zbcn">'+esc(x.title)+'</span><span class="zbtrack"><i style="width:'+p+'%;background:'+col+'"></i></span><span class="zbcv">'+money(s)+' / '+money(x.limit)+(ov?' <em class="q27over">'+money(s-x.limit)+' over</em>':'')+'</span></button>'}).join('')
    :'<p class="zempty">Add categories with a monthly limit, like groceries or eating out.</p>')+'</section>';
  var months=[];for(var i=5;i>=0;i--)months.push(zMoShift(mo,-i));
  var vals=months.map(function(m){return {m:m,o:zBudget(c,m).spent}}),mx=Math.max.apply(null,vals.map(function(v){return v.o}).concat([1]));
@@ -17222,6 +17223,55 @@ render=function(){
 // the birthday colour row shows the icon itself, so you can see the colour as you pick it
 var _q26ColRow=q24ColRow;
 q24ColRow=function(cur){var h=_q26ColRow(cur);return h.replace('<div class="zsws">','<div class="q26bdrow"><span class="zav q26bdpv" style="background:'+(cur||Q24BD[0])+'">'+zI(ZIC.cake,16)+'</span><div class="zsws">').replace(/<\/div><\/div>$/,'</div></div></div>')};
+
+
+/* ======================= v169: ONE shared colour picker outside the app (Jae: "I can't even move the colour picker,
+   it glitches out... it kicks me out") =======================
+   v167 redrew the page while you dragged and slipped the old picker back in; a real browser closes a colour picker
+   as soon as its element is moved, so it flickered shut. Now tapping ANY colour circle in the app opens one shared
+   picker that lives on <body>, outside the part that redraws. While you drag, each step is handed to the circle you
+   tapped (its own input / change code runs, so the page updates live); redraws can't touch the shared picker. */
+Q26LIVE='.q26-off';  // switch off v167's approach
+var q27=document.createElement('input');q27.type='color';q27.id='q27pick';q27.setAttribute('aria-hidden','true');q27.tabIndex=-1;
+q27.style.cssText='position:fixed;left:0;top:0;width:24px;height:24px;opacity:0;pointer-events:none;border:0;padding:0;z-index:-1';
+document.body.appendChild(q27);
+var q27Sel=null,q27T=0,q27Kind='';
+function q27Target(){return q27Sel?document.querySelector(q27Sel):null}
+// pickers whose own code only listens for "change": they get a change every ~120ms while dragging (they redraw)
+var Q27CHANGE=['data-q24bdc','data-zsoftc','data-z4cc'];
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||t===q27||!t.matches||!t.matches('input[type=color]')||t.hasAttribute('data-mkcustom')||!app.contains(t))return;
+ e.preventDefault();e.stopPropagation();
+ var attrs=[].slice.call(t.attributes).filter(function(a){return /^data-/.test(a.name)});
+ q27Sel='input[type=color]'+attrs.map(function(a){return '['+a.name+'="'+String(a.value).replace(/"/g,'\\"')+'"]'}).join('');
+ q27Kind=attrs.map(function(a){return a.name}).filter(function(n){return Q27CHANGE.indexOf(n)>-1})[0]||'';
+ var r=t.getBoundingClientRect();q27.style.left=Math.max(0,r.left)+'px';q27.style.top=Math.max(0,r.top)+'px';q27.value=t.value||'#888888';
+ try{if(q27.showPicker)q27.showPicker();else q27.click()}catch(err){q27.click()}
+},true);
+function q27Send(type){var t=q27Target();if(!t)return;t.value=q27.value;var l=t.closest('label');if(l&&/\b(zsw|z4col|zswc|any)\b/.test(l.className))l.style.background=q27.value;t.dispatchEvent(new Event(type,{bubbles:true}))}
+q27.addEventListener('input',function(){
+ q27Send('input');
+ if(q27Kind&&!q27T)q27T=setTimeout(function(){q27T=0;q27Send('change')},120);
+});
+q27.addEventListener('change',function(){if(q27T){clearTimeout(q27T);q27T=0}q27Send('input');q27Send('change');q27Sel=null;q27Kind=''});
+// the birthday preview icon follows along without a redraw too
+document.addEventListener('input',function(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-q24bdc')){var p=document.querySelector('.q26bdpv');if(p)p.style.background=t.value}},true);
+
+
+/* ---------- spending: "Paid with" always shows (it hid until you'd added a card), with "+ Add a new card…" ---------- */
+var _q27SpH=ZM.zspend.html;
+ZM.zspend.html=function(m){var h=_q27SpH(m),c=classById(m.cid);if(!h||!c)return h;
+ if(!/id="zs6"/.test(h))h=h.replace('<label class="zcheck"><input type="checkbox" id="zs5"','<div class="field"><label for="zs6">Paid with</label><select id="zs6"><option value="">Not saying</option></select></div><label class="zcheck"><input type="checkbox" id="zs5"');
+ if(m.q27card)h=h.replace(/(<select id="zs6">[\s\S]*?)<option value="([^"]*)" selected>/,'$1<option value="$2">').replace('<option value="'+m.q27card+'"','<option value="'+m.q27card+'" selected');
+ return h.replace(/(<select id="zs6">[\s\S]*?)<\/select>/,'$1<option value="__new">+ Add a new card…</option></select>');
+};
+document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='zs6'||!view.modal||view.modal.kind!=='zspend')return;var m=view.modal,c=classById(m.cid);
+ if(t.value!=='__new'){m.q27card=t.value;return}
+ var n=(window.prompt('Name the card, like TD Visa or RBC Debit','')||'').trim();
+ if(!n||!c){t.value=m.q27card||'';return}
+ var k={id:uid(),t:'card',title:n,kind:/visa|master|amex|credit/i.test(n)?'credit':'debit'};c.items.push(touch(k));save();
+ m.q27card=k.id;t.value='';render();var s6=document.getElementById('zs6');if(s6)s6.value=k.id;zToast('Card added. You can add its last 4 digits and colour under Cards.');
+});
 
 try{spBoot()}catch(e){}
 load();
