@@ -3559,9 +3559,10 @@ body.zdepth .z5grp,body.zdepth .z5top{background-image:linear-gradient(180deg,rg
 .q17prof>*{position:relative}
 .q17av{width:96px;height:96px;border-radius:50%;cursor:pointer;display:grid;place-items:center;background:color-mix(in srgb,var(--sideBg,#6f8468) 22%,#fff);
  box-shadow:0 0 0 5px var(--card),0 0 0 7px color-mix(in srgb,var(--sideBg,#6f8468) 30%,transparent),0 14px 26px -12px rgba(0,0,0,.35);margin-bottom:12px}
-.q17av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.q17av{position:relative}
+.q17av img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover;max-width:none}
 .q17av>span{font-size:34px;font-weight:500;color:var(--sideBg,#6f8468)}
-.q17av i{position:absolute;right:calc(50% - 50px);top:76px;width:26px;height:26px;border-radius:50%;background:var(--card);color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.q17av i{position:absolute;z-index:2;right:calc(50% - 50px);top:76px;width:26px;height:26px;border-radius:50%;background:var(--card);color:var(--ink2);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
 .q17prof b{font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
 .q17tag{border:none;background:none;padding:0;font:inherit;font-size:13.5px;color:var(--ink3);cursor:pointer;min-height:0!important}
 .q17tag.add{text-decoration:underline;text-underline-offset:3px}
@@ -3745,6 +3746,138 @@ body.zdepth .z5grp,body.zdepth .z5top{background-image:linear-gradient(180deg,rg
  box-shadow:0 0 0 6px rgba(255,255,255,.65),0 14px 26px -12px rgba(0,0,0,.45);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .q18rec:hover .q18plate{transform:rotate(14deg) scale(1.03)}
 .q18plate.none{display:grid;place-items:center;background:#EFE7DF;color:#9E7D61;padding-right:20px;box-sizing:border-box}
+/* ===== v156 round 17: To do and Reading widgets, depth levels, Coming up colour ===== */
+/* To do: Apple Reminders style */
+.q20todo{padding:16px 16px 12px;display:flex;flex-direction:column;gap:2px;min-height:240px}
+.q20th{display:flex;align-items:flex-start;justify-content:space-between}
+.q20ico{width:36px;height:36px;border-radius:50%;border:none;background:var(--a);color:#fff;display:grid;place-items:center;cursor:pointer;min-height:0!important;padding:0;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 14px -6px color-mix(in srgb,var(--a) 70%,transparent);transition:transform .2s}
+.q20ico:hover{transform:scale(1.08) rotate(-6deg)}
+.q20n{font-size:34px;font-weight:600;letter-spacing:-1px;line-height:1;color:var(--ink)}
+.q20tn{display:flex;align-items:baseline;gap:8px;margin:8px 0 6px}
+.q20tn button{border:none;background:none;padding:0;font:inherit;font-size:15px;font-weight:600;color:var(--a);cursor:pointer;min-height:0!important;white-space:nowrap;overflow:hidden;min-width:0}
+.q20tn em{font-style:normal;font-size:12px;color:var(--ink3);flex:none}
+.q20tn em.late{color:#A34A3F}
+.q20list{display:flex;flex-direction:column}
+.q20r{display:flex;align-items:center;gap:11px;padding:8px 0;border-top:1px solid color-mix(in srgb,var(--a) 13%,transparent);min-width:0;
+ transition:opacity .3s ease .16s,transform .38s cubic-bezier(.5,0,.75,0) .16s}
+.q20r:first-child{border-top:none}
+.q20ck{position:relative;width:21px;height:21px;flex:none;border-radius:50%;border:1.8px solid color-mix(in srgb,var(--a) 70%,#fff);background:transparent;padding:0;cursor:pointer;min-height:0!important;transition:transform .15s}
+.q20ck:hover{background:color-mix(in srgb,var(--a) 14%,transparent)}
+.q20ck:active{transform:scale(.85)}
+.q20ck i{position:absolute;inset:2px;border-radius:50%;background:var(--a);transform:scale(0);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.q20ck i::after{content:'';position:absolute;left:5.5px;top:2.5px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);opacity:0;transition:opacity .15s .1s}
+.q20r.ticking .q20ck i{transform:scale(1)}
+.q20r.ticking .q20ck i::after{opacity:1}
+.q20r.ticking .q20rt span{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--ink3)}
+.q20r.ticking{opacity:0;transform:translateX(26px)}
+.q20rt{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1px;border:none;background:none;padding:0;font:inherit;text-align:left;color:var(--ink);cursor:pointer;min-height:0!important}
+.q20rt span{font-size:14px;line-height:1.3;max-width:100%;white-space:nowrap;overflow:hidden;transition:color .2s}
+.q20rt small{font-size:11.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;max-width:100%}
+.q20rt small em{font-style:normal}
+.q20r.late .q20rt small em{color:#A34A3F;font-weight:500}
+.q20more{align-self:flex-start;border:none;background:none;padding:6px 0 0 32px;font:inherit;font-size:12.5px;color:var(--a);cursor:pointer;min-height:0!important}
+.q20add{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:10px;cursor:text}
+.q20plus{width:21px;height:21px;flex:none;border-radius:50%;background:var(--a);color:#fff;display:grid;place-items:center;transition:transform .25s}
+.q20add:focus-within .q20plus{transform:rotate(90deg)}
+.q20add input{flex:1;min-width:0;border:none!important;background:transparent!important;box-shadow:none!important;padding:4px 0!important;font:inherit;font-size:14px;color:var(--ink);outline:none;min-height:0!important}
+.q20add input::placeholder{color:var(--ink3)}
+.q20done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:14px 0;text-align:center}
+.q20done span{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--a) 14%,transparent);color:var(--a);margin-bottom:4px;animation:zpop .5s ease}
+.q20done b{font-size:15px;font-weight:600}.q20done small{font-size:12.5px;color:var(--ink3)}
+.q20todo.sm{min-height:150px;padding:14px}
+.q20todo.sm .q20n{font-size:28px}
+.q20todo.sm .q20ico{width:30px;height:30px}
+.q20todo.sm .q20tn{margin:6px 0 2px}
+.q20todo.sm .q20r{padding:5px 0}
+.q20todo.sm .q20rt small{display:none}
+.q20todo.sm .q20done{padding:4px 0}.q20todo.sm .q20done span{width:32px;height:32px}
+.q20todo.full{flex-direction:row;gap:22px}
+.q20side{width:190px;flex:none;display:flex;flex-direction:column}
+.q20main{flex:1;min-width:0;display:flex;flex-direction:column}
+.q20todo.full .q20list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}
+.q20todo.full .q20r:nth-child(2){border-top:none}
+.q20wk{display:flex;align-items:center;gap:10px;margin:8px 0 4px}
+.q20wk svg{width:46px;height:46px;transform:rotate(-90deg);flex:none}
+.q20wk .tr{fill:none;stroke:color-mix(in srgb,var(--a) 15%,transparent);stroke-width:6}
+.q20wk .pr{fill:none;stroke:var(--a);stroke-width:6;stroke-linecap:round;transition:stroke-dasharray .8s cubic-bezier(.2,.8,.2,1)}
+.q20wk b{display:block;font-size:15px;font-weight:600}.q20wk small{font-size:11.5px;color:var(--ink3)}
+@media(max-width:700px){.q20todo.full{flex-direction:column;gap:6px}.q20side{width:auto}.q20todo.full .q20list{grid-template-columns:minmax(0,1fr)}.q20todo.full .q20r:nth-child(2){border-top:1px solid color-mix(in srgb,var(--a) 13%,transparent)}.q20side .q20wk{display:none}.q20side .q20add{order:9}}
+/* Reading: Apple Books style */
+.q20read{border:none!important;color:#fff;background:var(--deep);min-height:250px;display:flex;flex-direction:column;padding:18px;gap:14px;isolation:isolate}
+.q20bg{position:absolute;inset:-30px;z-index:-2;background:radial-gradient(circle at 25% 20%,color-mix(in srgb,var(--a) 75%,#fff) 0,transparent 60%),var(--deep);background-size:cover;background-position:center;filter:blur(26px) saturate(1.25);transform:scale(1.1);animation:q20drift 18s ease-in-out infinite alternate}
+.q20sh{position:absolute;inset:0;z-index:-1;background:linear-gradient(160deg,rgba(0,0,0,.18),rgba(0,0,0,.5))}
+@keyframes q20drift{from{transform:scale(1.1) translate(0,0)}to{transform:scale(1.22) translate(-12px,8px)}}
+.q20hero{display:flex;gap:18px;align-items:center;min-width:0}
+.q20book{flex:none;width:96px;aspect-ratio:2/3;border:none;padding:0;border-radius:4px 9px 9px 4px;overflow:hidden;cursor:pointer;min-height:0!important;background:none;
+ transform:perspective(600px) rotateY(16deg) rotateZ(-1deg);transform-origin:left center;box-shadow:-2px 0 0 rgba(255,255,255,.12) inset,10px 16px 26px -10px rgba(0,0,0,.65);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.q20book:hover{transform:perspective(600px) rotateY(0) rotateZ(0) translateY(-4px)}
+.q20book img{width:100%;height:100%;object-fit:cover;display:block}
+.q20book>span{display:flex;align-items:flex-end;width:100%;height:100%;padding:10px;box-sizing:border-box;background:linear-gradient(160deg,color-mix(in srgb,var(--bk) 70%,#fff),var(--bk));text-align:left}
+.q20book>span b{font-size:12px;font-weight:600;line-height:1.2;color:#fff;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.q20ri{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.q20ri small{font-size:12px;opacity:.75}
+.q20ri>b{font-size:19px;font-weight:600;line-height:1.25;letter-spacing:-.2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.q20ri>span{font-size:13px;opacity:.8;white-space:nowrap;overflow:hidden}
+.q20pr{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.q20ring{position:relative;width:44px;height:44px;flex:none;display:grid;place-items:center}
+.q20ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.q20ring .tr{fill:none;stroke:rgba(255,255,255,.2);stroke-width:3.5}
+.q20ring .pr{fill:none;stroke:#fff;stroke-width:3.5;stroke-linecap:round;transition:stroke-dasharray .9s cubic-bezier(.2,.8,.2,1)}
+.q20ring b{position:relative;font-size:11.5px;font-weight:600}
+.q20acts{display:flex;gap:6px;flex-wrap:wrap}
+.q20pill{border:none;border-radius:99px;padding:7px 13px;font:inherit;font-size:12.5px;font-weight:500;background:#fff;color:#2a2620;cursor:pointer;min-height:0!important;transition:transform .15s,background .2s}
+.q20pill:active{transform:scale(.92)}
+.q20pill.ghost{background:rgba(255,255,255,.18);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.q20pill.ghost:hover{background:rgba(255,255,255,.28)}
+.q20up small{display:block;font-size:12px;opacity:.75;margin-bottom:8px}
+.q20up>div{display:flex;gap:10px;overflow:hidden}
+.q20book.mini{width:46px;transform:none;border-radius:3px 6px 6px 3px;box-shadow:0 8px 16px -8px rgba(0,0,0,.6);animation:q20in .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*70ms)}
+.q20book.mini:hover{transform:translateY(-4px) rotate(-3deg)}
+.q20book.mini>span{padding:5px}.q20book.mini>span b{font-size:8px;-webkit-line-clamp:5}
+@keyframes q20in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.q20st{display:flex;gap:16px;margin-top:auto;font-size:12px;opacity:.8}
+.q20st b{font-size:15px;font-weight:600;margin-right:2px}
+.q20read.full .q20hero .q20book{width:112px}
+.q20read.sm{min-height:150px;padding:14px;align-items:center;justify-content:center;gap:10px;text-align:center}
+.q20read.sm .q20book{width:64px;transform:perspective(500px) rotateY(14deg)}
+.q20sm{width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.q20sm small{font-size:11px;opacity:.75}
+.q20sm b{font-size:13px;font-weight:600;max-width:100%;white-space:nowrap;overflow:hidden}
+.q20fade.over{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+.q20sm i{display:block;width:70%;height:4px;border-radius:2px;background:rgba(255,255,255,.22);margin-top:5px;overflow:hidden}
+.q20sm u{display:block;height:100%;background:#fff;border-radius:2px}
+.q20emp{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}
+.q20eb{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.16);margin-bottom:6px}
+.q20emp b{font-size:16px;font-weight:600}.q20emp small{font-size:12.5px;opacity:.75;margin-bottom:8px}
+@media(prefers-reduced-motion:reduce){.q20bg,.q20book.mini{animation:none!important}.q20r{transition:none}}
+/* bills that start in a later month */
+.q20later>small{display:block;font-size:12.5px;color:var(--ink3);margin:12px 0 2px}
+/* depth: Flat | Soft | Deep, in the Edit widgets bar */
+.q20dseg{display:inline-flex;align-items:center;gap:2px;background:rgba(255,255,255,.1);border-radius:99px;padding:3px;flex:none}
+.q20dseg em{font-style:normal;font-size:12.5px;opacity:.7;padding:0 6px 0 9px}
+.q20dseg button{border:none;border-radius:99px;padding:6px 11px;font:inherit;font-size:12.5px;background:none;color:#fff;cursor:pointer;min-height:0!important}
+.q20dseg button.on{background:#fff;color:#2a2620}
+@media(max-width:700px){.q20dseg{order:5}}
+body.zflat .q18w{box-shadow:none}
+body.zflat .q18w:hover{box-shadow:0 8px 20px -16px rgba(0,0,0,.3)}
+body.zdepth .h4up{background-image:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 42%,rgba(70,55,40,.035) 100%);background-repeat:no-repeat;background-origin:border-box;background-size:100% 100%;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -16px 28px -20px rgba(70,55,40,.16),0 1px 2px rgba(70,55,40,.05),0 12px 28px -20px rgba(70,55,40,.28)}
+body.zdeep :is(.zcard,.cpsec,.cpcard,.wd,.zbcard,.zbhero,.z3card,.z2grp,.zpday,.zptray,.zstat,.cpnextc,.zgoal,.zrd,.z2note,.zwi,.zrcp,.z4meal,.z4today,.zpt,.cpwhen,.h4term,.hbox,.hb2,.zhab,.zmoodday,.cpis .cpcard,.z2add,.zmgridw,.zmday,.z5grp,.z5top,.h4up){
+ background-image:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,0) 50%,rgba(70,55,40,.07) 100%);
+ box-shadow:inset 0 1px 0 #fff,inset 0 -22px 34px -22px rgba(70,55,40,.26),0 2px 4px rgba(70,55,40,.07),0 22px 40px -22px rgba(70,55,40,.45)}
+body.zdeep .q18w:not(.q18dark):not(.q20read){box-shadow:inset 0 1px 0 #fff,inset 0 -22px 34px -22px rgba(70,55,40,.22),0 2px 4px rgba(70,55,40,.07),0 22px 40px -22px rgba(70,55,40,.45)}
+body.zdeep :is(.q18dark,.q20read,.q19prof){box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 24px 42px -20px rgba(0,0,0,.6)!important}
+/* Coming up: the colour from the Colours panel */
+.zhomewrap .h4up,.cphomesplit .h4up{border-color:var(--cp-hup-line,var(--line))}
+.h4up .h4uphead{background:var(--cp-hup-bg,transparent);border-radius:15px 15px 0 0;margin-bottom:14px}
+.h4up:not([open]) .h4uphead{border-radius:15px;margin-bottom:0}
+.h4up .h4uphead h2{color:var(--cp-hup-title,inherit)}
+.h4up .h4c{background:var(--cp-hup-c,var(--sideBg))}
+.h4up .h4c.nx{background:color-mix(in srgb,var(--cp-hup-c,var(--sideBg)) 55%,#9a948a)}
+.h4up .h4c.late{background:#9c4a41}
+.h4up .h4colh{border-bottom-color:var(--cp-hup-line,var(--line))}
+.h4up .h4link{color:var(--cp-hup-title,var(--ink2))}
 </style>
 </head>
 <body>
@@ -4053,7 +4186,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v155';
+var BUILD='v156';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -15973,6 +16106,114 @@ document.addEventListener('click',function(e){var l=e.target.closest&&e.target.c
 document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.classList&&e.target.classList.contains('q19lab')){e.preventDefault();q19Toggle(e.target)}});
 var _q19Render=render;
 render=function(){var before=app.firstElementChild;var r=_q19Render.apply(this,arguments);if(app.firstElementChild!==before)q19Side();return r};
+
+/* ======================= ROUND 17 (v156): To do and Reading widgets redone, card depth, bills, Coming up colour =======================
+   Jae: the To do and Reading widgets "look no different than they did this whole time" (v154 only added
+   more inside the same plain card). Now: To do = an Apple Reminders-style card (round icon, big count,
+   ring ticks that fill and slide away); Reading = an Apple Books-style card (the cover blurred behind,
+   the book tilted in 3D, a progress ring, +10% and Up next). Also: Depth Flat | Soft | Deep in the Edit
+   widgets bar; bills due in a later month show under "Later" (they used to vanish); the Coming up colour
+   in the Colours panel now actually colours the Coming up card. */
+function q20Hex(w,c){var v=w&&w.color;if(v&&/^#/.test(v))return v;if(v&&ZC[v])return ZC[v][1];return c?palHex(c.color):chromeHex('sideBg')}
+function q20Deep(hex){var q=rgb2hsl.apply(null,hex2rgb(hex));return hsl2hex(q[0],Math.min(q[1],26),22)}
+var Q20={};
+Q20.todo=function(w,sp){
+ var c=firstPage(sp,'todo');if(!c)return null;
+ var sz=w.size||'half',td=iso(today()),a=q20Hex(w,c);
+ var open=(c.tasks||[]).filter(function(t){return !t.done}).sort(function(x,y){return (x.due||'9')<(y.due||'9')?-1:(x.due||'9')>(y.due||'9')?1:0});
+ var late=open.filter(function(t){return t.due&&t.due<td}).length,dueT=open.filter(function(t){return t.due===td}).length;
+ var ws=iso(weekStart(0)),we=iso(weekStart(1)),wk=(c.tasks||[]).filter(function(t){return t.due&&t.due>=ws&&t.due<we}),wd=wk.filter(function(t){return t.done}).length;
+ var secs={};zSecs(c).forEach(function(s){secs[s.id]=s.name});
+ var when=function(t){if(!t.due)return '';var cd=cpCountdown(t.due);return t.due<td?'Late':cd.n===0?'Today':cd.n===1?'Tomorrow':parseISO(t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}).replace(/\./g,'')};
+ var row=function(t){var wn=when(t),g=t.sec&&secs[t.sec];
+  return '<div class="q20r'+(t.due&&t.due<td?' late':'')+'"><button class="q20ck" data-tick="'+t.id+'" data-c="'+c.id+'" aria-label="Mark '+esc(t.title)+' done"><i></i></button>'
+   +'<button class="q20rt" data-zact="taskedit:'+c.id+':'+t.id+'"><span class="q20fade">'+esc(t.title)+'</span>'+((wn||g)?'<small>'+(wn?'<em>'+esc(wn)+'</em>':'')+(wn&&g?' · ':'')+(g?esc(g):'')+'</small>':'')+'</button></div>'};
+ var head='<div class="q20th"><button class="q20ico" data-open="'+c.id+'" aria-label="Open '+esc(c.name)+'">'+zI('<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor"/>',sz==='small'?16:18)+'</button>'
+  +'<b class="q20n">'+open.length+'</b></div><div class="q20tn"><button class="q20fade" data-open="'+c.id+'">'+esc(c.name)+'</button>'+(late?'<em class="late">'+late+' late</em>':dueT?'<em>'+dueT+' today</em>':'')+'</div>';
+ var empty='<div class="q20done"><span>'+zI(ZIC.check,20)+'</span><b>All done</b><small>Nothing left to do. Nice.</small></div>';
+ if(sz==='small')return q18Shape(w,'q20todo sm',head+(open.length?'<div class="q20list">'+open.slice(0,2).map(row).join('')+'</div>':empty),' style="--a:'+a+'"');
+ var max=sz==='full'?8:4;
+ var list=open.length?'<div class="q20list">'+open.slice(0,max).map(row).join('')+'</div>'+(open.length>max?'<button class="q20more" data-open="'+c.id+'">'+(open.length-max)+' more</button>':''):empty;
+ var add='<label class="q20add"><span class="q20plus">'+zI(ZIC.plus,14)+'</span><input id="zadd-'+c.id+'" data-zenter="taskadd:'+c.id+'" placeholder="New task" autocomplete="off" aria-label="Add a task"></label>';
+ if(sz==='full'){
+  var p=wk.length?wd/wk.length:0,r=26,L=2*Math.PI*r;
+  var side='<div class="q20side">'+head+'<div class="q20wk"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="'+r+'" class="tr"/><circle cx="32" cy="32" r="'+r+'" class="pr" style="stroke-dasharray:'+(p*L).toFixed(1)+' '+L.toFixed(1)+'"/></svg><span><b>'+wd+'/'+wk.length+'</b><small>done this week</small></span></div>'+add+'</div>';
+  return q18Shape(w,'q20todo full',side+'<div class="q20main">'+list+'</div>',' style="--a:'+a+'"');
+ }
+ return q18Shape(w,'q20todo',head+list+add,' style="--a:'+a+'"');
+};
+// the tick: the ring fills, the words strike through and the row slides away, then the task is ticked
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('.q20ck');if(!b||b.getAttribute('data-q20go'))return;
+ e.preventDefault();e.stopPropagation();
+ var r=b.closest('.q20r'),id=b.getAttribute('data-tick');if(r)r.classList.add('ticking');
+ var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+ setTimeout(function(){var el=document.contains(b)?b:document.querySelector('.q20ck[data-tick="'+id+'"]');if(!el)return;el.setAttribute('data-q20go','1');el.click()},reduce?0:460);
+},true);
+/* Reading: Apple Books style */
+ZACT.q20rp=function(cid,id,n){var c=classById(cid),x=c&&zItem(c,id);if(!x)return;
+ x.progress=Math.max(0,Math.min(100,(+x.progress||0)+(+n||10)));if(x.status!=='doing'&&x.progress<100)x.status='doing';
+ if(x.progress>=100){x.status='done';x.progress=100;x.fin=iso(today());zToast('Finished: '+esc(x.title))}
+ touch(x);view.r6pop='.q20read';save();render()};
+ZACT.q20start=function(cid,id){var c=classById(cid),x=c&&zItem(c,id);if(!x)return;x.status='doing';x.progress=+x.progress||0;touch(x);save();render()};
+Q20.reading=function(w,sp){
+ var c=firstPage(sp,'reading');if(!c)return null;
+ var sz=w.size||'half',a=q20Hex(w,c),deep=q20Deep(a);
+ var R=(c.items||[]).filter(function(x){return x.t==='read'}),doing=R.filter(function(x){return x.status==='doing'}),want=R.filter(function(x){return x.status!=='doing'&&x.status!=='done'});
+ var yr=String(today().getFullYear()),finY=R.filter(function(x){return x.status==='done'&&String(x.fin||x.savedAt||'').slice(0,4)===yr}).length;
+ var x=doing[0]||want[0],now=!!doing[0];
+ var book=function(it,cls){return '<button class="q20book'+(cls||'')+'" data-zact="readedit:'+c.id+':'+it.id+'" aria-label="'+esc(it.title)+'">'+(it.cover?'<img src="'+esc(it.cover)+'" alt="" loading="lazy">':'<span style="--bk:'+a+'"><b>'+esc(it.title)+'</b></span>')+'</button>'};
+ var bg='<div class="q20bg"'+(x&&x.cover?' style="background-image:url(\''+esc(x.cover).replace(/'/g,'%27')+'\')"':'')+'></div><div class="q20sh"></div>';
+ var attrs=' style="--a:'+a+';--deep:'+deep+'"';
+ if(!x)return q18Shape(w,'q20read none'+(sz==='small'?' sm':''),bg+'<div class="q20emp"><span class="q20eb">'+zI(ZIC.book,22)+'</span><b>Your next favourite</b><small>Add a book, show or film</small><button class="q20pill" data-zact="readnew:'+c.id+'">+ Add</button></div>',attrs);
+ var verb=(x.type==='book'||!x.type)?(now?'Continue reading':'Up next'):(now?'Continue watching':'Up next');
+ var pct=now?Math.round(+x.progress||0):0,r=17,L=2*Math.PI*r;
+ var ring='<span class="q20ring"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="'+r+'" class="tr"/><circle cx="20" cy="20" r="'+r+'" class="pr" style="stroke-dasharray:'+(pct/100*L).toFixed(1)+' '+L.toFixed(1)+'"/></svg><b>'+pct+'%</b></span>';
+ if(sz==='small')return q18Shape(w,'q20read sm',bg+book(x)+'<div class="q20sm"><small>'+esc(verb)+'</small><b class="q20fade">'+esc(x.title)+'</b>'+(now?'<i><u style="width:'+pct+'%"></u></i>':'')+'</div>',attrs);
+ var acts=now?'<div class="q20acts"><button class="q20pill" data-zact="q20rp:'+c.id+':'+x.id+':10">+10%</button><button class="q20pill ghost" data-zact="q20rp:'+c.id+':'+x.id+':100">Finished</button></div>'
+  :'<div class="q20acts"><button class="q20pill" data-zact="q20start:'+c.id+':'+x.id+'">Start it</button></div>';
+ var hero='<div class="q20hero">'+book(x)+'<div class="q20ri"><small>'+esc(verb)+'</small><b>'+esc(x.title)+'</b>'+(x.by?'<span class="q20fade">'+esc(x.by)+'</span>':'')
+  +'<div class="q20pr">'+(now?ring:'')+acts+'</div></div></div>';
+ var next=(now?want:want.slice(1)).concat(doing.slice(1)).slice(0,sz==='full'?7:5);
+ var up=next.length?'<div class="q20up"><small>Up next</small><div>'+next.map(function(it,i){return book(it,' mini" style="--i:'+i)}).join('')+'</div></div>':'';
+ var stat='<div class="q20st"><span><b>'+finY+'</b> finished this year</span><span><b>'+want.length+'</b> on your list</span></div>';
+ return q18Shape(w,'q20read'+(sz==='full'?' full':''),bg+hero+(up||'')+stat,attrs);
+};
+var _q20Sizes=zwSizes;
+zwSizes=function(type){return {todo:['small','half','full'],reading:['small','half','full']}[type]||_q20Sizes(type)};
+var _q20WH=zWidgetHtml;
+zWidgetHtml=function(w,sp){if(Q20[w.type]){var h=Q20[w.type](w,sp);if(h)return h}return _q20WH(w,sp)};
+WDEF.reading.name='Reading & watching';
+
+/* ---------- card depth: Flat | Soft | Deep, right in the Edit widgets bar (synced, S.cardDepth) ---------- */
+function q20Depth(){return S.cardDepth===false?'flat':S.cardDepth==='deep'?'deep':'soft'}
+ZACT.q20depth=function(v){S.cardDepth=v==='flat'?false:v==='deep'?'deep':true;save();render()};
+var _q20Render=render;
+render=function(){var r=_q20Render.apply(this,arguments);document.querySelectorAll('.q20fade').forEach(function(el){el.classList.toggle('over',el.scrollWidth>el.clientWidth+1)});var d=q20Depth();document.body.classList.toggle('zdepth',d!=='flat');document.body.classList.toggle('zdeep',d==='deep');document.body.classList.toggle('zflat',d==='flat');return r};
+function q20DepthSeg(){var d=q20Depth();return '<span class="q20dseg" role="group" aria-label="Card depth"><em>Depth</em>'+[['flat','Flat'],['soft','Soft'],['deep','Deep']].map(function(o){return '<button class="'+(d===o[0]?'on':'')+'" data-zact="q20depth:'+o[0]+'" aria-pressed="'+(d===o[0])+'">'+o[1]+'</button>'}).join('')+'</span>'}
+var _q20VSH=viewSpaceHome;
+viewSpaceHome=function(){var h=_q20VSH.apply(this,arguments);return h.replace('<button class="zebtn" data-zact="wgal">',q20DepthSeg()+'<button class="zebtn" data-zact="wgal">')};
+
+/* ---------- bills: a bill that starts in a later month still shows, under "Later" ---------- */
+var _q20Bud=zBudgetPage;
+zBudgetPage=function(c){
+ var h=_q20Bud(c);try{
+  var mo=zMonthOf(c),b=zBudget(c,mo),end=zMoEnd(mo),inMo={};zBillsIn(b,mo+'-01',end).forEach(function(o){inMo[o.x.id]=1});
+  var from=zAddDays(end,1),td=iso(today());if(from<td)from=td;
+  var later=b.bills.filter(function(x){return !inMo[x.id]}).map(function(x){var d=zNextOcc(x.due,x.rep||'month',from);return d?{x:x,d:d,paid:!!(x.paid&&x.paid[d])}:null}).filter(Boolean).sort(function(p,q){return p.d<q.d?-1:1});
+  if(!later.length)return h;
+  var add='<div class="q20later"><small>Later</small>'+later.map(function(o){return zBillRow(c,o)}).join('')+'</div>';
+  var i=h.indexOf('<h3>Bills</h3>');if(i<0)return h;var j=h.indexOf('</section>',i);if(j<0)return h;
+  var seg=h.slice(i,j).replace(/<p class="zempty">Add your bills[^<]*<\/p>/,'<p class="zempty">No bills due this month.</p>');
+  return h.slice(0,i)+seg+add+h.slice(j);
+ }catch(e){return h}
+};
+var _q20BillSave=ZM.zbill.save;
+ZM.zbill.save=function(m){var isNew=!m.id;_q20BillSave(m);if(isNew&&!view.modal){try{localStorage.setItem('hub:zbchip','bills')}catch(e){}render()}};
+
+/* ---------- Coming up: the colour picked for it in the Colours panel now colours the card (live while picking too) ---------- */
+var _q20Live=cpLive;
+cpLive=function(){if(view.page==='home'&&!document.querySelector('.cpsplit')){var el=document.querySelector('.zhomewrap');if(el){el.setAttribute('style',cpVarStyle(cpSiteColors('home')));return}}return _q20Live()};
 
 try{spBoot()}catch(e){}
 load();
