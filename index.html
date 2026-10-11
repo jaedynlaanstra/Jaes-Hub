@@ -4311,6 +4311,16 @@ body.q36dragging{user-select:none;-webkit-user-select:none}
 @container (max-width:520px){.zbhero{flex-direction:column;gap:18px;padding:22px}.zbhero .zbtiles{width:100%}}
 @container (max-width:320px){.zbwent{flex-direction:column;align-items:flex-start}.zbhero .zbtiles{grid-template-columns:1fr}}
 @media(max-width:1399px){.q36grid{grid-template-columns:repeat(2,minmax(0,1fr))}.q36grid>.q36sec{grid-column:span 2!important}.q36grid>.q36sec[style*="span 1"]{grid-column:span 1!important}}
+/* v181: main grid + the tinted side panel (like the old right column) */
+.q36wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.q36wrap.noside{grid-template-columns:minmax(0,1fr)}
+.q36side{display:flex;flex-direction:column;gap:14px;background:color-mix(in srgb,var(--sideBg,#6f8468) 9%,#f6f5f1);border-radius:26px;padding:16px 14px;min-width:0;align-self:stretch}
+.q36side>.q36sec{margin:0!important;container-type:inline-size}
+.q36side.editing{min-height:200px}
+.q36side.editing>.q36sec{cursor:grab;touch-action:none;animation:zwob .6s ease-in-out infinite}
+.q36side.editing>.q36sec>*:not(.q36x):not(.q36m){pointer-events:none}
+.q37empty{margin:auto;font-size:13px;color:var(--ink3);text-align:center;padding:40px 10px}
+@media(max-width:1399px){.q36wrap .q36grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4639,7 +4649,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v180';
+var BUILD='v181';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17752,7 +17762,7 @@ zBudgetPage=function(c){return _q36Bud(c).replace('<span>Move, resize or hide ea
 // drag to move (mouse or finger), like Home
 var q36D=null;
 document.addEventListener('pointerdown',function(e){
- if(!q32On())return;var sec=e.target.closest&&e.target.closest('.q36grid .q36sec');if(!sec||e.target.closest('button,a,input,select,label,textarea'))return;
+ if(!q32On())return;var sec=e.target.closest&&e.target.closest('.q36wrap .q36sec');if(!sec||e.target.closest('button,a,input,select,label,textarea'))return;
  q36D={el:sec,x:e.clientX,y:e.clientY,on:false,id:e.pointerId};
 },true);
 document.addEventListener('pointermove',function(e){
@@ -17760,7 +17770,9 @@ document.addEventListener('pointermove',function(e){
  if(!q36D.on){if(Math.abs(dx)+Math.abs(dy)<6)return;q36D.on=true;q36D.el.classList.add('q36drag');document.body.classList.add('q36dragging')}
  e.preventDefault();q36D.el.style.transform='translate('+dx+'px,'+dy+'px)';
  q36D.el.style.pointerEvents='none';var t=document.elementFromPoint(e.clientX,e.clientY);q36D.el.style.pointerEvents='';
- var over=t&&t.closest&&t.closest('.q36grid .q36sec');if(!over||over===q36D.el)return;
+ var over=t&&t.closest&&t.closest('.q36wrap .q36sec');
+ if(!over){var sd=t&&t.closest&&t.closest('.q36side');if(sd&&q36D.el.parentNode!==sd){var b0=q36D.el.getBoundingClientRect();var em=sd.querySelector('.q37empty');if(em)em.remove();sd.appendChild(q36D.el);q36D.el.style.gridColumn='';var n0=q36D.el.getBoundingClientRect();q36D.x+=n0.left-b0.left;q36D.y+=n0.top-b0.top;q36D.el.style.transform='translate('+(e.clientX-q36D.x)+'px,'+(e.clientY-q36D.y)+'px)'}return}
+ if(over===q36D.el)return;
  var r=over.getBoundingClientRect(),after=(e.clientY>r.bottom-r.height*0.25)||(e.clientX>r.left+r.width/2&&e.clientY>r.top+r.height*0.25);
  var before=q36D.el.getBoundingClientRect();
  if(after)over.parentNode.insertBefore(q36D.el,over.nextSibling);else over.parentNode.insertBefore(q36D.el,over);
@@ -17768,10 +17780,41 @@ document.addEventListener('pointermove',function(e){
 },{passive:false,capture:true});
 function q36End(){if(!q36D)return;var d=q36D;q36D=null;document.body.classList.remove('q36dragging');if(!d.on)return;
  d.el.classList.remove('q36drag');d.el.style.transform='';
- var c=classById(view.classId);if(!c)return;var g=q36Grid(c),dom=[].slice.call(document.querySelectorAll('.q36grid .q36sec')).map(function(el){return el.getAttribute('data-q36')});
+ var c=classById(view.classId);if(!c)return;var g=q36Grid(c),els=[].slice.call(document.querySelectorAll('.q36wrap .q36sec')),dom=els.map(function(el){return el.getAttribute('data-q36')});
+ els.forEach(function(el){g.col[el.getAttribute('data-q36')]=el.closest('.q36side')?'side':'main'});
  g.order=dom.concat(g.order.filter(function(k){return dom.indexOf(k)<0}));q36Save(c,g)}
 document.addEventListener('pointerup',q36End,true);document.addEventListener('pointercancel',q36End,true);
 document.addEventListener('click',function(e){if(document.body.classList.contains('q36dragging')){e.preventDefault();e.stopPropagation()}},true);
+
+
+/* ---------- v181: the Budget side panel is back (Jae liked the tinted right column) — like Home, each section sits in
+   the Main area (the grid, any width) or the Side panel (c.bGrid.col[key]='side'); drag between them or ⋯ → Place ---------- */
+var Q36SIDE={pay:1,went:1,bills:1,trans:1};
+var _q37Grid=q36Grid;
+q36Grid=function(c){var g=_q37Grid(c),raw=c.bGrid&&c.bGrid.col||{};g.col={};g.order.forEach(function(k){g.col[k]=raw[k]||(Q36SIDE[k]?'side':'main')});if(!(c.bGrid&&c.bGrid.w)){g.w.cats='m';g.w.six='m';g.w.hero='f'}return g};
+ZACT.q37col=function(cid,k,v){var c=classById(cid);if(!c)return;var g=q36Grid(c);g.col[k]=v;q36Save(c,g)};
+var _q37Sec=ZM.q36sec.html;
+ZM.q36sec.html=function(m){var h=_q37Sec(m);if(!h)return h;var c=classById(m.cid),g=q36Grid(c),side=g.col[m.k]==='side';
+ var place='<div class="field"><label>Place</label><div class="zseg"><button class="'+(side?'':'on')+'" data-zact="q37col:'+c.id+':'+m.k+':main">Main area</button><button class="'+(side?'on':'')+'" data-zact="q37col:'+c.id+':'+m.k+':side">Side panel</button></div></div>';
+ h=h.replace(/(<\/h3>)/,'$1'+place);
+ if(side)h=h.replace(/<div class="field"><label>Width<\/label>[\s\S]*?<\/p><\/div>/,'');
+ return h};
+q28Apply=function(){
+ var c=view.page==='page'&&classById(view.classId);if(!c||c.kind!=='budget')return;var hw=document.querySelector('.zbhw');if(!hw)return;
+ var g=q36Grid(c),f=q28Find(hw),sz=c.bSize||{},edit=q32On(),hid={};g.hide.forEach(function(k){hid[k]=1});
+ if(f.went)f.went.classList.toggle('q32big',sz.went==='l');if(f.six)f.six.classList.toggle('q32big',sz.six==='l');
+ var desk=hw.querySelector('.zbdesk');
+ if(!desk){Object.keys(f).forEach(function(k){if(f[k])f[k].classList.toggle('q28hide',!!hid[k])});return}
+ var wrap=document.createElement('div');wrap.className='q36wrap'+(edit?' editing':'');
+ var grid=document.createElement('div');grid.className='q36grid'+(edit?' editing':'');var side=document.createElement('aside');side.className='q36side'+(edit?' editing':'');
+ wrap.appendChild(grid);wrap.appendChild(side);desk.parentNode.insertBefore(wrap,desk);
+ g.order.forEach(function(k){var el=f[k];if(!el)return;var inSide=g.col[k]==='side';
+  el.classList.add('q36sec');el.setAttribute('data-q36',k);el.style.gridColumn=inSide?'':'span '+Q36SPAN[g.w[k]||'m'];el.classList.toggle('q28hide',!!hid[k]);(inSide?side:grid).appendChild(el);
+  if(edit&&!hid[k]&&!el.querySelector(':scope>.q36x'))el.insertAdjacentHTML('afterbegin','<button class="zwx q36x" data-zact="q36hide:'+c.id+':'+k+'" aria-label="Hide this section">×</button><button class="zwm q36m" data-zact="q36menu:'+c.id+':'+k+'" aria-label="Size and more">'+zI(ZIC.dots,14)+'</button>')});
+ if(!side.querySelector('.q36sec:not(.q28hide)')){if(edit)side.innerHTML='<p class="q37empty">Drag a section here</p>';else{side.remove();wrap.classList.add('noside')}}
+ desk.remove();var b=hw.querySelector('.q28below');if(b)b.remove();
+ if(edit){var bar=document.querySelector('.q32bar');if(bar&&!bar.querySelector('.q36hid')&&g.hide.length)bar.querySelector('span').insertAdjacentHTML('afterend','<span class="q36hid">Hidden: '+g.hide.map(function(k){var n=(Q28SEC.filter(function(q){return q[0]===k})[0]||[k,k])[1];return '<button class="zebtn" data-zact="q36show:'+c.id+':'+k+'">+ '+esc(n)+'</button>'}).join('')+'</span>')}
+};
 
 try{spBoot()}catch(e){}
 load();
