@@ -4330,6 +4330,16 @@ body.q36dragging{user-select:none;-webkit-user-select:none}
  .zbill>.zdue{grid-area:d;display:block!important;font-size:12px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:none!important;padding:0!important}
  .zbill>.zamt{grid-area:amt;min-width:0}
 }
+.q38car{position:relative;min-width:0}
+.q38car .q17crow{scroll-snap-type:x mandatory;scroll-padding:0 2px}
+.q38car .q17crow>*{scroll-snap-align:start}
+.q38a{position:absolute;top:50%;margin-top:-22px;width:38px;height:38px;border-radius:50%;border:none;background:var(--card);color:var(--ink);box-shadow:0 6px 18px -6px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.05);display:grid;place-items:center;cursor:pointer;z-index:3;padding:0;min-height:0!important;opacity:0;pointer-events:none;transition:opacity .2s,transform .15s}
+.q38a.l{left:-8px}.q38a.r{right:-8px}
+.q38car.canl .q38a.l,.q38car.canr .q38a.r{opacity:1;pointer-events:auto}
+.q38a:hover{transform:scale(1.06)}.q38a:active{transform:scale(.94)}
+.q38car.canr .q17crow{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
+.q38car.canl.canr .q17crow{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent)}
+.q38car.canl:not(.canr) .q17crow{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px);mask-image:linear-gradient(90deg,transparent,#000 40px)}
 /* water: the amount sits clear of the + and − buttons */
 .q18wt{transform:translateY(-22%)}
 .q18wp,.q18wm{width:28px;height:28px;font-size:18px;bottom:6%}
@@ -4658,7 +4668,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v182';
+var BUILD='v183';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17824,6 +17834,22 @@ q28Apply=function(){
  desk.remove();var b=hw.querySelector('.q28below');if(b)b.remove();
  if(edit){var bar=document.querySelector('.q32bar');if(bar&&!bar.querySelector('.q36hid')&&g.hide.length)bar.querySelector('span').insertAdjacentHTML('afterend','<span class="q36hid">Hidden: '+g.hide.map(function(k){var n=(Q28SEC.filter(function(q){return q[0]===k})[0]||[k,k])[1];return '<button class="zebtn" data-zact="q36show:'+c.id+':'+k+'">+ '+esc(n)+'</button>'}).join('')+'</span>')}
 };
+
+
+/* ---------- your cards: ‹ › arrows to slide through them when they don't all fit (Jae: they kept getting cut off) ---------- */
+function q38Upd(row){var box=row.parentNode;if(!box||!box.classList.contains('q38car'))return;var max=row.scrollWidth-row.clientWidth-2;
+ box.classList.toggle('canl',row.scrollLeft>2);box.classList.toggle('canr',row.scrollLeft<max)}
+function q38Cards(){document.querySelectorAll('.q17crow').forEach(function(row){
+ if(!row.parentNode.classList.contains('q38car')){var box=document.createElement('div');box.className='q38car';row.parentNode.insertBefore(box,row);box.appendChild(row);
+  box.insertAdjacentHTML('beforeend','<button type="button" class="q38a l" aria-label="Previous card">'+zI('<path d="m15 6-6 6 6 6"/>',18)+'</button><button type="button" class="q38a r" aria-label="Next card">'+zI('<path d="m9 6 6 6-6 6"/>',18)+'</button>');
+  row.addEventListener('scroll',function(){q38Upd(row)},{passive:true})}
+ q38Upd(row)})}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.q38a');if(!b)return;e.preventDefault();e.stopPropagation();
+ var row=b.parentNode.querySelector('.q17crow');if(!row)return;var card=row.querySelector('.q17card,.q17cadd'),step=card?card.getBoundingClientRect().width+14:240;
+ row.scrollBy({left:b.classList.contains('l')?-step:step,behavior:'smooth'});setTimeout(function(){q38Upd(row)},450)},true);
+var _q38Render=render;
+render=function(){var r=_q38Render.apply(this,arguments);try{q38Cards()}catch(e){}return r};
+window.addEventListener('resize',function(){document.querySelectorAll('.q17crow').forEach(q38Upd)});
 
 try{spBoot()}catch(e){}
 load();
