@@ -4619,6 +4619,61 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .q43skip[data-q52]:hover{background:#E6E2DA;color:#2E2B27}
 .q43skip[data-q52] svg{display:block;flex:none}
 .q43skip[data-q52]~.q43body .q43t{margin-right:44px}
+
+/* v200: drawn icons sit dead centre in their button; the tour × is clickable on its whole circle (the text block
+   below it was painted on top of all but its top few pixels) */
+.q53i{display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:0!important;line-height:0!important;text-indent:0!important;letter-spacing:0!important}
+.q53i .q53s{width:1em;height:1em;flex:none;display:block;pointer-events:none;position:static!important;inset:auto!important;transform:none!important;margin:0!important}
+.zwx.q53i .q53s{width:15px;height:15px}
+.q43skip{z-index:3}
+/* Edit widgets / Edit page bar on an iPad or a narrow window: the words get their own line, buttons wrap below */
+@media(max-width:1199px) and (min-width:701px){
+ .zedit{flex-wrap:wrap;row-gap:10px;padding:12px 14px 12px 18px}
+ .zedit b{flex:none}
+ .zedit>b+span{flex:1 1 calc(100% - 140px);min-width:0}
+ .zedit>span:not(b+span),.zedit>button,.zedit>.zebtn,.zedit>div,.zedit>label{flex:none}
+ .zedit .fin{margin-left:auto}
+}
+/* Plan my week tips: the × is a soft round button, centred beside the tips */
+.zphelp{padding-right:46px}
+.zphelp>.zmini.q53i{width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.06);color:#5F5A52;font-size:16px;top:50%;transform:translateY(-50%)}
+.zphelp>.zmini.q53i:hover{background:rgba(0,0,0,.1)}
+/* Edit widgets: a widget with no card behind its title (Your classes) gets room for its × and ⋯; on an iPad or phone
+   the sticky bar sits below the floating menu button instead of covering it */
+.zhome.edit .zw-classes{padding:22px 14px 8px;border-radius:18px;background:rgba(0,0,0,.025)}
+@media(max-width:900px) and (min-width:701px){.zedit{top:calc(env(safe-area-inset-top,0px) + 62px)}}
+/* project tasks */
+.q53ts{display:flex;flex-direction:column;gap:6px}
+.q53t{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.q53t.sub{margin-left:26px}
+.q53t.y{background:var(--paper)}
+.q53t.y .q53tt{color:var(--ink3);text-decoration:line-through}
+.q53t .zck{flex:none}
+.q53tb{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;border:none;background:none;padding:0;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.q53tt{font-size:14.5px;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q53tm{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--ink3)}
+.q53due,.q53att{display:inline-flex;align-items:center;gap:4px}
+.q53due.none{opacity:.75}
+.q53due.today{color:#9A6A1E}
+.q53due.late,.q53t.late .q53due{color:#A34A3F}
+.q53empty{margin:0;font-size:13.5px;color:var(--ink3);line-height:1.45}
+.q53add{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center}
+.q53add input{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);min-width:0;max-width:100%}
+.q53add input[type=date]{width:150px}
+.q53opt{font-size:11px;color:var(--ink3);font-weight:400}
+.q53in{margin:-6px 0 12px;font-size:13px;color:var(--ink3)}
+.q53f .q53fi{display:inline-flex;width:20px;height:20px;flex:none}.q53f .q53fi svg{width:20px;height:20px}
+.q53fo{flex:1;min-width:0;border:none;background:none;padding:0;font:inherit;font-size:13.5px;color:var(--ink);text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;min-height:0!important}
+.modal label.q53up,.q53up{display:inline-flex!important;align-items:center;gap:6px;margin-top:6px;cursor:pointer;width:auto!important;line-height:1.2}.q53up svg{flex:none;display:block}
+.modal .zlk{margin-bottom:6px}
+.q53nx{display:flex;align-items:baseline;gap:6px;font-size:12.5px;min-width:0;color:var(--ink2)}
+.q53nx span{color:var(--ink3);flex:none}.q53nx b{font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.q53nx em{font-style:normal;color:var(--ink3);flex:none}.q53nx.late em{color:#A34A3F}
+.q53lt{font-size:12px;color:#A34A3F}
+.zcol,.zpc,.zpb{min-width:0}.zpc>.zpb{align-self:stretch;width:100%;box-sizing:border-box}.zpb>*{min-width:0;max-width:100%}
+@media(max-width:520px){.q53add{grid-template-columns:minmax(0,1fr) auto}.q53add input:first-child{grid-column:1/-1}.q53add input[type=date]{width:100%}}
+/* phone: the Budget tabs (Categories, Bills, Spending, Goals, Cards) all fit on one line */
+@media(max-width:480px){.zbchips{gap:6px!important;overflow:visible!important}.zbchips>button{flex:1 1 auto;min-width:0;padding:7px 9px!important;font-size:13px!important;justify-content:center}}
 </style>
 </head>
 <body>
@@ -4927,7 +4982,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v199';
+var BUILD='v200';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19141,6 +19196,10 @@ mergeState=function(local,remote){
    filled in (Budget's layout, Reading's "what I track"). Two copies that differed re-uploaded to each other forever
    (Jae's computer: about once a second on 2026-10-13). */
 SETTINGS_KEYS.push('coverPos','coverZoom','coverFit','coverHeight');
+// v200: data format 4, so copies older than v199 (with the merge bugs above) stop syncing and show the Update bar
+// instead of looping or overwriting newer colours and layouts
+APP_SCHEMA=4;
+var _q52Norm=normalize;normalize=function(){_q52Norm();if(dataSchema(S)<4)S.schema=4};
 var Q52SKIP={classes:1,deleted:1,setAt:1,setBase:1,settingsSavedAt:1,schema:1,notified:1};
 function q52Pick(lv,rv){if(lv===undefined)return rv;if(rv===undefined)return lv;return canon(rv)>canon(lv)?rv:lv}
 function q52Rest(local,remote,out){
@@ -19188,6 +19247,138 @@ q43Place=function(){_q52Place.apply(this,arguments);try{
  if(nx!==x){card.style.left=nx+'px';if(arr&&/below|above/.test(arr.className)){var l=parseFloat(arr.style.left);if(!isNaN(l))arr.style.left=Math.max(18,Math.min(cw-18,l+x-nx))+'px'}}
  if(ny!==y){card.style.top=ny+'px';if(arr&&/right/.test(arr.className)){var t=parseFloat(arr.style.top);if(!isNaN(t))arr.style.top=Math.max(18,Math.min(ch-18,t+y-ny))+'px'}}
 }catch(e){}};
+
+/* ===== v200: icons centred everywhere, iPad/phone proportions (Jae, 2026-10-13: "buttons with icons such as a circle
+   with an x, have the x in the center and not off to the side"; the tour × only worked at its very top) =====
+   A text ×, +, − sits wherever the font draws it (usually a little high or to one side), so any button whose only
+   content is one of those characters gets a drawn icon centred in it. Runs on everything added to the page. */
+var Q53G={'×':'<path d="M7 7l10 10M17 7L7 17"/>','✕':'<path d="M7 7l10 10M17 7L7 17"/>','+':'<path d="M12 6v12M6 12h12"/>','−':'<path d="M6 12h12"/>','–':'<path d="M6 12h12"/>'};
+var Q53SEL='button,[role=button],[data-zact],[data-act],a.zbtn,label.zsw';
+function q53Icons(root){root=root||document;if(!root.querySelectorAll)return;
+ var list=Array.prototype.slice.call(root.querySelectorAll(Q53SEL));if(root.matches&&root.matches(Q53SEL))list.push(root);
+ list.forEach(function(b){
+  if(b.children.length||b.closest('#mk .mktext'))return;var t=(b.textContent||'').trim();if(!Q53G[t])return;
+  if(!b.getAttribute('aria-label'))b.setAttribute('aria-label',t==='×'||t==='✕'?'Close':t==='+'?'Add':'Less');
+  b.innerHTML='<svg class="q53s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">'+Q53G[t]+'</svg>';b.classList.add('q53i')})}
+var q53Q=[],q53Busy=false;
+new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1)q53Q.push(n)})});
+ if(q53Q.length&&!q53Busy){q53Busy=true;Promise.resolve().then(function(){q53Busy=false;var l=q53Q;q53Q=[];l.forEach(function(n){if(n.isConnected)try{q53Icons(n)}catch(e){}})})}}).observe(document.documentElement,{childList:true,subtree:true});
+
+/* ===== v200: project tasks (Jae: a project per work client, like "Client X", with no due date of its own, and under
+   it lots of tasks, each with its own due date, links and files) =====
+   A project's old "subtasks" (p.steps) are now full tasks: {id,title,done,sub, due, time, notes, links[{id,title,url}],
+   files[fileId]}. Files live with the page's other files (FILES[pageId], synced the same way). Tasks with a due date
+   (or a planned day) show in Calendar, Coming up, Next due and Plan my week as "<task>" under the project's name;
+   their ids there are 'ps~<projectId>~<taskId>' and a proxy writes plan days / done straight into the task. */
+function q53Fmt(d){return d?parseISO(d).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}):''}
+function q53Find(cid,pid,sid){var c=classById(cid),p=c&&zItem(c,pid),s=p&&(p.steps||[]).filter(function(x){return x.id===sid})[0];return s?{c:c,p:p,s:s}:null}
+function q53Id(id){var k=String(id||'').split('~');return k[0]==='ps'&&k.length===3?{pid:k[1],sid:k[2]}:null}
+function q53Px(c,p,s){var id='ps~'+p.id+'~'+s.id;return new Proxy(s,{get:function(o,k){return k==='id'?id:k==='q53'?{cid:c.id,pid:p.id}:o[k]},set:function(o,k,v){if(k!=='id')o[k]=v;return true},deleteProperty:function(o,k){delete o[k];return true}})}
+function q53Due(s){var td=iso(today());if(!s.due)return '<span class="q53due none">'+zI(ZIC.clock,12)+'Add a date</span>';
+ var late=!s.done&&s.due<td,soon=!s.done&&s.due===td;return '<span class="q53due'+(late?' late':soon?' today':'')+'">'+zI(ZIC.clock,12)+(soon?'Today':esc(q53Fmt(s.due)))+(s.time?' · '+esc(s.time):'')+'</span>'}
+function q53Att(s){var n=(s.links||[]).length+(s.files||[]).length;return n?'<span class="q53att">'+zI(ZIC.link,12)+n+'</span>':''}
+function q53Next(p){var td=iso(today()),o=(p.steps||[]).filter(function(s){return !s.done&&s.due}).sort(function(a,b){return a.due<b.due?-1:1});return{next:o[0],late:o.filter(function(s){return s.due<td}).length,open:(p.steps||[]).filter(function(s){return !s.done}).length}}
+// the project panel: Tasks with dates, attachments and a pop-up for everything else
+var _q53Panel=zProjPanel;
+zProjPanel=function(c,p){var h=_q53Panel(c,p),st=p.steps||[];
+ var a=h.indexOf('<div class="zsect"><span>Subtasks</span>'),b=h.indexOf('<div class="zsect"><span>Links and files</span>');if(a<0||b<0)return h;
+ var td=iso(today()),open=st.filter(function(s){return !s.done}).length;
+ var rows=st.map(function(s){return '<div class="q53t'+(s.done?' y':'')+(s.sub?' sub':'')+(!s.done&&s.due&&s.due<td?' late':'')+'">'
+   +'<button class="zck'+(s.done?' y':'')+'" data-zact="steptick:'+c.id+':'+p.id+':'+s.id+'" aria-label="'+(s.done?'Mark not done':'Mark done')+'">'+(s.done?zI(ZIC.check,11):'')+'</button>'
+   +'<button class="q53tb" data-zact="q53edit:'+c.id+':'+p.id+':'+s.id+'"><span class="q53tt">'+esc(s.title)+'</span><span class="q53tm">'+q53Due(s)+q53Att(s)+(s.notes?'<span class="q53att">'+zI('<path d="M5 7h14M5 12h14M5 17h9"/>',12)+'</span>':'')+'</span></button></div>'}).join('');
+ var add='<div class="q53add"><input id="zstepnew" data-zenter="q53add:'+c.id+':'+p.id+'" placeholder="Add a task" autocomplete="off"><input type="date" id="q53addd" aria-label="Due date (optional)"><button class="zbtn" data-zact="q53add:'+c.id+':'+p.id+'">Add</button></div>';
+ var sect='<div class="zsect"><span>Tasks</span><span>'+(st.length?open+' to do':'')+'</span></div><div class="q53ts">'+(rows||'<p class="q53empty">Add the things you need to do for this project. Each one can have its own due date, links and files.</p>')+'</div>'+add;
+ h=h.slice(0,a)+sect+h.slice(b);
+ // the project's own due date is optional: say so
+ h=h.replace('<span>Due</span><input type="date"','<span>Due <small class="q53opt">optional</small></span><input type="date"');
+ h=h.replace('<div class="zsect"><span>Links and files</span>','<div class="zsect"><span>Links</span>');
+ return h};
+ZACT.q53add=function(cid,pid){var p=zItem(classById(cid),pid),v=zv('zstepnew');if(!p||!v)return;p.steps=p.steps||[];
+ var s={id:uid(),title:v,done:false},d=zv('q53addd');if(d)s.due=d;p.steps.push(s);touch(p);save();render();setTimeout(function(){var i=document.getElementById('zstepnew');if(i)i.focus()},30)};
+ZACT.q53edit=function(cid,pid,sid){if(!q53Find(cid,pid,sid))return;zOpen('q53task',{cid:cid,pid:pid,sid:sid})};
+ZM.q53task={html:function(m){var f=q53Find(m.cid,m.pid,m.sid);if(!f)return null;var s=f.s,L=FILES[m.cid]||[];
+ var files=(s.files||[]).map(function(id){var k=L.findIndex(function(x){return x.id===id});if(k<0)return '';var x=L[k];
+   return '<div class="zlk q53f"><span class="q53fi">'+fileIcon(x)+'</span><button class="q53fo" data-zact="q53fopen:'+m.cid+':'+id+'">'+esc(x.name||'File')+'</button><button class="zmini" data-zact="q53fdel:'+m.cid+':'+m.pid+':'+m.sid+':'+id+'" aria-label="Remove file">×</button></div>'}).join('');
+ var links=(s.links||[]).map(function(l){return '<div class="zlk">'+linkIcon(l.url,l.title)+'<a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title||cpHost(l.url))+'</a><small>'+esc(cpHost(l.url))+'</small><button class="zmini" data-zact="q53ldel:'+m.cid+':'+m.pid+':'+m.sid+':'+l.id+'" aria-label="Remove link">×</button></div>'}).join('');
+ return '<h3>Task</h3><p class="q53in">In '+esc(f.p.title)+'</p>'
+  +'<div class="field"><label for="q53n">Name</label><input id="q53n" value="'+esc(s.title)+'"></div>'
+  +'<div class="zfrow"><div class="field"><label for="q53d">Due date</label><input id="q53d" type="date" value="'+esc(s.due||'')+'"></div><div class="field"><label for="q53tm">Time</label><input id="q53tm" type="time" value="'+esc(s.time||'')+'"></div></div>'
+  +'<div class="field"><label for="q53no">Notes</label><textarea id="q53no" rows="3">'+esc(s.notes||'')+'</textarea></div>'
+  +'<div class="field"><label>Links</label>'+links+'<div class="zlkadd"><input id="q53lt" placeholder="Name"><input id="q53lu" placeholder="https://" data-zenter="q53ladd:'+m.cid+':'+m.pid+':'+m.sid+'"><button class="zbtn" data-zact="q53ladd:'+m.cid+':'+m.pid+':'+m.sid+'">Add</button></div></div>'
+  +'<div class="field"><label>Files</label>'+files+'<label class="zbtn q53up">'+zI('<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>',14)+'Add files<input type="file" multiple data-q53files="'+m.cid+':'+m.pid+':'+m.sid+'" style="display:none"></label></div>'
+  +(f.p.steps.indexOf(s)>0?'<label class="zcheck"><input type="checkbox" id="q53sub"'+(s.sub?' checked':'')+'> A step under the task above</label>':'');
+},save:function(m){var f=q53Find(m.cid,m.pid,m.sid);if(!f)return;var n=zv('q53n');if(!n){zToast('Give the task a name.');return}var s=f.s;
+ s.title=n;s.due=zv('q53d');s.time=zv('q53tm');s.notes=zv('q53no');['due','time','notes'].forEach(function(k){if(!s[k])delete s[k]});
+ var sb=document.getElementById('q53sub');if(sb)s.sub=sb.checked;touch(f.p);save();view.modal=null;render()},
+ del:function(m){return 'q53del:'+m.cid+':'+m.pid+':'+m.sid}};
+function q53DropFiles(cid,ids){(ids||[]).forEach(function(id){var k=(FILES[cid]||[]).findIndex(function(x){return x.id===id});if(k>-1)dropFile(cid,k)})}
+ZACT.q53del=function(cid,pid,sid){var f=q53Find(cid,pid,sid);if(!f||!confirm('Delete the task “'+f.s.title+'”?'))return;q53DropFiles(cid,f.s.files);
+ f.p.steps=f.p.steps.filter(function(x){return x.id!==sid});touch(f.p);save();view.modal=null;render()};
+ZACT.q53ladd=function(cid,pid,sid){var f=q53Find(cid,pid,sid);if(!f)return;var u=zv('q53lu');if(!u){zToast('Paste the link first.');return}if(!/^[a-z]+:/i.test(u))u='https://'+u;
+ f.s.links=f.s.links||[];f.s.links.push({id:uid(),title:zv('q53lt')||cpHost(u),url:u});['q53lt','q53lu'].forEach(function(i){var e=document.getElementById(i);if(e)e.value=''});touch(f.p);save();render()};
+ZACT.q53ldel=function(cid,pid,sid,lid){var f=q53Find(cid,pid,sid);if(!f)return;f.s.links=(f.s.links||[]).filter(function(l){return l.id!==lid});touch(f.p);save();render()};
+ZACT.q53fdel=function(cid,pid,sid,fid){var f=q53Find(cid,pid,sid);if(!f||!confirm('Remove this file from the task? It will be deleted.'))return;q53DropFiles(cid,[fid]);f.s.files=(f.s.files||[]).filter(function(x){return x!==fid});touch(f.p);save();render()};
+ZACT.q53fopen=function(cid,fid){var L=FILES[cid]||[],k=L.findIndex(function(x){return x.id===fid});if(k<0)return;var x=L[k];
+ if(!x.data&&x.cloud&&x.kind!=='text'){zToast('This file is still downloading. Give it a moment, then try again.');return}
+ if(x.kind==='pdf'){view.modal=null;render();mkOpen(cid,k);return}openFile(cid,k)};
+document.addEventListener('change',async function(e){var t=e.target;if(!t||!t.matches||!t.matches('input[data-q53files]'))return;
+ var k=t.getAttribute('data-q53files').split(':'),f=q53Find(k[0],k[1],k[2]);if(!f||!t.files||!t.files.length)return;
+ FILES[k[0]]=FILES[k[0]]||[];var added=0;
+ for(var i=0;i<t.files.length;i++){var file=t.files[i];
+  if(file.size>25000000){zToast(file.name+' is '+(file.size/1048576).toFixed(0)+' MB. The limit is 25 MB per file.');continue}
+  try{var rec=await readFile(file);rec.name=file.name;rec.section='proj:'+k[1];FILES[k[0]].push(rec);f.s.files=f.s.files||[];f.s.files.push(rec.id);added++}catch(er){zToast('Couldn’t read '+file.name+'.')}}
+ if(!added)return;saveFiles(k[0]);touch(f.p);save();render();if(sbUser)cloudSync(true)},true);
+// deleting a project also deletes its tasks' files
+var _q53PDel=ZACT.projdel;
+ZACT.projdel=function(cid,pid){var c=classById(cid),p=c&&zItem(c,pid),ids=[];if(p)(p.steps||[]).forEach(function(s){ids=ids.concat(s.files||[])});
+ _q53PDel.apply(this,arguments);if(p&&!zItem(classById(cid),pid))q53DropFiles(cid,ids)};
+// the board card: tasks to do, the next one due, and anything late
+var _q53Page=zProjectsPage;
+zProjectsPage=function(c){var h=_q53Page(c);
+ (c.items||[]).forEach(function(p){if(p.t!=='proj')return;var n=q53Next(p),mark='data-zdrag="'+c.id+':'+p.id+'"',i=h.indexOf(mark);if(i<0)return;
+  var j=h.indexOf('<div class="zmeta">',i);if(j<0)return;
+  var line=n.next?'<div class="q53nx'+(n.next.due<iso(today())?' late':'')+'"><span>Next</span><b>'+esc(n.next.title)+'</b><em>'+esc(n.next.due===iso(today())?'Today':q53Fmt(n.next.due))+'</em></div>':'';
+  if(n.late)line+='<div class="q53lt">'+n.late+' late</div>';
+  if(line)h=h.slice(0,j)+line+h.slice(j)});
+ return h};
+// the Timeline: a project with no due date of its own shows its tasks' dates as dots on its row
+z3Timeline=function(c){
+ var P=c.items.filter(function(x){return x.t==='proj'&&(x.status||'todo')!=='done'});if(!P.length)return '';
+ var td=iso(today()),start=iso(weekStart(0)),span=42,end=zAddDays(start,span),pos=function(k){return Math.max(0,Math.min(100,daysBetween(parseISO(start),parseISO(k))/span*100))};
+ var openT=function(p){return (p.steps||[]).filter(function(s){return !s.done&&s.due})};
+ var dated=P.filter(function(p){return p.due}).sort(function(a,b){return a.due<b.due?-1:1}),byTask=P.filter(function(p){return !p.due&&openT(p).length}),undated=P.filter(function(p){return !p.due&&!openT(p).length});
+ var axis='';for(var w=0;w<6;w++)axis+='<span>'+esc(parseISO(zAddDays(start,w*7)).toLocaleDateString('en-CA',{month:'short',day:'numeric'}).replace('.',''))+'</span>';
+ var tp=pos(td);
+ var rows=dated.map(function(p){var pr=zProjProgress(p),late=p.due<td,a=late?Math.max(0,pos(p.due)):tp,b=pos(p.due),beyond=p.due>end;
+  var col=(p.status||'todo')==='doing'?'#83708F':'#8C8A84';
+  return '<button class="z3tl" data-zact="projopen:'+c.id+':'+p.id+'"><span class="z3tn"><b>'+esc(p.title)+'</b><small>'+(late?'<span class="z2late">'+esc(cpCountdown(p.due).t)+'</span>':esc(zShortDay(p.due)))+' · '+pr+'%</small></span>'
+   +'<span class="z3tt"><span class="z3bar'+(late?' late':'')+'" style="left:'+Math.min(a,b)+'%;width:'+Math.max(2.5,Math.abs(b-a))+'%;--pc:'+col+'"><i style="width:'+pr+'%"></i></span>'+(beyond?'<em class="z3more">›</em>':'')+'<span class="z3dia" style="left:'+b+'%;--pc:'+(late?'#B66A5E':col)+'"></span></span></button>'}).join('');
+ rows+=byTask.map(function(p){var T=openT(p).sort(function(a,b){return a.due<b.due?-1:1}),late=T.filter(function(s){return s.due<td}).length,col=(p.status||'todo')==='doing'?'#83708F':'#8C8A84',more=T.some(function(s){return s.due>end});
+  return '<button class="z3tl" data-zact="projopen:'+c.id+':'+p.id+'"><span class="z3tn"><b>'+esc(p.title)+'</b><small>'+(late?'<span class="z2late">'+late+' late</span> · ':'')+T.length+' task'+(T.length===1?'':'s')+' with dates</small></span>'
+   +'<span class="z3tt">'+T.filter(function(s){return s.due<=end}).map(function(s){return '<span class="z3dia q53dot" style="left:'+pos(s.due)+'%;--pc:'+(s.due<td?'#B66A5E':col)+'" title="'+esc(s.title)+' · '+esc(q53Fmt(s.due))+'"></span>'}).join('')+(more?'<em class="z3more">›</em>':'')+'</span></button>'}).join('');
+ return '<section class="z3card z3time"><div class="z3h"><h3>Timeline</h3><span class="zsoft">The next six weeks</span></div>'
+  +'<div class="z3tl head"><span class="z3tn"></span><span class="z3tt z3axis">'+axis+'<span class="z3now" style="left:'+tp+'%"><em>Today</em></span></span></div>'
+  +(rows||'<p class="zempty">Give your tasks due dates to see them here.</p>')
+  +(undated.length?'<p class="z3nodate">Nothing dated yet: '+undated.map(function(p){return '<button class="zlink" data-zact="projopen:'+c.id+':'+p.id+'">'+esc(p.title)+'</button>'}).join(', ')+'</p>':'')+'</section>';
+};
+// project tasks with a date (or a planned day) join Calendar, Coming up, Next due and Plan my week
+var _q53All=allTasks;
+allTasks=function(){var out=_q53All();
+ S.classes.forEach(function(c){if(c.kind!=='projects')return;(c.items||[]).forEach(function(p){if(p.t!=='proj'||!p.steps)return;
+  var cc={id:c.id,name:p.title,short:p.title,color:c.color,space:c.space,kind:'projects'};
+  p.steps.forEach(function(s){if(!s.due&&!(s.plan&&s.plan.length))return;out.push({t:q53Px(c,p,s),c:cc,kind:'task'})})})});
+ return out};
+// ticking one anywhere ticks the task in its project
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-tick^="ps~"],[data-undo^="ps~"]');if(!b)return;
+ var k=q53Id(b.getAttribute('data-tick')||b.getAttribute('data-undo')),cid=b.getAttribute('data-c');if(!k||!cid)return;
+ e.preventDefault();e.stopImmediatePropagation();var f=q53Find(cid,k.pid,k.sid);if(!f)return;
+ f.s.done=!f.s.done;if(f.s.done){f.s.doneAt=iso(today());try{celebrate(e.clientX,e.clientY)}catch(er){}}else delete f.s.doneAt;touch(f.p);save();render()},true);
+// Plan my week finds things by kind:page:id; a project task's id is ps~project~task
+var _q53PlanItem=planItem;
+planItem=function(kind,cid,id){var k=q53Id(id);if(!k)return _q53PlanItem.apply(this,arguments);var f=q53Find(cid,k.pid,k.sid);if(!f)return null;
+ return{t:q53Px(f.c,f.p,f.s),c:{id:f.c.id,name:f.p.title,short:f.p.title,color:f.c.color,space:f.c.space,kind:'projects'},kind:kind||'task'}};
+var _q53Edit=ZACT.taskedit;
+ZACT.taskedit=function(cid,tid){var k=q53Id(tid);if(k){ZACT.q53edit(cid,k.pid,k.sid);return}return _q53Edit.apply(this,arguments)};
 
 try{spBoot()}catch(e){}
 load();
