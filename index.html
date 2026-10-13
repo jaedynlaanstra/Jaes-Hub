@@ -4613,6 +4613,12 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .preset>span:last-child{flex:none;max-width:45%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .preset>span:last-child:empty{display:none}
 @keyframes q21item{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+/* v199: the tour's close button: a round × centred on the title line, easy to tap */
+.q43skip[data-q52]{top:13px;right:12px;width:34px;height:34px;padding:0!important;border-radius:50%;background:#F1EEE8;color:#5F5A52;display:flex;align-items:center;justify-content:center;line-height:0}
+.q43skip[data-q52]:hover{background:#E6E2DA;color:#2E2B27}
+.q43skip[data-q52] svg{display:block;flex:none}
+.q43skip[data-q52]~.q43body .q43t{margin-right:44px}
 </style>
 </head>
 <body>
@@ -4921,7 +4927,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v198';
+var BUILD='v199';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19092,6 +19098,96 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 var _q51Open=q39Open;
 var _q51Close=q39Close;q39Close=function(){var x=document.getElementById('q51x');if(x)x.remove();return _q51Close.apply(this,arguments)};
 q39Open=function(){var r=_q51Open.apply(this,arguments);try{if(!document.getElementById('q51x')){var bx=document.createElement('button');bx.id='q51x';bx.type='button';bx.setAttribute('aria-label','Close the recipe');bx.innerHTML=zI('<path d="M6 6l12 12M18 6 6 18"/>',18);bx.addEventListener('click',function(){q39Close()});document.body.appendChild(bx)}}catch(e){}try{var card=document.querySelector('#q39cook .q39card');if(card&&!card.querySelector('.q51end'))card.insertAdjacentHTML('beforeend','<div class="q51end"><button type="button" data-q39="close">'+zI(ZIC.check,16)+' Done cooking</button></div>')}catch(e){}return r};
+
+/* ===== v199: colours and widget layouts kept getting wiped (2026-10-13) =====
+   Jae: "none of my colours saved and a lot of my widget changes are back to the default". The cloud copy had
+   stamps for homeW.school, sidePanelCol, menuIconSq, water... but no values. Two flaws in the v157 merge:
+   (1) a setting this device never stamped counted as old as its setBase (and setBase was merged to the NEWER of
+       the two), so a copy that simply didn't have a setting looked newer than a real change and "deleted" it;
+   (2) on equal times the tie-break compared text, and "null" sorts after "[", so a missing widget layout beat a
+       real one with the same stamp, which spread the loss to every device.
+   Now only a real stamp counts (a change or a removal made on some device), unstamped = oldest, and on equal
+   times a value that exists beats one that's missing.
+   Also: Jae's iPhone and computer uploaded to each other about once a second for minutes (cause: q52Rest below).
+   Two more guards against that kind of loop: a picture token in the cloud row means some device already put that
+   picture in storage, so it counts as confirmed here too (otherwise one copy could keep sending the full picture
+   and another the token); and a brake: if this copy changes the cloud more than 30 times in a minute, it slows
+   to one sync every 20 seconds for two minutes. */
+q21At=function(st,u){var m=st&&st.setAt;return (m&&m[u])||''};
+mergeState=function(local,remote){
+ var out=_q21Merge(local,remote);if(!local||!remote||!out||out===local||out===remote)return out;
+ var win=function(u,lv,rv){var la=q21At(local,u),ra=q21At(remote,u);if(la!==ra)return newer(ra,la)?'r':'l';
+  if(lv===undefined&&rv!==undefined)return 'r';if(rv===undefined&&lv!==undefined)return 'l';
+  return canon(rv===undefined?null:rv)>canon(lv===undefined?null:lv)?'r':'l'};
+ var obj=function(v){return v&&typeof v==='object'&&!Array.isArray(v)};
+ SETTINGS_KEYS.forEach(function(k){
+  var lv=local[k],rv=remote[k];
+  if(Q21DEEP[k]&&(obj(lv)||obj(rv))&&!(lv!=null&&!obj(lv))&&!(rv!=null&&!obj(rv))){
+   var o={},subs={};Object.keys(lv||{}).forEach(function(s){subs[s]=1});Object.keys(rv||{}).forEach(function(s){subs[s]=1});
+   Object.keys(subs).forEach(function(s){var a=(lv||{})[s],b=(rv||{})[s],v=win(k+'.'+s,a,b)==='r'?b:a;if(v!==undefined)o[s]=JSON.parse(JSON.stringify(v))});
+   out[k]=o;
+  }else{var v=win(k,lv,rv)==='r'?rv:lv;if(v===undefined)delete out[k];else out[k]=JSON.parse(JSON.stringify(v))}
+ });
+ var at={},keys={};[local.setAt||{},remote.setAt||{}].forEach(function(m){Object.keys(m).forEach(function(u){keys[u]=1})});
+ Object.keys(keys).forEach(function(u){var a=(local.setAt||{})[u]||'',b=(remote.setAt||{})[u]||'';at[u]=newer(b,a)?b:a});
+ out.setAt=at;out.setBase='';
+ out.settingsSavedAt=newer(remote.settingsSavedAt,local.settingsSavedAt)?remote.settingsSavedAt:local.settingsSavedAt;
+ q52Rest(local,remote,out);
+ return out;
+};
+/* v199: every part of the data now settles on ONE answer on every device. Before, (a) values outside the synced
+   settings (the Home cover's position and height, reminder records, old flags) always kept this device's copy, and
+   (b) when two copies of a class/page had the same save time, the settings the winning copy didn't have were never
+   filled in (Budget's layout, Reading's "what I track"). Two copies that differed re-uploaded to each other forever
+   (Jae's computer: about once a second on 2026-10-13). */
+SETTINGS_KEYS.push('coverPos','coverZoom','coverFit','coverHeight');
+var Q52SKIP={classes:1,deleted:1,setAt:1,setBase:1,settingsSavedAt:1,schema:1,notified:1};
+function q52Pick(lv,rv){if(lv===undefined)return rv;if(rv===undefined)return lv;return canon(rv)>canon(lv)?rv:lv}
+function q52Rest(local,remote,out){
+ var dev={};(typeof DEVICE_KEYS!=='undefined'?DEVICE_KEYS:[]).forEach(function(k){dev[k]=1});
+ var tk={};Object.keys(local).concat(Object.keys(remote)).forEach(function(k){tk[k]=1});
+ Object.keys(tk).forEach(function(k){if(Q52SKIP[k]||dev[k]||SETTINGS_KEYS.indexOf(k)>-1)return;
+  var lv=local[k],rv=remote[k];if(canon(lv===undefined?null:lv)===canon(rv===undefined?null:rv))return;
+  var v=q52Pick(lv,rv);if(v===undefined)delete out[k];else out[k]=JSON.parse(JSON.stringify(v))});
+ if(local.notified||remote.notified)out.notified=Object.assign({},remote.notified||{},local.notified||{});
+ var L={},R={};(local.classes||[]).forEach(function(c){L[c.id]=c});(remote.classes||[]).forEach(function(c){R[c.id]=c});
+ (out.classes||[]).forEach(function(c){var l=L[c.id],r=R[c.id];if(!l||!r)return;
+  if(l.savedAt===r.savedAt)CLASS_KEYS.forEach(function(k){if(c[k]===undefined){var v=l[k]!==undefined?l[k]:r[k];if(v!==undefined)c[k]=JSON.parse(JSON.stringify(v))}});
+  var ck={};Object.keys(l).concat(Object.keys(r)).forEach(function(k){ck[k]=1});
+  Object.keys(ck).forEach(function(k){if(k==='id'||k==='savedAt'||CLASS_KEYS.indexOf(k)>-1||LISTS.indexOf(k)>-1)return;
+   var lv=l[k],rv=r[k];if(canon(lv===undefined?null:lv)===canon(rv===undefined?null:rv))return;
+   var v=q52Pick(lv,rv);if(v===undefined)delete c[k];else c[k]=JSON.parse(JSON.stringify(v))});
+ });
+}
+var _q52MR=mergeRemote;
+mergeRemote=function(rs,force){try{if(rs)imgEach(rs,function(s){if(isImgTok(s))imgUp[s]=1})}catch(e){}return _q52MR(rs,force)};
+var q52Ups=[],q52Slow=0;
+var _q52Sync=syncOnce;
+syncOnce=async function(force){var v0=syncVer,r=await _q52Sync.apply(this,arguments);
+ if(r&&r.ok&&syncVer!==v0&&!force){var now=Date.now();q52Ups.push(now);q52Ups=q52Ups.filter(function(t){return now-t<60000});
+  if(q52Ups.length>30&&q52Slow<now){q52Slow=now+120000;try{console.warn('Doable: sync is changing too often, slowing down for 2 minutes')}catch(e){}}}
+ return r};
+var _q52Sched=scheduleCloudSync;
+scheduleCloudSync=function(ms){if(q52Slow>Date.now())ms=Math.max(ms===undefined?1500:ms,20000);return _q52Sched(ms)};
+
+/* v199: the tour's close button is a round × centred on the title line (it was small corner text, and on an
+   iPhone a card near the top sat under the clock bar, where taps don't reach the app). On phones the card is
+   centred across the screen and kept inside the safe areas. */
+function q52Safe(){var p=document.getElementById('q52sa');if(!p){p=document.createElement('div');p.id='q52sa';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)';document.body.appendChild(p)}
+ var cs=getComputedStyle(p);return{t:parseFloat(cs.paddingTop)||0,b:parseFloat(cs.paddingBottom)||0}}
+function q52Fix(){if(!Q43.el)return;var b=Q43.el.querySelector('.q43skip');if(!b||b.getAttribute('data-q52'))return;
+ var lab=b.textContent||'Close';b.setAttribute('data-q52','1');b.setAttribute('aria-label',lab);b.title=lab;
+ b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'}
+var _q52Place=q43Place;
+q43Place=function(){_q52Place.apply(this,arguments);try{
+ if(!Q43.on||!Q43.el)return;q52Fix();
+ var card=Q43.el.querySelector('.q43card'),arr=Q43.el.querySelector('.q43arr');if(!card)return;
+ var W=innerWidth,H=innerHeight,sa=q52Safe(),cw=card.offsetWidth,ch=card.offsetHeight,x=parseFloat(card.style.left)||0,y=parseFloat(card.style.top)||0;
+ var top=sa.t+16,bot=H-sa.b-16,ny=Math.max(top,Math.min(bot-ch,y));
+ var nx=W<600?Math.round((W-cw)/2):x;
+ if(nx!==x){card.style.left=nx+'px';if(arr&&/below|above/.test(arr.className)){var l=parseFloat(arr.style.left);if(!isNaN(l))arr.style.left=Math.max(18,Math.min(cw-18,l+x-nx))+'px'}}
+ if(ny!==y){card.style.top=ny+'px';if(arr&&/right/.test(arr.className)){var t=parseFloat(arr.style.top);if(!isNaN(t))arr.style.top=Math.max(18,Math.min(ch-18,t+y-ny))+'px'}}
+}catch(e){}};
 
 try{spBoot()}catch(e){}
 load();
