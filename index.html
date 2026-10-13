@@ -4642,6 +4642,58 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
    the sticky bar sits below the floating menu button instead of covering it */
 .zhome.edit .zw-classes{padding:22px 14px 8px;border-radius:18px;background:rgba(0,0,0,.025)}
 @media(max-width:900px) and (min-width:701px){.zedit{top:calc(env(safe-area-inset-top,0px) + 62px)}}
+/* older School widgets: small sizes, Style, ticks, motion */
+.q55wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin:2px 0 8px}
+.q55d{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--ink3);position:relative}
+.q55d b{font-weight:500;font-size:12.5px;color:var(--ink);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;max-width:100%}
+.q55d.tdy b{background:var(--ink);color:var(--card)}
+.q55d.has::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--wc,var(--ink2))}
+.q55dots{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.q55dots i{width:10px;height:10px;border-radius:50%}
+.q55late{color:#B4574B}
+.zw.q55dk .q55late{color:#F2B8AE}
+/* Dark / Your colour: inner pieces with fixed light colours follow the widget */
+.zw.q55dk .h4uphead,.zw.q55dk .h4colh,.zw.q55dk .hb2 .hd,.zw.q55dk .hwk2seg,.zw.q55dk .h4tilebody,.zw.q55dk .hcal4 .d.off{background:rgba(255,255,255,.08)!important;color:#fff!important}
+.zw.q55dk .hwk2seg .on,.zw.q55dk .hwk2d.sel .w,.zw.q55dk .hwk2d.sel{background:rgba(255,255,255,.92)!important;color:#2E2B27!important}
+.zw.q55dk .hwk2d .w{border-color:rgba(255,255,255,.3)!important;color:#fff}
+.zw.q55dk .h4c,.zw.q55dk .h4n{background:rgba(255,255,255,.18)!important;color:#fff!important}
+.zw.q55dk .h4bar{background:rgba(255,255,255,.16)!important}.zw.q55dk .h4bar>*{background:#fff!important}
+.zw.q55dk .h4tick,.zw.q55dk .tick{border-color:rgba(255,255,255,.55)!important}
+.zw.q55dk .hcal4 .d.on{background:#fff!important;color:#2E2B27!important}
+.zw.q55dk .h4btn,.zw.q55dk .zchev{background:rgba(255,255,255,.14)!important;color:#fff!important;border-color:transparent!important}
+.zw.q55dk .wdic{background:rgba(255,255,255,.16)!important;color:#fff!important}
+.zw.q55dk .wd .wdt,.zw.q55dk .wd .zsmb,.zw.q55dk .wd .zsms{color:#fff!important}
+.zw.q55dk .q55d.tdy b{background:#fff;color:#2E2B27}
+.zw.q55dk :is(h2,h3,.h4cardhead b,.h4link,.h4calt,.h4lab,.h4big){color:#fff!important}.zw.q55dk .soon{color:#F2C79A!important}.zw.q55dk .h4cd{background:rgba(255,255,255,.16)!important;color:#fff!important}.zw.q55dk .h4cpill{background:rgba(255,255,255,.14)!important;color:#fff!important}.zw.q55dk .h4soft{color:rgba(255,255,255,.7)!important}
+/* ticking off: the circle fills with a check, the line crosses out, then slides away */
+.q55on{background:var(--c,#6F8469)!important;border-color:var(--c,#6F8469)!important;position:relative;animation:q55pop .35s cubic-bezier(.2,.9,.3,1.4)}
+.q55on::after{content:'';position:absolute;left:50%;top:46%;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:translate(-50%,-50%) rotate(45deg)}
+.q55done .h4title,.q55done .tt,.q55done .ti,.q55done .h4what{text-decoration:line-through;opacity:.55;transition:opacity .2s}
+.q55out{transition:opacity .3s ease,transform .32s cubic-bezier(.4,0,.2,1)!important;opacity:0!important;transform:translateX(18px)!important}
+@keyframes q55pop{0%{transform:scale(.8)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+/* a gentle lift under the pointer, a small press when tapped */
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+ .zhome:not(.edit) .zw>:not(button){transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease}
+ .zhome:not(.edit) .zw:hover>:not(button){transform:translateY(-3px);box-shadow:0 16px 32px -18px rgba(0,0,0,.28)}
+}
+@media (prefers-reduced-motion:no-preference){
+ .zhome:not(.edit) .zw:active>:not(button){transform:scale(.99)}
+ /* arriving at Home: bars grow, numbers and days pop, tiles and rows rise in turn */
+ .zhome.q55in .h4bar>*{transform-origin:left center;animation:q55grow 1s cubic-bezier(.2,.8,.2,1) both .15s}
+ .zhome.q55in .h4c,.zhome.q55in .h4n,.zhome.q55in .zsmb,.zhome.q55in .q55d b{animation:q55pop .5s cubic-bezier(.2,.9,.3,1.4) both .2s}
+ .zhome.q55in .hwk2d,.zhome.q55in .h4tile,.zhome.q55in .h4row,.zhome.q55in .hr2,.zhome.q55in .q55d{animation:q55rise .5s cubic-bezier(.2,.8,.2,1) both}
+ .zhome.q55in :is(.hwk2d,.h4tile,.h4row,.hr2,.q55d):nth-child(2){animation-delay:.05s}
+ .zhome.q55in :is(.hwk2d,.h4tile,.h4row,.hr2,.q55d):nth-child(3){animation-delay:.1s}
+ .zhome.q55in :is(.hwk2d,.h4tile,.h4row,.hr2,.q55d):nth-child(4){animation-delay:.15s}
+ .zhome.q55in :is(.hwk2d,.h4tile,.h4row,.hr2,.q55d):nth-child(5){animation-delay:.2s}
+ .zhome.q55in :is(.hwk2d,.h4tile,.h4row,.hr2,.q55d):nth-child(6){animation-delay:.25s}
+ .zhome.q55in :is(.hwk2d,.h4tile,.h4row,.hr2,.q55d):nth-child(7){animation-delay:.3s}
+ .zhome.q55in :is(.hwk2d,.h4tile,.h4row,.hr2,.q55d):nth-child(n+8){animation-delay:.35s}
+ .zhome.q55in .hcal4 .d{animation:q55fade .6s ease both .1s}
+ .zhome.q55in .hcal4 .d.on{animation:q55pop .5s cubic-bezier(.2,.9,.3,1.4) both .35s}
+}
+@keyframes q55grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes q55rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes q55fade{from{opacity:0}to{opacity:1}}
 /* project tasks */
 .q53ts{display:flex;flex-direction:column;gap:6px}
 .q53t{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
@@ -4670,6 +4722,7 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .q53nx span{color:var(--ink3);flex:none}.q53nx b{font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
 .q53nx em{font-style:normal;color:var(--ink3);flex:none}.q53nx.late em{color:#A34A3F}
 .q53lt{font-size:12px;color:#A34A3F}
+.q54sp{font-size:11.5px;color:var(--ink3);font-weight:400;margin:0 6px}
 .zcol,.zpc,.zpb{min-width:0}.zpc>.zpb{align-self:stretch;width:100%;box-sizing:border-box}.zpb>*{min-width:0;max-width:100%}
 @media(max-width:520px){.q53add{grid-template-columns:minmax(0,1fr) auto}.q53add input:first-child{grid-column:1/-1}.q53add input[type=date]{width:100%}}
 /* phone: the Budget tabs (Categories, Bills, Spending, Goals, Cards) all fit on one line */
@@ -4982,7 +5035,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v200';
+var BUILD='v201';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -16550,16 +16603,21 @@ document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttri
 
 /* ---------- the menu can follow the page you're on ---------- */
 SETTINGS_KEYS.push('menuMatch','profileCard');
+/* v200: "Match each page" / "One colour" for the menu is chosen per space (Jae: Work one colour, School matching each
+   page). S.menuMatchSp {school,work,personal}; a space that never chose follows the old all-spaces S.menuMatch. */
+SETTINGS_KEYS.push('menuMatchSp');
+function q54Match(){var m=S.menuMatchSp,sp=curSpace();if(m&&typeof m[sp]==='boolean')return m[sp];return S.menuMatch!==false}
+function q54SetMatch(v){S.menuMatchSp=Object.assign({},S.menuMatchSp||{});S.menuMatchSp[curSpace()]=!!v}
 function q17PageCol(){var c=(view.page==='class'||view.page==='page')?classById(view.classId):null;return c&&!isRefClass(c)?c:null}
 function q17MenuShade(hex){var q=rgb2hsl.apply(null,hex2rgb(hex));return hsl2hex(q[0],Math.max(14,Math.min(q[1]*1.05,36)),40)}
 var _q17Chrome=chromeHex;
 chromeHex=function(key){
- if(key==='sideBg'&&S.menuMatch!==false){var c=q17PageCol();if(c)return q17MenuShade(palHex(c.color))}
+ if(key==='sideBg'&&q54Match()){var c=q17PageCol();if(c)return q17MenuShade(palHex(c.color))}
  return _q17Chrome.apply(this,arguments);
 };
-ZACT.q17match=function(on){S.menuMatch=on==='1'?true:false;save();render()};
+ZACT.q17match=function(on){q54SetMatch(on==='1');save();render()};
 var _q17Menu=ZACT.z4menu;
-ZACT.z4menu=function(hex){if(q17PageCol()&&S.menuMatch!==false)S.menuMatch=false;return _q17Menu(hex)};
+ZACT.z4menu=function(hex){if(q17PageCol()&&q54Match())q54SetMatch(false);return _q17Menu(hex)};
 ZACT.q17depth=function(on){S.cardDepth=on==='1';save();render()};
 
 /* ---------- Colours panel: card style and menu matching, as plain switches up top; custom page colour ---------- */
@@ -16568,8 +16626,8 @@ pickerHtml=function(){
  var h=_q17Pick();if(!view.picker||h.indexOf('<div class="z4pk">')<0)return h;
  var c=q17PageCol();
  if(c)h=h.replace(/(<div class="z4pkrow"><p><b>(?:Page|Class) colour<\/b>[\s\S]*?<div class="z4pksw">)[\s\S]*?(<\/div><\/div>)/,function(a,p1,p2){return p1+q17Swatches(c)+p2});
- var match=S.menuMatch!==false,depth=S.cardDepth!==false;
- h=h.replace('<p><b>Menu colour</b>','<p><b>Menu colour</b><span class="z4seg q17seg"><button class="'+(match?'on':'')+'" data-zact="q17match:1">Match each page</button><button class="'+(match?'':'on')+'" data-zact="q17match:0">One colour</button></span>');
+ var match=q54Match(),depth=S.cardDepth!==false;
+ h=h.replace('<p><b>Menu colour</b>','<p><b>Menu colour</b><span class="q54sp">for '+esc(spaceById(curSpace()).name)+'</span><span class="z4seg q17seg"><button class="'+(match?'on':'')+'" data-zact="q17match:1">Match each page</button><button class="'+(match?'':'on')+'" data-zact="q17match:0">One colour</button></span>');
  h=h.replace(/(<div class="z4pk">[\s\S]*?)(<\/div><details)/,function(a,p1,p2){return p1+'<div class="z4pkrow"><p><b>Card style</b><span>A soft inner shading on cards and widgets</span></p><span class="z4seg q17seg"><button class="'+(depth?'on':'')+'" data-zact="q17depth:1">Soft depth</button><button class="'+(depth?'':'on')+'" data-zact="q17depth:0">Flat</button></span></div>'+p2});
  return h;
 };
@@ -17632,12 +17690,12 @@ var _q24Ag=q21Agenda;q21Agenda=function(w){var h=_q24Ag(w);if(h&&w.color)h=h.spl
    Only the colours are re-applied while dragging (no redraw, which would close the picker); letting go saves. */
 var q25Raf=0;
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-z4menu'))return;
- if(q17PageCol()&&S.menuMatch!==false)S.menuMatch=false;
+ if(q17PageCol()&&q54Match())q54SetMatch(false);
  var v=t.value;if(q25Raf)cancelAnimationFrame(q25Raf);
  var go=function(){q25Raf=0;setThemeColour('chrome','sideBg',v);var l=t.closest('.z4cust');if(l){l.style.setProperty('--cur',v);l.style.background=v}};
  if(document.hidden)go();else q25Raf=requestAnimationFrame(go);
 },true);
-document.addEventListener('change',function(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-z4menu')&&q17PageCol()&&S.menuMatch!==false)S.menuMatch=false},true);
+document.addEventListener('change',function(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-z4menu')&&q17PageCol()&&q54Match())q54SetMatch(false)},true);
 
 
 /* ======================= v165: dark widgets show their colour; live colour wheel for widgets; copy / paste hex =======================
@@ -19083,7 +19141,7 @@ function q48Inks(bg,key){var q=rgb2hsl.apply(null,hex2rgb(bg));
  return key==='sideBright'?'#FFFFFF':key==='sideInk'?hsl2hex(q[0],Math.min(q[1],20),92):hsl2hex(q[0],Math.min(q[1],18),80)}
 var _q48Chrome=chromeHex;
 chromeHex=function(key){
- if(S.menuMatch!==false&&(key==='sideBg'||key==='sideInk'||key==='sideBright'||key==='sideSoft')){var c=q17PageCol();if(c){var bg=palHex(c.color);return key==='sideBg'?bg:q48Inks(bg,key)}}
+ if(q54Match()&&(key==='sideBg'||key==='sideInk'||key==='sideBright'||key==='sideSoft')){var c=q17PageCol();if(c){var bg=palHex(c.color);return key==='sideBg'?bg:q48Inks(bg,key)}}
  return _q48Chrome.apply(this,arguments);
 };
 var _q48Render=render;
@@ -19196,6 +19254,7 @@ mergeState=function(local,remote){
    filled in (Budget's layout, Reading's "what I track"). Two copies that differed re-uploaded to each other forever
    (Jae's computer: about once a second on 2026-10-13). */
 SETTINGS_KEYS.push('coverPos','coverZoom','coverFit','coverHeight');
+Q21DEEP.menuMatchSp=1; // each space's menu choice merges on its own
 // v200: data format 4, so copies older than v199 (with the merge bugs above) stop syncing and show the Update bar
 // instead of looping or overwriting newer colours and layouts
 APP_SCHEMA=4;
@@ -19379,6 +19438,100 @@ planItem=function(kind,cid,id){var k=q53Id(id);if(!k)return _q53PlanItem.apply(t
  return{t:q53Px(f.c,f.p,f.s),c:{id:f.c.id,name:f.p.title,short:f.p.title,color:f.c.color,space:f.c.space,kind:'projects'},kind:kind||'task'}};
 var _q53Edit=ZACT.taskedit;
 ZACT.taskedit=function(cid,tid){var k=q53Id(tid);if(k){ZACT.q53edit(cid,k.pid,k.sid);return}return _q53Edit.apply(this,arguments)};
+
+/* ===== v200: the older School widgets catch up (Jae: "my old widgets ... don't have the interactive feature that the
+   others do"; picked tick-off animation, more sizes and styles, and motion) =====
+   Sizes: Square and Small for Next due, Term, Today's plan, Coming up, Week, Your classes, Month and Resources.
+   Style: Light (the look they always had) | Dark | Your colour, re-theming the widget through its colour variables.
+   Ticks: the circle fills with a check, the line crosses out and slides away, then it's marked done. Motion: on
+   arriving at Home bars grow, days and tiles pop in, and every widget lifts a little under the pointer. */
+var Q55T={nextdue:1,term:1,plan:1,comingup:1,week:1,classes:1,month:1,resources:1};
+var Q55TONE={term:1,plan:1,comingup:1,week:1,classes:1,month:1,resources:1};
+Object.keys(Q55T).forEach(function(k){Q23SQ[k]=1});
+var _q55Sizes=zwSizes;
+zwSizes=function(type){var L=_q55Sizes(type);if(!Q55T[type])return L;var o=['sq','small','half','full'].filter(function(s){return s==='sq'||s==='small'||L.indexOf(s)>-1});return o};
+function q55School(){return S.classes.filter(function(c){return !c.kind&&c.id!==REF_CID&&!isRefClass(c)})}
+var _q55Small=zSmall;
+zSmall=function(w,d,sp){var t=w.type,td=iso(today());
+ var card=function(title,ico,big,sub,extra,href){return zWCard(w,Object.assign({},d,{ico:ico}),title,'','<div class="zsm">'+(extra||'')+'<b class="zsmb">'+big+'</b>'+(sub?'<span class="zsms">'+sub+'</span>':'')+'</div>',href||'')};
+ if(t==='comingup'){var we=zAddDays(iso(weekStart(0)),6),nw=zAddDays(we,7),O=zOpenTasks(),wk=O.filter(function(x){return x.t.due<=we}),late=wk.filter(function(x){return x.t.due<td}).length,nx=O.filter(function(x){return x.t.due>we&&x.t.due<=nw}).length;
+  return card('Coming up','calendar',wk.length,'due this week'+(late?' · <span class="q55late">'+late+' late</span>':'')+(nx?'<br>'+nx+' next week':''),'')}
+ if(t==='week'){var ws=iso(weekStart(0)),O2=zOpenTasks(),cnt={};O2.forEach(function(x){cnt[x.t.due]=(cnt[x.t.due]||0)+1});
+  var days='';for(var i=0;i<7;i++){var k=zAddDays(ws,i);days+='<span class="q55d'+(k===td?' tdy':'')+(cnt[k]?' has':'')+'"><i>'+WK_L[i]+'</i><b>'+parseISO(k).getDate()+'</b></span>'}
+  var n=O2.filter(function(x){return x.t.due>=ws&&x.t.due<=zAddDays(ws,6)}).length;
+  return zWCard(w,Object.assign({},d,{ico:'calendar'}),'This week','','<div class="q55wk">'+days+'</div><span class="zsms">'+(n?n+' due this week':'Nothing due this week')+'</span>','')}
+ if(t==='classes'){var C=q55School();
+  return card('Your classes','book',C.length,C.length===1?'class':'classes','<span class="q55dots">'+C.slice(0,8).map(function(c){return '<i style="background:'+palHex(c.color)+'"></i>'}).join('')+'</span>',C[0]?C[0].id:'')}
+ if(t==='month'){var now=today(),mk=td.slice(0,7),n2=zOpenTasks().filter(function(x){return String(x.t.due).slice(0,7)===mk}).length;
+  return card(now.toLocaleDateString('en-CA',{month:'long'}),'calendar',now.getDate(),now.toLocaleDateString('en-CA',{weekday:'long'})+' · '+(n2?n2+' due this month':'nothing due this month'),'')}
+ if(t==='resources'){var R=(FILES[REF_CID]||[]);
+  return card('Resources','list',R.length,R.length?esc(R[0].name||'')+(R.length>1?' and '+(R.length-1)+' more':''):'Reference files you keep handy','')}
+ return _q55Small(w,d,sp)};
+// Style
+function q55Vars(w){var tone=w&&w.tone;if(!tone||tone==='light'||!Q55TONE[w.type])return null;
+ var col=q20Hex(w),bg=tone==='dark'?q20Deep(col):col,lightInk=tone==='dark'||contrast(col,'#ffffff')>=2.6;
+ var v='--wbg:'+bg+';--card:'+bg+';';
+ v+=lightInk?'--paper:rgba(255,255,255,.08);--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.24);--ink:#fff;--ink2:rgba(255,255,255,.88);--ink3:rgba(255,255,255,.74);--head:#fff;--link:#fff;--wc:#fff;--wt:rgba(255,255,255,.14)'
+  :'--paper:rgba(0,0,0,.05);--line:rgba(0,0,0,.1);--line2:rgba(0,0,0,.16);--ink:#2A2722;--ink2:rgba(0,0,0,.72);--ink3:rgba(0,0,0,.56)';
+ return{cls:lightInk?'q55dk':'q55lt',v:v}}
+var _q55Home=viewSpaceHome;
+viewSpaceHome=function(){var h=_q55Home(),L=view.zwLive||homeWidgets(curSpace());
+ L.forEach(function(w){var t=q55Vars(w);if(!t)return;var id=String(w.id).replace(/[^\w-]/g,'');
+  h=h.replace(new RegExp('(<div class="zw [^"]*)"( style="[^"]*)"( data-wid="'+id+'")'),'$1 '+t.cls+'"$2;'+t.v+'"$3 data-wcol="1"')});
+ return h};
+var _q55Menu=ZM.zwmenu.html;
+ZM.zwmenu.html=function(m){var h=_q55Menu(m);if(!h)return h;var w=homeWidgets(curSpace()).filter(function(x){return x.id===m.wid})[0];if(!w||!Q55TONE[w.type])return h;
+ var cur=w.tone||'light',f='<div class="field"><label>Style</label><div class="zseg">'+[['light','Light'],['dark','Dark'],['exact','Your colour']].map(function(o){return '<button class="'+(cur===o[0]?'on':'')+'" data-zact="wset:'+w.id+':tone:'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div><p class="hint" style="margin:6px 0 0">Dark and Your colour use the colour picked below (or your menu colour).</p></div>';
+ h=h.replace(/(<div class="field"><label>Colour<\/label>)/,f+'$1');
+ var t=q55Vars(w);if(t)h=h.replace(/(<div class="zhome q24pv"><div class="zw [^"]*)"((?: data-wcol="1")?) style="([^"]*)"/,'$1 '+t.cls+'" data-wcol="1" style="$3;'+t.v+'"');
+ return h};
+// Ticks: fill, cross out, slide away, then mark it done
+var Q55TICK='.zhome .zw .hntick,.zhome .zw .h4tick,.zhome .zw .h4plan .tick,.zhome .zw-week [data-tick],.zhome .zw-week [data-tickasg]';
+window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest(Q55TICK);if(!b)return;
+ if(b.hasAttribute('data-q55go')){b.removeAttribute('data-q55go');q55NoCel=Date.now()+300;return}
+ if(b.closest('.zhome.edit')||b.classList.contains('q55on'))return;
+ e.preventDefault();e.stopImmediatePropagation();
+ var w=b.closest('.zw'),row=b.closest('.h4row,.hr2,.cpdue,.hwk2row')||b.parentElement,nd=!!b.closest('.zw-nextdue');
+ var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,sel=['data-tick','data-tickasg'].map(function(a){var v=b.getAttribute(a);return v?'['+a+'="'+v+'"]':''}).join('');
+ b.classList.add('q55on');if(row&&row!==w)row.classList.add('q55done');
+ try{var r=b.getBoundingClientRect();celebrate(r.left+r.width/2,r.top+r.height/2)}catch(er){}
+ if(!nd&&row&&row!==w)setTimeout(function(){row.classList.add('q55out')},reduce?0:230);
+ setTimeout(function(){var el=document.contains(b)?b:(sel&&document.querySelector(sel));if(!el)return;el.setAttribute('data-q55go','1');el.click()},reduce?0:560)},true);
+// celebrate() already ran above, so the real tick's own celebration is skipped once
+var _q55Cel=typeof celebrate==='function'?celebrate:null,q55NoCel=0;
+if(_q55Cel)celebrate=function(){if(q55NoCel>Date.now())return;return _q55Cel.apply(this,arguments)};
+// Motion: arriving at Home
+var q55Last='',q55T=0;
+var _q55Render=render;
+render=function(){var was=q55Last,r=_q55Render.apply(this,arguments);q55Last=view.page;
+ if(view.page==='home'&&was!=='home'){var z=document.querySelector('.zhome');if(z&&!z.classList.contains('edit')){z.classList.add('q55in');clearTimeout(q55T);q55T=setTimeout(function(){var y=document.querySelector('.zhome');if(y)y.classList.remove('q55in')},1700)}}
+ return r};
+
+/* ===== v201: events that last more than one day (a vacation). An event can have a Last day (t.end); the calendar shows it on every day it covers ===== */
+var _q56Cal=calTasks;
+calTasks=function(c,out){
+ var n0=out.length;_q56Cal(c,out);
+ var add=out.splice(n0),e,t,n,i;
+ add.forEach(function(o){
+  t=o.t;
+  if(!t||t.rep==='year'||!t.end||!t.due||t.end<=t.due){out.push(o);return}
+  n=Math.min(daysBetween(parseISO(t.due),parseISO(t.end))+1,90);
+  for(i=0;i<n;i++){e=Object.assign({},t,{due:zAddDays(t.due,i),title:t.title+(i?' · day '+(i+1)+' of '+n:' · day 1 of '+n)});
+   out.push({t:e,c:o.c,kind:o.kind,ev:true})}
+ });
+};
+function q56EndField(id,val,min){return '<div class="field"><label for="'+id+'">Last day (only if it lasts more than one day)</label><input id="'+id+'" type="date" value="'+esc(val||'')+'"'+(min?' min="'+esc(min)+'"':'')+'></div>'}
+function q56Clean(end,due){return end&&due&&end>due?end:''}
+var _q56EvH=ZM.zevent.html,_q56EvS=ZM.zevent.save;
+ZM.zevent.html=function(m){var h=_q56EvH(m);if(!h||m.rep)return h;return h.replace('<label class="zcheck">',q56EndField('ze7','',m.due)+'<label class="zcheck">')};
+ZM.zevent.save=function(m){var c=classById(m.cid),n=c?c.tasks.length:0,end=zv('ze7'),due=zv('ze2'),yr=document.getElementById('ze6');
+ _q56EvS(m);if(!c||c.tasks.length<=n)return;var t=c.tasks[c.tasks.length-1];
+ var k=q56Clean(end,due);if(k&&t.rep!=='year'){t.end=k;touch(t);save();render()}};
+var _q56TkH=ZM.ztask.html,_q56TkS=ZM.ztask.save;
+ZM.ztask.html=function(m){var h=_q56TkH(m),c=classById(m.cid),t=c&&zTask(c,m.tid);if(!h||!t||c.kind!=='cal'||t.rep==='year')return h;
+ return h.replace('<label class="zcheck">',q56EndField('zt10',t.end,t.due)+'<label class="zcheck">')};
+ZM.ztask.save=function(m){var c=classById(m.cid),t=c&&zTask(c,m.tid),has=!!document.getElementById('zt10'),end=zv('zt10');
+ var r=_q56TkS(m);if(t&&has){var k=t.rep==='year'?'':q56Clean(end,t.due);if((t.end||'')!==k){if(k)t.end=k;else delete t.end;touch(t);save();render()}}return r};
 
 try{spBoot()}catch(e){}
 load();
