@@ -5035,7 +5035,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v201';
+var BUILD='v202';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19532,6 +19532,14 @@ ZM.ztask.html=function(m){var h=_q56TkH(m),c=classById(m.cid),t=c&&zTask(c,m.tid
  return h.replace('<label class="zcheck">',q56EndField('zt10',t.end,t.due)+'<label class="zcheck">')};
 ZM.ztask.save=function(m){var c=classById(m.cid),t=c&&zTask(c,m.tid),has=!!document.getElementById('zt10'),end=zv('zt10');
  var r=_q56TkS(m);if(t&&has){var k=t.rep==='year'?'':q56Clean(end,t.due);if((t.end||'')!==k){if(k)t.end=k;else delete t.end;touch(t);save();render()}}return r};
+
+/* ===== v202: calmer DEFAULT menu colours. With "Match each page" the menu and frame used the page's palette colour at full strength (Lavender on Projects looked loud). Built-in palette colours now give a deeper, softer shade of themselves (q17MenuShade). A colour the person picked themselves (any-colour picker, 'x...' ids, or an edited palette colour) is still used exactly ===== */
+function q57Picked(c){return !!c&&(/^x/i.test(c.color||'')||!!(S.theme&&S.theme.colors&&S.theme.colors[c.color]))}
+var _q57Chrome=chromeHex;
+chromeHex=function(key){
+ if(q54Match()&&(key==='sideBg'||key==='sideInk'||key==='sideBright'||key==='sideSoft')){var c=q17PageCol();if(c){var bg=palHex(c.color);if(!q57Picked(c))bg=q17MenuShade(bg);return key==='sideBg'?bg:q48Inks(bg,key)}}
+ return _q57Chrome.apply(this,arguments);
+};
 
 try{spBoot()}catch(e){}
 load();
