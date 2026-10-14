@@ -4727,6 +4727,305 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 @media(max-width:520px){.q53add{grid-template-columns:minmax(0,1fr) auto}.q53add input:first-child{grid-column:1/-1}.q53add input[type=date]{width:100%}}
 /* phone: the Budget tabs (Categories, Bills, Spending, Goals, Cards) all fit on one line */
 @media(max-width:480px){.zbchips{gap:6px!important;overflow:visible!important}.zbchips>button{flex:1 1 auto;min-width:0;padding:7px 9px!important;font-size:13px!important;justify-content:center}}
+
+/* ===== v203: Plan my week (month/week + side list), Calendar day/week, Shopping store cards, Habit tracker, Budget widths, class page, Habits widget ===== */
+/* Plan my week */
+.q58plan{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.q58left{display:flex;flex-direction:column;gap:20px;min-width:0}
+.q58cal{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px 16px 14px;min-width:0}
+.q58ch{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.q58nav{display:flex;align-items:center;gap:8px;min-width:0}
+.q58nav h2{margin:0 4px 0 6px;font-size:22px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+.q58ar{width:30px;height:30px;border-radius:50%;border:none;background:var(--paper);color:var(--ink2);display:grid;place-items:center;cursor:pointer;padding:0;min-height:0!important;flex:none}
+.q58ar.big{width:34px;height:34px}
+.q58ar:hover{background:color-mix(in srgb,var(--cp-kplan-c,#7a8f72) 14%,var(--paper))}
+.q58ar:disabled{opacity:.35;cursor:default}
+.q58today{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 12px;font:inherit;font-size:13px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.q58seg{display:inline-flex;background:var(--paper);border-radius:12px;padding:3px;gap:2px}
+.q58seg button{border:none;background:none;border-radius:9px;padding:7px 16px;font:inherit;font-size:14px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.q58seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.q58banner{display:flex;align-items:center;gap:8px;background:var(--cp-kplan-wash,#f4f5f2);border:1px dashed var(--cp-kplan-c,#7a8f72);border-radius:12px;padding:8px 12px;margin:0 0 10px;font-size:13.5px;color:var(--ink2)}
+.q58banner span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q58dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.q58dnames{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:6px}
+.q58dnames span{font-size:12.5px;color:var(--ink3);padding-left:4px}
+.q58grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.q58cell{min-height:104px;border-radius:14px;background:color-mix(in srgb,var(--paper) 70%,var(--card));padding:7px 6px 6px;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-width:0;position:relative;border:1.5px solid transparent;transition:background .15s,border-color .15s;outline:none}
+.q58cell:hover{background:color-mix(in srgb,var(--cp-kplan-c,#7a8f72) 8%,var(--paper))}
+.q58cell:focus-visible{border-color:var(--cp-kplan-c,#7a8f72)}
+.q58cell.off{opacity:.45}
+.q58cell.past .q58dn{color:var(--ink3)}
+.q58cell.sel{border-color:color-mix(in srgb,var(--cp-kplan-c,#7a8f72) 55%,transparent);background:var(--cp-kplan-wash,#f4f5f2)}
+.q58cell.t{border-color:var(--cp-kplan-c,#7a8f72)}
+.q58dn{font-size:13.5px;color:var(--ink);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;margin:-2px 0 0 -2px}
+.q58cell.t .q58dn{background:var(--cp-kplan-c,#7a8f72);color:var(--cp-kplan-on,#fff)}
+.q58pills{display:flex;flex-direction:column;gap:3px;min-width:0}
+.q58pills small{font-size:11px;color:var(--ink3);padding-left:4px}
+.q58pill{display:flex;align-items:center;gap:5px;border-radius:7px;padding:3px 6px;font-size:11.5px;line-height:1.25;min-width:0;cursor:grab}
+.q58pill i{width:5px;height:5px;border-radius:50%;flex:none}
+.q58pill span{white-space:nowrap;overflow:hidden;min-width:0}
+.q58pill.d{opacity:.5;text-decoration:line-through}
+.q58marks{display:flex;gap:3px;margin-top:auto;padding-left:3px}
+.q58marks i{width:6px;height:6px;border-radius:50%;flex:none}
+.q58marks i.du{background:transparent;border:1.5px solid}
+.q58grid.picking .q58cell:not(.past):hover,.q58wk.picking .q58wd:not(.past):hover{border-color:var(--cp-kplan-c,#7a8f72);border-style:dashed}
+.q58cell.dropover,.q58wd.dropover{border-color:var(--cp-kplan-c,#7a8f72);border-style:dashed;background:var(--cp-kplan-wash,#f4f5f2)}
+.q58wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.q58wd{min-height:300px;border-radius:14px;background:color-mix(in srgb,var(--paper) 70%,var(--card));padding:8px 6px;display:flex;flex-direction:column;gap:8px;cursor:pointer;min-width:0;border:1.5px solid transparent;outline:none}
+.q58wd.t{border-color:var(--cp-kplan-c,#7a8f72)}
+.q58wd.sel{background:var(--cp-kplan-wash,#f4f5f2)}
+.q58wdh{display:flex;align-items:center;gap:6px;padding-left:2px}
+.q58wdh span{font-size:12.5px;color:var(--ink3)}
+.q58wdh b{font-weight:500;font-size:14px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center}
+.q58wd.t .q58wdh b{background:var(--cp-kplan-c,#7a8f72);color:var(--cp-kplan-on,#fff)}
+.q58wdl{display:flex;flex-direction:column;gap:4px;min-width:0}
+.q58wdl .q58pill{white-space:normal}
+.q58wdl .q58pill span{white-space:normal;-webkit-mask-image:none;mask-image:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.q58ev{display:flex;align-items:flex-start;flex-wrap:wrap;gap:2px 5px;font-size:11.5px;color:var(--ink3);min-width:0;padding:2px 4px}
+.q58ev i{margin-top:4px}
+.q58ev i+span{flex:1 1 0}
+.q58ev i{width:6px;height:6px;border-radius:50%;flex:none}
+.q58ev.du i{background:transparent;border:1.5px solid}
+.q58ev em{font-style:normal;flex:none}
+.q58ev span{flex:1 1 100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:0;color:var(--ink2)}
+.q58free{font-size:11.5px;color:var(--ink3);opacity:.7;padding-left:4px}
+.q58dayc .zpdh h3{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.q58dsub{font-size:14px;color:var(--ink3);font-weight:400}
+.q58empty{margin:4px 0;font-size:13.5px;color:var(--ink3);line-height:1.45}
+.q58side{position:sticky;top:16px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;padding:16px 0 8px!important;overflow:hidden}
+.q58sh{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 16px}
+.q58sh h3{margin:0;font-size:19px;font-weight:500}
+.q58sh span{font-size:12.5px;color:var(--ink3);white-space:nowrap}
+.q58hint{margin:4px 16px 10px;font-size:12.5px;color:var(--ink3);line-height:1.4}
+.q58auto{margin:0 16px 10px!important;align-self:flex-start}
+.q58scroll{overflow:auto;flex:1;min-height:0;padding:0 12px 10px;border-top:1px solid var(--line);overscroll-behavior:contain}
+.q58scroll h4{margin:14px 4px 8px;font-size:12.5px;font-weight:500;color:var(--cp-ktray-title,var(--ink2));display:flex;align-items:center;gap:6px}
+.q58scroll h4 em{font-style:normal;font-size:11.5px;background:var(--cp-ktray-bg,var(--paper));color:var(--cp-ktray-title,var(--ink2));border-radius:99px;padding:1px 7px}
+.q58it{border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:7px;transition:border-color .15s,box-shadow .15s}
+.q58it.pl{background:color-mix(in srgb,var(--paper) 55%,var(--card))}
+.q58it.on{border-color:var(--cp-ktray-c,#7a8f72);box-shadow:0 0 0 2px color-mix(in srgb,var(--cp-ktray-c,#7a8f72) 22%,transparent)}
+.q58itr{display:flex;align-items:center;gap:6px;padding-right:10px}
+.q58ib{flex:1;min-width:0;display:flex;align-items:flex-start;gap:9px;border:none;background:none;padding:9px 6px 9px 12px;font:inherit;text-align:left;cursor:pointer;color:var(--ink);min-height:0!important}
+.q58ib .q58dot{margin-top:6px}
+.q58itt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.q58itt b{font-weight:450;font-size:14px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.q58itt small{font-size:12px;color:var(--ink3);display:flex;flex-wrap:wrap;gap:0 8px}
+.q58late{color:#A34A3F}
+.q58was{color:var(--ink3);opacity:.85}
+.q58it.late{border-color:color-mix(in srgb,#A34A3F 35%,var(--line))}
+.q58unl{font-size:12.5px!important;flex:none}
+.q58pick{padding:0 10px 10px}
+.q58pkh{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:0 0 6px}
+.q58pkh span{font-size:12px;color:var(--ink3);text-align:center;flex:1}
+.q58pkh .q58ar{width:28px;height:28px}
+.q58chips{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px!important}
+.q58chips .zpc{min-width:0!important;padding:5px 0!important}
+.q58unp{display:block;margin:8px auto 0;font-size:12.5px!important}
+.q58row .q58pick{padding:4px 0 0}
+@media(max-width:1099px){
+ .q58plan{grid-template-columns:minmax(0,1fr)}
+ .q58side{position:static;max-height:none}
+ .q58scroll{max-height:none}
+}
+@media(max-width:700px){
+ .q58cal{padding:12px 10px;border-radius:20px}
+ .q58nav h2{font-size:18px}
+ .q58seg button{padding:6px 11px;font-size:13px}
+ .q58grid,.q58dnames{gap:3px}
+ .q58cell{min-height:58px;padding:4px 3px;border-radius:10px;align-items:center}
+ .q58dn{font-size:12.5px;width:24px;height:24px;margin:0}
+ .q58pills{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:3px}
+ .q58pill{padding:0;width:7px;height:7px;border-radius:50%;background:none!important}
+ .q58pill i{width:7px;height:7px}
+ .q58pill span,.q58pills small{display:none}
+ .q58marks{margin-top:0;padding:0;justify-content:center}
+ .q58dnames span{text-align:center;padding:0;font-size:11.5px}
+ .q58wk{grid-template-columns:minmax(0,1fr)}
+ .q58wd{min-height:0;flex-direction:row;align-items:flex-start;gap:10px}
+ .q58wdh{flex-direction:column;gap:0;width:38px;flex:none}
+ .q58wdl{flex:1}
+}
+/* Calendar: day / week / month */
+.q58cnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.q58cseg button.on{background:#fff!important;color:var(--cp-kcal-title,var(--ink))!important}
+.q58cw{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;padding:14px}
+.q58cwd{min-height:280px;border-radius:14px;background:color-mix(in srgb,var(--paper) 70%,var(--card));padding:8px 6px;display:flex;flex-direction:column;gap:6px;min-width:0;border:1.5px solid transparent}
+.q58cwd.t{border-color:var(--cp-kcal-c,#7a8f72)}
+.q58cwh{display:flex;align-items:center;gap:6px;border:none;background:none;padding:0 2px;font:inherit;cursor:pointer;color:var(--ink);min-height:0!important}
+.q58cwh span{font-size:12.5px;color:var(--ink3)}
+.q58cwh b{font-weight:500;font-size:14px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center}
+.q58cwd.t .q58cwh b{background:var(--cp-kcal-c,#7a8f72);color:var(--cp-kcal-on,#fff)}
+.q58cwl{display:flex;flex-direction:column;gap:4px;min-width:0}
+.q58chip{display:flex!important;flex-direction:column;gap:1px;white-space:normal!important;cursor:pointer;margin:0!important}
+.q58chip em{font-style:normal;font-size:10.5px;opacity:.75}
+.q58chip span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.q58cday{padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px}
+.q58cday h4{margin:8px 0 2px;font-size:12.5px;font-weight:500;color:var(--ink3)}
+.q58cdr{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--paper) 60%,var(--card));cursor:pointer;border-left:4px solid var(--pc);min-width:0}
+.q58cdr:hover{background:var(--paper)}
+.q58cdr.d .q58cdn b{text-decoration:line-through;opacity:.6}
+.q58cdb{width:18px;flex:none}
+.q58cdt{font-size:13px;color:var(--ink2);width:64px;flex:none}
+.q58cdn{display:flex;flex-direction:column;min-width:0}
+.q58cdn b{font-weight:450;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q58cdn small{font-size:12px;color:var(--ink3)}
+@media(max-width:700px){
+ .q58cw{grid-template-columns:minmax(0,1fr);padding:10px}
+ .q58cwd{min-height:0;flex-direction:row;align-items:flex-start;gap:10px}
+ .q58cwh{flex-direction:column;gap:0;width:40px;flex:none}
+ .q58cwl{flex:1}
+ .q58cday{padding:10px}
+ .q58cnav{justify-content:flex-start}
+}
+/* Shopping list */
+.q58shtop{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.q58shtop .z5tabs{margin:0!important}
+.q58cartp{display:flex;align-items:center;gap:12px;font-size:13.5px;color:var(--ink2)}
+.q58cartp i{width:160px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 8%,transparent);overflow:hidden;display:block}
+.q58cartp b{display:block;height:100%;border-radius:99px;background:var(--sideBg,#6f8468);transition:width .4s}
+.q58add{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:10px 10px 10px 14px;margin-bottom:12px}
+.q58ai{flex:1;min-width:0}
+.q58ai input{width:100%;border:none!important;background:none!important;font:inherit;font-size:15px;padding:8px 4px;outline:none;box-shadow:none!important}
+.q58store{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:0 10px;background:var(--paper);color:var(--ink3);width:190px;flex:none;cursor:text}
+.q58store input{border:none!important;background:none!important;font:inherit;font-size:14.5px;padding:9px 0;width:100%;min-width:0;outline:none;color:var(--ink);box-shadow:none!important}
+.q58store:focus-within{border-color:var(--sideBg,#6f8468)}
+.q58addb{flex:none;border-radius:12px!important;padding:10px 20px!important}
+.q58sbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 14px;flex-wrap:wrap}
+.q58shop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.q58stores{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;align-items:start;min-width:0}
+.q58sc{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-width:0}
+.q58sch{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--gt) 45%,var(--card))}
+.q58sch b{flex:1;min-width:0;font-weight:500;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q58sch em{font-style:normal;font-size:12px;min-width:22px;height:22px;border-radius:99px;display:grid;place-items:center;background:var(--gt);color:var(--gc);padding:0 6px}
+.q58sch .zmini{flex:none}
+.q58scb{padding:4px 10px}
+.q58scb .zrow{border-bottom:1px solid var(--line)}
+.q58scb .zrow:last-child{border-bottom:none}
+.q58sc .z5plus{margin:0 10px 10px}
+.q58sc .z5addin{margin:4px 10px 10px}
+.q58cart{position:sticky;top:16px}
+.q58cart .zch{display:flex;align-items:baseline;justify-content:space-between}
+.q58cbar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 8%,transparent);overflow:hidden;margin:4px 0 8px}
+.q58cbar b{display:block;height:100%;border-radius:99px;background:var(--sideBg,#6f8468);transition:width .4s}
+.q58cart .zrow{border-bottom:1px solid var(--line)}
+.q58cst{font-size:12px;color:var(--ink3);flex:none;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q58clear{display:block;width:100%;margin-top:12px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer}
+.q58clear:hover{background:var(--paper)}
+.q58none{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:36px 16px;border:1.5px dashed var(--line);border-radius:20px;color:var(--ink3);font-size:13.5px}
+.q58none b{color:var(--ink);font-weight:500;font-size:15px}
+@media(max-width:999px){.q58shop{grid-template-columns:minmax(0,1fr)}.q58cart{position:static}}
+@media(max-width:700px){
+ .q58shtop{flex-direction:column;align-items:stretch;gap:10px}
+ .q58cartp i{flex:1;width:auto}
+ .q58add{flex-wrap:wrap;padding:10px;border-radius:18px}
+ .q58ai{flex:1 1 100%}
+ .q58store{flex:1;width:auto}
+ .q58stores{grid-template-columns:minmax(0,1fr)}
+}
+/* Habit tracker */
+.q58hsum{display:flex!important;align-items:center;gap:16px;padding:22px 24px!important;background:color-mix(in srgb,var(--q58pc) 16%,var(--card))!important;border:none!important;border-radius:26px!important;margin-bottom:20px}
+.q58hsl{flex:1;min-width:0}
+.q58hsum .zch{margin:0 0 2px!important;padding:0!important;border:none!important}
+.q58hsum .zct{font-size:13px;color:var(--ink3);font-weight:400}
+.q58hbig{font-size:24px;font-weight:500;letter-spacing:-.01em;color:var(--ink);margin-bottom:12px}
+.q58hbar{height:8px;border-radius:99px;background:rgba(255,255,255,.75);overflow:hidden}
+.q58hbar b{display:block;height:100%;border-radius:99px;background:var(--q58pc);transition:width .5s}
+.q58hdate{font-size:13.5px;color:var(--ink2);white-space:nowrap;align-self:center}
+.q58htile{background:var(--card);border-radius:18px;padding:12px 18px;display:flex;flex-direction:column;align-items:center;min-width:110px;flex:none}
+.q58htile b{font-size:22px;font-weight:500;letter-spacing:-.01em}
+.q58htile.s b{color:#A9734F}.q58htile.w b{color:#5E7B96}
+.q58htile small{font-size:12px;color:var(--ink3)}
+.q58hgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.q58hside{display:flex;flex-direction:column;gap:20px;min-width:0}
+.q58hab{padding:0!important;overflow:hidden}
+.q58hab>.zch{display:flex;align-items:center;gap:6px;padding:16px 20px!important;margin:0!important;border-bottom:1px solid var(--line)}
+.q58hab .zct{font-size:15px}
+.q58hab .zcm{font-size:14px;color:var(--ink3);margin:0!important}
+.q58hdn{margin-left:auto;display:grid;grid-template-columns:repeat(7,30px);gap:5px;text-align:center;font-size:12px;color:var(--ink3)}
+.q58hdn .t{color:var(--ink);font-weight:500}
+.q58hr{display:flex;align-items:center;gap:10px;padding:10px 20px;border-bottom:1px solid var(--line)}
+.q58hn{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:none;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--ink);min-height:0!important}
+.q58hic{width:46px;height:46px;border-radius:14px;background:var(--wt);color:var(--wc);display:grid;place-items:center;flex:none}
+.q58hnt{display:flex;flex-direction:column;min-width:0}
+.q58hnt b{font-weight:450;font-size:15.5px;white-space:nowrap;overflow:hidden}
+.q58heat,.q58hci,.q58cart{padding:18px 20px!important}
+.q58cart .zch{padding:0!important;margin:0 0 6px!important}
+.q58hnt small{font-size:12.5px;color:var(--wc)}
+.q58hx{display:grid;grid-template-columns:repeat(7,30px);gap:5px;flex:none}
+.q58hb{width:30px;height:30px;border-radius:8px;border:1.5px solid color-mix(in srgb,var(--ink) 14%,transparent);background:var(--card);display:grid;place-items:center;cursor:pointer;padding:0;color:#fff;min-height:0!important;transition:background .15s,border-color .15s,transform .12s}
+.q58hb:active{transform:scale(.88)}
+.q58hb.t{border-color:var(--wc);border-width:2px}
+.q58hb.y{background:var(--wc);border-color:var(--wc)}
+.q58hb.off{border-style:dashed;opacity:.45}
+.q58hb:not(.y):hover{border-color:var(--wc)}
+.q58hadd{display:block;width:100%;border:none;background:none;padding:16px;font:inherit;font-size:14.5px;color:var(--q58pc,var(--ink2));color:var(--ink2);cursor:pointer}
+.q58hadd:hover{background:var(--paper)}
+.q58heat .zch,.q58hci .zch{padding:0!important;border:none!important;margin:0 0 12px!important}
+.q58heat .zct,.q58hci .zct{font-size:14.5px}
+.q58hg{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.q58hg i{aspect-ratio:1.5;border-radius:4px;background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.q58hg i.l1{background:color-mix(in srgb,var(--q58pc) 30%,#eee)}
+.q58hg i.l2{background:color-mix(in srgb,var(--q58pc) 50%,#eee)}
+.q58hg i.l3{background:color-mix(in srgb,var(--q58pc) 72%,#eee)}
+.q58hg i.l4{background:var(--q58pc)}
+.q58hg i.lf{background:transparent;border:1px dashed color-mix(in srgb,var(--ink) 10%,transparent)}
+.q58hg i.t{outline:1.5px solid var(--ink2);outline-offset:1px}
+.q58hci{background:color-mix(in srgb,#8FA6BD 18%,var(--card))!important;border:none!important}
+.q58cin b{font-size:40px;font-weight:500;letter-spacing:-.02em;color:var(--ink)}
+.q58cin span{font-size:17px;color:#5E7B96;margin-left:6px}
+@media(max-width:1099px){.q58hgrid{grid-template-columns:minmax(0,1fr)}.q58hside{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}}
+@media(max-width:760px){
+ .q58hsum{flex-wrap:wrap;padding:18px!important;gap:12px}
+ .q58hsl{flex:1 1 100%}
+ .q58hdate{display:none}
+ .q58htile{flex:1;min-width:0}
+ .q58hbig{font-size:20px}
+}
+@media(max-width:560px){
+ .q58hr{padding:10px 12px;gap:8px}.q58hab>.zch{padding:14px 12px!important}
+ .q58hic{width:36px;height:36px;border-radius:11px}.q58hn{gap:9px}
+ .q58hx,.q58hdn{grid-template-columns:repeat(7,24px);gap:3px}
+ .q58hb{width:24px;height:24px;border-radius:7px}
+ .q58hnt b{font-size:14px}
+}
+@media(max-width:390px){.q58hic{display:none}}
+/* Budget: sections are laid out by the width they really have (not the window), so nothing is squeezed below a readable size */
+.zbhw{container:q36w/inline-size}
+@container q36w (width < 900px){.q36wrap:not(.noside) .q36grid{grid-template-columns:minmax(0,1fr)!important}.q36wrap:not(.noside) .q36grid>.q36sec{grid-column:1/-1!important}}
+@container q36w (width >= 900px) and (width < 1324px){.q36wrap:not(.noside) .q36grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.q36wrap:not(.noside) .q36grid>.q36sec{grid-column:span 2!important}.q36wrap:not(.noside) .q36grid>.q36sec[style*="span 1"]{grid-column:span 1!important}}
+@container q36w (width >= 1324px){.q36wrap:not(.noside) .q36grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@container q36w (width < 520px){.q36wrap.noside .q36grid{grid-template-columns:minmax(0,1fr)!important}.q36wrap.noside .q36grid>.q36sec{grid-column:1/-1!important}}
+@container q36w (width >= 520px) and (width < 1000px){.q36wrap.noside .q36grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.q36wrap.noside .q36grid>.q36sec{grid-column:span 2!important}.q36wrap.noside .q36grid>.q36sec[style*="span 1"]{grid-column:span 1!important}}
+@container q36w (width >= 1000px){.q36wrap.noside .q36grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@container q36w (width < 1100px){.q36wrap:not(.noside){grid-template-columns:minmax(0,1fr) 280px}}
+@container q36w (width < 760px){.q36wrap:not(.noside){grid-template-columns:minmax(0,1fr)}}
+.q36sec{min-width:0}
+@container (max-width:380px){.zbcat{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n v" "t t";row-gap:7px;column-gap:8px;align-items:center}.zbcat>.zbcn{grid-area:n;min-width:0}.zbcat>.zbcv{grid-area:v}.zbcat>.zbtrack{grid-area:t;width:auto!important;max-width:none!important;flex:none!important}}
+.q17cempty,.q17cempty>span:last-child{white-space:normal}
+@container (max-width:520px){.q17cempty{flex-direction:column;align-items:flex-start}}
+.q36sec{overflow:hidden}
+.q36grid.editing>.q36sec,.q36side.editing>.q36sec{overflow:visible}
+.q36sec p,.q36sec .zsoft{overflow-wrap:anywhere}
+/* class page: Assignments and Files side by side; Class info folds in the right column */
+@container cpmain (min-width:740px){.cpduo{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)!important;gap:20px}.cpduo .cphead{flex-wrap:wrap}.cpduo .cpacts{flex-wrap:wrap}}
+.q58info{overflow:hidden}
+.q58info>summary{cursor:pointer;list-style:none}
+.q58info>summary::-webkit-details-marker{display:none}
+.q58ib2{display:flex;flex-direction:column;gap:12px;padding:12px}
+.q58ib2>*{margin:0!important}
+.q58ref{box-shadow:none!important}
+.q58done{margin:0!important;border:none!important;border-top:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important;background:var(--paper)!important}
+.q58done>summary{padding:12px 18px!important}
+/* the small Habits widget fills its box: in a narrow widget the rings sit on top, big, and the ticks underneath */
+@container (max-width:260px){
+ .q22hab .q22hb{flex-direction:column;justify-content:center;align-items:center;gap:10px}
+ .q22hab .q22rings{width:min(120px,60cqw);height:min(120px,60cqw);align-self:center}
+ .q22hab .q22hl{flex:none;flex-direction:row;justify-content:center;gap:8px;width:100%}
+ .q22hab .q22hk span,.q22hab .q22more{display:none}
+ .q22hab .q22hk{margin:0;padding:0}
+ .q22hab .q22hk i{width:22px;height:22px}
+}
+.zw-sq .q22hab .q22rings{width:min(96px,52cqw)!important;height:min(96px,52cqw)!important}
 </style>
 </head>
 <body>
@@ -5035,7 +5334,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v202';
+var BUILD='v203';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19540,6 +19839,357 @@ chromeHex=function(key){
  if(q54Match()&&(key==='sideBg'||key==='sideInk'||key==='sideBright'||key==='sideSoft')){var c=q17PageCol();if(c){var bg=palHex(c.color);if(!q57Picked(c))bg=q17MenuShade(bg);return key==='sideBg'?bg:q48Inks(bg,key)}}
  return _q57Chrome.apply(this,arguments);
 };
+
+
+/* ===== v203 (2026-10-13): Jae's round of mockups. Plan my week = month/week calendar + a slim "Due and to plan" list on the
+   side (each task gets its own ‹ › week arrows); Calendar gets Day / Week / Month; Shopping list = store cards (only stores
+   you need something from) + an "In the cart" card + a store box that remembers your stores; Habit tracker redone;
+   colours for to-do groups and stores; Budget sections never squeeze below a readable width; class page = Assignments and
+   Files side by side with a foldable Class info in the right column; the small Habits widget fills its box. Prefix q58. ===== */
+
+/* ---------- shared bits ---------- */
+var Q58CHL='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>';
+var Q58CHR=Q58CHL.replace('m15 6-6 6 6 6','m9 6 6 6-6 6');
+function q58Get(k,d){try{var v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}}
+function q58Set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function q58Fd(k,o){return parseISO(k).toLocaleDateString('en-CA',o).replace(/\./g,'')}
+
+/* ---------- colours for to-do groups and shopping stores: a section can carry its own colour (s.color, a soft-colour key
+   or '#hex'); everything that colours a group by its name (zHueOf) picks it up ---------- */
+var q58Names={};
+function q58BuildNames(){var o={};(S.classes||[]).forEach(function(c){(c.sections||[]).forEach(function(s){if(s&&s.color&&s.name)o[String(s.name)]=s.color})});q58Names=o}
+var _q58Hue=zHueOf;
+zHueOf=function(s){var v=q58Names[String(s||'')];return v&&ZC[v]?v:_q58Hue(s)};
+var _q58RenderN=render;
+render=function(){try{q58BuildNames()}catch(e){}return _q58RenderN.apply(this,arguments)};
+var _q58SecH=ZM.zsec.html,_q58SecS=ZM.zsec.save;
+ZM.zsec.html=function(m){var h=_q58SecH(m),c=classById(m.cid);if(!h||!c||(c.kind!=='todo'&&c.kind!=='groceries'))return h;
+ var s=m.sid&&(c.sections||[]).filter(function(x){return x.id===m.sid})[0];
+ if(m.soft===undefined){m.soft=s?(s.color||_q58Hue(s.name)):'';m.q58def=m.soft}
+ var cur=m.soft||'';
+ return h.replace(/(<\/div>)/,'$1<div class="field"><label>Colour</label>'+zSoftPick(cur,'data-zsoft')+'<p class="hint" style="margin:6px 0 0">'+(c.kind==='groceries'?'Used for the store’s badge and card.':'Used for the group’s card and badge.')+'</p></div>')};
+ZM.zsec.save=function(m){var c=classById(m.cid),n=c?(c.sections||[]).length:0,soft=m.soft;
+ _q58SecS(m);if(!c||!soft||(soft===m.q58def&&m.sid))return;
+ var s=m.sid?(c.sections||[]).filter(function(x){return x.id===m.sid})[0]:(c.sections.length>n?c.sections[c.sections.length-1]:null);
+ if(s&&s.color!==soft){s.color=soft;touch(s);save();render()}};
+
+/* ---------- PLAN MY WEEK ---------- */
+function q58PMode(){return q58Get('hub:planmode','month')==='week'?'week':'month'}
+function q58PData(){
+ view.noEv=true;var all;try{all=allTasks().filter(function(x){return !isRefClass(x.c)&&!x.ev})}finally{view.noEv=false}
+ var evs=allTasks().filter(function(x){return x.ev&&!isRefClass(x.c)});
+ var td=iso(today()),ws0=iso(weekStart(0)),byDay={},evDay={},dueDay={};
+ all.forEach(function(x){var k=planDay(x.t);if(k)(byDay[k]=byDay[k]||[]).push(x);if(x.t.due&&!x.t.done&&!k)(dueDay[x.t.due]=dueDay[x.t.due]||[]).push(x)});
+ evs.forEach(function(x){if(x.t.due)(evDay[x.t.due]=evDay[x.t.due]||[]).push(x)});
+ var byDue=function(a,b){var p=a.t.due||'9',q=b.t.due||'9';return p<q?-1:p>q?1:String(a.t.title).localeCompare(String(b.t.title))};
+ var tray=all.filter(function(x){if(x.t.done)return false;var pd=planDay(x.t);return !pd||pd<ws0}).sort(byDue);
+ var planned=all.filter(function(x){var pd=planDay(x.t);return pd&&pd>=td&&!x.t.done}).sort(function(a,b){var p=planDay(a.t),q=planDay(b.t);return p<q?-1:p>q?1:0});
+ return {all:all,evs:evs,td:td,byDay:byDay,evDay:evDay,dueDay:dueDay,tray:tray,planned:planned};
+}
+function q58Dot(x){return '<i class="q58dot" style="background:'+palHex(x.c.color)+'"></i>'}
+function q58DueTxt(x){
+ if(!x.t.due)return '<span class="q58nd">No due date</span>';
+ var cd=cpCountdown(x.t.due);if(!x.t.done&&cd.n<0)return '<span class="q58late">Late · was due '+esc(q58Fd(x.t.due,{month:'short',day:'numeric'}))+'</span>';
+ return '<span>Due '+esc(cd.n===0?'today':cd.n===1?'tomorrow':q58Fd(x.t.due,{month:'short',day:'numeric'}))+'</span>';
+}
+// a row of 7 days for one task, with its own ‹ › to go a week back or ahead (Jae: "arrows on the tasks")
+function q58Chips(x,td){
+ var key=pkEnc(planKey(x)),wo=(view.q58wk||{})[key]||0,start=zAddDays(td,7*wo),pd=planDay(x.t),days=[];
+ for(var i=0;i<7;i++)days.push(zAddDays(start,i));
+ var lab=wo===0?'Next 7 days':wo===1?'The 7 days after':q58Fd(days[0],{month:'short',day:'numeric'})+' – '+q58Fd(days[6],{month:'short',day:'numeric'});
+ return '<div class="q58pick"><div class="q58pkh"><button class="q58ar" data-zact="q58wk:'+key+':-1"'+(wo<=0?' disabled':'')+' aria-label="A week earlier">'+Q58CHL+'</button><span>'+esc(lab)+'</span><button class="q58ar" data-zact="q58wk:'+key+':1" aria-label="A week later">'+Q58CHR+'</button></div>'
+  +'<div class="zpchips q58chips">'+days.map(function(k){var d=parseISO(k),on=pd===k,due=x.t.due===k;
+   return '<button class="zpc'+(on?' on':'')+(due?' isdue':'')+(k===td?' t':'')+'" data-zact="q58set:'+key+':'+k+'" aria-label="'+esc(q58Fd(k,{weekday:'long',month:'long',day:'numeric'}))+(due?', the day it’s due':'')+'"><span>'+esc(q58Fd(k,{weekday:'short'}))+'</span><b>'+d.getDate()+'</b></button>'}).join('')+'</div>'
+  +(pd?'<button class="zlink q58unp" data-zact="poff:'+key+'">Take it off '+esc(pd===td?'today':q58Fd(pd,{weekday:'long'}))+'</button>':'')+'</div>';
+}
+ZACT.q58wk=function(k,d){view.q58wk=view.q58wk||{};var v=(view.q58wk[k]||0)+(+d);view.q58wk[k]=Math.max(0,v);render()};
+ZACT.q58set=function(k,day){view.q58pick=null;ZACT.pset(k,day)};
+ZACT.q58pick=function(k){view.q58pick=view.q58pick===k?null:k;render()};
+ZACT.q58pm=function(v){q58Set('hub:planmode',v);view.r6enter=1;render()};
+ZACT.q58nav=function(d){d=+d;if(q58PMode()==='week'){view.planWeek=d===0?0:(view.planWeek||0)+d}else{view.q58mo=d===0?0:(view.q58mo||0)+d}view.planSel=null;render()};
+ZACT.q58day=function(k){
+ var td=iso(today());
+ if(view.q58pick){if(k<td){zToast('Pick today or a day after it.');return}var p=view.q58pick;view.q58pick=null;ZACT.pset(p,k);view.planSel=k;return}
+ view.planSel=k;render();
+};
+function q58Pill(x,day){var key=planKey(x),p=pal(x.c.color);
+ return '<span class="q58pill'+(x.t.done?' d':'')+'" draggable="true" data-plandrag="'+key+'" data-planfrom="'+day+'" style="background:'+p.bg+';color:'+p.ink+'" title="'+esc(x.t.title)+'"><i style="background:'+p.bar+'"></i><span class="q20fade">'+esc(x.t.title)+'</span></span>'}
+function q58Row(x,day,td){
+ var key=planKey(x),open=view.planOpen===key,p=pal(x.c.color);
+ return '<div class="zpl q58row'+(x.t.done?' done':'')+(open?' open':'')+'" draggable="true" data-plandrag="'+key+'" data-planfrom="'+day+'" style="--pc:'+p.bar+'">'
+  +'<div class="zplrow"><button class="zptick" data-'+zpTickAttr(x)+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="'+(x.t.done?'Mark not done':'Mark done')+'"></button>'
+  +'<div class="zplb"><button class="zplt" data-zact="pmove:'+pkEnc(key)+'">'+esc(x.t.title)+'</button><div class="zplm">'+zpPill(x)+zpDue(x,day)+stepChip(x.t)+'</div></div>'
+  +'<button class="zplmv" data-zact="pmove:'+pkEnc(key)+'" aria-label="Move to another day" aria-expanded="'+open+'">'+zI(ZIC.cal,16)+'</button></div>'
+  +(open?q58Chips(x,td):'')+'</div>';
+}
+function q58Month(P,sel){
+ var t=today(),base=new Date(t.getFullYear(),t.getMonth()+(view.q58mo||0),1),m=base.getMonth(),td=P.td;
+ var start=new Date(base);start.setDate(1-((base.getDay()+6)%7));
+ var picking=!!view.q58pick,h='<div class="q58dnames">'+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(d){return '<span>'+d+'</span>'}).join('')+'</div><div class="q58grid'+(picking?' picking':'')+'">';
+ var cur=new Date(start);
+ for(var w=0;w<6;w++){
+  for(var d=0;d<7;d++){var k=iso(cur),off=cur.getMonth()!==m,L=(P.byDay[k]||[]).slice().sort(function(a,b){return (a.t.done?1:0)-(b.t.done?1:0)}),D=P.dueDay[k]||[],E=P.evDay[k]||[];
+   h+='<div class="q58cell'+(off?' off':'')+(k===td?' t':'')+(k<td?' past':'')+(k===sel?' sel':'')+'" data-planday="'+k+'" data-zact="q58day:'+k+'" role="button" tabindex="0" aria-label="'+esc(q58Fd(k,{weekday:'long',month:'long',day:'numeric'}))+', '+L.length+' planned">'
+    +'<span class="q58dn">'+cur.getDate()+'</span><div class="q58pills">'+L.slice(0,3).map(function(x){return q58Pill(x,k)}).join('')+(L.length>3?'<small>+'+(L.length-3)+' more</small>':'')+'</div>'
+    +(D.length||E.length?'<span class="q58marks">'+E.slice(0,3).map(function(x){return '<i class="ev" style="background:'+palHex(x.c.color)+'" title="'+esc(x.t.title)+'"></i>'}).join('')+D.slice(0,3).map(function(x){return '<i class="du" style="border-color:'+palHex(x.c.color)+'" title="Due: '+esc(x.t.title)+'"></i>'}).join('')+'</span>':'')
+    +'</div>';
+   cur.setDate(cur.getDate()+1)}
+  if(cur.getMonth()!==m&&w>=4)break;
+ }
+ return {html:h+'</div>',label:base.toLocaleDateString('en-CA',{month:'short',year:'numeric'}).replace('.','')};
+}
+function q58Week(P,sel){
+ var off=view.planWeek||0,ws=iso(weekStart(off)),td=P.td,h='<div class="q58wk'+(view.q58pick?' picking':'')+'">',days=[];
+ for(var i=0;i<7;i++)days.push(zAddDays(ws,i));
+ days.forEach(function(k){var L=(P.byDay[k]||[]).slice().sort(function(a,b){return (a.t.done?1:0)-(b.t.done?1:0)}),E=(P.evDay[k]||[]).slice().sort(function(a,b){return (a.t.time||'')<(b.t.time||'')?-1:1}),D=P.dueDay[k]||[];
+  h+='<div class="q58wd'+(k===td?' t':'')+(k<td?' past':'')+(k===sel?' sel':'')+'" data-planday="'+k+'" data-zact="q58day:'+k+'" role="button" tabindex="0">'
+   +'<div class="q58wdh"><span>'+esc(q58Fd(k,{weekday:'short'}))+'</span><b>'+parseISO(k).getDate()+'</b></div>'
+   +'<div class="q58wdl">'+L.map(function(x){return q58Pill(x,k)}).join('')
+   +E.map(function(x){return '<span class="q58ev"><i style="background:'+palHex(x.c.color)+'"></i>'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em>':'')+'<span>'+esc(x.t.title)+'</span></span>'}).join('')
+   +D.map(function(x){return '<span class="q58ev du"><i style="border-color:'+palHex(x.c.color)+'"></i><em>Due</em><span>'+esc(x.t.title)+'</span></span>'}).join('')
+   +(!L.length&&!E.length&&!D.length?'<small class="q58free">Free</small>':'')+'</div></div>'});
+ var sameMo=parseISO(days[0]).getMonth()===parseISO(days[6]).getMonth();
+ return {html:h+'</div>',label:q58Fd(days[0],{month:'short',day:'numeric'})+' – '+q58Fd(days[6],sameMo?{day:'numeric'}:{month:'short',day:'numeric'})};
+}
+function q58SideItem(x,td,planned){
+ var key=pkEnc(planKey(x)),on=view.q58pick===key,pd=planDay(x.t),late=x.t.due&&x.t.due<td&&!x.t.done;
+ var sub=planned?esc(q58Fd(pd,{weekday:'short',month:'short',day:'numeric'}))+(x.t.due?' · Due '+esc(q58Fd(x.t.due,{month:'short',day:'numeric'})):''):q58DueTxt(x);
+ if(!planned&&pd&&pd<td)sub+='<span class="q58was">Was planned '+esc(q58Fd(pd,{month:'short',day:'numeric'}))+'</span>';
+ return '<div class="q58it'+(on?' on':'')+(planned?' pl':'')+(late?' late':'')+'" draggable="true" data-plandrag="'+planKey(x)+'"'+(planned?' data-planfrom="'+pd+'"':'')+'>'
+  +'<div class="q58itr"><button class="q58ib" data-zact="q58pick:'+key+'" aria-expanded="'+on+'">'+q58Dot(x)+'<span class="q58itt"><b>'+esc(x.t.title)+'</b><small>'+sub+'</small></span></button>'
+  +(planned?'<button class="zlink q58unl" data-zact="poff:'+key+'">Unplan</button>':'')+'</div>'
+  +(on?q58Chips(x,td):'')+'</div>';
+}
+viewPlan=function(){
+ var P=q58PData(),td=P.td,mode=q58PMode(),real=cpSiteColors('plan'),narrow=window.innerWidth<1100;
+ var sel=view.planSel||td;view.planSel=sel;
+ var G=mode==='week'?q58Week(P,sel):q58Month(P,sel);
+ var pickX=null;if(view.q58pick){var pk=pkDec(view.q58pick).split(':');pickX=planItem(pk[0],pk[1],pk.slice(2).join(':'));if(!pickX)view.q58pick=null}
+ var atNow=mode==='week'?!(view.planWeek||0):!(view.q58mo||0);
+ var cal='<section class="q58cal">'
+  +'<div class="q58ch"><div class="q58nav"><button class="q58ar big" data-zact="q58nav:-1" aria-label="'+(mode==='week'?'Previous week':'Previous month')+'">'+Q58CHL+'</button><button class="q58ar big" data-zact="q58nav:1" aria-label="'+(mode==='week'?'Next week':'Next month')+'">'+Q58CHR+'</button>'
+  +'<h2>'+esc(G.label)+'</h2>'+(atNow?'':'<button class="q58today" data-zact="q58nav:0">Today</button>')+'</div>'
+  +'<span class="q58seg" role="group" aria-label="Show"><button class="'+(mode==='month'?'on':'')+'" data-zact="q58pm:month" aria-pressed="'+(mode==='month')+'">Month</button><button class="'+(mode==='week'?'on':'')+'" data-zact="q58pm:week" aria-pressed="'+(mode==='week')+'">Week</button></span></div>'
+  +(pickX?'<div class="q58banner">'+q58Dot(pickX)+'<span>Tap a day for <b>'+esc(pickX.t.title)+'</b></span><button class="zlink" data-zact="q58pick:'+view.q58pick+'">Cancel</button></div>':'')
+  +G.html+'</section>';
+ // the chosen day
+ var L=(P.byDay[sel]||[]).slice().sort(function(a,b){return (a.t.done?1:0)-(b.t.done?1:0)}),isT=sel===td,tom=sel===zAddDays(td,1);
+ var name=isT?'Today':tom?'Tomorrow':q58Fd(sel,{weekday:'long'}),sub=q58Fd(sel,{weekday:'short',month:'short',day:'numeric'});
+ var dueHere=P.all.filter(function(x){return x.t.due===sel&&!x.t.done&&planDay(x.t)!==sel});
+ var evHere=(P.evDay[sel]||[]).slice().sort(function(a,b){return (a.t.time||'')<(b.t.time||'')?-1:1});
+ var also='';
+ if(evHere.length||dueHere.length)also='<div class="zpalso"><p>Also on this day</p>'
+  +evHere.map(function(x){return '<button class="zpinfo2" data-zact="taskedit:'+x.c.id+':'+x.t.id+'"><i style="background:'+palHex(x.c.color)+'"></i>'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em>':'')+'<span>'+esc(x.t.title)+'</span></button>'}).join('')
+  +dueHere.map(function(x){var pd=planDay(x.t);return '<button class="zpinfo2" data-zact="q58pick:'+pkEnc(planKey(x))+'"><i style="background:'+palHex(x.c.color)+'"></i><em>Due</em><span>'+esc(x.t.title)+'</span><b class="zpplanit">'+(pd?'On '+esc(q58Fd(pd,{weekday:'short'})):'Plan it')+'</b></button>'}).join('')+'</div>';
+ var dayC='<section class="zpday q58dayc" data-planday="'+sel+'"><div class="zpdh"><div><h3>'+esc(name)+' <span class="q58dsub">· '+esc(sub)+'</span></h3></div>'+(L.length?'<span class="zpcount">'+L.filter(function(x){return x.t.done}).length+' of '+L.length+' done</span>':'')+'</div>'
+  +(L.length?L.map(function(x){return q58Row(x,sel,td)}).join(''):'<p class="q58empty">Nothing planned'+(isT?' for today':' this day')+'. '+(P.tray.length?'Tap a task in the list, then tap a day, to plan it.':'A free day.')+'</p>')
+  +also+'</section>';
+ // the list on the side
+ var lim=zAddDays(td,10),canAuto=P.tray.some(function(x){return x.t.due&&x.t.due<=lim});
+ var n=P.tray.length+P.planned.length;
+ var side='<section class="zptray q58side"><div class="q58sh"><h3>Due and to plan</h3><span>'+n+' task'+(n===1?'':'s')+'</span></div>'
+  +'<p class="q58hint">'+(narrow?'Tap a task, then tap a day. ‹ › change the week.':'Drag a task onto a day, or tap it and then tap a day.')+'</p>'
+  +(canAuto?'<button class="zpauto q58auto" data-zact="pauto">'+zI(ZIC.sparkle,15)+'<span>Plan it for me</span></button>':'')
+  +'<div class="q58scroll">'
+  +'<h4>Needs a day <em>'+P.tray.length+'</em></h4>'+(P.tray.length?P.tray.map(function(x){return q58SideItem(x,td,false)}).join(''):'<p class="q58empty">Everything has a day.</p>')
+  +(P.planned.length?'<h4>Planned <em>'+P.planned.length+'</em></h4>'+P.planned.map(function(x){return q58SideItem(x,td,true)}).join(''):'')
+  +'</div></section>';
+ var set=cpSetHead('Planner settings','plan')+'<button data-zact="autoplan">Plan new to-dos on their due date: '+(S.autoPlan?'On':'Off')+'</button><button data-secopen="1">Colours</button></div>';
+ return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain"><div class="q58plan"><div class="q58left">'+cal+dayC+'</div>'+side+'</div>'+set+'</div></div>';
+};
+// "Plan it for me" looks 10 days ahead from today (the old one followed the week on screen)
+var _q58Auto=ZACT.pauto;
+ZACT.pauto=function(){
+ var P=q58PData(),td=P.td,avail=[];for(var i=0;i<10;i++)avail.push(zAddDays(td,i));
+ var load={};avail.forEach(function(k){load[k]=(P.byDay[k]||[]).filter(function(x){return !x.t.done}).length+((P.dueDay[k]||[]).length*(1))+((P.evDay[k]||[]).length)});
+ var U=[],n=0,exam=typeof q21Exam==='function'?q21Exam:function(){return false};
+ P.tray.filter(function(x){return x.t.due&&x.t.due<=avail[avail.length-1]}).sort(function(a,b){return (exam(b)?1:0)-(exam(a)?1:0)}).forEach(function(x){
+  var cand=avail.filter(function(k){return k<x.t.due});if(exam(x))cand=cand.filter(function(k){return daysBetween(parseISO(k),parseISO(x.t.due))<=4});if(!cand.length)cand=[avail[0]];
+  var best=cand[0];cand.forEach(function(k){if(load[k]<load[best]||(load[k]===load[best]&&k>best))best=k});
+  U.push({k:planKey(x),prev:planDay(x.t)||''});planToggle(x,best,true);load[best]++;n++;
+ });
+ if(!n){zToast('Nothing due in the next 10 days needs a day.');return}
+ view.planUndo=U;save();render();
+ zToast('Planned '+n+' thing'+(n===1?'':'s')+' over the next 10 days','<button data-zact="pundo">Undo</button>');
+};
+Q49MAP.plan=[['.q58cal','kplan'],['.q58dayc','kplan'],['.q58side','ktray']];
+CP_SITE_ROWS.plan=[['kplan','Calendar and day'],['ktray','Due and to plan']];
+// keyboard: Enter on a day cell
+document.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var t=e.target;if(!t||!t.classList||!(t.classList.contains('q58cell')||t.classList.contains('q58wd')))return;e.preventDefault();t.click()});
+
+/* ---------- CALENDAR: Day / Week / Month ---------- */
+function q58CMode(){var v=q58Get('hub:calmode','month');return v==='week'||v==='day'?v:'month'}
+function q58CAnchor(){return view.q58cday||iso(today())}
+ZACT.q58cm=function(v){q58Set('hub:calmode',v);if(v==='month'){var a=q58CAnchor();view.calMonth=a.slice(0,7)===iso(today()).slice(0,7)?null:a.slice(0,7)}else if(view.calMonth&&!view.q58cday){view.q58cday=view.calMonth+'-01'}render()};
+ZACT.q58cn=function(d){d=+d;var m=q58CMode();if(d===0){view.q58cday=null;view.calMonth=null}else view.q58cday=zAddDays(q58CAnchor(),m==='week'?7*d:d);render()};
+ZACT.q58cd=function(k){view.q58cday=k;q58Set('hub:calmode','day');render()};
+function q58CalItems(from,to){
+ var by={};allTasks().forEach(function(x){var k=x.t.due;if(!k||isRefClass(x.c)||k<from||k>to)return;(by[k]=by[k]||[]).push(x)});
+ Object.keys(by).forEach(function(k){by[k].sort(function(a,b){var p=a.t.time||'',q=b.t.time||'';if(!p!==!q)return p?1:-1;return p<q?-1:p>q?1:0})});
+ return by;
+}
+function q58CalAct(x){return x.ev?'data-zact="taskedit:'+x.c.id+':'+x.t.id+'"':'data-open="'+x.c.id+'"'}
+function q58CalWeek(){
+ var a=q58CAnchor(),ws=a;var d0=parseISO(a);ws=zAddDays(a,-((d0.getDay()+6)%7));
+ var days=[];for(var i=0;i<7;i++)days.push(zAddDays(ws,i));
+ var by=q58CalItems(days[0],days[6]),td=iso(today());
+ return '<div class="q58cw">'+days.map(function(k){var L=by[k]||[];
+  return '<div class="q58cwd'+(k===td?' t':'')+'"><button class="q58cwh" data-zact="q58cd:'+k+'" aria-label="Open '+esc(q58Fd(k,{weekday:'long',month:'long',day:'numeric'}))+'"><span>'+esc(q58Fd(k,{weekday:'short'}))+'</span><b>'+parseISO(k).getDate()+'</b></button>'
+   +'<div class="q58cwl">'+L.map(function(x){var p=pal(x.c.color);return '<div class="chip q58chip" style="background:'+p.bg+';color:'+p.ink+';border-left:3px solid '+p.bar+(x.t.done?';opacity:.55;text-decoration:line-through':'')+'" '+q58CalAct(x)+' title="'+esc(x.t.title+' · '+(x.c.name||''))+'">'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em>':'')+'<span>'+esc(x.t.title)+'</span></div>'}).join('')
+   +(L.length?'':'<small class="q58free">Nothing</small>')+'</div></div>'}).join('')+'</div>';
+}
+function q58CalDay(){
+ var k=q58CAnchor(),by=q58CalItems(k,k),L=by[k]||[],allDay=L.filter(function(x){return !x.t.time}),timed=L.filter(function(x){return x.t.time});
+ var row=function(x){var p=pal(x.c.color),tick=!x.ev||x.t.bill;
+  return '<div class="q58cdr'+(x.t.done?' d':'')+'" '+q58CalAct(x)+' role="button" tabindex="0" style="--pc:'+p.bar+'">'
+   +(tick?'<button class="tick'+(x.t.done?' on':'')+'" data-'+(x.kind==='assign'?(x.t.done?'undo':'tickasg'):'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="'+(x.t.done?'Mark not done':'Mark done')+'"'+(x.t.done?' style="background:'+p.bar+'"':'')+'></button>':'<i class="q58cdb"></i>')
+   +'<span class="q58cdt">'+esc(x.t.time?fmtTime(x.t.time):(x.ev?'All day':'Due'))+'</span><span class="q58cdn"><b>'+esc(x.t.title)+'</b><small>'+esc(x.c.name||'')+'</small></span></div>'};
+ return '<div class="q58cday">'
+  +(L.length?(allDay.length?'<h4>All day and due</h4>'+allDay.map(row).join(''):'')+(timed.length?'<h4>By time</h4>'+timed.map(row).join(''):'')
+   :'<p class="q58empty">Nothing on this day.</p>')+'</div>';
+}
+var _q58CT=calendarTable;
+calendarTable=function(){var m=q58CMode();if(m==='week')return q58CalWeek();if(m==='day')return q58CalDay();return _q58CT.apply(this,arguments)};
+var _q58Cal=viewCalendar;
+viewCalendar=function(){
+ var m=q58CMode(),keep=view.calMonth;
+ if(m!=='month')view.calMonth=q58CAnchor().slice(0,7);
+ var h;try{h=_q58Cal.apply(this,arguments)}finally{if(m!=='month')view.calMonth=keep}
+ var seg='<span class="cpseg q58cseg" role="group" aria-label="Show">'+[['day','Day'],['week','Week'],['month','Month']].map(function(x){return '<button class="'+(m===x[0]?'on':'')+'" data-zact="q58cm:'+x[0]+'" aria-pressed="'+(m===x[0])+'">'+x[1]+'</button>'}).join('')+'</span>';
+ var i=h.indexOf('<section class="cpsec" id="k-cal">');if(i<0)return h;
+ var j=h.indexOf('<div class="cpseg"><button data-mon="-1"',i);if(j<0)return h;
+ var e=h.indexOf('</div>',j)+6;
+ var nav=m==='month'?h.slice(j,e):'<div class="cpseg"><button data-zact="q58cn:-1" aria-label="'+(m==='week'?'Previous week':'Previous day')+'">‹</button><button data-zact="q58cn:0">Today</button><button data-zact="q58cn:1" aria-label="'+(m==='week'?'Next week':'Next day')+'">›</button></div>';
+ h=h.slice(0,j)+'<div class="q58cnav">'+seg+nav+'</div>'+h.slice(e);
+ if(m!=='month'){
+  var a=q58CAnchor(),lab,from,to;
+  if(m==='week'){var d0=parseISO(a);from=zAddDays(a,-((d0.getDay()+6)%7));to=zAddDays(from,6);var same=parseISO(from).getMonth()===parseISO(to).getMonth();lab=q58Fd(from,{month:'short',day:'numeric'})+' – '+q58Fd(to,same?{day:'numeric'}:{month:'short',day:'numeric'})}
+  else{from=to=a;lab=a===iso(today())?'Today, '+q58Fd(a,{month:'long',day:'numeric'}):q58Fd(a,{weekday:'long',month:'long',day:'numeric'})}
+  var by=q58CalItems(from,to),L=[];Object.keys(by).forEach(function(k){L=L.concat(by[k])});
+  var due=L.filter(function(x){return !x.ev}).length,open=L.filter(function(x){return !x.ev&&!x.t.done}).length,ev=L.filter(function(x){return x.ev}).length;
+  h=h.replace(/(<section class="cpsec" id="k-cal">[\s\S]*?<h2 class="cptitle"[^>]*>)[^<]*(<\/h2>)(<span class="cppill"[^>]*>[^<]*<\/span>)?/,function(all,a1,a2,a3){return a1+esc(lab)+a2+(due||ev?'<span class="cppill" style="color:var(--cp-kcal-c)">'+(due?due+' due':ev+' event'+(ev===1?'':'s'))+'</span>':'')});
+  h=h.replace(/(<section class="cpsec" id="k-cal">[\s\S]*?<div class="cphint">)[^<]*(<\/div>)/,'$1'+esc(due?(open?open+' still to do':'All done'):(ev?ev+' event'+(ev===1?'':'s'):(m==='week'?'Nothing this week':'Nothing this day')))+'$2');
+ }
+ return h;
+};
+
+/* ---------- SHOPPING LIST: store cards like Jae's mockup ---------- */
+SETTINGS_KEYS.push('shopStores');
+function q58StoreNames(){
+ var seen={},out=[];var add=function(n){n=String(n||'').trim();if(!n)return;var k=n.toLowerCase();if(seen[k])return;seen[k]=1;out.push(n)};
+ (S.shopStores||[]).forEach(add);(S.classes||[]).forEach(function(c){if(c.kind==='groceries')(c.sections||[]).forEach(function(s){add(s.name)})});
+ return out;
+}
+function q58Remember(n){n=String(n||'').trim();if(!n)return;var L=(S.shopStores||[]).filter(function(x){return String(x).toLowerCase()!==n.toLowerCase()});L.unshift(n);S.shopStores=L.slice(0,80)}
+ZACT.q58add=function(cid){
+ var c=classById(cid);if(!c)return;var inp=document.getElementById('z5top-'+cid),st=document.getElementById('q58st-'+cid),t=inp&&inp.value.trim();
+ if(!t){if(inp)inp.focus();return}
+ var store=st?st.value.trim():'',tab=z5Tab(c),x=touch({id:uid(),title:t,done:false});if(tab==='shop')x.list='shop';
+ if(store&&!/^any( store)?$/i.test(store)){
+  c.sections=c.sections||[];var s=c.sections.filter(function(z){return String(z.name).trim().toLowerCase()===store.toLowerCase()})[0];
+  if(!s){if(store===store.toLowerCase())store=store.replace(/(^|\s)\S/g,function(a){return a.toUpperCase()});var mx=c.sections.reduce(function(a,z){return Math.max(a,z.ord||0)},0);s=touch({id:uid(),name:store,ord:mx+1});c.sections.push(s)}
+  else if(s.list&&s.list!==tab){delete s.list;touch(s)}
+  x.sec=s.id;q58Remember(s.name);store=s.name;
+ }else store='';
+ q58Set('hub:q58st:'+cid,store);
+ c.tasks.push(x);save();render();
+ setTimeout(function(){var i=document.getElementById('z5top-'+cid);if(i){i.value='';i.focus()}},30);
+};
+function q58ShopCard(c,key,name,logo,L,menu,pair){
+ var adding=view.z5add===key;
+ return '<section class="q58sc" style="--gt:'+pair[0]+';--gc:'+pair[1]+'"><div class="q58sch">'+logo+'<b>'+esc(name)+'</b><em>'+L.length+'</em>'+(menu||'')+'</div>'
+  +'<div class="q58scb">'+L.map(function(t){return zTaskRow(c,t)}).join('')+'</div>'
+  +(adding?'<div class="z5addin"><input id="z5in" data-zenter="z5add:'+c.id+':'+key+'" placeholder="Add to '+esc(name)+'" autocomplete="off"><button class="zbtn" data-zact="z5add:'+c.id+':'+key+'">Add</button><button class="zmini" data-zact="z5open:'+key+'" aria-label="Close">×</button></div>'
+   :'<button class="z5plus" data-zact="z5open:'+key+'">'+zI(ZIC.plus,14)+'<span>Add item</span></button>')+'</section>';
+}
+var _q58Shop=z5Shop;
+z5Shop=function(c){
+ var tab=z5Tab(c);if(tab==='wish')return _q58Shop(c);
+ var T=c.tasks||[],gro=T.filter(function(t){return z5In(t,'gro')}),shp=T.filter(function(t){return z5In(t,'shop')}),W=(c.items||[]).filter(function(x){return x.t==='wish'&&!x.got});
+ var cnt=function(L){return L.filter(function(t){return !t.done}).length};
+ var L=tab==='gro'?gro:shp,open=L.filter(function(t){return !t.done}),done=L.filter(function(t){return t.done});
+ var secs=zSecs(c),byId={};secs.forEach(function(s){byId[s.id]=s});
+ var sort=z5Sort(c,tab),dn=done.length,tot=L.length;
+ var tabs='<div class="q58shtop"><div class="zshoptabs z5tabs q58tabs" role="tablist">'
+  +[['gro','Groceries','leaf',cnt(gro)],['shop','Shopping','cart',cnt(shp)],['wish','Wishlist','heart',W.length]].map(function(x){return '<button role="tab" aria-selected="'+(tab===x[0])+'" class="'+(tab===x[0]?'on':'')+'" data-zact="shoptab:'+c.id+':'+x[0]+'">'+zI(ZIC[x[2]],16)+'<span>'+x[1]+'</span><em>'+x[3]+'</em></button>'}).join('')+'</div>'
+  +(tot?'<div class="q58cartp"><span>'+(dn===tot?'Everything’s in the cart':dn+' of '+tot+' in the cart')+'</span><i><b style="width:'+Math.round(dn/tot*100)+'%"></b></i></div>':'')+'</div>';
+ var last=q58Get('hub:q58st:'+c.id,''),names=q58StoreNames();
+ var add='<section class="q58add"><span class="zfw q58ai"><input id="z5top-'+c.id+'" data-zenter="q58add:'+c.id+'" placeholder="'+(tab==='gro'?'Add a grocery item, like oat milk':'Add something to buy, like printer ink')+'" autocomplete="off"></span>'
+  +'<label class="q58store" title="Which store (optional)">'+zI(ZIC.store||ZIC.cart,15)+'<input id="q58st-'+c.id+'" list="q58stl-'+c.id+'" data-zenter="q58add:'+c.id+'" value="'+esc(last)+'" placeholder="Any store" autocomplete="off" aria-label="Store"><datalist id="q58stl-'+c.id+'">'+names.map(function(n){return '<option value="'+esc(n)+'"></option>'}).join('')+'</datalist></label>'
+  +'<button class="zbtn q58addb" data-zact="q58add:'+c.id+'">Add</button></section>';
+ var sorts=[['store','By store'],tab==='gro'?['aisle','By aisle']:null,['az','A to Z']].filter(Boolean);
+ var bar='<div class="q58sbar"><span class="z4seg">'+sorts.map(function(s){return '<button class="'+(sort===s[0]?'on':'')+'" data-zact="z5sort:'+c.id+':'+s[0]+'">'+s[1]+'</button>'}).join('')+'</span><span class="zsoft">'+open.length+' to buy</span></div>';
+ var cards='';
+ if(sort==='store'){
+  var any=open.filter(function(t){return !(t.sec&&byId[t.sec])});
+  if(any.length)cards+=q58ShopCard(c,'any','Any store','<span class="zlogo" style="width:28px;height:28px;background:#E6EDE6;color:#708F77">'+zI(ZIC.cart,14)+'</span>',any,'',['#EEF1EC','#708F77']);
+  secs.forEach(function(s){var S2=open.filter(function(t){return t.sec===s.id});if(!S2.length)return; // only stores you need something from
+   cards+=q58ShopCard(c,'s~'+s.id,s.name,zLogo(s.name,28,'store',s.site),S2,'<button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename, colour or remove '+esc(s.name)+'">'+zI(ZIC.dots,14)+'</button>',ZC[zHueOf(s.name)]||ZC.grey)});
+ }else if(sort==='aisle'){
+  ['produce','bakery','meat','dairy','pantry','snack','frozen','home','care','other'].map(function(k){return Z5AISLES.filter(function(a){return a[0]===k})[0]}).forEach(function(a){var A=open.filter(function(t){return z5Aisle(t)===a[0]}).sort(function(x,y){return String(x.title).localeCompare(String(y.title))});if(!A.length)return;var k=ZC[a[3]]||ZC.grey;
+   cards+=q58ShopCard(c,'a~'+a[0],a[1],'<span class="zlogo" style="width:28px;height:28px;background:'+k[0]+';color:'+k[1]+'">'+zI(ZIC[a[2]]||ZIC.cart,14)+'</span>',A,'',k)});
+ }else if(open.length){
+  cards+=q58ShopCard(c,'az','Everything, A to Z','<span class="zlogo" style="width:28px;height:28px;background:#ECEBE9;color:#7A756E">'+zI(ZIC.list,14)+'</span>',open.slice().sort(function(x,y){return String(x.title).localeCompare(String(y.title))}),'',['#F1F0EE','#7A756E']);
+ }
+ if(!open.length)cards='<div class="q58none">'+zI(ZIC.check,20)+'<b>'+(tot?'All done. Everything’s in the cart.':'Your list is empty')+'</b><span>'+(tot?'Clear the ticked items when you’re home.':'Add something above. Pick a store if you like, and Doable remembers it for next time.')+'</span></div>';
+ var cart='<section class="zcard q58cart"><div class="zch"><span class="zct">In the cart</span><span class="zcm">'+dn+' of '+tot+'</span></div><div class="q58cbar"><b style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></b></div>'
+  +(done.length?done.map(function(t){var s=t.sec&&byId[t.sec];return zTaskRow(c,t).replace(/<\/div>$/,'<span class="q58cst">'+esc(s?s.name:'')+'</span></div>')}).join('')+'<button class="q58clear" data-zact="z5clear:'+c.id+'">Clear ticked items</button>'
+   :'<p class="q58empty">Tick things off as they go in your cart.</p>')+'</section>';
+ return tabs+add+bar+'<div class="q58shop"><div class="q58stores">'+cards+'</div>'+cart+'</div>';
+};
+
+/* ---------- HABIT TRACKER (Jae's mockup) ---------- */
+zHabitsPage=function(c){
+ var H=zHabits(c),td=iso(today()),days=[];for(var i=6;i>=0;i--)days.push(zAddDays(td,-i));
+ var pc=palHex(c.color);
+ var todayH=H.filter(function(h){return zHabitOn(h,td)}),doneT=todayH.filter(function(h){return zHabitDone(c,h,td)}).length;
+ var ws=iso(weekStart(0)),sch=0,got=0,schAll=0;for(var k=ws,j=0;j<7;j++,k=zAddDays(k,1)){H.forEach(function(h){if(zHabitOn(h,k)){schAll++;if(k<=td){sch++;if(zHabitDone(c,h,k))got++}}})}
+ var best=0;H.forEach(function(h){var b=zBest(c,h);if(b>best)best=b});
+ var pct=todayH.length?Math.round(doneT/todayH.length*100):0,wk=schAll?Math.round(got/schAll*100):0;
+ var sum='<section class="zcard q58hsum" style="--q58pc:'+pc+'"><div class="q58hsl"><div class="zch"><span class="zct">Today</span></div>'
+  +'<div class="q58hbig">'+(H.length?(todayH.length?doneT+' of '+todayH.length+' done today':'Nothing scheduled today'):'Start a habit')+'</div>'
+  +'<div class="q58hbar"><b style="width:'+pct+'%"></b></div></div>'
+  +'<span class="q58hdate">'+esc(q58Fd(td,{weekday:'short',month:'short',day:'numeric'}))+'</span>'
+  +'<div class="q58htile s"><b>'+best+' day'+(best===1?'':'s')+'</b><small>best streak</small></div>'
+  +'<div class="q58htile w"><b>'+wk+'%</b><small>this week</small></div></section>';
+ var N=days.map(function(k){return '<span'+(k===td?' class="t"':'')+'>'+esc(parseISO(k).toLocaleDateString('en-CA',{weekday:'narrow'}))+'</span>'}).join('');
+ var rows=H.map(function(h){var st=zStreak(c,h);
+  return '<div class="q58hr" style="'+zcv(h.color||'sage')+'"><button class="q58hn" data-zact="habitedit:'+c.id+':'+h.id+'" title="Edit, change colour or icon"><span class="q58hic">'+zI(ZIC[h.ico]||ZIC.check,18)+'</span><span class="q58hnt"><b class="q20fade">'+esc(h.title)+'</b><small>'+(st?st+' day'+(st===1?'':'s'):'Start today')+'</small></span></button>'
+   +'<div class="q58hx">'+days.map(function(k){var on=zHabitOn(h,k),y=zHabitDone(c,h,k);
+    return '<button class="q58hb'+(y?' y':'')+(on?'':' off')+(k===td?' t':'')+'" data-zact="htick:'+c.id+':'+h.id+':'+k+'" aria-label="'+esc(h.title)+', '+esc(q58Fd(k,{weekday:'long'}))+(y?', done':'')+'">'+(y?zI(ZIC.check,13):'')+'</button>'}).join('')+'</div></div>'}).join('');
+ var list='<section class="zcard q58hab"><div class="zch"><span class="zct">Habits</span><span class="zcm">· '+H.length+'</span><span class="q58hdn">'+N+'</span></div>'
+  +(H.length?rows:'<p class="q58empty" style="padding:18px">No habits yet. Add one, like drinking water or reading 20 pages.</p>')
+  +'<button class="q58hadd" data-zact="habitnew:'+c.id+'">+ Add a habit</button></section>';
+ // last 12 weeks, a square per day, darker = more done
+ var start=iso(weekStart(-11)),cells='';
+ for(var d=0;d<7;d++)for(var w=0;w<12;w++){var kk=zAddDays(start,w*7+d),s=0,g=0;H.forEach(function(h){if(zHabitOn(h,kk)){s++;if(zHabitDone(c,h,kk))g++}});
+  var lv=kk>td?'f':!s||!g?0:Math.ceil(g/s*4);cells+='<i class="l'+lv+(kk===td?' t':'')+'" title="'+esc(q58Fd(kk,{weekday:'short',month:'short',day:'numeric'}))+(kk<=td&&s?': '+g+' of '+s:'')+'"></i>'}
+ var heat='<section class="zcard q58heat" style="--q58pc:'+pc+'"><div class="zch"><span class="zct">Last 12 weeks</span></div><div class="q58hg">'+cells+'</div></section>';
+ var ci='<section class="zcard q58hci" style="--q58pc:'+pc+'"><div class="zch"><span class="zct">Check-ins this week</span></div><div class="q58cin"><b>'+got+'</b><span>of '+schAll+'</span></div></section>';
+ return sum+'<div class="q58hgrid">'+list+'<div class="q58hside">'+heat+ci+'</div></div>';
+};
+
+/* ---------- CLASS PAGE: Assignments and Files side by side; the right column = Next due, FanshaweOnline, Class info
+   (folds: when and where, grade, professor, reference files, Claude project), Title page ---------- */
+function q58Class(){
+ if(view.page!=='class'||window.innerWidth<1200)return;
+ var rail=document.querySelector('.cprail.cpclassrail');if(!rail||rail.querySelector('.q58info'))return;
+ var parts=[rail.querySelector('#cp-when'),rail.querySelector('#cp-grade'),rail.querySelector('#c-prof')].filter(Boolean);
+ var bot=document.querySelector('#c-info.cpfoldrow'),infoF=bot&&bot.querySelector('details[data-fold="info"]'),doneF=bot&&bot.querySelector('details[data-fold="done"]');
+ var open=q58Get('hub:fold:rinfo','0')==='1';
+ var d=document.createElement('details');d.className='cpcard cpfold q58info';d.setAttribute('data-fold','rinfo');if(open)d.open=true;
+ var dot=rail.querySelector('#c-title .cpdot');d.innerHTML='<summary class="cpcardhead">'+(dot?'<span class="cpdot" style="'+esc(dot.getAttribute('style')||'')+'"></span>':'')+'<h3 class="cpcardtitle">Class info</h3><span class="tpchev">'+CP_ICO.chev+'</span></summary><div class="q58ib2"></div>';
+ var body=d.querySelector('.q58ib2');parts.forEach(function(p){body.appendChild(p)});
+ if(infoF){var ib=infoF.querySelector('.cpcardbody');if(ib){var box=document.createElement('section');box.className='cpcard q58ref';box.appendChild(ib);body.appendChild(box)}infoF.remove()}
+ var after=rail.querySelector('.cpfolbtn')||rail.querySelector('.cpnextc');
+ if(after&&after.parentNode===rail)after.after(d);else rail.insertBefore(d,rail.firstChild);
+ var asg=document.getElementById('c-assign');
+ if(doneF&&asg){doneF.classList.add('q58done');asg.appendChild(doneF)}
+ if(bot&&!bot.querySelector('details,button')){bot.remove();d.id='c-info'}
+}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-cpjump="c-info"],[data-scroll="c-info"]');if(!b||window.innerWidth<1200)return;q58Set('hub:fold:rinfo','1');var d=document.querySelector('.q58info');if(d)d.open=true},true);
+var _q58RenderC=render;
+render=function(){var r=_q58RenderC.apply(this,arguments);try{q58Class()}catch(e){}return r};
 
 try{spBoot()}catch(e){}
 load();
