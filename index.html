@@ -5017,15 +5017,19 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .q58done{margin:0!important;border:none!important;border-top:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important;background:var(--paper)!important}
 .q58done>summary{padding:12px 18px!important}
 /* the small Habits widget fills its box: in a narrow widget the rings sit on top, big, and the ticks underneath */
-@container (max-width:260px){
- .q22hab .q22hb{flex-direction:column;justify-content:center;align-items:center;gap:10px}
- .q22hab .q22rings{width:min(120px,60cqw);height:min(120px,60cqw);align-self:center}
- .q22hab .q22hl{flex:none;flex-direction:row;justify-content:center;gap:8px;width:100%}
- .q22hab .q22hk span,.q22hab .q22more{display:none}
- .q22hab .q22hk{margin:0;padding:0}
+/* v205: narrow Habits widgets are a clear checklist: every habit's name beside its tick (Jae couldn't see which habit a
+   bare circle was); the rings shrink to a small badge beside the count */
+@container (max-width:280px){
+ .q22hab{position:relative}
+ .q22hab .q22hb{flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0}
+ .q22hab .q22rings{position:absolute;top:12px;right:52px;width:28px!important;height:28px!important}
+ .q22hab .q22hl{flex:1;flex-direction:column;justify-content:flex-start;gap:4px;width:100%}
+ .q22hab .q22hk{font-size:14px;gap:10px;padding:7px 6px!important;margin:0 -6px!important;border-radius:10px}
+ .q22hab .q22hk span{display:block!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
  .q22hab .q22hk i{width:22px;height:22px}
+ .q22hab .q22more{display:block!important;margin-top:4px}
 }
-.zw-sq .q22hab .q22rings{width:min(96px,52cqw)!important;height:min(96px,52cqw)!important}
+.zw-sq .q22hab .q22hk span{display:block!important}
 /* ===== v204: Assignments and Files & links like Jae's mockup: module bands, round + ===== */
 .q59plus{width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.24);color:inherit;display:grid;place-items:center;cursor:pointer;padding:0;flex:none;min-height:0!important;transition:background .15s}
 .q59plus:hover{background:rgba(255,255,255,.36)}
@@ -5076,6 +5080,180 @@ a.q59nm:hover{text-decoration:underline}
 #c-files.q59over{outline:2px dashed var(--cp-files-c,#8a8a8a);outline-offset:-4px}
 #c-assign .q58done{border-top:1px solid var(--line)!important;background:none!important}
 #c-assign .q58done>summary .cpdot{display:none}
+/* ===== v205: Budget page, design 10a ===== */
+.q60{container:q60/inline-size;color:var(--ink);--q60m:#7b8a7f;--q60f:#9aa69d;--q60d:#f0f1ea;--q60t:#eceee7}
+.q32editbtn{display:none!important}
+.q60top{display:flex;justify-content:space-between;align-items:center;gap:10px;white-space:nowrap}
+.q60mo{display:flex;align-items:center;gap:6px}
+.q60mo b{font-size:20px;font-weight:500;padding:0 6px}
+.q60r{width:32px;height:32px;border-radius:50%;border:none;background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0;min-height:0!important;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.q60r:disabled{background:#e8e9e2;color:var(--q60f);box-shadow:none;cursor:default}
+.q60seg{display:inline-flex;gap:3px;background:#e8e9e2;border-radius:14px;padding:3px}
+.q60seg button{border:none;background:none;border-radius:11px;padding:6px 12px;font:inherit;font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;white-space:nowrap;min-height:0!important;transition:background .15s}
+.q60seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.q60seg.sm{border-radius:12px}.q60seg.sm button{padding:4px 12px;font-size:12px;border-radius:9px}
+.q60adds{display:flex;gap:6px}
+.q60b{border:none;background:var(--card);color:var(--ink);border-radius:12px;padding:8px 11px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap;min-height:0!important;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.q60b.pri{background:var(--bp);color:#fff;font-weight:500}
+.q60b:hover{filter:brightness(.97)}
+.q60sum{background:var(--card);border-radius:24px;padding:22px 26px;box-shadow:0 4px 16px rgba(80,100,85,.07);margin-top:16px;display:flex;align-items:center;gap:28px}
+.q60sl{flex:1;min-width:0}
+.q60big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.q60big b{font-size:36px;font-weight:600;line-height:1.1;letter-spacing:-.01em}
+.q60big b.over{color:#b5503f}
+.q60big span{font-size:14px;color:var(--q60m);white-space:nowrap}
+.q60bar{height:8px;background:var(--q60t);border-radius:5px;overflow:hidden;margin-top:12px}
+.q60bar u,.q60tr u,.q60gb u,.q60ft u{display:block;height:100%;border-radius:5px;text-decoration:none;transition:width .15s ease}
+.q60bar u{background:var(--bpf)}
+.q60used{font-size:12px;color:var(--q60m);margin-top:8px}
+.q60stats{display:flex;flex:none;white-space:nowrap;align-items:center}
+.q60stats>div{padding:0 16px;border-left:1px solid var(--q60t)}
+.q60stats>div:last-child{padding-right:0}
+.q60stats small{display:block;font-size:12px;color:var(--q60m)}
+.q60stats b{font-size:20px;font-weight:600}
+.q60tabs{display:flex;gap:4px;margin-top:16px;border-bottom:1.5px solid #e1e4db;overflow-x:auto;scrollbar-width:none}
+.q60tabs::-webkit-scrollbar{display:none}
+.q60tabs button{border:none;background:none;padding:12px 16px;font:inherit;font-size:14px;font-weight:500;color:var(--q60m);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;cursor:pointer;white-space:nowrap;min-height:0!important;transition:color .15s,border-color .15s;flex:none}
+.q60tabs button.on{font-weight:600;color:var(--ink);border-bottom-color:var(--bp)}
+.q60tabs em{font-style:normal;font-weight:500;color:var(--q60m);font-size:12.5px;margin-left:2px}
+.q60body{margin-top:16px}
+.q60g15,.q60g12,.q60g11{display:grid;gap:14px;align-items:start}
+.q60g15{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+.q60g12{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.q60g11{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;margin-bottom:12px}
+.q60col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.q60c{background:var(--card);border-radius:22px;padding:20px 22px;box-shadow:0 4px 16px rgba(80,100,85,.07);min-width:0}
+.q60c.q60ins{padding:16px 18px;display:flex;flex-direction:column}
+.q60ch{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.q60ch h3{margin:0;font-size:17px;font-weight:500}
+.q60ins .q60ch h3{font-size:15px}
+.q60lk{border:none;background:none;padding:0;font:inherit;font-size:13px;color:var(--bp);cursor:pointer;white-space:nowrap;min-height:0!important}
+.q60lk:hover{text-decoration:underline}
+.q60soft{font-size:12px;color:var(--q60m);white-space:nowrap}
+.q60e{margin:6px 0 2px;font-size:13.5px;color:var(--q60m);line-height:1.5}
+.q60tx{display:flex;align-items:center;gap:14px;padding:11px 0;border:none;border-top:1px solid var(--q60d);background:none;width:100%;font:inherit;text-align:left;cursor:pointer;color:var(--ink);min-height:0!important}
+.q60tx .zlogo{border-radius:12px!important;flex:none}
+.q60txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.q60txt b{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q60txt small,.q60due{font-size:12px;color:var(--q60m)}
+.q60amt{font-size:15px;font-weight:500;white-space:nowrap;flex:none}
+.q60amt.in{color:#4f7a5b}
+.q60cat{display:grid;grid-template-columns:14px minmax(70px,100px) minmax(40px,1fr) auto;gap:12px;align-items:center;padding:10px 0;border:none;border-top:1px solid var(--q60d);background:none;width:100%;font:inherit;font-size:14px;text-align:left;color:var(--ink);cursor:pointer;min-height:0!important}
+.q60cat>i{width:10px;height:10px;border-radius:50%}
+.q60cn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q60tr{height:8px;background:var(--q60t);border-radius:5px;overflow:hidden;display:block}
+.q60cv{text-align:right;font-size:13px;color:#4f6555;white-space:nowrap}
+.q60cv.over{color:#b5503f}
+.q60cv em{font-style:normal;color:var(--q60f)}
+.q60pay{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 22px;cursor:pointer}
+.q60pay>b{font-size:15px;font-weight:500}
+.q60pay span{font-size:13px;color:var(--q60m);white-space:nowrap}
+.q60pay span b{color:var(--ink);font-weight:500}
+.q60nb{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--q60d)}
+.q60ck{width:20px;height:20px;border-radius:6px;border:1.8px solid #b9c3b8;background:none;padding:0;cursor:pointer;flex:none;min-height:0!important}
+.q60ck:hover{border-color:var(--bp)}
+.q60nbt{flex:1;min-width:0;display:flex;flex-direction:column;border:none;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--ink);min-height:0!important}
+.q60nbt b{font-size:14px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q60nb .q60amt{font-size:14px}
+.q60due.soon{color:#b5714e}.q60due.late{color:#b5503f}.q60due.paid{color:#6b9477}
+.q60gl{display:block;width:100%;border:none;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--ink);margin-top:6px;min-height:0!important}
+.q60gl span{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.q60gl b{font-size:14px;font-weight:400}
+.q60gl small{font-size:12px;color:var(--q60m);white-space:nowrap}
+.q60gb{height:8px;background:var(--q60t);border-radius:5px;margin:10px 0 6px;overflow:hidden}
+.q60gb u{background:#6a8ba3;min-width:6px}
+.q60gs{font-size:12px;color:var(--q60m)}
+.q60chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px}
+.q60chips button{border:none;background:#eef0e8;color:#4f6555;border-radius:14px;padding:6px 14px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;min-height:0!important}
+.q60chips button.on{background:var(--bp);color:#fff}
+.q60add{width:30px;height:30px;border-radius:50%;border:none;background:var(--bp);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0;min-height:0!important}
+.q60more{padding-top:10px;border-top:1px solid var(--q60d)}
+.q60went{display:flex;align-items:center;gap:18px;margin-top:8px}
+.q60leg1{font-size:12px;color:#6f7f73;line-height:1.9;display:flex;flex-direction:column}
+.q60leg1 i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.q60six{display:flex;gap:10px;align-items:flex-end;height:96px;margin-top:8px}
+.q60six>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;font-size:10.5px;color:var(--q60f)}
+.q60six u{display:block;width:100%;background:#e7e8e1;border-radius:5px;text-decoration:none}
+.q60six u.on{background:#b8a698}
+.q60ban{display:flex;align-items:center;gap:14px;background:var(--bpb);color:#fff;border-radius:16px;padding:14px 16px;margin:14px 0 10px}
+.q60bl{flex:1;min-width:0;display:flex;flex-direction:column}
+.q60ban small{font-size:12px;opacity:.85}
+.q60bl b{font-size:22px;font-weight:500}
+.q60br{text-align:right;display:flex;flex-direction:column}
+.q60br b{font-size:20px;font-weight:600}
+.q60edit{border:none;background:rgba(255,255,255,.2);color:#fff;border-radius:10px;padding:5px 12px;font:inherit;font-size:12px;cursor:pointer;min-height:0!important;flex:none}
+.q60exp{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:0 0 14px}
+.q60exp>span{color:var(--q60m)}
+.q60exp b{color:#4f7a5b;font-weight:500}
+.q60bill{display:flex;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--q60d)}
+.q60bt{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:none;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--ink);min-height:0!important}
+.q60bt>span{display:flex;flex-direction:column;min-width:0}
+.q60bt b{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q60bill.paid .q60bt b{text-decoration:line-through;color:var(--q60m)}
+.q60bill .q60amt{min-width:64px;text-align:right}
+.q60pay2{min-width:92px;border-radius:12px;padding:8px 14px;font:inherit;font-size:13px;font-weight:500;border:1px solid var(--bp);background:var(--bp);color:#fff;cursor:pointer;flex:none;min-height:0!important;transition:background .15s}
+.q60pay2.y{background:#e4ebdf;border-color:#e4ebdf;color:#4f6555}
+.q60cards{display:flex;flex-direction:column;gap:10px;margin-top:8px;align-items:stretch}
+.q60cards .q17card{width:100%!important;max-width:none!important;margin:0!important}
+.q60gh2{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.q60gh2 h3{margin:0;font-size:17px;font-weight:500}
+.q60goals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),420px));gap:14px}
+.q60goal{overflow:hidden}
+.q60gcov{height:90px;margin:-20px -22px 14px;background-size:cover;background-position:center}
+.q60gh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;border:none;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--ink);min-height:0!important}
+.q60gh b{font-size:15px;font-weight:400}.q60gh small{font-size:12px;color:var(--q60m)}
+.q60gn{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px}
+.q60gn b{font-size:28px;font-weight:600}.q60gn span{font-size:13px;color:var(--q60m)}
+.q60gf{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--q60m)}
+.q60gf .q60lk{font-size:12px}
+.q60sub{margin:2px 0 10px;font-size:12px;color:var(--q60m)}
+.q60fl{margin-bottom:10px}
+.q60fl>div:first-child{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}
+.q60fl b{font-weight:500}
+.q60ft{height:12px;background:var(--q60t);border-radius:8px;overflow:hidden}
+.q60ft u{border-radius:8px}
+.q60note{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:#6f7f73;background:#eef0e8;border-radius:12px;padding:10px 12px}
+.q60pie{width:140px;height:140px;border-radius:50%;margin:10px auto 12px;display:flex;align-items:center;justify-content:center}
+.q60pie>div{width:88px;height:88px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.q60pie b{font-size:15px;font-weight:600}.q60pie small{font-size:11px;color:var(--q60m)}
+.q60leg2{display:grid;grid-template-columns:1fr 1fr;gap:2px 18px}
+.q60leg2 span{display:flex;align-items:center;gap:8px;font-size:13px;padding:3px 0;min-width:0}
+.q60leg2 i{width:10px;height:10px;border-radius:3px;flex:none}
+.q60leg2 em{flex:1;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q60leg2 small{color:var(--q60m);font-size:13px}
+.q60lg{display:flex;gap:14px;font-size:12px;color:var(--q60m)}
+.q60lg span{display:flex;align-items:center;gap:6px}.q60lg i{width:10px;height:10px;border-radius:5px}
+.q60bvs{display:flex;gap:18px;margin-top:8px;overflow-x:auto;scrollbar-width:thin}
+.q60bv{flex:1;min-width:70px;display:flex;flex-direction:column;align-items:center;text-align:center;font-size:12px}
+.q60bvb{display:flex;gap:6px;align-items:flex-end;height:110px;border-bottom:1px solid var(--q60t);width:100%;justify-content:center}
+.q60bvb u{width:26px;background:#e4e6df;border-radius:13px;display:block;text-decoration:none;transition:height .15s}
+.q60bv span{margin-top:8px;white-space:nowrap}
+.q60bv small{font-size:11px;color:var(--q60m)}.q60bv small.over{color:#b5503f}
+/* narrower spaces: iPad and phone */
+@container q60 (max-width:760px){
+ .q60top{flex-wrap:wrap}.q60adds{width:100%;overflow-x:auto}.q60adds .q60b{flex:1}
+ .q60sum{flex-direction:column;align-items:stretch;gap:16px;padding:20px}
+ .q60stats>div{flex:1;padding:0 10px}.q60stats>div:first-child{border-left:none;padding-left:0}
+ .q60g15,.q60g12,.q60g11{grid-template-columns:minmax(0,1fr)}
+}
+@container q60 (max-width:420px){
+ .q60big b{font-size:30px}.q60stats b{font-size:17px}
+ .q60c{padding:16px}
+ .q60cat{grid-template-columns:12px minmax(0,1fr) auto;row-gap:6px}.q60cat .q60tr{grid-column:2/-1;grid-row:2}
+ .q60bill{flex-wrap:wrap;gap:10px}.q60bt{flex:1 1 60%}.q60pay2{min-width:0}
+ .q60ban{flex-wrap:wrap}.q60br{text-align:left}
+}
+
+/* v205: menu icon colour */
+body.q61ic .side .sic.pg{--pgc:var(--q61ic)!important}
+body.q61ic .side .sic:not(.pg){color:var(--q61ic);opacity:1}
+body.q61ic.q31nosq .side .sic.pg{color:var(--q61ic)}
+.q61ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.q61dot{width:30px!important;height:30px!important;flex:none}
+
+.q61pz{padding:16px 24px 0}
+.q61pz .pastezone{margin:0;background:var(--card)}
+.q61pzx{margin-top:10px}
 </style>
 </head>
 <body>
@@ -5384,7 +5562,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v204';
+var BUILD='v205';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -16763,7 +16941,7 @@ pickerHtml=function(){
  h=h.slice(0,i)+quick+h.slice(i);
  return h.replace(/This page: [^<]*/,'Background and sections').replace(/Page colour<small>/g,'Background<small>')
   .replace(/<button data-zact="pageedit:[^"]*" style="width:100%;margin-top:8px">Change this page’s colour or name<\/button>/,'')
-  .replace(/<p class="sub2">Tap a section to open it\.[^<]*<\/p>/,'<p class="sub2">The two big choices are right here. Fine-tune the rest in the sections below.</p>');
+  .replace(/<p class="sub2">Tap a section to open it\.[^<]*<\/p>/,'<p class="sub2">Open a section to change it.</p>');
 };
 
 /* ---------- each redraw: the default cover for the page you're on, and the depth look ---------- */
@@ -19528,8 +19706,8 @@ var _q49Render=render;
 render=function(){var r=_q49Render.apply(this,arguments);try{q49Pens()}catch(e){}return r};
 window.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('[data-q49sec]');if(!b)return;e.preventDefault();e.stopPropagation();
- var key=b.getAttribute('data-q49sec');view.editSurf='__sec';render();
- setTimeout(function(){var inp=document.querySelector('.pickpanel input[data-secc="'+key+'"]');if(!inp)return;var row=inp.closest('.secrow')||inp;
+ var key=b.getAttribute('data-q49sec');view.editSurf='__sec';view.pkAcc=Object.assign({},view.pkAcc||{},{page:true});render();
+ setTimeout(function(){var inp=document.querySelector('.pickpanel input[data-secc="'+key+'"]');if(!inp)return;var dd=inp.closest('details');if(dd&&!dd.open)dd.open=true;var row=inp.closest('.secrow')||inp;
   try{row.scrollIntoView({block:'center'})}catch(err){}row.classList.remove('q49flash');void row.offsetWidth;row.classList.add('q49flash');inp.click()},60);
 },true);
 
@@ -20387,6 +20565,163 @@ function q59StorePair(s){
  var b=q59Brand(s&&s.name);if(!b)return ZC[zHueOf(s&&s.name)]||ZC.grey;
  return ['color-mix(in srgb,'+b+' 26%,#fff)','color-mix(in srgb,'+b+' 82%,#000)'];
 }
+
+/* ===== v205 (2026-10-13): Budget page = Jae's Claude Design handoff "10a" (design_handoff_budget_page). A top bar (month,
+   Left to spend | Spent, + Spending / + Money in / + Bill), one summary card that is always there, then tabs: Overview,
+   Transactions, Categories, Bills & cards, Goals, Insights (tab per device in hub:q60tab:<cid>). Replaces the v148-v184
+   ring / grid / Edit page layout (c.bGrid etc. are simply no longer used). Accents come from the page's own colour.
+   Prefix q60. ===== */
+var Q60TABS=['Overview','Transactions','Categories','Bills & cards','Goals','Insights'];
+function q60Tab(c){var v=+q58Get('hub:q60tab:'+c.id,'0');return v>=0&&v<6?v:0}
+ZACT.q60tab=function(cid,i){q58Set('hub:q60tab:'+cid,String(i));view.zbAll=false;render();var t=document.querySelector('.q60tabs');if(t&&t.getBoundingClientRect().top<0)t.scrollIntoView({block:'start',behavior:'smooth'})};
+ZACT.q60filter=function(v){view.q60f=v;view.zbAll=false;render()};
+ZACT.q60chart=function(v){q58Set('hub:q60chart',v);render()};
+ZACT.q60less=function(){view.zbAll=false;render()};
+function q60Pal(c){
+ var hx=palHex(c.color||'sage'),q=rgb2hsl.apply(null,hex2rgb(hx));
+ var p=hsl2hex(q[0],Math.max(10,Math.min(q[1],30)),36),bn=hsl2hex(q[0],Math.max(8,Math.min(q[1],22)),42);
+ return '--bp:'+p+';--bpb:'+bn+';--bpt:color-mix(in srgb,'+p+' 12%,#fff);--bpf:'+hsl2hex(q[0],Math.max(12,Math.min(q[1],28)),52);
+}
+function q60Card(title,link,body,cls){return '<section class="q60c'+(cls?' '+cls:'')+'"><div class="q60ch"><h3>'+title+'</h3>'+(link||'')+'</div>'+body+'</section>'}
+function q60Link(txt,act){return '<button class="q60lk" data-zact="'+act+'">'+txt+'</button>'}
+function q60Tx(c,x,catBy){var ct=catBy[x.cat];
+ return '<button class="q60tx" data-zact="spendedit:'+c.id+':'+x.id+'">'+zLogo(x.title||'',38,x.income?'arrowin':'wallet')+'<span class="q60txt"><b>'+esc(x.title||(x.income?'Money in':'Spending'))+'</b><small>'
+  +esc(x.date?parseISO(x.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}).replace(/\./g,''):'')+(x.income?' · Money in':ct?' · '+esc(ct.title):'')+'</small></span><span class="q60amt'+(x.income?' in':'')+'">'+(x.income?'+':'-')+money(x.amount).replace('−','')+'</span></button>'}
+function q60CatRow(c,b,x){var s=b.byCat[x.id]||0,lim=+x.limit||0,over=lim?s>lim:s>0,p=lim?Math.min(100,s/lim*100):(s?100:0),col=zCatCol(x);
+ return '<button class="q60cat" data-zact="catedit:'+c.id+':'+x.id+'"><i style="background:'+col+'"></i><span class="q60cn">'+esc(x.title)+'</span><span class="q60tr"><u style="width:'+p+'%;background:'+col+'"></u></span><span class="q60cv'+(over?' over':'')+'">'+money(s)+'<em> / '+money(lim)+'</em></span></button>'}
+function q60BillLine(o){var cd=cpCountdown(o.d),late=!o.paid&&o.d<iso(today());
+ if(o.paid)return '<span class="q60due paid">Paid</span>';
+ return '<span class="q60due'+(late?' late':cd.n<=3?' soon':'')+'">'+esc(late?cd.t:cd.n===0?'Today':cd.n===1?'Tomorrow':'in '+cd.t+' · '+parseISO(o.d).toLocaleDateString('en-CA',{month:'short',day:'numeric'}).replace(/\./g,''))+'</span>'}
+function q60Bills(c,b,mo){
+ var L=zBillsIn(b,mo+'-01',zMoEnd(mo)),has={};L.forEach(function(o){has[o.x.id]=1});
+ // bills with nothing in this month still show, with their next date
+ b.bills.forEach(function(x){if(has[x.id])return;var n=zNextOcc(x.due,x.rep||'month',iso(today()));if(n)L.push({x:x,d:n,paid:!!(x.paid&&x.paid[n]),later:1})});
+ return L.sort(function(a,z){return a.d<z.d?-1:a.d>z.d?1:0});
+}
+zBudgetPage=function(c){
+ var mo=zMonthOf(c),b=zBudget(c,mo),cur=mo===zMonth(),tab=q60Tab(c),spentMode=c.bview==='spent',td=iso(today());
+ var saved=b.goals.reduce(function(s,g){return s+(+g.saved||0)},0),used=b.total?b.spent/b.total*100:0,over=b.total&&b.spent>b.total;
+ var catBy={};b.cats.forEach(function(x){catBy[x.id]=x});
+ var rec=b.sp.slice().sort(function(a,z){return (z.date||'')<(a.date||'')?-1:(z.date||'')>(a.date||'')?1:0});
+ // top bar
+ var top='<div class="q60top"><div class="q60mo"><button class="q60r" data-zact="bmon:-1" aria-label="Previous month">'+Q58CHL+'</button><b>'+esc(zMoName(mo,true))+'</b><button class="q60r" data-zact="bmon:1" aria-label="Next month"'+(cur?' disabled':'')+'>'+Q58CHR+'</button>'+(cur?'':'<button class="q60lk" data-zact="bmon:0">This month</button>')+'</div>'
+  +'<span class="q60seg"><button class="'+(spentMode?'':'on')+'" data-zact="q17bview:'+c.id+':left">Left to spend</button><button class="'+(spentMode?'on':'')+'" data-zact="q17bview:'+c.id+':spent">Spent</button></span>'
+  +'<div class="q60adds"><button class="q60b pri" data-zact="spendnew:'+c.id+'">+ Spending</button><button class="q60b" data-zact="spendnew:'+c.id+':in">+ Money in</button><button class="q60b" data-zact="billnew:'+c.id+'">+ Bill</button></div></div>';
+ // summary
+ var big,sub;
+ if(!b.total){big=money(b.spent);sub='spent '+(cur?'this month':'in '+zMoName(mo))}
+ else if(spentMode){big=money(b.spent);sub='spent of '+money(b.total)}
+ else if(over){big=money(b.spent-b.total);sub='over your '+money(b.total)}
+ else{big=money(b.left);sub='left of '+money(b.total)}
+ var sum='<section class="q60sum"><div class="q60sl"><div class="q60big"><b'+(over&&!spentMode?' class="over"':'')+'>'+big+'</b><span>'+sub+'</span></div>'
+  +'<div class="q60bar"><u style="width:'+Math.min(100,used)+'%'+(over?';background:#b5503f':'')+'"></u></div><div class="q60used">'+(b.total?Math.round(used)+'% used':'<button class="q60lk" data-zact="catnew:'+c.id+'">Add a category with a limit</button> to see what’s left')+'</div></div>'
+  +'<div class="q60stats"><div><small>Money in</small><b>'+money(b.inc)+'</b></div><div><small>Money out</small><b>'+money(b.spent)+'</b></div><div><small>Saved</small><b>'+money(saved)+'</b></div></div></section>';
+ var tabs='<div class="q60tabs" role="tablist">'+Q60TABS.map(function(t,i){return '<button role="tab" aria-selected="'+(tab===i)+'" class="'+(tab===i?'on':'')+'" data-zact="q60tab:'+c.id+':'+i+'">'+t+(i===1&&rec.length?' <em>'+rec.length+'</em>':'')+'</button>'}).join('')+'</div>';
+ var nx=zPayNext(b),bills=q60Bills(c,b,mo),unpaid=bills.filter(function(o){return !o.paid});
+ var payTxt=function(){if(!nx)return '';var cd=cpCountdown(nx.d);return cd.n===0?'<b>today</b>':'in <b>'+cd.n+' day'+(cd.n===1?'':'s')+'</b> · '+esc(parseISO(nx.d).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}).replace(/\./g,''))};
+ var catsSorted=b.cats.slice().sort(function(a,z){return (b.byCat[z.id]||0)-(b.byCat[a.id]||0)});
+ var goalCard=function(g,big){var pct=g.target?Math.min(100,Math.round((+g.saved||0)/(+g.target)*100)):0,when=g.date?parseISO(g.date).toLocaleDateString('en-CA',{month:'short',year:'numeric'}).replace('.',''):'';
+  if(!big)return '<button class="q60gl" data-zact="goaledit:'+c.id+':'+g.id+'"><span><b>'+esc(g.title)+'</b><small>'+money(g.saved)+' of '+money(g.target)+'</small></span></button><div class="q60gb"><u style="width:'+pct+'%"></u></div><div class="q60gs">'+pct+'% there'+(when?' · '+esc(when):'')+'</div>';
+  return '<section class="q60c q60goal">'+(g.cover?'<div class="q60gcov" style="background-image:url('+esc(g.cover)+')"></div>':'')+'<button class="q60gh" data-zact="goaledit:'+c.id+':'+g.id+'"><b>'+esc(g.title)+'</b><small>'+esc(when)+'</small></button>'
+   +'<div class="q60gn"><b>'+money(g.saved)+'</b><span>of '+money(g.target)+'</span></div><div class="q60gb"><u style="width:'+pct+'%"></u></div><div class="q60gf"><span>'+pct+'% there</span>'+q60Link('+ Add money','goalmoney:'+c.id+':'+g.id)+'</div></section>'};
+ var body='';
+ if(tab===0){
+  var recent=q60Card('Recent transactions',rec.length?q60Link('See all '+rec.length+' ›','q60tab:'+c.id+':1'):'',rec.length?rec.slice(0,4).map(function(x){return q60Tx(c,x,catBy)}).join(''):'<p class="q60e">Nothing added yet. Tap + Spending after you buy something.</p>');
+  var topc=q60Card('Top categories',q60Link('All categories ›','q60tab:'+c.id+':2'),b.cats.length?catsSorted.slice(0,4).map(function(x){return q60CatRow(c,b,x)}).join(''):'<p class="q60e">Add categories with a monthly limit, like groceries or eating out. '+q60Link('+ Category','catnew:'+c.id)+'</p>');
+  var pay='<section class="q60c q60pay"'+(nx?' data-zact="payedit:'+c.id+':'+nx.p.id+'" role="button" tabindex="0"':'')+'><b>'+esc(nx&&nx.p.title||'Pay day')+'</b>'+(nx?'<span>'+payTxt()+'</span>':q60Link('+ Add pay day','paynew:'+c.id))+'</section>';
+  var nb=unpaid.filter(function(o){return o.d>=td||!o.later}).slice(0,3);
+  var nbills=q60Card('Next bills',q60Link('All ›','q60tab:'+c.id+':3'),nb.length?nb.map(function(o){return '<div class="q60nb"><button class="q60ck" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'" aria-label="Mark '+esc(o.x.title)+' paid"></button><button class="q60nbt" data-zact="billedit:'+c.id+':'+o.x.id+'"><b>'+esc(o.x.title)+'</b>'+q60BillLine(o)+'</button><span class="q60amt">'+money(o.x.amount)+'</span></div>'}).join(''):'<p class="q60e">'+(b.bills.length?'All paid. Nice.':'No bills yet. '+q60Link('+ Bill','billnew:'+c.id))+'</p>');
+  var goal=q60Card(b.goals.length>1?'Goals':'Goal',b.goals.length?q60Link('All ›','q60tab:'+c.id+':4'):'',b.goals.length?goalCard(b.goals[0],false):'<p class="q60e">Save toward something. '+q60Link('+ Add a goal','goalnew:'+c.id)+'</p>');
+  body='<div class="q60g15"><div class="q60col">'+recent+topc+'</div><div class="q60col">'+pay+nbills+goal+'</div></div>';
+ }else if(tab===1){
+  var used2={};rec.forEach(function(x){if(!x.income&&x.cat&&catBy[x.cat])used2[x.cat]=1});
+  var chips=[['all','All']].concat(b.cats.filter(function(x){return used2[x.id]}).map(function(x){return [x.id,x.title]}));if(rec.some(function(x){return x.income}))chips.push(['in','Money in']);
+  var f=view.q60f||'all';if(!chips.some(function(x){return x[0]===f}))f='all';
+  var L=rec.filter(function(x){return f==='all'||(f==='in'?x.income:(!x.income&&x.cat===f))}),n=view.zbAll?L.length:Math.min(L.length,12);
+  body=q60Card(cur?'This month':esc(zMoName(mo,true)),'<button class="q60add" data-zact="spendnew:'+c.id+'" aria-label="Add spending">'+zI(ZIC.plus,16)+'</button>','<div class="q60chips">'+chips.map(function(x){return '<button class="'+(f===x[0]?'on':'')+'" data-zact="q60filter:'+x[0]+'">'+esc(x[1])+'</button>'}).join('')+'</div>'
+   +(L.length?L.slice(0,n).map(function(x){return q60Tx(c,x,catBy)}).join(''):'<p class="q60e">Nothing here yet.</p>')
+   +(L.length>12?'<div class="q60more">'+(view.zbAll?q60Link('Show less','q60less'):q60Link('Show all '+L.length,'ball'))+'</div>':''),'q60one');
+ }else if(tab===2){
+  var segs=zSpendSegs(c,b).filter(function(s){return s.v>0}).sort(function(a,z){return z.v-a.v});
+  var cats=q60Card('Budget by category',q60Link('+ Category','catnew:'+c.id),b.cats.length?b.cats.map(function(x){return q60CatRow(c,b,x)}).join(''):'<p class="q60e">Add categories with a monthly limit, like groceries or eating out.</p>');
+  var went=q60Card('Where it went','',b.spent?'<div class="q60went">'+zDonut(segs,110,18,money(b.spent),'')+'<div class="q60leg1">'+segs.slice(0,5).map(function(s){return '<span><i style="background:'+s.col+'"></i>'+esc(s.label)+' '+Math.round(s.v/b.spent*100)+'%</span>'}).join('')+'</div></div>':'<p class="q60e">Nothing spent '+(cur?'yet':'that month')+'.</p>');
+  var months=[];for(var i=5;i>=0;i--)months.push(zMoShift(mo,-i));
+  var vals=months.map(function(m){return {m:m,o:zBudget(c,m).spent}}),mx=Math.max.apply(null,vals.map(function(v){return v.o}).concat([1]));
+  var six=q60Card('Last six months','<span class="q60soft">Money out</span>','<div class="q60six">'+vals.map(function(v){return '<div title="'+esc(zMoName(v.m,true))+': '+money(v.o)+'"><u class="'+(v.m===mo?'on':'')+'" style="height:'+Math.max(4,Math.round(v.o/mx*100))+'%"></u><span>'+esc(zMoName(v.m))+'</span></div>'}).join('')+'</div>');
+  body='<div class="q60g15"><div class="q60col">'+cats+'</div><div class="q60col">'+went+six+'</div></div>';
+ }else if(tab===3){
+  var toPay=unpaid.filter(function(o){return !o.later}).reduce(function(s,o){return s+(+o.x.amount||0)},0);
+  var before=nx?unpaid.filter(function(o){return o.d<nx.d&&!o.later}).reduce(function(s,o){return s+(+o.x.amount||0)},0):toPay;
+  var banner=nx?'<div class="q60ban"><div class="q60bl"><small>'+esc(nx.p.title||'Pay day')+'</small><b>'+(cpCountdown(nx.d).n===0?'Today':cpCountdown(nx.d).n+' day'+(cpCountdown(nx.d).n===1?'':'s'))+'</b><small>'+esc(parseISO(nx.d).toLocaleDateString('en-CA',{weekday:'long',month:'short',day:'numeric'}).replace(/\./g,''))+' · '+esc(zRepName(nx.p.rep||'2week').toLowerCase())+'</small></div>'
+    +(b.total?'<div class="q60br"><small>Left after bills due first</small><b>'+money(b.left-before)+'</b></div>':'')+'<button class="q60edit" data-zact="payedit:'+c.id+':'+nx.p.id+'">Edit</button></div>'
+    +'<div class="q60exp"><span>Expected pay</span>'+(nx.p.amount?'<b>+'+money(nx.p.amount)+'</b>':q60Link('+ Add amount','payedit:'+c.id+':'+nx.p.id))+'</div>'
+   :'<div class="q60ban"><div class="q60bl"><small>Pay day</small><b>Not set</b><small>Doable counts down to it and shows what’s left after bills.</small></div><button class="q60edit" data-zact="paynew:'+c.id+'">Add</button></div>';
+  var rows=bills.map(function(o){return '<div class="q60bill'+(o.paid?' paid':'')+'"><button class="q60bt" data-zact="billedit:'+c.id+':'+o.x.id+'">'+zLogo(o.x.title,34,'wallet')+'<span><b>'+esc(o.x.title)+'</b>'+q60BillLine(o)+'</span></button><span class="q60amt">'+money(o.x.amount)+'</span>'
+   +'<button class="q60pay2'+(o.paid?' y':'')+'" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'">'+(o.paid?'✓ Paid':'Mark paid')+'</button></div>'}).join('');
+  var billsC=q60Card('Bills','<span class="q60soft">'+(toPay?money(toPay)+' to pay · ':'')+q60Link('+ Bill','billnew:'+c.id)+'</span>',banner+(rows||'<p class="q60e">Add your bills with their due dates, like rent or your phone. They show on your calendar too.</p>'));
+  var CL=q17Cards(c);
+  var cards=q60Card('Your cards',q60Link('+ Add a card','cardnew:'+c.id),CL.length?'<div class="q60cards">'+CL.map(function(x){return q17CardTile(c,x,mo)}).join('')+'</div>':'<p class="q60e">Add your bank and credit cards to see balances and what you spent on each. Only the last 4 digits.</p>');
+  body='<div class="q60g12"><div class="q60col">'+billsC+'</div><div class="q60col">'+cards+'</div></div>';
+ }else if(tab===4){
+  body='<div class="q60gh2"><h3>Goals and savings</h3><button class="q60b" data-zact="goalnew:'+c.id+'">+ Add a goal</button></div>'
+   +(b.goals.length?'<div class="q60goals">'+b.goals.map(function(g){return goalCard(g,true)}).join('')+'</div>':'<p class="q60e">Save toward something: a trip, a laptop, a rainy-day fund.</p>');
+ }else{
+  var scale=Math.max(b.total,b.inc,b.spent,saved,1);
+  var flow=[['Money in',b.inc,'#c79aa0'],['Money out',b.spent,'#9a8260'],['Saved',saved,'#6a8ba3']].map(function(r){return '<div class="q60fl"><div><span>'+r[0]+'</span><b>'+money(r[1])+'</b></div><div class="q60ft"><u style="width:'+(r[1]/scale*100)+'%;min-width:'+(r[1]?0:4)+'px;background:'+r[2]+'"></u></div></div>'}).join('');
+  var io=q60Card('Money in vs money out','','<p class="q60sub">'+esc(zMoName(mo))+(b.total?' · bars scaled to your '+money(b.total)+' budget':'')+'</p>'+flow+(b.inc?'':'<div class="q60note"><span>No money in yet this month.</span>'+q60Link('+ Money in','spendnew:'+c.id+':in')+'</div>'),'q60ins');
+  var segs2=zSpendSegs(c,b).filter(function(s){return s.v>0}).sort(function(a,z){return z.v-a.v}),pie=q58Get('hub:q60chart','donut')==='pie';
+  var cone=function(){var acc=0,tot=b.spent||1;return 'conic-gradient('+segs2.map(function(s){var a=acc;acc+=s.v/tot*360;return s.col+' '+a.toFixed(1)+'deg '+acc.toFixed(1)+'deg'}).join(',')+')'};
+  var wi=q60Card('Where it went','<span class="q60seg sm"><button class="'+(pie?'on':'')+'" data-zact="q60chart:pie">Pie</button><button class="'+(pie?'':'on')+'" data-zact="q60chart:donut">Donut</button></span>',
+   b.spent?'<div class="q60pie" style="background:'+cone()+'">'+(pie?'':'<div><b>'+money(b.spent)+'</b><small>spent</small></div>')+'</div><div class="q60leg2">'+segs2.map(function(s){return '<span><i style="background:'+s.col+'"></i><em>'+esc(s.label)+'</em><small>'+Math.round(s.v/b.spent*100)+'%</small></span>'}).join('')+'</div>':'<p class="q60e">Nothing spent '+(cur?'yet':'that month')+'.</p>','q60ins');
+  var bc=b.cats.filter(function(x){return (+x.limit||0)||(b.byCat[x.id]||0)}),mx2=Math.max.apply(null,bc.map(function(x){return Math.max(+x.limit||0,b.byCat[x.id]||0)}).concat([1]));
+  var bvs=q60Card('Budgeted vs spent','<span class="q60lg"><span><i style="background:#e4e6df"></i>Budget</span><span><i style="background:var(--bpf)"></i>Spent</span></span>',bc.length?'<div class="q60bvs">'+bc.map(function(x){var s=b.byCat[x.id]||0,lim=+x.limit||0,ov=lim?s>lim:s>0;
+    return '<div class="q60bv"><div class="q60bvb"><u style="height:'+Math.max(lim?6:0,lim/mx2*100)+'%"></u><u style="height:'+Math.max(s?6:0,s/mx2*100)+'%;background:'+zCatCol(x)+'"></u></div><span>'+esc(x.title)+'</span><small'+(ov?' class="over"':'')+'>'+(ov?'Over budget':lim?money(lim-s)+' left':'')+'</small></div>'}).join('')+'</div>':'<p class="q60e">Add categories with limits to compare.</p>','q60ins');
+  body='<div class="q60g11">'+io+wi+'</div>'+bvs;
+ }
+ return '<div class="q60" style="'+q60Pal(c)+'">'+top+sum+tabs+'<div class="q60body">'+body+'</div></div>';
+};
+
+
+/* v205: menu icon colour (Jae). S.menuIconCol (synced): '' = each page's own colour (as before), or '#hex' = one colour for
+   every icon in the menu (page icons and Home, Calendar...). A row under "Menu icons" in Look and feel and Settings. */
+SETTINGS_KEYS.push('menuIconCol');
+function q61Apply(){var v=S.menuIconCol;var on=!!(v&&/^#[0-9a-f]{6}$/i.test(v));document.body.classList.toggle('q61ic',on);if(on)document.body.style.setProperty('--q61ic',v);else document.body.style.removeProperty('--q61ic')}
+ZACT.q61ic=function(v){S.menuIconCol=v==='one'?(S.menuIconCol||chromeHex('sideBright')||'#ffffff'):'';if(v==='one'&&!/^#[0-9a-f]{6}$/i.test(S.menuIconCol))S.menuIconCol='#ffffff';save();render()};
+var _q61Rows=q46LookRows;
+q46LookRows=function(){var h=_q61Rows.apply(this,arguments),one=!!S.menuIconCol,v=S.menuIconCol||'#ffffff';
+ var row=q46Row('Menu icon colour','The colour of the little icons in your menu','<span class="q61ctl">'+q46Seg(one?'one':'each',[['each','Each page’s colour'],['one','One colour']],'q61ic')
+  +(one?'<label class="z4col z4cust on q61dot" title="Pick the icon colour" style="--cur:'+v+';background:'+v+'"><input type="color" value="'+v+'" data-q61ic="1" aria-label="Menu icon colour"></label>':'')+'</span>');
+ var k=h.indexOf(q46Row('Cover pictures','').slice(0,40));return k>-1?h.slice(0,k)+row+h.slice(k):h+row};
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q61ic'))return;document.body.classList.add('q61ic');document.body.style.setProperty('--q61ic',t.value);var l=t.closest('label');if(l)l.style.background=t.value});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q61ic'))return;S.menuIconCol=t.value;save();render()});
+/* v205: the Look and feel panel opens with every section folded (Jae: "so much info"); the quick Page/Menu colour rows
+   at the top fold too, as "Page and menu colour". What you open stays open until the panel closes. */
+var q61PickWas=false;
+var _q61Render=render;
+render=function(){
+ if(view.picker&&!q61PickWas&&!view.q61keep)view.pkAcc={look:false,page:false};
+ view.q61keep=false;q61PickWas=!!view.picker;
+ var r=_q61Render.apply(this,arguments);
+ try{q61Apply();
+  var z=document.querySelector('.pickpanel .z4pk');
+  if(z&&!z.closest('details')){var d=document.createElement('details');d.className='pkacc';d.setAttribute('data-pkacc','quick');if((view.pkAcc||{}).quick)d.open=true;
+   d.innerHTML='<summary><span>Page and menu colour</span><b class="pkchev">'+CP_ICO.chev+'</b></summary><div class="pkaccb"></div>';z.parentNode.insertBefore(d,z);d.querySelector('.pkaccb').appendChild(z)}
+ }catch(e){}
+ return r};
+
+/* v205: cover settings never sit at the bottom of the page (Jae). The cover button at the top of every page has every
+   option, so the copies in the bottom settings rows are gone, and the "paste a picture" box appears right under the
+   cover/title instead of in the settings row. */
+coverControls=function(id,owner){var key='cover:'+id;
+ return view.paste===key?'<div class="pastezone" style="flex-basis:100%" data-drop="'+key+'">Copy an image, then press Ctrl and V<p class="pz2">Or drag an image file onto this box. Press Escape to cancel.</p><button class="zbtn ghost q61pzx" data-paste="'+key+'">Cancel</button></div>':''};
+var _q61RenderC=render;
+render=function(){var r=_q61RenderC.apply(this,arguments);
+ try{var pz=document.querySelector('.main .pastezone[data-drop^="cover:"]');
+  if(pz&&!pz.closest('.q61pz')){var tops=[].slice.call(document.querySelectorAll('.main .coverwrap, .main .banner, .main .h4band, .main .hband')).filter(function(el){return el.offsetHeight>0&&!el.closest('.cpsettings')});var anchor=tops.length?tops[tops.length-1]:null;
+   var box=document.createElement('div');box.className='q61pz';box.appendChild(pz);
+   if(anchor&&anchor.parentNode)anchor.after(box);else{var m=document.querySelector('.main');if(m)m.insertBefore(box,m.firstChild)}}
+ }catch(e){}
+ return r};
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
