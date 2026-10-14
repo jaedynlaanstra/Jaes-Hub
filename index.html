@@ -5026,6 +5026,56 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
  .q22hab .q22hk i{width:22px;height:22px}
 }
 .zw-sq .q22hab .q22rings{width:min(96px,52cqw)!important;height:min(96px,52cqw)!important}
+/* ===== v204: Assignments and Files & links like Jae's mockup: module bands, round + ===== */
+.q59plus{width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.24);color:inherit;display:grid;place-items:center;cursor:pointer;padding:0;flex:none;min-height:0!important;transition:background .15s}
+.q59plus:hover{background:rgba(255,255,255,.36)}
+.q59plus.on{background:#fff;color:var(--ink)}
+@media(min-width:701px){#c-assign .cphead .cpacts,#c-files .cphead .cpacts{flex-wrap:nowrap!important;align-items:center;gap:8px}
+#c-files .cphead,#c-assign .cphead{flex-wrap:nowrap!important;align-items:center}}
+.q59list,.q59files{padding:0!important;margin:0!important}
+.q59gh{display:flex;align-items:center;gap:6px;padding:10px 18px;background:color-mix(in srgb,var(--paper) 75%,var(--card));border-top:1px solid var(--line);border-bottom:1px solid var(--line);cursor:pointer;user-select:none;min-height:42px}
+.q59list>.q59gh:first-child,.q59files>.q59gh:first-child,.q59files>.q59srch+.q59gh{border-top:none}
+.q59gn{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.q59gh em{font-style:normal;font-size:12.5px;color:var(--ink3);flex:none}
+.q59chev{margin-left:auto;color:var(--ink3);display:grid;place-items:center;flex:none;transition:transform .2s}
+.q59chev svg{width:14px;height:14px}
+.q59gh.shut .q59chev{transform:rotate(-90deg)}
+.q59ga{width:26px;height:26px;border-radius:50%;border:none;background:none;color:var(--ink3);display:grid;place-items:center;cursor:pointer;padding:0;min-height:0!important;flex:none}
+.q59ga:first-of-type{margin-left:auto}
+.q59ga+.q59ga+.q59chev,.q59ga~.q59chev{margin-left:0}
+.q59ga svg{width:15px;height:15px}
+.q59ga[data-sheet] svg{width:18px;height:18px}
+.q59ga:hover{background:color-mix(in srgb,var(--ink) 7%,transparent);color:var(--ink)}
+.q59r{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line);cursor:pointer}
+.q59r:last-child{border-bottom:none}
+.q59r:hover{background:color-mix(in srgb,var(--paper) 45%,var(--card))}
+.q59r>.tick{width:22px;height:22px;margin-top:1px}
+.q59rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.q59rt b{font-weight:450;font-size:15px;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.q59rt small{font-size:12.5px;color:var(--ink3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.q59cd{flex:none;font-size:12.5px;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--ink) 6%,var(--card));color:var(--ink2);margin-top:1px}
+.q59cd.near{background:color-mix(in srgb,var(--cp-asg-c,#a0826d) 22%,var(--card));color:var(--cp-asg-title,var(--ink))}
+.q59cd.late{background:#F7ECEA;color:#A34A3F}
+.q59f{display:flex;align-items:center;gap:12px;padding:12px 14px 12px 18px;border-bottom:1px solid var(--line)}
+.q59f:last-child{border-bottom:none}
+.q59f .cptile{flex:none}
+.q59ft{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.q59nm{font-size:15px;font-weight:450;color:var(--ink);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+a.q59nm:hover{text-decoration:underline}
+.q59ft small{font-size:12.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q59dots{width:30px;height:30px;border-radius:50%;border:none;background:none;color:var(--ink3);display:grid;place-items:center;cursor:pointer;padding:0;flex:none;min-height:0!important}
+.q59dots svg{width:16px;height:16px}
+.q59dots:hover{background:var(--paper);color:var(--ink)}
+.q59none{margin:0;padding:12px 18px;font-size:13px;color:var(--ink3);border-bottom:1px solid var(--line)}
+.q59foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-top:1px solid var(--line)}
+.q59files>.q59foot:first-child{border-top:none}
+.q59drop{border:none;background:none;padding:0;font:inherit;font-size:14px;color:var(--cp-files-c,var(--ink2));cursor:pointer;min-height:0!important}
+.q59drop:hover{text-decoration:underline}
+.q59srch{padding:12px 18px;border-bottom:1px solid var(--line)}
+.q59srch .cpsearch{width:100%!important;max-width:none!important;flex:1}
+#c-files.q59over{outline:2px dashed var(--cp-files-c,#8a8a8a);outline-offset:-4px}
+#c-assign .q58done{border-top:1px solid var(--line)!important;background:none!important}
+#c-assign .q58done>summary .cpdot{display:none}
 </style>
 </head>
 <body>
@@ -5334,7 +5384,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v203';
+var BUILD='v204';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -5588,8 +5638,15 @@ function idbDo(mode,fn){
    The copy is kept as {at,json}; localStorage is only a fallback if IndexedDB can't be used, and is cleared
    once IndexedDB has the copy, which frees that space. Writes are queued so an older copy never lands last. */
 var stWriting=false,stPending=false;
+/* v204: stSafe = this page really read the saved copy (or the browser has no IndexedDB at all). Until then nothing is
+   written: when IndexedDB was slow to open (over 3s, or a quick double reload) the app used to start empty and then
+   save that empty hub over the real one a moment later. */
+var stSafe=false;
 function persistLocal(){
  if(!LOCAL){try{sset('hub:state',JSON.stringify(S)).catch(function(){view.storageOk=false})}catch(e){view.storageOk=false}return}
+ if(!stSafe){ // a late check: if there turns out to be no saved copy at all, saving is safe
+  if(IDB&&!persistLocal.chk){persistLocal.chk=1;idbDo('readonly',function(st){return st.get('__hubstate')}).then(function(r){persistLocal.chk=0;if(!r){stSafe=true;persistLocal()}}).catch(function(){persistLocal.chk=0})}
+  return}
  if(stWriting){stPending=true;return}
  stWriting=true;stPending=false;
  var json;try{json=JSON.stringify(S)}catch(e){stWriting=false;return}
@@ -5606,7 +5663,11 @@ function persistLocal(){
 async function loadLocalState(){
  if(!LOCAL){var r0=await sget('hub:state');return r0&&r0.value||''}
  var a=null,b='',bAt=0;
- try{await idbReady;if(IDB)a=await idbDo('readonly',function(st){return st.get('__hubstate')})}catch(e){}
+ try{await idbReady}catch(e){}
+ // IndexedDB can finish opening after idbReady gave up: wait up to 10 more seconds for it
+ if(!IDB&&window.indexedDB){for(var w=0;w<40&&!IDB;w++)await new Promise(function(r){setTimeout(r,250)})}
+ if(!window.indexedDB)stSafe=true;
+ if(IDB){for(var tr=0;tr<3;tr++){try{a=await idbDo('readonly',function(st){return st.get('__hubstate')});stSafe=true;break}catch(e){await new Promise(function(r){setTimeout(r,400)})}}}
  try{b=localStorage.getItem('hub:state')||'';bAt=+(localStorage.getItem('hub:stateat')||0)}catch(e){}
  if(a&&a.json&&(!b||(bAt&&a.at>=bAt)))return a.json;
  return b||(a&&a.json)||'';
@@ -5709,8 +5770,8 @@ async function dropFile(cid,i){
 async function load(){
  try{
   var raw=await loadLocalState();
-  if(raw){var p=JSON.parse(raw);if(p&&p.classes){S=p;migrate()}}
- }catch(e){}
+  if(raw){var p=null;try{p=JSON.parse(raw)}catch(e){stSafe=false}if(p&&p.classes){S=p;migrate()}}
+ }catch(e){stSafe=false}
  normalize();
  ensureIds();
  rebaseline();
@@ -19865,9 +19926,9 @@ render=function(){try{q58BuildNames()}catch(e){}return _q58RenderN.apply(this,ar
 var _q58SecH=ZM.zsec.html,_q58SecS=ZM.zsec.save;
 ZM.zsec.html=function(m){var h=_q58SecH(m),c=classById(m.cid);if(!h||!c||(c.kind!=='todo'&&c.kind!=='groceries'))return h;
  var s=m.sid&&(c.sections||[]).filter(function(x){return x.id===m.sid})[0];
- if(m.soft===undefined){m.soft=s?(s.color||_q58Hue(s.name)):'';m.q58def=m.soft}
+ if(m.soft===undefined){m.soft=s?(s.color||(c.kind==='groceries'&&typeof q59Brand==='function'&&q59Brand(s.name)?'':_q58Hue(s.name))):'';m.q58def=m.soft}
  var cur=m.soft||'';
- return h.replace(/(<\/div>)/,'$1<div class="field"><label>Colour</label>'+zSoftPick(cur,'data-zsoft')+'<p class="hint" style="margin:6px 0 0">'+(c.kind==='groceries'?'Used for the store’s badge and card.':'Used for the group’s card and badge.')+'</p></div>')};
+ return h.replace(/(<\/div>)/,'$1<div class="field"><label>Colour</label>'+zSoftPick(cur,'data-zsoft')+'<p class="hint" style="margin:6px 0 0">'+(c.kind==='groceries'?'Leave it unpicked to use the colour of the store’s logo.':'Used for the group’s card and badge.')+'</p></div>')};
 ZM.zsec.save=function(m){var c=classById(m.cid),n=c?(c.sections||[]).length:0,soft=m.soft;
  _q58SecS(m);if(!c||!soft||(soft===m.q58def&&m.sid))return;
  var s=m.sid?(c.sections||[]).filter(function(x){return x.id===m.sid})[0]:(c.sections.length>n?c.sections[c.sections.length-1]:null);
@@ -20124,7 +20185,7 @@ z5Shop=function(c){
   var any=open.filter(function(t){return !(t.sec&&byId[t.sec])});
   if(any.length)cards+=q58ShopCard(c,'any','Any store','<span class="zlogo" style="width:28px;height:28px;background:#E6EDE6;color:#708F77">'+zI(ZIC.cart,14)+'</span>',any,'',['#EEF1EC','#708F77']);
   secs.forEach(function(s){var S2=open.filter(function(t){return t.sec===s.id});if(!S2.length)return; // only stores you need something from
-   cards+=q58ShopCard(c,'s~'+s.id,s.name,zLogo(s.name,28,'store',s.site),S2,'<button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename, colour or remove '+esc(s.name)+'">'+zI(ZIC.dots,14)+'</button>',ZC[zHueOf(s.name)]||ZC.grey)});
+   cards+=q58ShopCard(c,'s~'+s.id,s.name,zLogo(s.name,28,'store',s.site),S2,'<button class="zmini" data-zact="secedit:'+c.id+':'+s.id+'" aria-label="Rename, colour or remove '+esc(s.name)+'">'+zI(ZIC.dots,14)+'</button>',q59StorePair(s))});
  }else if(sort==='aisle'){
   ['produce','bakery','meat','dairy','pantry','snack','frozen','home','care','other'].map(function(k){return Z5AISLES.filter(function(a){return a[0]===k})[0]}).forEach(function(a){var A=open.filter(function(t){return z5Aisle(t)===a[0]}).sort(function(x,y){return String(x.title).localeCompare(String(y.title))});if(!A.length)return;var k=ZC[a[3]]||ZC.grey;
    cards+=q58ShopCard(c,'a~'+a[0],a[1],'<span class="zlogo" style="width:28px;height:28px;background:'+k[0]+';color:'+k[1]+'">'+zI(ZIC[a[2]]||ZIC.cart,14)+'</span>',A,'',k)});
@@ -20191,6 +20252,141 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 var _q58RenderC=render;
 render=function(){var r=_q58RenderC.apply(this,arguments);try{q58Class()}catch(e){}return r};
 
+
+/* ===== v204 (2026-10-13): Assignments and Files & links like Jae's class-page mockup. Both cards group by module
+   (= the class's chapters) under full-width tinted bands ("MODULE 1 · 2"), a round + in each header instead of the
+   button row, no hint line under "Assignments". Assignments get a Module picker (a.section = chapter id). Files can
+   be dropped onto the card. Built by swapping the card bodies after each render (q59Fix). Prefix q59. ===== */
+var Q59PLUS='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+var Q59SRCH='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>';
+function q59Band(cid,key,name,n,extra){
+ var shut=!!cpShut(cid)[key];
+ return '<div class="q59gh'+(shut?' shut':'')+'" data-chap="'+cid+':'+key+'" role="button" aria-expanded="'+(!shut)+'"><span class="q59gn">'+esc(name)+'</span><em>· '+n+'</em>'+(extra||'')+'<span class="q59chev">'+CP_ICO.chev+'</span></div>';
+}
+function q59AsgRow(c,a,first){
+ var cd=cpCountdown(a.due),late=cd.n!=null&&cd.n<0;
+ var pill=a.due?(late?'Late':cd.n===0?'Today':cd.n+'d'):'';
+ var sub=[a.due?withTime(parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),a.time):'No due date','worth '+(a.weight!==''&&a.weight!=null?a.weight+'%':'—')];
+ return '<div class="q59r" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'"><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark '+esc(a.title)+' done"></button>'
+  +'<div class="q59rt"><b>'+esc(a.title)+asgFileIcon(c,a)+'</b><small>'+esc(sub.join(' · '))+stepChip(a)+'</small></div>'
+  +(pill?'<span class="q59cd'+(late?' late':first?' near':'')+'">'+pill+'</span>':'')+'</div>';
+}
+function q59AsgList(c){
+ var asg=(c.assignments||[]).filter(function(a){return !a.done}).sort(function(a,b){var p=a.due||'9',q=b.due||'9';return p<q?-1:p>q?1:0});
+ var first=asg.filter(function(a){return a.due&&cpCountdown(a.due).n>=0})[0],secs=cpSections(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var row=function(a){return q59AsgRow(c,a,a===first)},shut=cpShut(c.id);
+ var groups=secs.map(function(s){return {id:s.id,name:s.name,L:asg.filter(function(a){return a.section===s.id})}}).filter(function(g){return g.L.length});
+ var other=asg.filter(function(a){return !(a.section&&ids[a.section])});
+ if(!groups.length)return other.map(row).join('');
+ if(other.length)groups.push({id:'',name:'Not in a module',L:other});
+ return groups.map(function(g){var k='a~'+(g.id||'_');return q59Band(c.id,k,g.name,g.L.length)+(shut[k]?'':g.L.map(row).join(''))}).join('');
+}
+function q59FileRow(c,f,i){
+ var nn=(f.marks&&f.marks.notes&&f.marks.notes.length)||0;
+ var meta=cpFileLabel(f)==='NOTE'?'Note':(f.kind==='pdf'&&f.marks&&f.marks.strokes&&f.marks.strokes.length?'Marked up':'')||(f.size?(f.size>1048576?(f.size/1048576).toFixed(1)+' MB':Math.max(1,Math.round(f.size/1024))+' KB'):'File');
+ if(nn)meta+=' · '+nn+' note'+(nn>1?'s':'');
+ var name=f.kind==='pdf'?'<a class="q59nm" href="#" data-mkopen="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>'
+  :(f.kind?'<a class="q59nm" href="#" data-openfile="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>':'<span class="q59nm">'+esc(f.name)+'</span>');
+ return '<div class="q59f">'+cpTile(cpFileLabel(f),f.icon)+'<span class="q59ft">'+name+'<small>'+esc(meta)+'</small></span><button class="q59dots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(f.name)+'">'+CP_ICO.more+'</button></div>';
+}
+function q59LinkRow(c,l,i){
+ return '<div class="q59f">'+cpTile(cpLinkLabel(l),l.icon)+'<span class="q59ft"><a class="q59nm" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a><small>'+(l.pinned?'Pinned · ':'')+esc(cpHost(l.url))+'</small></span>'
+  +'<button class="q59dots" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(l.title)+'">'+CP_ICO.more+'</button></div>';
+}
+function q59FileList(c){
+ var files=FILES[c.id]||[],links=c.links||[],shut=cpShut(c.id),secs=cpSections(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var fr=function(sid){var o='';files.forEach(function(f,i){if(sid===null||((f.section&&ids[f.section])?f.section:'')===sid)o+=q59FileRow(c,f,i)});return o};
+ var lr=function(sid){var o='';links.forEach(function(l,i){if(sid===null||((l.section&&ids[l.section])?l.section:'')===sid)o+=q59LinkRow(c,l,i)});return o};
+ var cnt=function(sid){return files.filter(function(f){return ((f.section&&ids[f.section])?f.section:'')===sid}).length+links.filter(function(l){return ((l.section&&ids[l.section])?l.section:'')===sid}).length};
+ var h='';
+ if(!secs.length){
+  if(files.length)h+=q59Band(c.id,'f~files','Files',files.length)+(shut['f~files']?'':fr(null));
+  if(links.length)h+=q59Band(c.id,'f~links','Links',links.length)+(shut['f~links']?'':lr(null));
+ }else{
+  secs.forEach(function(s,k){var n=cnt(s.id),sh=!!shut[s.id];
+   h+=q59Band(c.id,s.id,s.name,n,'<button class="q59ga" data-zact="q59fadd:'+c.id+':'+s.id+'" aria-label="Add to '+esc(s.name)+'">'+Q59PLUS+'</button><button class="q59ga" data-sheet="chap" data-i="'+(c.sections||[]).indexOf(s)+'" data-c="'+c.id+'" aria-label="Rename, move or remove '+esc(s.name)+'">'+CP_ICO.more+'</button>')
+    +(sh?'':(n?'<div data-q59sec="'+s.id+'">'+fr(s.id)+lr(s.id)+'</div>':'<p class="q59none" data-q59sec="'+s.id+'">Nothing here yet.</p>'))});
+  var u=cnt('');if(u)h+=q59Band(c.id,'_','Unsorted',u)+(shut['_']?'':'<div data-q59sec="">'+fr('')+lr('')+'</div>');
+ }
+ var dups=cpDupLinks(c);
+ return h+'<div class="q59foot"><button class="q59drop" data-zact="q59fadd:'+c.id+':">Drop files or add a link</button>'
+  +(dups.length?'<button class="cptext cpdupbtn" data-dedupe="'+c.id+'">Remove '+dups.length+' duplicate link'+(dups.length>1?'s':'')+'</button>':'')+'</div>';
+}
+ZACT.q59fadd=function(cid,sec){view.modal={kind:'sheet',what:'fadd',i:0,classId:cid,q59sec:sec||''};render()};
+ZACT.q59find=function(){view.q59fs=!view.q59fs;if(!view.q59fs)view.fileQ='';render();setTimeout(function(){var i=document.getElementById('filesearch');if(i)i.focus()},40)};
+var _q59MH=modalHtml;
+modalHtml=function(){var h=_q59MH.apply(this,arguments),m=view.modal;if(!m||m.kind!=='sheet'||m.what!=='fadd')return h;
+ var c=classById(m.classId);if(!c)return h;var sec=m.q59sec||'',s=sec&&(c.sections||[]).filter(function(x){return x.id===sec})[0];
+ var list='<div class="sheetlist">'
+  +'<label class="sheetbtn"><input type="file" multiple data-file="'+c.id+'" data-filesec="'+esc(sec)+'" data-closesheet="1" style="display:none">Upload files</label>'
+  +'<button data-add="link" data-c="'+c.id+'" data-sec="'+esc(sec||'_')+'">Add a link</button>'
+  +'<button data-add="note" data-c="'+c.id+'" data-sec="'+esc(sec||'_')+'">New note page</button>'
+  +(sec?'':'<button data-add="section" data-c="'+c.id+'">New module or chapter</button>')
+  +'<button data-index="'+c.id+'" data-closesheet="1">Let search read inside your PDFs</button></div>';
+ return h.replace(/<h3>Add to Files &amp; links<\/h3><div class="sheetlist">[\s\S]*?<\/div>/,'<h3>'+(s?'Add to '+esc(s.name):'Add to Files &amp; links')+'</h3>'+list);
+};
+// the Module picker in the assignment pop-up
+var _q59MH2=modalHtml;
+modalHtml=function(){var h=_q59MH2.apply(this,arguments),m=view.modal;if(!m||m.kind!=='assign')return h;
+ var c=classById(m.classId),secs=c?cpSections(c):[];if(!secs.length)return h;
+ var a=m.id?findAsg(m.classId,m.id):null,cur=m.q59mod!==undefined?m.q59mod:(a&&a.section)||'';
+ return h.replace('<div class="field"><label for="m6">Priority</label>','<div class="field"><label for="q59mod">Module</label><select id="q59mod"><option value="">None</option>'+secs.map(function(s){return '<option value="'+s.id+'"'+(cur===s.id?' selected':'')+'>'+esc(s.name)+'</option>'}).join('')+'</select></div><div class="field"><label for="m6">Priority</label>')};
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='q59mod'&&view.modal)view.modal.q59mod=e.target.value});
+var _q59Save=saveModal;
+saveModal=function(){
+ var m=view.modal,el=document.getElementById('q59mod');
+ if(!m||m.kind!=='assign'||!el)return _q59Save.apply(this,arguments);
+ var c=classById(m.classId),before=c?(c.assignments||[]).map(function(a){return a.id}):[],v=el.value;
+ var r=_q59Save.apply(this,arguments);
+ if(c){var a=m.id?findAsg(m.classId,m.id):(c.assignments||[]).filter(function(x){return before.indexOf(x.id)<0})[0];
+  if(a&&(a.section||'')!==v){if(v)a.section=v;else delete a.section;touch(a);save();render()}}
+ return r;
+};
+function q59Fix(){
+ if(view.page!=='class')return;var c=classById(view.classId);if(!c)return;
+ var A=document.getElementById('c-assign'),F=document.getElementById('c-files');
+ if(A&&!A.getAttribute('data-q59')){A.setAttribute('data-q59','1');
+  var hn=A.querySelector('.cphead .cphint');if(hn)hn.remove();
+  var add=A.querySelector('.cphead [data-add="assign"]');if(add)add.outerHTML='<button class="q59plus" data-add="assign" data-c="'+c.id+'" aria-label="Add an assignment" title="Add an assignment">'+Q59PLUS+'</button>';
+  if(view.asgView!=='cards'){var b=A.querySelector('.cpbody');if(b){var w=document.createElement('div');w.className='q59list';w.innerHTML=q59AsgList(c);b.replaceWith(w);var more=A.querySelector('.cpmorebox');if(more)more.remove()}}
+ }
+ if(F&&!F.getAttribute('data-q59')){F.setAttribute('data-q59','1');
+  var hf=F.querySelector('.cphead .cphint');if(hf)hf.remove();
+  var acts=F.querySelector('.cphead .cpacts'),q=(view.fileQ||'').trim(),srch=acts&&acts.querySelector('.cpsearch');
+  if(acts){if(srch)srch.remove();acts.innerHTML='<button class="q59plus'+(view.q59fs||q?' on':'')+'" data-zact="q59find" aria-label="Search files and links" title="Search">'+Q59SRCH+'</button><button class="q59plus" data-zact="q59fadd:'+c.id+':" aria-label="Add files, links or a note" title="Add">'+Q59PLUS+'</button>'}
+  var body=F.querySelector('.cpfbody');
+  if(body){
+   var total=(FILES[c.id]||[]).length+(c.links||[]).length;
+   if(q){var top=document.createElement('div');top.className='q59srch';if(srch)top.appendChild(srch);body.insertBefore(top,body.firstChild)}
+   else{var w2=document.createElement('div');w2.className='cpfbody q59files';w2.innerHTML=(view.q59fs?'<div class="q59srch"></div>':'')+(total?q59FileList(c):'<p class="q59none">Nothing here yet. Upload slides and PDFs, add links to readings or start a note.</p><div class="q59foot"><button class="q59drop" data-zact="q59fadd:'+c.id+':">Drop files or add a link</button></div>');
+    if(view.q59fs&&srch)w2.querySelector('.q59srch').appendChild(srch);body.replaceWith(w2)}
+  }
+ }
+}
+var _q59Render=render;
+render=function(){var r=_q59Render.apply(this,arguments);try{q59Fix()}catch(e){console.error(e)}return r};
+// drop files straight onto the Files & links card (onto a module to file them there)
+document.addEventListener('dragover',function(e){var f=e.target.closest&&e.target.closest('#c-files');if(!f||!e.dataTransfer||[].indexOf.call(e.dataTransfer.types||[],'Files')<0)return;e.preventDefault();f.classList.add('q59over')});
+document.addEventListener('dragleave',function(e){var f=e.target.closest&&e.target.closest('#c-files');if(f&&!f.contains(e.relatedTarget))f.classList.remove('q59over')});
+document.addEventListener('drop',function(e){var f=e.target.closest&&e.target.closest('#c-files');if(!f||!e.dataTransfer||!e.dataTransfer.files||!e.dataTransfer.files.length)return;e.preventDefault();f.classList.remove('q59over');
+ var s=e.target.closest('[data-q59sec]'),g=e.target.closest('.q59gh');var sec=s?s.getAttribute('data-q59sec'):g?(g.getAttribute('data-chap')||'').split(':')[1]:'';if(sec==='_')sec='';
+ addFiles(view.classId,[].slice.call(e.dataTransfer.files),sec||undefined)});
+// the + and ⋯ inside a module band shouldn't also fold the band
+window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.q59gh .q59ga');if(!b)return;e.stopPropagation();e.preventDefault();
+ var z=b.getAttribute('data-zact');if(z){var p=z.split(':');ZACT[p[0]].apply(null,p.slice(1));return}
+ view.modal={kind:'sheet',what:b.getAttribute('data-sheet'),i:+b.getAttribute('data-i'),classId:b.getAttribute('data-c')};render()},true);
+
+
+/* v204: a store card's header takes the colour of the store's logo (Jae). The logo pictures can't be read (no CORS),
+   so known stores have their brand colour here; a colour picked in the store's ⋯ always wins; unknown stores keep
+   their soft colour. The header is only a light tint of it, so it stays soft. */
+var Q59BRAND=[['costco','#E31837'],['walmart','#0071CE'],['loblaws','#E01A22'],['no frills','#F2B600'],['nofrills','#F2B600'],['food basics','#F58220'],['metro','#E2001A'],['sobeys','#00843D'],['freshco','#6FA82F'],['superstore','#E21B2C'],['real canadian','#E21B2C'],['wholesale club','#E21B2C'],['zehrs','#C8102E'],['fortinos','#E21B2C'],['valu-mart','#E21B2C'],['your independent','#E21B2C'],['save-on','#E31837'],['safeway','#E51937'],['farm boy','#D2232A'],['longo','#00563F'],['whole foods','#00674B'],['t&t','#E60012'],['adonis','#00843D'],['bulk barn','#F7941D'],['m&m','#E31837'],['shoppers','#CC0000'],['pharmaprix','#CC0000'],['rexall','#00539B'],['london drugs','#003DA5'],['dollarama','#00A651'],['dollar tree','#00843D'],['giant tiger','#E4002B'],['winners','#8B1D41'],['homesense','#6E2C6B'],['marshalls','#002F87'],['ikea','#0058A3'],['canadian tire','#D52B1E'],['home depot','#F96302'],['lowe','#004990'],['rona','#003DA5'],['best buy','#0046BE'],['staples','#CC0000'],['amazon','#FF9900'],['target','#CC0000'],['michaels','#E31837'],['indigo','#3A3A3A'],['sephora','#2B2B2B'],['petsmart','#E2231A'],['pet valu','#00843D'],['h&m','#E50010'],['old navy','#003764'],['lululemon','#D22030'],['aldi','#00005F'],['trader joe','#BA0C2F'],['kroger','#134A9F'],['tim hortons','#C8102E'],['starbucks','#00704A'],['mcdonald','#DA291C']];
+function q59Brand(n){n=String(n||'').toLowerCase();for(var i=0;i<Q59BRAND.length;i++)if(n.indexOf(Q59BRAND[i][0])>-1)return Q59BRAND[i][1];return ''}
+function q59StorePair(s){
+ if(s&&s.color)return ZC[s.color]||ZC.grey;
+ var b=q59Brand(s&&s.name);if(!b)return ZC[zHueOf(s&&s.name)]||ZC.grey;
+ return ['color-mix(in srgb,'+b+' 26%,#fff)','color-mix(in srgb,'+b+' 82%,#000)'];
+}
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
