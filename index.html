@@ -5280,6 +5280,9 @@ body.q61ic.q31nosq .side .sic.pg{color:var(--q61ic)}
 .q60bright{display:flex;align-items:center;gap:14px;flex:none}
 /* v207: a coloured "Your classes" widget is a real card (it was a flat square box behind the tiles) */
 .zhome .zw-classes[data-wcol]>.h4cls{border-radius:16px;padding:16px 18px 18px;border:1px solid rgba(0,0,0,.05)!important}
+/* v208: "Your classes" without a colour has no card, so the hover lift drew a sharp-cornered shadow box around it; the tiles lift on their own instead */
+.zhome:not(.edit) .zw-classes:not([data-wcol]):hover>.h4cls{transform:none!important;box-shadow:none!important}
+.zhome .zw-classes>.h4cls{border-radius:16px}
 @media(max-width:700px){.zhome .zw-classes[data-wcol] .h4clsgrid{margin:0 -18px;padding:4px 18px 10px;scroll-padding-inline:18px}}
 </style>
 </head>
@@ -5589,7 +5592,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v207';
+var BUILD='v208';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
