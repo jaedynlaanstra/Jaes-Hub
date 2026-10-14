@@ -5278,6 +5278,9 @@ body.q61ic.q31nosq .side .sic.pg{color:var(--q61ic)}
 @container (max-width:220px){.q22leg>span:nth-child(n+2){display:none}.q22leg>span{max-width:100%}.q22leg>span .q20fade,.q22leg>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 
 .q60bright{display:flex;align-items:center;gap:14px;flex:none}
+/* v207: a coloured "Your classes" widget is a real card (it was a flat square box behind the tiles) */
+.zhome .zw-classes[data-wcol]>.h4cls{border-radius:16px;padding:16px 18px 18px;border:1px solid rgba(0,0,0,.05)!important}
+@media(max-width:700px){.zhome .zw-classes[data-wcol] .h4clsgrid{margin:0 -18px;padding:4px 18px 10px;scroll-padding-inline:18px}}
 </style>
 </head>
 <body>
@@ -5586,7 +5589,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v206';
+var BUILD='v207';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -7701,13 +7704,13 @@ async function syncFiles(force){
     if(f.cloud&&!exists&&!hasContent(f))filesMiss[f.id]=1;
     if(unsent||behind){
      // fetch the cloud copy first (if there is one) and merge: nothing from either device is lost
-     var cloudM=null;
+     var cloudM=null,startMarks=f.marks,startSig=mkIdsOf(f.marks),mineSig=mkMarksSig(f.marks);
      if(names[f.id+'.marks.json']){
       var dlm=await withTimeout(bucket.download(path+'.marks.json'),60000,{error:{message:'timeout'}});
       if(!dlm||dlm.error){if(behind||unsent)throw (dlm&&dlm.error)||new Error('marks download failed')}
       else{try{cloudM=JSON.parse(await dlm.data.text())}catch(e){cloudM=null}}
      }
-     var merged=mkMergeMarks(f.marks,cloudM),mineSig=mkMarksSig(f.marks);
+     var merged=mkMergeMarks(f.marks,cloudM);
      if(cloudM&&mkMarksSig(merged)!==mineSig)await mkHistAdd(f,'before merging markup from your other device');
      if(unsent||(cloudM&&mkMarksSig(merged)!==mkMarksSig(cloudM))){
       // we hold something the cloud doesn't: upload the merged copy as the newest version
@@ -7717,8 +7720,27 @@ async function syncFiles(force){
       remirror[cid]=1;
      }
      var changedHere=mkMarksSig(merged)!==mineSig;
+     if(f.marks&&(f.marks!==startMarks||mkMarksSig(f.marks)!==mineSig||(f.marks.savedAt||'')!==localAt)){
+      /* v207: you kept writing while this was downloading/uploading. Before, the copy made at the start
+         replaced f.marks, so the lines drawn in the meantime vanished (and were then saved as deleted).
+         Now the other device's changes are folded into what you have NOW, and it stays "unsent". */
+      var live=f.marks,liveIds=mkIdsOf(live),startIds=startSig,mIds=mkIdsOf(merged);
+      ['strokes','notes','texts'].forEach(function(key){
+       live[key]=(live[key]||[]).filter(function(x){return !(x&&startIds[x.id]&&!mIds[x.id])}); // removed on the other device
+       (merged[key]||[]).forEach(function(x){if(x&&x.id&&!startIds[x.id]&&!liveIds[x.id])live[key].push(x)}); // new from the other device
+      });
+      live.deleted=live.deleted||{};Object.keys(merged.deleted||{}).forEach(function(k){if(!live.deleted[k]||merged.deleted[k]>live.deleted[k])live.deleted[k]=merged.deleted[k]});
+      if(merged.pages&&(live.pages||1)<merged.pages)live.pages=merged.pages;
+      if(MK&&MK.f===f&&MK.knownIds){Object.keys(mIds).forEach(function(id){if(!startIds[id])MK.knownIds[id]=1});Object.keys(startIds).forEach(function(id){if(!mIds[id])delete MK.knownIds[id]})}
+      f.marks=live;f.marksSyncedAt=merged.savedAt;
+      if((live.savedAt||'')===f.marksSyncedAt)live.savedAt=new Date(Date.now()+1).toISOString();
+      dirty[cid]=1;moved++;
+      if(changedHere&&MK&&MK.f===f&&!MK.drawing&&!MK.erasing){Object.keys(MK.pageInfo).forEach(function(n){mkDrawAnnoForPage(+n)});mkRerenderChrome()}
+      if(sbUser)setTimeout(function(){scheduleCloudSync(1500)},0); // send the newer lines next
+     }else{
      f.marks=merged;f.marksSyncedAt=merged.savedAt;dirty[cid]=1;moved++;
      if(changedHere&&MK&&MK.f===f&&!MK.drawing&&!MK.erasing){MK.knownIds=mkIdsOf(merged);Object.keys(MK.pageInfo).forEach(function(n){mkDrawAnnoForPage(+n)});mkRerenderChrome()} // open right now: show it
+     }
     }
     var needUpload=(!f.cloud&&(f.data||f.kind==='text'))||(f.cloud&&!exists&&hasContent(f));
     if(needUpload){
