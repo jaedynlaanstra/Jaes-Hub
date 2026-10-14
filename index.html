@@ -5111,10 +5111,12 @@ a.q59nm:hover{text-decoration:underline}
 .q60stats>div:last-child{padding-right:0}
 .q60stats small{display:block;font-size:12px;color:var(--q60m)}
 .q60stats b{font-size:20px;font-weight:600}
-.q60tabs{display:flex;gap:4px;margin-top:16px;border-bottom:1.5px solid #e1e4db;overflow-x:auto;scrollbar-width:none}
+.q60tabs{display:flex;gap:4px;margin-top:16px;border-bottom:1.5px solid #e1e4db;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding-bottom:1.5px}
 .q60tabs::-webkit-scrollbar{display:none}
-.q60tabs button{border:none;background:none;padding:12px 16px;font:inherit;font-size:14px;font-weight:500;color:var(--q60m);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;cursor:pointer;white-space:nowrap;min-height:0!important;transition:color .15s,border-color .15s;flex:none}
-.q60tabs button.on{font-weight:600;color:var(--ink);border-bottom-color:var(--bp)}
+.q60tabs button{position:relative;border:none!important;border-radius:0!important;background:none!important;box-shadow:none!important;padding:12px 16px;font:inherit;font-size:14px;font-weight:500;color:var(--q60m);cursor:pointer;white-space:nowrap;min-height:0!important;transition:color .15s;flex:none}
+.q60tabs button::after{content:'';position:absolute;left:0;right:0;bottom:-1.5px;height:2.5px;background:transparent;transition:background .15s}
+.q60tabs button.on{font-weight:600;color:var(--ink)}
+.q60tabs button.on::after{background:var(--bp)}
 .q60tabs em{font-style:normal;font-weight:500;color:var(--q60m);font-size:12.5px;margin-left:2px}
 .q60body{margin-top:16px}
 .q60g15,.q60g12,.q60g11{display:grid;gap:14px;align-items:start}
@@ -5138,7 +5140,7 @@ a.q59nm:hover{text-decoration:underline}
 .q60txt small,.q60due{font-size:12px;color:var(--q60m)}
 .q60amt{font-size:15px;font-weight:500;white-space:nowrap;flex:none}
 .q60amt.in{color:#4f7a5b}
-.q60cat{display:grid;grid-template-columns:14px minmax(70px,100px) minmax(40px,1fr) auto;gap:12px;align-items:center;padding:10px 0;border:none;border-top:1px solid var(--q60d);background:none;width:100%;font:inherit;font-size:14px;text-align:left;color:var(--ink);cursor:pointer;min-height:0!important}
+.q60cat{display:grid;grid-template-columns:14px minmax(70px,100px) minmax(40px,1fr) 136px;gap:12px;align-items:center;padding:10px 0;border:none;border-top:1px solid var(--q60d);background:none;width:100%;font:inherit;font-size:14px;text-align:left;color:var(--ink);cursor:pointer;min-height:0!important}
 .q60cat>i{width:10px;height:10px;border-radius:50%}
 .q60cn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .q60tr{height:8px;background:var(--q60t);border-radius:5px;overflow:hidden;display:block}
@@ -5187,7 +5189,7 @@ a.q59nm:hover{text-decoration:underline}
 .q60exp b{color:#4f7a5b;font-weight:500}
 .q60bill{display:flex;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--q60d)}
 .q60bt{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:none;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--ink);min-height:0!important}
-.q60bt>span{display:flex;flex-direction:column;min-width:0}
+.q60bt>span:not(.zlogo){display:flex;flex-direction:column;min-width:0}
 .q60bt b{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .q60bill.paid .q60bt b{text-decoration:line-through;color:var(--q60m)}
 .q60bill .q60amt{min-width:64px;text-align:right}
@@ -5240,8 +5242,8 @@ a.q59nm:hover{text-decoration:underline}
  .q60big b{font-size:30px}.q60stats b{font-size:17px}
  .q60c{padding:16px}
  .q60cat{grid-template-columns:12px minmax(0,1fr) auto;row-gap:6px}.q60cat .q60tr{grid-column:2/-1;grid-row:2}
- .q60bill{flex-wrap:wrap;gap:10px}.q60bt{flex:1 1 60%}.q60pay2{min-width:0}
- .q60ban{flex-wrap:wrap}.q60br{text-align:left}
+ .q60bill{gap:10px}.q60bright{flex-direction:column;align-items:flex-end;gap:6px}.q60pay2{min-width:0;padding:6px 12px;font-size:12.5px}
+ .q60ban{flex-wrap:wrap;row-gap:10px}.q60bl{flex:1 1 100%}.q60br{text-align:left;flex:1}
 }
 
 /* v205: menu icon colour */
@@ -5254,6 +5256,28 @@ body.q61ic.q31nosq .side .sic.pg{color:var(--q61ic)}
 .q61pz{padding:16px 24px 0}
 .q61pz .pastezone{margin:0;background:var(--card)}
 .q61pzx{margin-top:10px}
+
+/* v206 Budget fixes */
+.q60cards{gap:10px!important}
+.q60card{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;width:100%;border:none;border-radius:16px;padding:16px 18px;color:#fff;font:inherit;text-align:left;cursor:pointer;min-height:0!important;box-shadow:0 6px 16px -10px rgba(0,0,0,.4);transition:transform .15s}
+.q60card:hover{transform:translateY(-1px)}
+.q60cl{display:flex;flex-direction:column;gap:14px;min-width:0}
+.q60cnm{display:flex;align-items:center;gap:8px;min-width:0}
+.q60cnm b{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q60cnm .zlogo{box-shadow:0 0 0 1.5px rgba(255,255,255,.7)!important}
+.q60cl small{font-size:12px;opacity:.85;white-space:nowrap}
+.q60cr{display:flex;flex-direction:column;align-items:flex-end;flex:none}
+.q60cr b{font-size:24px;font-weight:600;line-height:1.1}
+.q60cr small{font-size:11.5px;opacity:.8}
+.q60nb .zlogo{flex:none}
+.q60went .zdc b{font-size:14px!important;font-weight:600}
+.q60went .zdc small{font-size:11px}
+.q22bar{gap:0!important;border-radius:6px;overflow:hidden}
+.q22bar i{border-radius:0!important}
+
+@container (max-width:220px){.q22leg>span:nth-child(n+2){display:none}.q22leg>span{max-width:100%}.q22leg>span .q20fade,.q22leg>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+
+.q60bright{display:flex;align-items:center;gap:14px;flex:none}
 </style>
 </head>
 <body>
@@ -5562,7 +5586,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v205';
+var BUILD='v206';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -20630,7 +20654,7 @@ zBudgetPage=function(c){
   var topc=q60Card('Top categories',q60Link('All categories ›','q60tab:'+c.id+':2'),b.cats.length?catsSorted.slice(0,4).map(function(x){return q60CatRow(c,b,x)}).join(''):'<p class="q60e">Add categories with a monthly limit, like groceries or eating out. '+q60Link('+ Category','catnew:'+c.id)+'</p>');
   var pay='<section class="q60c q60pay"'+(nx?' data-zact="payedit:'+c.id+':'+nx.p.id+'" role="button" tabindex="0"':'')+'><b>'+esc(nx&&nx.p.title||'Pay day')+'</b>'+(nx?'<span>'+payTxt()+'</span>':q60Link('+ Add pay day','paynew:'+c.id))+'</section>';
   var nb=unpaid.filter(function(o){return o.d>=td||!o.later}).slice(0,3);
-  var nbills=q60Card('Next bills',q60Link('All ›','q60tab:'+c.id+':3'),nb.length?nb.map(function(o){return '<div class="q60nb"><button class="q60ck" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'" aria-label="Mark '+esc(o.x.title)+' paid"></button><button class="q60nbt" data-zact="billedit:'+c.id+':'+o.x.id+'"><b>'+esc(o.x.title)+'</b>'+q60BillLine(o)+'</button><span class="q60amt">'+money(o.x.amount)+'</span></div>'}).join(''):'<p class="q60e">'+(b.bills.length?'All paid. Nice.':'No bills yet. '+q60Link('+ Bill','billnew:'+c.id))+'</p>');
+  var nbills=q60Card('Next bills',q60Link('All ›','q60tab:'+c.id+':3'),nb.length?nb.map(function(o){return '<div class="q60nb"><button class="q60ck" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'" aria-label="Mark '+esc(o.x.title)+' paid"></button>'+zLogo(o.x.title,30,'wallet')+'<button class="q60nbt" data-zact="billedit:'+c.id+':'+o.x.id+'"><b>'+esc(o.x.title)+'</b>'+q60BillLine(o)+'</button><span class="q60amt">'+money(o.x.amount)+'</span></div>'}).join(''):'<p class="q60e">'+(b.bills.length?'All paid. Nice.':'No bills yet. '+q60Link('+ Bill','billnew:'+c.id))+'</p>');
   var goal=q60Card(b.goals.length>1?'Goals':'Goal',b.goals.length?q60Link('All ›','q60tab:'+c.id+':4'):'',b.goals.length?goalCard(b.goals[0],false):'<p class="q60e">Save toward something. '+q60Link('+ Add a goal','goalnew:'+c.id)+'</p>');
   body='<div class="q60g15"><div class="q60col">'+recent+topc+'</div><div class="q60col">'+pay+nbills+goal+'</div></div>';
  }else if(tab===1){
@@ -20656,11 +20680,11 @@ zBudgetPage=function(c){
     +(b.total?'<div class="q60br"><small>Left after bills due first</small><b>'+money(b.left-before)+'</b></div>':'')+'<button class="q60edit" data-zact="payedit:'+c.id+':'+nx.p.id+'">Edit</button></div>'
     +'<div class="q60exp"><span>Expected pay</span>'+(nx.p.amount?'<b>+'+money(nx.p.amount)+'</b>':q60Link('+ Add amount','payedit:'+c.id+':'+nx.p.id))+'</div>'
    :'<div class="q60ban"><div class="q60bl"><small>Pay day</small><b>Not set</b><small>Doable counts down to it and shows what’s left after bills.</small></div><button class="q60edit" data-zact="paynew:'+c.id+'">Add</button></div>';
-  var rows=bills.map(function(o){return '<div class="q60bill'+(o.paid?' paid':'')+'"><button class="q60bt" data-zact="billedit:'+c.id+':'+o.x.id+'">'+zLogo(o.x.title,34,'wallet')+'<span><b>'+esc(o.x.title)+'</b>'+q60BillLine(o)+'</span></button><span class="q60amt">'+money(o.x.amount)+'</span>'
-   +'<button class="q60pay2'+(o.paid?' y':'')+'" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'">'+(o.paid?'✓ Paid':'Mark paid')+'</button></div>'}).join('');
+  var rows=bills.map(function(o){return '<div class="q60bill'+(o.paid?' paid':'')+'"><button class="q60bt" data-zact="billedit:'+c.id+':'+o.x.id+'">'+zLogo(o.x.title,34,'wallet')+'<span><b>'+esc(o.x.title)+'</b>'+q60BillLine(o)+'</span></button><span class="q60bright"><span class="q60amt">'+money(o.x.amount)+'</span>'
+   +'<button class="q60pay2'+(o.paid?' y':'')+'" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'">'+(o.paid?'✓ Paid':'Mark paid')+'</button></span></div>'}).join('');
   var billsC=q60Card('Bills','<span class="q60soft">'+(toPay?money(toPay)+' to pay · ':'')+q60Link('+ Bill','billnew:'+c.id)+'</span>',banner+(rows||'<p class="q60e">Add your bills with their due dates, like rent or your phone. They show on your calendar too.</p>'));
   var CL=q17Cards(c);
-  var cards=q60Card('Your cards',q60Link('+ Add a card','cardnew:'+c.id),CL.length?'<div class="q60cards">'+CL.map(function(x){return q17CardTile(c,x,mo)}).join('')+'</div>':'<p class="q60e">Add your bank and credit cards to see balances and what you spent on each. Only the last 4 digits.</p>');
+  var cards=q60Card('Your cards',q60Link('+ Add a card','cardnew:'+c.id),CL.length?'<div class="q60cards">'+CL.map(function(x){return q60CardTile(c,x)}).join('')+'</div>':'<p class="q60e">Add your bank and credit cards to see balances and what you spent on each. Only the last 4 digits.</p>');
   body='<div class="q60g12"><div class="q60col">'+billsC+'</div><div class="q60col">'+cards+'</div></div>';
  }else if(tab===4){
   body='<div class="q60gh2"><h3>Goals and savings</h3><button class="q60b" data-zact="goalnew:'+c.id+'">+ Add a goal</button></div>'
@@ -20722,6 +20746,34 @@ render=function(){var r=_q61RenderC.apply(this,arguments);
    if(anchor&&anchor.parentNode)anchor.after(box);else{var m=document.querySelector('.main');if(m)m.insertBefore(box,m.firstChild)}}
  }catch(e){}
  return r};
+
+/* v206: Budget fixes after Jae's look. Card tiles in Bills & cards are compact like the mockup (name, •••• digits, balance)
+   in the card's own bank colours; donut slices touch (no gaps) everywhere, and so do the pieces of the small Budget
+   widget's bar. */
+function q60CardTile(c,x){
+ var b=typeof q28Bank==='function'?q28Bank(x):null,kind=x.kind||'credit',credit=kind==='credit',g;
+ if(b)g=credit?b.cr:b.db;
+ else{var hex=palHex(x.color||'denim'),q=rgb2hsl.apply(null,hex2rgb(hex));g=[hsl2hex(q[0],Math.max(18,Math.min(q[1]*1.2,42)),46),hsl2hex((q[0]+24)%360,Math.max(18,Math.min(q[1]*1.1,40)),62)]}
+ var bal=+x.balance||0,lim=+x.limit||0;
+ return '<button class="q60card" data-zact="cardedit:'+c.id+':'+x.id+'" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')">'
+  +'<span class="q60cl"><span class="q60cnm">'+(b?zLogo(b.n,20,'card',b.d):'')+'<b>'+esc(x.title||(b?b.n:'Card'))+'</b></span><small>•••• '+esc(x.last4||'····')+' · '+(credit?'Credit':kind==='savings'?'Savings':'Debit')+'</small></span>'
+  +'<span class="q60cr"><b>'+money(bal)+'</b><small>'+(credit?(lim?'owing of '+money(lim):'owing'):'balance')+'</small></span></button>';
+}
+var _q62Donut=zDonut;
+zDonut=function(segs,sz,w,top,sub){
+ sz=sz||120;w=w||14;var r=(sz-w)/2,C=2*Math.PI*r,tot=0,off=0,c2=sz/2;
+ segs.forEach(function(x){tot+=Math.max(0,+x.v||0)});
+ var h='<svg class="zdonut" width="'+sz+'" height="'+sz+'" viewBox="0 0 '+sz+' '+sz+'" aria-hidden="true"><circle cx="'+c2+'" cy="'+c2+'" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".08" stroke-width="'+w+'"/>';
+ if(tot>0)segs.forEach(function(x){var v=Math.max(0,+x.v||0);if(!v)return;var len=C*v/tot;
+  // each slice runs a hair past its end so the next one covers the seam: the colours touch
+  h+='<circle class="zseg" cx="'+c2+'" cy="'+c2+'" r="'+r+'" fill="none" stroke="'+x.col+'" stroke-width="'+w+'" stroke-dasharray="'+Math.min(C,len+0.6).toFixed(2)+' '+C.toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 '+c2+' '+c2+')"/>';off+=len});
+ h+='</svg>';
+ return '<div class="zdwrap" style="width:'+sz+'px;height:'+sz+'px">'+h+(top!=null?'<div class="zdc"><b>'+top+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div>':'')+'</div>';
+};
+
+// the chosen Budget tab is always scrolled into sight in the tab bar (phones)
+var _q62Render=render;
+render=function(){var r=_q62Render.apply(this,arguments);try{var t=document.querySelector('.q60tabs'),on=t&&t.querySelector('button.on');if(on){var a=on.offsetLeft,b=a+on.offsetWidth;if(a<t.scrollLeft||b>t.scrollLeft+t.clientWidth)t.scrollLeft=Math.max(0,a-24)}}catch(e){}return r};
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
