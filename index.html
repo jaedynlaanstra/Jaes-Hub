@@ -5740,7 +5740,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v214';
+var BUILD='v215';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -21988,74 +21988,79 @@ function q66Dense(V,closed,step){
 }
 function q66Rot(p,c,ang){var cs=Math.cos(ang),sn=Math.sin(ang),x=p[0]-c[0],y=p[1]-c[1];return [c[0]+x*cs-y*sn,c[1]+x*sn+y*cs]}
 function q66Snap90(ang,tol){var q=Math.PI/2,r=ang-Math.round(ang/q)*q;return Math.abs(r)<tol*Math.PI/180?ang-r:ang}
-// what was drawn: {name, pts} in page units, or null when it isn't clearly a shape
+// what was drawn: {name, pts} in page units, or null. v215: generous like Procreate (the hold is what says
+// "make this a shape"), works at any size down to a little checkbox, and picks whichever of circle/oval,
+// square/rectangle or triangle fits the drawing best.
+function q66Pct(L,q){var a=L.slice().sort(function(x,y){return x-y});return a[Math.max(0,Math.min(a.length-1,Math.round(q*(a.length-1))))]}
 function q66Recognize(raw,scale){
- if(raw.length<6)return null;
+ if(raw.length<4)return null;
  var xs=raw.map(function(p){return p[0]}),ys=raw.map(function(p){return p[1]});
- var w=Math.max.apply(null,xs)-Math.min.apply(null,xs),h=Math.max.apply(null,ys)-Math.min.apply(null,ys),size=Math.max(w,h);
- if(size*scale<Q66_MIN||size<26)return null;
- var P=q66Resample(raw,72),A=P[0],B=P[P.length-1],chord=Math.hypot(B[0]-A[0],B[1]-A[1]),len=0;
- for(var i=1;i<P.length;i++)len+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);
+ var w=Math.max.apply(null,xs)-Math.min.apply(null,xs),h=Math.max.apply(null,ys)-Math.min.apply(null,ys),size=Math.max(w,h),px=size*scale;
+ if(px<10)return null;
+ var P=q66Resample(raw,80),A=P[0],B=P[P.length-1],chord=Math.hypot(B[0]-A[0],B[1]-A[1]),len=0,i,j;
+ for(i=1;i<P.length;i++)len+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);
  // a straight line
  var dev=0;P.forEach(function(p){dev=Math.max(dev,mkDistToSeg(p,A,B))});
- if(chord>=size*.9&&dev<chord*.07&&len<chord*1.12){
+ if(chord>=size*.9&&dev<chord*.08&&len<chord*1.15&&px>=14){
   var ang=q66Snap90(Math.atan2(B[1]-A[1],B[0]-A[0]),4),E=[A[0]+Math.cos(ang)*chord,A[1]+Math.sin(ang)*chord];
-  return {name:'line',pts:q66Dense([A,E],false,2)};
+  return {name:'line',pts:q66Dense([A,E],false,Math.max(.5,Math.min(2,chord/40)))};
  }
- // v214: a closed shape, drawn by a real hand: it may overshoot past the start, stop a little short, or have
- // round corners. Find where the loop closes (the closest pair of points between its start and its end) and
- // use just that loop.
+ // a closed shape: where does the loop close? (it may overshoot the start a little, or stop a little short)
  var bi=0,bj=P.length-1,bd=1e9;
- for(var i2=0;i2<=Math.floor(P.length*.3);i2++)for(var j2=Math.floor(P.length*.55);j2<P.length;j2++){var dd=Math.hypot(P[i2][0]-P[j2][0],P[i2][1]-P[j2][1]);if(dd<bd){bd=dd;bi=i2;bj=j2}}
- if(bd>size*.35||len<size*2.2)return null;
- if((bi+(P.length-1-bj))/P.length>.22)return null;
- var Q=P.slice(bi,bj+1);if(Q.length<20)return null;
- Q=q66Resample(Q,72);A=Q[0];
+ for(i=0;i<=Math.floor(P.length*.3);i++)for(j=Math.floor(P.length*.5);j<P.length;j++){var dd=Math.hypot(P[i][0]-P[j][0],P[i][1]-P[j][1]);if(dd<bd){bd=dd;bi=i;bj=j}}
+ if(bd>size*.45||len<size*2)return null;
+ if((bi+(P.length-1-bj))/P.length>.3)return null;
+ var Q=q66Resample(P.slice(bi,bj+1),80);A=Q[0];
  var c=[0,0];Q.forEach(function(p){c[0]+=p[0]/Q.length;c[1]+=p[1]/Q.length});
- // an ellipse along its own main direction, sized from the spread of the points (steady even when lumpy)
+ var step=Math.max(.5,Math.min(2,size/40)),best=null,try_=function(name,err,pts){if(!best||err<best.err)best={name:name,err:err,pts:pts}};
+ // 1) ellipse along its own main direction, sized from the spread of the points
  var sxx=0,syy=0,sxy=0;Q.forEach(function(p){var x=p[0]-c[0],y=p[1]-c[1];sxx+=x*x;syy+=y*y;sxy+=x*y});
  var th=.5*Math.atan2(2*sxy,sxx-syy),cs=Math.cos(th),sn=Math.sin(th),su=0,sv=0;
  Q.forEach(function(p){var x=p[0]-c[0],y=p[1]-c[1],u=x*cs+y*sn,v=-x*sn+y*cs;su+=u*u;sv+=v*v});
- var ea=Math.sqrt(2*su/Q.length),eb=Math.sqrt(2*sv/Q.length),ec=c,eErr=0;
- Q.forEach(function(p){var x=p[0]-ec[0],y=p[1]-ec[1],u=x*cs+y*sn,v=-x*sn+y*cs;eErr+=Math.abs(Math.sqrt((u/ea)*(u/ea)+(v/eb)*(v/eb))-1)});
- var eDist=eErr/Q.length*(ea+eb)/2/size;
- // corners: 3 or 4 of them (corners closer together than 18% of the size count as one)
- var far=0;Q.forEach(function(p,k){if(Math.hypot(p[0]-c[0],p[1]-c[1])>Math.hypot(Q[far][0]-c[0],Q[far][1]-c[1]))far=k});
- var Qr=Q.slice(far).concat(Q.slice(1,far+1)),V=q66RDP(Qr,size*.1);V.pop();
- for(var m2=V.length-1;m2>0&&V.length>3;m2--){if(Math.hypot(V[m2][0]-V[m2-1][0],V[m2][1]-V[m2-1][1])<size*.18)V.splice(m2,1)}
- if(V.length>3&&Math.hypot(V[0][0]-V[V.length-1][0],V[0][1]-V[V.length-1][1])<size*.18)V.pop();
- for(var guard=0;guard<10&&V.length>3;guard++){ // a "corner" where the line barely turns is just a wobble
-  var drop=-1;for(var k4=0;k4<V.length;k4++){var p0=V[(k4+V.length-1)%V.length],p1=V[k4],p2=V[(k4+1)%V.length];
-   var t1=Math.atan2(p1[1]-p0[1],p1[0]-p0[0]),t2=Math.atan2(p2[1]-p1[1],p2[0]-p1[0]),turn=Math.abs(((t2-t1)+3*Math.PI)%(2*Math.PI)-Math.PI);
-   if(turn<.5){drop=k4;break}}
-  if(drop<0)break;V.splice(drop,1);
+ var ea=Math.sqrt(2*su/Q.length),eb=Math.sqrt(2*sv/Q.length),eErr=0;
+ // corners: how much of the turning happens in a few sharp places (box, triangle) rather than evenly all the
+ // way round (circle). Measured on the shape stretched back to round, so a long oval's ends don't count as corners.
+ var k5=eb>0?ea/eb:1,Qn=Q.map(function(p){var x=p[0]-c[0],y=p[1]-c[1];return [x*cs+y*sn,(-x*sn+y*cs)*k5]});
+ var dirs=[],turns=[],tot=0,n5=Qn.length;
+ for(i=0;i<n5;i++){var q1=Qn[i],q2=Qn[(i+3)%n5];dirs.push(Math.atan2(q2[1]-q1[1],q2[0]-q1[0]))}
+ for(i=0;i<n5;i++){var dt=Math.abs(((dirs[(i+1)%n5]-dirs[i])+3*Math.PI)%(2*Math.PI)-Math.PI);turns.push(dt);tot+=dt}
+ var corner=tot?turns.slice().sort(function(a,b){return b-a}).slice(0,Math.round(n5*.2)).reduce(function(a,b){return a+b},0)/tot:0;
+ var cornerBias=corner>=.52?2.5:1,roundBias=corner<=.48?2:1; // round shapes measure .37-.49, boxes and triangles .50-.75
+ Q.forEach(function(p){var x=p[0]-c[0],y=p[1]-c[1],u=x*cs+y*sn,v=-x*sn+y*cs,pd=Math.hypot(u,v),r=Math.sqrt((u/ea)*(u/ea)+(v/eb)*(v/eb))||1;eErr+=pd*Math.abs(1-1/r)});
+ eErr=eErr/Q.length/size;
+ if(px>=22&&Math.min(ea,eb)>size*.08){
+  var round=Math.abs(ea-eb)/Math.max(ea,eb)<.18,ra=round?(ea+eb)/2:ea,rb=round?(ea+eb)/2:eb,th2=q66Snap90(th,12),c2=Math.cos(th2),s2=Math.sin(th2),a0=Math.atan2(A[1]-c[1],A[0]-c[0])-th2,E2=[];
+  for(j=0;j<=96;j++){var t=a0+j/96*Math.PI*2,u2=Math.cos(t)*ra,v2=Math.sin(t)*rb;E2.push([c[0]+u2*c2-v2*s2,c[1]+u2*s2+v2*c2])}
+  try_(round?'circle':'oval',eErr*cornerBias,E2);
  }
- var pErr=1e9;
- if(V.length===3||V.length===4){pErr=0;Q.forEach(function(p){var m=1e9;for(var k=0;k<V.length;k++)m=Math.min(m,mkDistToSeg(p,V[k],V[(k+1)%V.length]));pErr+=m});pErr=pErr/Q.length/size}
- var P2=Q;
- if(pErr<.07&&pErr<=eDist*1.3){
-  if(V.length===3)return {name:'triangle',pts:q66Dense(V,true,2)};
-  // a rectangle: the average direction of its sides, level/upright when close, then its box in that direction
-  var sx=0,sy=0;for(var k2=0;k2<4;k2++){var a2=Math.atan2(V[(k2+1)%4][1]-V[k2][1],V[(k2+1)%4][0]-V[k2][0])*4;sx+=Math.cos(a2);sy+=Math.sin(a2)}
-  var al=q66Snap90(Math.atan2(sy,sx)/4,10),R=V.map(function(p){return q66Rot(p,c,-al)});
-  var rxs=R.map(function(p){return p[0]}).sort(function(a3,b3){return a3-b3}),rys=R.map(function(p){return p[1]}).sort(function(a3,b3){return a3-b3});
-  var rx0=(rxs[0]+rxs[1])/2,rx1=(rxs[2]+rxs[3])/2,ry0=(rys[0]+rys[1])/2,ry1=(rys[2]+rys[3])/2;
-  var rw=rx1-rx0,rh=ry1-ry0;if(rw<size*.15||rh<size*.15)return null;
-  var sq=Math.abs(rw-rh)/Math.max(rw,rh)<.15;
-  if(sq){var s2=(rw+rh)/2,mx=(rx0+rx1)/2,my=(ry0+ry1)/2;rx0=mx-s2/2;rx1=mx+s2/2;ry0=my-s2/2;ry1=my+s2/2}
-  var C=[[rx0,ry0],[rx1,ry0],[rx1,ry1],[rx0,ry1]].map(function(p){return q66Rot(p,c,al)});
-  // start at the corner nearest where the pen started, so the line still begins where you began
+ // 2) rectangle: the tightest box over every angle (level or upright when close), edges at the 3rd/97th percentile
+ var bestBox=null;
+ for(var deg=0;deg<90;deg+=3){var al=deg*Math.PI/180,R=Q.map(function(p){return q66Rot(p,c,-al)}),rx=R.map(function(p){return p[0]}),ry=R.map(function(p){return p[1]});
+  var bx={al:al,x0:q66Pct(rx,.03),x1:q66Pct(rx,.97),y0:q66Pct(ry,.03),y1:q66Pct(ry,.97)};bx.area=(bx.x1-bx.x0)*(bx.y1-bx.y0);if(!bestBox||bx.area<bestBox.area)bestBox=bx}
+ var al2=q66Snap90(bestBox.al,10);
+ if(al2!==bestBox.al){var R2=Q.map(function(p){return q66Rot(p,c,-al2)}),rx2=R2.map(function(p){return p[0]}),ry2=R2.map(function(p){return p[1]});bestBox={al:al2,x0:q66Pct(rx2,.03),x1:q66Pct(rx2,.97),y0:q66Pct(ry2,.03),y1:q66Pct(ry2,.97)}}
+ var X0=bestBox.x0,X1=bestBox.x1,Y0=bestBox.y0,Y1=bestBox.y1,rErr=0;
+ Q.forEach(function(p){var q=q66Rot(p,c,-bestBox.al),dx=Math.max(X0-q[0],0,q[0]-X1),dy=Math.max(Y0-q[1],0,q[1]-Y1);rErr+=(dx||dy)?Math.hypot(dx,dy):Math.min(q[0]-X0,X1-q[0],q[1]-Y0,Y1-q[1])});
+ rErr=rErr/Q.length/size;
+ var bw=X1-X0,bh=Y1-Y0;
+ if(bw>size*.12&&bh>size*.12){
+  var sq=Math.abs(bw-bh)/Math.max(bw,bh)<.18;
+  if(sq){var sd=(bw+bh)/2,mx=(X0+X1)/2,my=(Y0+Y1)/2;X0=mx-sd/2;X1=mx+sd/2;Y0=my-sd/2;Y1=my+sd/2}
+  var C=[[X0,Y0],[X1,Y0],[X1,Y1],[X0,Y1]].map(function(p){return q66Rot(p,c,bestBox.al)});
   var st=0;C.forEach(function(p,k){if(Math.hypot(p[0]-A[0],p[1]-A[1])<Math.hypot(C[st][0]-A[0],C[st][1]-A[1]))st=k});
-  return {name:sq?'square':'rectangle',pts:q66Dense(C.slice(st).concat(C.slice(0,st)),true,2)};
+  try_(sq?'square':'rectangle',rErr*roundBias,q66Dense(C.slice(st).concat(C.slice(0,st)),true,step));
  }
- if(eDist<.05&&Math.min(ea,eb)>size*.08){
-  if(Math.abs(ea-eb)/Math.max(ea,eb)<.15){ea=eb=(ea+eb)/2}
-  th=q66Snap90(th,10);cs=Math.cos(th);sn=Math.sin(th);
-  var a0=Math.atan2(A[1]-ec[1],A[0]-ec[0])-th,out=[];
-  for(var j=0;j<=96;j++){var t=a0+j/96*Math.PI*2,u=Math.cos(t)*ea,v=Math.sin(t)*eb;out.push([ec[0]+u*cs-v*sn,ec[1]+u*sn+v*cs])}
-  return {name:ea===eb?'circle':'oval',pts:out};
+ // 3) triangle: the two points farthest apart, then the point farthest from the line between them
+ var t1=0,t2=0,tdm=0;for(i=0;i<Q.length;i+=2)for(j=i+2;j<Q.length;j+=2){var d3=Math.hypot(Q[i][0]-Q[j][0],Q[i][1]-Q[j][1]);if(d3>tdm){tdm=d3;t1=i;t2=j}}
+ var t3=0,t3d=0;Q.forEach(function(p,k){var d4=mkDistToSeg(p,Q[t1],Q[t2]);if(d4>t3d){t3d=d4;t3=k}});
+ if(t3d>size*.25){
+  var T=[Q[t1],Q[t2],Q[t3]].sort(function(a,b){return Q.indexOf(a)-Q.indexOf(b)}),tErr=0;
+  Q.forEach(function(p){tErr+=Math.min(mkDistToSeg(p,T[0],T[1]),mkDistToSeg(p,T[1],T[2]),mkDistToSeg(p,T[2],T[0]))});
+  tErr=tErr/Q.length/size;
+  var ts=0;T.forEach(function(p,k){if(Math.hypot(p[0]-A[0],p[1]-A[1])<Math.hypot(T[ts][0]-A[0],T[ts][1]-A[1]))ts=k});
+  try_('triangle',tErr*1.05*roundBias,q66Dense(T.slice(ts).concat(T.slice(0,ts)),true,step));
  }
- return null;
+ return best&&best.err<.1?{name:best.name,pts:best.pts}:null;
 }
 // the hold itself: called by a timer while the pen stays still, or on lift right after a long enough hold
 function q66Hold(){
@@ -22075,18 +22080,18 @@ mkAppendPoint=function(clientX,clientY,pressure){
    if(L>2){var ang=q66Snap90(Math.atan2(p[1]-A[1],p[0]-A[0]),4);d.pts=q66Dense([A,[A[0]+Math.cos(ang)*L,A[1]+Math.sin(ang)*L]],false,2).map(function(q){return [q[0],q[1],d.pr]})}}
   return;
  }
- var before=d&&d.holdAt;
  _q66Append.apply(this,arguments);
  d=MK.drawing;
- if(d&&d.tool==='pen'&&d.holdAt!==before){clearTimeout(MK.q66t);MK.q66t=setTimeout(q66Hold,Q66_MS)}
+ if(d&&d.tool==='pen'&&!d.q66){var hp=d.q66hp;if(!hp||Math.hypot(clientX-hp[0],clientY-hp[1])>3){d.q66hp=[clientX,clientY];d.q66ht=Date.now();clearTimeout(MK.q66t);MK.q66t=setTimeout(q66Hold,Q66_MS)}}
 };
 var _q66Begin=mkBeginStroke;
-mkBeginStroke=function(){clearTimeout(MK&&MK.q66t);var r=_q66Begin.apply(this,arguments);if(MK&&MK.drawing&&MK.drawing.tool==='pen'){MK.q66t=setTimeout(q66Hold,Q66_MS)}return r};
+mkBeginStroke=function(anno,page,clientX,clientY){clearTimeout(MK&&MK.q66t);var r=_q66Begin.apply(this,arguments);var d=MK&&MK.drawing;if(d&&d.tool==='pen'){d.q66hp=[clientX,clientY];d.q66ht=Date.now();MK.q66t=setTimeout(q66Hold,Q66_MS)}return r};
 var _q66Finish=mkFinishStroke;
 mkFinishStroke=function(){
  clearTimeout(MK.q66t);var d=MK.drawing;
- if(d&&d.tool==='pen'&&!d.q66&&d.holdAt&&Date.now()-d.holdAt>=Q66_MS)q66Hold();
+ if(d&&d.tool==='pen'&&!d.q66&&d.q66ht&&Date.now()-d.q66ht>=Q66_MS)q66Hold();
  var shape=d&&d.q66;
+ if(d){delete d.q66hp;delete d.q66ht}
  if(shape){Q66RAW[d.id]=d.q66raw;delete d.q66;delete d.q66raw;delete d.pr}
  var r=_q66Finish.apply(this,arguments);
  if(shape)zToast('Made '+(/^[aeiou]/.test(shape.name)?'an ':'a ')+shape.name,'<button data-q66keep="'+d.id+'">Keep my drawing</button>');
