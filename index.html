@@ -6142,7 +6142,7 @@ async function saveFiles(cid,quiet){
    for(var k=0;k<n;k++)sdel('hub:fd:'+f.id+':'+k);
   }
  }
- var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,icon:f.icon,text:f.text,marks:f.marks,marksSyncedAt:f.marksSyncedAt,chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
+ var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,icon:f.icon,text:f.text,marks:f.marks,marksSyncedAt:f.marksSyncedAt,marksTag:f.marksTag||'',chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
  try{await sset('hub:files:'+cid,JSON.stringify(index))}catch(e){}
  render();
 }
@@ -7486,10 +7486,14 @@ function handleSession(session){
 }
 function startRealtime(){
  stopRealtime();
+ /* v217: your devices tell each other "something changed" with a tiny ping. Before, every save sent the WHOLE
+    synced data (about 110 KB) to every open device through Realtime, and each one then downloaded it all again,
+    over a thousand times a day. A device that is in the background just catches up when you open it again. */
  rtChannel=sb.channel('hub-'+sbUser.id)
-  .on('postgres_changes',{event:'*',schema:'public',table:'hub_state',filter:'user_id=eq.'+sbUser.id},function(){scheduleCloudSync(300)})
+  .on('broadcast',{event:'changed'},function(){if(!document.hidden)scheduleCloudSync(300)})
   .subscribe();
 }
+function rtPing(v){if(rtChannel)try{rtChannel.send({type:'broadcast',event:'changed',payload:{v:v}})}catch(e){}}
 function stopRealtime(){
  if(rtChannel&&sb){try{sb.removeChannel(rtChannel)}catch(e){}}
  rtChannel=null;
@@ -7737,7 +7741,7 @@ async function syncOnce(force){
    if(typeof q68MayUpload==='function'&&!q68MayUpload(mine0,null))return{ok:true,changed:false}; // v217 loop brake
    var up0=await sb.from('hub_state').update({state:mine0,version:syncVer+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',syncVer).select('version');
    if(up0.error)return{ok:false,error:friendlyErr(up0.error.message)};
-   if(up0.data&&up0.data.length){syncVer=syncVer+1;syncedCanon=c0;return{ok:true,changed:false}}
+   if(up0.data&&up0.data.length){syncVer=syncVer+1;syncedCanon=c0;rtPing(syncVer);return{ok:true,changed:false}}
   }
  }
  for(var attempt=0;attempt<5;attempt++){
@@ -7751,7 +7755,7 @@ async function syncOnce(force){
   if(row&&typeof q68Newer==='function'&&q68Newer(row.state))return{ok:false,error:Q68OLD}; // v217: an older copy stops writing
   if(!row){
    var ins=await sb.from('hub_state').insert({user_id:uid,state:payloadOf(S),version:1});
-   if(!ins.error){S.everSynced=true;syncVer=1;syncedCanon=canon(payloadOf(S));return{ok:true,changed:changed}}
+   if(!ins.error){S.everSynced=true;syncVer=1;syncedCanon=canon(payloadOf(S));rtPing(syncVer);return{ok:true,changed:changed}}
    if(ins.error.code==='23505')continue;
    return{ok:false,error:friendlyErr(ins.error.message)};
   }
@@ -7764,7 +7768,7 @@ async function syncOnce(force){
   if(typeof q68MayUpload==='function'&&!q68MayUpload(mine,row.state)){syncVer=row.version;syncedCanon=cm;return{ok:true,changed:changed}} // v217 loop brake
   var up=await sb.from('hub_state').update({state:mine,version:row.version+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',row.version).select('version');
   if(up.error)return{ok:false,error:friendlyErr(up.error.message)};
-  if(up.data&&up.data.length){syncVer=row.version+1;syncedCanon=cm;return{ok:true,changed:changed}}
+  if(up.data&&up.data.length){syncVer=row.version+1;syncedCanon=cm;rtPing(syncVer);return{ok:true,changed:changed}}
  }
  return{ok:false,error:'Sync is busy right now, it will retry.'};
 }
@@ -7826,7 +7830,7 @@ async function listCloudNames(bucket,uid){
  for(var page=0;page<50;page++){
   var r=await withTimeout(bucket.list(uid,{limit:1000,offset:offset}),60000,null);
   if(!r||r.error)throw new Error('could not list files');
-  (r.data||[]).forEach(function(o){names[o.name]=1});
+  (r.data||[]).forEach(function(o){names[o.name]=(o.metadata&&o.metadata.eTag)||o.updated_at||1}); // which copy is in the cloud (changes on every upload)
   if((r.data||[]).length<1000)break;
   offset+=1000;
  }
@@ -7910,10 +7914,13 @@ async function syncFiles(force){
     if(unsent||behind){
      // fetch the cloud copy first (if there is one) and merge: nothing from either device is lost
      var cloudM=null,startMarks=f.marks,startSig=mkIdsOf(f.marks),mineSig=mkMarksSig(f.marks);
-     if(names[f.id+'.marks.json']){
+     /* v217: if the cloud copy is the very one this device last sent or fetched, there is nothing new in it, so
+        don't download it again (one notebook's markup can be 1-2 MB, and this ran before every upload). */
+     var mTag=names[f.id+'.marks.json'],cloudSame=!behind&&!!f.marksTag&&f.marksTag===mTag;
+     if(mTag&&!cloudSame){
       var dlm=await withTimeout(bucket.download(path+'.marks.json'),60000,{error:{message:'timeout'}});
       if(!dlm||dlm.error){if(behind||unsent)throw (dlm&&dlm.error)||new Error('marks download failed')}
-      else{try{cloudM=JSON.parse(await dlm.data.text())}catch(e){cloudM=null}}
+      else{try{cloudM=JSON.parse(await dlm.data.text());f.marksTag=mTag}catch(e){cloudM=null}}
      }
      var merged=mkMergeMarks(f.marks,cloudM);
      if(cloudM&&mkMarksSig(merged)!==mineSig)await mkHistAdd(f,'before merging markup from your other device');
@@ -7922,6 +7929,9 @@ async function syncFiles(force){
       merged.savedAt=new Date().toISOString();
       var upm=await withTimeout(bucket.upload(path+'.marks.json',new Blob([JSON.stringify(merged)],{type:'application/json'}),{upsert:true,contentType:'application/json'}),60000,{error:{message:'timeout'}});
       if(!upm||upm.error)throw (upm&&upm.error)||new Error('marks upload failed');
+      f.marksTag=null;   // remember which cloud copy is ours now (a tiny lookup, not a download)
+      try{var lt=await withTimeout(bucket.list(uid,{search:f.id+'.marks.json',limit:5}),20000,null);
+       (lt&&lt.data||[]).forEach(function(o){if(o.name===f.id+'.marks.json')f.marksTag=(o.metadata&&o.metadata.eTag)||o.updated_at||null})}catch(e){}
       remirror[cid]=1;
      }
      var changedHere=mkMarksSig(merged)!==mineSig;
@@ -7990,10 +8000,10 @@ function imgInfoText(r){
  return n?'Pictures: all '+n+' up to date.':'';
 }
 function syncPicturesNow(){imgForce=true;view.imgInfo='Syncing pictures…';render();cloudSync(true)}
-function scheduleCloudSync(ms){
+function scheduleCloudSync(ms){   // v217: 4 s after you stop typing (was 1.5 s), so a burst of edits is one save, not ten
  if(!sbUser)return;
  clearTimeout(cloudTimer);
- cloudTimer=setTimeout(function(){cloudSync(false)},ms===undefined?1500:ms);
+ cloudTimer=setTimeout(function(){cloudTimer=null;cloudSync(false)},ms===undefined?4000:ms);
 }
 async function cloudSync(force){
  if(!sbUser||!sb)return;
@@ -8028,6 +8038,7 @@ async function cloudSync(force){
  if(cloudAgain){cloudAgain=false;scheduleCloudSync(200)}
 }
 document.addEventListener('visibilitychange',function(){if(!document.hidden)scheduleCloudSync(200)});
+document.addEventListener('visibilitychange',function(){if(document.hidden&&cloudTimer){clearTimeout(cloudTimer);cloudTimer=null;cloudSync(false)}}); // leaving the app: send what is waiting now
 window.addEventListener('online',function(){scheduleCloudSync(200)});
 setInterval(function(){if(!document.hidden)scheduleCloudSync(0)},90000);
 
@@ -21048,10 +21059,10 @@ saveFiles=async function(cid,quiet){
  // never write this class's list before it was read (it would replace the real one with a partial one)
  if(fidxLoaded[cid]||filesReady){
   fidxLoaded[cid]=true;
-  var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,icon:f.icon,text:f.text,marks:f.marks,marksSyncedAt:f.marksSyncedAt,chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
+  var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,icon:f.icon,text:f.text,marks:f.marks,marksSyncedAt:f.marksSyncedAt,marksTag:f.marksTag||'',chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
   var inIdb=false;
   if(IDB){try{await idbDo('readwrite',function(st){return st.put({at:Date.now(),list:index},'__fidx:'+cid)});inIdb=true}catch(e){}}
-  var small=inIdb?index.map(function(x){var o=Object.assign({},x);delete o.text;delete o.marks;delete o.marksSyncedAt;return o}):index;
+  var small=inIdb?index.map(function(x){var o=Object.assign({},x);delete o.text;delete o.marks;delete o.marksSyncedAt;delete o.marksTag;return o}):index;
   try{await sset('hub:files:'+cid,JSON.stringify(small))}catch(e){}
  }
  render();
