@@ -5398,6 +5398,40 @@ body.q61ic.q31nosq .side .sic.pg{color:var(--q61ic)}
  .q64papers{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
  .q64nc{width:100%}.q64nc input{flex:1;width:auto}
 }
+
+/* v212: categories drop-down, pictures and selection in notes */
+.q64stat{margin-right:0}
+.q64dd{position:relative;margin-right:auto}
+.q64dd>summary{list-style:none;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 12px 0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:14px;cursor:pointer;max-width:260px;box-sizing:border-box}
+.q64dd>summary::-webkit-details-marker{display:none}
+.q64dd>summary i,.q64ddi i,.q64sel>i{width:9px;height:9px;border-radius:50%;flex:none}
+.q64dd>summary span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.q64dd>summary em,.q64ddi em{font-style:normal;font-size:12px;color:var(--ink3)}
+.q64dd>summary svg{flex:none;color:var(--ink3);transition:transform .2s}
+.q64dd[open]>summary svg{transform:rotate(180deg)}
+.q64ddm{position:absolute;left:0;top:calc(100% + 6px);z-index:30;min-width:240px;max-width:min(320px,calc(100vw - 32px));max-height:min(420px,60vh);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 14px 40px -12px rgba(40,30,20,.3)}
+.q64ddm p{margin:8px 10px 4px;font-size:12px;color:var(--ink3)}
+.q64ddm hr{border:none;border-top:1px solid var(--line);margin:6px 4px}
+.q64ddi{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:none;background:none;border-radius:10px;font:inherit;font-size:14px;color:var(--ink);text-align:left;cursor:pointer}
+.q64ddi span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q64ddi:hover{background:rgba(0,0,0,.04)}
+.q64ddi.on{background:var(--wt,#F1EFEA);font-weight:500}
+.q64ddi.edit{color:var(--ink2)}
+.q64sel{position:relative;display:flex;align-items:center;gap:10px;height:42px;padding:0 12px 0 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);max-width:360px;box-sizing:border-box}
+.q64sel select{flex:1;min-width:0;border:none!important;background:none!important;box-shadow:none!important;padding:0!important;height:100%;font:inherit;font-size:15px;color:var(--ink);-webkit-appearance:none;appearance:none;outline:none;cursor:pointer}
+.q64sel svg{flex:none;color:var(--ink3);pointer-events:none}
+.q64sel+.q64nc{display:flex;margin-top:10px;max-width:360px}
+.q64sel+.q64nc input{flex:1;width:auto}
+@media(max-width:700px){.q64dd{order:2;flex:1 1 auto;margin-right:0}.q64dd>summary{max-width:100%}.q64srch{order:3}.q64sel{max-width:none}}
+#mk .q65sel{position:absolute;border:1.5px dashed #4A7FD0;border-radius:6px;background:rgba(74,127,208,.05);box-sizing:border-box;z-index:6;cursor:move;touch-action:none}
+#mk .q65bar{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-8px);display:flex;gap:2px;padding:4px;background:#2B2926;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.28);white-space:nowrap;z-index:7;cursor:default}
+#mk .q65bar.below{bottom:auto;top:100%;transform:translate(-50%,8px)}
+#mk .q65bar button{background:none;border:none;color:#fff;font:inherit;font-size:13.5px;padding:8px 11px;border-radius:8px;cursor:pointer}
+#mk .q65bar button:hover{background:rgba(255,255,255,.12)}
+#mk .q65bar .q65del{color:#FFB1A8}
+#mk .q65h{position:absolute;right:-11px;bottom:-11px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #4A7FD0;box-sizing:border-box;cursor:nwse-resize;touch-action:none}
+#mk .mkicon.q65tb{width:auto;padding:0 11px;gap:6px;font-size:13px}
+@media(max-width:600px){#mk .mkicon.q65tb{width:34px;padding:0}#mk .mkicon.q65tb span{display:none}#mk .q65hint{display:none}}
 </style>
 </head>
 <body>
@@ -5706,7 +5740,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v211';
+var BUILD='v212';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -7842,7 +7876,7 @@ async function syncFiles(force){
          replaced f.marks, so the lines drawn in the meantime vanished (and were then saved as deleted).
          Now the other device's changes are folded into what you have NOW, and it stays "unsent". */
       var live=f.marks,liveIds=mkIdsOf(live),startIds=startSig,mIds=mkIdsOf(merged);
-      ['strokes','notes','texts'].forEach(function(key){
+      ['strokes','notes','texts','images'].forEach(function(key){
        live[key]=(live[key]||[]).filter(function(x){return !(x&&startIds[x.id]&&!mIds[x.id])}); // removed on the other device
        (merged[key]||[]).forEach(function(x){if(x&&x.id&&!startIds[x.id]&&!liveIds[x.id])live[key].push(x)}); // new from the other device
       });
@@ -21135,12 +21169,18 @@ function q64Init(c){
  c.nInit=1;touch(c);save();render();
 }
 function q64CatChips(c,m){
- var cats=q64Cats(c);
- return '<div class="q64pick">'+cats.map(function(k){return '<button type="button" class="q64chip'+(m.cat===k.id?' on':'')+'" data-q64cat="'+esc(k.id)+'"><i style="background:'+k.hex+'"></i>'+esc(k.name)+'</button>'}).join('')
-  +'<button type="button" class="q64chip'+(!m.cat?' on':'')+'" data-q64cat="">No category</button>'
-  +(m.newcat?'<span class="q64nc"><input id="q64nc" placeholder="Category name" maxlength="40" data-zenter="q64addcat:'+c.id+'"><button type="button" data-zact="q64addcat:'+c.id+'">Add</button></span>'
-   :'<button type="button" class="q64chip add" data-q64cat="+">+ New category</button>')+'</div>';
+ var cats=q64Cats(c),cl=cats.filter(function(k){return k.cls}),own=cats.filter(function(k){return !k.cls}),cur=cats.filter(function(k){return k.id===m.cat})[0];
+ var opt=function(k){return '<option value="'+esc(k.id)+'"'+(m.cat===k.id?' selected':'')+'>'+esc(k.name)+'</option>'};
+ return '<div class="q64sel"><i style="background:'+(cur?cur.hex:'transparent')+'"></i><select data-q64cs="1" aria-label="Category">'
+  +(cl.length?'<optgroup label="Classes">'+cl.map(opt).join('')+'</optgroup>'+(own.length?'<optgroup label="Categories">'+own.map(opt).join('')+'</optgroup>':''):own.map(opt).join(''))
+  +'<option value=""'+(!m.cat?' selected':'')+'>No category</option><option value="+">+ New category…</option></select>'+zI(ZIC.chev||'<path d="m6 9 6 6 6-6"/>',15)+'</div>'
+  +(m.newcat?'<span class="q64nc"><input id="q64nc" placeholder="New category name" maxlength="40" data-zenter="q64addcat:'+c.id+'"><button type="button" data-zact="q64addcat:'+c.id+'">Add</button></span>':'');
 }
+document.addEventListener('change',function(e){
+ var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q64cs')||!view.modal)return;
+ if(t.value==='+'){view.modal.newcat=true;render();setTimeout(function(){var el=document.getElementById('q64nc');if(el)el.focus()},30);return}
+ view.modal.cat=t.value;view.modal.newcat=false;render();
+});
 ZACT.q64addcat=function(cid){
  var c=classById(cid),el=document.getElementById('q64nc'),v=el?String(el.value).trim():'';if(!c||!v)return;
  c.sections=c.sections||[];
@@ -21230,19 +21270,23 @@ zNotesPage=function(c){
   if(!q)return true;var t=n.f?n.f.name:((n.x.title||'')+' '+(n.x.body||''));return t.toLowerCase().indexOf(q)>-1});
  var cnt={};all.forEach(function(n){cnt[n.cat]=(cnt[n.cat]||0)+1});
  var ws=iso(weekStart(0)),wk=all.filter(function(n){var a=n.at||'';return a.slice(0,10)>=ws}).length;
- var chip=function(id,label,hex){var n=id==='*'?all.length:cnt[id]||0;return '<button class="q64chip'+(sel===id?' on':'')+'" data-q64f="'+esc(id)+'" data-c="'+c.id+'">'+(hex?'<i style="background:'+hex+'"></i>':'')+esc(label)+(n?'<em>'+n+'</em>':'')+'</button>'};
- var chips='<div class="q64chips">'+chip('*','All')+cats.map(function(k){return chip(k.id,k.name,k.hex)}).join('')+(cnt['']?chip('','No category'):'')
-  +'<button class="q64chip add" data-zact="q64cats:'+c.id+'">Edit categories</button></div>';
  var selCat=cats.filter(function(k){return k.id===sel})[0];
+ var item=function(id,label,hex){var n=id==='*'?all.length:cnt[id]||0;return '<button class="q64ddi'+(sel===id?' on':'')+'" data-q64f="'+esc(id)+'" data-c="'+c.id+'" role="menuitemradio" aria-checked="'+(sel===id)+'"><i style="background:'+(hex||'transparent')+'"></i><span>'+esc(label)+'</span><em>'+(n||'')+'</em></button>'};
+ var cl=cats.filter(function(k){return k.cls}),own=cats.filter(function(k){return !k.cls});
+ var chips='<details class="q64dd"><summary aria-label="Show notes from"><i style="background:'+(selCat?selCat.hex:'transparent')+'"></i><span>'+esc(sel==='*'?'All notes':selCat?selCat.name:'No category')+'</span><em>'+(sel==='*'?all.length:cnt[sel]||0)+'</em>'+zI('<path d="m6 9 6 6 6-6"/>',15)+'</summary>'
+  +'<div class="q64ddm" role="menu">'+item('*','All notes')
+  +(cl.length?'<p>Classes</p>'+cl.map(function(k){return item(k.id,k.name,k.hex)}).join('')+(own.length?'<p>Categories</p>':''):'')
+  +own.map(function(k){return item(k.id,k.name,k.hex)}).join('')+(cnt['']?item('','No category'):'')
+  +'<hr><button class="q64ddi edit" data-zact="q64cats:'+c.id+'"><i></i><span>Edit categories…</span><em></em></button></div></details>';
  var grid=L.length?'<div class="q64grid">'+L.map(function(n){return q64Card(n,cats)}).join('')+'</div>'
   :'<div class="q64empty"><span class="q64th q64p-grid"></span><div><b>'+(q?'No notes match “'+esc(view.q64q)+'”':all.length?'Nothing in '+esc(selCat?selCat.name:'this category')+' yet':'No notes yet')+'</b>'
    +'<p>'+(q?'Try another word.':'Tap New note, choose '+(pageSpace(c)==='school'?'a class or category':'a category')+' and your paper, then write with your finger or Apple Pencil.')+'</p>'
    +(q?'':'<button class="q64newb sm" data-zact="q64new:'+c.id+':'+(sel==='*'?'':esc(sel))+'">+ New note</button>')+'</div></div>';
  return '<div class="q64">'
-  +'<div class="q64bar"><div class="q64stat"><b>'+all.length+'</b><span>note'+(all.length===1?'':'s')+(wk?' · '+wk+' this week':'')+'</span></div>'
+  +'<div class="q64bar"><div class="q64stat"><b>'+all.length+'</b><span>note'+(all.length===1?'':'s')+(wk?' · '+wk+' this week':'')+'</span></div>'+chips
   +'<label class="q64srch">'+zI(ZIC.search,15)+'<input id="q64q" type="search" placeholder="Search notes" value="'+esc(view.q64q||'')+'" data-q64q="1" aria-label="Search notes"></label>'
   +'<button class="q64newb" data-zact="q64new:'+c.id+':'+(sel==='*'?'':esc(sel))+'">'+zI(ZIC.plus,15)+'<span>New note</span></button></div>'
-  +q64Daily(c,cats)+chips+grid+'</div>';
+  +q64Daily(c,cats)+grid+'</div>';
 };
 
 /* ---------- New note: name, category, paper ---------- */
@@ -21285,6 +21329,7 @@ document.addEventListener('click',function(e){
  if(b.hasAttribute('data-q64cat')){var v=b.getAttribute('data-q64cat');if(v==='+'){m.newcat=true;render();setTimeout(function(){var el=document.getElementById('q64nc');if(el)el.focus()},30);return}m.cat=v}
  render();
 });
+document.addEventListener('click',function(e){document.querySelectorAll('details.q64dd[open]').forEach(function(d){if(!d.contains(e.target))d.removeAttribute('open')})});
 document.addEventListener('input',function(e){
  var t=e.target;if(!t)return;
  if(t.id==='q64n1'&&view.modal)view.modal.name=t.value;
@@ -21402,8 +21447,513 @@ zWidgetHtml=function(w,sp){
 if(typeof Q46PG!=='undefined')Q46PG.notes={n:'Notes',s:[
  {s:'.q64newb',t:'New note',p:'Give it a name, pick a category and your paper (graph, lined, dotted or blank), then write with your finger or Apple Pencil.'},
  {s:'.q64daily',t:'Daily notes',p:'One page a day for your agenda and what you got done. The round days show which days have a page.'},
- {s:'.q64chips',t:'Categories',p:'Tap one to see only those notes. Edit categories to add, rename or recolour them.'},
+ {s:'.q64dd',t:'Categories',p:'Pick a category to see only those notes. Edit categories is at the bottom of the list.'},
  {s:'.q64more',t:'Rename or move a note',p:'Tap ⋯ on a note to rename it or move it to another category. You can also tap a note’s name at the top while you write.'}]};
+
+
+/* ======================= v212: pictures, copy and paste, and smoother ink in notes and PDFs =======================
+   Jae (2026-10-16): categories should be a drop-down (seeing them all at once felt busy); wants copy and paste
+   in notes, pictures included: an "Add image" button and Cmd/Ctrl+V pasting whatever was copied; and the
+   writing should feel smoother, more like Apple's.
+   - Pictures live in marks.images [{id,page,x,y,w,h,src,at}] (page units) next to the ink, merged and
+     tombstoned the same way. src is a token 'nimg:<fingerprint>'; the picture itself (shrunk to 1600px) is
+     kept in IndexedDB under that token and uploaded ONCE to cloud storage as <uid>/nimg-<fingerprint>, so it
+     never rides along in the synced data or in marks.json. (Not 'img-': Sync pictures tidies those away.)
+   - Select tool (the loop icon): draw a loop around writing, text and pictures, or tap a picture. Then drag
+     to move, drag the corner to resize a picture, and Copy / Cut / Delete. Copy puts a picture of the
+     selection on the system clipboard (paste it into Messages, Mail...) and keeps the real ink inside Doable,
+     so pasting in Doable gives editable ink back.
+   - Paste: Cmd/Ctrl+V, or the Paste button (iPad without a keyboard). A picture becomes a picture on the page,
+     text becomes typed text, ink copied in Doable comes back as ink.
+   - Ink: drawn through the real points with a smooth curve (centripetal Catmull-Rom), smoothing that follows
+     your speed (steady when slow, no lag when fast), and a gentle pressure feel (about 15% either side of the
+     size you picked, measured against the stroke's own average, so the size stays the size). */
+
+/* ---------- smoother ink ---------- */
+function q65Spline(pts,scale){
+ var n=pts.length,out=[];if(!n)return out;
+ var P=function(i){var q=pts[Math.max(0,Math.min(n-1,i))];return [q[0]*scale,q[1]*scale,q[2]==null?.5:q[2]]};
+ out.push(P(0));if(n===1)return out;
+ for(var i=0;i<n-1;i++){
+  var p0=P(i-1),p1=P(i),p2=P(i+1),p3=P(i+2);
+  var d1=Math.hypot(p2[0]-p1[0],p2[1]-p1[1]),steps=Math.max(1,Math.min(10,Math.ceil(d1/2.5)));
+  var t0=0,t1=t0+Math.max(1e-4,Math.sqrt(Math.hypot(p1[0]-p0[0],p1[1]-p0[1]))),t2=t1+Math.max(1e-4,Math.sqrt(d1)),t3=t2+Math.max(1e-4,Math.sqrt(Math.hypot(p3[0]-p2[0],p3[1]-p2[1])));
+  for(var s=1;s<=steps;s++){
+   var t=t1+(t2-t1)*s/steps,L=function(a,b,ta,tb){var u=(tb-t)/(tb-ta),v=(t-ta)/(tb-ta);return [a[0]*u+b[0]*v,a[1]*u+b[1]*v]};
+   var A1=L(p0,p1,t0,t1),A2=L(p1,p2,t1,t2),A3=L(p2,p3,t2,t3),B1=L(A1,A2,t0,t2),B2=L(A2,A3,t1,t3),C=L(B1,B2,t1,t2);
+   out.push([C[0],C[1],p1[2]+(p2[2]-p1[2])*s/steps]);
+  }
+ }
+ return out;
+}
+var _q65Paint=mkPaintStroke;
+mkPaintStroke=function(ctx,s,scale){
+ if(s.tool==='hi')return _q65Paint.apply(this,arguments);
+ var raw=s.pts||[];if(!raw.length)return;
+ var pts=q65Spline(raw,scale),base=Math.max(.5,s.width*scale);
+ // pressure, smoothed along the line, measured against the stroke's own average
+ var pr=[],e=pts[0][2],sum=0;for(var i=0;i<pts.length;i++){e+=(pts[i][2]-e)*.18;pr.push(e);sum+=e}
+ var avg=sum/pts.length,lo=1e9,hi=-1e9;pr.forEach(function(v){if(v<lo)lo=v;if(v>hi)hi=v});
+ ctx.save();ctx.globalAlpha=1;ctx.fillStyle=s.color;ctx.strokeStyle=s.color;ctx.lineCap='round';ctx.lineJoin='round';
+ if(hi-lo<.03||pts.length<2){ // even pressure (finger, mouse): one smooth stroke
+  ctx.lineWidth=base;ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+  if(pts.length===1)ctx.lineTo(pts[0][0]+.01,pts[0][1]);
+  for(var j=1;j<pts.length;j++)ctx.lineTo(pts[j][0],pts[j][1]);
+  ctx.stroke();ctx.restore();return;
+ }
+ var R=pr.map(function(v){return base/2*Math.max(.84,Math.min(1.16,1+(v-avg)*.55))});
+ // the union of round dabs and the joins between them, in one fill: smooth width, no seams
+ ctx.beginPath();
+ for(var k=0;k<pts.length;k++){
+  var a=pts[k],ra=R[k],turn=false;
+  if(k>0&&k<pts.length-1){var u1=pts[k][0]-pts[k-1][0],v1=pts[k][1]-pts[k-1][1],u2=pts[k+1][0]-pts[k][0],v2=pts[k+1][1]-pts[k][1],l1=Math.hypot(u1,v1),l2=Math.hypot(u2,v2);turn=l1>0&&l2>0&&(u1*u2+v1*v2)/(l1*l2)<.97}
+  if(k===0||k===pts.length-1||k%4===0||turn){ctx.moveTo(a[0]+ra,a[1]);ctx.arc(a[0],a[1],ra,0,Math.PI*2)}
+  if(k){var b=pts[k-1],rb=R[k-1],dx=a[0]-b[0],dy=a[1]-b[1],len=Math.hypot(dx,dy);
+   if(len>.01){var nx=-dy/len,ny=dx/len;ctx.moveTo(b[0]-nx*rb,b[1]-ny*rb);ctx.lineTo(a[0]-nx*ra,a[1]-ny*ra);ctx.lineTo(a[0]+nx*ra,a[1]+ny*ra);ctx.lineTo(b[0]+nx*rb,b[1]+ny*rb);ctx.closePath() /* same winding as the round dabs, so they add up, never cancel */}}
+ }
+ ctx.fill('nonzero');ctx.restore();
+};
+// smoothing that follows your speed: slow, careful writing is steadied; fast writing has no lag
+mkAppendPoint=function(clientX,clientY,pressure){
+ if(!MK.drawing||!MK.drawingAnno)return;
+ var d=MK.drawing,pg=d.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
+ if(d.straight){d.pts=mkStraightPts(d,p);return}
+ d.rawLast=[p[0],p[1],pr];
+ var last=d.pts[d.pts.length-1],scale=mkScaleFor(pg),dist=Math.hypot(p[0]-last[0],p[1]-last[1])*scale;
+ if(dist<.3)return;
+ var pen=MK.activePointerType==='pen',k=Math.min(.96,(pen?.52:.45)+dist*(pen?.075:.06));
+ d.pts.push([last[0]+(p[0]-last[0])*k,last[1]+(p[1]-last[1])*k,pr]);
+ var hp=d.holdPt;
+ if(!hp||Math.hypot(p[0]-hp[0],p[1]-hp[1])>MK_HOLD_EPS){
+  MK.drawing.holdPt=[p[0],p[1]];MK.drawing.holdAt=Date.now();
+  if(d.tool==='hi'){clearTimeout(MK.holdTimer);MK.holdTimer=setTimeout(mkHoldSnap,MK_HOLD_MS)}
+ }
+};
+
+/* ---------- pictures: stored once, by fingerprint ---------- */
+var Q65D={},Q65IMG={},Q65WAIT={};
+function q65Tok(d){return 'nimg:'+imgToken(d).slice(4)}
+function q65Q(){try{return JSON.parse(localStorage.getItem('hub:nimgq')||'[]')}catch(e){return []}}
+function q65SetQ(L){try{localStorage.setItem('hub:nimgq',JSON.stringify(L))}catch(e){}}
+async function q65Put(tok,d){Q65D[tok]=d;await idbReady;if(IDB){try{await idbDo('readwrite',function(st){return st.put(d,tok)})}catch(e){}}}
+async function q65Upload(){
+ if(!sb||!sbUser||q65Upload.busy)return;var L=q65Q();if(!L.length)return;
+ q65Upload.busy=true;var left=[];
+ try{
+  for(var i=0;i<L.length;i++){
+   var tok=L[i],d=Q65D[tok];
+   if(!d){try{d=await idbDo('readonly',function(st){return st.get(tok)})}catch(e){}}
+   if(!d){continue}
+   var m=IMG_RE.exec(d);if(!m)continue;
+   var r=await withTimeout(sb.storage.from('hub-files').upload(sbUser.id+'/'+tok.replace(':','-'),b64ToBlob(d.slice(m[0].length),m[1]),{contentType:m[1],cacheControl:'31536000',upsert:false}),120000,{error:{message:'timeout'}});
+   if(r.error&&!/already exists|Duplicate/i.test(String(r.error.message||'')))left.push(tok);
+  }
+ }catch(e){}
+ var now=q65Q().filter(function(t){return L.indexOf(t)<0||left.indexOf(t)>-1});q65SetQ(now);q65Upload.busy=false;
+}
+setInterval(function(){if(navigator.onLine!==false)q65Upload()},60000);
+// the picture for a token: from memory, this device, or your account; redraws the page when it arrives
+function q65Img(tok){
+ var o=Q65IMG[tok];if(o)return o.ok?o.img:null;
+ if(Q65WAIT[tok]&&Date.now()-Q65WAIT[tok]<300000)return null;
+ o=Q65IMG[tok]={ok:false,img:new Image()};
+ o.img.onload=function(){o.ok=true;q65Redraw(tok)};
+ (async function(){
+  var d=Q65D[tok];
+  if(!d){await idbReady;if(IDB){try{d=await idbDo('readonly',function(st){return st.get(tok)})}catch(e){}}}
+  if(!d&&sb&&sbUser){
+   try{var dl=await withTimeout(sb.storage.from('hub-files').download(sbUser.id+'/'+tok.replace(':','-')),120000,{error:1});
+    if(dl&&!dl.error&&dl.data){d='data:'+(dl.data.type||'image/jpeg')+';base64,'+(await blobToB64(dl.data));q65Put(tok,d)}}catch(e){}
+  }
+  if(d){Q65D[tok]=d;var m=IMG_RE.exec(d);try{o.url=URL.createObjectURL(b64ToBlob(d.slice(m[0].length),m[1]))}catch(e){o.url=d}o.img.src=o.url}else{delete Q65IMG[tok];Q65WAIT[tok]=Date.now()}
+ })();
+ return null;
+}
+function q65Redraw(tok){
+ if(MK&&MK.f&&MK.f.marks)(MK.f.marks.images||[]).forEach(function(im){if(im.src===tok)mkDrawAnnoForPage(im.page)});
+ clearTimeout(q65Redraw.t);q65Redraw.t=setTimeout(function(){if(view.page==='page'&&!view.modal)render()},400); // note thumbnails
+}
+function q65PaintImages(ctx,n,scale){
+ ((MK.f.marks&&MK.f.marks.images)||[]).forEach(function(im){
+  if(im.page!==n)return;var img=q65Img(im.src);
+  if(img)ctx.drawImage(img,im.x*scale,im.y*scale,im.w*scale,im.h*scale);
+  else{ctx.save();ctx.fillStyle='rgba(120,120,120,.08)';ctx.fillRect(im.x*scale,im.y*scale,im.w*scale,im.h*scale);ctx.restore()}
+ });
+}
+mkDrawAnnoForPage=function(n){
+ var anno=document.querySelector('.mkanno[data-mkpage="'+n+'"]');if(!anno||!MK)return;
+ var scale=mkScaleFor(n),dpr=mkCanvasDpr(anno,n,scale),ctx=anno.getContext('2d');
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.clearRect(0,0,scale*MK.pageInfo[n].vp1.width,scale*MK.pageInfo[n].vp1.height);
+ q65PaintImages(ctx,n,scale);
+ mkStrokesForPage(n).forEach(function(s){mkPaintStroke(ctx,s,scale)});
+ mkPaintTexts(ctx,n,scale);
+ q65SelDraw(n);
+};
+// a picture file or blob, shrunk to 1600px on its longest side
+function q65Shrink(blob){
+ return new Promise(function(res){
+  var url=URL.createObjectURL(blob),im=new Image();
+  im.onload=function(){
+   var w=im.naturalWidth,h=im.naturalHeight,k=Math.min(1,1600/Math.max(w,h)),cv=document.createElement('canvas');
+   cv.width=Math.max(1,Math.round(w*k));cv.height=Math.max(1,Math.round(h*k));
+   var c=cv.getContext('2d');var png=/png|gif|webp/i.test(blob.type||'');
+   if(!png){c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height)}
+   c.drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
+   var d=png?cv.toDataURL('image/png'):cv.toDataURL('image/jpeg',.86);
+   if(png&&d.length>900000){c.globalCompositeOperation='destination-over';c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height);d=cv.toDataURL('image/jpeg',.86)}
+   res({d:d,w:cv.width,h:cv.height});
+  };
+  im.onerror=function(){URL.revokeObjectURL(url);res(null)};
+  im.src=url;
+ });
+}
+
+/* ---------- where new things go: the middle of what you're looking at ---------- */
+function q65Spot(){
+ var body=document.getElementById('mkbody');if(!body)return {page:MK.curPage||1,x:306,y:396};
+ var r=body.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,best=null;
+ document.querySelectorAll('#mk .mkanno').forEach(function(a){var b=a.getBoundingClientRect();if(cy>=b.top&&cy<=b.bottom&&b.width)best=a});
+ if(!best){var a2=document.querySelector('.mkanno[data-mkpage="'+(MK.curPage||1)+'"]');if(!a2)return {page:MK.curPage||1,x:306,y:396};best=a2;var bb=a2.getBoundingClientRect();cy=Math.max(bb.top+40,Math.min(bb.bottom-40,cy))}
+ var pg=+best.getAttribute('data-mkpage'),p=mkAnnoPoint(best,cx,cy,pg),info=MK.pageInfo[pg].vp1;
+ return {page:pg,x:Math.max(20,Math.min(info.width-20,p[0])),y:Math.max(20,Math.min(info.height-20,p[1]))};
+}
+
+/* ---------- undo for pictures, moves, pastes and deletes ---------- */
+var Q65K=['strokes','images','texts'];
+function q65Snap(ids){var mk=mkMarks(),o={};Q65K.forEach(function(k){o[k]={};(ids[k]||[]).forEach(function(id){var x=(mk[k]||[]).filter(function(e){return e.id===id})[0];o[k][id]=x?JSON.parse(JSON.stringify(x)):null})});return o}
+function q65Apply(map){
+ var mk=mkMarks(),pages={};
+ Q65K.forEach(function(k){mk[k]=mk[k]||[];Object.keys(map[k]||{}).forEach(function(id){
+  var v=map[k][id],ix=-1;for(var i=0;i<mk[k].length;i++)if(mk[k][i].id===id){ix=i;break}
+  if(v){var c=JSON.parse(JSON.stringify(v));pages[c.page]=1;if(ix>-1){var o=mk[k][ix];pages[o.page]=1;Object.keys(o).forEach(function(kk){delete o[kk]});Object.assign(o,c)}else mk[k].push(c)}
+  else if(ix>-1){pages[mk[k][ix].page]=1;mk[k].splice(ix,1)}
+ })});
+ return Object.keys(pages).map(Number);
+}
+function q65Record(before,after){MK.history.push({t:'q65',before:before,after:after});MK.future=[];mkRerenderChrome();mkCommit()}
+var _q65Undo=mkUndo,_q65Redo=mkRedo;
+mkUndo=function(){var a=MK.history[MK.history.length-1];if(!a||a.t!=='q65')return _q65Undo.apply(this,arguments);
+ MK.history.pop();q65Clear();q65Apply(a.before).forEach(mkDrawAnnoForPage);MK.future.push(a);mkRerenderChrome();mkCommit()};
+mkRedo=function(){var a=MK.future[MK.future.length-1];if(!a||a.t!=='q65')return _q65Redo.apply(this,arguments);
+ MK.future.pop();q65Clear();q65Apply(a.after).forEach(mkDrawAnnoForPage);MK.history.push(a);mkRerenderChrome();mkCommit()};
+// pictures merge, sync and remember deletions exactly like ink
+var _q65Merge=mkMergeMarks;
+mkMergeMarks=function(a,b){
+ var out=_q65Merge.apply(this,arguments);if(!a||!b)return out;
+ var nw=(a.savedAt||'')>=(b.savedAt||'')?a:b,old=nw===a?b:a,del=out.deleted||{},seen={},L=[];
+ (nw.images||[]).concat(old.images||[]).forEach(function(x){if(x&&x.id&&!del[x.id]&&!seen[x.id]){seen[x.id]=1;L.push(x)}});
+ if(L.length||a.images||b.images)out.images=L;
+ return out;
+};
+var _q65Ids=mkIdsOf;
+mkIdsOf=function(m){var o=_q65Ids(m);((m&&m.images)||[]).forEach(function(x){if(x&&x.id)o[x.id]=1});return o};
+var _q65Sig=mkMarksSig;
+mkMarksSig=function(m){var s=_q65Sig(m);return m&&m.images&&m.images.length?s+'|'+m.images.map(function(x){return x.id+':'+(x.at||'')}).sort().join(','):s};
+
+/* ---------- adding pictures and text ---------- */
+async function q65AddImageBlob(blob,spot){
+ if(!MK||!blob)return;
+ var r=await q65Shrink(blob);if(!r||!MK){zToast('That picture could not be read.');return}
+ var tok=q65Tok(r.d);await q65Put(tok,r.d);
+ var Q=q65Q();if(Q.indexOf(tok)<0){Q.push(tok);q65SetQ(Q)}q65Upload();
+ var sp=spot||q65Spot(),info=MK.pageInfo[sp.page].vp1,w=Math.min(r.w*.75,info.width*.6),h=w*r.h/r.w;
+ if(h>info.height*.5){h=info.height*.5;w=h*r.w/r.h}
+ var x=Math.max(8,Math.min(info.width-w-8,sp.x-w/2)),y=Math.max(8,Math.min(info.height-h-8,sp.y-h/2));
+ var im={id:uid(),page:sp.page,x:x,y:y,w:w,h:h,src:tok,at:new Date().toISOString()};
+ if(MK.mode!=='edit'){mkSetMode('edit')}
+ var before=q65Snap({images:[im.id]});mkMarks().images=mkMarks().images||[];mkMarks().images.push(im);
+ q65Record(before,q65Snap({images:[im.id]}));
+ mkDrawAnnoForPage(sp.page);
+ if(MK.tool!=='sel')mkPickTool('sel');
+ q65Select(sp.page,{images:[im.id]});
+}
+function q65AddText(text,spot){
+ text=String(text||'').replace(/\r/g,'').replace(/\s+$/,'').slice(0,4000);if(!text.trim())return;
+ var sp=spot||q65Spot(),info=MK.pageInfo[sp.page].vp1;
+ var x=Math.max(MK_ROW,Math.min(info.width-MK_ROW*8,Math.round((sp.x-120)/MK_ROW)*MK_ROW)),y=Math.max(MK_ROW,Math.ceil(sp.y/MK_ROW)*MK_ROW);
+ var t={id:uid(),page:sp.page,x:x,y:y,style:'p',color:(MK.toolColor&&MK.toolColor.text)||'#000000',text:text,at:new Date().toISOString()};
+ if(MK.mode!=='edit')mkSetMode('edit');
+ var before=q65Snap({texts:[t.id]});mkTexts().push(t);q65Record(before,q65Snap({texts:[t.id]}));
+ mkDrawAnnoForPage(sp.page);if(MK.tool!=='sel')mkPickTool('sel');q65Select(sp.page,{texts:[t.id]});
+}
+function q65PickImage(){
+ var inp=document.getElementById('q65file');
+ if(!inp){inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.id='q65file';inp.style.display='none';document.body.appendChild(inp);
+  inp.addEventListener('change',function(){var f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(f.size>25*1024*1024){zToast('That picture is over 25 MB.');return}q65AddImageBlob(f)})}
+ inp.click();
+}
+
+/* ---------- selecting: draw a loop, or tap a picture ---------- */
+function q65Items(page,ids){var mk=mkMarks(),o={};Q65K.forEach(function(k){var set={};(ids[k]||[]).forEach(function(i){set[i]=1});o[k]=(mk[k]||[]).filter(function(x){return x.page===page&&set[x.id]})});return o}
+function q65Box(page,ids){
+ var it=q65Items(page,ids),x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,add=function(a,b,c,d){x0=Math.min(x0,a);y0=Math.min(y0,b);x1=Math.max(x1,c);y1=Math.max(y1,d)};
+ it.strokes.forEach(function(s){var h=(s.width||1)/2+(s.tool==='hi'?s.width/2:0);(s.pts||[]).forEach(function(p){add(p[0]-h,p[1]-h,p[0]+h,p[1]+h)})});
+ it.images.forEach(function(m){add(m.x,m.y,m.x+m.w,m.y+m.h)});
+ it.texts.forEach(function(t){var b=mkTextBox(t);add(b.x0,b.y0,b.x1,b.y1)});
+ return x0>x1?null:{x0:x0,y0:y0,x1:x1,y1:y1};
+}
+function q65Count(ids){return Q65K.reduce(function(n,k){return n+((ids&&ids[k])||[]).length},0)}
+function q65Select(page,ids){MK.q65={page:page,ids:{strokes:ids.strokes||[],images:ids.images||[],texts:ids.texts||[]}};document.querySelectorAll('#mk .q65sel').forEach(function(e){e.remove()});q65SelDraw(page)}
+function q65Clear(){if(!MK||!MK.q65)return;MK.q65=null;document.querySelectorAll('#mk .q65sel').forEach(function(e){e.remove()})}
+function q65SelDraw(n){
+ if(!MK)return;var wrap=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .mkpagewrap');if(!wrap)return;
+ var old=wrap.querySelector('.q65sel');
+ var S2=MK.q65;if(!S2||S2.page!==n||!q65Count(S2.ids)){if(old)old.remove();return}
+ var b=q65Box(n,S2.ids);if(!b){if(old)old.remove();return}
+ var info=MK.pageInfo[n].vp1,pad=4,W=info.width,H=info.height;
+ var el=old||document.createElement('div');el.className='q65sel';
+ el.style.left=((b.x0-pad)/W*100)+'%';el.style.top=((b.y0-pad)/H*100)+'%';el.style.width=((b.x1-b.x0+pad*2)/W*100)+'%';el.style.height=((b.y1-b.y0+pad*2)/H*100)+'%';
+ var one=S2.ids.images.length===1&&q65Count(S2.ids)===1,below=b.y0<60;
+ el.innerHTML='<div class="q65bar'+(below?' below':'')+'"><button data-q65="copy">Copy</button><button data-q65="cut">Cut</button><button data-q65="dup">Duplicate</button><button data-q65="del" class="q65del">Delete</button></div>'+(one?'<i class="q65h" data-q65h="1" aria-label="Drag to resize"></i>':'');
+ if(!old)wrap.appendChild(el);
+}
+function q65Inside(pt,poly){var c=false;for(var i=0,j=poly.length-1;i<poly.length;j=i++){var a=poly[i],b=poly[j];if((a[1]>pt[1])!==(b[1]>pt[1])&&pt[0]<(b[0]-a[0])*(pt[1]-a[1])/(b[1]-a[1])+a[0])c=!c}return c}
+function q65LassoPick(page,poly){
+ var mk=mkMarks(),ids={strokes:[],images:[],texts:[]};
+ (mk.strokes||[]).forEach(function(s){if(s.page!==page||!s.pts||!s.pts.length)return;var st=Math.max(1,Math.floor(s.pts.length/24)),n=0,t=0;for(var i=0;i<s.pts.length;i+=st){t++;if(q65Inside(s.pts[i],poly))n++}if(n/t>=.5)ids.strokes.push(s.id)});
+ (mk.images||[]).forEach(function(m){if(m.page===page&&q65Inside([m.x+m.w/2,m.y+m.h/2],poly))ids.images.push(m.id)});
+ (mk.texts||[]).forEach(function(t){if(t.page===page&&q65Inside([t.x+12,t.y-6],poly))ids.texts.push(t.id)});
+ return ids;
+}
+function q65HitImage(page,p){var L=((MK.f.marks&&MK.f.marks.images)||[]).filter(function(m){return m.page===page&&p[0]>=m.x&&p[0]<=m.x+m.w&&p[1]>=m.y&&p[1]<=m.y+m.h});return L[L.length-1]||null}
+function q65InSel(page,p){var S2=MK.q65;if(!S2||S2.page!==page)return false;var b=q65Box(page,S2.ids);return !!b&&p[0]>=b.x0-8&&p[0]<=b.x1+8&&p[1]>=b.y0-8&&p[1]<=b.y1+8}
+function q65DrawLasso(page,poly){
+ var live=document.querySelector('.mklive[data-mkpage="'+page+'"]');if(!live)return;
+ var scale=mkScaleFor(page),dpr=mkCanvasDpr(live,page,scale),ctx=live.getContext('2d');
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,scale*MK.pageInfo[page].vp1.width,scale*MK.pageInfo[page].vp1.height);
+ if(!poly||poly.length<2)return;
+ ctx.beginPath();poly.forEach(function(p,i){i?ctx.lineTo(p[0]*scale,p[1]*scale):ctx.moveTo(p[0]*scale,p[1]*scale)});
+ ctx.fillStyle='rgba(74,127,208,.07)';ctx.fill();ctx.setLineDash([6,5]);ctx.lineWidth=1.6;ctx.strokeStyle='#4A7FD0';ctx.stroke();
+}
+// moving: shift every selected thing by (dx,dy) page units, from where it was when the drag began
+function q65MoveTo(g,dx,dy){
+ var mk=mkMarks();
+ Q65K.forEach(function(k){(mk[k]||[]).forEach(function(x){var o=g.orig[k][x.id];if(!o)return;
+  if(k==='strokes')x.pts=o.pts.map(function(p){return [p[0]+dx,p[1]+dy,p[2]]});else{x.x=o.x+dx;x.y=o.y+dy}})});
+}
+var Q65G=null;
+function q65Begin(page,anno,cx,cy,kind){
+ var p=mkAnnoPoint(anno,cx,cy,page);
+ if(kind==='resize'||q65InSel(page,p)){
+  var ids=MK.q65.ids,orig={};Q65K.forEach(function(k){orig[k]={};q65Items(page,ids)[k].forEach(function(x){orig[k][x.id]=JSON.parse(JSON.stringify(x))})});
+  Q65G={mode:kind==='resize'?'resize':'move',page:page,anno:anno,p0:p,orig:orig,before:q65Snap(ids),moved:false};return;
+ }
+ var hit=q65HitImage(page,p);
+ if(hit){q65Select(page,{images:[hit.id]});q65Begin(page,anno,cx,cy);Q65G.tap=true;return}
+ Q65G={mode:'lasso',page:page,anno:anno,poly:[p],p0:p};
+}
+function q65Move(cx,cy){
+ var g=Q65G;if(!g)return;var p=mkAnnoPoint(g.anno,cx,cy,g.page),dx=p[0]-g.p0[0],dy=p[1]-g.p0[1];
+ if(!g.moved&&Math.hypot(dx,dy)*mkScaleFor(g.page)<4)return;g.moved=true;
+ if(g.mode==='lasso'){g.poly.push(p);q65DrawLasso(g.page,g.poly);return}
+ if(g.mode==='move'){q65MoveTo(g,dx,dy)}
+ else{var id=MK.q65.ids.images[0],o=g.orig.images[id],im=mkMarks().images.filter(function(x){return x.id===id})[0];if(!o||!im)return;
+  var w=Math.max(24,o.w+dx),k=w/o.w;im.w=w;im.h=o.h*k}
+ if(!q65Move.f){q65Move.f=1;requestAnimationFrame(function(){q65Move.f=0;if(Q65G)mkDrawAnnoForPage(Q65G.page)});setTimeout(function(){if(q65Move.f){q65Move.f=0;if(Q65G)mkDrawAnnoForPage(Q65G.page)}},40)}
+}
+function q65End(){
+ var g=Q65G;Q65G=null;if(!g)return;
+ if(g.mode==='lasso'){
+  q65DrawLasso(g.page,null);
+  if(!g.moved||g.poly.length<4){q65Clear();return}
+  var ids=q65LassoPick(g.page,g.poly);if(q65Count(ids))q65Select(g.page,ids);else q65Clear();return;
+ }
+ if(!g.moved){mkDrawAnnoForPage(g.page);return}
+ var now=new Date().toISOString(),mk=mkMarks();
+ Q65K.forEach(function(k){(mk[k]||[]).forEach(function(x){if(g.orig[k][x.id]&&k!=='strokes')x.at=now})});
+ // moved things get new ids, so another device's older copy (with the old place) can't put them back
+ var ren={};Q65K.forEach(function(k){ren[k]={};(mk[k]||[]).forEach(function(x){if(g.orig[k][x.id]){var nid=uid();ren[k][x.id]=nid;x.id=nid}});
+  MK.q65.ids[k]=(MK.q65.ids[k]||[]).map(function(i){return ren[k][i]||i});Object.keys(ren[k]).forEach(function(o){g.before[k][ren[k][o]]=null})});
+ var after=q65Snap(MK.q65.ids);Q65K.forEach(function(k){Object.keys(ren[k]).forEach(function(o){after[k][o]=null})});
+ q65Record(g.before,after);mkDrawAnnoForPage(g.page);
+}
+// pen and mouse/trackpad, with the Select tool
+document.addEventListener('pointerdown',function(e){
+ if(!MK||MK.mode!=='edit'||MK.tool!=='sel'||e.pointerType==='touch')return;
+ if(e.target.closest&&e.target.closest('.q65bar'))return;
+ var wrap=e.target.closest&&e.target.closest('.mkpagewrap');if(!wrap)return;
+ var anno=wrap.querySelector('.mkanno'),page=+anno.getAttribute('data-mkpage');
+ e.preventDefault();e.stopPropagation();
+ if(e.pointerType==='pen'){MK.activePointerType='pen';MK.pencilSeen=true}
+ try{anno.setPointerCapture(e.pointerId)}catch(err){}
+ q65Begin(page,anno,e.clientX,e.clientY,e.target.closest('[data-q65h]')?'resize':null);
+},true);
+document.addEventListener('pointermove',function(e){if(!Q65G||e.pointerType==='touch')return;e.preventDefault();e.stopPropagation();q65Move(e.clientX,e.clientY)},true);
+document.addEventListener('pointerup',function(e){if(!Q65G||e.pointerType==='touch')return;e.stopPropagation();if(MK)MK.activePointerType=null;q65End()},true);
+document.addEventListener('pointercancel',function(e){if(!Q65G||e.pointerType==='touch')return;if(MK)MK.activePointerType=null;q65End()},true);
+// a finger: tap a picture to pick it, drag the selection to move it; elsewhere a finger still scrolls
+// (or draws the loop, on a device that has never seen an Apple Pencil)
+var Q65T=null;
+document.addEventListener('touchstart',function(e){
+ if(MK&&e.target&&e.target.closest&&e.target.closest('#mk .q65bar')){e.stopPropagation();return}
+ if(!MK||MK.mode!=='edit'||MK.tool!=='sel'||e.touches.length!==1)return;
+ var t=e.touches[0];if(t.touchType==='stylus')return;
+ if(e.target.closest&&e.target.closest('.q65bar'))return;
+ var wrap=e.target.closest&&e.target.closest('.mkpagewrap');if(!wrap)return;
+ var anno=wrap.querySelector('.mkanno'),page=+anno.getAttribute('data-mkpage'),p=mkAnnoPoint(anno,t.clientX,t.clientY,page);
+ var rs=!!(e.target.closest('[data-q65h]'));
+ if(!(rs||q65InSel(page,p)||q65HitImage(page,p)||!MK.pencilSeen))return;
+ e.preventDefault();e.stopPropagation();Q65T=t.identifier;
+ q65Begin(page,anno,t.clientX,t.clientY,rs?'resize':null);
+},{capture:true,passive:false});
+document.addEventListener('touchmove',function(e){if(Q65T===null)return;for(var i=0;i<e.changedTouches.length;i++)if(e.changedTouches[i].identifier===Q65T){e.preventDefault();e.stopPropagation();q65Move(e.changedTouches[i].clientX,e.changedTouches[i].clientY)}},{capture:true,passive:false});
+document.addEventListener('touchend',function(e){if(Q65T===null)return;for(var i=0;i<e.changedTouches.length;i++)if(e.changedTouches[i].identifier===Q65T){e.preventDefault();e.stopPropagation();Q65T=null;q65End()}},{capture:true,passive:false});
+document.addEventListener('touchcancel',function(e){if(Q65T===null)return;Q65T=null;q65End()},{capture:true});
+
+/* ---------- copy, cut, duplicate, delete ---------- */
+var Q65SAFARI=/^((?!chrome|chromium|crios|fxios|edg|android).)*safari/i.test(navigator.userAgent);
+var Q65MARK='(handwriting copied from Doable)';
+function q65GetClip(){try{return JSON.parse(localStorage.getItem('hub:q65clip')||'null')}catch(e){return null}}
+function q65Render(page,ids,b,k){ // a picture of the selection, for other apps
+ var cv=document.createElement('canvas'),pad=6;cv.width=Math.max(1,Math.round((b.x1-b.x0+pad*2)*k));cv.height=Math.max(1,Math.round((b.y1-b.y0+pad*2)*k));
+ var ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.setTransform(1,0,0,1,(pad-b.x0)*k,(pad-b.y0)*k);
+ var it=q65Items(page,ids);
+ it.images.forEach(function(m){var img=q65Img(m.src);if(img)ctx.drawImage(img,m.x*k,m.y*k,m.w*k,m.h*k)});
+ it.strokes.forEach(function(s){mkPaintStroke(ctx,s,k)});
+ it.texts.forEach(function(t){var st=MK_TXT[t.style]?t.style:'p',L=mkTextLines(t);ctx.font=mkTextFont(st,k);ctx.fillStyle=t.color||'#000';L.lines.forEach(function(l,i){ctx.fillText(l,t.x*k,(t.y+i*L.step-MK_TXT[st].drop)*k)})});
+ return cv;
+}
+function q65Copy(){
+ var S2=MK&&MK.q65;if(!S2||!q65Count(S2.ids))return false;
+ var it=q65Items(S2.page,S2.ids),b=q65Box(S2.page,S2.ids);
+ var clip={at:Date.now(),fid:MK.f.id,page:S2.page,box:b,strokes:it.strokes,images:it.images,texts:it.texts};
+ try{localStorage.setItem('hub:q65clip',JSON.stringify(clip))}catch(e){}
+ var cv=q65Render(S2.page,S2.ids,b,3);
+ try{
+  if(navigator.clipboard&&window.ClipboardItem){
+   var png=new Promise(function(res){cv.toBlob(function(bl){res(bl)},'image/png')});
+   navigator.clipboard.write([new ClipboardItem({'image/png':png,'text/plain':new Blob([Q65MARK],{type:'text/plain'})})]).catch(q65MarkOnly);
+  }else q65MarkOnly();
+ }catch(e){q65MarkOnly()}
+ return true;
+}
+// the picture couldn't go on the clipboard: at least put the marker there, so Cmd+V in Doable pastes this copy
+function q65MarkOnly(){
+ var done=function(){};
+ try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(Q65MARK).then(done,q65ExecMark);return}}catch(e){}
+ q65ExecMark();
+}
+function q65ExecMark(){try{var ta=document.createElement('textarea');ta.value=Q65MARK;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}catch(e){}}
+function q65Delete(){
+ var S2=MK&&MK.q65;if(!S2)return;var before=q65Snap(S2.ids),after={};
+ Q65K.forEach(function(k){after[k]={};(S2.ids[k]||[]).forEach(function(id){after[k][id]=null})});
+ var pg=S2.page;q65Clear();q65Apply(after);q65Record(before,after);mkDrawAnnoForPage(pg);
+}
+// paste a Doable copy: new ids; on the same page it lands a little down and right, elsewhere in the middle of the view
+function q65PasteClip(clip,spot){
+ if(!clip||!MK)return;
+ var b=clip.box||{x0:0,y0:0,x1:0,y1:0},sp=spot||q65Spot(),dx,dy;
+ if(!spot&&clip.fid===MK.f.id&&clip.page===sp.page){dx=18;dy=18}else{dx=sp.x-(b.x0+b.x1)/2;dy=sp.y-(b.y0+b.y1)/2}
+ var mk=mkMarks(),ids={strokes:[],images:[],texts:[]},now=new Date().toISOString();
+ Q65K.forEach(function(k){mk[k]=mk[k]||[];(clip[k]||[]).forEach(function(x){var c=JSON.parse(JSON.stringify(x));c.id=uid();c.page=sp.page;
+  if(k==='strokes')c.pts=c.pts.map(function(p){return [p[0]+dx,p[1]+dy,p[2]]});else{c.x+=dx;c.y+=dy;c.at=now}
+  ids[k].push(c.id)})});
+ var before=q65Snap(ids);
+ Q65K.forEach(function(k){(clip[k]||[]).forEach(function(x,i){var c=JSON.parse(JSON.stringify(x));c.id=ids[k][i];c.page=sp.page;
+  if(k==='strokes')c.pts=c.pts.map(function(p){return [p[0]+dx,p[1]+dy,p[2]]});else{c.x+=dx;c.y+=dy;c.at=now}mk[k].push(c)})});
+ if(MK.mode!=='edit')mkSetMode('edit');
+ q65Record(before,q65Snap(ids));mkDrawAnnoForPage(sp.page);if(MK.tool!=='sel')mkPickTool('sel');q65Select(sp.page,ids);
+}
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('#mk [data-q65]');if(!b||!MK)return;e.preventDefault();e.stopPropagation();
+ var a=b.getAttribute('data-q65');
+ if(a==='copy'){q65Copy();zToast('Copied');return}
+ if(a==='cut'){if(q65Copy())q65Delete();zToast('Cut');return}
+ if(a==='dup'){var S2=MK.q65;if(!S2)return;var it=q65Items(S2.page,S2.ids);q65PasteClip({fid:MK.f.id,page:S2.page,box:q65Box(S2.page,S2.ids),strokes:it.strokes,images:it.images,texts:it.texts});return}
+ if(a==='del'){q65Delete();return}
+ if(a==='img'){q65PickImage();return}
+ if(a==='paste'){q65PasteButton();return}
+},true);
+
+/* ---------- paste: Cmd/Ctrl+V, or the Paste button ---------- */
+var q65Pasted=0;
+async function q65PasteData(o){ // o: {mark, blob, text}
+ var clip=q65GetClip();
+ if(clip&&(o.mark||(!o.blob&&!o.text))){q65PasteClip(clip);return}
+ if(o.blob){await q65AddImageBlob(o.blob);return}
+ if(o.text){q65AddText(o.text);return}
+ zToast('Nothing to paste. Copy a picture or some text first.');
+}
+document.addEventListener('paste',function(e){
+ if(!MK||!document.getElementById('mk'))return;
+ var t=e.target;if(t&&(t.tagName==='TEXTAREA'||t.tagName==='INPUT'||t.isContentEditable))return;
+ var cd=e.clipboardData;if(!cd)return;e.preventDefault();q65Pasted=Date.now();
+ var text=cd.getData('text/plain')||'',blob=null;
+ for(var i=0;i<(cd.items||[]).length;i++){var it=cd.items[i];if(it.kind==='file'&&/^image\//.test(it.type)){blob=it.getAsFile();break}}
+ q65PasteData({mark:text===Q65MARK,blob:text===Q65MARK?null:blob,text:text===Q65MARK?'':text});
+});
+async function q65PasteButton(){
+ q65Pasted=Date.now();
+ if(navigator.clipboard&&navigator.clipboard.read){
+  try{
+   var items=await navigator.clipboard.read(),blob=null,text='';
+   for(var i=0;i<items.length;i++){var ty=items[i].types||[];
+    var im=ty.filter(function(x){return /^image\//.test(x)})[0];if(im&&!blob)blob=await items[i].getType(im);
+    if(ty.indexOf('text/plain')>-1&&!text)text=await (await items[i].getType('text/plain')).text();}
+   if(text===Q65MARK){q65PasteData({mark:true});return}
+   q65PasteData({blob:blob,text:blob?'':text});return;
+  }catch(e){}
+ }
+ if(navigator.clipboard&&navigator.clipboard.readText){try{var tx=await navigator.clipboard.readText();if(tx){q65PasteData({mark:tx===Q65MARK,text:tx===Q65MARK?'':tx});return}}catch(e){}}
+ var clip=q65GetClip();if(clip){q65PasteClip(clip);return}
+ zToast('Doable couldn’t read what you copied. Allow pasting when your device asks.');
+}
+document.addEventListener('keydown',function(e){
+ if(!MK||!document.getElementById('mk'))return;
+ var t=e.target;if(t&&(t.tagName==='TEXTAREA'||t.tagName==='INPUT'||t.isContentEditable))return;
+ var mod=e.metaKey||e.ctrlKey,k=(e.key||'').toLowerCase();
+ if(mod&&k==='v'){if(Q65SAFARI){e.preventDefault();q65PasteButton();return}var at=Date.now();setTimeout(function(){if(q65Pasted<at)q65PasteButton()},300);return} // Safari sends no paste event here
+ if(!MK.q65)return;
+ if(mod&&k==='c'){e.preventDefault();q65Copy();zToast('Copied');return}
+ if(mod&&k==='x'){e.preventDefault();if(q65Copy())q65Delete();return}
+ if(mod&&k==='d'){e.preventDefault();var S2=MK.q65,it=q65Items(S2.page,S2.ids);q65PasteClip({fid:MK.f.id,page:S2.page,box:q65Box(S2.page,S2.ids),strokes:it.strokes,images:it.images,texts:it.texts});return}
+ if(k==='backspace'||k==='delete'){e.preventDefault();q65Delete();return}
+ if(k==='escape'){e.preventDefault();q65Clear();return}
+});
+
+/* ---------- the tools: Select in the toolbar and the floating menu; Add image and Paste in the top bar ---------- */
+MK_ICO.sel=mkIco('<path d="M7 4.5c4-1.6 10.5-.6 12 3.5 1.3 3.6-2.6 6.6-7.5 6.8-4.6.2-8.8-1.6-9-4.6-.1-2 1.4-4.4 4.5-5.7z" stroke-dasharray="3 2.4"/><path d="M9 15.5c-.6 1.6-.4 3 .4 4.2"/>');
+MK_ICO.img=mkIco('<rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17.5 5-4.5 3.5 3 3-2.5 4.5 4"/>',18);
+MK_ICO.paste=mkIco('<rect x="5.5" y="4.5" width="13" height="16" rx="2.2"/><path d="M9 4.5V3.6c0-.6.4-1.1 1-1.1h4c.6 0 1 .5 1 1.1v.9"/><path d="M9 10h6M9 13.5h6M9 17h3.5"/>',18);
+var _q65TB=mkToolbarHtml;
+mkToolbarHtml=function(){
+ var sel='<button class="'+(MK.tool==='sel'?'on':'')+'" data-mk="tool:sel" title="Select">'+MK_ICO.sel+'</button>';
+ if(MK.tool!=='sel')return _q65TB.apply(this,arguments).replace(/(<button class="[^"]*" data-mk="tool:text" title="Text">[\s\S]*?<\/button>)/,'$1'+sel);
+ var tb=function(t,n){return '<button data-mk="tool:'+t+'" title="'+n+'">'+MK_ICO[t]+'</button>'};
+ return '<div class="mkrow">'+tb('hi','Highlighter')+tb('pen','Pen')+tb('eraser','Eraser')+tb('text','Text')+sel+'<span class="mksep"></span>'
+  +'<span class="mktxthint q65hint">Draw a loop around writing, or tap a picture</span></div>';
+};
+var _q65Float=mkFloatRender;
+mkFloatRender=function(){
+ _q65Float.apply(this,arguments);
+ var el=document.getElementById('mkfloat'),tx=el&&el.querySelector('[data-mk="ftool:text"]');
+ if(tx&&!el.querySelector('[data-mk="ftool:sel"]'))tx.insertAdjacentHTML('afterend','<button class="'+(MK.tool==='sel'?'on':'')+'" data-mk="ftool:sel" aria-label="Select">'+MK_ICO.sel+'</button>');
+};
+var _q65Top=mkTopHtml;
+mkTopHtml=function(){
+ var h=_q65Top.apply(this,arguments);
+ return h.replace('<span class="mkgrow"></span>','<span class="mkgrow"></span><button class="mkicon q65tb" data-q65="img" aria-label="Add image" title="Add image">'+MK_ICO.img+'<span>Image</span></button><button class="mkicon q65tb" data-q65="paste" aria-label="Paste" title="Paste">'+MK_ICO.paste+'<span>Paste</span></button>');
+};
+if(typeof Q46MK!=='undefined'){var q65ti=Q46MK.s.map(function(x){return x.s}).indexOf('#mk [data-mk="tool:text"]');
+ Q46MK.s.splice(q65ti+1,0,{s:'#mk [data-mk="tool:sel"]',t:'Select',p:'Draw a loop around your writing, or tap a picture. Then drag it to move it, or Copy, Cut, Duplicate or Delete it.'},
+  {s:'#mk [data-q65="img"]',t:'Pictures',p:'Add a photo or screenshot to the page. Drag its corner to resize it.'},
+  {s:'#mk [data-q65="paste"]',t:'Paste',p:'Paste a picture or text you copied. With a keyboard, Command+V (Ctrl+V) works too.'})}
+var _q65Pick=mkPickTool;
+mkPickTool=function(t){if(t!=='sel')q65Clear();return _q65Pick.apply(this,arguments)};
+var _q65Mode=mkSetMode;
+mkSetMode=function(m){if(m!=='edit')q65Clear();return _q65Mode.apply(this,arguments)};
+var _q65Close=mkClose;
+mkClose=function(){Q65G=null;Q65T=null;var r=_q65Close.apply(this,arguments);q65Upload();return r};
+// ink, pictures and typed text all show on the little note previews
+var _q65Thumb=q64Thumb;
+q64Thumb=function(n){
+ var h=_q65Thumb.apply(this,arguments),L=n.f&&n.f.marks&&n.f.marks.images;if(!L||!L.length)return h;
+ var imgs=L.filter(function(m){return m.page===1}).map(function(m){var o=Q65IMG[m.src];if(!o)q65Img(m.src);return o&&o.ok?'<image href="'+o.url+'" x="'+m.x+'" y="'+m.y+'" width="'+m.w+'" height="'+m.h+'" preserveAspectRatio="none"/>':''}).join('');
+ if(!imgs)return h;
+ if(h.indexOf('<svg')>-1)return h.replace('<g fill="none"',imgs+'<g fill="none"');
+ return h.replace('</span>','<svg viewBox="0 0 612 792" preserveAspectRatio="xMidYMin slice" aria-hidden="true">'+imgs+'</svg></span>');
+};
 
 try{spBoot()}catch(e){}
 load();
