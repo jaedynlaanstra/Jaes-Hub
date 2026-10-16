@@ -5706,7 +5706,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v210';
+var BUILD='v211';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -21374,17 +21374,13 @@ ZACT.mkpage=function(kind){if(kind==='notes'&&curSpace()==='school'){ZACT.q64sch
 var _q64Side=sidebar;
 sidebar=function(c){
  var h=_q64Side.apply(this,arguments);if(curSpace()!=='school')return h;
- var P=spacePages('school');if(!P.length)return h;
+ var P=spacePages('school');
  var items=P.map(function(p){var on=view.page==='page'&&view.classId===p.id,k=KINDS[p.kind]||{},pp=defPal(p.color);
   return '<div class="sitem sico'+(on?' on':'')+'" data-open="'+p.id+'"><span class="sic pg" style="--pgc:'+pp.bar+'">'+zI(ZIC[k.ico]||ZIC.note,15)+'</span><span class="nm2">'+esc(p.name)+'</span></div>'}).join('');
+ // v211: Notes always sits under Applications on School; the first tap makes the page
+ if(!q64SchoolPage(false))items='<div class="sitem sico" data-zact="q64school" role="button" tabindex="0"><span class="sic pg" style="--pgc:'+defPal(PAGE_PAL.notes).bar+'">'+zI(ZIC.note,15)+'</span><span class="nm2">Notes</span></div>'+items;
  var i=h.indexOf('<p class="slabel">Classes</p>');if(i<0)return h;
  return h.slice(0,i)+items+h.slice(i);
-};
-var _q64MH=modalHtml;
-modalHtml=function(){
- var h=_q64MH.apply(this,arguments),m=view.modal;
- if(m&&m.what==='addcls'&&!q64SchoolPage(false))h=h.replace('Import due dates from a calendar</button>','Import due dates from a calendar</button><button data-zact="q64school">Add a Notes page</button>');
- return h;
 };
 
 /* ---------- the Notes widget on Home (every space): newest notes with their paper, and New note ---------- */
