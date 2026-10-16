@@ -5740,7 +5740,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v212';
+var BUILD='v213';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -21953,6 +21953,145 @@ q64Thumb=function(n){
  if(!imgs)return h;
  if(h.indexOf('<svg')>-1)return h.replace('<g fill="none"',imgs+'<g fill="none"');
  return h.replace('</span>','<svg viewBox="0 0 612 792" preserveAspectRatio="xMidYMin slice" aria-hidden="true">'+imgs+'</svg></span>');
+};
+
+
+/* ======================= v213: hold to make a perfect shape (like Procreate's QuickShape) =======================
+   Jae: draw a square and it becomes a perfect square, same with other shapes, without ever touching handwriting
+   (a lowercase "a" has a circle in it). So, like Procreate, nothing changes unless you HOLD the pen still at
+   the end of the line for about half a second (Q66_MS) before lifting. Writing never pauses like that, and the
+   shape must also be bigger than a letter (Q66_MIN screen px). Recognised: a straight line (keep holding and
+   move to stretch it; it snaps level or upright within 4 degrees), circle / oval, square / rectangle, triangle.
+   A toast offers "Keep my drawing" to put your own line back. Snapped strokes carry s.sharp (drawn as straight
+   segments, no smoothing); older app versions just draw the dense points. */
+var Q66_MS=500,Q66_MIN=44,Q66RAW={};
+if(typeof Q46MK!=='undefined')Q46MK.s.forEach(function(x){if(x.t==='Pen')x.p+=' Draw a shape and hold the pen still at the end: it snaps into a perfect circle, square, triangle or straight line.'});
+function q66Resample(pts,n){
+ var L=0,i,d=[0];for(i=1;i<pts.length;i++){L+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);d.push(L)}
+ if(!L)return [pts[0]];var out=[],j=0;
+ for(var k=0;k<n;k++){var t=L*k/(n-1);while(j<d.length-2&&d[j+1]<t)j++;var seg=d[j+1]-d[j]||1,u=(t-d[j])/seg;out.push([pts[j][0]+(pts[j+1][0]-pts[j][0])*u,pts[j][1]+(pts[j+1][1]-pts[j][1])*u])}
+ return out;
+}
+function q66RDP(P,eps){
+ if(P.length<3)return P.slice();
+ var a=P[0],b=P[P.length-1],mi=0,md=0;
+ for(var i=1;i<P.length-1;i++){var d=mkDistToSeg(P[i],a,b);if(d>md){md=d;mi=i}}
+ if(md<=eps)return [a,b];
+ return q66RDP(P.slice(0,mi+1),eps).slice(0,-1).concat(q66RDP(P.slice(mi),eps));
+}
+function q66Dense(V,closed,step){
+ var out=[],n=V.length,m=closed?n:n-1;
+ for(var i=0;i<m;i++){var a=V[i],b=V[(i+1)%n],L=Math.hypot(b[0]-a[0],b[1]-a[1]),k=Math.max(1,Math.ceil(L/step));
+  for(var j=0;j<k;j++)out.push([a[0]+(b[0]-a[0])*j/k,a[1]+(b[1]-a[1])*j/k])}
+ out.push(closed?V[0].slice():V[n-1].slice());
+ return out;
+}
+function q66Rot(p,c,ang){var cs=Math.cos(ang),sn=Math.sin(ang),x=p[0]-c[0],y=p[1]-c[1];return [c[0]+x*cs-y*sn,c[1]+x*sn+y*cs]}
+function q66Snap90(ang,tol){var q=Math.PI/2,r=ang-Math.round(ang/q)*q;return Math.abs(r)<tol*Math.PI/180?ang-r:ang}
+// what was drawn: {name, pts} in page units, or null when it isn't clearly a shape
+function q66Recognize(raw,scale){
+ if(raw.length<6)return null;
+ var xs=raw.map(function(p){return p[0]}),ys=raw.map(function(p){return p[1]});
+ var w=Math.max.apply(null,xs)-Math.min.apply(null,xs),h=Math.max.apply(null,ys)-Math.min.apply(null,ys),size=Math.max(w,h);
+ if(size*scale<Q66_MIN||size<26)return null;
+ var P=q66Resample(raw,72),A=P[0],B=P[P.length-1],chord=Math.hypot(B[0]-A[0],B[1]-A[1]),len=0;
+ for(var i=1;i<P.length;i++)len+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);
+ // a straight line
+ var dev=0;P.forEach(function(p){dev=Math.max(dev,mkDistToSeg(p,A,B))});
+ if(chord>=size*.9&&dev<chord*.07){
+  var ang=q66Snap90(Math.atan2(B[1]-A[1],B[0]-A[0]),4),E=[A[0]+Math.cos(ang)*chord,A[1]+Math.sin(ang)*chord];
+  return {name:'line',pts:q66Dense([A,E],false,2)};
+ }
+ // closed shapes only: the end comes back near the start, and the line went all the way round
+ if(chord>size*.25||len<size*2.3)return null;
+ var c=[0,0];P.forEach(function(p){c[0]+=p[0]/P.length;c[1]+=p[1]/P.length});
+ // an ellipse along its own main direction
+ var sxx=0,syy=0,sxy=0;P.forEach(function(p){var x=p[0]-c[0],y=p[1]-c[1];sxx+=x*x;syy+=y*y;sxy+=x*y});
+ var th=.5*Math.atan2(2*sxy,sxx-syy),cs=Math.cos(th),sn=Math.sin(th),u0=1e9,u1=-1e9,v0=1e9,v1=-1e9;
+ P.forEach(function(p){var x=p[0]-c[0],y=p[1]-c[1],u=x*cs+y*sn,v=-x*sn+y*cs;u0=Math.min(u0,u);u1=Math.max(u1,u);v0=Math.min(v0,v);v1=Math.max(v1,v)});
+ var ea=(u1-u0)/2,eb=(v1-v0)/2,ec=[c[0]+((u0+u1)/2)*cs-((v0+v1)/2)*sn,c[1]+((u0+u1)/2)*sn+((v0+v1)/2)*cs],eErr=0;
+ P.forEach(function(p){var x=p[0]-ec[0],y=p[1]-ec[1],u=x*cs+y*sn,v=-x*sn+y*cs;eErr+=Math.abs(Math.sqrt((u/ea)*(u/ea)+(v/eb)*(v/eb))-1)});
+ var eDist=eErr/P.length*(ea+eb)/2/size;
+ // a polygon with real corners: 3 or 4 of them
+ var V=q66RDP(P.concat([P[0]]),size*.08);V.pop();
+ if(V.length>1&&Math.hypot(V[0][0]-V[V.length-1][0],V[0][1]-V[V.length-1][1])<size*.15)V.pop();
+ var pErr=1e9;
+ if(V.length===3||V.length===4){pErr=0;P.forEach(function(p){var m=1e9;for(var k=0;k<V.length;k++)m=Math.min(m,mkDistToSeg(p,V[k],V[(k+1)%V.length]));pErr+=m});pErr=pErr/P.length/size}
+ if(pErr<.05&&pErr<=eDist){
+  if(V.length===3)return {name:'triangle',pts:q66Dense(V,true,2)};
+  // a rectangle: the average direction of its sides, level/upright when close, then its box in that direction
+  var sx=0,sy=0;for(var k2=0;k2<4;k2++){var a2=Math.atan2(V[(k2+1)%4][1]-V[k2][1],V[(k2+1)%4][0]-V[k2][0])*4;sx+=Math.cos(a2);sy+=Math.sin(a2)}
+  var al=q66Snap90(Math.atan2(sy,sx)/4,10),R=P.map(function(p){return q66Rot(p,c,-al)});
+  var rx0=Math.min.apply(null,R.map(function(p){return p[0]})),rx1=Math.max.apply(null,R.map(function(p){return p[0]})),ry0=Math.min.apply(null,R.map(function(p){return p[1]})),ry1=Math.max.apply(null,R.map(function(p){return p[1]}));
+  var rw=rx1-rx0,rh=ry1-ry0,sq=Math.abs(rw-rh)/Math.max(rw,rh)<.13;
+  if(sq){var s2=(rw+rh)/2,mx=(rx0+rx1)/2,my=(ry0+ry1)/2;rx0=mx-s2/2;rx1=mx+s2/2;ry0=my-s2/2;ry1=my+s2/2}
+  var C=[[rx0,ry0],[rx1,ry0],[rx1,ry1],[rx0,ry1]].map(function(p){return q66Rot(p,c,al)});
+  // start at the corner nearest where the pen started, so the line still begins where you began
+  var st=0;C.forEach(function(p,k){if(Math.hypot(p[0]-A[0],p[1]-A[1])<Math.hypot(C[st][0]-A[0],C[st][1]-A[1]))st=k});
+  return {name:sq?'square':'rectangle',pts:q66Dense(C.slice(st).concat(C.slice(0,st)),true,2)};
+ }
+ if(eDist<.045){
+  if(Math.abs(ea-eb)/Math.max(ea,eb)<.12){ea=eb=(ea+eb)/2}
+  th=q66Snap90(th,10);cs=Math.cos(th);sn=Math.sin(th);
+  var a0=Math.atan2(A[1]-ec[1],A[0]-ec[0]),out=[];
+  for(var j=0;j<=96;j++){var t=a0+j/96*Math.PI*2,u=Math.cos(t)*ea,v=Math.sin(t)*eb;out.push([ec[0]+u*cs-v*sn,ec[1]+u*sn+v*cs])}
+  return {name:ea===eb?'circle':'oval',pts:out};
+ }
+ return null;
+}
+// the hold itself: called by a timer while the pen stays still, or on lift right after a long enough hold
+function q66Hold(){
+ var d=MK&&MK.drawing;if(!d||d.tool!=='pen'||d.q66||d.straight)return;
+ var raw=d.pts.slice();if(d.rawLast)raw.push(d.rawLast);
+ var r=q66Recognize(raw,mkScaleFor(d.page));if(!r)return;
+ var pr=raw.reduce(function(s,p){return s+(p[2]==null?.5:p[2])},0)/raw.length;
+ d.q66raw=raw.map(function(p){return p.slice()});d.q66={name:r.name,a:r.pts[0]};
+ d.pts=r.pts.map(function(p){return [p[0],p[1],pr]});d.pr=pr;d.straight=true;d.rawLast=null;d.sharp=1;
+ mkDrawLive(d.page);
+}
+var _q66Append=mkAppendPoint;
+mkAppendPoint=function(clientX,clientY,pressure){
+ var d=MK&&MK.drawing;
+ if(d&&d.q66){ // already a shape: a line keeps following the pen; other shapes stay put
+  if(d.q66.name==='line'&&MK.drawingAnno){var p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,d.page),A=d.q66.a,L=Math.hypot(p[0]-A[0],p[1]-A[1]);
+   if(L>2){var ang=q66Snap90(Math.atan2(p[1]-A[1],p[0]-A[0]),4);d.pts=q66Dense([A,[A[0]+Math.cos(ang)*L,A[1]+Math.sin(ang)*L]],false,2).map(function(q){return [q[0],q[1],d.pr]})}}
+  return;
+ }
+ var before=d&&d.holdAt;
+ _q66Append.apply(this,arguments);
+ d=MK.drawing;
+ if(d&&d.tool==='pen'&&d.holdAt!==before){clearTimeout(MK.q66t);MK.q66t=setTimeout(q66Hold,Q66_MS)}
+};
+var _q66Begin=mkBeginStroke;
+mkBeginStroke=function(){clearTimeout(MK&&MK.q66t);var r=_q66Begin.apply(this,arguments);if(MK&&MK.drawing&&MK.drawing.tool==='pen'){MK.q66t=setTimeout(q66Hold,Q66_MS)}return r};
+var _q66Finish=mkFinishStroke;
+mkFinishStroke=function(){
+ clearTimeout(MK.q66t);var d=MK.drawing;
+ if(d&&d.tool==='pen'&&!d.q66&&d.holdAt&&Date.now()-d.holdAt>=Q66_MS)q66Hold();
+ var shape=d&&d.q66;
+ if(shape){Q66RAW[d.id]=d.q66raw;delete d.q66;delete d.q66raw;delete d.pr}
+ var r=_q66Finish.apply(this,arguments);
+ if(shape)zToast('Made a '+shape.name,'<button data-q66keep="'+d.id+'">Keep my drawing</button>');
+ return r;
+};
+var _q66Cancel=mkCancelStroke;
+mkCancelStroke=function(){clearTimeout(MK&&MK.q66t);return _q66Cancel.apply(this,arguments)};
+// "Keep my drawing": put your own line back in place of the shape
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q66keep]');if(!b||!MK)return;
+ var id=b.getAttribute('data-q66keep'),raw=Q66RAW[id],s=((MK.f.marks&&MK.f.marks.strokes)||[]).filter(function(x){return x.id===id})[0];
+ if(!raw||!s)return;
+ s.pts=raw;delete s.sharp;delete Q66RAW[id];mkDrawAnnoForPage(s.page);mkCommit();
+});
+// shapes are drawn with straight sides and an even width
+var _q66Paint=mkPaintStroke;
+mkPaintStroke=function(ctx,s,scale){
+ if(!s.sharp||s.tool==='hi')return _q66Paint.apply(this,arguments);
+ var p=s.pts||[];if(!p.length)return;
+ ctx.save();ctx.strokeStyle=s.color;ctx.lineWidth=Math.max(.5,s.width*scale);ctx.lineCap='round';ctx.lineJoin='round';
+ ctx.beginPath();ctx.moveTo(p[0][0]*scale,p[0][1]*scale);for(var i=1;i<p.length;i++)ctx.lineTo(p[i][0]*scale,p[i][1]*scale);
+ if(p.length>2&&Math.hypot(p[0][0]-p[p.length-1][0],p[0][1]-p[p.length-1][1])<.5)ctx.closePath();
+ ctx.stroke();ctx.restore();
 };
 
 try{spBoot()}catch(e){}
