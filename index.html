@@ -5432,6 +5432,57 @@ body.q61ic.q31nosq .side .sic.pg{color:var(--q61ic)}
 #mk .q65h{position:absolute;right:-11px;bottom:-11px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #4A7FD0;box-sizing:border-box;cursor:nwse-resize;touch-action:none}
 #mk .mkicon.q65tb{width:auto;padding:0 11px;gap:6px;font-size:13px}
 @media(max-width:600px){#mk .mkicon.q65tb{width:34px;padding:0}#mk .mkicon.q65tb span{display:none}#mk .q65hint{display:none}}
+/* v216: Shopping list, your own lists (All tab: a card per list, three across; cards fold) */
+.q67tabs{max-width:720px!important}
+.q67sel{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:0 6px 0 10px;background:var(--paper);color:var(--ink3);width:180px;flex:none}
+.q67sel select{border:none!important;background:none!important;font:inherit;font-size:14.5px;padding:9px 0;width:100%;min-width:0;outline:none;color:var(--ink);box-shadow:none!important;cursor:pointer}
+.q67sel:focus-within{border-color:var(--sideBg,#6f8468)}
+.q67wrap{container-type:inline-size;container-name:q67}
+.q67grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+@container q67 (min-width:540px){.q67grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container q67 (min-width:860px){.q67grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.q67card{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-width:0}
+.q67h,.q67sc>summary{list-style:none;cursor:pointer;user-select:none;-webkit-user-select:none}
+.q67h::-webkit-details-marker,.q67sc>summary::-webkit-details-marker{display:none}
+.q67h{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--gt) 55%,var(--card))}
+.q67card:not([open])>.q67h,.q67sc:not([open])>summary{border-bottom-color:transparent}
+.q67ic{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--gt);color:var(--gc)}
+.q67h b{flex:1;min-width:0;font-weight:500;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q67h em{font-style:normal;font-size:12px;min-width:22px;height:22px;border-radius:99px;display:grid;place-items:center;background:var(--gt);color:var(--gc);padding:0 6px;flex:none}
+.q67h .zmini{flex:none}
+.q67chev{flex:none;display:grid;place-items:center;width:22px;color:var(--ink3);transition:transform .2s}
+.q67chev svg{width:14px;height:14px}
+details:not([open])>summary .q67chev{transform:rotate(-90deg)}
+.q67b{padding:4px 10px 4px}
+.q67b .zrow{border-bottom:1px solid var(--line)}
+.q67b .zrow:last-of-type{border-bottom:none}
+.q67b .z5plus{margin:0 0 6px}
+.q67empty{margin:0;padding:14px 4px;font-size:13.5px;color:var(--ink3)}
+.q67dn{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0 0;padding:8px 2px 2px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--ink3)}
+.q67dn button{border:none;background:none;font:inherit;font-size:12.5px;color:var(--ink2);text-decoration:underline;cursor:pointer;padding:2px;min-height:0!important}
+.q67in{flex-wrap:wrap}
+.q67in #z5in{flex:1 1 100%}
+.q67in #q67ist{flex:1 1 120px}
+.q67new{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:132px;border:1.5px dashed var(--line);border-radius:20px;background:none;font:inherit;color:var(--ink3);cursor:pointer;padding:18px}
+.q67new span{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--paper);color:var(--ink2)}
+.q67new b{font-weight:500;font-size:15px;color:var(--ink)}
+.q67new small{font-size:12.5px}
+.q67new:hover{background:var(--paper)}
+.q67fabrow{display:flex;margin:-14px 0 -4px}
+.q67fab{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:8px 15px 8px 11px;font:inherit;font-size:14px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.q67fab svg{width:18px;height:18px;padding:2px;border-radius:50%;background:var(--sideBg,#6f8468);color:#fff;box-sizing:border-box}
+.q67sc>summary .zmini{flex:none}
+.q67prow{display:flex;gap:8px;margin-bottom:12px}
+.q67prow input{flex:1;min-width:0}
+.q67chips{display:flex;flex-wrap:wrap;gap:8px}
+.q67chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:99px;padding:7px 12px;font:inherit;font-size:13.5px;cursor:pointer;min-height:0!important}
+.q67chip svg{color:var(--gc,var(--ink3))}
+.q67chip.on{background:var(--gt);border-color:var(--gc);color:var(--ink)}
+.q67chipn{border-style:dashed;color:var(--ink3)}
+.q67added{display:flex;flex-direction:column;gap:4px;margin-top:4px;font-size:13px;color:var(--ink3)}
+.q67added span{display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q67added svg{color:#708F77;flex:none}
+@media(max-width:999px){.q67add{flex-wrap:wrap}.q67add .q58ai{flex:1 1 100%}.q67sel,.q67add .q58store{flex:1;width:auto}}
 </style>
 </head>
 <body>
@@ -5740,7 +5791,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v215';
+var BUILD='v216';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -17431,7 +17482,7 @@ zNewWidget=function(w,d,sp){
  var h=_q17NW(w,d,sp),c=d.page?firstPage(sp,d.page):null;if(!c||h==null)return h;
  if(w.type==='todo')return h.replace('<div class="zadd zqm">',q17Week(c)+'<div class="zadd zqm">');
  if(w.type==='groceries'){
-  var T=(c.tasks||[]).filter(function(t){return t.list!=='shop'}),op=T.filter(function(t){return !t.done}),dn=T.length-op.length,shopN=(c.tasks||[]).filter(function(t){return t.list==='shop'&&!t.done}).length;
+  var T=(c.tasks||[]).filter(function(t){return z5In(t,'gro')}),op=T.filter(function(t){return !t.done}),dn=T.length-op.length,shopN=(typeof q67Also==='function'?q67Also(c):'');
   var secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
   var groups=[{id:'',name:'Any store'}].concat(secs).map(function(s){return {s:s,L:op.filter(function(x){return s.id?x.sec===s.id:!(x.sec&&ids[x.sec])})}}).filter(function(g){return g.L.length});
   var big=(w.size||'full')==='full',max=big?9:6,shown=0;
@@ -17440,7 +17491,7 @@ zNewWidget=function(w,d,sp){
     +'<div class="q17chips">'+L.map(function(x){return '<button class="q17chip" data-tick="'+x.id+'" data-c="'+c.id+'" title="Tick it off"><i></i>'+esc(x.title)+'</button>'}).join('')+'</div></div>'}).join('');
   var blocks=T.length?'<div class="q17cart"><div class="z3blocks">'+T.slice().sort(function(a,b){return (b.done?1:0)-(a.done?1:0)}).slice(0,40).map(function(t){return '<i class="'+(t.done?'y':'')+'"></i>'}).join('')+'</div><span>'+dn+' of '+T.length+' in the cart</span></div>':'';
   return zWCard(w,d,esc(c.name),op.length+' to buy',blocks+(body||'<p class="zsoft">Your grocery list is empty.</p>')+(op.length>max?'<button class="zlink" data-open="'+c.id+'">+'+(op.length-max)+' more</button>':'')
-   +(shopN?'<p class="zsoft q17also">Also '+shopN+' on your Shopping list</p>':'')+'<div class="zadd zqm"><input id="zadd-'+c.id+'" data-zenter="taskadd:'+c.id+'" placeholder="Add a grocery item" autocomplete="off"></div>',c.id);
+   +(shopN?'<p class="zsoft q17also">Also '+esc(shopN)+'</p>':'')+'<div class="zadd zqm"><input id="zadd-'+c.id+'" data-zenter="taskadd:'+c.id+'" placeholder="Add a grocery item" autocomplete="off"></div>',c.id);
  }
  if(w.type==='reading'){
   var want=c.items.filter(function(x){return x.t==='read'&&x.status!=='doing'&&x.status!=='done'}),fin=c.items.filter(function(x){return x.t==='read'&&x.status==='done'}),yr=String(today().getFullYear());
@@ -17457,7 +17508,7 @@ var _q17Small=zSmall;
 zSmall=function(w,d,sp){
  var c=d.page?firstPage(sp,d.page):null;
  if(c&&(w.type==='todo'||w.type==='groceries')){
-  var L=(c.tasks||[]).filter(function(t){return !t.done&&(w.type!=='groceries'||t.list!=='shop')});if(w.type==='todo')L.sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:1});
+  var L=(c.tasks||[]).filter(function(t){return !t.done&&(w.type!=='groceries'||z5In(t,'gro'))});if(w.type==='todo')L.sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:1});
   return zWCard(w,d,esc(c.name),'','<div class="zsm q17sm"><b class="zsmb">'+L.length+'</b><span class="zsms">'+(w.type==='todo'?'left to do':'to buy')+'</span><ul>'+L.slice(0,3).map(function(t){return '<li>'+esc(t.title)+'</li>'}).join('')+'</ul></div>',c.id);
  }
  return _q17Small(w,d,sp);
@@ -22116,6 +22167,169 @@ mkPaintStroke=function(ctx,s,scale){
  if(p.length>2&&Math.hypot(p[0][0]-p[p.length-1][0],p[0][1]-p[p.length-1][1])<.5)ctx.closePath();
  ctx.stroke();ctx.restore();
 };
+
+/* ======================= v216: Shopping list, your own lists (Jae) =======================
+   "Sometimes I have an art project I need to buy things for, or Mom's birthday." Tabs are now All | Groceries |
+   Shopping | Wishlist. All = one card per list, three across on a computer, each folds (per device,
+   hub:q67f:<cid>|<list>). Groceries and Shopping are the two built-in lists; your own lists are page items
+   {id:'sl-…', t:'slist', name, color, ord} (synced like any item). Renaming or recolouring a built-in list writes
+   an item with the fixed id 'sl-gro' / 'sl-shop' {builtin:1}. An item's list is t.list: none = Groceries,
+   'shop' = Shopping, 'sl-…' = one of your lists (an unknown id falls back to Groceries). Store cards on the
+   Groceries and Shopping tabs fold too. Phones: the big add bar is a small "+ Add to a list" button that opens a
+   pop-up (name, which list, store). Prefix q67. ===== */
+var Q67K={};
+function q67Build(){var o={};(S.classes||[]).forEach(function(c){if(c.kind==='groceries')(c.items||[]).forEach(function(x){if(x.t==='slist'&&!x.builtin)o[x.id]=1})});Q67K=o}
+function q67LOf(t){var l=t&&t.list;if(!l||l==='gro')return 'gro';if(l==='shop')return 'shop';return Q67K[l]?l:'gro'}
+z5In=function(t,tab){var l=q67LOf(t);return tab==='shop'?l==='shop':tab==='gro'?l==='gro':l===tab};
+var Q67BUILT={gro:{name:'Groceries',ico:'leaf',soft:'sage'},shop:{name:'Shopping',ico:'cart',soft:'mist'}};
+function q67Lists(c){
+ var I=(c.items||[]).filter(function(x){return x.t==='slist'}),ov={};I.forEach(function(x){if(x.builtin)ov[x.id]=x});
+ var out=['gro','shop'].map(function(k){var o=ov['sl-'+k]||{},b=Q67BUILT[k];return {id:k,name:o.name||b.name,soft:o.color||b.soft,ico:b.ico,builtin:1}});
+ I.filter(function(x){return !x.builtin}).sort(function(a,b){return (a.ord||0)-(b.ord||0)}).forEach(function(x){
+  out.push({id:x.id,name:x.name||'List',soft:x.color||zHueOf(x.name),ico:ZIC[zTaskIco(x.name)]?zTaskIco(x.name):'tag',item:x})});
+ return out;
+}
+function q67List(c,id){return q67Lists(c).filter(function(l){return l.id===id})[0]}
+function q67Pair(l){return ZC[l.soft]||ZC.grey}
+function q67Shut(c,k){return q58Get('hub:q67f:'+c.id+'|'+k,'0')==='1'}
+document.addEventListener('toggle',function(e){var d=e.target;if(!d||!d.getAttribute)return;var k=d.getAttribute('data-q67fold');if(k)q58Set('hub:q67f:'+k,d.open?'0':'1')},true);
+function q67Phone(){return window.innerWidth<=700}
+
+// which tab: All is the first one now
+z5Tab=function(c){var v=q58Get('hub:shoptab:'+c.id,'all');return v==='wish'||v==='shop'||v==='gro'?v:v==='list'?'gro':'all'};
+function q67Tabs(c,tab){
+ var T=c.tasks||[],cnt=function(k){return T.filter(function(t){return !t.done&&(k==='all'||z5In(t,k))}).length},W=(c.items||[]).filter(function(x){return x.t==='wish'&&!x.got}).length;
+ var L=q67Lists(c);
+ return '<div class="zshoptabs z5tabs q58tabs q67tabs" role="tablist">'
+  +[['all','All','grid',cnt('all')],['gro',L[0].name,'leaf',cnt('gro')],['shop',L[1].name,'cart',cnt('shop')],['wish','Wishlist','heart',W]].map(function(x){return '<button role="tab" aria-selected="'+(tab===x[0])+'" class="'+(tab===x[0]?'on':'')+'" data-zact="shoptab:'+c.id+':'+x[0]+'">'+zI(ZIC[x[2]],16)+'<span>'+esc(x[1])+'</span><em>'+x[3]+'</em></button>'}).join('')+'</div>';
+}
+function q67Fab(c){return '<button class="q67fab" data-zact="q67open:'+c.id+'">'+zI(ZIC.plus,16)+'<span>Add to a list</span></button>'}
+
+// a store name -> its section id (makes the store the first time, like the add bar always has)
+function q67StoreId(c,store){
+ store=String(store||'').trim();if(!store||/^any( store)?$/i.test(store))return '';
+ c.sections=c.sections||[];var s=c.sections.filter(function(z){return String(z.name).trim().toLowerCase()===store.toLowerCase()})[0];
+ if(!s){if(store===store.toLowerCase())store=store.replace(/(^|\s)\S/g,function(a){return a.toUpperCase()});var mx=c.sections.reduce(function(a,z){return Math.max(a,z.ord||0)},0);s=touch({id:uid(),name:store,ord:mx+1});c.sections.push(s)}
+ q58Remember(s.name);return s.id;
+}
+function q67Add(c,title,lid,store){
+ var x=touch({id:uid(),title:title,done:false});if(lid&&lid!=='gro')x.list=lid;
+ var sid=q67StoreId(c,store);if(sid)x.sec=sid;
+ c.tasks.push(x);q58Set('hub:q67last:'+c.id,lid||'gro');q58Set('hub:q58st:'+c.id,sid?((c.sections||[]).filter(function(s){return s.id===sid})[0]||{}).name||'':'');
+ return x;
+}
+function q67Last(c){var v=q58Get('hub:q67last:'+c.id,'gro');return q67List(c,v)?v:'gro'}
+function q67StoreList(c){return '<datalist id="q67dl-'+c.id+'">'+q58StoreNames().map(function(n){return '<option value="'+esc(n)+'"></option>'}).join('')+'</datalist>'}
+
+// one card per list on the All tab
+function q67Row(c,t){var h=zTaskRow(c,t);if(!t.sec||h.indexOf('z5st')>-1)return h;
+ var s=(c.sections||[]).filter(function(x){return x.id===t.sec})[0];return s?h.replace(/<\/div>$/,'<span class="z5st" title="'+esc(s.name)+'">'+zLogo(s.name,20,'store',s.site)+'</span></div>'):h}
+function q67Card(c,l){
+ var T=(c.tasks||[]).filter(function(t){return q67LOf(t)===l.id}),open=T.filter(function(t){return !t.done}),done=T.filter(function(t){return t.done});
+ var k=q67Pair(l),key='l~'+l.id,adding=view.z5add===key;
+ var rows=open.map(function(t){return q67Row(c,t)}).join('')||'<p class="q67empty">'+(done.length?'Everything’s in the cart.':'Nothing on this list yet.')+'</p>';
+ var dn=done.length?'<div class="q67dn"><span>'+done.length+' in the cart</span><button data-zact="q67clear:'+c.id+':'+l.id+'">Clear ticked</button></div>'+done.map(function(t){return q67Row(c,t)}).join(''):'';
+ var add=adding?'<div class="z5addin q67in"><input id="z5in" data-zenter="q67iadd:'+c.id+':'+l.id+'" placeholder="Add to '+esc(l.name)+'" autocomplete="off"><input id="q67ist" list="q67dl-'+c.id+'" data-zenter="q67iadd:'+c.id+':'+l.id+'" placeholder="Store (optional)" autocomplete="off" aria-label="Store"><button class="zbtn" data-zact="q67iadd:'+c.id+':'+l.id+'">Add</button><button class="zmini" data-zact="z5open:'+key+'" aria-label="Close">×</button></div>'
+  :'<button class="z5plus" data-zact="z5open:'+key+'">'+zI(ZIC.plus,14)+'<span>Add item</span></button>';
+ return '<details class="q67card" data-q67fold="'+c.id+'|'+l.id+'"'+(q67Shut(c,l.id)?'':' open')+' style="--gt:'+k[0]+';--gc:'+k[1]+'"><summary class="q67h"><span class="q67ic">'+zI(ZIC[l.ico]||ZIC.tag,15)+'</span><b>'+esc(l.name)+'</b><em>'+open.length+'</em>'
+  +'<button class="zmini" data-zact="q67edit:'+c.id+':'+l.id+'" aria-label="Rename or change the colour of '+esc(l.name)+'">'+zI(ZIC.dots,14)+'</button><span class="q67chev">'+CP_ICO.chev+'</span></summary>'
+  +'<div class="q67b">'+rows+dn+add+'</div></details>';
+}
+function q67All(c){
+ var L=q67Lists(c),T=c.tasks||[],tot=T.length,dn=T.filter(function(t){return t.done}).length;
+ var top='<div class="q58shtop">'+q67Tabs(c,'all')+(tot?'<div class="q58cartp"><span>'+(dn===tot?'Everything’s in the cart':dn+' of '+tot+' in the cart')+'</span><i><b style="width:'+Math.round(dn/tot*100)+'%"></b></i></div>':'')+'</div>';
+ var last=q67Last(c),st=q58Get('hub:q58st:'+c.id,'');
+ var add=q67Phone()?'<div class="q67fabrow">'+q67Fab(c)+'</div>'
+  :'<section class="q58add q67add"><span class="zfw q58ai"><input id="z5top-'+c.id+'" data-zenter="q67add:'+c.id+'" placeholder="Add something to buy" autocomplete="off"></span>'
+   +'<label class="q67sel" title="Which list">'+zI(ZIC.list,15)+'<select id="q67ls-'+c.id+'" data-q67ls="'+c.id+'" aria-label="Which list">'+L.map(function(l){return '<option value="'+l.id+'"'+(l.id===last?' selected':'')+'>'+esc(l.name)+'</option>'}).join('')+'<option value="__new">+ New list…</option></select></label>'
+   +'<label class="q58store" title="Which store (optional)">'+zI(ZIC.store||ZIC.cart,15)+'<input id="q58st-'+c.id+'" list="q67dl-'+c.id+'" data-zenter="q67add:'+c.id+'" value="'+esc(st)+'" placeholder="Any store" autocomplete="off" aria-label="Store"></label>'
+   +'<button class="zbtn q58addb" data-zact="q67add:'+c.id+'">Add</button></section>';
+ var cards=L.map(function(l){return q67Card(c,l)}).join('')
+  +'<button class="q67new" data-zact="q67new:'+c.id+'"><span>'+zI(ZIC.plus,18)+'</span><b>New list</b><small>Like an art project or a birthday</small></button>';
+ return top+add+q67StoreList(c)+'<div class="q67wrap"><div class="q67grid">'+cards+'</div></div>';
+}
+var _q67Shop=z5Shop;
+z5Shop=function(c){
+ q67Build();var tab=z5Tab(c);if(tab==='all')return q67All(c);
+ var h=_q67Shop(c);
+ h=h.replace(/<div class="zshoptabs z5tabs[^"]*" role="tablist">[\s\S]*?<\/div>/,q67Tabs(c,tab));
+ if(tab!=='wish'&&q67Phone())h=h.replace(/<section class="q58add">[\s\S]*?<\/section>/,'<div class="q67fabrow">'+q67Fab(c)+'</div>');
+ return h;
+};
+// store cards on the Groceries / Shopping tabs fold too
+q58ShopCard=function(c,key,name,logo,L,menu,pair){
+ var adding=view.z5add===key,fk=z5Tab(c)+'~'+key;
+ return '<details class="q58sc q67sc" data-q67fold="'+c.id+'|'+fk+'"'+(q67Shut(c,fk)?'':' open')+' style="--gt:'+pair[0]+';--gc:'+pair[1]+'"><summary class="q58sch">'+logo+'<b>'+esc(name)+'</b><em>'+L.length+'</em>'+(menu||'')+'<span class="q67chev">'+CP_ICO.chev+'</span></summary>'
+  +'<div class="q58scb">'+L.map(function(t){return zTaskRow(c,t)}).join('')+'</div>'
+  +(adding?'<div class="z5addin"><input id="z5in" data-zenter="z5add:'+c.id+':'+key+'" placeholder="Add to '+esc(name)+'" autocomplete="off"><button class="zbtn" data-zact="z5add:'+c.id+':'+key+'">Add</button><button class="zmini" data-zact="z5open:'+key+'" aria-label="Close">×</button></div>'
+   :'<button class="z5plus" data-zact="z5open:'+key+'">'+zI(ZIC.plus,14)+'<span>Add item</span></button>')+'</details>';
+};
+
+// adding: the computer bar on All, the + inside a card, and the phone pop-up
+ZACT.q67add=function(cid){
+ var c=classById(cid);if(!c)return;var inp=document.getElementById('z5top-'+cid),t=inp&&inp.value.trim();if(!t){if(inp)inp.focus();return}
+ var ls=document.getElementById('q67ls-'+cid),st=document.getElementById('q58st-'+cid),lid=ls&&ls.value!=='__new'?ls.value:q67Last(c);
+ q67Add(c,t,lid,st?st.value:'');inp.value='';save();render();
+ setTimeout(function(){var i=document.getElementById('z5top-'+cid);if(i){i.value='';i.focus()}},30);
+};
+ZACT.q67iadd=function(cid,lid){
+ var c=classById(cid),inp=document.getElementById('z5in'),t=inp&&inp.value.trim();if(!c||!t)return;
+ var st=document.getElementById('q67ist');q67Add(c,t,lid,st?st.value:'');inp.value='';save();render();
+ setTimeout(function(){var i=document.getElementById('z5in');if(i){i.value='';i.focus()}},30);
+};
+ZACT.q67clear=function(cid,lid){var c=classById(cid);if(!c)return;c.tasks=c.tasks.filter(function(t){return !(t.done&&q67LOf(t)===lid)});save();render()};
+document.addEventListener('change',function(e){var s=e.target;if(!s||!s.getAttribute||!s.getAttribute('data-q67ls'))return;var cid=s.getAttribute('data-q67ls');
+ if(s.value==='__new'){s.value=q67Last(classById(cid)||{id:cid});zOpen('q67list',{cid:cid,pick:1});return}
+ q58Set('hub:q67last:'+cid,s.value)});
+ZACT.q67open=function(cid){var c=classById(cid);if(!c)return;var tab=z5Tab(c);zOpen('q67add',{cid:cid,lid:tab==='gro'||tab==='shop'?tab:q67Last(c),store:q58Get('hub:q58st:'+cid,''),added:[]})};
+ZACT.q67pick=function(lid){var m=view.modal;if(!m||m.kind!=='q67add')return;if(lid==='__new'){var keep=Object.assign({},m,{name:zv('q67an'),store:zv('q67as')});zOpen('q67list',{cid:m.cid,pick:1,back:keep});return}m.lid=lid;render()};
+ZACT.q67padd=function(){var m=view.modal;if(!m||m.kind!=='q67add')return;var c=classById(m.cid),inp=document.getElementById('q67an'),t=inp&&inp.value.trim();if(!c)return;if(!t){if(inp)inp.focus();return}
+ var st=zv('q67as');q67Add(c,t,m.lid,st);m.store=st;m.name='';var l=q67List(c,m.lid);m.added=[t+' · '+(l?l.name:'')].concat(m.added||[]).slice(0,4);
+ inp.value='';save();render();setTimeout(function(){var i=document.getElementById('q67an');if(i){i.value='';i.focus()}},30)};
+ZM.q67add={closeLabel:'Done',html:function(m){var c=classById(m.cid);if(!c)return null;var L=q67Lists(c);
+ return '<h3>Add to a list</h3><div class="q67prow"><input id="q67an" data-zenter="q67padd" placeholder="What do you need?" autocomplete="off" value="'+esc(m.name||'')+'"><button class="zbtn" data-zact="q67padd">Add</button></div>'
+  +'<div class="field"><label>List</label><div class="q67chips">'+L.map(function(l){var k=q67Pair(l);return '<button type="button" class="q67chip'+(m.lid===l.id?' on':'')+'" style="--gt:'+k[0]+';--gc:'+k[1]+'" data-zact="q67pick:'+l.id+'">'+zI(ZIC[l.ico]||ZIC.tag,13)+'<span>'+esc(l.name)+'</span></button>'}).join('')
+   +'<button type="button" class="q67chip q67chipn" data-zact="q67pick:__new">'+zI(ZIC.plus,13)+'<span>New list</span></button></div></div>'
+  +'<div class="field"><label for="q67as">Store (optional)</label><input id="q67as" list="q67dl2-'+c.id+'" data-zenter="q67padd" value="'+esc(m.store||'')+'" placeholder="Any store" autocomplete="off"><datalist id="q67dl2-'+c.id+'">'+q58StoreNames().map(function(n){return '<option value="'+esc(n)+'"></option>'}).join('')+'</datalist></div>'
+  +(m.added&&m.added.length?'<div class="q67added">'+m.added.map(function(a){return '<span>'+zI(ZIC.check,12)+esc(a)+'</span>'}).join('')+'</div>':'');
+}};
+
+// make, rename, recolour, move and delete a list
+ZACT.q67new=function(cid){zOpen('q67list',{cid:cid})};
+ZACT.q67edit=function(cid,lid,el,e){if(e){e.preventDefault();e.stopPropagation()}zOpen('q67list',{cid:cid,lid:lid})};
+ZM.q67list={html:function(m){var c=classById(m.cid);if(!c)return null;var l=m.lid&&q67List(c,m.lid);
+ if(m.soft===undefined)m.soft=l?l.soft:ZC_KEYS[(q67Lists(c).length+3)%ZC_KEYS.length];
+ var mine=q67Lists(c).filter(function(x){return !x.builtin}),i=l&&!l.builtin?mine.map(function(x){return x.id}).indexOf(l.id):-1;
+ return '<h3>'+(l?'Edit list':'New list')+'</h3><div class="field"><label for="q67ln">Name</label><input id="q67ln" value="'+esc(l?l.name:'')+'" placeholder="Art project, Mom’s birthday"></div>'
+  +'<div class="field"><label>Colour</label>'+zSoftPick(m.soft,'data-zsoft')+'</div>'
+  +(l&&l.builtin?'<p class="hint" style="margin:-4px 0 8px">This is one of the two lists every Shopping list starts with. You can rename it and change its colour.</p>'
+   :'<p class="hint" style="margin:-4px 0 8px">'+(l?'Things on this list show in its own card on the All tab.':'A list for one thing you’re shopping for. It gets its own card on the All tab, and you can still pick a store for each item.')+'</p>')
+  +(i>-1&&mine.length>1?'<div class="sheetlist">'+(i>0?'<button data-zact="q67move:'+c.id+':'+l.id+':-1">Move earlier</button>':'')+(i<mine.length-1?'<button data-zact="q67move:'+c.id+':'+l.id+':1">Move later</button>':'')+'</div>':'');
+},save:function(m){var c=classById(m.cid);if(!c)return;var n=zv('q67ln');if(!n){var el=document.getElementById('q67ln');if(el)el.focus();return}
+ c.items=c.items||[];var l=m.lid&&q67List(c,m.lid),x;
+ if(l&&l.builtin){x=c.items.filter(function(y){return y.id==='sl-'+l.id})[0];if(!x){x={id:'sl-'+l.id,t:'slist',builtin:1};c.items.push(x)}
+  if(n===Q67BUILT[l.id].name)delete x.name;else x.name=n;if(m.soft===Q67BUILT[l.id].soft)delete x.color;else x.color=m.soft}
+ else if(l){x=l.item;x.name=n;x.color=m.soft}
+ else{var mx=q67Lists(c).reduce(function(a,y){return Math.max(a,(y.item&&y.item.ord)||0)},0);x={id:'sl-'+uid(),t:'slist',name:n,color:m.soft,ord:mx+1};c.items.push(x);q58Set('hub:q67last:'+c.id,x.id)}
+ touch(x);q67Build();save();
+ if(m.back){var b=m.back;if(!l)b.lid=x.id;view.modal=b}else view.modal=null;render()},
+ del:function(m){var c=classById(m.cid),l=c&&m.lid&&q67List(c,m.lid);return l&&!l.builtin?'q67del:'+m.cid+':'+m.lid:''}};
+ZACT.q67move=function(cid,lid,dir){var c=classById(cid);if(!c)return;var mine=q67Lists(c).filter(function(x){return !x.builtin}),i=mine.map(function(x){return x.id}).indexOf(lid),j=i+(+dir);if(i<0||j<0||j>=mine.length)return;
+ var a=mine[i],b=mine[j];mine.splice(i,1);mine.splice(j,0,a);mine.forEach(function(x,k){if(x.item.ord!==k+1){x.item.ord=k+1;touch(x.item)}});save();render()};
+ZACT.q67del=function(cid,lid){var c=classById(cid),l=c&&q67List(c,lid);if(!l||l.builtin)return;var n=(c.tasks||[]).filter(function(t){return t.list===lid}).length;
+ if(!confirm('Delete '+l.name+(n?' and the '+n+' thing'+(n===1?'':'s')+' on it':'')+'? This cannot be undone.'))return;
+ c.items=c.items.filter(function(x){return x.id!==lid});c.tasks=c.tasks.filter(function(t){return t.list!==lid});
+ if(q67Last(c)===lid)q58Set('hub:q67last:'+cid,'gro');q67Build();save();view.modal=null;render()};
+
+// the item pop-up: the List choice includes your lists
+ZM.ztask.html=(function(f){return function(m){var h=f(m),c=classById(m.cid),t=c&&zTask(c,m.tid);if(!h||!c||c.kind!=='groceries'||!t)return h;q67Build();
+ var cur=q67LOf(t);return h.replace(/<select id="zt8">[\s\S]*?<\/select>/,'<select id="zt8">'+q67Lists(c).map(function(l){return '<option value="'+l.id+'"'+(l.id===cur?' selected':'')+'>'+esc(l.name)+'</option>'}).join('')+'</select>')}})(ZM.ztask.html);
+ZM.ztask.save=(function(f){return function(m){var c=classById(m.cid),t=c&&zTask(c,m.tid),l=document.getElementById('zt8'),v=l&&l.value;var r=f(m);
+ if(t&&v&&v!=='gro'&&v!=='shop'){t.list=v;touch(t);save();render()}return r}})(ZM.ztask.save);
+// the Home widget says what else is on your other lists ("Also 3 on Shopping, 2 on Art project")
+function q67Also(c){q67Build();return q67Lists(c).slice(1).map(function(l){var n=(c.tasks||[]).filter(function(t){return !t.done&&q67LOf(t)===l.id}).length;return n?n+' on '+l.name:''}).filter(Boolean).join(', ')}
+var _q67Render=render;
+render=function(){try{q67Build()}catch(e){}return _q67Render.apply(this,arguments)};
 
 try{spBoot()}catch(e){}
 load();
