@@ -7914,7 +7914,7 @@ async function syncFiles(force){
     if(unsent||behind){
      // fetch the cloud copy first (if there is one) and merge: nothing from either device is lost
      var cloudM=null,startMarks=f.marks,startSig=mkIdsOf(f.marks),mineSig=mkMarksSig(f.marks);
-     /* v217: if the cloud copy is the very one this device last sent or fetched, there is nothing new in it, so
+     /* v218: if the cloud copy is the very one this device last sent or fetched, there is nothing new in it, so
         don't download it again (one notebook's markup can be 1-2 MB, and this ran before every upload). */
      var mTag=names[f.id+'.marks.json'],cloudSame=!behind&&!!f.marksTag&&f.marksTag===mTag;
      if(mTag&&!cloudSame){
@@ -7922,16 +7922,19 @@ async function syncFiles(force){
       if(!dlm||dlm.error){if(behind||unsent)throw (dlm&&dlm.error)||new Error('marks download failed')}
       else{try{cloudM=JSON.parse(await dlm.data.text());f.marksTag=mTag}catch(e){cloudM=null}}
      }
-     var merged=mkMergeMarks(f.marks,cloudM);
+     // a separate copy when nothing was downloaded: merging with nothing hands back f.marks itself, and stamping
+     // savedAt on that would look like new writing below and upload again, over and over
+     var merged=cloudSame?JSON.parse(JSON.stringify(f.marks)):mkMergeMarks(f.marks,cloudM);
      if(cloudM&&mkMarksSig(merged)!==mineSig)await mkHistAdd(f,'before merging markup from your other device');
      if(unsent||(cloudM&&mkMarksSig(merged)!==mkMarksSig(cloudM))){
       // we hold something the cloud doesn't: upload the merged copy as the newest version
       merged.savedAt=new Date().toISOString();
-      var upm=await withTimeout(bucket.upload(path+'.marks.json',new Blob([JSON.stringify(merged)],{type:'application/json'}),{upsert:true,contentType:'application/json'}),60000,{error:{message:'timeout'}});
+      var mBlob=new Blob([JSON.stringify(merged)],{type:'application/json'});
+      var upm=await withTimeout(bucket.upload(path+'.marks.json',mBlob,{upsert:true,contentType:'application/json'}),60000,{error:{message:'timeout'}});
       if(!upm||upm.error)throw (upm&&upm.error)||new Error('marks upload failed');
       f.marksTag=null;   // remember which cloud copy is ours now (a tiny lookup, not a download)
       try{var lt=await withTimeout(bucket.list(uid,{search:f.id+'.marks.json',limit:5}),20000,null);
-       (lt&&lt.data||[]).forEach(function(o){if(o.name===f.id+'.marks.json')f.marksTag=(o.metadata&&o.metadata.eTag)||o.updated_at||null})}catch(e){}
+       (lt&&lt.data||[]).forEach(function(o){if(o.name===f.id+'.marks.json'&&o.metadata&&+o.metadata.size===mBlob.size)f.marksTag=o.metadata.eTag||o.updated_at||null})}catch(e){} // same size: it is our copy
       remirror[cid]=1;
      }
      var changedHere=mkMarksSig(merged)!==mineSig;
