@@ -5791,7 +5791,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v216';
+var BUILD='v217';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -7734,6 +7734,7 @@ async function syncOnce(force){
   if(q0.data&&q0.data.version===syncVer){
    var mine0=payloadOf(S),c0=canon(mine0);
    if(c0===syncedCanon)return{ok:true,changed:false};
+   if(typeof q68MayUpload==='function'&&!q68MayUpload(mine0,null))return{ok:true,changed:false}; // v217 loop brake
    var up0=await sb.from('hub_state').update({state:mine0,version:syncVer+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',syncVer).select('version');
    if(up0.error)return{ok:false,error:friendlyErr(up0.error.message)};
    if(up0.data&&up0.data.length){syncVer=syncVer+1;syncedCanon=c0;return{ok:true,changed:false}}
@@ -7747,6 +7748,7 @@ async function syncOnce(force){
    showUpdateBanner('Your data was saved by a newer version of Doable. Update to keep syncing.');
    return{ok:false,error:'Your data was saved by a newer version of Doable, so this copy has paused syncing to keep it safe. Tap Update at the bottom of the screen. Nothing is lost.'};
   }
+  if(row&&typeof q68Newer==='function'&&q68Newer(row.state))return{ok:false,error:Q68OLD}; // v217: an older copy stops writing
   if(!row){
    var ins=await sb.from('hub_state').insert({user_id:uid,state:payloadOf(S),version:1});
    if(!ins.error){S.everSynced=true;syncVer=1;syncedCanon=canon(payloadOf(S));return{ok:true,changed:changed}}
@@ -7759,6 +7761,7 @@ async function syncOnce(force){
   if(canon(mine)!==before)changed=true;
   var cm=canon(mine);
   if(cm===canon(row.state||{})){syncVer=row.version;syncedCanon=cm;return{ok:true,changed:changed}}
+  if(typeof q68MayUpload==='function'&&!q68MayUpload(mine,row.state)){syncVer=row.version;syncedCanon=cm;return{ok:true,changed:changed}} // v217 loop brake
   var up=await sb.from('hub_state').update({state:mine,version:row.version+1,updated_at:new Date().toISOString()}).eq('user_id',uid).eq('version',row.version).select('version');
   if(up.error)return{ok:false,error:friendlyErr(up.error.message)};
   if(up.data&&up.data.length){syncVer=row.version+1;syncedCanon=cm;return{ok:true,changed:changed}}
@@ -22330,6 +22333,81 @@ ZM.ztask.save=(function(f){return function(m){var c=classById(m.cid),t=c&&zTask(
 function q67Also(c){q67Build();return q67Lists(c).slice(1).map(function(l){var n=(c.tasks||[]).filter(function(t){return !t.done&&q67LOf(t)===l.id}).length;return n?n+' on '+l.name:''}).filter(Boolean).join(', ')}
 var _q67Render=render;
 render=function(){try{q67Build()}catch(e){}return _q67Render.apply(this,arguments)};
+
+/* ---------- v217: sync can't run away any more ----------
+   On Oct 15-16 Safari and another browser on the Mac uploaded to each other every few seconds for hours (about 5,000 times,
+   0.7 GB of Supabase egress), because their two copies kept disagreeing about something and neither ever gave in.
+   Three guards, each enough on its own:
+   1. Loop brake: an upload this copy makes by itself (the window isn't focused, or nobody touched it in the last 90 s) is
+      "automatic". Only 3 automatic uploads are allowed per 10 minutes; after that they wait, and the wait doubles each
+      time it happens again (up to 8 hours) until someone uses this copy. What you change yourself always goes up at once.
+      When the brake trips, a short note of what the copies disagreed about is kept in S.loopLog (synced), for debugging.
+   2. Sleeping tabs: a tab or window that has been in the background for 3 minutes stops syncing (live pings included)
+      and catches up the moment you come back to it. Forgotten tabs cost nothing.
+   3. Older copies give way: every upload says which build made it (appBuild). A copy that sees data from a newer build
+      stops talking to the cloud and shows the Update bar; what you did on it stays on the device and syncs after updating.
+      Never publish a release with a LOWER build number than one that has been live, or every device would pause. */
+var BUILD_N=parseInt(String(BUILD).replace(/\D/g,''),10)||0;
+var Q68OLD='A newer version of Doable has saved your data on another device, so this copy has paused syncing. Tap Update at the bottom of the screen. Nothing is lost.';
+var q68Gate=false,q68Input=0,q68HidAt=document.hidden?Date.now():0,q68Ups=[],q68Trips=0,q68Until=0,q68Logged=0;
+['pointerdown','keydown','input','touchstart','wheel'].forEach(function(t){window.addEventListener(t,function(){q68Input=Date.now()},{capture:true,passive:true})});
+document.addEventListener('visibilitychange',function(){q68HidAt=document.hidden?Date.now():0});
+function q68Active(){var f=true;try{f=document.hasFocus()}catch(e){}return !document.hidden&&f&&Date.now()-q68Input<90000}
+function q68Asleep(){return !window.q68Off&&document.hidden&&q68HidAt&&Date.now()-q68HidAt>180000}
+function q68Browser(){var u=navigator.userAgent,m;
+ if(/iPhone|iPad/.test(u))return /iPad/.test(u)?'iPad':'iPhone';
+ if(m=/(Edg|OPR|Firefox|Chrome)\/(\d+)/.exec(u))return {Edg:'Edge',OPR:'Opera'}[m[1]]||m[1]+' '+m[2];
+ if(/Safari/.test(u))return 'Safari';return 'browser'}
+// where two copies differ, as short paths (lists matched by id), for the loop note
+function q68Paths(a,b){var out=[];
+ (function walk(x,y,p){if(out.length>=8)return;
+  if(x===y)return;
+  if(Array.isArray(x)&&Array.isArray(y)){
+   var byId=function(L){var o={};L.forEach(function(v,i){o[v&&typeof v==='object'&&v.id!=null?'#'+v.id:i]=v});return o};
+   var X=byId(x),Y=byId(y),ks={};Object.keys(X).concat(Object.keys(Y)).forEach(function(k){ks[k]=1});
+   Object.keys(ks).forEach(function(k){walk(X[k],Y[k],p+'['+k+']')});return}
+  if(x&&y&&typeof x==='object'&&typeof y==='object'&&!Array.isArray(x)&&!Array.isArray(y)){
+   var ks2={};Object.keys(x).concat(Object.keys(y)).forEach(function(k){ks2[k]=1});
+   Object.keys(ks2).forEach(function(k){walk(x[k],y[k],p?p+'.'+k:k)});return}
+  if(JSON.stringify(x)!==JSON.stringify(y))out.push(p+' = '+String(JSON.stringify(x)).slice(0,40)+' / '+String(JSON.stringify(y)).slice(0,40));
+ })(a,b,'');return out}
+function q68MayUpload(mine,cloudState){
+ if(window.q68Off||q68Active())return true;
+ var now=Date.now(),win=Math.min(10*60000*Math.pow(2,q68Trips),8*3600000);
+ if(now<q68Until)return false;
+ q68Ups=q68Ups.filter(function(t){return now-t<win});
+ if(q68Ups.length<3){q68Ups.push(now);return true}
+ q68Trips++;q68Until=now+Math.min(10*60000*Math.pow(2,q68Trips),8*3600000);q68Ups=[];
+ try{console.warn('Doable: this copy keeps disagreeing with the cloud, so automatic uploads are paused for '+Math.round((q68Until-now)/60000)+' minutes')}catch(e){}
+ if(now-q68Logged>3600000){q68Logged=now;
+  var paths=[];try{paths=cloudState?q68Paths(JSON.parse(canon(mine)),normalizeForCompare(cloudState)).filter(function(p){return !/^(loopLog|appBuild)/.test(p)}):['(no download: this copy changed by itself)']}catch(e){paths=['?']}
+  S.loopLog=(S.loopLog||[]).concat([{id:'L'+now.toString(36)+Math.random().toString(36).slice(2,5),at:new Date(now).toISOString(),build:BUILD,from:q68Browser(),paths:paths}]).slice(-20);
+  try{persistLocal()}catch(e){}
+ }
+ return false;
+}
+function q68Newer(st){
+ var b=+(st&&st.appBuild)||0;if(b<=BUILD_N)return false;
+ q68Gate=true;
+ try{showUpdateBanner('A newer version of Doable is on your other device. Update this one to keep syncing.')}catch(e){}
+ try{navigator.serviceWorker.getRegistration().then(function(r){if(r)r.update()})}catch(e){}
+ return true;
+}
+var _q68Pay=payloadOf;
+payloadOf=function(state){var o=_q68Pay.apply(this,arguments);if(o&&typeof o==='object')o.appBuild=Math.max(+o.appBuild||0,BUILD_N);return o};
+var _q68Merge=mergeState;
+mergeState=function(local,remote){var out=_q68Merge.apply(this,arguments);
+ if(out&&local&&remote){
+  var b=Math.max(+local.appBuild||0,+remote.appBuild||0);if(b)out.appBuild=b;
+  var seen={},L=[];(local.loopLog||[]).concat(remote.loopLog||[]).forEach(function(e){if(e&&e.id&&!seen[e.id]){seen[e.id]=1;L.push(e)}});
+  L.sort(function(x,y){return x.at<y.at?-1:(x.at>y.at?1:(x.id<y.id?-1:1))});
+  if(L.length)out.loopLog=L.slice(-20);else delete out.loopLog;
+ }
+ return out};
+var _q68Sync=syncOnce;
+syncOnce=async function(){if(q68Gate)return{ok:false,error:Q68OLD};return _q68Sync.apply(this,arguments)};
+var _q68Cloud=cloudSync;
+cloudSync=function(force){if(!force&&q68Asleep())return Promise.resolve();return _q68Cloud.apply(this,arguments)};
 
 try{spBoot()}catch(e){}
 load();
