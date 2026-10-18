@@ -5483,6 +5483,186 @@ details:not([open])>summary .q67chev{transform:rotate(-90deg)}
 .q67added span{display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .q67added svg{color:#708F77;flex:none}
 @media(max-width:999px){.q67add{flex-wrap:wrap}.q67add .q58ai{flex:1 1 100%}.q67sel,.q67add .q58store{flex:1;width:auto}}
+
+/* ===== v218: Look and feel panel (Jae's handoff), To do on phones, other devices ===== */
+.pickpanel.q69p{right:20px;top:16px;bottom:auto;width:400px;max-width:calc(100vw - 24px);height:min(720px,calc(100vh - 32px));height:min(720px,calc(100dvh - 32px));max-height:none;padding:0;border-radius:22px;border:0;background:#fff;color:#2b2b2b;box-shadow:0 12px 40px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;font-family:var(--fb)}
+.q69p .q69head{position:static!important;display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start!important;gap:10px!important;margin:0!important;padding:12px 14px 0 24px!important;background:none!important;border-radius:0!important;touch-action:none;cursor:grab;user-select:none;flex:none}
+.q69p .q69head .pickgrip{width:34px;height:5px;border-radius:3px;background:#d6d1c4;flex:none}
+.q69p .q69drag{font-size:13px;color:#8a857b;flex:1}
+.q69p .q69drag.pkph{display:none}
+.q69p .q44x{position:static!important;width:44px;height:44px;border-radius:50%;border:1px solid #ddd8cc;background:#fff;color:#2b2b2b;display:flex;align-items:center;justify-content:center;padding:0;flex:none;cursor:pointer;transform:none!important;margin:0!important}
+.q69p .q44x:hover{background:#f4f1ea}
+.q69top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 24px 12px;flex:none}
+.q69top>div{flex:1;min-width:0}
+.q69p .q69top h3{font-size:21px;font-weight:600;margin:0;color:#2b2b2b;font-family:var(--fb);font-style:normal;letter-spacing:0}
+.q69top p{font-size:14px;color:#6b675f;margin:2px 0 0;line-height:1.35}
+.q69reset{border:1px solid #ddd8cc;background:#fff;color:#2b2b2b;border-radius:99px;padding:10px 14px;min-height:44px;font:inherit;font-size:14px;cursor:pointer;flex:none}
+.q69reset:hover{background:#f4f1ea}
+.q69mode{display:flex;gap:4px;margin:0 24px 10px;padding:4px;background:#f1eee7;border-radius:99px;flex:none}
+.q69mode button{flex:1;border:0;border-radius:99px;padding:10px 0;min-height:44px;font:inherit;font-size:15px;font-weight:500;cursor:pointer;background:transparent;color:#2b2b2b}
+.q69mode button.on{background:#2b2b2b;color:#fff}
+.q69tabs{display:flex;gap:20px;margin:0 24px;border-bottom:1px solid #ece8de;flex:none;overflow-x:auto;scrollbar-width:none}
+.q69tabs::-webkit-scrollbar{display:none}
+.q69tabs button{position:relative;border:0;background:none;border-radius:0;padding:10px 0;min-height:44px;font:inherit;font-size:15px;font-weight:500;cursor:pointer;color:#8a857b;white-space:nowrap}
+.q69tabs button.on{color:#2b2b2b}
+.q69tabs button.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#2b2b2b}
+.q69body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:20px 24px}
+.q69sec{margin-bottom:24px}
+.q69st{font-size:13px;font-weight:600;color:#6b675f;letter-spacing:.01em}
+.q69sh{font-size:13px;color:#8a857b;margin:2px 0 8px;line-height:1.4}
+.q69st+.q69row,.q69st+.q69seg,.q69st+.q69pre,.q69st+.q69font,.q69st+.q69tgl,.q69st+.q46look{margin-top:8px}
+.q69row{display:flex;align-items:center;gap:14px;padding:8px 12px;min-height:44px;box-sizing:border-box;border:1px solid #e6e2d8;border-radius:14px;margin-bottom:8px;cursor:pointer;background:#fff}
+.q69row:hover{background:#faf8f3}
+.q69sw{position:relative;width:32px;height:32px;border-radius:50%;box-shadow:0 0 0 1px #ccc7ba;flex:none;overflow:hidden}
+.q69sw input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;margin:0}
+.q69lab{flex:1;min-width:0;display:flex;flex-direction:column}
+.q69lab>span{font-size:16px;color:#2b2b2b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q69lab small{font-size:12.5px;color:#8a857b;margin-top:1px;line-height:1.3}
+.q69lab em{font-style:normal;font-size:13px;color:#9a4a1a;margin-top:2px;line-height:1.3}
+.q69hex{font-size:13px;color:#8a857b;font-variant-numeric:tabular-nums;flex:none}
+.q69tgl{display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:48px;padding:8px 4px;border:0;background:none;font:inherit;font-size:15px;color:#2b2b2b;cursor:pointer;border-radius:12px}
+.q69sw2{flex:none;width:44px;height:26px;border-radius:13px;background:#cfcabd;position:relative;transition:background .2s}
+.q69sw2 i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}
+.q69tgl.on .q69sw2{background:#2b2b2b}
+.q69tgl.on .q69sw2 i{left:21px}
+.q69link{border:0;background:none;padding:6px 2px;min-height:36px;font:inherit;font-size:14px;color:#5a4a6e;cursor:pointer;text-align:left}
+.q69link:hover{color:#2b2b2b;text-decoration:underline}
+.q69seg{display:flex;gap:4px;padding:4px;background:#f1eee7;border-radius:99px}
+.q69seg button{flex:1;border:0;border-radius:99px;min-height:40px;padding:8px 0;font:inherit;font-size:14.5px;font-weight:500;background:transparent;color:#2b2b2b;cursor:pointer}
+.q69seg button.on{background:#2b2b2b;color:#fff}
+.q69pre{position:relative;margin-bottom:10px}
+.q69pb{width:100%;text-align:left;font:inherit;cursor:pointer;background:#fff;color:#2b2b2b;border:2px solid #e6e2d8;border-radius:18px;padding:12px 16px;display:flex;align-items:center;gap:14px;min-height:44px}
+.q69pb:hover{background:#faf8f3}
+.q69pre.on .q69pb{border-color:#2b2b2b}
+.q69dots{display:flex;padding-right:8px;flex:none}
+.q69dots i{width:26px;height:26px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 3px #ddd8cc;margin-right:-6px}
+.q69pb b{margin-left:10px;font-size:16px;font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q69pb small{font-size:13px;color:#6b675f;flex:none}
+.q69pre:has(.q69del) .q69pb{padding-right:52px}
+.q69del{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:1px solid #ddd8cc;background:#fff;color:#6b675f;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+.q69font{display:block;width:100%;text-align:left;font-size:20px;line-height:1.25;min-height:44px;padding:10px 16px;margin-bottom:8px;border-radius:14px;cursor:pointer;background:#fff;color:#2b2b2b;border:2px solid #e6e2d8}
+.q69font:hover{background:#faf8f3}
+.q69font.on{border-color:#2b2b2b}
+.q69opt{display:flex;align-items:center;gap:12px;min-height:44px;padding:6px 12px;border:1px solid #e6e2d8;border-radius:14px;margin-bottom:8px;font-size:15px;color:#2b2b2b}
+.q69opt>span{flex:1}
+.q69opt select{width:auto;min-width:120px;font-size:14px;padding:6px 8px;border-radius:10px}
+.q69opt input[type=range]{width:130px}
+.q69opt input[type=checkbox]{width:20px;height:20px;margin:0}
+.q69opt b{font-weight:400;font-size:13px;color:#8a857b;width:42px;text-align:right}
+.q69hint{font-size:13px;color:#8a857b;margin:4px 0 0}
+.q69secs{margin-top:12px}
+.q69secs .secrow{display:flex;align-items:center;gap:10px;padding:8px 12px;min-height:44px;box-sizing:border-box;border:1px solid #e6e2d8;border-radius:14px;margin-bottom:8px}
+.q69secs .secrow input[type=color]{order:0;width:32px;height:32px;border-radius:50%;border:0;padding:0;flex:none;box-shadow:0 0 0 1px #ccc7ba;cursor:pointer;background:none;overflow:hidden}
+.q69secs .secrow input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.q69secs .secrow input[type=color]::-webkit-color-swatch{border:0;border-radius:50%}
+.q69secs .secrow .secname{order:1;flex:1;min-width:0;font-size:15px;color:#2b2b2b}
+.q69secs .secrow .sechex{order:2;width:68px;text-transform:uppercase;font-size:13px;color:#8a857b;border:0;background:transparent;padding:4px;text-align:right}
+.q69secs .secrow .secbold,.q69secs .secrow .ghost,.q69secs .secrow .secsp{order:3}
+.q69secs .q25cp,.q69secs .q25cps,.q69pages .q25cp{display:none!important}
+.q69secs .secrow .secbold{width:32px;height:32px;padding:0;border-radius:50%;flex:none}
+.q69secs .secrow .secsp{display:none}
+.q69secs .secscope{margin:0 0 10px}
+.q69secs .lab{font-size:13px!important;color:#6b675f!important;letter-spacing:.01em!important;text-transform:none;margin:14px 0 8px!important}
+.q69pages .crow.colpg{display:flex;align-items:center;gap:12px;padding:6px 12px;min-height:44px;box-sizing:border-box;border:1px solid #e6e2d8;border-radius:14px;margin-bottom:8px}
+.q69pages .crow.colpg input[type=color]{width:28px;height:28px;border-radius:8px;border:0;padding:0;box-shadow:0 0 0 1px #ccc7ba;flex:none}
+.q69pages .colpgname{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:15px;color:#2b2b2b;display:flex;align-items:center;gap:8px;text-align:left;padding:4px 0;cursor:pointer}
+.q69pages .colpgname span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q69look .z4pkrow{border:1px solid #e6e2d8;border-radius:14px;padding:12px 14px;margin:0 0 8px;display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.q69look .z4pkrow p{margin:0}
+.q69look .z4pkrow p b{display:block;font-size:15px;font-weight:500;color:#2b2b2b}
+.q69look .z4pkrow p span{display:block;font-size:13px;color:#8a857b}
+.q69foot{display:flex;gap:12px;align-items:center;padding:12px 24px;border-top:1px solid #ece8de;flex:none;background:#fff}
+.q69foot>span{flex:1;min-width:0;font-size:13px;color:#6b675f;line-height:1.3}
+.q69undo{border:1px solid #ddd8cc;background:#fff;color:#2b2b2b;border-radius:99px;padding:10px 16px;min-height:44px;font:inherit;font-size:14px;cursor:pointer;flex:none}
+.q69undo[disabled]{opacity:.4;cursor:default}
+.q69savebtn{border:0;background:#2b2b2b;color:#fff;border-radius:99px;padding:10px 18px;min-height:44px;font:inherit;font-size:15px;font-weight:500;cursor:pointer;flex:none;white-space:nowrap}
+@media(max-width:700px){
+  .pickpanel.q69p{height:var(--pkh,62vh)!important;max-width:none;border-radius:22px 22px 0 0;padding:0 0 env(safe-area-inset-bottom,0px)!important}
+  .q69p .q69head{flex-direction:row!important;padding:10px 12px 0 20px!important}
+  .q69p .q69drag.pkdesk{display:none}.q69p .q69drag.pkph{display:inline}
+  .q69top{padding:2px 20px 10px}.q69mode{margin:0 20px 8px}.q69tabs{margin:0 20px;gap:18px}.q69body{padding:16px 20px}.q69foot{padding:10px 20px;gap:8px}
+  .q69top h3{font-size:19px!important}.q69top p{font-size:13px}
+  .q69foot>span{font-size:12px}
+  .q69savebtn{padding:10px 14px;font-size:14px}
+  body:has(.q69p) .main{padding-bottom:var(--pkh,62vh)}
+}
+@media(max-width:380px){.q69foot>span{display:none}.q69foot{justify-content:space-between}}
+
+/* To do on phones */
+.q69todo{display:flex;flex-direction:column;padding-bottom:110px}
+.q69sum{padding:2px 6px 14px;margin:0;font-size:14px;color:#8a8478}
+.q69g{margin:0 0 10px;border-radius:20px;background:var(--card,#fff);border:1px solid #e9e5db;overflow:hidden}
+.q69g>summary{list-style:none;display:block;padding:16px 18px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.q69r1{display:flex;align-items:center;gap:10px}.q69gn{flex:1;min-width:0}
+.q69r2{display:flex;align-items:center;gap:12px;margin-top:10px}
+.q69g>summary::-webkit-details-marker{display:none}
+.q69gn{font-size:17px;font-weight:500;color:var(--ink,#2b2620);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q69gd{font-size:13px;white-space:nowrap}
+.q69gc{color:#b3ad9f;display:flex;transition:transform .25s}
+.q69g[open] .q69gc{transform:rotate(90deg)}
+.q69gbar{flex:1;height:6px;border-radius:3px;background:#ece8de;overflow:hidden}
+.q69gbar i{display:block;height:6px;border-radius:3px;transition:width .4s}
+.q69g>summary em{font-style:normal;font-size:12px;color:#8a8478;white-space:nowrap}
+.q69gb{padding:0 12px 8px;border-top:1px solid #f0ece3}
+.q69gb .zrow{border-radius:12px}
+.q69gact{display:flex;justify-content:space-between;gap:10px;padding:4px 6px 2px}
+.q69gact .q69link{color:#6b5a3a}
+.q69empty{font-size:14px;color:#8a8478;padding:12px 6px 4px;margin:0}
+.q69newg{align-self:flex-start;border:0;background:none;padding:8px 6px;font:inherit;font-size:14px;color:#6b5a3a;cursor:pointer;white-space:nowrap}
+.q69newg:hover{color:#4a3d24}
+#q69fab{position:fixed;right:20px;bottom:calc(30px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:#5a4e3b;color:#fff;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 6px 16px rgba(60,50,30,.35);cursor:pointer;z-index:60;transition:opacity .2s,transform .2s}
+#q69fab.hide{opacity:0;pointer-events:none;transform:scale(.9)}
+body.q9menu #q69fab{display:none}
+#q69sh{position:fixed;inset:0;z-index:200}
+#q69sh .q69scrim{position:absolute;inset:0;background:rgba(30,25,15,.4);opacity:0;transition:opacity .25s}
+#q69sh.on .q69scrim{opacity:1}
+#q69sh .q69sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card,#fff);color:var(--ink,#2b2620);border-radius:28px 28px 0 0;padding:10px 20px calc(28px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.15);transform:translateY(110%);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:calc(100dvh - 40px);overflow:auto;box-sizing:border-box}
+#q69sh.on .q69sheet{transform:none}
+#q69sh.off .q69sheet{transform:translateY(110%)}
+#q69sh.off .q69scrim{opacity:0}
+.q69grab{display:block;width:36px;height:4px;border-radius:2px;background:#d8d3c8;margin:0 auto 14px}
+.q69shh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.q69shh b{font-size:18px;font-weight:500}
+.q69shx{width:32px;height:32px;border-radius:50%;border:0;background:#efece5;color:var(--q69b,#5a4e3b);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+#q69sh .q69in{width:100%;box-sizing:border-box;height:48px;border:1px solid #e1dccf;border-radius:14px;padding:0 14px;font:inherit;font-size:16px;outline:none;background:#fff;color:#2b2620;margin:0}
+#q69sh .q69in:focus{border-color:var(--q69b,#5a4e3b)}
+.q69chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.q69chip{padding:8px 14px;border-radius:18px;font:inherit;font-size:13px;cursor:pointer;background:#fff;color:#2b2620;border:1px solid #e1dccf;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:34px}
+.q69chip.on{background:var(--q69b,#5a4e3b);color:#fff;border-color:var(--q69b,#5a4e3b)}
+.q69chip.q69plus{width:34px;height:34px;padding:0;border:1px dashed #b3ad9f;color:var(--q69b,#5a4e3b);display:flex;align-items:center;justify-content:center;background:#fff}
+.q69chip.q69plus.on{background:#f4f1ea;color:var(--q69b,#5a4e3b)}
+.q69ng{display:flex;gap:10px;margin:-2px 0 12px}
+.q69ng[hidden]{display:none}
+#q69sh .q69ng .q69in{flex:1;min-width:0;height:44px;font-size:16px}
+.q69ngb{padding:0 16px;height:44px;border-radius:14px;border:1px solid var(--q69b,#5a4e3b);color:var(--q69b,#5a4e3b);background:#fff;font:inherit;font-weight:500;cursor:pointer;white-space:nowrap}
+.q69dr{display:flex;gap:10px}
+.q69dw{position:relative;flex:1;min-width:0}
+#q69sh .q69dw .q69in{color:#6b665b;font-size:16px;-webkit-appearance:none;appearance:none;min-width:0;max-width:100%}
+.q69dw>span{display:none;position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:16px;color:#a29d93;pointer-events:none}
+@supports(-webkit-touch-callout:none){.q69dw.empty>span{display:block}.q69dw.empty .q69in{color:transparent}}
+.q69addb{width:96px;height:48px;border-radius:14px;border:0;background:var(--q69b,#5a4e3b);color:#fff;font:inherit;font-size:15px;font-weight:500;cursor:pointer;flex:none}
+
+/* other devices: Home card and the screen after making an account */
+.q69dev{display:flex;gap:18px;align-items:center;background:var(--card,#fff);border:1px solid var(--line,#e9e5db);border-radius:20px;padding:18px 20px;margin-bottom:22px;flex-wrap:wrap}
+.q69dev .qrbox{width:112px;height:112px;background:#fff;border:1px solid var(--line2,#D4CFC4);border-radius:14px;padding:6px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none}
+.q69dev .qrbox svg{width:100%;height:100%}
+.q69devi{color:var(--ink2,#6b675f);flex:none;display:flex}
+.q69devt{flex:1;min-width:200px}
+.q69devt>b{display:block;font-size:16px;font-weight:500;margin-bottom:4px}
+.q69devt>span{display:block;font-size:14px;color:var(--ink2,#6b675f);line-height:1.5}
+.q69devt>span b{font-weight:500;color:var(--ink,#33312c);word-break:break-all}
+.q69devb{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#onb.q69onb .q69oart{color:#8a857b;display:flex;justify-content:center;margin:2px 0 14px}
+#onb.q69onb h2{text-align:center}
+#onb.q69onb .onbcard>p{text-align:center}
+#onb .q69obox{display:flex;gap:16px;align-items:center;background:#faf8f3;border:1px solid #ece8de;border-radius:16px;padding:14px 16px;margin:6px 0 14px}
+#onb .q69obox.col{flex-direction:column;align-items:flex-start;gap:4px}
+#onb .q69obox b{display:block;font-size:15px;color:#33312c;margin-bottom:2px}
+#onb .q69obox span{display:block;font-size:13.5px;color:#6b675f;line-height:1.45}
+#onb .q69obox .qrbox{width:120px;height:120px;background:#fff;border:1px solid #D4CFC4;border-radius:12px;padding:6px;box-sizing:border-box;flex:none;display:flex;align-items:center;justify-content:center}
+#onb .q69obox .qrbox svg{width:100%;height:100%}
+#onb .q69obox .iglink{margin:4px 0}
+@media(max-width:420px){#onb .q69obox:not(.col){flex-direction:column;text-align:center}}
 </style>
 </head>
 <body>
@@ -5791,7 +5971,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v217';
+var BUILD='v218';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19773,6 +19953,8 @@ var Q46PG={
   {s:'[data-zact^="catnew"],.zbcat',t:'Categories',p:'Give each kind of spending a budget, like groceries or eating out.'},
   {s:'.zbchip,[data-zact^="zbchip"]',t:'Sections',p:'Switch between categories, bills, spending, goals and your cards.'}]},
  todo:{n:'To do',s:[
+  {s:'.q69g>summary',t:'Your groups',p:'Each card shows what’s due next and how much is open. Tap one to see its tasks.'},
+  {s:'#q69fab',t:'Add a task',p:'Tap the round + to add a task, pick its group and a due date.'},
   {s:'.z2addc input,[placeholder^="Add a task, then"]',t:'Add a task',p:'Type it here, pick a date if it has one, and tap Add.'},
   {s:'.z2gsel',t:'Groups',p:'Put tasks into groups, like one per client or project.'},
   {s:'[data-zact^="secnew"]',t:'New group',p:'Make a new group here.'},
@@ -22408,6 +22590,408 @@ var _q68Sync=syncOnce;
 syncOnce=async function(){if(q68Gate)return{ok:false,error:Q68OLD};return _q68Sync.apply(this,arguments)};
 var _q68Cloud=cloudSync;
 cloudSync=function(force){if(!force&&q68Asleep())return Promise.resolve();return _q68Cloud.apply(this,arguments)};
+
+
+/* ======================= v218: Look and feel panel, To do on phones, and "use it on your other devices" =======================
+   Three things from Jae (prefix q69):
+   1. Look and feel = Jae's Claude Design handoff (design_handoff_look_and_feel_panel): one floating card with a Simple
+      mode (this page, menu, card style, presets, heading font) and an Advanced mode (tabs Colours, Presets, Fonts, Style).
+      Every option of the old accordion panel is still there; the rows reuse the old data-* attributes, so the old
+      handlers (live colour, Doable's own colour picker, presets, fonts, reset) do the work. Undo and Save as theme
+      in the footer. Mode remembered per device (hub:q69mode).
+   2. To do on phones (<=700px) = the handoff "Todo Mobile v2": a summary line, one white card per group with its
+      status (late / due today / later / all done) and a bar, tap a card to open it, "+ New group" under the list,
+      and a round + button that opens a "New task" sheet (task, group chips with an inline new group, date, Add).
+      Computers keep the v150 layout.
+   3. First visit: after making an account, a screen says Doable works on every device with the same account; on a
+      computer it shows a QR code for the phone, on a phone the link for the computer. On Home, new accounts get a
+      card prompting the OTHER kind of device until it has been used there (synced S.devSeen {mobile, computer}). */
+
+/* ---------- 1. Look and feel ---------- */
+var Q69={hist:[],sig:null,snap:null,at:0,open:false};
+function q69Mode(){if(view.q69mode)return view.q69mode;var m='simple';try{m=localStorage.getItem('hub:q69mode')||'simple'}catch(e){}return m==='adv'?'adv':'simple'}
+function q69Clone(o){return o==null?o:JSON.parse(JSON.stringify(o))}
+function q69Snap(){
+ var cl={};(S.classes||[]).forEach(function(c){cl[c.id]=c.color});
+ return {theme:q69Clone(S.theme||{}),spaceTheme:q69Clone(S.spaceTheme||{}),menuMatchSp:q69Clone(S.menuMatchSp||null),menuMatch:S.menuMatch,
+  cardDepth:S.cardDepth,menuIconSq:S.menuIconSq,menuIconCol:S.menuIconCol||'',defCovers:S.defCovers,cl:cl};
+}
+function q69SigOf(s){var t=Object.assign({},s.theme||{});delete t.saved;return JSON.stringify([t,s.spaceTheme,s.menuMatchSp,s.menuMatch,s.cardDepth,s.menuIconSq,s.menuIconCol,s.defCovers,s.cl])}
+function q69Track(){
+ if(!view.picker){if(Q69.open){Q69.open=false;Q69.hist=[];Q69.sig=null;Q69.snap=null;view.q69msg='';view.q69all=false;view.q69preset=''}return}
+ var s=q69Snap(),g=q69SigOf(s);Q69.open=true;
+ if(Q69.sig==null){Q69.sig=g;Q69.snap=s;return}
+ if(g===Q69.sig)return;
+ var now=Date.now();
+ if(now-Q69.at>1200){Q69.hist.push(Q69.snap);if(Q69.hist.length>30)Q69.hist.shift();view.q69msg=''}
+ Q69.at=now;Q69.sig=g;Q69.snap=s;
+}
+ZACT.q69undo=function(){
+ var s=Q69.hist.pop();if(!s)return;
+ var saved=(S.theme&&S.theme.saved)||[];
+ S.theme=q69Clone(s.theme)||{};if(saved.length)S.theme.saved=saved;else delete S.theme.saved;
+ S.spaceTheme=q69Clone(s.spaceTheme)||{};
+ if(s.menuMatchSp)S.menuMatchSp=q69Clone(s.menuMatchSp);else delete S.menuMatchSp;
+ ['menuMatch','cardDepth','menuIconSq','defCovers'].forEach(function(k){if(s[k]===undefined)delete S[k];else S[k]=s[k]});
+ S.menuIconCol=s.menuIconCol||'';
+ (S.classes||[]).forEach(function(c){if(s.cl[c.id]!==undefined&&c.color!==s.cl[c.id]){c.color=s.cl[c.id];touch(c)}});
+ try{q17Custom()}catch(e){}
+ var now=q69Snap();Q69.sig=q69SigOf(now);Q69.snap=now;Q69.at=0;view.q69msg='Undone';view.q69all=false;
+ applyTheme();save();render();
+};
+ZACT.q69mode=function(m){view.q69mode=m==='adv'?'adv':'simple';try{localStorage.setItem('hub:q69mode',view.q69mode)}catch(e){}render()};
+ZACT.q69tab=function(t){view.q69tab=t;view.q69mode='adv';render();var b=document.querySelector('.q69body');if(b)b.scrollTop=0};
+ZACT.q69more=function(){view.q69mode='adv';view.q69tab='colours';try{localStorage.setItem('hub:q69mode','adv')}catch(e){}render();var b=document.querySelector('.q69body');if(b)b.scrollTop=0};
+ZACT.q69font=function(k,name){if(!FONTS[name])return;S.theme=S.theme||{};S.theme.fonts=Object.assign({},S.theme.fonts||{});S.theme.fonts[k]=name;applyFonts();save();render()};
+ZACT.q69save=function(){
+ S.theme=S.theme||{};S.theme.saved=S.theme.saved||[];
+ var n=S.theme.saved.length+1,names={};S.theme.saved.forEach(function(s){names[s.name]=1});while(names['My theme '+n])n++;
+ var cols={};PALETTES.forEach(function(pp){if(!pp.custom)cols[pp.id]=palHex(pp.id)});
+ var chr={};CHROME.forEach(function(ch){chr[ch.key]=chromeHex(ch.key)});
+ S.theme.saved.push({name:'My theme '+n,colors:cols,chrome:chr});
+ view.q69preset='s'+(S.theme.saved.length-1);view.q69msg='Saved as My theme '+n;save();render();
+};
+// the every-page background: School uses the theme's page background, Work and Personal their own space colour
+function q69AllBg(){var sp=curSpace();if(sp!=='school'){var st=S.spaceTheme&&S.spaceTheme[sp];return (st&&st.page)||SPACE_DEF[sp].page||'#FFFFFF'}return (S.theme&&S.theme.chrome&&S.theme.chrome.paper)||'#FFFFFF'}
+function q69SetAllBg(v){var sp=curSpace();
+ if(sp!=='school'){S.spaceTheme=Object.assign({},S.spaceTheme||{});S.spaceTheme[sp]=Object.assign({},S.spaceTheme[sp]||{},{page:v})}
+ else{S.theme=S.theme||{};S.theme.chrome=Object.assign({},S.theme.chrome||{},{paper:v})}
+}
+function q69KeySpace(k){
+ var m=/^(work|personal):/.exec(k);if(m)return m[1];
+ var c=/^class:(.+)$/.exec(k);if(c){if(c[1]==='*')return 'school';var cc=classById(c[1]);return cc?(cc.space||'school'):'school'}
+ return 'school';
+}
+// "Use this background on every page": copies this page's background to every page in this space and clears the pages' own
+ZACT.q69all=function(on){
+ view.q69all=on==='1';if(!view.q69all){render();return}
+ var cur=pageBgFor(pageBgKey())||q69AllBg(),sp=curSpace();
+ q69SetAllBg(cur);
+ if(S.theme&&S.theme.pageBg){var P=Object.assign({},S.theme.pageBg);Object.keys(P).forEach(function(k){if(q69KeySpace(k)===sp)delete P[k]});S.theme.pageBg=P}
+ applyTheme();save();render();
+};
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q69allbg'))return;q69SetAllBg(t.value);applyTheme()});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q69allbg'))return;q69SetAllBg(t.value);applyTheme();save();render()});
+// a colour row's swatch and code follow the colour while you drag
+document.addEventListener('input',function(e){var t=e.target;if(!t||t.type!=='color'||!t.closest)return;var r=t.closest('.q69row');if(!r)return;
+ var sw=r.querySelector('.q69sw');if(sw)sw.style.background=t.value;var hx=r.querySelector('.q69hex');if(hx)hx.textContent=t.value.toUpperCase()});
+// the selected preset (for its dark border) is remembered while the panel is open
+window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.q69p [data-preset],.q69p [data-saved]');if(!b)return;
+ view.q69preset=b.hasAttribute('data-preset')?'p'+b.getAttribute('data-preset'):'s'+b.getAttribute('data-saved');view.q69msg=''},true);
+// a card pencil (v196) opens Advanced > Colours, where its row lives
+window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q49sec]');if(!b)return;view.q69mode='adv';view.q69tab='colours';render()},true);
+
+function q69Row(label,val,attr,warn,sub){
+ val=String(val||'#FFFFFF').toUpperCase();
+ return '<label class="q69row"><span class="q69sw" style="background:'+val+'"><input type="color" value="'+val.toLowerCase()+'" '+attr+' aria-label="'+esc(label)+'"></span>'
+  +'<span class="q69lab"><span>'+esc(label)+'</span>'+(sub?'<small>'+esc(sub)+'</small>':'')+(warn?'<em>'+esc(warn)+'</em>':'')+'</span><span class="q69hex">'+val+'</span></label>';
+}
+function q69Warn(fg,bg,where){var r=contrast(fg,bg);return r<4.5?'Hard to read on '+where+' (contrast '+r.toFixed(1)+':1)':''}
+function q69Toggle(on,act,label){return '<button type="button" class="q69tgl'+(on?' on':'')+'" data-zact="'+act+':'+(on?'0':'1')+'" aria-pressed="'+on+'"><span class="q69sw2"><i></i></span><span>'+label+'</span></button>'}
+function q69Seg(cur,opts,act){return '<div class="q69seg">'+opts.map(function(o){return '<button type="button" class="'+(cur===o[0]?'on':'')+'" data-zact="'+act+':'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div>'}
+function q69Sec(title,hint,body){return body?'<div class="q69sec"><div class="q69st">'+title+'</div>'+(hint?'<div class="q69sh">'+hint+'</div>':'')+body+'</div>':''}
+var Q69TAG=['Soft','Fresh','Cool','Warm'];
+function q69Presets(){
+ var on=view.q69preset;
+ var card=function(attr,name,tag,src,sel,del){
+  var col=src.colors||{},ch=src.chrome||{};
+  var dots=[ch.paper||'#FBFAF8',ch.sideBg||chromeHex('sideBg'),col.lavender||defPal('lavender').bar,col.sage||defPal('sage').bar];
+  return '<div class="q69pre'+(sel?' on':'')+'"><button type="button" class="q69pb" '+attr+'><span class="q69dots">'+dots.map(function(d){return '<i style="background:'+d+'"></i>'}).join('')+'</span><b>'+esc(name)+'</b><small>'+tag+'</small></button>'
+   +(del!=null?'<button type="button" class="q69del" data-delsaved="'+del+'" aria-label="Delete '+esc(name)+'">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',14)+'</button>':'')+'</div>';
+ };
+ return PRESETS.map(function(p,i){return card('data-preset="'+i+'"',p.name,Q69TAG[i]||'',p,on==='p'+i)}).join('')
+  +((S.theme&&S.theme.saved)||[]).map(function(s,i){return card('data-saved="'+i+'"',s.name,'Saved',s,on==='s'+i,i)}).join('');
+}
+function q69FontPairs(){var ff=fontSet();
+ return FONTPAIRS.map(function(fp,i){loadFont(fp.h);loadFont(fp.b);var on=ff.h===fp.h&&ff.b===fp.b;
+  return '<button type="button" class="q69font'+(on?' on':'')+'" data-fontpair="'+i+'" style="font-family:'+esc(fontStack(fp.h))+';font-weight:'+fp.hw+'">'+esc(fp.name)+'</button>'}).join('');
+}
+function q69FontList(k){var ff=fontSet(),cur=ff[k];
+ return Object.keys(FONTS).map(function(n){loadFont(n);return '<button type="button" class="q69font'+(cur===n?' on':'')+'" data-zact="q69font:'+k+':'+n+'" style="font-family:'+esc(fontStack(n))+'">'+esc(n)+'</button>'}).join('');
+}
+function q69FontMore(){var ff=fontSet();
+ var ws=[[300,'Light'],[400,'Regular'],[500,'Medium'],[600,'Semibold'],[700,'Bold']];
+ var sel=function(id,cur){return '<select data-fontpick="'+id+'" aria-label="Weight">'+ws.map(function(o){return '<option value="'+o[0]+'"'+(+cur===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select>'};
+ return '<div class="q69opt"><span>Heading weight</span>'+sel('hw',ff.hw)+'</div>'
+  +'<div class="q69opt"><span>Body weight</span>'+sel('bw',ff.bw)+'</div>'
+  +'<label class="q69opt"><span>Italic headings</span><input type="checkbox" data-fontit="1"'+(ff.it?' checked':'')+'></label>'
+  +'<div class="q69opt"><span>Size</span><input type="range" min="85" max="125" step="1" value="'+ff.size+'" data-fontsize="1" aria-label="Text size"><b id="fontsizeout">'+ff.size+'%</b></div>'
+  +'<p class="q69hint">Fonts load from Google, so they need an internet connection.</p>';
+}
+function q69PageName(){
+ if(view.page==='class'||view.page==='page')return ((classById(view.classId)||{}).name)||'This page';
+ return ({home:'Home',calendar:'Calendar',plan:'Plan my week',professors:'People',apps:'Applications',install:'Get the app'})[view.page]||'This page';
+}
+function q69ThisPage(adv,secBody){
+ var c=q17PageCol(),pbk=pageBgKey(),own=!!((S.theme&&S.theme.pageBg||{})[pbk]),all=!!view.q69all;
+ var bg=all?q69AllBg():(pageBgFor(pbk)||'#FFFFFF'),ink=chromeHex('ink');
+ var rows='';
+ if(c)rows+=q69Row(c.kind?'Page colour':'Class colour',palHex(c.color),'data-z4cc="'+c.id+'"','',c.kind?'The cover, the title and the highlights':'The cover, the title and the highlights');
+ rows+=all?q69Row('Background',bg,'data-q69allbg="1"','','Every page'+(curSpace()==='school'?'':' in '+spaceById(curSpace()).name))
+          :q69Row('Background',bg,'data-pagebg="'+esc(pbk)+'"','',own?'':'Same as every page for now');
+ rows+=q69Row('Text',ink,'data-themechrome="ink"',q69Warn(ink,bg,'this page'),'Same on every page');
+ rows+=q69Toggle(all,'q69all','Use this background on every page');
+ if(!all&&own)rows+='<button type="button" class="q69link" data-pagebgreset="'+esc(pbk)+'">Go back to the every-page background</button>';
+ if(adv&&secBody)rows+='<div class="q69secs">'+secBody+'</div>';
+ if(!adv)rows+='<button type="button" class="q69link" data-zact="q69more">More colours for this page</button>';
+ return q69Sec('This page: '+esc(q69PageName()),all?'Background changes apply to every page':'Changes apply to this page only',rows);
+}
+function q69Menu(adv){
+ var match=q54Match(),sb=chromeHex('sideBg'),si=chromeHex('sideInk'),sp=curSpace(),spn=spaceById(sp).name;
+ var rows=q69Toggle(match,'q17match','Match each page’s colour')
+  +q69Row('Menu background',sb,'data-z4menu="1"','',match&&q17PageCol()?'Picking one turns matching off':'')
+  +q69Row('Menu text',si,'data-themechrome="sideInk"',q69Warn(si,sb,'the menu'));
+ if(adv)rows+=q69Row('Menu highlight text',chromeHex('sideBright'),'data-themechrome="sideBright"','','Your name and the page you are on')
+  +q69Row('Menu small text',chromeHex('sideSoft'),'data-themechrome="sideSoft"','','Labels and the pages under a class');
+ return q69Sec('Menu',match?'Each '+(sp==='school'?'class':'page')+' tints the menu with its own colour':'Same on every page'+(sp==='school'?'':' in '+esc(spn)),rows);
+}
+function q69SiteDefaults(){
+ var rows=(curSpace()==='school'?q69Row('Default background',q69AllBg(),'data-themechrome="paper"','','Pages without their own'):q69Row('Default background',q69AllBg(),'data-q69allbg="1"','','Pages in '+spaceById(curSpace()).name+' without their own'))
+  +q69Row('Cards and boxes',chromeHex('card'),'data-themechrome="card"','','Cards, pop-ups and text boxes')
+  +q69Row('Main text',chromeHex('ink'),'data-themechrome="ink"',q69Warn(chromeHex('ink'),q69AllBg(),'the page background'))
+  +q69Row('Titles and headings',chromeHex('head'),'data-themechrome="head"')
+  +q69Row('Softer text',chromeHex('ink2'),'data-themechrome="ink2"','','Dates and labels')
+  +q69Row('Faintest text',chromeHex('ink3'),'data-themechrome="ink3"','','Hints and placeholders')
+  +q69Row('Links',chromeHex('link'),'data-themechrome="link"')
+  +q69Row('Finished items',chromeHex('doneBg'),'data-themechrome="doneBg"','','The box behind things you have done');
+ return q69Sec('Site defaults','Used by pages without their own colours',rows);
+}
+function q69Kinds(){
+ var sp=curSpace();
+ var L=(S.classes||[]).filter(function(c){if(c.id===REF_CID||c.kind==='cal')return false;return sp==='school'?(!c.kind&&!c.space)||(c.space==='school'):c.space===sp});
+ if(!L.length)return '';
+ var rows=L.map(function(c){var hx=palHex(c.color);return /^x/.test(c.color||'')||!PALETTES.some(function(p){return p.id===c.color&&!p.custom})?q69Row(c.name,hx,'data-z4cc="'+c.id+'"'):q69Row(c.name,hx,'data-themecolor="'+esc(c.color)+'"','',(L.filter(function(o){return o.color===c.color}).length>1?'Shared with others in this colour':''))}).join('');
+ return q69Sec(sp==='school'?'Class colours':'Page colours','One colour for each '+(sp==='school'?'class':'page'),rows);
+}
+function q69Panel(parts){
+ var mode=q69Mode(),adv=mode==='adv',tab=view.q69tab||'colours';
+ var pos=view.pickPos?('left:'+view.pickPos.x+'px;top:'+view.pickPos.y+'px;right:auto;bottom:auto'):'';
+ var h='<div class="pickpanel q69p" style="'+pos+'" role="dialog" aria-label="Look and feel">'
+  +'<div class="pickhead q69head" data-pickdrag="1"><span class="pickgrip"></span><span class="q69drag pkdesk">drag to move</span><span class="q69drag pkph">drag up or down</span>'
+  +'<button type="button" class="q44x" data-picker="0" aria-label="Close Look and feel" title="Close">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',18)+'</button></div>'
+  +'<div class="q69top"><div><h3>Look and feel</h3><p>'+(adv?'Fine-tune every colour and font.':'Pick a preset, then adjust a few colours.')+'</p></div><button type="button" class="q69reset" data-resetpal="1">Reset</button></div>'
+  +'<div class="q69mode">'+[['simple','Simple'],['adv','Advanced']].map(function(m){return '<button type="button" class="'+(mode===m[0]?'on':'')+'" data-zact="q69mode:'+m[0]+'">'+m[1]+'</button>'}).join('')+'</div>'
+  +(adv?'<div class="q69tabs" role="tablist">'+[['colours','Colours'],['presets','Presets'],['fonts','Fonts'],['style','Style']].map(function(t){return '<button type="button" role="tab" aria-selected="'+(tab===t[0])+'" class="'+(tab===t[0]?'on':'')+'" data-zact="q69tab:'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>':'')
+  +'<div class="q69body">';
+ if(!adv){
+  h+=q69ThisPage(false)+q69Menu(false)
+   +q69Sec('Cards','The shading on cards and widgets',q69Seg(q20Depth(),[['flat','Flat'],['soft','Soft'],['deep','Deep']],'q20depth'))
+   +q69Sec('Presets and saved themes','',q69Presets())
+   +q69Sec('Heading font','',q69FontPairs());
+ }else if(tab==='colours'){
+  h+=q69ThisPage(true,parts.sec)+q69Menu(true)+q69SiteDefaults()+q69Kinds()
+   +(parts.pages?q69Sec('Each page','The square is that page’s background. Tap a name for its own colours.','<div class="q69pages">'+parts.pages+'</div>'):'')+(parts.warn||'');
+ }else if(tab==='presets'){
+  h+=q69Sec('Presets and saved themes','Tap one to use it. Save as theme keeps what you have now.',q69Presets());
+ }else if(tab==='fonts'){
+  h+=q69Sec('Font pairs','A heading font and a body font that go together',q69FontPairs())
+   +q69Sec('Headings','',q69FontList('h'))+q69Sec('Body text','',q69FontList('b'))
+   +q69Sec('Weight and size','',q69FontMore());
+ }else{
+  h+=q69Sec('Style','Cards, menu icons, covers and tours','<div class="q46look q69look">'+q46LookRows()+'</div>');
+ }
+ h+='</div><div class="q69foot"><button type="button" class="q69undo" data-zact="q69undo"'+(Q69.hist.length?'':' disabled')+'>Undo</button><span>'+esc(view.q69msg||'Changes apply live.')+'</span><button type="button" class="q69savebtn" data-zact="q69save">Save as theme</button></div></div>';
+ return h;
+}
+var _q69Pick=pickerHtml;
+pickerHtml=function(){
+ var h=_q69Pick.apply(this,arguments);
+ if(!h||!view.picker||(view.editSurf&&view.editSurf!=='__sec')||h.indexOf('class="pickpanel')<0)return h;
+ var parts={sec:'',pages:'',warn:''};
+ try{
+  var tp=document.createElement('template');tp.innerHTML=h;var root=tp.content;
+  var body=function(k){var d=root.querySelector('details.pkacc[data-pkacc="'+k+'"] .pkaccb');return d||null};
+  var pg=body('page');
+  if(pg){
+   // our own Background row replaces the old one; the section rows, chapters and This class / Every class stay
+   pg.querySelectorAll('[data-pagebg],[data-pagebghex],[data-pagebgreset]').forEach(function(el){var r=el.closest('.secrow');if(r)r.remove();else el.remove()});
+   pg.querySelectorAll('.colpgsel').forEach(function(el){el.remove()});
+   var txt=pg.textContent.replace(/\s+/g,'');
+   if(pg.querySelector('[data-secc],[data-chc],[data-secscope]'))parts.sec=pg.innerHTML;
+   else if(txt)parts.sec='';
+  }
+  var pgs=body('pages');if(pgs)parts.pages=pgs.innerHTML;
+  var mn=body('menu');if(mn){var w=mn.querySelectorAll('.warn,p.hint');parts.warn=[].map.call(w,function(x){return x.outerHTML}).join('')}
+  var btn=root.querySelector('.pickbtn');
+  return (btn?btn.outerHTML:'')+q69Panel(parts);
+ }catch(e){return h}
+};
+var _q69Render=render;
+render=function(){try{q69Track()}catch(e){}var r=_q69Render.apply(this,arguments);try{q69FabSync()}catch(e){}try{q69DevSeen()}catch(e){}return r};
+// colours picked without a redraw still count for Undo
+document.addEventListener('change',function(e){if(!view.picker)return;setTimeout(function(){try{q69Track();var u=document.querySelector('.q69undo');if(u)u.disabled=!Q69.hist.length}catch(err){}},0)});
+
+/* ---------- 2. To do on phones ---------- */
+var Q69ST={late:'#C98D86',soon:'#C9A566',later:'#C9C3B4',done:'#A8BFA9'};
+function q69Phone(){return window.innerWidth<=700}
+function q69Brand(c){var hx=palHex(c&&c.color||'sand'),l=rgb2hsl.apply(null,hex2rgb(hx));return hsl2hex(l[0],Math.min(l[1],30),30)}
+function q69GOpen(cid,k){try{return localStorage.getItem('hub:q69g:'+cid+'|'+k)==='1'}catch(e){return false}}
+function q69Status(L,all,td,we){
+ if(!all.length)return ['No tasks',Q69ST.later];
+ if(!L.length)return ['All done',Q69ST.done];
+ var late=L.filter(function(t){return t.due&&t.due<td}).length;if(late)return [late+' late',Q69ST.late];
+ var tm=zAddDays(td,1),D=L.filter(function(t){return t.due}).map(function(t){return t.due}).sort();
+ if(D[0]===td)return ['Due today',Q69ST.soon];
+ if(D[0]===tm)return ['Due tomorrow',Q69ST.soon];
+ if(D[0]&&D[0]<=we)return ['Due '+parseISO(D[0]).toLocaleDateString('en-CA',{weekday:'long'}),Q69ST.soon];
+ return ['Later',Q69ST.later];
+}
+function q69TodoPhone(c){
+ var td=iso(today()),we=zAddDays(iso(weekStart(0)),6),secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=1});
+ var T=c.tasks||[],open=T.filter(function(t){return !t.done}).sort(z1ByDue),done=T.filter(function(t){return t.done});
+ var G=secs.map(function(s){return {s:s,k:s.id,name:s.name,L:open.filter(function(t){return t.sec===s.id}),all:T.filter(function(t){return t.sec===s.id})}});
+ var none={s:null,k:'none',name:secs.length?'Not in a group':'Your tasks',L:open.filter(function(t){return !(t.sec&&ids[t.sec])}),all:T.filter(function(t){return !(t.sec&&ids[t.sec])})};
+ if(none.L.length||!secs.length)G.unshift(none);
+ var mx=Math.max.apply(null,G.map(function(g){return g.L.length}).concat([1]));
+ var sum=secs.length?open.length+' open across '+secs.length+' group'+(secs.length===1?'':'s'):(open.length?open.length+' open':'Nothing to do yet');
+ var card=function(g){
+  var st=q69Status(g.L,g.all,td,we),w=!g.all.length?0:!g.L.length?100:Math.max(6,g.L.length/mx*100);
+  var on=q69GOpen(c.id,g.k)||(!secs.length&&!g.s);
+  return '<details class="q69g" data-q69g="'+c.id+'|'+g.k+'"'+(on?' open':'')+'><summary><span class="q69r1"><span class="q69gn">'+esc(g.name)+'</span><span class="q69gd" style="color:'+st[1]+'">'+esc(st[0])+'</span><span class="q69gc" aria-hidden="true">'+zI('<path d="m9.5 6 6 6-6 6"/>',16)+'</span></span>'
+   +'<span class="q69r2"><span class="q69gbar"><i style="width:'+w.toFixed(1)+'%;background:'+st[1]+'"></i></span><em>'+g.L.length+' open</em></span></summary>'
+   +'<div class="q69gb">'+(g.L.length?g.L.map(function(t){return zTaskRow(c,t)}).join(''):'<p class="q69empty">'+(g.all.length?'All done here.':'Nothing here yet.')+'</p>')
+   +'<div class="q69gact"><button type="button" class="q69link" data-q69add="'+c.id+'|'+(g.s?g.s.id:'')+'">+ Add a task</button>'+(g.s?'<button type="button" class="q69link" data-zact="secedit:'+c.id+':'+g.s.id+'">Edit group</button>':'')+'</div></div></details>';
+ };
+ var h='<div class="q69todo"><p class="q69sum">'+esc(sum)+'</p>'+G.map(card).join('');
+ if(done.length)h+='<details class="q69g q69done" data-q69g="'+c.id+'|done"'+(q69GOpen(c.id,'done')?' open':'')+'><summary><span class="q69r1"><span class="q69gn">Done</span><span class="q69gd" style="color:#7d9a7f">'+done.length+' finished</span><span class="q69gc" aria-hidden="true">'+zI('<path d="m9.5 6 6 6-6 6"/>',16)+'</span></span></summary>'
+  +'<div class="q69gb">'+done.map(function(t){return zTaskRow(c,t)}).join('')+'<div class="q69gact"><button type="button" class="q69link" data-zact="cleardone:'+c.id+'">Clear finished tasks</button></div></div></details>';
+ h+='<button type="button" class="q69newg" data-zact="secnew:'+c.id+'">+ New group</button></div>';
+ return h;
+}
+var _q69List=zListPage;
+zListPage=function(c){if(c&&c.kind==='todo'&&q69Phone())return q69TodoPhone(c);return _q69List.apply(this,arguments)};
+document.addEventListener('toggle',function(e){var d=e.target;if(!d||!d.getAttribute)return;var k=d.getAttribute('data-q69g');if(!k)return;try{if(d.open)localStorage.setItem('hub:q69g:'+k,'1');else localStorage.removeItem('hub:q69g:'+k)}catch(err){}},true);
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q69add]');if(!b)return;e.preventDefault();var p=b.getAttribute('data-q69add').split('|');q69SheetOpen(p[0],p[1]||'')});
+
+// the round + button and the New task sheet live on <body>, so redraws never touch them
+function q69TodoCid(){if(view.page!=='page'||!q69Phone())return null;var c=classById(view.classId);return c&&c.kind==='todo'?c.id:null}
+function q69FabSync(){
+ var cid=q69TodoCid(),f=document.getElementById('q69fab'),show=cid&&!view.modal&&!view.picker&&!view.menu&&!document.getElementById('onb');
+ if(!show){if(f)f.remove();return}
+ if(!f){f=document.createElement('button');f.id='q69fab';f.type='button';f.setAttribute('aria-label','Add a task');f.innerHTML=zI('<path d="M12 5v14M5 12h14"/>',26);
+  f.addEventListener('click',function(){var id=q69TodoCid();if(id)q69SheetOpen(id,null)});document.body.appendChild(f)}
+ f.style.background=q69Brand(classById(cid));
+ f.classList.toggle('hide',!!document.getElementById('q69sh'));
+}
+var Q69SH=null;
+function q69SheetOpen(cid,sec){
+ var c=classById(cid);if(!c)return;
+ if(sec==null){sec='';try{sec=localStorage.getItem('hub:z2grp:'+cid)||''}catch(e){}}
+ if(sec&&!zSecs(c).some(function(s){return s.id===sec}))sec='';
+ Q69SH={cid:cid,sec:sec,adding:false};
+ var el=document.getElementById('q69sh');if(el)el.remove();
+ el=document.createElement('div');el.id='q69sh';el.style.setProperty('--q69b',q69Brand(c));
+ el.innerHTML='<div class="q69scrim" data-q69x="1"></div><div class="q69sheet" role="dialog" aria-modal="true" aria-label="New task"><i class="q69grab"></i>'
+  +'<div class="q69shh"><b>New task</b><button type="button" class="q69shx" data-q69x="1" aria-label="Close">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',16)+'</button></div>'
+  +'<input id="q69t" class="q69in" placeholder="What needs doing?" autocomplete="off" enterkeyhint="done">'
+  +'<div class="q69chips"></div>'
+  +'<div class="q69ng" hidden><input id="q69n" class="q69in" placeholder="New group name" autocomplete="off"><button type="button" class="q69ngb" data-q69ng="1">Add group</button></div>'
+  +'<div class="q69dr"><span class="q69dw empty"><input id="q69d" type="date" class="q69in" aria-label="Due date"><span aria-hidden="true">Due date</span></span><button type="button" class="q69addb" data-q69go="1">Add</button></div></div>';
+ document.body.appendChild(el);
+ q69Chips();
+ var d=el.querySelector('#q69d');d.addEventListener('input',function(){d.parentNode.classList.toggle('empty',!d.value)});d.addEventListener('change',function(){d.parentNode.classList.toggle('empty',!d.value)});
+ el.addEventListener('click',q69SheetClick);
+ el.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();q69SheetClose()}else if(e.key==='Enter'&&e.target.id==='q69t'){e.preventDefault();q69SheetAdd()}else if(e.key==='Enter'&&e.target.id==='q69n'){e.preventDefault();q69NewGroup()}});
+ q69FabSync();
+ requestAnimationFrame(function(){el.classList.add('on')});setTimeout(function(){el.classList.add('on')},30);
+ setTimeout(function(){var t=document.getElementById('q69t');if(t)try{t.focus({preventScroll:true})}catch(e){}},60);
+}
+function q69Chips(){
+ var el=document.getElementById('q69sh'),c=Q69SH&&classById(Q69SH.cid);if(!el||!c)return;
+ var L=[{id:'',name:'No group'}].concat(zSecs(c));
+ el.querySelector('.q69chips').innerHTML=L.map(function(s){var on=Q69SH.sec===s.id;return '<button type="button" class="q69chip'+(on?' on':'')+'" data-q69sec="'+esc(s.id)+'" aria-pressed="'+on+'">'+esc(s.name)+'</button>'}).join('')
+  +'<button type="button" class="q69chip q69plus'+(Q69SH.adding?' on':'')+'" data-q69ngt="1" aria-label="New group">'+zI('<path d="M12 6v12M6 12h12"/>',16)+'</button>';
+}
+function q69SheetClick(e){
+ var t=e.target.closest('[data-q69x],[data-q69sec],[data-q69ngt],[data-q69ng],[data-q69go]');if(!t)return;
+ if(t.hasAttribute('data-q69x'))q69SheetClose();
+ else if(t.hasAttribute('data-q69sec')){Q69SH.sec=t.getAttribute('data-q69sec');q69Chips()}
+ else if(t.hasAttribute('data-q69ngt')){Q69SH.adding=!Q69SH.adding;var r=document.querySelector('#q69sh .q69ng');if(r){r.hidden=!Q69SH.adding;if(Q69SH.adding){var n=document.getElementById('q69n');if(n)n.focus()}}q69Chips()}
+ else if(t.hasAttribute('data-q69ng'))q69NewGroup();
+ else if(t.hasAttribute('data-q69go'))q69SheetAdd();
+}
+function q69NewGroup(){
+ var c=Q69SH&&classById(Q69SH.cid),n=document.getElementById('q69n');if(!c||!n)return;var v=n.value.trim();if(!v)return;
+ if(zSecs(c).some(function(s){return String(s.name).trim().toLowerCase()===v.toLowerCase()}))return;
+ c.sections=c.sections||[];var mx=c.sections.reduce(function(a,x){return Math.max(a,x.ord||0)},0);
+ var s={id:uid(),ord:mx+1,name:v};touch(s);c.sections.push(s);save();
+ Q69SH.sec=s.id;Q69SH.adding=false;n.value='';var r=document.querySelector('#q69sh .q69ng');if(r)r.hidden=true;q69Chips();
+ render();
+}
+function q69SheetAdd(){
+ var c=Q69SH&&classById(Q69SH.cid),ti=document.getElementById('q69t'),di=document.getElementById('q69d');if(!c||!ti)return;
+ var title=ti.value.trim();if(!title){ti.focus();return}
+ var due=di?di.value:'',x=touch({id:uid(),title:title,due:due,done:false});if(Q69SH.sec)x.sec=Q69SH.sec;if(due&&S.autoPlan)x.plan=[due];
+ c.tasks.push(x);
+ try{localStorage.setItem('hub:z2grp:'+c.id,Q69SH.sec||'');localStorage.setItem('hub:q69g:'+c.id+'|'+(Q69SH.sec||'none'),'1')}catch(e){}
+ save();q69SheetClose();render();
+}
+function q69SheetClose(){
+ var el=document.getElementById('q69sh');Q69SH=null;if(!el)return;el.classList.remove('on');el.classList.add('off');
+ setTimeout(function(){el.remove();q69FabSync()},320);
+ var f=document.getElementById('q69fab');if(f)f.classList.remove('hide');
+}
+// leaving the page or the phone size closes the sheet
+var _q69Go=go;
+go=function(){if(document.getElementById('q69sh'))q69SheetClose();return _q69Go.apply(this,arguments)};
+
+/* ---------- 3. Other devices ---------- */
+function q69Kind(){return onbPlatform()==='desktop'?'computer':'mobile'}
+SETTINGS_KEYS.push('devSeen');Q21DEEP.devSeen=1;
+// each kind of device is written once, the first time a signed-in copy of v218 runs on it (no repeated uploads)
+function q69DevSeen(){
+ if(!sbUser||!q21Pulled||!S.everSynced)return;
+ var k=q69Kind();if(S.devSeen&&S.devSeen[k])return;
+ S.devSeen=Object.assign({},S.devSeen||{});S.devSeen[k]=iso(today());save();
+}
+function q69NewAcct(){if(!sbUser)return false;var made=Date.parse(sbUser.created_at||'');return !!made&&Date.now()-made<30*864e5}
+function q69DevCard(){
+ if(!sbUser||!q21Pulled||!q69NewAcct())return '';
+ var k=q69Kind(),other=k==='computer'?'mobile':'computer',seen=S.devSeen||{};
+ if(seen[other]||seen.off)return '';
+ var url=siteUrl(),em=(sbUser&&sbUser.email)||'';
+ setTimeout(fillQr,0);
+ if(k==='computer')return '<div class="q69dev"><div class="qrbox" data-qr="'+esc(url)+'"></div><div class="q69devt"><b>Get Doable on your phone too</b>'
+  +'<span>Point your phone’s camera at the square and open the link. Sign in with '+(em?'<b>'+esc(em)+'</b>':'the same account')+' and everything you add here shows up there.</span>'
+  +'<div class="q69devb"><button type="button" data-go="install">Show me how</button><button type="button" class="ghost" data-zact="q69devoff">Not now</button></div></div></div>';
+ return '<div class="q69dev"><span class="q69devi">'+q69Devices(54)+'</span><div class="q69devt"><b>Set up Doable on your computer too</b>'
+  +'<span>On your computer, open <b class="q69url">'+esc(url.replace(/^https?:\/\//,''))+'</b> and sign in with '+(em?'<b>'+esc(em)+'</b>':'the same account')+'. Your stuff syncs both ways.</span>'
+  +'<div class="q69devb"><button type="button" data-xact="copylink">Copy link</button>'+(navigator.share?'<button type="button" data-xact="sharelink">Send it to myself</button>':'')+'<button type="button" class="ghost" data-zact="q69devoff">Not now</button></div></div></div>';
+}
+ZACT.q69devoff=function(){S.devSeen=Object.assign({},S.devSeen||{},{off:1});save();render()};
+var _q69Inst=homeInstallCard;
+homeInstallCard=function(){var a='';try{a=q69DevCard()}catch(e){}return a+_q69Inst.apply(this,arguments)};
+function q69Devices(w){
+ return '<svg viewBox="0 0 120 64" width="'+w*1.9+'" height="'+w+'" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">'
+  +'<rect x="4" y="12" width="26" height="46" rx="5"/><path d="M14 52h6"/>'
+  +'<rect x="50" y="8" width="62" height="40" rx="4"/><path d="M42 56h78"/><path d="M74 48v8"/>'
+  +'<path d="M33 26c4-5 10-6 14-3" stroke-width="2"/><path d="m45 19 2 4-4 1" stroke-width="2"/><path d="M47 40c-4 5-10 6-14 3" stroke-width="2"/><path d="m35 47-2-4 4-1" stroke-width="2"/></svg>';
+}
+// after making an account: one screen about every device (then, on a phone in the browser, the home screen steps)
+var _q69Build=buildOnb;
+buildOnb=function(){
+ if(!onb||onb.step!==5)return _q69Build.apply(this,arguments);
+ onbCss();guideCss();
+ var el=document.getElementById('onb');
+ if(!el){el=document.createElement('div');el.id='onb';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.addEventListener('click',onbClick);document.body.appendChild(el)}
+ el.className='q69onb';
+ var k=q69Kind(),url=siteUrl(),em=onb.email||((sbUser&&sbUser.email)||''),more=k==='mobile'&&!isInstalledApp();
+ var other=k==='computer'
+  ?'<div class="q69obox"><div class="qrbox" data-qr="'+esc(url)+'"></div><div><b>Now get it on your phone</b><span>Point your phone’s camera at the square, open the link and sign in. That’s it.</span></div></div>'
+  :'<div class="q69obox col"><b>Now set it up on your computer</b><span>On your computer, go to</span><div class="iglink">'+esc(url.replace(/^https?:\/\//,''))+'</div><span>and sign in. Doable will remember you.</span><div class="igbtns"><button data-xact="copylink">Copy link</button>'+(navigator.share?'<button data-xact="sharelink">Send it to myself</button>':'')+'</div></div>';
+ el.innerHTML='<div class="onbcard"><div class="onbdots"><i class="on"></i><i class="on"></i><i class="on"></i></div>'
+  +'<div class="q69oart">'+q69Devices(62)+'</div>'
+  +'<h2>You’re all set'+(onb.name?', '+esc(onb.name):'')+'</h2>'
+  +'<p>Doable works on your phone, tablet and computer. Open it on any of them and sign in with '+(em?'<b>'+esc(em)+'</b>':'this account')+'. Everything you add syncs on its own.</p>'
+  +other
+  +'<button class="onbbtn" data-q69onb="'+(more?'phone':'finish')+'">'+(more?'Next: put it on this phone':'Take me to my hub')+'</button>'
+  +(more?'<div class="onbrow"><span></span><button class="onblink" data-onb="finish">Skip, take me to my hub</button></div>':'')+'</div>';
+ setTimeout(fillQr,0);
+};
+var _q69After=onbAfterSignedIn;
+onbAfterSignedIn=function(){if(onb&&onb.mode==='up'){onb.step=5;buildOnb();return}return _q69After.apply(this,arguments)};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q69onb]');if(!b||!onb)return;
+ var a=b.getAttribute('data-q69onb');if(a==='phone'){onb.step=3;buildOnb()}else onbClose('done')});
 
 try{spBoot()}catch(e){}
 load();
