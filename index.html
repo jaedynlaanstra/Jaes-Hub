@@ -5663,6 +5663,14 @@ body.q9menu #q69fab{display:none}
 #onb .q69obox .qrbox svg{width:100%;height:100%}
 #onb .q69obox .iglink{margin:4px 0}
 @media(max-width:420px){#onb .q69obox:not(.col){flex-direction:column;text-align:center}}
+/* v220 custom papers */
+.q64p-custom{background-size:cover;background-position:top center}
+.q70wrap{position:relative;display:block}
+.q70wrap>.q64paper{width:100%}
+.q70x{position:absolute;top:2px;right:2px;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:#fff;color:#6B675F;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.q70x:hover{background:#FAF0EF;color:#9c4a41}
+.q70add .q64th{display:flex;align-items:center;justify-content:center;border-style:dashed;background:transparent}
+.q70add .q64th i{font-style:normal;font-size:26px;color:var(--ink3)}
 </style>
 </head>
 <body>
@@ -5971,7 +5979,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v219';
+var BUILD='v220';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -21353,7 +21361,7 @@ modalHtml=function(){var h=_q63MH.apply(this,arguments);if(!view.modal||view.mod
    under their class on it. */
 CLASS_KEYS.push('nInit');
 KINDS.notes.desc='Handwritten notes on graph, lined or dotted paper, sorted into categories';
-var Q64P={grid:{n:'Graph',row:18},gridl:{n:'Big graph',row:27},lined:{n:'Lined',row:27},linedn:{n:'Narrow lined',row:18},dots:{n:'Dotted',row:18},blank:{n:'Blank',row:18}};
+var Q64P={grid:{n:'Graph',row:18},gridl:{n:'Big graph',row:27},lined:{n:'Lined',row:27},linedn:{n:'Narrow lined',row:18},dots:{n:'Dotted',row:18},blank:{n:'Blank',row:18},custom:{n:'Your own',row:18}};
 var Q64ORDER=['grid','gridl','lined','linedn','dots','blank'];
 // a blank page of the chosen paper (US Letter) as a tiny PDF. Lines sit a whole number of rows from the TOP,
 // where typed text snaps to them.
@@ -21374,10 +21382,13 @@ function q64Pdf(paper){
  return btoa(out);
 }
 async function q64Make(cid,name,cat,paper){
+ var tp=null;
+ if(/^tpl:/.test(paper)){tp=q70Get(paper.slice(4));paper=tp?'custom':'grid'}
  if(!Q64P[paper])paper='grid';
  FILES[cid]=FILES[cid]||[];
- var rec={id:uid(),name:name,kind:'pdf',ext:'pdf',mime:'application/pdf',data:q64Pdf(paper),section:cat||'',
+ var rec={id:uid(),name:name,kind:'pdf',ext:'pdf',mime:'application/pdf',data:tp?q70Pdf(tp.img):q64Pdf(paper),section:cat||'',
   marks:{savedAt:new Date().toISOString(),strokes:[],notes:[],texts:[],paper:paper,pages:1}};
+ if(tp){rec.marks.tpl=tp.id;rec.marks.thumb=tp.thumb||''}
  FILES[cid].push(rec);
  await saveFiles(cid);
  if(sbUser)cloudSync(true);
@@ -21476,7 +21487,7 @@ function q64Thumb(n){
  (mk.texts||[]).filter(function(t){return t.page===1&&t.text}).slice(0,30).forEach(function(t){
   var big=t.style==='h';String(t.text).split('\n').slice(0,8).forEach(function(l,i){ink+='<text x="'+r(t.x)+'" y="'+r(t.y+i*(big?36:18)-4)+'" font-size="'+(big?22:12.5)+'" fill="'+esc(t.color||'#222')+'"'+(big?' font-weight="600"':'')+'>'+esc(l.slice(0,90))+'</text>'});
  });
- return '<span class="q64th q64p-'+paper+'">'+(ink?'<svg viewBox="0 0 612 792" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round">'+ink+'</g></svg>':'')+'</span>';
+ return '<span class="q64th q64p-'+paper+'"'+(paper==='custom'&&mk.thumb?' style="background-image:url('+mk.thumb+')"':'')+'>'+(ink?'<svg viewBox="0 0 612 792" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round">'+ink+'</g></svg>':'')+'</span>';
 }
 function q64OpenAttr(n){return n.f?(n.f.kind==='pdf'?'data-mkopen="':'data-openfile="')+n.i+'" data-c="'+n.cid+'"':'data-zact="noteedit:'+n.cid+':'+n.x.id+'"'}
 function q64Card(n,cats){
@@ -23006,6 +23017,85 @@ var _q69After=onbAfterSignedIn;
 onbAfterSignedIn=function(){if(onb&&onb.mode==='up'){onb.step=5;buildOnb();return}return _q69After.apply(this,arguments)};
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q69onb]');if(!b||!onb)return;
  var a=b.getAttribute('data-q69onb');if(a==='phone'){onb.step=3;buildOnb()}else onbClose('done')});
+
+/* ---------- v220: your own note papers (upload a picture of a page, it stays in the New note paper list) ----------
+   S.noteTpl = {id:{id,name,img,thumb,at,gone}} (synced setting, each template merges on its own; the pictures are
+   ordinary data-URL pictures, so the existing picture sync moves them to cloud storage). Removing sets gone:1 and
+   drops the pictures. A note made from one gets the picture drawn INTO its PDF page, so it works like any other paper
+   and removing the template never changes notes already made. */
+SETTINGS_KEYS.push('noteTpl');Q21DEEP.noteTpl=1;
+function q70List(){var o=(S.noteTpl&&typeof S.noteTpl==='object')?S.noteTpl:{};return Object.keys(o).map(function(k){return o[k]}).filter(function(t){return t&&!t.gone&&t.img}).sort(function(a,b){return String(a.at||'').localeCompare(String(b.at||''))})}
+function q70Get(id){var t=S.noteTpl&&S.noteTpl[id];return t&&!t.gone&&t.img?t:null}
+// a one-page PDF (US Letter) whose page is the picture
+function q70Pdf(dataUrl){
+ var bin=atob(dataUrl.split(',')[1]),W=612,H=792,iw=1020,ih=1320;
+ var c='q '+W+' 0 0 '+H+' 0 0 cm /Im0 Do Q\n';
+ var objs=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+  '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << /XObject << /Im0 6 0 R >> >> /Contents 4 0 R >>',
+  '<< /Length '+c.length+' >>\nstream\n'+c+'endstream','<< /Title (Doable note) /Producer (Doable) >>',
+  '<< /Type /XObject /Subtype /Image /Width '+iw+' /Height '+ih+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+bin.length+' >>\nstream\n'+bin+'\nendstream'];
+ var out='%PDF-1.4\n',offs=[];
+ objs.forEach(function(o,i){offs.push(out.length);out+=(i+1)+' 0 obj\n'+o+'\nendobj\n'});
+ var xref=out.length;
+ out+='xref\n0 '+(objs.length+1)+'\n0000000000 65535 f \n'+offs.map(function(o){return ('0000000000'+o).slice(-10)+' 00000 n \n'}).join('');
+ out+='trailer\n<< /Size '+(objs.length+1)+' /Root 1 0 R /Info 5 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';
+ return btoa(out);
+}
+// picture file -> {img: Letter-shaped JPEG, thumb: small copy}
+function q70Process(file){
+ return new Promise(function(res,rej){
+  var url=URL.createObjectURL(file),im=new Image();
+  im.onload=function(){
+   try{
+    var iw=1020,ih=1320,cv=document.createElement('canvas');cv.width=iw;cv.height=ih;
+    var cx=cv.getContext('2d');cx.fillStyle='#FFFFFF';cx.fillRect(0,0,iw,ih);
+    var w=im.naturalWidth,h=im.naturalHeight,ar=w/h,la=iw/ih,cover=ar>0.6&&ar<0.95,sc=cover?Math.max(iw/w,ih/h):Math.min(iw/w,ih/h);
+    cx.drawImage(im,(iw-w*sc)/2,cover?(ih-h*sc)/2:(ih-h*sc)/2,w*sc,h*sc);
+    var tc=document.createElement('canvas');tc.width=170;tc.height=220;tc.getContext('2d').drawImage(cv,0,0,170,220);
+    URL.revokeObjectURL(url);
+    res({img:cv.toDataURL('image/jpeg',0.82),thumb:tc.toDataURL('image/jpeg',0.7)});
+   }catch(e){URL.revokeObjectURL(url);rej(e)}
+  };
+  im.onerror=function(){URL.revokeObjectURL(url);rej(new Error('load'))};
+  im.src=url;
+ });
+}
+var q70In=document.createElement('input');q70In.type='file';q70In.accept='image/*';q70In.style.display='none';document.body.appendChild(q70In);
+q70In.addEventListener('change',function(){
+ var f=q70In.files&&q70In.files[0];q70In.value='';if(!f)return;
+ if(f.size>25*1024*1024){zToast('That picture is too big (25 MB limit).');return}
+ q70Process(f).then(function(r){
+  S.noteTpl=S.noteTpl||{};
+  var n=q70List().length+1,id='tpl-'+uid();
+  S.noteTpl[id]={id:id,name:'My page '+n,img:r.img,thumb:r.thumb,at:new Date().toISOString()};
+  save();
+  if(view.modal&&view.modal.kind==='q64new')view.modal.paper='tpl:'+id;
+  render();zToast('Added to your papers. It stays here until you remove it.');
+ }).catch(function(){zToast('Couldn’t read that picture. Try a JPG or PNG (iPhone: pick it from Photos).')});
+});
+document.addEventListener('click',function(e){
+ var up=e.target.closest&&e.target.closest('[data-q70up]');
+ if(up){e.preventDefault();e.stopPropagation();q70In.click();return}
+ var d=e.target.closest&&e.target.closest('[data-q70del]');
+ if(d){
+  e.preventDefault();e.stopPropagation();
+  var id=d.getAttribute('data-q70del'),t=S.noteTpl&&S.noteTpl[id];if(!t)return;
+  if(!confirm('Remove “'+t.name+'” from your papers? Notes you already made with it keep their page.'))return;
+  S.noteTpl[id]={id:id,gone:1,at:new Date().toISOString()};
+  if(view.modal&&view.modal.paper==='tpl:'+id)view.modal.paper='grid';
+  save();render();
+ }
+},true);
+var _q70NewHtml=ZM.q64new.html;
+ZM.q64new.html=function(m){
+ var h=_q70NewHtml.call(this,m);if(!h)return h;
+ var tiles=q70List().map(function(t){
+  var on=m.paper==='tpl:'+t.id;
+  return '<div class="q70wrap"><button type="button" class="q64paper'+(on?' on':'')+'" data-q64paper="tpl:'+esc(t.id)+'" aria-pressed="'+on+'"><span class="q64th q64p-custom" style="background-image:url('+(t.thumb||t.img)+')"></span><b>'+esc(t.name)+'</b></button>'
+   +'<button type="button" class="q70x" data-q70del="'+esc(t.id)+'" aria-label="Remove '+esc(t.name)+'" title="Remove this paper">×</button></div>';
+ }).join('')+'<button type="button" class="q64paper q70add" data-q70up="1"><span class="q64th"><i>+</i></span><b>Upload yours</b></button>';
+ return h.replace(/<button type="button" class="q64paper[^"]*" data-q64paper="typed"/,function(x){return tiles+x});
+};
 
 try{spBoot()}catch(e){}
 load();
