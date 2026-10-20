@@ -5979,7 +5979,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v221';
+var BUILD='v222';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10541,6 +10541,7 @@ function mkCss(){
  var st=document.createElement('style');st.id='mkcss';
  st.textContent=''
   +'#mk{position:fixed;inset:0;z-index:260;background:#1c1a17;display:flex;flex-direction:column;color:#EFEAE0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}'
+  +'html.mkopen,html.mkopen body{background:#1c1a17!important}'
   +'#mk .mktop{display:flex;align-items:center;gap:6px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;flex-wrap:wrap}'
   +'#mk .mkicon{background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}'
   +'#mk .mkicon:disabled{opacity:.3}'
@@ -10700,7 +10701,7 @@ async function mkOpen(cid,i,startEdit){
  if(f.marks&&f.marks.paper){MK.paper=f.marks.paper;MK.pageCount=Math.max(1,f.marks.pages||1)}
  MK.knownIds=mkIdsOf(f.marks);mkHistAdd(f,'when you opened it');
  mkCss();
- mkLockViewportZoom();
+ mkLockViewportZoom();mkDarkEdge(true);
  var el=document.createElement('div');el.id='mk';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
  document.body.appendChild(el);
  mkSetMode('read');
@@ -10747,8 +10748,17 @@ function mkClose(){
  mkCommitNow();
  var el=document.getElementById('mk');if(el)el.remove();
  window.removeEventListener('resize',mkOnResize);
- mkRestoreViewportZoom();
+ mkRestoreViewportZoom();mkDarkEdge(false);
  MK=null;
+}
+// iPadOS 26 frosts the strip behind the clock using the PAGE's colour, not the viewer's, so the light page
+// under the viewer washed the dark toolbar out. While the viewer is open the page and the bar colour go dark too.
+var mkThemeSaved=null;
+function mkDarkEdge(on){
+ document.documentElement.classList.toggle('mkopen',on);
+ var m=document.querySelector('meta[name=theme-color]');if(!m)return;
+ if(on){if(mkThemeSaved==null)mkThemeSaved=m.getAttribute('content');m.setAttribute('content','#1c1a17')}
+ else if(mkThemeSaved!=null){m.setAttribute('content',mkThemeSaved);mkThemeSaved=null}
 }
 var mkResizeTimer=null;
 // a rotation (or anything else that changes the width) re-fits the pages -- keep whatever you were
