@@ -5979,7 +5979,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v222';
+var BUILD='v223';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10542,7 +10542,7 @@ function mkCss(){
  st.textContent=''
   +'#mk{position:fixed;inset:0;z-index:260;background:#1c1a17;display:flex;flex-direction:column;color:#EFEAE0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}'
   +'html.mkopen,html.mkopen body{background:#1c1a17!important}'
-  +'#mk .mktop{display:flex;align-items:center;gap:6px;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;flex-wrap:wrap}'
+  +'#mk .mktop{display:flex;align-items:center;gap:6px;padding:calc(env(safe-area-inset-top,0px) + min(env(safe-area-inset-top,0px) * .75, 20px) + 8px) 10px 8px;flex-wrap:wrap}'
   +'#mk .mkicon{background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}'
   +'#mk .mkicon:disabled{opacity:.3}'
   +'#mk .mkname{font-size:12.5px;color:#C9C3B4;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1}'
