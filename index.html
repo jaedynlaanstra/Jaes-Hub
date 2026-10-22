@@ -5695,6 +5695,127 @@ body.q9menu #q69fab{display:none}
 .q71bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:99990;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px);box-sizing:border-box;padding:10px 12px 10px 16px;border-radius:16px;background:#9c4a41;color:#fff;font-size:14px;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .q71bar.amber{background:#8A6A2E}
 .q71bar button{flex:none;border:none;border-radius:10px;background:rgba(255,255,255,.2);color:#fff;font-size:14px;font-weight:500;padding:8px 12px;cursor:pointer}
+/* v226 notebooks (sizes, shadows and timings from Jae's handoff) */
+.q73shelf{display:flex;flex-wrap:wrap;gap:44px 96px;padding:30px 0 24px;align-content:flex-start}
+.q73it{width:176px;display:flex;flex-direction:column;align-items:center;gap:14px;background:none;border:0;padding:0;margin:0;cursor:pointer;font:inherit;color:inherit;text-align:center;border-radius:14px}
+.q73it:focus-visible{outline:2px solid var(--ink3);outline-offset:6px}
+.q73ic{position:relative;display:block;width:160px;height:212px;flex:none;perspective:700px}
+.q73it.q73away .q73ic{opacity:0}
+.q73blk{position:absolute;left:6px;top:4px;width:150px;height:204px;border-radius:2px 8px 8px 2px;background:repeating-linear-gradient(90deg,#fbf8f2 0 3px,#ece5da 3px 4px);box-shadow:0 14px 24px -10px rgba(60,40,25,.45)}
+.q73pg,.q73peek{position:absolute;background-color:#fff;background-image:linear-gradient(#e3e8ef 1px,transparent 1px),linear-gradient(90deg,#e3e8ef 1px,transparent 1px);background-size:12px 12px}
+.q73pg{left:10px;top:12px;width:136px;height:188px;border-radius:2px}
+.q73peek{left:30px;top:8px;width:118px;height:180px;border-radius:3px;box-shadow:0 2px 8px rgba(60,40,25,.18);padding:10px;box-sizing:border-box;text-align:left;transition:transform .5s cubic-bezier(.3,.7,.3,1.25)}
+.q73peek b{display:block;font-size:8px;font-weight:500;letter-spacing:.12em;color:#1f4766;border-bottom:1px solid #1f4766;padding-bottom:3px;white-space:nowrap;overflow:hidden}
+.q73peek i{display:block;height:3px;width:80%;margin-top:7px;background:#d6dde7;border-radius:2px}
+.q73peek i+i{width:55%;margin-top:5px}
+.q73cv{position:absolute;inset:0;transform-origin:left center;border-radius:2px 12px 12px 2px;box-shadow:0 14px 24px -10px rgba(60,40,25,.45),inset -3px 0 6px rgba(0,0,0,.12);transition:transform .55s cubic-bezier(.3,.7,.3,1.15),box-shadow .55s}
+.q73sp{position:absolute;left:0;top:0;bottom:0;width:20px;border-radius:2px 0 0 2px}
+.q73band{position:absolute;right:22px;top:0;bottom:0;width:10px;background:rgba(0,0,0,.18)}
+.q73lab{position:absolute;left:38px;top:34px;width:106px;box-sizing:border-box;padding:10px 8px;background:#f6efe4;border-radius:3px;color:#4a3d34;font-size:14px;line-height:1.15;text-align:center;overflow-wrap:break-word;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}
+.q73cn{position:absolute;left:0;right:0;bottom:14px;padding-left:20px;text-align:center;color:rgba(255,255,255,.85);font-size:12px}
+@media (hover:hover){.q73it:hover .q73peek{transform:translate(62px,-4px) rotate(6deg)}.q73it:hover .q73cv{transform:translateY(-3px)}}
+.q73cap{display:block;width:100%}
+.q73cap b{display:block;font-size:16px;font-weight:450;color:var(--ink);overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent)}
+.q73cap small{display:block;font-size:13px;color:var(--ink2);margin-top:2px}
+.q73add .q73ic{display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2,#d8cfc5);border-radius:4px 12px 12px 4px;box-sizing:border-box;color:var(--ink3);transition:border-color .2s,color .2s}
+.q73add:hover .q73ic{border-color:var(--ink3);color:var(--ink2)}
+@media (max-width:700px){
+ .q73shelf{gap:26px 16px;justify-content:center;padding-top:22px}
+ .q73it{width:146px}
+ .q73ic{transform:scale(.82);transform-origin:top center;margin-bottom:-38px}
+}
+/* the open book */
+.q73ov{position:fixed;z-index:100;overflow:hidden;display:flex;align-items:center;justify-content:center;perspective:2200px;color:#3a3330}
+.q73dim{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(25,18,12,.18) 0%,rgba(25,18,12,.5) 45%,rgba(25,18,12,.82) 100%);opacity:0;transition:opacity .5s ease}
+.q73ov.lit .q73dim{opacity:1}
+.q73book{position:relative;flex:none;width:880px;height:583px;transform-origin:center center}
+.q73rp{position:absolute;left:440px;top:0;width:440px;height:583px;isolation:isolate;border-radius:0 28px 28px 0;overflow:hidden;visibility:hidden;padding:32px 36px;box-sizing:border-box;box-shadow:0 30px 60px -10px rgba(30,20,10,.45)}
+.q73rp>.q73sheet{position:absolute;top:10px;bottom:10px;left:0;right:10px;background:#fdfbf7;border-radius:0 18px 18px 0;z-index:-1}
+.q73flip{position:absolute;left:440px;top:0;width:440px;height:583px;transform-origin:left center;transform-style:preserve-3d;transform:rotateY(0deg);transition:transform 1.1s cubic-bezier(.45,.05,.25,1)}
+.q73ov.open .q73flip{transform:rotateY(-180deg)}
+.q73front,.q73back{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.q73front{border-radius:4px 28px 28px 4px;box-shadow:inset -8px 0 16px rgba(0,0,0,.12),0 38px 66px -27px rgba(60,40,25,.45)}
+.q73front .q73sp{width:55px;border-radius:4px 0 0 4px}
+.q73front .q73band{right:60px;width:27px}
+.q73front .q73lab{left:104px;top:94px;width:292px;padding:27px 22px;border-radius:8px;font-size:38px;-webkit-line-clamp:4}
+.q73front .q73cn{bottom:38px;font-size:33px;padding-left:55px}
+.q73back{transform:rotateY(180deg);isolation:isolate;border-radius:28px 0 0 28px;overflow:hidden;visibility:hidden;padding:32px 36px;box-sizing:border-box;box-shadow:0 30px 60px -10px rgba(30,20,10,.45)}
+.q73back>.q73sheet{position:absolute;top:10px;bottom:10px;left:10px;right:0;background:#fdfbf7;border-radius:18px 0 0 18px;z-index:-1}
+.q73ov.pages .q73rp,.q73ov.pages .q73back{visibility:visible}
+.q73ov.one .q73book,.q73ov.one .q73rp,.q73ov.one .q73flip{left:0}
+.q73ov.one .q73book{width:440px}
+.q73ov.one .q73back{display:none}
+.q73ov.one .q73rp{border-radius:4px 28px 28px 4px;padding:30px 30px 26px 40px}
+.q73ov.one .q73rp>.q73sheet{left:10px;border-radius:4px 18px 18px 4px}
+.q73pc{position:relative;height:100%;display:flex;flex-direction:column;min-height:0}
+.q73x{position:absolute;top:-18px;right:-22px;z-index:2;width:30px;height:30px;border-radius:50%;border:0;padding:0;background:none;color:#8b827c;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.q73x:hover{background:#f1ebe4;color:#3a3330}
+.q73nm{flex:none;font:inherit;font-size:26px;color:#3a3330;border:0;border-bottom:1px solid transparent;background:transparent;width:100%;padding:0 0 2px;margin:0;outline:none;cursor:text;border-radius:0}
+.q73ov.one .q73nm{padding-right:30px;box-sizing:border-box}
+input.q73nm:hover{border-bottom:1px dashed #d8cfc5}
+input.q73nm:focus{border-bottom:1px solid #9a7761}
+.q73meta{flex:none;display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:12px}
+.q73meta>span{font-size:13px;color:#8b827c;white-space:nowrap;margin-right:4px}
+.q73sw{position:relative;flex:none;width:20px;height:20px;border-radius:50%;border:0;padding:0;cursor:pointer}
+.q73sw.on{box-shadow:0 0 0 2px #fdfbf7,0 0 0 4px var(--c)}
+.q73cust{display:flex;align-items:center;justify-content:center;border:1px dashed #b5aaa0;box-sizing:border-box;background:transparent;color:#8b827c;font-size:14px;line-height:1;overflow:hidden}
+.q73cust:hover{border-color:#9a7761;color:#9a7761}
+.q73cust input{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;cursor:pointer}
+.q73sws{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:6px 2px}
+.q73sws .q73sw{width:28px;height:28px}
+.q73sws .q73sw.on{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--c)}
+.q73sub{flex:none;font-size:12.5px;color:#8b827c;margin:8px 0 0;line-height:1.4}
+.q73acts{flex:none;display:flex;flex-wrap:wrap;gap:4px;margin-top:14px}
+.q73a{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:14px;border:0;background:none;cursor:pointer;color:#8b827c;font:inherit;font-size:13px}
+.q73a>span{width:20px;height:20px;border-radius:50%;border:1px solid #d8cfc5;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;box-sizing:border-box}
+.q73a:hover{background:#f1ebe4;color:#3a3330}
+.q73a.solid{background:#9a7761;color:#fff;padding:8px 16px 8px 8px}
+.q73a.solid>span{border-color:rgba(255,255,255,.6)}
+.q73a.solid:hover{background:#8a6955;color:#fff}
+.q73list{flex:1;min-height:0;margin:6px -12px 0 0;padding:0 12px 4px 0;overflow-y:auto;overscroll-behavior:contain}
+.q73row{position:relative;display:flex;align-items:center;gap:8px;padding:10px;border-bottom:1px solid #eee8e1;border-radius:8px;cursor:pointer}
+.q73row.on{background:#f1ebe4}
+.q73rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.q73rt b{font-size:16px;font-weight:400;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent)}
+.q73rt small{font-size:12px;color:#8b827c}
+.q73ri{font:inherit;font-size:16px;color:#3a3330;border:0;border-bottom:1px solid #9a7761;border-radius:0;background:transparent;outline:none;padding:0;margin:0;width:100%}
+.q73dots{flex:none;width:28px;height:28px;border-radius:50%;border:0;padding:0;background:none;color:#8b827c;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.q73dots:hover{background:#e9e2da;color:#3a3330}
+.q73dots svg{width:16px;height:16px}
+.q73dots.sm{width:26px;height:26px}
+.q73pop{position:absolute;right:8px;top:44px;z-index:3;display:flex;flex-direction:column;min-width:170px;padding:6px;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(40,28,18,.18);font-size:14px;cursor:default}
+.q73sh>.q73pop{top:38px}
+.q73pop button{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;border-radius:8px;border:0;background:none;font:inherit;font-size:14px;color:#3a3330;text-align:left;cursor:pointer}
+.q73pop button:hover{background:#f4efe9}
+.q73pop button>span{color:#8b827c}
+.q73pop .q73to{justify-content:flex-start;padding:7px 12px 7px 22px;color:#5a4f48}
+.q73pop .q73to.sub{padding-left:38px}
+.q73pop .q73to.cur{font-weight:600}
+.q73to i{flex:none;width:8px;height:8px;border-radius:50%;background:#c9c3b9}
+.q73pop hr{border:0;height:1px;background:#eee8e1;margin:4px 6px}
+.q73pop .q73del{color:#a8493c}
+.q73pop .q73del:hover{background:#f8ece9}
+.q73note{font-size:12.5px;color:#8b827c;margin:4px 12px 6px;line-height:1.4}
+.q73sh{position:relative;display:flex;align-items:center;gap:4px;margin-top:14px;padding:5px 4px 5px 10px;border-radius:8px;background:#f5f0ea}
+.q73sh>span{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px}
+.q73sh b{min-width:0;padding-right:18px;margin-right:-10px;font-size:13px;font-weight:600;color:#6f5a4b;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
+.q73sh em{font-style:normal;font-size:12px;color:#9a918a}
+.q73sh .q73ri{font-size:13px;font-weight:600}
+.q73emp{margin:0;padding:16px 10px;font-size:14px;color:#8b827c;line-height:1.45}
+.q73emp.sm{padding:8px 10px;font-size:13px}
+.q73pt{font-size:13px;color:#8b827c;padding-right:30px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent)}
+.q73pv{display:flex;align-items:center;justify-content:center;width:100%;height:420px;margin-top:14px;padding:12px;box-sizing:border-box;background:#fff;border:1px solid #ece6df;border-radius:6px;cursor:pointer;font:inherit;color:inherit}
+.q73pv>.q64th{height:100%;width:auto;max-width:100%;aspect-ratio:612/792;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.q73pv.empty{flex-direction:column;gap:14px;cursor:default}
+.q73pv.empty>.q64th{height:190px}
+.q73pv.empty p{margin:0;color:#8b827c;font-size:14px}
+.q73pf{display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:12px;color:#9a918a}
+.q73pf button{border:0;background:none;padding:4px 0;color:#9a7761;font:inherit;font-size:12px;cursor:pointer}
+.q73pf button:hover{color:#7d5f4b}
+@media (prefers-reduced-motion:reduce){.q73peek,.q73cv{transition:none}}
+/* phones give every button a 38px minimum height; the book's round buttons keep their own size */
+#q73ov button,.q73sws .q73sw{min-height:0}
+@media (max-width:700px){#q73ov .q73sw{width:24px;height:24px}#q73ov .q73dots{width:34px;height:34px}}
 </style>
 </head>
 <body>
@@ -6003,7 +6124,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v225';
+var BUILD='v226';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -23399,6 +23520,393 @@ document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttri
 // paper names longer than two lines become one fading line (measured without the class, so it can't flip back and forth)
 var _q72Render=render;
 render=function(){var r=_q72Render.apply(this,arguments);document.querySelectorAll('.q64paper>b').forEach(function(b){b.classList.remove('q72over');if(b.scrollHeight>b.clientHeight+1)b.classList.add('q72over')});return r};
+
+/* ---------- v226: Notes as notebooks (Jae's Claude Design handoff "Notebook-style Notes page") ----------
+   The "All notes" view of a Notes page is a shelf of notebooks, one per category. Tapping one zooms it to the middle
+   under a spotlight and the cover swings open: the left page lists the notes (and the SECTIONS inside the book), the
+   right page previews the chosen note. Data: a notebook = a top-level entry in c.sections; a section inside it = a
+   c.sections entry with parent:<notebook id> (one level); a notebook's cover = s.book ('p0'..'p5' or '#hex');
+   s.cls = a School class whose own note pages also show in the book (its modules were copied in as sections).
+   Notes with no category sit in a grey "Unfiled" book. Search and the category filter still show the note list.
+   The open book lives on <body> (outside #app) so redraws never interrupt its animation; timings are the handoff's. */
+var Q73PAL=[['#a98468','#8d6a53','#6f5240'],['#5d7a8c','#44627a','#324b5e'],['#7f8f6a','#66764f','#4e5c3b'],['#b9776a','#9c5c50','#7b443a'],['#8a7aa3','#6f5f8a','#54466d'],['#c9a35c','#ad8743','#876630']];
+var Q73SOFT={sand:0,clay:0,mist:1,grey:1,sage:2,brick:3,rose:3,peach:3,lavender:4};
+function q73Hash(s){var h=0;s=String(s||'');for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)}
+function q73Look(s){
+ if(!s)return {cover:'linear-gradient(135deg,#aaa49c,#8f8880)',spine:'#77706a',dot:'#8f8880',key:''};
+ var b=s.book||'';
+ if(/^#[0-9a-f]{6}$/i.test(b))return {cover:'linear-gradient(135deg,'+b+','+q72Mix(b,'#000000',.82)+')',spine:q72Mix(b,'#000000',.65),dot:q72Mix(b,'#000000',.82),key:b.toLowerCase()};
+ var i=/^p[0-5]$/.test(b)?+b.slice(1):(s.color in Q73SOFT?Q73SOFT[s.color]:q73Hash(s.name)%6),p=Q73PAL[i];
+ return {cover:'linear-gradient(135deg,'+p[0]+','+p[1]+')',spine:p[2],dot:p[1],key:'p'+i};
+}
+// notebooks and their sections (only one level deep; a section whose notebook is gone becomes a notebook)
+function q73Tree(c){
+ var all=q64Secs(c),ids={};all.forEach(function(s){ids[s.id]=s});
+ var top=function(s){return !s.parent||!ids[s.parent]||!!ids[s.parent].parent};
+ return all.filter(top).map(function(s){return {s:s,kids:all.filter(function(k){return k.parent===s.id&&!top(k)})}});
+}
+function q73Sec(c,id){return ((c&&c.sections)||[]).filter(function(s){return s.id===id})[0]||null}
+// categories everywhere else (New note, the filter, a note's ⋯) list each notebook, then "Notebook › Section"
+q64Cats=function(c){
+ var out=[];
+ q73Tree(c).forEach(function(t){var L=q73Look(t.s);out.push({id:t.s.id,name:t.s.name,hex:L.dot});
+  t.kids.forEach(function(k){out.push({id:k.id,name:t.s.name+' › '+k.name,hex:L.dot,parent:t.s.id})})});
+ return out;
+};
+// every note on the page, with the notebook and section it belongs to
+function q73Notes(c){
+ var T=q73Tree(c),where={},out=[];
+ T.forEach(function(t){where[t.s.id]={b:t.s.id,sec:''};t.kids.forEach(function(k){where[k.id]={b:t.s.id,sec:k.id}})});
+ (FILES[c.id]||[]).forEach(function(f,i){var w=where[f.section]||{b:'',sec:''};out.push({f:f,i:i,cid:c.id,book:w.b,sec:w.sec,at:q64At(c.id,f)})});
+ (c.items||[]).forEach(function(x){if(x.t!=='note')return;var w=where[x.sec]||{b:'',sec:''};out.push({x:x,cid:c.id,book:w.b,sec:w.sec,at:x.savedAt||x.date||''})});
+ // a notebook made for a class also shows the note pages from that class's own page, under the module with the same name
+ if(pageSpace(c)==='school')T.forEach(function(t){
+  var k=t.s.cls&&classById(t.s.cls);if(!k)return;var chap={};cpSections(k).forEach(function(ch){chap[ch.id]=String(ch.name||'').trim().toLowerCase()});
+  (FILES[k.id]||[]).forEach(function(f,i){if(!(f.marks&&f.marks.paper))return;var nm=chap[f.section]||'',sec='';
+   t.kids.forEach(function(kd){if(nm&&String(kd.name).trim().toLowerCase()===nm)sec=kd.id});
+   out.push({f:f,i:i,cid:k.id,book:t.s.id,sec:sec,at:q64At(k.id,f),own:k})});
+ });
+ return out.sort(function(a,b){return a.at<b.at?1:a.at>b.at?-1:0});
+}
+function q73Key(n){return n.f?'f~'+n.cid+'~'+n.f.id:'x~'+n.cid+'~'+n.x.id}
+function q73Title(n){return n.f?n.f.name:(n.x.title||'Untitled')}
+function q73Count(n){return n+(n===1?' note':' notes')}
+function q73Books(c){
+ var N=q73Notes(c),B=q73Tree(c).map(function(t){return {id:t.s.id,s:t.s,kids:t.kids,name:t.s.name,look:q73Look(t.s)}});
+ if(N.some(function(n){return !n.book}))B.push({id:'',s:null,kids:[],name:'Unfiled',look:q73Look(null)});
+ B.forEach(function(b){b.notes=N.filter(function(n){return n.book===b.id})});
+ return B;
+}
+function q73Icon(b,big){
+ var lt=b.notes[0],peek=lt?q73Title(lt):'No notes yet';
+ return '<span class="q73ic" data-q73ic="1"><span class="q73blk"></span><span class="q73pg"></span>'
+  +'<span class="q73peek"><b>'+esc(peek.toUpperCase())+'</b><i></i><i></i></span>'
+  +'<span class="q73cv" style="background:'+b.look.cover+'"><span class="q73sp" style="background:'+b.look.spine+'"></span><span class="q73band"></span>'
+  +'<span class="q73lab">'+esc(b.name)+'</span><span class="q73cn">'+q73Count(b.notes.length)+'</span></span></span>';
+}
+function q73Shelf(c){
+ var B=q73Books(c),h=B.map(function(b){
+  var lt=b.notes[0],when=lt?q64When(lt.at).replace('Today, ','Today '):'';
+  return '<button type="button" class="q73it" data-q73open="'+esc(c.id+'~'+(b.id||'_'))+'" aria-label="Open '+esc(b.name)+', '+q73Count(b.notes.length)+'">'+q73Icon(b)
+   +'<span class="q73cap"><b>'+esc(b.name)+'</b><small>'+q73Count(b.notes.length)+(when?' · '+esc(when):'')+'</small></span></button>';
+ }).join('');
+ h+='<button type="button" class="q73it q73add" data-zact="q73newbook:'+c.id+'"><span class="q73ic"><span class="q73plus">'+zI(ZIC.plus,26)+'</span></span><span class="q73cap"><b>New notebook</b><small>For a class, a client, anything</small></span></button>';
+ return '<div class="q73shelf">'+h+'</div>';
+}
+var _q73Page=zNotesPage;
+zNotesPage=function(c){
+ var h=_q73Page.apply(this,arguments),sel=q64Filter(c),q=String(view.q64q||'').trim();
+ if(sel!=='*'&&sel!==''&&!q64Cats(c).some(function(k){return k.id===sel}))sel='*';
+ if(sel!=='*'||q)return h;
+ var i=h.lastIndexOf('<div class="q64grid">');if(i<0)i=h.lastIndexOf('<div class="q64empty">');if(i<0)return h;
+ return h.slice(0,i)+q73Shelf(c)+'</div>';
+};
+
+/* ---------- New notebook ---------- */
+ZACT.q73newbook=function(cid){zOpen('q73book',{cid:cid,book:'p'+((q73Tree(classById(cid)).length)%6)})};
+function q73Swatches(cur,attr,custAttr){
+ return Q73PAL.map(function(p,i){var on=cur==='p'+i;return '<button type="button" class="q73sw'+(on?' on':'')+'" '+attr+'="p'+i+'" style="background:'+p[1]+';--c:'+p[1]+'" aria-label="Cover colour '+(i+1)+'" aria-pressed="'+on+'"></button>'}).join('')
+  +'<label class="q73sw q73cust'+(/^#/.test(cur)?' on':'')+'" style="'+(/^#/.test(cur)?'--c:'+cur+';background:'+cur:'')+'" title="Any colour">'+(/^#/.test(cur)?'':'+')+'<input type="color" value="'+(/^#/.test(cur)?cur:'#8d6a53')+'" '+custAttr+' aria-label="Any cover colour"></label>';
+}
+ZM.q73book={html:function(m){
+ var c=classById(m.cid);if(!c)return null;
+ var sch=pageSpace(c)==='school',cls=sch?q64SchoolClasses():[];
+ return '<h3>New notebook</h3>'
+  +'<div class="field"><label for="q73b1">Name</label><input id="q73b1" maxlength="40" placeholder="'+(m.cls?esc((classById(m.cls)||{}).name||''):'Business Law, Daily notes, Ideas…')+'" value="'+esc(m.name||'')+'"></div>'
+  +'<div class="field"><label>Cover</label><div class="q73sws">'+q73Swatches(m.book,'data-q73bsw','data-q73bcc="1"')+'</div></div>'
+  +(cls.length?'<div class="field"><label for="q73b2">Sections from a class (optional)</label><select id="q73b2" data-q73bcls="1"><option value="">No, I’ll add my own sections</option>'
+   +cls.map(function(k){var n=cpSections(k).length;return '<option value="'+k.id+'"'+(m.cls===k.id?' selected':'')+'>'+esc(k.name)+(n?' ('+n+' module'+(n===1?'':'s')+')':'')+'</option>'}).join('')+'</select>'
+   +'<p class="q64hint">Its modules become sections in the book, and notes you make on that class’s page show in it too.</p></div>':'')
+  +'<p class="q64hint">You can add sections inside the notebook any time, like Module 1, Module 2.</p>';
+},save:function(m){
+ var c=classById(m.cid);if(!c)return;c.sections=c.sections||[];
+ var k=m.cls&&classById(m.cls),name=zv('q73b1')||(k?k.name:'Untitled notebook');
+ var ord=c.sections.reduce(function(n,s){return Math.max(n,(s.ord||0)+1)},0);
+ var s=touch({id:uid(),name:name,ord:ord,book:m.book||'p0'});if(k)s.cls=k.id;c.sections.push(s);
+ if(k)cpSections(k).forEach(function(ch,i){c.sections.push(touch({id:uid(),name:ch.name||('Module '+(i+1)),parent:s.id,ord:i}))});
+ touch(c);save();view.modal=null;render();
+ setTimeout(function(){var b=document.querySelector('[data-q73open="'+c.id+'~'+s.id+'"]');if(b)q73Open(b)},80);
+}};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q73bsw]');if(!b||!view.modal||view.modal.kind!=='q73book')return;view.modal.book=b.getAttribute('data-q73bsw');render()});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!view.modal||view.modal.kind!=='q73book')return;
+ if(t.hasAttribute('data-q73bcc')){view.modal.book=t.value;render()}
+ if(t.hasAttribute('data-q73bcls')){view.modal.cls=t.value;render()}});
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='q73b1'&&view.modal&&view.modal.kind==='q73book')view.modal.name=e.target.value});
+
+/* ---------- the open book ---------- */
+var Q73=null;
+function q73Panel(){
+ var m=document.querySelector('#app .main')||document.querySelector('.main')||app,r=m.getBoundingClientRect();
+ var L=Math.max(r.left,0),T=Math.max(r.top,0),R=Math.min(r.right,innerWidth),B=Math.min(r.bottom,innerHeight);
+ return {l:L,t:T,w:Math.max(200,R-L),h:Math.max(200,B-T),rad:getComputedStyle(m).borderRadius||'0'};
+}
+function q73Geo(){
+ var P=q73Panel(),ic=document.querySelector('[data-q73open="'+Q73.key+'"] [data-q73ic]');
+ if(!ic)return Q73.geo||{dx:0,dy:0,k:.4};
+ var r=ic.getBoundingClientRect();
+ return {dx:r.left+r.width/2-(P.l+P.w/2),dy:r.top+r.height/2-(P.t+P.h/2),k:r.width/440};
+}
+function q73Scale(P){var S=Math.min(1,(P.w-60)/908,(P.h-60)/603);if(S>=.62)return {S:S,one:false};return {S:Math.min(1,(P.w-28)/440,(P.h-28)/583),one:true}}
+function q73BookT(ph){
+ var g=Q73.geo,S=Q73.S,off=Q73.one?0:220;
+ if(ph==='start'||ph==='return')return 'translate('+(g.dx-off*g.k)+'px,'+g.dy+'px) scale('+g.k+')';
+ if(ph==='zoom')return 'translate('+(-off*S)+'px,0px) scale('+S+')';
+ return 'translate(0px,0px) scale('+S+')';
+}
+function q73Book(){var c=classById(Q73.cid);if(!c)return null;return q73Books(c).filter(function(b){return b.id===Q73.id})[0]||null}
+function q73Front(b){
+ return '<span class="q73sp" style="background:'+b.look.spine+'"></span><span class="q73band"></span><span class="q73lab">'+esc(b.name)+'</span><span class="q73cn">'+q73Count(b.notes.length)+'</span>';
+}
+function q73Open(btn){
+ if(Q73||!btn)return;
+ var key=btn.getAttribute('data-q73open'),p=key.split('~'),cid=p[0],id=p[1]==='_'?'':p[1];
+ Q73={key:key,cid:cid,id:id,phase:'start',sel:null,menu:null,move:false,ren:null,sren:null,smenu:null,tm:[]};
+ var b=q73Book();if(!b){Q73=null;return}
+ var P=q73Panel(),sc=q73Scale(P);Q73.S=sc.S;Q73.one=sc.one;Q73.geo=q73Geo();
+ if(b.notes[0])Q73.sel=q73Key(b.notes[0]);
+ var ov=document.createElement('div');ov.id='q73ov';ov.className='q73ov'+(Q73.one?' one':'');
+ ov.style.cssText='left:'+P.l+'px;top:'+P.t+'px;width:'+P.w+'px;height:'+P.h+'px;border-radius:'+P.rad;
+ ov.innerHTML='<div class="q73dim"></div><div class="q73book" role="dialog" aria-modal="true" aria-label="'+esc(b.name)+'">'
+  +'<div class="q73rp"><div class="q73sheet"></div><div class="q73pc" id="q73R"></div></div>'
+  +'<div class="q73flip"><div class="q73front" style="background:'+b.look.cover+'">'+q73Front(b)+'</div>'
+  +'<div class="q73back" style="background:'+b.look.cover+'"><div class="q73sheet"></div><div class="q73pc" id="q73L"></div></div></div></div>';
+ document.body.appendChild(ov);
+ var bk=ov.querySelector('.q73book');bk.style.transition='none';bk.style.transform=q73BookT('start');
+ ov.querySelector('.q73rp').style.background=b.look.cover;
+ q73Fill();q73HideIcon();void bk.offsetWidth;
+ // a timer, not requestAnimationFrame: a page in the background never gets animation frames
+ Q73.tm.push(setTimeout(function(){if(!Q73)return;Q73.phase='zoom';ov.classList.add('lit');bk.style.transition='transform .52s cubic-bezier(.65,0,.25,1)';bk.style.transform=q73BookT('zoom')},30));
+ Q73.tm.push(setTimeout(function(){if(!Q73)return;Q73.phase='open';bk.style.transition='transform 1.1s cubic-bezier(.45,.05,.25,1)';bk.style.transform=q73BookT('open');ov.classList.add('open');
+  Q73.tm.push(setTimeout(function(){if(Q73&&Q73.phase==='open')ov.classList.add('pages')},160))},590));
+}
+function q73Close(){
+ if(!Q73||Q73.phase==='shut'||Q73.phase==='return')return;
+ Q73.tm.forEach(clearTimeout);Q73.tm=[];
+ var ov=document.getElementById('q73ov');if(!ov){Q73=null;return}
+ var bk=ov.querySelector('.q73book');
+ if(Q73.phase!=='open'){ov.remove();Q73=null;q73HideIcon();return}
+ Q73.phase='shut';Q73.menu=null;ov.classList.remove('open');
+ Q73.tm.push(setTimeout(function(){if(Q73)Q73.geo=q73Geo()},1100));
+ Q73.tm.push(setTimeout(function(){if(!Q73)return;Q73.phase='return';ov.classList.remove('lit','pages');bk.style.transition='transform .56s cubic-bezier(.45,0,.2,1)';bk.style.transform=q73BookT('return')},1120));
+ Q73.tm.push(setTimeout(function(){ov.remove();Q73=null;q73HideIcon()},1720));
+}
+// closes at once (leaving the page, or opening a note)
+function q73Gone(){if(!Q73)return;Q73.tm.forEach(clearTimeout);var ov=document.getElementById('q73ov');if(ov)ov.remove();Q73=null;q73HideIcon()}
+function q73HideIcon(){document.querySelectorAll('.q73it.q73away').forEach(function(e){e.classList.remove('q73away')});if(Q73){var b=document.querySelector('[data-q73open="'+Q73.key+'"]');if(b)b.classList.add('q73away')}}
+
+// the left page (contents) and the right page (preview); on a phone there's one page: the contents
+function q73Row(n){
+ var k=q73Key(n),on=Q73.sel===k&&!Q73.one,ren=Q73.ren===k,t=q73Title(n);
+ var h='<div class="q73row'+(on?' on':'')+'" data-q73pick="'+esc(k)+'"><span class="q73rt">'
+  +(ren?'<input class="q73ri" value="'+esc(t)+'" data-q73ren="'+esc(k)+'" maxlength="120" aria-label="Name">':'<b>'+esc(t)+'</b>')
+  +'<small>'+esc(q64When(n.at)||'—')+(n.own?' · on the class page':'')+'</small></span>'
+  +'<button type="button" class="q73dots" data-q73menu="'+esc(k)+'" aria-label="More for '+esc(t)+'">'+CP_ICO.more+'</button>';
+ if(Q73.menu===k){
+  h+='<div class="q73pop" role="menu"><button type="button" data-q73act="ren|'+esc(k)+'">Rename</button>';
+  if(!n.own){
+   h+='<button type="button" data-q73act="mv|'+esc(k)+'">Move to<span>›</span></button>';
+   if(Q73.move){var c=classById(Q73.cid);q73Books(c).forEach(function(b){if(!b.id&&!b.s)return;
+     var sel=b.id===n.book&&!n.sec;h+='<button type="button" class="q73to'+(sel?' cur':'')+'" data-q73act="to|'+esc(k)+'|'+esc(b.id)+'"><i style="background:'+b.look.dot+'"></i>'+esc(b.name)+'</button>';
+     b.kids.forEach(function(kd){var cur=n.sec===kd.id;h+='<button type="button" class="q73to sub'+(cur?' cur':'')+'" data-q73act="to|'+esc(k)+'|'+esc(kd.id)+'"><i style="background:'+b.look.dot+'"></i>'+esc(kd.name)+'</button>'})});
+    h+='<button type="button" class="q73to" data-q73act="to|'+esc(k)+'|"><i></i>Unfiled</button>'}
+   h+='<hr><button type="button" class="q73del" data-q73act="del|'+esc(k)+'">Delete</button>';
+  }else h+='<p class="q73note">This note lives on the '+esc(n.own.name)+' class page.</p>';
+  h+='</div>';
+ }
+ return h+'</div>';
+}
+function q73Fill(){
+ if(!Q73)return;var b=q73Book();if(!b){q73Gone();return}
+ var L=document.getElementById('q73L'),R=document.getElementById('q73R');if(!L||!R)return;
+ var toc=Q73.one?R:L,pv=Q73.one?null:R,s=b.s;
+ var h=Q73.one?'<button type="button" class="q73x" data-q73close="1" aria-label="Close the notebook">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',16)+'</button>':'';
+ h+=s?'<input class="q73nm" value="'+esc(b.name)+'" data-q73nm="1" maxlength="40" aria-label="Notebook name">':'<div class="q73nm">Unfiled</div>';
+ h+='<div class="q73meta"><span>'+q73Count(b.notes.length)+(s?' · Cover':'')+'</span>'+(s?q73Swatches(b.look.key,'data-q73sw','data-q73cc="1"'):'')+'</div>';
+ if(s&&s.cls){var k=classById(s.cls);if(k)h+='<p class="q73sub">Includes note pages from the '+esc(k.name)+' class page.</p>'}
+ if(!s)h+='<p class="q73sub">Notes without a notebook. Use ⋯ › Move to, to put one in a notebook.</p>';
+ h+='<div class="q73acts"><button type="button" class="q73a" data-q73new="'+esc(b.id)+'"><span>+</span>New note</button>'+(s?'<button type="button" class="q73a" data-q73sec="1"><span>+</span>New section</button>':'')+'</div>';
+ var rows='',root=b.notes.filter(function(n){return !n.sec});
+ rows+=root.map(q73Row).join('');
+ b.kids.forEach(function(kd){
+  var ns=b.notes.filter(function(n){return n.sec===kd.id}),ren=Q73.sren===kd.id;
+  rows+='<div class="q73sh"><span>'+(ren?'<input class="q73ri" value="'+esc(kd.name)+'" data-q73sren="'+esc(kd.id)+'" maxlength="40" aria-label="Section name">':'<b>'+esc(kd.name)+'</b>')+'<em>'+ns.length+'</em></span>'
+   +'<button type="button" class="q73dots sm" data-q73new="'+esc(kd.id)+'" aria-label="New note in '+esc(kd.name)+'">'+zI(ZIC.plus,14)+'</button>'
+   +'<button type="button" class="q73dots sm" data-q73smenu="'+esc(kd.id)+'" aria-label="More for '+esc(kd.name)+'">'+CP_ICO.more+'</button>'
+   +(Q73.smenu===kd.id?'<div class="q73pop" role="menu"><button type="button" data-q73sact="ren|'+esc(kd.id)+'">Rename</button><button type="button" data-q73sact="up|'+esc(kd.id)+'">Move up</button><button type="button" data-q73sact="down|'+esc(kd.id)+'">Move down</button><hr><button type="button" class="q73del" data-q73sact="del|'+esc(kd.id)+'">Delete section</button></div>':'')+'</div>';
+  rows+=ns.length?ns.map(q73Row).join(''):'<p class="q73emp sm">Nothing in this section yet.</p>';
+ });
+ if(!b.notes.length&&!b.kids.length)rows='<p class="q73emp">No notes yet. Tap New note to start one'+(s?', or New section to divide the book.':'.')+'</p>';
+ h+='<div class="q73list">'+rows+'</div>';
+ var keepTop=toc.querySelector('.q73list');keepTop=keepTop?keepTop.scrollTop:0;
+ toc.innerHTML=h;var nl=toc.querySelector('.q73list');if(nl)nl.scrollTop=keepTop;
+ if(pv){
+  var n=b.notes.filter(function(x){return q73Key(x)===Q73.sel})[0]||b.notes[0];
+  pv.innerHTML=n?'<button type="button" class="q73x" data-q73close="1" aria-label="Close the notebook">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',16)+'</button>'
+    +'<div class="q73pt">'+esc(q73Title(n))+'</div><button type="button" class="q73pv" data-q73go="'+esc(q73Key(n))+'" aria-label="Open '+esc(q73Title(n))+'">'+q64Thumb(n)+'</button>'
+    +'<div class="q73pf"><span>'+esc(q64When(n.at)||'')+'</span><button type="button" data-q73go="'+esc(q73Key(n))+'">Open note →</button></div>'
+   :'<button type="button" class="q73x" data-q73close="1" aria-label="Close the notebook">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',16)+'</button><div class="q73pv empty"><span class="q64th q64p-grid"></span><p>This notebook is empty.</p><button type="button" class="q73a solid" data-q73new="'+esc(b.id)+'"><span>+</span>New note</button></div>';
+ }
+ var fr=document.querySelector('#q73ov .q73front');if(fr){fr.style.background=b.look.cover;fr.innerHTML=q73Front(b)}
+ document.querySelectorAll('#q73ov .q73back,#q73ov .q73rp').forEach(function(e){e.style.background=b.look.cover});
+}
+function q73Find(key){
+ var c=classById(Q73.cid),b=q73Book();if(!c||!b)return null;
+ return b.notes.filter(function(n){return q73Key(n)===key})[0]||null;
+}
+function q73OpenNote(n){
+ if(!n)return;
+ if(n.f){var ix=q64FileIx(n.cid,n.f.id);if(ix<0)return;if(n.f.kind==='pdf')mkOpen(n.cid,ix);else openFile(n.cid,ix);return}
+ ZACT.noteedit(n.cid,n.x.id);
+}
+function q73Rename(n,v){
+ v=String(v||'').trim();if(!n||!v)return;
+ if(n.f){if(n.f.name===v)return;n.f.name=v;saveFiles(n.cid);save()}else{if(n.x.title===v)return;n.x.title=v;touch(n.x);save()}
+}
+function q73Move(n,target){
+ var c=classById(n.cid);if(!c||n.own)return;
+ if(n.f){n.f.section=target;saveFiles(n.cid);save()}else{n.x.sec=target;touch(n.x);save()}
+}
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.closest)return;
+ var op=t.closest('[data-q73open]');if(op&&!Q73){e.preventDefault();q73Open(op);return}
+ var ov=document.getElementById('q73ov');if(!Q73||!ov||!ov.contains(t))return;
+ if(t===ov||t.classList.contains('q73dim')||t.closest('[data-q73close]')){q73Close();return}
+ if(Q73.phase!=='open')return;
+ var c=classById(Q73.cid),b=q73Book();if(!c||!b)return;
+ var a;
+ if((a=t.closest('[data-q73menu]'))){var k=a.getAttribute('data-q73menu');Q73.menu=Q73.menu===k?null:k;Q73.move=false;Q73.smenu=null;q73Fill();return}
+ if((a=t.closest('[data-q73smenu]'))){var sk=a.getAttribute('data-q73smenu');Q73.smenu=Q73.smenu===sk?null:sk;Q73.menu=null;q73Fill();return}
+ if((a=t.closest('[data-q73act]'))){
+  var p=a.getAttribute('data-q73act').split('|'),n=q73Find(p[1]);
+  if(p[0]==='ren'){Q73.ren=p[1];Q73.menu=null;q73Fill();var ri=document.querySelector('#q73ov [data-q73ren]');if(ri){ri.focus();ri.select()}return}
+  if(p[0]==='mv'){Q73.move=!Q73.move;q73Fill();return}
+  if(p[0]==='to'){Q73.menu=null;q73Move(n,p[2]||'');render();q73Fill();return}
+  if(p[0]==='del'&&n){Q73.menu=null;
+   if(n.f){var ix=q64FileIx(n.cid,n.f.id);if(ix>-1&&confirm('Delete “'+n.f.name+'”? This cannot be undone.')){(c.items||[]).forEach(function(x){if(x.t==='nday'&&x.fid===n.f.id){delete x.fid;touch(x)}});dropFile(n.cid,ix);save();render()}}
+   else if(confirm('Delete “'+(n.x.title||'this note')+'”? This cannot be undone.')){c.items=c.items.filter(function(x){return x!==n.x});save();render()}
+   Q73.sel=null;q73Fill();return}
+  return;
+ }
+ if((a=t.closest('[data-q73sact]'))){
+  var q=a.getAttribute('data-q73sact').split('|'),s=q73Sec(c,q[1]);Q73.smenu=null;if(!s){q73Fill();return}
+  if(q[0]==='ren'){Q73.sren=s.id;q73Fill();var si=document.querySelector('#q73ov [data-q73sren]');if(si){si.focus();si.select()}return}
+  if(q[0]==='up'||q[0]==='down'){var K=b.kids.slice(),i=K.indexOf(s),j=q[0]==='up'?i-1:i+1;if(j>=0&&j<K.length){K.splice(i,1);K.splice(j,0,s);K.forEach(function(x,o){if(x.ord!==o){x.ord=o;touch(x)}});save();render()}q73Fill();return}
+  if(q[0]==='del'){var cnt=b.notes.filter(function(n){return n.sec===s.id}).length;
+   if(!confirm('Delete the section “'+s.name+'”?'+(cnt?' Its '+q73Count(cnt)+' stay in the notebook.':'')))return;
+   (FILES[c.id]||[]).forEach(function(f){if(f.section===s.id)f.section=b.id});
+   (c.items||[]).forEach(function(x){if(x.t==='note'&&x.sec===s.id){x.sec=b.id;touch(x)}});
+   c.sections=c.sections.filter(function(x){return x.id!==s.id});touch(c);saveFiles(c.id);save();render();q73Fill();return}
+ }
+ if((a=t.closest('[data-q73sw]'))&&b.s){b.s.book=a.getAttribute('data-q73sw');touch(b.s);save();render();q73Fill();return}
+ if((a=t.closest('[data-q73sec]'))&&b.s){
+  var kid=touch({id:uid(),name:'Section '+(b.kids.length+1),parent:b.s.id,ord:b.kids.length});c.sections.push(kid);save();render();
+  Q73.sren=kid.id;q73Fill();var ni=document.querySelector('#q73ov [data-q73sren]');if(ni){ni.focus();ni.select()}return}
+ if((a=t.closest('[data-q73new]'))){ZACT.q64new(c.id,a.getAttribute('data-q73new')||'');return}
+ if((a=t.closest('[data-q73go]'))){q73OpenNote(q73Find(a.getAttribute('data-q73go')));return}
+ if(t.closest('input,.q73pop,label'))return;
+ if((a=t.closest('[data-q73pick]'))){var pk=a.getAttribute('data-q73pick');if(Q73.ren===pk)return;Q73.menu=null;Q73.smenu=null;
+  if(Q73.one){q73OpenNote(q73Find(pk));return}Q73.sel=pk;q73Fill();return}
+ if(Q73.menu||Q73.smenu){Q73.menu=null;Q73.smenu=null;q73Fill()}
+});
+// Doable's own colour picker for the cover's "+" (it is only wired up inside #app)
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.matches||!t.matches('#q73ov input[type=color][data-q73cc]'))return;
+ e.preventDefault();e.stopPropagation();
+ q27Sel='#q73ov input[type=color][data-q73cc]';q27Kind='';
+ var r=t.getBoundingClientRect();q27.style.left=Math.max(0,r.left)+'px';q27.style.top=Math.max(0,r.top)+'px';q27.value=t.value||'#8d6a53';
+ try{if(q27.showPicker)q27.showPicker();else q27.click()}catch(err){q27.click()}
+},true);
+document.addEventListener('input',function(e){
+ var t=e.target;if(!Q73||!t||!t.closest||!t.closest('#q73ov'))return;
+ var b=q73Book();if(!b)return;
+ if(t.hasAttribute('data-q73nm')&&b.s){var v=t.value.trim();if(!v)return;b.s.name=v;touch(b.s);var lb=document.querySelector('#q73ov .q73front .q73lab');if(lb)lb.textContent=v;clearTimeout(Q73.nt);Q73.nt=setTimeout(function(){save();render()},500)}
+ if(t.hasAttribute('data-q73cc')&&b.s){var L=q73Look({book:t.value});document.querySelectorAll('#q73ov .q73front,#q73ov .q73back,#q73ov .q73rp').forEach(function(x){x.style.background=L.cover});var sp=document.querySelector('#q73ov .q73front .q73sp');if(sp)sp.style.background=L.spine}
+});
+document.addEventListener('change',function(e){var t=e.target;if(!Q73||!t||!t.hasAttribute||!t.hasAttribute('data-q73cc'))return;var b=q73Book();if(!b||!b.s)return;b.s.book=t.value.toLowerCase();touch(b.s);save();render();q73Fill()});
+function q73Commit(t){
+ if(!Q73||!t)return;
+ if(t.hasAttribute('data-q73ren')){var n=q73Find(t.getAttribute('data-q73ren'));Q73.ren=null;q73Rename(n,t.value);render();q73Fill()}
+ else if(t.hasAttribute('data-q73sren')){var c=classById(Q73.cid),s=q73Sec(c,t.getAttribute('data-q73sren')),v=String(t.value||'').trim();Q73.sren=null;if(s&&v&&v!==s.name){s.name=v;touch(s);save();render()}q73Fill()}
+}
+document.addEventListener('keydown',function(e){
+ if(!Q73)return;var t=e.target;
+ if(t&&t.hasAttribute&&(t.hasAttribute('data-q73ren')||t.hasAttribute('data-q73sren'))){if(e.key==='Enter'){e.preventDefault();q73Commit(t)}else if(e.key==='Escape'){e.preventDefault();Q73.ren=null;Q73.sren=null;q73Fill()}return}
+ if(t&&t.hasAttribute&&t.hasAttribute('data-q73nm')&&e.key==='Enter'){t.blur();return}
+ if(e.key==='Escape'&&!document.querySelector('.modalbg')&&!document.getElementById('mk')){if(Q73.menu||Q73.smenu){Q73.menu=null;Q73.smenu=null;q73Fill()}else q73Close()}
+});
+document.addEventListener('focusout',function(e){var t=e.target;if(Q73&&t&&t.hasAttribute&&(t.hasAttribute('data-q73ren')||t.hasAttribute('data-q73sren')))setTimeout(function(){q73Commit(t)},0)});
+window.addEventListener('resize',function(){
+ if(!Q73)return;var ov=document.getElementById('q73ov');if(!ov)return;
+ var P=q73Panel(),sc=q73Scale(P);ov.style.left=P.l+'px';ov.style.top=P.t+'px';ov.style.width=P.w+'px';ov.style.height=P.h+'px';
+ if(sc.one!==Q73.one){q73Gone();return}
+ Q73.S=sc.S;if(Q73.phase==='open'){var bk=ov.querySelector('.q73book');bk.style.transition='none';bk.style.transform=q73BookT('open')}
+});
+// after any redraw: keep the open book's own icon hidden, refresh its pages (a new note, a sync), close it if you left the page
+var _q73Render=render;
+render=function(){
+ var r=_q73Render.apply(this,arguments);
+ try{
+  q73Rename73();
+  if(Q73){
+   if(!(view.page==='page'||view.page==='class')||view.classId!==Q73.cid){q73Gone()}
+   else{q73HideIcon();var a=document.activeElement;if(Q73.phase==='open'&&!(a&&a.closest&&a.closest('#q73ov')&&a.matches('input')))q73Fill()}
+  }
+ }catch(e){}
+ return r;
+};
+// a note opened from the book: the book stays open underneath and is there when you close the note
+var _q73MkClose=mkClose;mkClose=function(){var r=_q73MkClose.apply(this,arguments);if(Q73)setTimeout(q73Fill,50);return r};
+
+/* ---------- "Meeting notes" is now just "Notes", and every space has Notes in its menu ---------- */
+STARTER.work.forEach(function(s){if(s[0]==='notes')s[1]='Notes'});
+function q73Rename73(){
+ S.spacesInit=S.spacesInit||{};if(S.spacesInit.notes73)return;if(sbUser&&(!S.everSynced||!q21Pulled))return;
+ var ch=false;S.classes.forEach(function(c){if(c.kind==='notes'&&c.name==='Meeting notes'){c.name='Notes';touch(c);ch=true}});
+ S.spacesInit.notes73=1;save();
+}
+function q73SpacePage(sp,create){
+ var c=spacePages(sp).filter(function(p){return p.kind==='notes'})[0]||null;
+ if(!c&&create){
+  var id='pg-'+sp+'-notes',gone=Object.keys(S.deleted||{}).some(function(k){return k.indexOf(id)>-1});
+  c=newPage(sp,'notes','Notes',gone||classById(id)?id+'-'+uid():id,spacePages(sp).reduce(function(n,p){return Math.max(n,(p.ord||0)+1)},0));S.classes.push(c);save();
+ }
+ return c;
+}
+ZACT.q73notes=function(sp){var c=q73SpacePage(sp||curSpace(),true);view.modal=null;view.menu=false;go('class',c.id)};
+var _q73Side=sidebar;
+sidebar=function(){
+ var h=_q73Side.apply(this,arguments),sp=curSpace();if(sp==='school'||q73SpacePage(sp,false))return h;
+ var np=sideItem('data-znew','1','New page',false),i=h.indexOf(np);if(i<0)return h;
+ return h.slice(0,i)+'<div class="sitem sico" data-zact="q73notes:'+sp+'" role="button" tabindex="0"><span class="sic pg" style="--pgc:'+defPal(PAGE_PAL.notes).bar+'">'+zI(ZIC.note,15)+'</span><span class="nm2">Notes</span></div>'+h.slice(i);
+};
+// the pop-ups say Notebook and Unfiled; a notebook's dot is its cover colour; Edit categories = the notebooks only
+q64SecHex=function(s){return q73Look(s).dot};
+var _q73CC=q64CatChips;
+q64CatChips=function(c,m){return _q73CC.apply(this,arguments).replace('>No category<','>Unfiled<').replace('+ New category…','+ New notebook…').replace('placeholder="New category name"','placeholder="New notebook name"')};
+function q73Words(h){return h&&h.replace('<label>Which class or category?</label>','<label>Notebook</label>').replace('<label>Class or category</label>','<label>Notebook</label>').replace('<label>Category</label>','<label>Notebook</label>')}
+['q64new','q64edit','znote'].forEach(function(k){var o=ZM[k].html;ZM[k].html=function(){return q73Words(o.apply(this,arguments))}});
+var _q73Cats=ZM.q64cats.html;
+ZM.q64cats.html=function(m){
+ var h=_q73Cats.apply(this,arguments),c=classById(m.cid);if(!h||!c)return h;
+ h=h.replace('<h3>Categories</h3>','<h3>Notebooks</h3>').replace(/<p class="hint"[^>]*>[\s\S]*?<\/p>/,'<p class="hint" style="margin:-4px 0 14px">Rename or remove a notebook, or tap its dot to change the cover. Sections are added inside each notebook.</p>')
+  .replace(/<div class="q64clsl">[\s\S]*?<\/div>(?=<div class="q64crow)/,'').replace('placeholder="New category"','placeholder="New notebook"');
+ (c.sections||[]).forEach(function(k){if(!k.parent)return;h=h.replace(new RegExp('<div class="q64crow"><button type="button" class="q64cdot" data-zact="q64ccol:'+c.id+':'+k.id+'"[\\s\\S]*?<\\/div>'),'')});
+ return h;
+};
+ZACT.q64ccol=function(cid,sid){var c=classById(cid),s=q73Sec(c,sid);if(!s)return;var i=+(q73Look(s).key.replace('p',''))||0;s.book='p'+((isNaN(i)?0:i+1)%6);touch(s);save();render()};
+// deleting a notebook in Edit categories takes its sections with it (their notes stay, unfiled)
+var _q73CDel=ZACT.q64cdel;
+ZACT.q64cdel=function(cid,sid){
+ var c=classById(cid),kids=((c&&c.sections)||[]).filter(function(x){return x.parent===sid});
+ if(!kids.length)return _q73CDel.apply(this,arguments);
+ var s=q73Sec(c,sid),ids=[sid].concat(kids.map(function(k){return k.id}));
+ var n=(FILES[cid]||[]).filter(function(f){return ids.indexOf(f.section)>-1}).length+(c.items||[]).filter(function(x){return x.t==='note'&&ids.indexOf(x.sec)>-1}).length;
+ if(!confirm('Delete the notebook “'+(s?s.name:'')+'” and its '+kids.length+' section'+(kids.length===1?'':'s')+'?'+(n?' Its '+q73Count(n)+' stay, in Unfiled.':'')))return;
+ c.sections=c.sections.filter(function(x){return ids.indexOf(x.id)<0});
+ (FILES[cid]||[]).forEach(function(f){if(ids.indexOf(f.section)>-1)f.section=''});
+ (c.items||[]).forEach(function(x){if(x.t==='note'&&ids.indexOf(x.sec)>-1){x.sec='';touch(x)}});
+ save();saveFiles(cid);render();
+};
 
 try{spBoot()}catch(e){}
 load();
