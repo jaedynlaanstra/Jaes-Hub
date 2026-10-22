@@ -5735,10 +5735,14 @@ body.q9menu #q69fab{display:none}
 .q73ov.open .q73flip{transform:rotateY(-180deg)}
 .q73front,.q73back{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .q73front{border-radius:4px 28px 28px 4px;box-shadow:inset -8px 0 16px rgba(0,0,0,.12),0 38px 66px -27px rgba(60,40,25,.45)}
+/* the big cover is EXACTLY 2.75x the shelf icon (440/160), and its letters keep the small text's shapes ('opsz'):
+   DM Sans draws big sizes narrower, so the words "grew" when the book landed back on the shelf (v227) */
 .q73front .q73sp{width:55px;border-radius:4px 0 0 4px}
-.q73front .q73band{right:60px;width:27px}
-.q73front .q73lab{left:104px;top:94px;width:292px;padding:27px 22px;border-radius:8px;font-size:38px;-webkit-line-clamp:4}
-.q73front .q73cn{bottom:38px;font-size:33px;padding-left:55px}
+.q73front .q73band{right:60.5px;width:27.5px}
+.q73front .q73lab{left:104.5px;top:93.5px;width:291.5px;padding:27.5px 22px;border-radius:8.25px;font-size:38.5px;-webkit-line-clamp:5;font-variation-settings:'opsz' 14}
+.q73front .q73cn{bottom:38.5px;font-size:33px;padding-left:55px;font-variation-settings:'opsz' 12}
+.q73lab{font-variation-settings:'opsz' 14;white-space:normal}
+.q73cn{font-variation-settings:'opsz' 12}
 .q73back{transform:rotateY(180deg);isolation:isolate;border-radius:28px 0 0 28px;overflow:hidden;visibility:hidden;padding:32px 36px;box-sizing:border-box;box-shadow:0 30px 60px -10px rgba(30,20,10,.45)}
 .q73back>.q73sheet{position:absolute;top:10px;bottom:10px;left:10px;right:0;background:#fdfbf7;border-radius:18px 0 0 18px;z-index:-1}
 .q73ov.pages .q73rp,.q73ov.pages .q73back{visibility:visible}
@@ -6124,7 +6128,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v226';
+var BUILD='v227';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
