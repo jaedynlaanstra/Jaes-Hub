@@ -5997,7 +5997,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v223';
+var BUILD='v224';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -23070,15 +23070,30 @@ function q70Pdf(dataUrl){
  out+='trailer\n<< /Size '+(objs.length+1)+' /Root 1 0 R /Info 5 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';
  return btoa(out);
 }
-// picture file -> {img: Letter-shaped JPEG, thumb: small copy}
-function q70Process(file){
+// v224: a PDF -> its first page drawn as a picture (sized to fill the Letter page), then the picture path below
+function q70IsPdf(f){return f&&(f.type==='application/pdf'||/\.pdf$/i.test(f.name||''))}
+async function q70PdfPage(file){
+ var P=await loadPdfJs();if(!P)throw new Error('pdfjs');
+ var doc=await P.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+ try{
+  var pg=await doc.getPage(1),vp=pg.getViewport({scale:1}),sc=Math.min(2040/vp.width,2640/vp.height);
+  var v2=pg.getViewport({scale:sc}),cv=document.createElement('canvas');cv.width=Math.round(v2.width);cv.height=Math.round(v2.height);
+  var ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+  // print intent: the display intent waits for animation frames, which a hidden page never gets
+  await pg.render({canvasContext:ctx,viewport:v2,intent:'print'}).promise;
+  return await new Promise(function(r,j){cv.toBlob(function(b){b?r(b):j(new Error('blob'))},'image/png')});
+ }finally{try{doc.destroy()}catch(e){}}
+}
+// picture file -> {img: Letter-shaped JPEG, thumb: small copy}. fit: true = show all of it (white around it if it isn't Letter-shaped)
+function q70Process(file,fit){
+ if(q70IsPdf(file))return q70PdfPage(file).then(function(b){return q70Process(b,true)});
  return new Promise(function(res,rej){
   var url=URL.createObjectURL(file),im=new Image();
   im.onload=function(){
    try{
     var iw=1020,ih=1320,cv=document.createElement('canvas');cv.width=iw;cv.height=ih;
     var cx=cv.getContext('2d');cx.fillStyle='#FFFFFF';cx.fillRect(0,0,iw,ih);
-    var w=im.naturalWidth,h=im.naturalHeight,ar=w/h,la=iw/ih,cover=ar>0.6&&ar<0.95,sc=cover?Math.max(iw/w,ih/h):Math.min(iw/w,ih/h);
+    var w=im.naturalWidth,h=im.naturalHeight,ar=w/h,la=iw/ih,cover=!fit&&ar>0.6&&ar<0.95,sc=cover?Math.max(iw/w,ih/h):Math.min(iw/w,ih/h);
     cx.drawImage(im,(iw-w*sc)/2,cover?(ih-h*sc)/2:(ih-h*sc)/2,w*sc,h*sc);
     var tc=document.createElement('canvas');tc.width=170;tc.height=220;tc.getContext('2d').drawImage(cv,0,0,170,220);
     URL.revokeObjectURL(url);
@@ -23089,18 +23104,21 @@ function q70Process(file){
   im.src=url;
  });
 }
-var q70In=document.createElement('input');q70In.type='file';q70In.accept='image/*';q70In.style.display='none';document.body.appendChild(q70In);
+var q70In=document.createElement('input');q70In.type='file';q70In.accept='image/*,application/pdf,.pdf';q70In.style.display='none';document.body.appendChild(q70In);
 q70In.addEventListener('change',function(){
  var f=q70In.files&&q70In.files[0];q70In.value='';if(!f)return;
- if(f.size>25*1024*1024){zToast('That picture is too big (25 MB limit).');return}
+ var pdf=q70IsPdf(f);
+ if(f.size>25*1024*1024){zToast('That '+(pdf?'PDF':'picture')+' is too big (25 MB limit).');return}
+ if(pdf)zToast('Reading the first page of your PDF…');
  q70Process(f).then(function(r){
   S.noteTpl=S.noteTpl||{};
   var n=q70List().length+1,id='tpl-'+uid();
-  S.noteTpl[id]={id:id,name:'My page '+n,img:r.img,thumb:r.thumb,at:new Date().toISOString()};
+  var nm=pdf?(f.name.replace(/\.pdf$/i,'').replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim().slice(0,40)||'My page '+n):'My page '+n;
+  S.noteTpl[id]={id:id,name:nm,img:r.img,thumb:r.thumb,at:new Date().toISOString()};
   save();
   if(view.modal&&view.modal.kind==='q64new')view.modal.paper='tpl:'+id;
-  render();zToast('Added to your papers. It stays here until you remove it.');
- }).catch(function(){zToast('Couldn’t read that picture. Try a JPG or PNG (iPhone: pick it from Photos).')});
+  render();zToast(pdf?'Added the PDF’s first page to your papers.':'Added to your papers. It stays here until you remove it.');
+ }).catch(function(){zToast(pdf?'Couldn’t read that PDF. If it has a password, remove it first, or upload a picture of the page.':'Couldn’t read that picture. Try a JPG or PNG (iPhone: pick it from Photos).')});
 });
 document.addEventListener('click',function(e){
  var up=e.target.closest&&e.target.closest('[data-q70up]');
