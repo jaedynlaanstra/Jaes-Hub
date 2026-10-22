@@ -5667,6 +5667,12 @@ body.q9menu #q69fab{display:none}
 .q64p-custom{background-size:cover;background-position:top center}
 .q70wrap{position:relative;display:block}
 .q70wrap>.q64paper{width:100%}
+/* v225: paper names stay inside their tile (a long one ran into the next tile): up to two lines, every tile the same
+   height; a name longer than that becomes one line that fades at the right edge, like list rows (q72over) */
+.q64papers>*{min-width:0}
+.q64paper{min-width:0;max-width:100%;box-sizing:border-box}
+.q64paper>b{display:block;width:100%;white-space:normal;overflow-wrap:break-word;overflow:hidden;line-height:1.2;height:2.4em}
+.q64paper>b.q72over{white-space:nowrap;text-align:left;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
 .q70x{position:absolute;top:2px;right:2px;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:#fff;color:#6B675F;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .q70x:hover{background:#FAF0EF;color:#9c4a41}
 .q70add .q64th{display:flex;align-items:center;justify-content:center;border-style:dashed;background:transparent}
@@ -5997,7 +6003,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v224';
+var BUILD='v225';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -23138,7 +23144,7 @@ ZM.q64new.html=function(m){
  var h=_q70NewHtml.call(this,m);if(!h)return h;
  var tiles=q70List().map(function(t){
   var on=m.paper==='tpl:'+t.id;
-  return '<div class="q70wrap"><button type="button" class="q64paper'+(on?' on':'')+'" data-q64paper="tpl:'+esc(t.id)+'" aria-pressed="'+on+'"><span class="q64th q64p-custom" style="background-image:url('+(t.thumb||t.img)+')"></span><b>'+esc(t.name)+'</b></button>'
+  return '<div class="q70wrap"><button type="button" class="q64paper'+(on?' on':'')+'" data-q64paper="tpl:'+esc(t.id)+'" aria-pressed="'+on+'" title="'+esc(t.name)+'"><span class="q64th q64p-custom" style="background-image:url('+(t.thumb||t.img)+')"></span><b>'+esc(t.name)+'</b></button>'
    +'<button type="button" class="q70x" data-q70del="'+esc(t.id)+'" aria-label="Remove '+esc(t.name)+'" title="Remove this paper">×</button></div>';
  }).join('')+'<button type="button" class="q64paper q70add" data-q70up="1"><span class="q64th"><i>+</i></span><b>Upload yours</b></button>';
  return h.replace(/<button type="button" class="q64paper[^"]*" data-q64paper="typed"/,function(x){return tiles+x});
@@ -23360,6 +23366,39 @@ var _q71Render=render;
 render=function(){var r=_q71Render.apply(this,arguments);try{q71Paint()}catch(e){}return r};
 // coming back to the app re-checks the cover and bar
 document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(q71Paint,800)});
+
+/* ---------- v225: the Home side panel in Look and feel ----------
+   The side panel behind Home's right widget column (S.sidePanel, v165) and its colour (S.sidePanelCol, v177) were only
+   in the Edit widgets bar. Now Look and feel has them too: a "Home side panel" section while you're on Home (Simple and
+   Advanced > Colours), and the same switch + colour in the shared Style rows (Settings > Look and feel). */
+function q72Mix(a,b,t){var x=hex2rgb(a),y=hex2rgb(b);return '#'+x.map(function(v,i){return ('0'+Math.round(v*t+y[i]*(1-t)).toString(16)).slice(-2)}).join('')}
+// what the panel looks like now: the picked colour, or Auto = 13% of the menu colour over the card colour
+function q72Col(){return S.sidePanelCol||q72Mix(chromeHex('sideBg'),chromeHex('card'),.13)}
+function q72Sec(){
+ if(view.page!=='home')return '';
+ var on=!!S.sidePanel,rows=q69Toggle(on,'q25panel','Show the side panel');
+ if(on)rows+=q69Row('Side panel colour',q72Col(),'data-q72panel="1"','',S.sidePanelCol?'':'Auto: a soft tint of your menu colour')
+  +(S.sidePanelCol?'<button type="button" class="q69link" data-zact="q34auto">Go back to auto</button>':'');
+ return q69Sec('Home side panel','A tinted panel behind the right column of widgets, on computers',rows);
+}
+var _q72This=q69ThisPage;
+q69ThisPage=function(){return _q72This.apply(this,arguments)+q72Sec()};
+var _q72Rows=q46LookRows;
+q46LookRows=function(){
+ var h=_q72Rows.apply(this,arguments),on=!!S.sidePanel,v=q72Col();
+ return h+q46Row('Home side panel','A tinted panel behind the right column of widgets, on computers','<span class="q61ctl">'+q46Seg(on?'1':'0',[['0','Off'],['1','On']],'q25panel')
+  +(on?'<label class="z4col z4cust on q61dot" title="Side panel colour" style="--cur:'+v+';background:'+v+'"><input type="color" value="'+v+'" data-q72panel="1" aria-label="Side panel colour"></label>'
+   +(S.sidePanelCol?'<button type="button" class="zbtn ghost" data-zact="q34auto">Auto</button>':''):'')+'</span>');
+};
+// live while dragging (no redraw, so the colour picker stays open), saved when you let go
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q72panel'))return;
+ var v=t.value,z=document.querySelector('.zhome.q25panel');if(z)z.style.setProperty('--q34p',v);
+ var sw=t.closest('.q69sw,.q61dot');if(sw){sw.style.background=v;sw.style.setProperty('--cur',v)}
+ var hx=t.closest('.q69row');hx=hx&&hx.querySelector('.q69hex');if(hx)hx.textContent=v.toUpperCase()});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q72panel'))return;S.sidePanelCol=t.value;save();render()});
+// paper names longer than two lines become one fading line (measured without the class, so it can't flip back and forth)
+var _q72Render=render;
+render=function(){var r=_q72Render.apply(this,arguments);document.querySelectorAll('.q64paper>b').forEach(function(b){b.classList.remove('q72over');if(b.scrollHeight>b.clientHeight+1)b.classList.add('q72over')});return r};
 
 try{spBoot()}catch(e){}
 load();
