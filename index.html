@@ -6128,7 +6128,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v227';
+var BUILD='v228';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19268,15 +19268,19 @@ q27.showPicker=function(){q33Open()};q27.click=function(){q33Open()};
 
 /* ---------- side panel colour: a colour dot beside "Side panel" in the Edit widgets bar (S.sidePanelCol, synced; Auto = a tint of the menu colour) ---------- */
 SETTINGS_KEYS.push('sidePanelCol');
-ZACT.q34auto=function(){delete S.sidePanelCol;save();render()};
+SETTINGS_KEYS.push('sidePanelColSp');Q21DEEP.sidePanelColSp=1; // v228: each space keeps its own panel colour (merges per space)
+// a space that never chose follows the old all-spaces S.sidePanelCol; 'auto' = chose the menu tint
+function q34Col(){var m=S.sidePanelColSp,v=m&&m[curSpace()];if(typeof v==='string')return v==='auto'?'':v;return S.sidePanelCol||''}
+function q34SetCol(v){S.sidePanelColSp=Object.assign({},S.sidePanelColSp||{});S.sidePanelColSp[curSpace()]=v||'auto'}
+ZACT.q34auto=function(){q34SetCol('');save();render()};
 var _q34VSH=viewSpaceHome;
-viewSpaceHome=function(){var h=_q34VSH.apply(this,arguments),col=S.sidePanelCol;
+viewSpaceHome=function(){var h=_q34VSH.apply(this,arguments),col=q34Col();
  if(S.sidePanel&&col)h=h.replace('<div class="zhome q25panel','<div style="--q34p:'+col+'" class="zhome q25panel');
  if(S.sidePanel){var cur=col||'#e9eef0';
   h=h.replace('<button class="'+(S.sidePanel?'on':'')+'" data-zact="q25panel:1">On</button></span>','<button class="on" data-zact="q25panel:1">On</button></span><span class="q34pc"><label class="q34dot" title="Side panel colour" style="background:'+(col||'color-mix(in srgb,var(--sideBg) 13%,var(--card))')+'"><input type="color" data-q34panel="1" value="'+cur+'" aria-label="Side panel colour"></label>'+(col?'<button class="zebtn q34auto" data-zact="q34auto" title="Back to a tint of your menu colour">Auto</button>':'')+'</span>')}
  return h};
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q34panel'))return;var z=document.querySelector('.zhome.q25panel');if(z)z.style.setProperty('--q34p',t.value);var l=t.closest('label');if(l)l.style.background=t.value});
-document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q34panel'))return;S.sidePanelCol=t.value;save();render()});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q34panel'))return;q34SetCol(t.value);save();render()});
 
 
 /* ---------- water: − and + are matching drawn icons (the text characters sat at different sizes) ---------- */
@@ -23498,12 +23502,12 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)setT
    Advanced > Colours), and the same switch + colour in the shared Style rows (Settings > Look and feel). */
 function q72Mix(a,b,t){var x=hex2rgb(a),y=hex2rgb(b);return '#'+x.map(function(v,i){return ('0'+Math.round(v*t+y[i]*(1-t)).toString(16)).slice(-2)}).join('')}
 // what the panel looks like now: the picked colour, or Auto = 13% of the menu colour over the card colour
-function q72Col(){return S.sidePanelCol||q72Mix(chromeHex('sideBg'),chromeHex('card'),.13)}
+function q72Col(){return q34Col()||q72Mix(chromeHex('sideBg'),chromeHex('card'),.13)}
 function q72Sec(){
  if(view.page!=='home')return '';
  var on=!!S.sidePanel,rows=q69Toggle(on,'q25panel','Show the side panel');
- if(on)rows+=q69Row('Side panel colour',q72Col(),'data-q72panel="1"','',S.sidePanelCol?'':'Auto: a soft tint of your menu colour')
-  +(S.sidePanelCol?'<button type="button" class="q69link" data-zact="q34auto">Go back to auto</button>':'');
+ if(on)rows+=q69Row('Side panel colour',q72Col(),'data-q72panel="1"','',q34Col()?'':'Auto: a soft tint of your menu colour')
+  +(q34Col()?'<button type="button" class="q69link" data-zact="q34auto">Go back to auto</button>':'');
  return q69Sec('Home side panel','A tinted panel behind the right column of widgets, on computers',rows);
 }
 var _q72This=q69ThisPage;
@@ -23513,14 +23517,14 @@ q46LookRows=function(){
  var h=_q72Rows.apply(this,arguments),on=!!S.sidePanel,v=q72Col();
  return h+q46Row('Home side panel','A tinted panel behind the right column of widgets, on computers','<span class="q61ctl">'+q46Seg(on?'1':'0',[['0','Off'],['1','On']],'q25panel')
   +(on?'<label class="z4col z4cust on q61dot" title="Side panel colour" style="--cur:'+v+';background:'+v+'"><input type="color" value="'+v+'" data-q72panel="1" aria-label="Side panel colour"></label>'
-   +(S.sidePanelCol?'<button type="button" class="zbtn ghost" data-zact="q34auto">Auto</button>':''):'')+'</span>');
+   +(q34Col()?'<button type="button" class="zbtn ghost" data-zact="q34auto">Auto</button>':''):'')+'</span>');
 };
 // live while dragging (no redraw, so the colour picker stays open), saved when you let go
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q72panel'))return;
  var v=t.value,z=document.querySelector('.zhome.q25panel');if(z)z.style.setProperty('--q34p',v);
  var sw=t.closest('.q69sw,.q61dot');if(sw){sw.style.background=v;sw.style.setProperty('--cur',v)}
  var hx=t.closest('.q69row');hx=hx&&hx.querySelector('.q69hex');if(hx)hx.textContent=v.toUpperCase()});
-document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q72panel'))return;S.sidePanelCol=t.value;save();render()});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q72panel'))return;q34SetCol(t.value);save();render()});
 // paper names longer than two lines become one fading line (measured without the class, so it can't flip back and forth)
 var _q72Render=render;
 render=function(){var r=_q72Render.apply(this,arguments);document.querySelectorAll('.q64paper>b').forEach(function(b){b.classList.remove('q72over');if(b.scrollHeight>b.clientHeight+1)b.classList.add('q72over')});return r};
