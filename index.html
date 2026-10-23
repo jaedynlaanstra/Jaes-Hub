@@ -6388,7 +6388,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v233';
+var BUILD='v234';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -25368,6 +25368,48 @@ var _q78Open=mkOpen;
 mkOpen=function(){
  var r=_q78Open.apply(this,arguments);
  Promise.resolve(r).then(function(){if(MK&&MK.pageCount>1&&q78Pref()&&!MK.book)q78Set(true)});
+ return r;
+};
+
+/* ======================= v234: turn book pages while zoomed in (prefix q79) =======================
+   Zoomed in, one finger moves around the page, so it can't also drag the page over. Instead, like a
+   photo viewer: move to the side edge of the book, then swipe again past it and the page turns
+   (swipe left at the right edge = next pages, swipe right at the left edge = back). Works in Reading,
+   and in Markup when a finger is moving the page (once the Pencil has been used). After a zoomed turn
+   you land at the top of the page you'd read next, at the same zoom. */
+var Q79T=null;
+document.addEventListener('touchstart',function(e){
+ Q79T=null;
+ if(!q78On()||MK.zoom<=1.02||Q78G||e.touches.length!==1)return;
+ var t=e.touches[0];if(t.touchType==='stylus'||!e.target.closest||!e.target.closest('#mkbody'))return;
+ var body=document.getElementById('mkbody'),g=mkGeom(MK.zoom);
+ Q79T={id:t.identifier,x:t.clientX,y:t.clientY,atR:body.scrollLeft>=g.maxLeft-2,atL:body.scrollLeft<=2};
+},{capture:true,passive:true});
+document.addEventListener('touchmove',function(e){
+ if(!Q79T)return;
+ // a second finger (a pinch), or a finger that's drawing in Markup, is never a page swipe
+ if(e.touches.length>1||(MK&&MK.touch&&(MK.touch.mode==='draw'||MK.touch.mode==='pending')))Q79T=null;
+},{capture:true,passive:true});
+document.addEventListener('touchend',function(e){
+ var t=Q79T;Q79T=null;if(!t||!q78On()||e.touches.length)return;
+ var c=null;for(var i=0;i<e.changedTouches.length;i++)if(e.changedTouches[i].identifier===t.id)c=e.changedTouches[i];
+ if(!c)return;
+ var dx=c.clientX-t.x,dy=c.clientY-t.y;
+ if(Math.abs(dx)<70||Math.abs(dx)<1.5*Math.abs(dy))return;
+ var dir=dx<0&&t.atR?1:dx>0&&t.atL?-1:0;if(!dir||!q78CanTurn(dir))return;
+ // a Markup finger pan glides to a stop first; turn once it has landed
+ var go=function(){if(MK&&!MK.touch&&!Q78G)q78Turn(dir)};
+ if(MK.touch)setTimeout(go,360);else go();
+},{capture:true,passive:true});
+var _q79Finish=q78Finish;
+q78Finish=function(done){
+ var dir=Q78G&&Q78G.dir,zoomed=MK&&MK.zoom>1.02;
+ var r=_q79Finish.apply(this,arguments);
+ if(done&&zoomed&&MK&&q78On()){
+  var body=document.getElementById('mkbody'),g=mkGeom(MK.zoom);
+  body.scrollTop=0;body.scrollLeft=dir>0?0:g.maxLeft; // next pages: top of the left page; back: top of the right page
+  mkOnScroll();mkNotesLayout();
+ }
  return r;
 };
 
