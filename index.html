@@ -5820,6 +5820,189 @@ input.q73nm:focus{border-bottom:1px solid #9a7761}
 /* phones give every button a 38px minimum height; the book's round buttons keep their own size */
 #q73ov button,.q73sws .q73sw{min-height:0}
 @media (max-width:700px){#q73ov .q73sw{width:24px;height:24px}#q73ov .q73dots{width:34px;height:34px}}
+/* ---------- Health page ---------- */
+.hl{--sg:#66764f;--sgd:#4e5c3b;--sgl:#e6ebdc;--sgb:#d7dfc9;--sgt:#36412a;--sgs:#5d6a4c;--tint:#f4f6ef;--hm1:#7d736d;--hm2:#8b827c;--hm3:#9a918a;--hbd:#e3ddd4;--hbd2:#ebe5de;--hdg:#a8493c;--ht:#3a3330;position:relative;color:var(--ht)}
+:where(.hl) :where(button,input,textarea){font:inherit;color:inherit}
+:where(.hl) button{cursor:pointer}
+.hltabs{display:none}
+.hlgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start}
+.hlmain{display:flex;flex-direction:column;gap:20px;min-width:0}
+.hlside{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+@media(min-width:1200px){.hlgrid{grid-template-columns:minmax(0,1fr) minmax(320px,420px)}}
+@media(min-width:701px) and (max-width:1199px){
+ .hlside{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hlside .hlcarec{grid-column:1/-1}
+ .hlcarec .hlbody{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+}
+/* cards */
+.hlcard{background:#fff;border:1px solid var(--hbd);border-radius:22px;overflow:hidden;min-width:0}
+.hlhead{display:flex;align-items:center;gap:12px;padding:16px 26px}
+.hlhead h2,.hlhead h3{margin:0;font-weight:500}
+.hlhead.dark{background:var(--sgd);color:#fff;justify-content:space-between;flex-wrap:wrap}
+.hlhead.dark h2{font-size:22px;color:#fff}
+.hlhead.dark span{font-size:14px;color:#dfe6d2}
+.hlhead.lite{background:var(--sgl);border-bottom:1px solid var(--sgb);padding:14px 18px 14px 20px}
+.hlhead.lite h3{font-size:18px;color:var(--sgt)}
+.hlhead.lite span{font-size:13px;color:var(--sgs);flex:1}
+.hladdb{border:none;background:#fff;color:var(--sgt);font-size:14px;padding:6px 14px;border-radius:16px;box-shadow:0 1px 2px rgba(40,30,20,.08)}
+.hlbody{padding:20px 26px 24px;display:flex;flex-direction:column;gap:20px}
+.hlbody.list{padding:12px;gap:10px}
+.hllab{font-size:13px;color:var(--hm1);display:block}
+.hlhelp{font-size:12px;color:var(--hm3);margin:6px 0 0;line-height:1.5}
+.hllink{border:none;background:none;padding:0;font-size:14px;color:#66764f}
+.hllink.dng{color:var(--hdg);font-size:13px;flex:none}
+.hllink:hover{text-decoration:underline}
+/* symptom picker */
+.hlpickh{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:-8px}
+.hlchips{display:flex;flex-wrap:wrap;gap:8px}
+.hlchip{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:18px;border:1px solid #e3dcd3;background:#fff;font-size:14px;color:#4a423d}
+.hlchip i{width:8px;height:8px;border-radius:50%;flex:none}
+.hlchip.on{background:var(--sg);border-color:var(--sg);color:#fff}
+.hlcustom{border:1px dashed #cfc6bb;border-radius:18px;padding:8px 14px;font-size:14px;background:#fff;width:100%;max-width:340px}
+.hlsym{background:#fbf9f6;border:1px solid #efe9e2;border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.hlsymh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hlsymh>i{width:10px;height:10px;border-radius:50%}
+.hlsymh>b{font-size:17px;font-weight:500;flex:1;min-width:120px}
+.hltime{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--hm1);white-space:nowrap}
+.hltime input,.hlfm input[type=date],.hlfm input[type=time]{border:1px solid #e6dfd7;border-radius:10px;padding:6px 8px;background:#fff;min-width:0}
+.hlx{width:30px;height:30px;border-radius:50%;border:none;background:none;font-size:22px;line-height:1;color:var(--hm3)}
+.hlx:hover{background:#f4efe9;color:var(--hdg)}
+.hlsevh{display:flex;justify-content:space-between;font-size:13px;color:var(--hm1);margin-bottom:6px;gap:10px}
+.hlsevh b{font-weight:500}
+.hlsev input[type=range]{width:100%;accent-color:var(--sg);margin:0}
+.hl textarea{width:100%;min-height:76px;border:1px solid #ebe5de;border-radius:12px;padding:10px 12px;background:#fff;resize:vertical;font-size:15px;line-height:1.5}
+.hl textarea:focus,.hl input:focus{outline:2px solid #66764f33;border-color:var(--sg)}
+.hllab+textarea{margin-top:6px}
+.hlmedia{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hlmw{position:relative}
+.hlmx{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;border:none;background:#4a423d;color:#fff;font-size:15px;line-height:1;padding:0}
+.hlth{position:relative;display:block;width:72px;height:72px;border-radius:12px;overflow:hidden;border:none;padding:0;background:#ece7df;flex:none}
+.hlth.sm{width:56px;height:56px}
+.hlth img,.hlth video{width:100%;height:100%;object-fit:cover;display:block}
+.hlplay{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:16px;background:rgba(0,0,0,.18)}
+.hlgone{display:grid;place-items:center;height:100%;font-size:10px;line-height:1.2;color:var(--hm2);text-align:center;padding:4px}
+.hlup{display:inline-flex;align-items:center;height:56px;padding:0 16px;border:1px dashed #cfc6bb;border-radius:12px;font-size:13px;color:var(--hm1);cursor:pointer}
+.hlup input,.hlavup input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.hlact{display:flex;justify-content:flex-end}
+.hlbtn{background:var(--sg);color:#fff;border:none;border-radius:22px;padding:9px 22px;font-size:15px}
+.hlbtn:hover{background:var(--sgd)}
+/* log */
+.hl-log{display:flex;flex-direction:column;gap:14px;min-width:0}
+.hlloghead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;background:var(--sgl);border:1px solid var(--sgb);border-radius:18px;padding:14px 22px}
+.hlloghead h2{margin:0;font-size:22px;font-weight:500;color:var(--sgt)}
+.hlloghead span{font-size:14px;color:var(--sgs)}
+.hlempty{background:#fff;border:1px solid var(--hbd2);border-radius:18px;padding:26px 22px;text-align:center}
+.hlempty p{margin:0 0 4px;font-size:17px}.hlempty span{font-size:14px;color:var(--hm2)}
+.hlpills{display:flex;flex-wrap:wrap;gap:8px}
+.hlpill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:18px;border:1px solid #e3dcd3;background:#fff;font-size:14px;color:#4a423d;flex:none}
+.hlpill i{width:8px;height:8px;border-radius:50%}
+.hlpill em{font-style:normal;font-size:12px;opacity:.7}
+.hlpill.on{background:var(--sg);border-color:var(--sg);color:#fff}
+.hlsum{background:#fff;border:1px solid var(--hbd);border-radius:20px;padding:20px 22px}
+.hlsumh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.hlsumh h3{margin:0;font-size:20px;font-weight:500}
+.hltiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.hltile{background:var(--tint);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.hltile b{font-size:18px;font-weight:500;color:var(--sgt)}
+.hltile small{font-size:12px;color:var(--hm1);line-height:1.35}
+.hlsum h4{margin:16px 0 8px;font-size:13px;font-weight:400;color:var(--hm1)}
+.hlgal{display:flex;flex-wrap:wrap;gap:10px}
+.hlgi{width:84px}.hlgi .hlth{width:84px;height:84px}.hlgi small{display:block;font-size:11px;color:var(--hm3);margin-top:3px;text-align:center}
+.hllogbody{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+@media(min-width:900px){.hllogbody{grid-template-columns:minmax(280px,400px) minmax(0,1fr)}.hlcal{position:sticky;top:12px}}
+.hlcal{background:#fff;border:1px solid var(--hbd);border-radius:20px;padding:14px 12px}
+.hlcalh{display:flex;justify-content:space-between;align-items:center;padding:0 4px 8px}
+.hlcalh b{font-size:17px;font-weight:500}
+.hlcalh span{display:flex;gap:6px}
+.hlcalh button{width:34px;height:34px;border-radius:50%;border:1px solid var(--hbd);background:#fff;font-size:18px;line-height:1;padding:0}
+.hlgrid7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.hlgrid7>small{text-align:center;font-size:11px;color:var(--hm3);padding-bottom:2px}
+.hlcell{min-height:52px;border-radius:10px;padding:6px 2px 4px;border:none;background:transparent;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--hm1)}
+.hlcell.e{pointer-events:none}
+.hlcell.has{background:#faf8f4;cursor:pointer}
+.hlcell.today{box-shadow:inset 0 0 0 1px #d8cfc5;color:var(--ht)}
+.hlcell.sel{background:#eef1e7;box-shadow:inset 0 0 0 1.5px var(--sg)}
+.hldots{display:inline-flex;flex-wrap:wrap;gap:3px;justify-content:center}
+.hldots i{width:8px;height:8px;border-radius:50%}
+.hldays{display:flex;flex-direction:column;gap:10px;min-width:0}
+.hlshowing{margin:0;font-size:13px;color:var(--hm1)}
+.hlday{background:#fff;border:1px solid var(--hbd2);border-radius:18px;min-width:0;overflow:hidden}
+.hlday.flat{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.hldayh{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;padding:12px 16px;text-align:left}
+.hldt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.hldt b{font-size:15px;font-weight:500}
+.hldt small{font-size:13px;color:var(--hm2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hlchev{color:var(--hm3);font-size:13px;flex:none}
+.hldayb{padding:2px 16px 14px;display:flex;flex-direction:column;gap:14px}
+.hlit{display:flex;flex-direction:column;gap:8px}
+.hlrow{display:flex;align-items:center;gap:12px}
+.hlrt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35}
+.hlrt b{font-size:16px;font-weight:500;display:flex;align-items:center;gap:8px}
+.hlrt b.hldate{font-size:17px;display:block}
+.hlrt small{font-size:13px;color:var(--hm3)}
+.hldot{width:8px;height:8px;border-radius:50%;flex:none}
+.hlsd{display:inline-grid;place-items:center;border-radius:50%;color:#fff;font-size:13px;font-weight:500;flex:none}
+.hlnote{margin:0;font-size:15px;line-height:1.5;color:#4a423d;white-space:pre-wrap}
+.hlate{margin:0;font-size:13px;color:var(--hm2)}
+/* side cards */
+.hlitem{display:flex;align-items:flex-start;gap:12px;border:1px solid var(--hbd2);border-radius:14px;padding:12px 12px 12px 14px;cursor:pointer;min-width:0;background:#fff}
+.hlitem:hover{border-color:var(--sgb)}
+.hlit2{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.hlit2 b{font-size:15px;font-weight:500;overflow-wrap:anywhere}
+.hlit2 b em{font-style:normal;font-size:14px;color:var(--sgd);margin-left:4px}
+.hlit2 small{font-size:13px;color:var(--hm2);overflow-wrap:anywhere}
+.hlit2 .hlty{font-size:12px;color:var(--sgs)}
+.hlpn{font-size:13px;color:#5a4f48;white-space:pre-wrap;margin-top:4px;overflow-wrap:anywhere}
+.hldb{width:50px;border-radius:12px;background:#f1f3ec;color:var(--sgd);display:flex;flex-direction:column;align-items:center;padding:5px 0;flex:none;line-height:1.1}
+.hldb.next{background:var(--sg);color:#fff}
+.hldb small{font-size:11px}.hldb b{font-size:19px;font-weight:500}
+.hlmd{width:10px;height:10px;border-radius:50%;background:#a9b392;margin-top:6px;flex:none}
+.hlav{width:48px;height:48px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-size:16px}
+.hlicons{display:flex;gap:2px;flex:none}
+.hlic{width:26px;height:26px;border-radius:50%;border:none;background:none;color:#b0a79f;font-size:15px;padding:0;line-height:1}
+.hlic:hover{background:#f4efe9;color:#6b6159}.hlic.del:hover{color:var(--hdg)}
+/* picture viewer */
+.hlviewer{position:fixed;inset:0;z-index:140;background:rgba(14,10,6,.85);display:flex;align-items:center;justify-content:center;padding:20px}
+.hlvbg{position:absolute;inset:0}
+.hlviewer img,.hlviewer video{position:relative;max-width:100%;max-height:100%;border-radius:12px}
+.hlviewer p{position:relative;color:#fff}
+.hlvx{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.18);color:#fff;font-size:26px;line-height:1}
+/* pop-ups */
+.modal:has(.hlfm){background:#fdfbf7;border-radius:24px;padding:26px 28px}
+.modal:has(.hlfm) [data-savemodal]{background:#66764f!important;border-color:#66764f!important}
+.modal:has(.hlfm) .acts{background:#fdfbf7}
+.hlfm .hlchip{background:#fff;border:1px solid #e3dcd3;color:#4a423d}
+.hlfm .hlchip.on{background:#66764f;border-color:#66764f;color:#fff}
+.hlfm .hllink{background:none;border:none;color:#66764f}
+.hlfm .zfrow{display:flex;gap:10px}.hlfm .zfrow .field{flex:1;min-width:0}
+.hlfm .field label{font-size:13px;color:var(--hm1)}
+.hlfm .field input,.hlfm .field textarea{border:1px solid #e6dfd7;border-radius:12px;padding:10px 12px;font-size:15px;background:#fff;width:100%}
+.hlphoto{display:flex;align-items:center;gap:14px;margin-bottom:14px;font-size:13px;color:var(--hm1)}
+.hlavup{position:relative;width:64px;height:64px;border-radius:50%;border:1px dashed #cfc6bb;display:grid;place-items:center;font-size:24px;color:var(--hm3);cursor:pointer;flex:none}
+/* phones: three tabs, one column, bigger tap targets, and the pop-up slides up from the bottom */
+@media(max-width:700px){
+ .hltabs{display:flex;background:#ece7df;border-radius:24px;padding:4px;gap:2px;margin-bottom:14px}
+ .hltabs button{flex:1;border:none;background:none;border-radius:20px;padding:11px 0;font-size:15px;color:var(--hm1)}
+ .hltabs button.on{background:#fff;color:var(--sgt);box-shadow:0 1px 3px rgba(40,30,20,.12)}
+ .hl[data-tab=today] .hl-log,.hl[data-tab=today] .hl-care,.hl[data-tab=log] .hl-today,.hl[data-tab=log] .hl-care,.hl[data-tab=care] .hl-today,.hl[data-tab=care] .hl-log{display:none}
+ .hlgrid,.hlmain{gap:18px}
+ .hlhead{padding:14px 18px}.hlbody{padding:16px 16px 20px}
+ .hlchip,.hlpill{padding:11px 14px;font-size:15px}
+ .hlpills{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+ .hlsym{padding:14px}
+ .hlbtn{width:100%;padding:13px 22px}.hlact{display:block}
+ .hlic{width:40px;height:40px;font-size:18px}
+ .hladdb{padding:9px 16px}
+ .hlcell{min-height:46px}
+ .hlloghead{padding:12px 16px}
+ .hlsum{padding:16px}
+ .hltime input{padding:8px}
+ .modalbg:has(.hlfm){align-items:flex-end;padding:0}
+ .modalbg:has(.hlfm) .modal{max-width:none;border-radius:26px 26px 0 0;max-height:88vh;max-height:88dvh;padding:30px 20px calc(16px + env(safe-area-inset-bottom,0px))}
+ .modal:has(.hlfm)::before{content:"";position:absolute;top:10px;left:50%;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:#ddd5cb}
+ .modal:has(.hlfm) .modalx{display:none}
+ .hlfm input,.hlfm textarea{font-size:16px}
+}
 </style>
 </head>
 <body>
@@ -23915,6 +24098,352 @@ ZACT.q64cdel=function(cid,sid){
  (c.items||[]).forEach(function(x){if(x.t==='note'&&ids.indexOf(x.sec)>-1){x.sec='';touch(x)}});
  save();saveFiles(cid);render();
 };
+
+/* ---------- Health page: symptom log, appointments, medications and care team ----------
+   Everything lives in the page's items so it syncs and merges like the rest of Doable:
+     t:'hsym'  {d,s,tm,v 1-10,note,m:[{k:'p'|'v',r}]}   one per symptom felt
+     t:'hfood' id 'hfood|YYYY-MM-DD' {d,text}            what you ate that day
+     t:'happt' {what,who,d,tm,where,notes}   t:'hmed' {name,dose,freq,start}
+     t:'hcare' {type,name,place,phone,address,photo}      t:'hcsym' id 'hcsym|name' {name}  (symptoms you added)
+   Photos: shrunk once, kept on this device, uploaded ONCE to cloud storage under a fingerprint (the same
+   system the note pictures use), and every other device downloads each one once and keeps it. Nothing
+   re-syncs. m:{k:'p',r:'nimg:...'}.  Videos are big, so they stay on the device that added them
+   (m:{k:'v',r:id}, the file lives in IndexedDB under 'hvid:<id>') and other devices show a small note. */
+var HL_SYMS=[['Headache','#6f7d5a'],['Fatigue','#5d7a8c'],['Nausea','#b9776a'],['Dizziness','#8a7aa3'],['Brain fog','#ad8743'],['Stomach pain','#4e8a86'],['Joint pain','#9c5c50'],['Tingling','#7a8fb0'],['Rash','#c06d8a'],['Trouble sleeping','#7f6a5a']];
+var HL_CARE_TYPES=['Doctor','Dentist','Therapist','Massage therapist','Specialist','Other'];
+var HL_CARE_COL={'Doctor':'#6f7d5a','Dentist':'#5d7a8c','Therapist':'#8a7aa3','Massage therapist':'#b9776a','Specialist':'#ad8743','Other':'#8b827c'};
+var HL_WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],HL_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],HL_MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+KINDS.health={name:'Health',tpl:'Health',desc:'Log symptoms with photos, appointments, medications and your care team',ico:'heart',col:'moss'};
+PAGE_PAL.health='moss';
+TEMPLATES.personal.push('health');
+var HL=null;
+function hlS(){return HL||(HL={tab:'today',draft:{syms:[],detail:{},food:''},picker:false,filter:'',daySel:'',cal:null,open:{},viewer:null})}
+function hlNowHM(){var d=new Date();return (d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()}
+function hlFmtT(t){if(!t)return '';var p=t.split(':'),h=+p[0],m=p[1];return (h%12||12)+':'+m+' '+(h<12?'am':'pm')}
+function hlShort(d){var x=parseISO(d);return x?HL_MON[x.getMonth()]+' '+x.getDate():''}
+function hlLong(d){var x=parseISO(d);return x?HL_WD[x.getDay()]+', '+HL_MON[x.getMonth()]+' '+x.getDate():''}
+function hlSevColor(v){return v<=3?'#9fae7e':v<=6?'#cfa45a':'#b9665a'}
+function hlSevWord(v){return v<=3?'Mild':v<=6?'Moderate':'Severe'}
+function hlPart(t){var h=+(t||'12').split(':')[0];return h<12?'Morning':h<17?'Afternoon':h<21?'Evening':'Night'}
+function hlSymColor(s){for(var i=0;i<HL_SYMS.length;i++)if(HL_SYMS[i][0]===s)return HL_SYMS[i][1];
+ var h=Math.abs(String(s).split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%360;return 'oklch(0.6 0.08 '+h+')'}
+function hlPage(sp,create){
+ var c=firstPage(sp,'health');
+ if(!c&&create){var id='pg-'+sp+'-health';c=classById(id);if(!c){c=newPage(sp,'health','Health',id,spacePages(sp).length);S.classes.push(c)}}
+ return c;
+}
+function hlItems(c,t){return (c.items||[]).filter(function(x){return x.t===t})}
+function hlAllSyms(c){
+ var out=HL_SYMS.map(function(x){return x[0]});
+ hlItems(c,'hcsym').forEach(function(x){if(out.indexOf(x.name)<0)out.push(x.name)});
+ hlItems(c,'hsym').forEach(function(x){if(out.indexOf(x.s)<0)out.push(x.s)});
+ return out;
+}
+/* ----- pictures and videos ----- */
+var HLV={};   // video id -> object URL, or 0 when this device doesn't have it
+function hlVidUrl(id){
+ if(HLV[id]!==undefined)return HLV[id]||'';
+ HLV[id]=0;
+ (async function(){
+  await idbReady;var b=null;
+  if(IDB){try{b=await idbDo('readonly',function(st){return st.get('hvid:'+id)})}catch(e){}}
+  if(b){try{HLV[id]=URL.createObjectURL(b);render()}catch(e){}}
+ })();
+ return '';
+}
+function hlPhotoUrl(tok){var im=q65Img(tok);return im&&Q65IMG[tok]&&Q65IMG[tok].url||''}
+function hlMediaUrl(m){return m.k==='v'?hlVidUrl(m.r):hlPhotoUrl(m.r)}
+// a picture, shrunk to 1280px (or 360px for a person's photo) and kept on this device; it is only uploaded once the entry is saved
+function hlShrink(blob,max){
+ return new Promise(function(res){
+  var url=URL.createObjectURL(blob),im=new Image();
+  im.onload=function(){
+   var k=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement('canvas');
+   cv.width=Math.max(1,Math.round(im.naturalWidth*k));cv.height=Math.max(1,Math.round(im.naturalHeight*k));
+   var x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.drawImage(im,0,0,cv.width,cv.height);
+   URL.revokeObjectURL(url);res(cv.toDataURL('image/jpeg',.8));
+  };
+  im.onerror=function(){URL.revokeObjectURL(url);res(null)};
+  im.src=url;
+ });
+}
+async function hlTakePhoto(blob,max){
+ var d=await hlShrink(blob,max);if(!d)return null;
+ var tok=q65Tok(d);await q65Put(tok,d);return tok;
+}
+function hlQueueUpload(toks){ // the one and only upload of each picture
+ var Q=q65Q(),any=false;
+ toks.forEach(function(t){if(t&&Q.indexOf(t)<0){Q.push(t);any=true}});
+ if(any){q65SetQ(Q);q65Upload()}
+}
+async function hlTakeFiles(files,store){
+ for(var i=0;i<files.length;i++){
+  var f=files[i];
+  if(/^video\//.test(f.type)){
+   if(f.size>150000000){zToast('That video is over 150 MB. Try a shorter one.');continue}
+   var id=uid();await idbReady;
+   try{await idbDo('readwrite',function(st){return st.put(f,'hvid:'+id)})}catch(e){zToast('This device could not save that video.');continue}
+   HLV[id]=URL.createObjectURL(f);store.push({k:'v',r:id});
+  }else if(/^image\//.test(f.type)||/\.(heic|heif)$/i.test(f.name||'')){
+   var tok=await hlTakePhoto(f,1280);
+   if(tok)store.push({k:'p',r:tok});else zToast('That picture could not be read.');
+  }
+ }
+}
+function hlTh(m,cls,attr){
+ var u=hlMediaUrl(m),inner;
+ if(m.k==='v')inner=u?'<video src="'+esc(u)+'#t=0.1" preload="metadata" muted playsinline></video><b class="hlplay">▶</b>':'<span class="hlgone">Video on another device</span>';
+ else inner=u?'<img src="'+esc(u)+'" alt="">':'<span class="hlgone"></span>';
+ return '<'+(attr?'button type="button"':'div')+' class="hlth '+(cls||'')+'" '+(attr||'')+'>'+inner+'</'+(attr?'button':'div')+'>';
+}
+/* ----- today card ----- */
+function hlSymChip(c,t,on){
+ return '<button type="button" class="hlchip'+(on?' on':'')+'" data-zact="hlpick:'+encodeURIComponent(t)+'"><i style="background:'+(on?'#fff':hlSymColor(t))+'"></i>'+esc(t)+'</button>';
+}
+function hlDraftCard(c,t){
+ var dt=hlS().draft.detail[t],k=encodeURIComponent(t);
+ return '<div class="hlsym"><div class="hlsymh"><i style="background:'+hlSymColor(t)+'"></i><b>'+esc(t)+'</b>'
+  +'<label class="hltime">Felt it at <input type="time" value="'+esc(dt.time)+'" data-hlf="time:'+k+'" aria-label="Time felt"></label>'
+  +'<button type="button" class="hlx" data-zact="hlrm:'+k+'" aria-label="Remove '+esc(t)+'">×</button></div>'
+  +'<div class="hlsev"><div class="hlsevh"><span>How bad is it?</span><b id="hlsl-'+k+'" style="color:'+hlSevColor(dt.sev)+'">'+dt.sev+' / 10 · '+hlSevWord(dt.sev)+'</b></div>'
+  +'<input type="range" min="1" max="10" step="1" value="'+dt.sev+'" data-hlf="sev:'+k+'" aria-label="Severity from 1 to 10"></div>'
+  +'<label class="hllab" for="hln-'+k+'">What are you noticing?</label><textarea id="hln-'+k+'" rows="3" data-hlf="note:'+k+'" placeholder="When it started, what it feels like, what you were doing…">'+esc(dt.note)+'</textarea>'
+  +'<div class="hlmedia">'+dt.media.map(function(m,i){return '<span class="hlmw">'+hlTh(m,'sm')+'<button type="button" class="hlmx" data-zact="hlrmm:'+k+':'+i+'" aria-label="Remove">×</button></span>'}).join('')
+  +'<label class="hlup">+ Photo / video<input type="file" accept="image/*,video/*" multiple data-hlfile="'+k+'"></label></div>'
+  +'<div class="hlact"><button type="button" class="hlbtn" data-zact="hladd:'+c.id+':'+k+'">Add</button></div></div>';
+}
+function hlToday(c){
+ var D=hlS().draft,td=new Date(),counts={};
+ hlItems(c,'hsym').forEach(function(e){(counts[e.s]=counts[e.s]||{})[e.d]=1});
+ var all=hlAllSyms(c),n=function(s){return counts[s]?Object.keys(counts[s]).length:0};
+ var common=all.slice().sort(function(a,b){return n(b)-n(a)}).slice(0,5);
+ D.syms.forEach(function(s){if(common.indexOf(s)<0)common.push(s)});
+ var shown=hlS().picker?all:common;
+ var chips=shown.map(function(s){return hlSymChip(c,s,D.syms.indexOf(s)>-1)}).join('');
+ var body='<div class="hlpickh"><span class="hllab">'+(hlS().picker?'All symptoms':'Your most logged')+'</span><button type="button" class="hllink" data-zact="hlpicker">'+(hlS().picker?'Show less ▴':'All symptoms ▾')+'</button></div>'
+  +'<div class="hlchips">'+chips+'</div>'
+  +(hlS().picker?'<input class="hlcustom" id="hlcustom" data-zenter="hlcustom" placeholder="+ Add your own, then press Enter" autocomplete="off" enterkeyhint="done">':'');
+ if(D.syms.length){
+  body+=D.syms.map(function(s){return hlDraftCard(c,s)}).join('')
+   +'<div><label class="hllab" for="hlfood">What did you eat today?</label><textarea id="hlfood" rows="2" data-hlf="food" placeholder="Meals, snacks, drinks…">'+esc(D.food)+'</textarea>'
+   +'<p class="hlhelp">Food is saved to today with the next symptom you add.</p></div>';
+ }else body+='<p class="hlhelp">Tap a symptom above to log how it feels. You can pick more than one.</p>';
+ return '<section class="hlcard hl-today"><div class="hlhead dark"><h2>How are you feeling?</h2><span>'+HL_WD[td.getDay()]+', '+HL_MON[td.getMonth()]+' '+td.getDate()+'</span></div><div class="hlbody">'+body+'</div></section>';
+}
+/* ----- symptom log ----- */
+function hlSevDot(v,sz){return '<span class="hlsd" style="background:'+hlSevColor(v)+';width:'+sz+'px;height:'+sz+'px">'+v+'</span>'}
+function hlEntryMedia(e){
+ return e.m&&e.m.length?'<div class="hlmedia">'+e.m.map(function(m,i){return hlTh(m,'',' data-zact="hlview:'+e.id+':'+i+'" aria-label="Open"')}).join('')+'</div>':'';
+}
+function hlLog(c){
+ var S2=hlS(),all=hlItems(c,'hsym'),foods={};hlItems(c,'hfood').forEach(function(x){foods[x.d]=x.text});
+ var f=S2.filter,list=f?all.filter(function(e){return e.s===f}):all,td=iso(today()),counts={};
+ all.forEach(function(e){(counts[e.s]=counts[e.s]||{})[e.d]=1});
+ var syms=Object.keys(counts).sort(function(a,b){return Object.keys(counts[b]).length-Object.keys(counts[a]).length||(a<b?-1:1)});
+ if(f&&!counts[f])S2.filter=f='';
+ var h='<div class="hlloghead"><h2>Symptom log</h2><span>'+(f?list.length+' of '+all.length:all.length)+' '+(all.length===1&&!f?'entry':'entries')+'</span></div>';
+ if(!all.length)return '<section class="hl-log">'+h+'<div class="hlempty"><p>Nothing logged yet.</p><span>When you add a symptom, it shows up here on a calendar so you can spot patterns and show a doctor.</span></div></section>';
+ h+='<div class="hlpills"><button type="button" class="hlpill'+(f?'':' on')+'" data-zact="hlfilter:">All</button>'
+  +syms.map(function(s){var on=f===s,col=hlSymColor(s);
+   return '<button type="button" class="hlpill'+(on?' on':'')+'" style="'+(on?'background:'+col+';border-color:'+col:'')+'" data-zact="hlfilter:'+encodeURIComponent(s)+'"><i style="background:'+(on?'#fff':col)+'"></i>'+esc(s)+' <em>'+Object.keys(counts[s]).length+'</em></button>'}).join('')+'</div>';
+ if(f){ // summary and every photo for this symptom
+  var days=Object.keys(counts[f]).sort(),inMonth=days.filter(function(d){return (today()-parseISO(d))/864e5<30}).length,parts={};
+  list.forEach(function(e){if(e.tm){var p=hlPart(e.tm);parts[p]=(parts[p]||0)+1}});
+  var top=Object.keys(parts).sort(function(a,b){return parts[b]-parts[a]})[0],avg=list.reduce(function(a,e){return a+e.v},0)/list.length;
+  var gal=[];list.slice().sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0}).forEach(function(e){(e.m||[]).forEach(function(m,i){gal.push('<div class="hlgi">'+hlTh(m,'',' data-zact="hlview:'+e.id+':'+i+'" aria-label="Open"')+'<small>'+hlShort(e.d)+'</small></div>')})});
+  var tile=function(v,k){return '<div class="hltile"><b>'+esc(v)+'</b><small>'+esc(k)+'</small></div>'};
+  h+='<div class="hlsum"><div class="hlsumh"><h3>'+esc(f)+'</h3><button type="button" class="hllink" data-zact="hlfilter:">Show all</button></div>'
+   +'<div class="hltiles">'+tile(days.length+(days.length===1?' day':' days'),inMonth+' in the last 30 days')+tile(hlShort(days[days.length-1]),days.length>1?'Last felt · first '+hlShort(days[0]):'Last felt')+tile(top||'—','Most often felt')+tile(avg.toFixed(1)+' / 10','Average severity')+'</div>'
+   +(gal.length?'<h4>All photos & videos</h4><div class="hlgal">'+gal.join('')+'</div>':'')+'</div>';
+ }
+ // calendar
+ var now=new Date();if(!S2.cal)S2.cal=[now.getFullYear(),now.getMonth()];
+ var cy=S2.cal[0],cm=S2.cal[1],lead=new Date(cy,cm,1).getDay(),nd=new Date(cy,cm+1,0).getDate(),cells='';
+ for(var i=0;i<lead;i++)cells+='<i class="hlcell e"></i>';
+ for(var d=1;d<=nd;d++){
+  var key=iso(new Date(cy,cm,d)),es=list.filter(function(e){return e.d===key}),sel=S2.daySel===key;
+  cells+='<'+(es.length?'button type="button" data-zact="hlday:'+key+'"':'div')+' class="hlcell'+(es.length?' has':'')+(sel?' sel':'')+(key===td?' today':'')+'"><span>'+d+'</span><span class="hldots">'+es.map(function(e){return '<i style="background:'+(f?hlSevColor(e.v):hlSymColor(e.s))+'"></i>'}).join('')+'</span></'+(es.length?'button':'div')+'>';
+ }
+ var cal='<div class="hlcal"><div class="hlcalh"><b>'+HL_MONL[cm]+' '+cy+'</b><span><button type="button" data-zact="hlcal:-1" aria-label="Previous month">‹</button><button type="button" data-zact="hlcal:1" aria-label="Next month">›</button></span></div>'
+  +'<div class="hlgrid7">'+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(function(x){return '<small>'+x+'</small>'}).join('')+cells+'</div>'
+  +'<p class="hlhelp">'+(f?'Dot colour shows how bad '+esc(f.toLowerCase())+' was that day. Tap a day to see it.':'Each dot is a symptom. Tap a day to see what you logged.')+'</p></div>';
+ // day list
+ var dates=Object.keys(list.reduce(function(o,e){o[e.d]=1;return o},{})).filter(function(d){return !S2.daySel||d===S2.daySel}).sort().reverse(),dl='';
+ if(S2.daySel)dl+='<p class="hlshowing">Showing '+esc(hlLong(S2.daySel))+' · <button type="button" class="hllink" data-zact="hlday:'+S2.daySel+'">Show all days</button></p>';
+ var del=function(e){return '<button type="button" class="hllink dng" data-zact="hldel:'+c.id+':'+e.id+'">Delete</button>'};
+ if(f){
+  dl+=list.filter(function(e){return !S2.daySel||e.d===S2.daySel}).sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:(b.tm||'')<(a.tm||'')?-1:1}).map(function(e){
+   return '<div class="hlday flat"><div class="hlrow">'+hlSevDot(e.v,32)+'<div class="hlrt"><b class="hldate">'+esc(hlLong(e.d))+'</b><small>'+esc([e.s,hlFmtT(e.tm),hlSevWord(e.v)].filter(Boolean).join(' · '))+'</small></div>'+del(e)+'</div>'
+    +(e.note?'<p class="hlnote">'+esc(e.note)+'</p>':'')+(foods[e.d]?'<p class="hlate">Ate '+esc(foods[e.d])+'</p>':'')+hlEntryMedia(e)+'</div>'}).join('');
+ }else{
+  dl+=dates.map(function(d){
+   var its=list.filter(function(e){return e.d===d}).sort(function(a,b){return (a.tm||'')<(b.tm||'')?-1:1}),worst=Math.max.apply(null,its.map(function(e){return e.v})),ok='|'+d;
+   var open=S2.open[ok]!=null?S2.open[ok]:S2.daySel===d;
+   var names=its.map(function(e){return e.s}).filter(function(x,i,a){return a.indexOf(x)===i});
+   return '<div class="hlday"><button type="button" class="hldayh" data-zact="hlopen:'+d+'" aria-expanded="'+open+'">'+hlSevDot(worst,30)+'<span class="hldt"><b>'+esc(hlShort(d))+'</b><small>'+esc(names.join(', '))+'</small></span>'
+    +'<span class="hldots">'+its.map(function(e){return '<i style="background:'+hlSymColor(e.s)+'"></i>'}).join('')+'</span><span class="hlchev">'+(open?'▴':'▾')+'</span></button>'
+    +(open?'<div class="hldayb">'+(foods[d]?'<p class="hlate">Ate '+esc(foods[d])+'</p>':'')+its.map(function(e){
+      return '<div class="hlit"><div class="hlrow">'+hlSevDot(e.v,34)+'<div class="hlrt"><b><i class="hldot" style="background:'+hlSymColor(e.s)+'"></i>'+esc(e.s)+'</b><small>'+esc([hlFmtT(e.tm),hlSevWord(e.v)].filter(Boolean).join(' · '))+'</small></div>'+del(e)+'</div>'
+       +(e.note?'<p class="hlnote">'+esc(e.note)+'</p>':'')+hlEntryMedia(e)+'</div>'}).join('')+'</div>':'')+'</div>'}).join('');
+ }
+ if(!dl||(!dates.length&&!f))dl+='<p class="hlhelp">Nothing logged this way yet.</p>';
+ return '<section class="hl-log">'+h+'<div class="hllogbody">'+cal+'<div class="hldays">'+dl+'</div></div></section>';
+}
+/* ----- side cards ----- */
+function hlSide(title,count,addAct,body,cls){
+ return '<section class="hlcard hls '+(cls||'')+'"><div class="hlhead lite"><h3>'+title+'</h3><span>'+count+'</span><button type="button" class="hladdb" data-zact="'+addAct+'">+ Add</button></div><div class="hlbody list">'+body+'</div></section>';
+}
+function hlRowBtns(c,type,id){return '<span class="hlicons"><button type="button" class="hlic" data-zact="hledit:'+c.id+':'+type+':'+id+'" aria-label="Edit">✎</button><button type="button" class="hlic del" data-zact="hlrmitem:'+c.id+':'+id+'" aria-label="Delete">×</button></span>'}
+function hlCare(c){
+ var td=iso(today()),ap=hlItems(c,'happt').filter(function(a){return !a.d||a.d>=td}).sort(function(a,b){return (a.d||'9')<(b.d||'9')?-1:(a.d||'9')>(b.d||'9')?1:0});
+ var A=ap.length?ap.map(function(a,i){var d=a.d?parseISO(a.d):null;
+  return '<div class="hlitem" role="button" tabindex="0" data-zact="hledit:'+c.id+':appt:'+a.id+'"><span class="hldb'+(i===0?' next':'')+'"><small>'+(d?HL_MON[d.getMonth()]:'—')+'</small><b>'+(d?d.getDate():'')+'</b></span>'
+   +'<span class="hlit2"><b>'+esc(a.what||'Appointment')+'</b><small>'+esc([a.who,d?HL_WD[d.getDay()].slice(0,3)+(a.tm?' '+hlFmtT(a.tm):''):'',a.where].filter(Boolean).join(' · '))+'</small>'+(a.notes?'<span class="hlpn">'+esc(a.notes)+'</span>':'')+'</span>'+hlRowBtns(c,'appt',a.id)+'</div>'}).join('')
+  :'<p class="hlhelp">No upcoming appointments.</p>';
+ var meds=hlItems(c,'hmed'),M=meds.length?meds.map(function(m){
+  var st=m.start?parseISO(m.start):null,t=today(),mo=st?(t.getFullYear()-st.getFullYear())*12+t.getMonth()-st.getMonth():0,days=st?Math.round((t-st)/864e5):0;
+  var dur=!st?'':mo>=1?mo+(mo===1?' month':' months'):days+(days===1?' day':' days');
+  return '<div class="hlitem" role="button" tabindex="0" data-zact="hledit:'+c.id+':med:'+m.id+'"><i class="hlmd"></i><span class="hlit2"><b>'+esc(m.name)+(m.dose?' <em>'+esc(m.dose)+'</em>':'')+'</b>'
+   +(m.freq?'<small>'+esc(m.freq)+'</small>':'')+(st?'<small>Started '+HL_MON[st.getMonth()]+' '+st.getDate()+', '+st.getFullYear()+' · '+dur+'</small>':'')+'</span>'+hlRowBtns(c,'med',m.id)+'</div>'}).join('')
+  :'<p class="hlhelp">No medications yet.</p>';
+ var care=hlItems(c,'hcare'),C=care.length?care.map(function(p){
+  var u=p.photo?hlPhotoUrl(p.photo):'',ini=(p.name||'?').replace(/^Dr\.?\s*/i,'').split(/\s+/).map(function(w){return w[0]}).slice(0,2).join('').toUpperCase();
+  return '<div class="hlitem" role="button" tabindex="0" data-zact="hledit:'+c.id+':care:'+p.id+'"><span class="hlav" style="background:'+(u?'center/cover no-repeat url('+esc(u)+')':(HL_CARE_COL[p.type]||hlSymColor(p.type||'Other')))+'">'+(u?'':esc(ini))+'</span>'
+   +'<span class="hlit2"><small class="hlty">'+esc(p.type||'')+'</small><b>'+esc(p.name)+'</b><small>'+esc([p.place,p.phone].filter(Boolean).join(' · '))+'</small>'+(p.address?'<small>'+esc(p.address)+'</small>':'')+'</span>'+hlRowBtns(c,'care',p.id)+'</div>'}).join('')
+  :'<p class="hlhelp">Add your doctor, dentist and anyone else who looks after you.</p>';
+ return '<div class="hlside hl-care">'+hlSide('Appointments',ap.length+' upcoming','hlnew:'+c.id+':appt',A)+hlSide('Medications',meds.length+' active','hlnew:'+c.id+':med',M)
+  +hlSide('Care team',care.length+(care.length===1?' provider':' providers'),'hlnew:'+c.id+':care',C,'hlcarec')+'</div>';
+}
+function hlViewer(c){
+ var v=hlS().viewer;if(!v)return '';
+ var e=zItem(c,v.id),m=e&&e.m&&e.m[v.i];if(!m)return '';
+ var u=hlMediaUrl(m);
+ return '<div class="hlviewer"><div class="hlvbg" data-zact="hlviewclose"></div>'+(m.k==='v'?(u?'<video src="'+esc(u)+'" controls autoplay playsinline></video>':'<p>This video is on the device you added it from.</p>')
+  :(u?'<img src="'+esc(u)+'" alt="">':'<p>Loading…</p>'))+'<button type="button" class="hlvx" data-zact="hlviewclose" aria-label="Close">×</button></div>';
+}
+function zHealthPage(c){
+ var S2=hlS(),tabs=[['today','Today'],['log','Log'],['care','Care']];
+ return '<div class="hl" data-tab="'+S2.tab+'"><div class="hltabs" role="tablist">'+tabs.map(function(t){return '<button type="button" role="tab" class="'+(S2.tab===t[0]?'on':'')+'" aria-selected="'+(S2.tab===t[0])+'" data-zact="hltab:'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>'
+  +'<div class="hlgrid"><div class="hlmain">'+hlToday(c)+hlLog(c)+'</div>'+hlCare(c)+'</div>'+hlViewer(c)+'</div>';
+}
+var _hlViewPage=viewPage;
+viewPage=function(c){
+ if(c.kind!=='health')return _hlViewPage(c);
+ return '<div class="zpage" style="'+zcv(zSoftOf(c))+'">'+zHealthPage(c)
+  +cpSetHead('Page settings','pg')+'<button data-zact="pageedit:'+c.id+'">Rename or recolour</button>'+coverControls(c.id,c)
+  +'<button class="cpdelcls" data-zact="pagedel:'+c.id+'">Delete page</button></div></div>';
+};
+/* ----- actions ----- */
+function hlC(cid){var c=classById(cid);return c&&c.kind==='health'?c:null}
+function hlD(k){return decodeURIComponent(k)}
+ZACT.hltab=function(t){hlS().tab=t;render();window.scrollTo(0,0)};
+ZACT.hlpicker=function(){hlS().picker=!hlS().picker;render()};
+ZACT.hlpick=function(k){
+ var s=hlD(k),D=hlS().draft,i=D.syms.indexOf(s);
+ if(i>-1)D.syms.splice(i,1);else{D.syms.push(s);if(!D.detail[s])D.detail[s]={time:hlNowHM(),sev:5,note:'',media:[]}}
+ render();
+};
+ZACT.hlrm=function(k){var D=hlS().draft,s=hlD(k);D.syms=D.syms.filter(function(x){return x!==s});render()};
+ZACT.hlrmm=function(k,i){var d=hlS().draft.detail[hlD(k)];if(d){d.media.splice(+i,1);render()}};
+ZACT.hlcustom=function(el){
+ var v=(el&&el.value||'').trim();if(!v)return;
+ var cid=curHealthId();var c=cid&&hlC(cid);if(!c)return;
+ if(hlAllSyms(c).indexOf(v)<0)c.items.push(touch({id:'hcsym|'+v,t:'hcsym',name:v}));
+ var D=hlS().draft;if(D.syms.indexOf(v)<0){D.syms.push(v);D.detail[v]={time:hlNowHM(),sev:5,note:'',media:[]}}
+ save();render();
+};
+function curHealthId(){return view.page==='page'?view.classId:null}
+ZACT.hladd=function(cid,k){
+ var c=hlC(cid),s=hlD(k),D=hlS().draft,dt=D.detail[s];if(!c||!dt)return;
+ var td=iso(today());
+ c.items.push(touch({id:uid(),t:'hsym',d:td,s:s,tm:dt.time||'',v:dt.sev||5,note:dt.note||'',m:dt.media.slice()}));
+ hlQueueUpload(dt.media.filter(function(m){return m.k==='p'}).map(function(m){return m.r}));
+ var food=(D.food||'').trim();
+ if(food){var id='hfood|'+td,x=zItem(c,id);if(x){x.text=x.text?x.text+', '+food:food;touch(x)}else c.items.push(touch({id:id,t:'hfood',d:td,text:food}));D.food=''}
+ D.syms=D.syms.filter(function(x){return x!==s});delete D.detail[s];
+ save();render();zToast('Saved to your log');
+};
+ZACT.hlfilter=function(k){var S2=hlS();S2.filter=hlD(k||'')===S2.filter?'':hlD(k||'');S2.daySel='';render()};
+ZACT.hlday=function(d){var S2=hlS();S2.daySel=S2.daySel===d?'':d;if(S2.daySel)S2.open['|'+d]=true;render()};
+ZACT.hlopen=function(d){var S2=hlS(),k='|'+d,cur=S2.open[k]!=null?S2.open[k]:S2.daySel===d;S2.open[k]=!cur;render()};
+ZACT.hlcal=function(n){var S2=hlS(),y=S2.cal[0],m=S2.cal[1]+(+n);if(m<0){m=11;y--}else if(m>11){m=0;y++}S2.cal=[y,m];S2.daySel='';render()};
+ZACT.hldel=function(cid,id){
+ var c=hlC(cid),e=c&&zItem(c,id);if(!e)return;
+ if(!confirm('Delete this entry for '+e.s+' on '+hlShort(e.d)+'?'))return;
+ (e.m||[]).forEach(function(m){if(m.k==='v'){delete HLV[m.r];idbReady.then(function(){if(IDB)idbDo('readwrite',function(st){return st.delete('hvid:'+m.r)}).catch(function(){})})}});
+ c.items=c.items.filter(function(x){return x.id!==id});save();render();
+};
+ZACT.hlview=function(id,i){hlS().viewer={id:id,i:+i};render()};
+ZACT.hlviewclose=function(el,e){hlS().viewer=null;render()};
+ZACT.hlrmitem=function(cid,id,el,e){
+ var c=hlC(cid),x=c&&zItem(c,id);if(!x)return;
+ if(!confirm('Delete '+(x.name||x.what||'this')+'?'))return;
+ c.items=c.items.filter(function(i){return i.id!==id});view.modal=null;save();render();
+};
+ZACT.hlnew=function(cid,type){zOpen('hl'+type,{cid:cid})};
+ZACT.hledit=function(cid,type,id){zOpen('hl'+type,{cid:cid,id:id})};
+/* what's typed on the page is kept in the draft without redrawing, so a sync in the background never wipes it */
+document.addEventListener('input',function(e){
+ var t=e.target,a=t&&t.getAttribute&&t.getAttribute('data-hlf');if(!a)return;
+ var p=a.split(':'),D=hlS().draft;
+ if(p[0]==='food'){D.food=t.value;return}
+ var s=hlD(p[1]),dt=D.detail[s];if(!dt)return;
+ if(p[0]==='time')dt.time=t.value;
+ else if(p[0]==='note')dt.note=t.value;
+ else if(p[0]==='sev'){dt.sev=+t.value;var l=document.getElementById('hlsl-'+p[1]);if(l){l.textContent=dt.sev+' / 10 · '+hlSevWord(dt.sev);l.style.color=hlSevColor(dt.sev)}}
+});
+document.addEventListener('change',async function(e){
+ var t=e.target;if(!t||!t.getAttribute)return;
+ var k=t.getAttribute('data-hlfile');
+ if(k!=null){
+  var dt=hlS().draft.detail[hlD(k)],files=Array.prototype.slice.call(t.files||[]);t.value='';
+  if(!dt||!files.length)return;
+  zToast('Adding…');await hlTakeFiles(files,dt.media);render();return;
+ }
+ if(t.hasAttribute('data-hlcarefile')&&view.modal&&view.modal.kind==='hlcare'){
+  var f=t.files&&t.files[0];t.value='';if(!f)return;
+  var tok=await hlTakePhoto(f,360);if(tok){view.modal.photo=tok;view.modal.photoNew=true;render()}
+ }
+});
+/* ----- add / edit pop-ups (a bottom sheet on phones) ----- */
+function hlField(id,label,val,o){
+ o=o||{};
+ return '<div class="field"><label for="'+id+'">'+label+'</label>'+(o.area?'<textarea id="'+id+'" rows="3" placeholder="'+esc(o.ph||'')+'">'+esc(val||'')+'</textarea>'
+  :'<input id="'+id+'" type="'+(o.type||'text')+'" value="'+esc(val||'')+'" placeholder="'+esc(o.ph||'')+'" autocomplete="off">')+'</div>';
+}
+function hlItem(m){var c=hlC(m.cid);return c&&m.id?zItem(c,m.id):null}
+function hlSaveItem(m,obj){
+ var c=hlC(m.cid);if(!c)return;
+ var x=m.id&&zItem(c,m.id);
+ if(x){Object.assign(x,obj);touch(x)}else c.items.push(touch(Object.assign({id:uid()},obj)));
+ save();view.modal=null;render();
+}
+ZM.hlappt={html:function(m){var x=hlItem(m)||{};
+ return '<div class="hlfm"><h3>'+(m.id?'Edit appointment':'New appointment')+'</h3>'+hlField('hf1','What is it for?',x.what,{ph:'Follow-up, cleaning…'})+hlField('hf2','Who with?',x.who,{ph:'Dr. Patel'})
+  +'<div class="zfrow">'+hlField('hf3','Date',x.d,{type:'date'})+hlField('hf4','Time',x.tm,{type:'time'})+'</div>'+hlField('hf5','Where?',x.where,{ph:'Clinic or address'})
+  +hlField('hf6','Things to talk about',x.notes,{area:1,ph:'Questions, symptoms to mention…'})+'</div>'},
+ save:function(m){var w=zv('hf1');if(!w)return;hlSaveItem(m,{t:'happt',what:w,who:zv('hf2'),d:zv('hf3'),tm:zv('hf4'),where:zv('hf5'),notes:(document.getElementById('hf6')||{}).value||''})},
+ del:function(m){return m.id?'hlrmitem:'+m.cid+':'+m.id:''}};
+ZM.hlmed={html:function(m){var x=hlItem(m)||{};
+ return '<div class="hlfm"><h3>'+(m.id?'Edit medication':'New medication')+'</h3>'+hlField('hf1','Medication',x.name,{ph:'Vitamin D3'})+hlField('hf2','Dose',x.dose,{ph:'2,000 IU'})+hlField('hf3','How often?',x.freq,{ph:'Once daily, morning'})
+  +hlField('hf4','Started on',x.start||iso(today()),{type:'date'})+'</div>'},
+ save:function(m){var n=zv('hf1');if(!n)return;hlSaveItem(m,{t:'hmed',name:n,dose:zv('hf2'),freq:zv('hf3'),start:zv('hf4')})},
+ del:function(m){return m.id?'hlrmitem:'+m.cid+':'+m.id:''}};
+ZM.hlcare={html:function(m){var x=hlItem(m)||{};
+ if(m.type===undefined){m.type=x.type||'Doctor';m.photo=x.photo||''}
+ var types=HL_CARE_TYPES.slice();if(m.type&&types.indexOf(m.type)<0)types.push(m.type);
+ var u=m.photo?hlPhotoUrl(m.photo):'';
+ return '<div class="hlfm"><h3>'+(m.id?'Edit care provider':'New care provider')+'</h3>'
+  +'<div class="hlphoto"><label class="hlavup" style="'+(u?'background:center/cover no-repeat url('+esc(u)+')':'')+'">'+(u?'':'+')+'<input type="file" accept="image/*" data-hlcarefile="1"></label><span>Photo'+(m.photo?' · <button type="button" class="hllink" data-zact="hlcarerm">Remove photo</button>':'')+'</span></div>'
+  +'<div class="field"><label>Type</label><div class="hlchips">'+types.map(function(t){return '<button type="button" class="hlchip'+(m.type===t?' on':'')+'" data-zact="hlcaretype:'+encodeURIComponent(t)+'">'+esc(t)+'</button>'}).join('')+'</div></div>'
+  +hlField('hf0','Or type your own','',{ph:'Physio, optometrist…'})+hlField('hf1','Name',x.name,{ph:'Dr. Maya Patel'})+hlField('hf2','Practice / clinic',x.place)+hlField('hf3','Phone',x.phone,{type:'tel'})+hlField('hf4','Address',x.address)+'</div>'},
+ save:function(m){var n=zv('hf1');if(!n)return;
+  var ty=zv('hf0')||m.type||'Other';
+  if(m.photoNew)hlQueueUpload([m.photo]);
+  hlSaveItem(m,{t:'hcare',type:ty,name:n,place:zv('hf2'),phone:zv('hf3'),address:zv('hf4'),photo:m.photo||''})},
+ del:function(m){return m.id?'hlrmitem:'+m.cid+':'+m.id:''}};
+ZACT.hlcaretype=function(k){if(view.modal){view.modal.type=hlD(k);var o=document.getElementById('hf0');if(o)o.value='';render()}};
+ZACT.hlcarerm=function(){if(view.modal){view.modal.photo='';view.modal.photoNew=false;render()}};
 
 try{spBoot()}catch(e){}
 load();
