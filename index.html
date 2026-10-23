@@ -6015,6 +6015,21 @@ input.q73nm:focus{border-bottom:1px solid #9a7761}
 #mk .q75size span{min-width:32px;text-align:center;font-size:13px;color:#C9C3B4}
 #mk .q75trow .q75move{height:34px;padding:0 14px;border-radius:10px;border:none;background:rgba(255,255,255,.08);color:#EFEAE0;font:inherit;font-size:13px;cursor:pointer;margin-left:auto}
 #mk .q75paste{position:fixed;z-index:40;height:40px;padding:0 20px;border-radius:20px;border:none;background:#2B2926;color:#EFEAE0;font:inherit;font-size:14.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);cursor:pointer}
+/* v231: Menu tab in Look and feel (q76) */
+.q76head{display:flex;justify-content:flex-end;font-size:12.5px;color:#8a857b;margin:8px 2px 6px}
+.q76list{display:flex;flex-direction:column;gap:8px}
+.q76row{display:flex;align-items:center;gap:10px;padding:4px 6px 4px 2px;min-height:52px;box-sizing:border-box;border:1px solid #e6e2d8;border-radius:14px;background:#fff;-webkit-user-select:none;user-select:none}
+.q76row.drag{box-shadow:0 12px 26px -12px rgba(0,0,0,.35);border-color:#d4cfc4;position:relative;z-index:2}
+.q76h{flex:none;width:34px;height:44px;display:grid;place-items:center;color:#8a857b;cursor:grab;touch-action:none;-webkit-touch-callout:none;opacity:1}
+.q76row.drag .q76h{cursor:grabbing;color:#2b2b2b}
+.q76sw{cursor:pointer}
+.q76n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;font-size:15.5px;color:#2b2b2b}
+.q76keep{flex:none;display:grid;place-items:center;min-width:52px;min-height:44px;padding:0;border:0;background:none;cursor:pointer;border-radius:12px}
+.q76keep.on .q69sw2{background:#2b2b2b}
+.q76keep.on .q69sw2 i{left:21px}
+.q76lab{font-size:13px;color:#6b675f;margin:10px 0 8px}
+.q76gap{height:8px}
+body.q76noic .side .sic,body.q76noic .side .sdot{display:none!important}
 </style>
 </head>
 <body>
@@ -6323,7 +6338,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v230';
+var BUILD='v231';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -24721,6 +24736,124 @@ mkFloatRender=function(){
  if(g&&!el.querySelector('[data-q75="swap"]'))g.insertAdjacentHTML('afterend','<button class="q75swap'+(MK.tool==='eraser'?' on':'')+'" data-q75="swap" aria-label="Switch between pen and eraser" title="Pen / eraser">'+MK_ICO.swap+'</button><span class="mkfsep"></span>');
 };
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#mk [data-q75="swap"]');if(!b)return;e.preventDefault();e.stopPropagation();q75Swap()},true);
+
+
+/* ======================= v231: a Menu tab in Look and feel (prefix q76) =======================
+   Jae: "add one that says menu that allows me to drag and reorder the pages, change the pages main colour, turn on/off
+   the little square behind the icons, and then maybe a toggle that says 'keep in side bar' which means that they don't
+   have to hit the drop down. Make the drop down the standard tho." Advanced now has Colours, Presets, Fonts, Style, Menu.
+   - The pages (classes on School) in menu order: drag the handle (mouse or finger) to reorder (c.ord, the same order
+     as "Order of pages"), tap the round swatch for its colour (data-z4cc, the shared picker), and a Keep in side bar switch.
+   - Keep in side bar: S.menuKeep {pageId:true/false} (synced, each page merges on its own). A kept page sits above the
+     Pages / Classes label, so it shows even when that drop-down is folded. Off (inside the drop-down) is the default.
+   - Icons: Show icons (S.menuIcons, false hides them), Square behind each icon (S.menuIconSq), Icon colour (S.menuIconCol).
+   The menu rows leave the panel's Style tab (they live here now); Settings keeps its rows. */
+SETTINGS_KEYS.push('menuKeep','menuIcons');Q21DEEP.menuKeep=1;
+function q76Kept(id){return !!(S.menuKeep&&S.menuKeep[id])}
+ZACT.q76keep=function(id){S.menuKeep=Object.assign({},S.menuKeep||{});S.menuKeep[id]=!S.menuKeep[id];save();render()};
+ZACT.q76ic=function(v){S.menuIcons=v==='1';save();render()};
+
+// the menu: kept pages move out of the drop-down, to just above its label
+var _q76Side=sidebar;
+sidebar=function(){
+ var h=_q76Side.apply(this,arguments),K=S.menuKeep;
+ if(!K||!Object.keys(K).some(function(k){return K[k]}))return h;
+ var tp=document.createElement('template');tp.innerHTML=h;
+ var sc=tp.content.querySelector('.sidescroll');if(!sc)return h;
+ var lab=[].filter.call(sc.children,function(el){return el.classList.contains('slabel')&&el.textContent.trim()})[0];if(!lab)return h;
+ var moved=0;
+ for(var n=lab.nextElementSibling;n&&!n.classList.contains('slabel');){
+  var nx=n.nextElementSibling,id=n.getAttribute('data-open');
+  if(id&&q76Kept(id)){var sub=nx&&nx.classList.contains('ssub')?nx:null;if(sub)nx=sub.nextElementSibling;
+   n.classList.add('q76kept');sc.insertBefore(n,lab);if(sub)sc.insertBefore(sub,lab);moved++}
+  n=nx;
+ }
+ return moved?tp.innerHTML:h;
+};
+var _q76Render=render;
+render=function(){var r=_q76Render.apply(this,arguments);document.body.classList.toggle('q76noic',S.menuIcons===false);return r};
+
+// the Menu tab
+var Q76GRIP='<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01"/>';
+function q76Rows(){
+ var L=q46List(),school=curSpace()==='school';
+ if(!L.length)return '<p class="q69hint">No '+(school?'classes':'pages')+' yet.</p>';
+ return '<div class="q76head"><span>Keep in side bar</span></div><div class="q76list">'+L.map(function(c){var hx=String(palHex(c.color)).toUpperCase(),k=q76Kept(c.id);
+  return '<div class="q76row" data-q76id="'+c.id+'"><span class="q76h" title="Drag to move" aria-hidden="true">'+zI(Q76GRIP,18)+'</span>'
+   +'<label class="q69sw q76sw" style="background:'+hx+'"><input type="color" value="'+hx.toLowerCase()+'" data-z4cc="'+c.id+'" aria-label="Colour of '+esc(c.name)+'"></label>'
+   +'<span class="q76n q20fade">'+esc(c.name)+'</span>'
+   +'<button type="button" class="q76keep'+(k?' on':'')+'" data-zact="q76keep:'+c.id+'" aria-pressed="'+k+'" aria-label="Keep '+esc(c.name)+' in the side bar"><span class="q69sw2"><i></i></span></button></div>'}).join('')+'</div>';
+}
+function q76Icons(){
+ var show=S.menuIcons!==false,one=!!S.menuIconCol,v=S.menuIconCol||'#ffffff';
+ var h=q69Toggle(show,'q76ic','Show icons');
+ if(show)h+=q69Toggle(S.menuIconSq!==false,'q31sq','Square behind each icon')
+  +'<div class="q76lab">Icon colour</div>'+q69Seg(one?'one':'each',[['each','Each page’s colour'],['one','One colour']],'q61ic')
+  +(one?'<div class="q76gap"></div>'+q69Row('Icon colour',v,'data-q76ic="1"','','Home, Calendar and every page'):'');
+ return h;
+}
+function q76Body(){
+ var sp=curSpace(),school=sp==='school',w=school?'class':'page';
+ return q69Sec(school?'Classes in your menu':'Pages in your menu','Drag to change the order. Tap a circle for the '+w+'’s colour. Kept '+w+'s show without opening the drop-down.'+(spacesOn().length>1?' This is your '+esc(spaceById(sp).name)+' menu.':''),q76Rows())
+  +q69Sec('Icons','The little icons in your menu',q76Icons());
+}
+var _q76Panel=q69Panel;
+q69Panel=function(parts){
+ var adv=q69Mode()==='adv',menu=adv&&view.q69tab==='menu';
+ var h=_q76Panel.apply(this,arguments);if(!adv)return h;
+ h=h.replace('data-zact="q69tab:style">Style</button>','data-zact="q69tab:style">Style</button><button type="button" role="tab" aria-selected="'+menu+'" class="'+(menu?'on':'')+'" data-zact="q69tab:menu">Menu</button>');
+ var a='<div class="q69body">',i=h.indexOf(a),j=h.lastIndexOf('</div><div class="q69foot">');
+ if(i<0||j<i)return h;
+ if(menu)return h.slice(0,i+a.length)+q76Body()+h.slice(j);
+ if((view.q69tab||'colours')==='style'){
+  // the order and the menu icons are in the Menu tab now
+  var tp=document.createElement('template');tp.innerHTML=h.slice(i,j);
+  tp.content.querySelectorAll('.q69look .q46lrow').forEach(function(r){var b=r.querySelector('b');if(b&&/^(Order of |Menu icon)/.test(b.textContent))r.remove()});
+  h=h.slice(0,i)+tp.innerHTML.replace('Cards, menu icons, covers and tours','Cards, covers and tours')+h.slice(j);
+ }
+ return h;
+};
+// the swatches follow the colour while you pick
+document.addEventListener('input',function(e){var t=e.target;if(!t||t.type!=='color'||!t.closest)return;
+ if(t.hasAttribute('data-z4cc')){var l=t.closest('.q76sw');if(l)l.style.background=t.value}
+ if(t.hasAttribute('data-q76ic')){document.body.classList.add('q61ic');document.body.style.setProperty('--q61ic',t.value)}});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q76ic'))return;S.menuIconCol=t.value;save();render()});
+
+// drag to reorder (mouse, finger or pen): the row follows, the others make room; the order is saved when you let go
+(function(){var d=null,tick=0;
+ function ids(list){return [].map.call(list.children,function(r){return r.getAttribute('data-q76id')})}
+ document.addEventListener('pointerdown',function(e){var h=e.target.closest&&e.target.closest('.q76h');if(!h)return;var row=h.closest('.q76row');if(!row)return;
+  e.preventDefault();e.stopPropagation();d={row:row,list:row.parentElement,from:ids(row.parentElement).join(),y:e.clientY,body:row.closest('.q69body')};row.classList.add('drag');
+  try{h.setPointerCapture(e.pointerId)}catch(err){}
+  // near the top or bottom of the panel, the list scrolls along
+  tick=setInterval(function(){if(!d||!d.body)return;var b=d.body.getBoundingClientRect(),v=d.y<b.top+40?-8:d.y>b.bottom-40?8:0;if(v){d.body.scrollTop+=v;place()}},30);
+ },true);
+ function place(){
+  var rows=[].filter.call(d.list.children,function(r){return r!==d.row}),before=null;
+  for(var k=0;k<rows.length;k++){var r=rows[k].getBoundingClientRect();if(d.y<r.top+r.height/2){before=rows[k];break}}
+  if(before){if(d.row.nextElementSibling!==before)d.list.insertBefore(d.row,before)}else if(d.list.lastElementChild!==d.row)d.list.appendChild(d.row);
+ }
+ document.addEventListener('pointermove',function(e){if(!d)return;e.preventDefault();d.y=e.clientY;place()},{passive:false});
+ function end(){if(!d)return;clearInterval(tick);d.row.classList.remove('drag');var now=ids(d.list),changed=now.join()!==d.from;d=null;if(!changed)return;
+  now.forEach(function(id,k){var c=classById(id);if(c&&c.ord!==k){c.ord=k;touch(c)}});save();render()}
+ document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+})();
+
+// Undo in Look and feel also covers the order, Keep in side bar and Show icons
+var _q76Snap=q69Snap;
+q69Snap=function(){var s=_q76Snap.apply(this,arguments),o={};(S.classes||[]).forEach(function(c){o[c.id]=c.ord});s.ord=o;s.menuKeep=q69Clone(S.menuKeep||{});s.menuIcons=S.menuIcons;return s};
+var _q76Sig=q69SigOf;
+q69SigOf=function(s){return _q76Sig.apply(this,arguments)+JSON.stringify([s.ord,s.menuKeep,s.menuIcons])};
+var _q76Undo=ZACT.q69undo;
+ZACT.q69undo=function(){
+ var s=Q69.hist[Q69.hist.length-1];
+ if(s&&s.ord){
+  var cur=S.menuKeep||{},nk=q69Clone(s.menuKeep)||{};Object.keys(cur).forEach(function(k){if(!(k in nk))nk[k]=false});S.menuKeep=nk;
+  if(s.menuIcons===undefined)delete S.menuIcons;else S.menuIcons=s.menuIcons;
+  (S.classes||[]).forEach(function(c){if(c.id in s.ord&&c.ord!==s.ord[c.id]){if(s.ord[c.id]===undefined)delete c.ord;else c.ord=s.ord[c.id];touch(c)}});
+ }
+ return _q76Undo.apply(this,arguments);
+};
 
 
 try{spBoot()}catch(e){}
