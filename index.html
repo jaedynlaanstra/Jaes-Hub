@@ -5820,6 +5820,172 @@ input.q73nm:focus{border-bottom:1px solid #9a7761}
 /* phones give every button a 38px minimum height; the book's round buttons keep their own size */
 #q73ov button,.q73sws .q73sw{min-height:0}
 @media (max-width:700px){#q73ov .q73sw{width:24px;height:24px}#q73ov .q73dots{width:34px;height:34px}}
+/* v229: Health page (q74). Sizes follow the page's own width (container queries), so a phone, an iPad beside the menu and a wide Mac each get the right layout */
+.q74w{container:q74p/inline-size;width:100%}
+.q74{color:#3a3330;--q74s:#66764f;--q74sd:#4e5c3b}
+.q74 button{font:inherit;color:inherit;cursor:pointer}
+.q74tabs{display:none}
+.q74cols{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.q74main{flex:1 1 520px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.q74side{flex:1 1 320px;max-width:460px;min-width:0;display:flex;flex-direction:column;gap:20px}
+.q74card{background:#fff;border:1px solid #e3ddd4;border-radius:22px;overflow:hidden}
+.q74band{display:flex;align-items:center;gap:10px;padding:14px 22px}
+.q74band h3{margin:0;font-weight:400;font-size:22px;letter-spacing:0;white-space:nowrap;overflow:hidden}
+.q74band>span{margin-left:auto;font-size:14px;white-space:nowrap}
+.q74band.dark{background:#4e5c3b;color:#fff;padding:16px 26px}
+.q74band.dark>span{color:#dfe6d2}
+.q74band.dark h3{color:#fff}
+.q74band.light h3{color:#36412a}
+.q74band.light{background:#e6ebdc;color:#36412a}
+.q74band.light>span{color:#5d6a4c}
+.q74log>.q74band{border:1px solid #d7dfc9;border-radius:18px}
+.q74sd .q74band{padding:14px 18px 14px 20px;border-bottom:1px solid #d7dfc9}
+.q74sd .q74band h3{font-size:18px}
+.q74sd .q74cnt{margin-left:0;font-size:13px}
+.q74add{margin-left:auto;background:#fff;border:0;border-radius:16px;padding:6px 14px;font-size:14px;color:#36412a!important;box-shadow:0 1px 2px rgba(40,30,20,.08)}
+.q74body{padding:20px 26px 24px;display:flex;flex-direction:column;gap:20px}
+.q74lbrow{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+.q74lb{display:block;font-size:13px;color:#7d736d;margin-bottom:6px}
+.q74lbrow .q74lb{margin:0}
+.q74lnk{background:none;border:0;padding:0;font-size:14px;color:#66764f!important}
+.q74lnk:hover{color:#4e5c3b!important}
+.q74chips{display:flex;flex-wrap:wrap;gap:8px}
+.q74chip,.q74pill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:18px;font-size:14px;border:1px solid #e3dcd3;background:#fff;color:#4a423d!important;white-space:nowrap}
+.q74chip.on{background:#66764f;border-color:#66764f;color:#fff!important}
+.q74pill.on{color:#fff!important}
+.q74pill small{opacity:.7;font-size:12px}
+.q74dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.q74in{font:inherit;font-size:15px;border:1px solid #ebe5de;border-radius:12px;padding:9px 12px;background:#fff;color:#3a3330;box-sizing:border-box}
+.q74cust{margin-top:10px;width:100%;border:1px dashed #d8cfc5;border-radius:18px;padding:8px 14px;font:inherit;font-size:14px;background:transparent;box-sizing:border-box}
+.q74ta{display:block;width:100%;min-height:76px;resize:vertical;line-height:1.45}
+.q74help{margin:6px 0 0;font-size:12px;color:#9a918a}
+.q74sc{background:#fbf9f6;border:1px solid #efe9e2;border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.q74scr{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.q74scn{font-weight:400;font-size:17px;margin-right:auto}
+.q74felt{display:flex;align-items:center;gap:8px;font-size:13px;color:#7d736d;white-space:nowrap}
+.q74felt .q74in{padding:6px 10px;font-size:14px}
+.q74xb{width:30px;height:30px;border-radius:50%;border:0;background:none;color:#b0a79f!important;font-size:20px;line-height:1}
+.q74xb:hover{background:#f4efe9;color:#a8493c!important}
+.q74sevl{font-size:14px}
+.q74rng{width:100%;accent-color:#66764f;margin:0}
+.q74media{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.q74tc{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.q74tc small{font-size:12px;color:#8b827c}
+.q74th{position:relative;display:inline-block;width:56px;height:56px;border-radius:12px;overflow:hidden;background:#f3efe9;border:0;padding:0;flex:none}
+.q74th img,.q74th video{width:100%;height:100%;object-fit:cover;display:block}
+.q74play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.q74x{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:0;background:rgba(30,20,10,.55);color:#fff!important;font-size:13px;line-height:1;padding:0}
+.q74up{display:inline-flex;align-items:center;height:56px;padding:0 14px;border:1px dashed #d8cfc5;border-radius:12px;font-size:13px;color:#7d736d;cursor:pointer}
+.q74addr{display:flex;justify-content:flex-end}
+.q74btn{background:#66764f;color:#fff!important;border:0;border-radius:22px;padding:9px 22px;font-size:15px}
+.q74btn:hover{background:#4e5c3b}
+.q74log{display:flex;flex-direction:column;gap:14px;container:q74l/inline-size}
+.q74pills{display:flex;flex-wrap:wrap;gap:8px}
+.q74empty{margin:0;padding:6px 2px;font-size:14px;color:#9a918a;line-height:1.5}
+.q74sum{background:#fff;border:1px solid #ebe5de;border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.q74sumh{display:flex;align-items:center;justify-content:space-between}
+.q74sumh h4{margin:0;font-weight:400;font-size:20px;display:flex;align-items:center;gap:9px}
+.q74stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.q74stat{background:#f4f6ef;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.q74stat b{font-weight:500;font-size:18px;color:#36412a;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.q74stat small{font-size:12px;color:#7d736d}
+.q74gal{display:flex;flex-wrap:wrap;gap:10px}
+.q74split{display:grid;grid-template-columns:minmax(280px,420px) minmax(200px,1fr);gap:14px;align-items:start}
+.q74cal{background:#fff;border:1px solid #ebe5de;border-radius:20px;padding:14px 12px;position:sticky;top:0}
+.q74calh{display:flex;align-items:center;justify-content:space-between;padding:0 4px 10px}
+.q74calh b{font-weight:400;font-size:17px}
+.q74nav{width:30px;height:30px;border-radius:50%;border:1px solid #ebe5de;background:#fff;font-size:17px!important;line-height:1;margin-left:6px;color:#5a4f48!important}
+.q74cg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.q74cg>small{text-align:center;font-size:11px;color:#9a918a;padding-bottom:4px}
+.q74cell{min-height:52px;border-radius:10px;padding:6px;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:4px;border:0;background:transparent;color:#7d736d!important;font:inherit;text-align:left;min-width:0}
+.q74cell em{font-style:normal;font-size:12px}
+.q74cell.has{background:#faf8f4}
+.q74cell.today{box-shadow:inset 0 0 0 1px #d8cfc5;color:#3a3330!important}
+.q74cell.sel{background:#eef1e7;box-shadow:inset 0 0 0 1.5px #66764f}
+.q74dots{display:flex;flex-wrap:wrap;gap:3px}
+.q74days{display:flex;flex-direction:column;gap:10px;min-width:0}
+.q74showing{margin:0;font-size:13px;color:#7d736d}
+.q74showing .q74lnk{font-size:13px}
+.q74day{background:#fff;border:1px solid #ebe5de;border-radius:18px;overflow:hidden}
+.q74day.flat{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.q74dh{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;background:none;border:0;text-align:left}
+.q74sev{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-size:13px;flex:none}
+.q74dt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.q74dt b{font-weight:400;font-size:15px}
+.q74dt small{font-size:13px;color:#8b827c}
+.q74dt .q74bigd{font-size:17px;color:#3a3330}
+.q74fade{white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+.q74dd{display:flex;gap:3px;flex:none}
+.q74chev{color:#b0a79f;font-size:12px;flex:none}
+.q74dx{padding:0 16px 14px;display:flex;flex-direction:column;gap:12px}
+.q74it{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid #f0ebe5}
+.q74dr1{display:flex;align-items:center;gap:12px}
+.q74symn{display:inline-flex;align-items:center;gap:7px;background:none;border:0;padding:0;font-size:16px!important;text-align:left}
+.q74dellnk{font-size:13px;color:#9a918a!important;flex:none}
+.q74dellnk:hover{color:#a8493c!important}
+.q74note{margin:0;font-size:15px;line-height:1.5;color:#4a423d;white-space:pre-wrap}
+.q74ate{margin:0;font-size:13px;color:#7d736d}
+.q74sbody{padding:12px;display:flex;flex-direction:column;gap:10px}
+.q74sbody .q74empty{padding:4px 6px}
+.q74row{display:flex;align-items:flex-start;gap:4px;border:1px solid #ebe5de;border-radius:14px;padding:12px 8px 12px 14px}
+.q74row:hover{border-color:#d7dfc9}
+.q74rm{flex:1;min-width:0;display:flex;align-items:flex-start;gap:12px;background:none;border:0;padding:0;text-align:left}
+.q74rt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.q74rt b{font-weight:400;font-size:15px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.q74rt small{font-size:13px;color:#8b827c;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.q74an{font-style:normal;font-size:13px;color:#5a4f48;white-space:pre-wrap;margin-top:4px;line-height:1.4}
+.q74ic{width:26px;height:26px;border-radius:50%;border:0;background:none;color:#b0a79f!important;font-size:14px;flex:none;padding:0}
+.q74ic:hover{background:#f4efe9;color:#5a4f48!important}
+.q74ic.del:hover{color:#a8493c!important}
+.q74dateb{width:50px;flex:none;border-radius:12px;background:#f1f3ec;color:#4e5c3b;display:flex;flex-direction:column;align-items:center;padding:6px 0}
+.q74dateb.first{background:#66764f;color:#fff}
+.q74dateb small{font-size:11px}
+.q74dateb b{font-weight:400;font-size:19px;line-height:1.1}
+.q74mdot{width:10px;height:10px;border-radius:50%;background:#a9b392;flex:none;margin-top:6px}
+.q74dose{font-size:14px;color:#4e5c3b}
+.q74av{width:48px;height:48px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px}
+.q74ptype{font-size:12px!important;color:#5d6a4c!important}
+.q74two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.q74phrow{display:flex;align-items:center;gap:14px}
+.q74ph{width:64px;height:64px;border-radius:50%;border:1px dashed #d8cfc5;background:#f3efe9;display:flex;align-items:center;justify-content:center;font-size:22px;color:#9a918a;cursor:pointer}
+.modal label.q74ph{display:flex;align-items:center;justify-content:center;margin:0;padding:0;font-size:22px;color:#9a918a;flex:none}
+.modal .q74chips{margin-top:2px}
+.modal .q74chip{font-size:13px;padding:6px 12px}
+.q74vw{position:fixed;inset:0;z-index:9999;background:rgba(14,10,6,.85);display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
+.q74vw img,.q74vw video{max-width:100%;max-height:100%;border-radius:12px}
+.q74vx{position:absolute;top:max(14px,env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:22px}
+/* too narrow for both columns side by side: the care cards sit below at full width, so nothing is lopsided */
+@container q74p (max-width:880px){
+ .q74side{max-width:none;flex-basis:100%}
+ .q74main{flex-basis:100%}
+}
+@container q74l (max-width:720px){
+ .q74split{grid-template-columns:1fr}
+ .q74cal{position:static}
+}
+/* phone-sized page: Today · Log · Care tabs, one column, bigger tap targets */
+@container q74p (max-width:700px){
+ .q74tabs{display:flex;background:#ece7df;border-radius:24px;padding:4px;margin-bottom:16px}
+ .q74tabs button{flex:1;border:0;background:transparent;border-radius:20px;padding:11px 0;font-size:15px;color:#7d736d!important}
+ .q74tabs button.on{background:#fff;color:#36412a!important;box-shadow:0 1px 3px rgba(40,30,20,.12)}
+ .q74cols,.q74main,.q74side{gap:18px}
+ .q74side{max-width:none;flex-basis:100%}
+ .q74main{flex-basis:100%}
+ .q74[data-tab=today] .q74log,.q74[data-tab=today] .q74side,.q74[data-tab=log] .q74today,.q74[data-tab=log] .q74side,.q74[data-tab=care] .q74main{display:none}
+ .q74band.dark{padding:14px 18px}
+ .q74band h3{font-size:20px}
+ .q74body{padding:16px}
+ .q74chip{padding:11px 14px;font-size:15px}
+ .q74sc{padding:14px}
+ .q74addr .q74btn{width:100%;padding:13px 0}
+ .q74pills{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:0 16px 2px;scrollbar-width:none}
+ .q74pills::-webkit-scrollbar{display:none}
+ .q74pill{padding:10px 14px}
+ .q74ic{width:40px;height:40px;font-size:16px}
+ .q74nav{width:40px;height:40px}
+ .q74cell{min-height:46px;padding:5px 4px}
+ .q74sum{padding:16px}
+}
 </style>
 </head>
 <body>
@@ -6128,7 +6294,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v228';
+var BUILD='v229';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -13675,6 +13841,7 @@ function viewPage(c){
  else if(k==='apps')h=zAppsPage(c);
  else if(k==='notes')h=zNotesPage(c);
  else if(k==='shifts')h=zShiftsPage(c);
+ else if(k==='health')h=q74Page(c);
  return '<div class="zpage" style="'+zcv(zSoftOf(c))+'">'+h
   +cpSetHead('Page settings','pg')+'<button data-zact="pageedit:'+c.id+'">Rename or recolour</button>'+coverControls(c.id,c)
   +'<button class="cpdelcls" data-zact="pagedel:'+c.id+'">Delete page</button></div></div>';
@@ -23915,6 +24082,319 @@ ZACT.q64cdel=function(cid,sid){
  (c.items||[]).forEach(function(x){if(x.t==='note'&&ids.indexOf(x.sec)>-1){x.sec='';touch(x)}});
  save();saveFiles(cid);render();
 };
+
+/* v229: Health page (prefix q74). A page type for Personal: log symptoms one at a time (time, how bad, notes, photos or
+   videos, what you ate), look back on a month calendar, filter by symptom, and keep appointments, medications and a care team.
+   Everything lives in the page's c.items so it syncs like the rest: t:'hent' (a symptom entry), 'hfood' (food for a day),
+   'hsym' (your own symptom names), 'happt', 'hmed', 'hcare'. Photos and videos go in FILES[cid] (section 'q74'), the entry keeps their ids. */
+KINDS.health={name:'Health',tpl:'Health',desc:'Symptom log, appointments, medications and your care team',ico:'heart',col:'sage'};
+if(TEMPLATES.personal.indexOf('health')<0)TEMPLATES.personal.push('health');
+PAGE_PAL.health='sage';
+var Q74S={},Q74URL={};
+var Q74SYM={'Headache':'#6f7d5a','Fatigue':'#5d7a8c','Nausea':'#b9776a','Dizziness':'#8a7aa3','Brain fog':'#ad8743','Stomach pain':'#4e8a86','Joint pain':'#9c5c50','Tingling':'#7a8fb0','Rash':'#c06d8a','Trouble sleeping':'#7f6a5a'};
+var Q74PROV={'Doctor':'#6f7d5a','Dentist':'#5d7a8c','Therapist':'#8a7aa3','Massage therapist':'#b9776a','Specialist':'#ad8743','Other':'#8b827c'};
+var Q74MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],Q74MONL=['January','February','March','April','May','June','July','August','September','October','November','December'],Q74WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function q74Iso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function q74Now(){return q74Iso(new Date())}
+function q74Hm(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+function q74Dt(s){return new Date(s+'T12:00:00')}
+function q74Short(s){var d=q74Dt(s);return Q74MON[d.getMonth()]+' '+d.getDate()}
+function q74Long(s){var d=q74Dt(s);return Q74WD[d.getDay()]+', '+Q74MON[d.getMonth()]+' '+d.getDate()}
+function q74Tm(t){if(!t)return '';var p=t.split(':'),h=+p[0];return (h%12||12)+':'+(p[1]||'00')+(h<12?' am':' pm')}
+function q74SevCol(n){return n<=3?'#9fae7e':n<=6?'#cfa45a':'#b9665a'}
+function q74SevWord(n){return n<=3?'Mild':n<=6?'Moderate':'Severe'}
+function q74Col(t){if(Q74SYM[t])return Q74SYM[t];var h=0,i;for(i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%360;return 'hsl('+h+',24%,48%)'}
+function q74Part(t){var h=+String(t).split(':')[0];return h<12?'Morning':h<17?'Afternoon':h<21?'Evening':'Night'}
+function q74St(c){
+ var s=Q74S[c.id];
+ if(!s){var n=new Date();s=Q74S[c.id]={tab:'today',filter:null,daySel:null,cal:[n.getFullYear(),n.getMonth()],open:{},pick:false,draft:{syms:[],det:{},food:''},reg:[]}}
+ return s;
+}
+function q74Items(c,t){return (c.items||[]).filter(function(x){return x.t===t})}
+function q74Syms(c){var o=Object.keys(Q74SYM);q74Items(c,'hsym').forEach(function(x){if(o.indexOf(x.title)<0)o.push(x.title)});return o}
+function q74Counts(c){var m={};q74Items(c,'hent').forEach(function(e){var a=m[e.sym]=m[e.sym]||[];if(a.indexOf(e.date)<0)a.push(e.date)});return m}
+function q74Reg(st,v){st.reg.push(v);return st.reg.length-1}
+function q74Src(cid,fid){
+ if(Q74URL[fid])return Q74URL[fid];
+ var f=(FILES[cid]||[]).filter(function(x){return x.id===fid})[0];
+ if(!f||!f.data)return '';
+ try{var b=atob(f.data),u=new Uint8Array(b.length),i;for(i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
+  return Q74URL[fid]=URL.createObjectURL(new Blob([u],{type:f.mime||'image/jpeg'}))}catch(e){return ''}
+}
+function q74Thumb(c,m,sz,cap){
+ var u=q74Src(c.id,m.f);
+ return '<span class="q74tc"><button class="q74th" style="width:'+sz+'px;height:'+sz+'px" data-zact="q74view:'+c.id+':'+m.f+':'+(m.v?1:0)+'" aria-label="Open '+(m.v?'video':'photo')+'">'
+  +(u?(m.v?'<video src="'+u+'#t=0.1" muted preload="metadata" playsinline></video><b class="q74play">▶</b>':'<img src="'+u+'" alt="">'):'')+'</button>'+(cap?'<small>'+esc(cap)+'</small>':'')+'</span>';
+}
+function q74Circle(n,sz){return '<span class="q74sev" style="background:'+q74SevCol(n)+';width:'+sz+'px;height:'+sz+'px">'+n+'</span>'}
+function q74Dot(col,sz){return '<i class="q74dot" style="background:'+col+(sz?';width:'+sz+'px;height:'+sz+'px':'')+'"></i>'}
+
+function q74Page(c){
+ var st=q74St(c);st.reg=[];
+ var tabs=[['today','Today'],['log','Log'],['care','Care']];
+ return '<div class="q74w"><div class="q74" data-tab="'+st.tab+'">'
+  +'<div class="q74tabs" role="tablist">'+tabs.map(function(t){return '<button role="tab" aria-selected="'+(st.tab===t[0])+'" class="'+(st.tab===t[0]?'on':'')+'" data-zact="q74tab:'+c.id+':'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>'
+  +'<div class="q74cols"><div class="q74main">'+q74TodayCard(c,st)+q74LogCard(c,st)+'</div>'
+  +'<div class="q74side">'+q74Appts(c)+q74Meds(c)+q74Care(c)+'</div></div></div></div>';
+}
+ZACT.q74tab=function(cid,t){var c=classById(cid);if(!c)return;q74St(c).tab=t;render()};
+
+/* ---------- How are you feeling? ---------- */
+function q74TodayCard(c,st){
+ var D=st.draft,all=q74Syms(c),cnt=q74Counts(c),n=D.syms.length;
+ var order=Object.keys(cnt).sort(function(a,b){return cnt[b].length-cnt[a].length});
+ var pool=D.syms.concat(order).concat(all).filter(function(v,i,a){return a.indexOf(v)===i});
+ var shown=st.pick?all:pool.slice(0,Math.max(5,n));
+ var chips=shown.map(function(t){var on=D.syms.indexOf(t)>-1;
+  return '<button class="q74chip'+(on?' on':'')+'" data-zact="q74tog:'+c.id+':'+q74Reg(st,t)+'" aria-pressed="'+on+'">'+q74Dot(on?'#fff':q74Col(t),8)+esc(t)+'</button>'}).join('');
+ var h='<section class="q74card q74today"><div class="q74band dark"><h3>How are you feeling?</h3><span>'+esc(q74Long(q74Now()))+'</span></div><div class="q74body">'
+  +'<div><div class="q74lbrow"><span class="q74lb">'+(st.pick?'All symptoms':'Your most logged')+'</span><button class="q74lnk" data-zact="q74pick:'+c.id+'">'+(st.pick?'Show less ▴':'All symptoms ▾')+'</button></div>'
+  +'<div class="q74chips">'+chips+'</div>'
+  +(st.pick?'<input class="q74in q74cust" placeholder="+ Add your own, then press Enter" data-zenter="q74cust:'+c.id+'" autocomplete="off" maxlength="40">':'')+'</div>';
+ D.syms.forEach(function(s,j){
+  var d=D.det[s];
+  h+='<div class="q74sc"><div class="q74scr">'+q74Dot(q74Col(s),10)+'<b class="q74scn">'+esc(s)+'</b>'
+   +'<label class="q74felt">Felt it at <input type="time" class="q74in" value="'+esc(d.time)+'" data-q74in="time" data-c="'+c.id+'" data-j="'+j+'"></label>'
+   +'<button class="q74xb" data-zact="q74rm:'+c.id+':'+j+'" aria-label="Remove '+esc(s)+'">×</button></div>'
+   +'<div class="q74sevb"><div class="q74lbrow"><span class="q74lb">How bad is it?</span><span class="q74sevl" style="color:'+q74SevCol(d.sev)+'">'+d.sev+' / 10 · '+q74SevWord(d.sev)+'</span></div>'
+   +'<input type="range" min="1" max="10" step="1" value="'+d.sev+'" data-q74in="sev" data-c="'+c.id+'" data-j="'+j+'" aria-label="Severity" class="q74rng"></div>'
+   +'<div><span class="q74lb">What are you noticing?</span><textarea class="q74in q74ta" data-q74in="note" data-c="'+c.id+'" data-j="'+j+'" placeholder="Where, how it feels, what you were doing">'+esc(d.note)+'</textarea></div>'
+   +'<div class="q74media">'+d.media.map(function(m,k){return '<span class="q74th q74dr">'+(m.v?'<video src="'+m.url+'" muted playsinline></video>':'<img src="'+m.url+'" alt="">')
+     +'<button class="q74x" data-zact="q74mrm:'+c.id+':'+j+':'+k+'" aria-label="Remove">×</button></span>'}).join('')
+   +'<label class="q74up">+ Photo / video<input type="file" accept="image/*,video/*" multiple data-q74file="1" data-c="'+c.id+'" data-j="'+j+'" style="display:none"></label></div>'
+   +'<div class="q74addr"><button class="q74btn" data-zact="q74add:'+c.id+':'+j+'">Add</button></div></div>';
+ });
+ if(n)h+='<div><span class="q74lb">What did you eat today?</span><textarea class="q74in q74ta" data-q74in="food" data-c="'+c.id+'" placeholder="Meals, snacks, drinks">'+esc(D.food)+'</textarea><p class="q74help">Food is saved to today with the next symptom you add.</p></div>';
+ else h+='<p class="q74help">Tap a symptom above to log how you feel. One card per symptom, so each keeps its own time, notes and photos.</p>';
+ return h+'</div></section>';
+}
+ZACT.q74pick=function(cid){var c=classById(cid);if(c){var s=q74St(c);s.pick=!s.pick;render()}};
+function q74AddSym(st,t){var D=st.draft;if(D.syms.indexOf(t)>-1)return;D.syms.push(t);D.det[t]=D.det[t]||{time:q74Hm(),sev:5,note:'',media:[]}}
+ZACT.q74tog=function(cid,i){
+ var c=classById(cid);if(!c)return;var st=q74St(c),t=st.reg[+i],D=st.draft;if(t==null)return;
+ if(D.syms.indexOf(t)>-1){q74Free(D.det[t]);D.syms=D.syms.filter(function(x){return x!==t});delete D.det[t]}else q74AddSym(st,t);
+ render();
+};
+ZACT.q74cust=function(cid,el){
+ var c=classById(cid),v=el&&String(el.value||'').trim();if(!c||!v)return;
+ var st=q74St(c);
+ if(q74Syms(c).indexOf(v)<0)c.items.push(touch({id:uid(),t:'hsym',title:v}));
+ save();q74AddSym(st,v);render();
+};
+function q74Free(d){if(d&&d.media)d.media.forEach(function(m){try{URL.revokeObjectURL(m.url)}catch(e){}})}
+ZACT.q74rm=function(cid,j){var c=classById(cid);if(!c)return;var st=q74St(c),D=st.draft,t=D.syms[+j];if(t==null)return;q74Free(D.det[t]);D.syms.splice(+j,1);delete D.det[t];render()};
+ZACT.q74mrm=function(cid,j,k){var c=classById(cid);if(!c)return;var D=q74St(c).draft,t=D.syms[+j],d=t&&D.det[t];if(!d)return;var m=d.media.splice(+k,1)[0];if(m)try{URL.revokeObjectURL(m.url)}catch(e){}render()};
+ZACT.q74add=async function(cid,j){
+ var c=classById(cid);if(!c)return;var st=q74St(c),D=st.draft,s=D.syms[+j],d=s&&D.det[s];if(!d||d.busy)return;
+ d.busy=true;var media=[],i;
+ for(i=0;i<d.media.length;i++){
+  var m=d.media[i];
+  if(m.file.size>25000000){zToast('“'+m.file.name+'” is over 25 MB, so it was skipped.');continue}
+  try{var rec=await readFile(m.file);rec.section='q74';(FILES[cid]=FILES[cid]||[]).push(rec);media.push({f:rec.id,v:m.v?1:0})}catch(e){}
+ }
+ q74Free(d);
+ var today=q74Now();
+ c.items.push(touch({id:uid(),t:'hent',date:today,sym:s,time:d.time||'',sev:d.sev||5,note:String(d.note||'').trim(),media:media}));
+ var fd=String(D.food||'').trim();
+ if(fd){
+  var fx=c.items.filter(function(x){return x.t==='hfood'&&x.date===today})[0];
+  if(fx){fx.text=fx.text?fx.text+', '+fd:fd;touch(fx)}else c.items.push(touch({id:uid(),t:'hfood',date:today,text:fd}));
+  D.food='';
+ }
+ D.syms=D.syms.filter(function(x){return x!==s});delete D.det[s];st.daySel=null;
+ save();render();
+ if(media.length)saveFiles(cid);
+};
+// typing never redraws the page, so the cursor stays put
+document.addEventListener('input',function(e){
+ var t=e.target,k=t&&t.getAttribute&&t.getAttribute('data-q74in');if(!k)return;
+ var c=classById(t.getAttribute('data-c'));if(!c)return;var D=q74St(c).draft;
+ if(k==='food'){D.food=t.value;return}
+ var s=D.syms[+t.getAttribute('data-j')],d=s&&D.det[s];if(!d)return;
+ if(k==='sev'){d.sev=+t.value;var l=t.closest('.q74sevb').querySelector('.q74sevl');if(l){l.textContent=d.sev+' / 10 · '+q74SevWord(d.sev);l.style.color=q74SevCol(d.sev)}}
+ else d[k]=t.value;
+});
+document.addEventListener('change',function(e){
+ var t=e.target;if(!t||!t.getAttribute)return;
+ if(t.getAttribute('data-q74file')){
+  var c=classById(t.getAttribute('data-c'));if(!c)return;var D=q74St(c).draft,s=D.syms[+t.getAttribute('data-j')],d=s&&D.det[s];if(!d)return;
+  Array.prototype.forEach.call(t.files||[],function(f){d.media.push({url:URL.createObjectURL(f),file:f,v:/^video/.test(f.type)})});
+  t.value='';render();return;
+ }
+ if(t.getAttribute('data-q74cphoto')&&t.files&&t.files[0]){
+  var m=view.modal;if(!m||m.kind!=='q74care')return;
+  shrinkImage(t.files[0],320,function(url){q74Grab(m);m.photo=url;render()});
+ }
+});
+
+/* ---------- Symptom log ---------- */
+function q74LogCard(c,st){
+ var E=q74Items(c,'hent'),foods={};q74Items(c,'hfood').forEach(function(x){foods[x.date]=x.text});
+ var cnt=q74Counts(c),f=st.filter&&cnt[st.filter]?st.filter:null;st.filter=f;
+ var list=f?E.filter(function(e){return e.sym===f}):E;
+ var today=q74Now(),flt='';
+ var names=Object.keys(cnt).sort(function(a,b){return cnt[b].length-cnt[a].length||a.localeCompare(b)});
+ flt='<button class="q74pill'+(f?'':' on')+'" style="'+(f?'':'background:#66764f;border-color:#66764f')+'" data-zact="q74fl:'+c.id+':'+q74Reg(st,'')+'">All</button>'
+  +names.map(function(t){var on=f===t,col=q74Col(t);
+   return '<button class="q74pill'+(on?' on':'')+'" style="'+(on?'background:'+col+';border-color:'+col:'')+'" data-zact="q74fl:'+c.id+':'+q74Reg(st,t)+'">'+q74Dot(on?'#fff':col,8)+esc(t)+' <small>'+cnt[t].length+'</small></button>'}).join('');
+ var h='<section class="q74log"><div class="q74band light"><h3>Symptom log</h3><span>'+(f?list.length+' of '+E.length+' entries':E.length+(E.length===1?' entry':' entries'))+'</span></div>';
+ if(!E.length)return h+'<p class="q74empty">Nothing logged yet. Pick a symptom on Today and tap Add, and it shows up here on the calendar.</p></section>';
+ h+='<div class="q74pills">'+flt+'</div>';
+ if(f){
+  var days=[],i;list.forEach(function(e){if(days.indexOf(e.date)<0)days.push(e.date)});days.sort();
+  var recent=days.filter(function(d){return (q74Dt(today)-q74Dt(d))/864e5<30}).length;
+  var parts={};list.filter(function(e){return e.time}).forEach(function(e){var p=q74Part(e.time);parts[p]=(parts[p]||0)+1});
+  var top=Object.keys(parts).sort(function(a,b){return parts[b]-parts[a]})[0];
+  var avg=list.reduce(function(a,e){return a+e.sev},0)/list.length;
+  var gal=[];list.slice().sort(function(a,b){return b.date<a.date?-1:1}).forEach(function(e){(e.media||[]).forEach(function(m){gal.push(q74Thumb(c,m,84,q74Short(e.date)))})});
+  var tile=function(v,k){return '<div class="q74stat"><b>'+esc(v)+'</b><small>'+esc(k)+'</small></div>'};
+  h+='<div class="q74sum"><div class="q74sumh"><h4>'+q74Dot(q74Col(f),10)+esc(f)+'</h4><button class="q74lnk" data-zact="q74fl:'+c.id+':'+q74Reg(st,'')+'">Show all</button></div>'
+   +'<div class="q74stats">'+tile(days.length+(days.length===1?' day':' days'),recent+' in the last 30 days')+tile(q74Short(days[days.length-1]),days.length>1?'Last felt · first '+q74Short(days[0]):'Last felt')
+   +tile(top||'—','Most often felt')+tile(avg.toFixed(1)+' / 10','Average severity')+'</div>'
+   +(gal.length?'<span class="q74lb">All photos &amp; videos</span><div class="q74gal">'+gal.join('')+'</div>':'')+'</div>';
+ }
+ // calendar
+ var cy=st.cal[0],cm=st.cal[1],first=new Date(cy,cm,1,12).getDay(),nd=new Date(cy,cm+1,0).getDate(),cells='',d;
+ for(d=0;d<first;d++)cells+='<span class="q74cell blank"></span>';
+ for(d=1;d<=nd;d++){
+  var iso=q74Iso(new Date(cy,cm,d,12)),es=list.filter(function(e){return e.date===iso}),sel=st.daySel===iso;
+  cells+=(es.length?'<button class="q74cell has'+(sel?' sel':'')+(iso===today?' today':'')+'" data-zact="q74day:'+c.id+':'+iso+'" aria-label="'+esc(q74Long(iso))+', '+es.length+' logged">':'<span class="q74cell'+(iso===today?' today':'')+'">')
+   +'<em>'+d+'</em><span class="q74dots">'+es.map(function(e){return q74Dot(f?q74SevCol(e.sev):q74Col(e.sym),8)}).join('')+'</span>'+(es.length?'</button>':'</span>');
+ }
+ var cal='<div class="q74cal"><div class="q74calh"><b>'+Q74MONL[cm]+' '+cy+'</b><span><button class="q74nav" data-zact="q74mo:'+c.id+':-1" aria-label="Previous month">‹</button><button class="q74nav" data-zact="q74mo:'+c.id+':1" aria-label="Next month">›</button></span></div>'
+  +'<div class="q74cg">'+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(function(w){return '<small>'+w+'</small>'}).join('')+cells+'</div>'
+  +'<p class="q74help">'+(f?'Dot colour shows how bad '+esc(f.toLowerCase())+' was that day. Tap a day to see it.':'Each dot is a symptom. Tap a day to see what you logged.')+'</p></div>';
+ // day list
+ var dl='';
+ if(st.daySel)dl+='<p class="q74showing">Showing '+esc(q74Long(st.daySel))+' · <button class="q74lnk" data-zact="q74day:'+c.id+':'+st.daySel+'">Show all days</button></p>';
+ var dates=[];list.forEach(function(e){if(dates.indexOf(e.date)<0&&(!st.daySel||e.date===st.daySel))dates.push(e.date)});dates.sort().reverse();
+ var delb=function(e){return '<button class="q74lnk q74dellnk" data-zact="q74del:'+c.id+':'+e.id+'">Delete</button>'};
+ var med=function(e){return (e.media&&e.media.length)?'<div class="q74media">'+e.media.map(function(m){return q74Thumb(c,m,72)}).join('')+'</div>':''};
+ if(f){
+  list.filter(function(e){return !st.daySel||e.date===st.daySel}).sort(function(a,b){return b.date.localeCompare(a.date)||(b.time||'').localeCompare(a.time||'')}).forEach(function(e){
+   dl+='<div class="q74day flat"><div class="q74dr1">'+q74Circle(e.sev,32)+'<div class="q74dt"><b class="q74bigd">'+esc(q74Long(e.date))+'</b><small>'+esc([e.sym,q74Tm(e.time),q74SevWord(e.sev)].filter(Boolean).join(' · '))+'</small></div>'+delb(e)+'</div>'
+    +(e.note?'<p class="q74note">'+esc(e.note)+'</p>':'')+(foods[e.date]?'<p class="q74ate">Ate '+esc(foods[e.date])+'</p>':'')+med(e)+'</div>';
+  });
+ }else{
+  dates.forEach(function(date){
+   var its=list.filter(function(e){return e.date===date}).sort(function(a,b){return (a.time||'').localeCompare(b.time||'')});
+   var worst=Math.max.apply(null,its.map(function(e){return e.sev})),ok='|'+date,open=st.open[ok]!=null?st.open[ok]:st.daySel===date;
+   dl+='<div class="q74day"><button class="q74dh" aria-expanded="'+open+'" data-zact="q74open:'+c.id+':'+date+'">'+q74Circle(worst,30)+'<span class="q74dt"><b>'+esc(q74Long(date))+'</b><small class="q74fade">'+esc(its.map(function(e){return e.sym}).join(', '))+'</small></span>'
+    +'<span class="q74dd">'+its.map(function(e){return q74Dot(q74Col(e.sym),8)}).join('')+'</span><span class="q74chev">'+(open?'▴':'▾')+'</span></button>';
+   if(open){
+    dl+='<div class="q74dx">'+(foods[date]?'<p class="q74ate">Ate '+esc(foods[date])+'</p>':'');
+    its.forEach(function(e){
+     dl+='<div class="q74it"><div class="q74dr1">'+q74Circle(e.sev,34)+'<div class="q74dt"><button class="q74symn" data-zact="q74fl:'+c.id+':'+q74Reg(st,e.sym)+'">'+q74Dot(q74Col(e.sym),9)+esc(e.sym)+'</button><small>'+esc([q74Tm(e.time),q74SevWord(e.sev)].filter(Boolean).join(' · '))+'</small></div>'+delb(e)+'</div>'
+      +(e.note?'<p class="q74note">'+esc(e.note)+'</p>':'')+med(e)+'</div>';
+    });
+    dl+='</div>';
+   }
+   dl+='</div>';
+  });
+ }
+ if(!dl||(st.daySel&&!dates.length))dl+='<p class="q74empty">Nothing here.</p>';
+ return h+'<div class="q74split">'+cal+'<div class="q74days">'+dl+'</div></div></section>';
+}
+ZACT.q74fl=function(cid,i){var c=classById(cid);if(!c)return;var st=q74St(c),t=st.reg[+i];st.filter=t?(st.filter===t?null:t):null;st.daySel=null;render()};
+ZACT.q74day=function(cid,iso){var c=classById(cid);if(!c)return;var st=q74St(c),on=st.daySel===iso;st.daySel=on?null:iso;if(!on)st.open['|'+iso]=true;render()};
+ZACT.q74open=function(cid,date){var c=classById(cid);if(!c)return;var st=q74St(c),k='|'+date,cur=st.open[k]!=null?st.open[k]:st.daySel===date;st.open[k]=!cur;render()};
+ZACT.q74mo=function(cid,dir){var c=classById(cid);if(!c)return;var st=q74St(c),d=new Date(st.cal[0],st.cal[1]+(+dir),1);st.cal=[d.getFullYear(),d.getMonth()];st.daySel=null;render()};
+ZACT.q74del=async function(cid,id){
+ var c=classById(cid),e=c&&zItem(c,id);if(!e||!confirm('Delete this entry? This cannot be undone.'))return;
+ c.items=c.items.filter(function(x){return x.id!==id});save();render();
+ var ids=(e.media||[]).map(function(m){return m.f}),L=FILES[cid]||[],i;
+ for(i=L.length-1;i>=0;i--)if(ids.indexOf(L[i].id)>-1){try{await dropFile(cid,i)}catch(x){}}
+ if(ids.length){saveFiles(cid)}
+};
+ZACT.q74view=function(cid,fid,v){
+ var u=q74Src(cid,fid);if(!u)return;
+ var o=document.createElement('div');o.className='q74vw';
+ o.innerHTML=(+v?'<video src="'+u+'" controls autoplay playsinline></video>':'<img src="'+u+'" alt="">')+'<button class="q74vx" aria-label="Close">×</button>';
+ o.addEventListener('click',function(e){if(e.target.tagName!=='VIDEO'&&e.target.tagName!=='IMG')o.remove()});
+ document.body.appendChild(o);
+};
+
+/* ---------- Appointments, medications, care team ---------- */
+function q74Side(c,title,count,addAct,body,empty){
+ return '<section class="q74card q74sd"><div class="q74band light"><h3>'+title+'</h3><span class="q74cnt">'+count+'</span><button class="q74add" data-zact="'+addAct+':'+c.id+'">+ Add</button></div>'
+  +'<div class="q74sbody">'+(body||'<p class="q74empty">'+empty+'</p>')+'</div></section>';
+}
+function q74Row(c,x,lead,main,sub,more){
+ return '<div class="q74row"><button class="q74rm" data-zact="q74edit:'+c.id+':'+x.id+'">'+lead+'<span class="q74rt">'+main+sub+(more||'')+'</span></button>'
+  +'<button class="q74ic" data-zact="q74edit:'+c.id+':'+x.id+'" aria-label="Edit">✎</button><button class="q74ic del" data-zact="q74rem:'+c.id+':'+x.id+'" aria-label="Delete">×</button></div>';
+}
+function q74Appts(c){
+ var today=q74Now(),L=q74Items(c,'happt').filter(function(a){return !a.date||a.date>=today}).sort(function(a,b){return (a.date||'9').localeCompare(b.date||'9')||(a.time||'').localeCompare(b.time||'')});
+ var body=L.map(function(a,k){
+  var d=a.date?q74Dt(a.date):null;
+  var lead='<span class="q74dateb'+(k===0?' first':'')+'"><small>'+(d?Q74MON[d.getMonth()]:'—')+'</small><b>'+(d?d.getDate():'')+'</b></span>';
+  var meta=[a.who,d?Q74WD[d.getDay()].slice(0,3)+(a.time?' '+q74Tm(a.time):''):'',a.where].filter(Boolean).join(' · ');
+  return q74Row(c,a,lead,'<b>'+esc(a.what||'Appointment')+'</b>','<small>'+esc(meta)+'</small>',a.notes&&a.notes.trim()?'<em class="q74an">'+esc(a.notes)+'</em>':'');
+ }).join('');
+ return q74Side(c,'Appointments',L.length+' upcoming','q74newa',body,'No upcoming appointments. Add one, with things you want to talk about.');
+}
+function q74Meds(c){
+ var today=q74Dt(q74Now()),L=q74Items(c,'hmed');
+ var body=L.map(function(m){
+  var st=m.start?q74Dt(m.start):null,mo=st?(today.getFullYear()-st.getFullYear())*12+today.getMonth()-st.getMonth():0,days=st?Math.round((today-st)/864e5):0;
+  var dur=!st||days<1?'':mo>=1?mo+(mo===1?' month':' months'):days+(days===1?' day':' days');
+  var since=st?'Started '+Q74MON[st.getMonth()]+' '+st.getDate()+', '+st.getFullYear()+(dur?' · '+dur:''):'';
+  return q74Row(c,m,'<span class="q74mdot"></span>','<b>'+esc(m.name)+(m.dose?' <span class="q74dose">'+esc(m.dose)+'</span>':'')+'</b>','<small>'+esc(m.freq||'')+'</small>','<small>'+esc(since)+'</small>');
+ }).join('');
+ return q74Side(c,'Medications',L.length+' active','q74newm',body,'No medications yet.');
+}
+function q74Care(c){
+ var L=q74Items(c,'hcare');
+ var body=L.map(function(p){
+  var bg=p.photo?'background:center/cover no-repeat url('+p.photo+')':'background:'+(Q74PROV[p.type]||q74Col(p.type||'Other'));
+  var ini=p.photo?'':String(p.name||'?').replace(/^Dr\.?\s*/,'').split(/\s+/).map(function(w){return w[0]}).slice(0,2).join('').toUpperCase();
+  return q74Row(c,p,'<span class="q74av" style="'+bg+'">'+esc(ini)+'</span>','<small class="q74ptype">'+esc(p.type||'')+'</small><b>'+esc(p.name)+'</b>','<small>'+esc([p.place,p.phone].filter(Boolean).join(' · '))+'</small>',p.address&&p.address.trim()?'<small>'+esc(p.address)+'</small>':'');
+ }).join('');
+ return q74Side(c,'Care team',L.length+(L.length===1?' provider':' providers'),'q74newc',body,'Add your doctor, dentist and anyone else you see.');
+}
+ZACT.q74newa=function(cid){zOpen('q74appt',{cid:cid})};
+ZACT.q74newm=function(cid){zOpen('q74med',{cid:cid})};
+ZACT.q74newc=function(cid){zOpen('q74care',{cid:cid,type:'Doctor'})};
+ZACT.q74edit=function(cid,id){var c=classById(cid),x=c&&zItem(c,id);if(!x)return;
+ zOpen({happt:'q74appt',hmed:'q74med',hcare:'q74care'}[x.t],{cid:cid,id:id,type:x.type,photo:x.photo});
+};
+ZACT.q74rem=function(cid,id){var c=classById(cid);if(!c||!confirm('Delete this? This cannot be undone.'))return;c.items=c.items.filter(function(x){return x.id!==id});save();render()};
+// keep what was typed when a modal redraws (chips, photo)
+function q74Grab(m){m.g=m.g||{};Array.prototype.forEach.call(document.querySelectorAll('.modal [id^=q74]'),function(e){m.g[e.id]=e.value})}
+function q74V(m,id,def){return m.g&&id in m.g?m.g[id]:(def==null?'':def)}
+function q74Fld(label,inner,id){return '<div class="field"><label'+(id?' for="'+id+'"':'')+'>'+label+'</label>'+inner+'</div>'}
+function q74Inp(m,id,x,k,type,ph){return '<input id="'+id+'" type="'+(type||'text')+'" value="'+esc(q74V(m,id,x?x[k]:''))+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'>'}
+function q74Fin(m,c,t,fill){ // add or update one item of type t
+ var x=m.id&&zItem(c,m.id);if(!x){x={id:uid(),t:t};c.items.push(x)}
+ fill(x);touch(x);save();view.modal=null;render();
+}
+ZM.q74appt={html:function(m){var c=classById(m.cid),x=m.id&&zItem(c,m.id);
+ return '<h3>'+(x?'Edit appointment':'New appointment')+'</h3>'+q74Fld('Reason',q74Inp(m,'q74a1',x,'what','text','Check-up, follow-up…'),'q74a1')+q74Fld('With',q74Inp(m,'q74a2',x,'who'),'q74a2')
+  +'<div class="q74two">'+q74Fld('Date',q74Inp(m,'q74a3',x,'date','date'),'q74a3')+q74Fld('Time',q74Inp(m,'q74a4',x,'time','time'),'q74a4')+'</div>'
+  +q74Fld('Where',q74Inp(m,'q74a5',x,'where'),'q74a5')+q74Fld('Things to talk about','<textarea id="q74a6" rows="4">'+esc(q74V(m,'q74a6',x?x.notes:''))+'</textarea>','q74a6');
+ },save:function(m){var c=classById(m.cid);if(!c||!zv('q74a1'))return;
+  q74Fin(m,c,'happt',function(x){x.what=zv('q74a1');x.who=zv('q74a2');x.date=zv('q74a3');x.time=zv('q74a4');x.where=zv('q74a5');x.notes=document.getElementById('q74a6').value.trim()});
+ },del:function(m){return m.id?'q74rem:'+m.cid+':'+m.id:''}};
+ZM.q74med={html:function(m){var c=classById(m.cid),x=m.id&&zItem(c,m.id);
+ return '<h3>'+(x?'Edit medication':'New medication')+'</h3>'+q74Fld('Medication',q74Inp(m,'q74m1',x,'name'),'q74m1')+q74Fld('Dose',q74Inp(m,'q74m2',x,'dose','text','200 mg'),'q74m2')
+  +q74Fld('How often',q74Inp(m,'q74m3',x,'freq','text','Once daily, morning'),'q74m3')
+  +q74Fld('Started on','<input id="q74m4" type="date" value="'+esc(q74V(m,'q74m4',x?x.start:q74Now()))+'">','q74m4');
+ },save:function(m){var c=classById(m.cid);if(!c||!zv('q74m1'))return;
+  q74Fin(m,c,'hmed',function(x){x.name=zv('q74m1');x.dose=zv('q74m2');x.freq=zv('q74m3');x.start=zv('q74m4')});
+ },del:function(m){return m.id?'q74rem:'+m.cid+':'+m.id:''}};
+ZM.q74care={html:function(m){var c=classById(m.cid),x=m.id&&zItem(c,m.id),ty=m.type||'Doctor',types=Object.keys(Q74PROV);
+ var own=m.g&&m.g.q74c1c!=null?m.g.q74c1c:(types.indexOf(ty)<0?ty:'');
+ return '<h3>'+(x?'Edit care provider':'New care provider')+'</h3>'
+  +'<div class="field"><label>Photo</label><div class="q74phrow"><label class="q74ph" style="'+(m.photo?'background:center/cover no-repeat url('+m.photo+')':'')+'">'+(m.photo?'':'+')+'<input type="file" accept="image/*" data-q74cphoto="1" style="display:none"></label>'
+  +(m.photo?'<button type="button" class="q74lnk" data-zact="q74cph">Remove photo</button>':'')+'</div></div>'
+  +'<div class="field"><label>Type</label><div class="q74chips">'+types.map(function(t){var on=ty===t&&!own;return '<button type="button" class="q74chip'+(on?' on':'')+'" data-zact="q74ctype:'+esc(t)+'">'+esc(t)+'</button>'}).join('')+'</div>'
+  +'<input id="q74c1c" class="q74cust" placeholder="Or type your own" value="'+esc(own)+'" maxlength="40"></div>'
+  +q74Fld('Name',q74Inp(m,'q74c2',x,'name'),'q74c2')+q74Fld('Practice / clinic',q74Inp(m,'q74c3',x,'place'),'q74c3')+q74Fld('Phone',q74Inp(m,'q74c4',x,'phone','tel'),'q74c4')+q74Fld('Address',q74Inp(m,'q74c5',x,'address'),'q74c5');
+ },save:function(m){var c=classById(m.cid);if(!c||!zv('q74c2'))return;
+  q74Fin(m,c,'hcare',function(x){x.type=zv('q74c1c')||m.type||'Doctor';x.name=zv('q74c2');x.place=zv('q74c3');x.phone=zv('q74c4');x.address=zv('q74c5');x.photo=m.photo||''});
+ },del:function(m){return m.id?'q74rem:'+m.cid+':'+m.id:''}};
+ZACT.q74ctype=function(t){var m=view.modal;if(!m||m.kind!=='q74care')return;q74Grab(m);m.type=t;m.g.q74c1c='';render()};
+ZACT.q74cph=function(){var m=view.modal;if(!m||m.kind!=='q74care')return;q74Grab(m);m.photo='';render()};
 
 try{spBoot()}catch(e){}
 load();
