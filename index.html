@@ -5986,6 +5986,35 @@ input.q73nm:focus{border-bottom:1px solid #9a7761}
  .q74cell{min-height:46px;padding:5px 4px}
  .q74sum{padding:16px}
 }
+/* v230: Markup (q75): palette button and panel, text font and size, the hold-to-paste button */
+#mk .mkrow button.q75pal{gap:6px;min-width:0;padding:0 12px 0 10px;font-size:13px;color:#EFEAE0}
+#mk .mkrow button.q75pal svg{width:18px;height:18px;flex-shrink:0}
+#mk .q75pal span{max-width:86px;overflow:hidden;white-space:nowrap}
+#mk .q75pal.q75long span{-webkit-mask-image:linear-gradient(90deg,#000 72%,transparent);mask-image:linear-gradient(90deg,#000 72%,transparent)}
+#q75pp{position:fixed;z-index:40;width:min(290px,calc(100vw - 24px));box-sizing:border-box;background:#2a2722;color:#EFEAE0;border-radius:16px;padding:12px;box-shadow:0 18px 44px rgba(0,0,0,.45);font-size:14px}
+#q75pp h4{margin:2px 6px 8px;font-size:13px;font-weight:600;color:#C9C3B4}
+#q75pp .q75row{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:none;background:none;color:inherit;border-radius:11px;font:inherit;cursor:pointer;text-align:left}
+#q75pp .q75row.on{background:rgba(255,255,255,.1)}
+#q75pp .q75row b{flex:1;min-width:0;font-weight:500;overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+#q75pp .q75dots{display:flex;gap:3px;flex-shrink:0}
+#q75pp .q75dots i{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+#q75pp .q75acts{display:flex;gap:8px;margin-top:10px}
+#q75pp .q75acts button{flex:1;height:40px;border-radius:11px;border:none;background:rgba(255,255,255,.1);color:#EFEAE0;font:inherit;font-size:13.5px;cursor:pointer}
+#q75pp .q75acts button.q75pri{background:#EFEAE0;color:#1c1a17;font-weight:600}
+#q75pp .q75acts button.q75del{color:#E8A49E}
+#q75pp .q75pname{display:block;width:100%;box-sizing:border-box;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#1c1a17;color:#EFEAE0;padding:0 12px;font:inherit;font-size:16px;outline:none}
+#q75pp .q75cols{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;padding:2px}
+#q75pp .q75c{position:relative;width:36px;height:36px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;box-sizing:border-box}
+#q75pp .q75c button{position:absolute;top:-5px;right:-5px;width:20px;height:20px;border-radius:50%;border:none;background:#4a4640;color:#EFEAE0;font-size:13px;line-height:20px;padding:0;cursor:pointer}
+#q75pp .q75add{background:rgba(255,255,255,.08);color:#C9C3B4;font-size:20px;cursor:pointer;overflow:hidden}
+#q75pp .q75add input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+#mk .q75trow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+#mk .q75trow .q75fonts{margin-left:0}
+#mk .q75size{display:flex;align-items:center;background:rgba(255,255,255,.08);border-radius:10px;padding:2px}
+#mk .q75size button{width:34px;height:30px;border:none;background:none;color:#EFEAE0;font-size:17px;border-radius:8px;cursor:pointer}
+#mk .q75size span{min-width:32px;text-align:center;font-size:13px;color:#C9C3B4}
+#mk .q75trow .q75move{height:34px;padding:0 14px;border-radius:10px;border:none;background:rgba(255,255,255,.08);color:#EFEAE0;font:inherit;font-size:13px;cursor:pointer;margin-left:auto}
+#mk .q75paste{position:fixed;z-index:40;height:40px;padding:0 20px;border-radius:20px;border:none;background:#2B2926;color:#EFEAE0;font:inherit;font-size:14.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);cursor:pointer}
 </style>
 </head>
 <body>
@@ -6294,7 +6323,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v229';
+var BUILD='v230';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -24395,6 +24424,304 @@ ZM.q74care={html:function(m){var c=classById(m.cid),x=m.id&&zItem(c,m.id),ty=m.t
  },del:function(m){return m.id?'q74rem:'+m.cid+':'+m.id:''}};
 ZACT.q74ctype=function(t){var m=view.modal;if(!m||m.kind!=='q74care')return;q74Grab(m);m.type=t;m.g.q74c1c='';render()};
 ZACT.q74cph=function(){var m=view.modal;if(!m||m.kind!=='q74care')return;q74Grab(m);m.photo='';render()};
+
+/* ======================= v230: Markup changes (prefix q75) =======================
+   Jae: (1) scribble back and forth over writing to erase it, like GoodNotes. Undo also missed pen strokes: after a
+   sync the marks are a fresh copy, so the line undo remembered was no longer the one on the page (found again by id).
+   (2) no Image / Paste buttons in the top bar: Cmd/Ctrl+V pastes, and on a phone or iPad holding a finger on the page
+   shows a small "Paste" button right there. (3) typed text: tap it (any pen) to edit it, with a font and a size;
+   drag it with the Text tool, or "Move" in its editor. Text keeps t.font ('serif'|'round'|'mono') and t.size (pt).
+   (4) your own pen colour palettes, synced: S.mkPals = {list:[{id,name,cols}], on:id ('' = the standard colours)}.
+   Apple Pencil double-tap can't be used: Safari doesn't tell web pages about it. ===== */
+
+/* ---------- undo finds the line again by its id ---------- */
+function q75Rebind(act){
+ if(!MK||!act||(act.t!=='add'&&act.t!=='remove')||!act.s)return;
+ var l=mkMarks().strokes;for(var i=0;i<l.length;i++)if(l[i].id===act.s.id){act.s=l[i];return}
+}
+var _q75Undo=mkUndo,_q75Redo=mkRedo;
+mkUndo=function(){if(MK)q75Rebind(MK.history[MK.history.length-1]);return _q75Undo.apply(this,arguments)};
+mkRedo=function(){if(MK)q75Rebind(MK.future[MK.future.length-1]);return _q75Redo.apply(this,arguments)};
+
+/* ---------- scribble to erase ----------
+   A pen line that goes back and forth at least Q75_REV times (along its own main direction, each pass at least a
+   third of its length) is a scribble. If it covers ink (half or more of a line inside the scribble's outline),
+   that ink is erased and the scribble itself is not kept. A zig-zag on empty paper stays as ink. */
+var Q75_REV=3;
+function q75IsScribble(s){
+ var p=s.pts;if(!p||p.length<12)return false;
+ var sc=mkScaleFor(s.page),n=p.length,mx=0,my=0;p.forEach(function(q){mx+=q[0];my+=q[1]});mx/=n;my/=n;
+ var xx=0,yy=0,xy=0;p.forEach(function(q){var dx=q[0]-mx,dy=q[1]-my;xx+=dx*dx;yy+=dy*dy;xy+=dx*dy});
+ var a=.5*Math.atan2(2*xy,xx-yy),c=Math.cos(a),si=Math.sin(a);
+ var pr=p.map(function(q){return (q[0]-mx)*c+(q[1]-my)*si});
+ var span=Math.max.apply(null,pr)-Math.min.apply(null,pr);if(span*sc<14)return false;
+ var th=Math.max(8/sc,span*.33),dir=0,ext=pr[0],rev=0;
+ for(var i=1;i<n;i++){var v=pr[i];
+  if(dir===0){if(Math.abs(v-ext)>th){dir=v>ext?1:-1;ext=v}}
+  else if(dir>0){if(v>ext)ext=v;else if(ext-v>th){rev++;dir=-1;ext=v}}
+  else{if(v<ext)ext=v;else if(v-ext>th){rev++;dir=1;ext=v}}
+ }
+ return rev>=Q75_REV;
+}
+function q75Hull(pts){
+ var P=pts.map(function(q){return [q[0],q[1]]}).sort(function(a,b){return a[0]-b[0]||a[1]-b[1]}),lo=[],up=[];
+ var cr=function(o,a,b){return (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])};
+ P.forEach(function(p){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)});
+ for(var i=P.length-1;i>=0;i--){var p=P[i];while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}
+ lo.pop();up.pop();return lo.concat(up);
+}
+function q75Covered(s){
+ var hull=q75Hull(s.pts);if(hull.length<3)return [];
+ return mkStrokesForPage(s.page).filter(function(o){
+  if(o===s||o.id===s.id||!o.pts||!o.pts.length)return false;
+  var st=Math.max(1,Math.floor(o.pts.length/40)),n=0,inn=0;
+  for(var i=0;i<o.pts.length;i+=st){n++;if(q65Inside(o.pts[i],hull))inn++}
+  return inn/n>=.5;
+ });
+}
+function q75EraseList(page,gone){
+ var set={};gone.forEach(function(g){set[g.id]=1});
+ var before=JSON.parse(JSON.stringify(mkStrokesForPage(page))),mk=mkMarks();
+ mk.strokes=mk.strokes.filter(function(x){return !set[x.id]});
+ var act={t:'erase',page:page,before:before,after:JSON.parse(JSON.stringify(mkStrokesForPage(page)))};
+ MK.history.push(act);MK.future=[];
+ mkDrawLive(page);mkDrawAnnoForPage(page);mkRerenderChrome();mkCommit();
+ var orphaned=(mk.notes||[]).filter(function(nt){return set[nt.sid]});
+ if(orphaned.length)mkAskDeleteNotes(orphaned,act);
+}
+var _q75Add=mkAddStroke;
+mkAddStroke=function(s){
+ if(MK&&s&&s.tool==='pen'&&!s.sharp&&q75IsScribble(s)){var gone=q75Covered(s);if(gone.length){q75EraseList(s.page,gone);return}}
+ return _q75Add.apply(this,arguments);
+};
+
+/* ---------- typed text: tap to edit (any pen), drag with the Text tool, font and size ---------- */
+var Q75F={sans:{n:'Sans',f:''},serif:{n:'Serif',f:'Georgia,"Times New Roman",serif'},round:{n:'Rounded',f:'ui-rounded,"SF Pro Rounded","Nunito","Arial Rounded MT Bold",sans-serif'},mono:{n:'Mono',f:'ui-monospace,Menlo,Consolas,monospace'}};
+var Q75SIZES=[9,10,11,12.5,14,16,18,22,26,32,40,48];
+var Q75CUR=null; // the text being measured or painted (mkTextFont is only ever called right after mkTextLines)
+function q75K(t){var st=t&&MK_TXT[t.style]?t.style:'p';return t&&+t.size?(+t.size)/MK_TXT[st].size:1}
+mkTextFont=function(st,scale,t){
+ t=t||Q75CUR;var f=t&&Q75F[t.font]&&Q75F[t.font].f,sz=(t&&+t.size)||MK_TXT[st].size;
+ return MK_TXT[st].w+' '+(sz*scale)+'px '+(f||getComputedStyle(document.body).fontFamily||'sans-serif');
+};
+var _q75Lines=mkTextLines;
+mkTextLines=function(t){Q75CUR=t;var L=_q75Lines.apply(this,arguments),k=q75K(t);if(k!==1)L.step=L.step*k;return L};
+function q75TextHit(page,p){var hit=null;mkTextsForPage(page).forEach(function(t){var b=mkTextBox(t);if(p[0]>=b.x0&&p[0]<=b.x1&&p[1]>=b.y0&&p[1]<=b.y1)hit=t});return hit}
+function q75TextById(id){var l=mkTexts();for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i];return null}
+var _q75Begin=mkBeginStroke;
+mkBeginStroke=function(anno,page){
+ var r=_q75Begin.apply(this,arguments);
+ if(MK&&MK.tool==='text'&&MK.textTap){var t=q75TextHit(page,MK.textTap.p);if(t)MK.q75drag={anno:anno,page:page,id:t.id,p0:MK.textTap.p,before:JSON.parse(JSON.stringify(t)),moved:false}}
+ return r;
+};
+document.addEventListener('pointermove',function(e){
+ var g=MK&&MK.q75drag;if(!g||e.pointerType==='touch')return;
+ var p=mkAnnoPoint(g.anno,e.clientX,e.clientY,g.page),dx=p[0]-g.p0[0],dy=p[1]-g.p0[1];
+ if(!g.moved&&Math.hypot(dx,dy)*mkScaleFor(g.page)<5)return;
+ g.moved=true;e.preventDefault();
+ var t=q75TextById(g.id);if(!t)return;t.x=g.before.x+dx;t.y=g.before.y+dy;
+ if(!g.tm)g.tm=setTimeout(function(){g.tm=0;if(MK)mkDrawAnnoForPage(g.page)},16);
+},true);
+var _q75Finish=mkFinishStroke;
+mkFinishStroke=function(){
+ var g=MK&&MK.q75drag;
+ if(g){MK.q75drag=null;clearTimeout(g.tm);
+  if(g.moved){MK.textTap=null;var t=q75TextById(g.id);
+   if(t){t.at=new Date().toISOString();MK.history.push({t:'txt',page:g.page,id:g.id,before:g.before,after:JSON.parse(JSON.stringify(t))});MK.future=[];mkDrawAnnoForPage(g.page);mkRerenderChrome();mkCommit()}
+   return;
+  }
+ }
+ // a quick tap with the pen or highlighter on typed text opens it, instead of leaving a dot on it
+ var d=MK&&MK.drawing;
+ if(d&&(d.tool==='pen'||d.tool==='hi')&&d.t0&&Date.now()-d.t0<350&&d.pts&&d.pts.length){
+  var sc=mkScaleFor(d.page),still=d.pts.every(function(q){return Math.hypot(q[0]-d.pts[0][0],q[1]-d.pts[0][1])*sc<6});
+  var hit=still&&q75TextHit(d.page,d.pts[0]);
+  if(hit){clearTimeout(MK.holdTimer);clearTimeout(MK.q66t);MK.drawing=null;MK.drawingAnno=null;mkDrawLive(d.page);mkOpenTextEditor(hit);return}
+ }
+ return _q75Finish.apply(this,arguments);
+};
+var _q75Cancel=mkCancelStroke;
+mkCancelStroke=function(){
+ var g=MK&&MK.q75drag;
+ if(g){MK.q75drag=null;clearTimeout(g.tm);var t=q75TextById(g.id);if(t){t.x=g.before.x;t.y=g.before.y;mkDrawAnnoForPage(g.page)}}
+ return _q75Cancel.apply(this,arguments);
+};
+function q75TextRow(){
+ var ed=MK&&MK.editingText,row=document.getElementById('q75trow');if(!ed||!row)return;
+ var sz=ed.size||MK_TXT[ed.style==='h'?'h':'p'].size;
+ row.innerHTML='<div class="mktxtseg q75fonts">'+Object.keys(Q75F).map(function(k){return '<button data-q75="font:'+k+'" class="'+(ed.font===k?'on':'')+'"'+(Q75F[k].f?' style="font-family:'+esc(Q75F[k].f)+'"':'')+'>'+Q75F[k].n+'</button>'}).join('')+'</div>'
+  +'<div class="q75size"><button data-q75="size:-1" aria-label="Smaller">−</button><span>'+(Math.round(sz*10)/10)+'</span><button data-q75="size:1" aria-label="Bigger">+</button></div>'
+  +(ed.id?'<button class="q75move" data-q75="move">Move</button>':'');
+ var ta=document.getElementById('mktxtta');if(ta)ta.style.fontFamily=Q75F[ed.font]&&Q75F[ed.font].f||'';
+}
+var _q75Open=mkOpenTextEditor;
+mkOpenTextEditor=function(t){
+ var r=_q75Open.apply(this,arguments);
+ if(MK&&MK.editingText){
+  MK.editingText.font=Q75F[t.font]?t.font:'sans';MK.editingText.size=+t.size||0;
+  var ta=document.getElementById('mktxtta');
+  if(ta&&!document.getElementById('q75trow')){var row=document.createElement('div');row.id='q75trow';row.className='q75trow';ta.insertAdjacentElement('afterend',row);q75TextRow()}
+ }
+ return r;
+};
+var _q75Save=mkSaveText;
+mkSaveText=function(del){
+ var ed=MK&&MK.editingText,n=MK?MK.history.length:0;
+ var r=_q75Save.apply(this,arguments);
+ var act=MK&&MK.history.length>n&&MK.history[MK.history.length-1];
+ if(ed&&act&&act.t==='txt'&&act.after){
+  var t=q75TextById(act.id),fix=function(o){if(ed.font&&ed.font!=='sans')o.font=ed.font;else delete o.font;if(ed.size)o.size=ed.size;else delete o.size};
+  fix(act.after);if(t){fix(t);mkDrawAnnoForPage(t.page)}
+ }
+ return r;
+};
+document.addEventListener('click',function(e){
+ if(!MK||!e.target.closest)return;
+ if(e.target.closest('#mknoteed [data-mk^="edtstyle"]')){setTimeout(q75TextRow,0);return}
+ var b=e.target.closest('#mk [data-q75]');if(!b)return;
+ var a=b.getAttribute('data-q75'),arg='',i=a.indexOf(':');if(i>-1){arg=a.slice(i+1);a=a.slice(0,i)}
+ var ed=MK.editingText;
+ if(a==='font'&&ed){ed.font=arg;q75TextRow();return}
+ if(a==='size'&&ed){var cur=ed.size||MK_TXT[ed.style==='h'?'h':'p'].size,j=0;while(j<Q75SIZES.length-1&&Q75SIZES[j]<cur)j++;
+  if(+arg>0)j=Q75SIZES[j]>cur?j:Math.min(Q75SIZES.length-1,j+1);else j=Math.max(0,Q75SIZES[j]<cur?j:j-1);
+  ed.size=Q75SIZES[j];q75TextRow();return}
+ if(a==='move'&&ed&&ed.id){var id=ed.id,pg=ed.page;mkSaveText();if(!q75TextById(id))return;if(MK.tool!=='sel')mkPickTool('sel');q65Select(pg,{texts:[id]});mkDrawAnnoForPage(pg);zToast('Drag the text to move it.');return}
+ if(a==='pal'){q75PalOpen(b);return}
+ if(a==='pick'){q75PalSet(arg);q75PalOpen();return}
+ if(a==='new'){q75PalNew();return}
+ if(a==='edit'){Q75PE=true;q75PalOpen();return}
+ if(a==='done'){Q75PE=false;q75PalOpen();return}
+ if(a==='rmcol'){q75PalEdit(function(p){p.cols.splice(+arg,1)});return}
+ if(a==='delpal'){var o=q75Pals();o.list=o.list.filter(function(x){return x.id!==o.on});o.on='';q75PalSave(o);Q75PE=false;q75PalOpen();return}
+ if(a==='paste'){var sp=Q75PASTE;q75HidePaste();if(sp)q75PasteAt(sp);return}
+},true);
+
+/* ---------- paste: no buttons in the top bar; hold a finger on the page for a "Paste" button there ---------- */
+var _q75Top=mkTopHtml;
+mkTopHtml=function(){return _q75Top.apply(this,arguments).replace(/<button class="mkicon q65tb"[\s\S]*?<\/button>/g,'')};
+if(typeof Q46MK!=='undefined')Q46MK.s=Q46MK.s.filter(function(x){return x.s!=='#mk [data-q65="img"]'&&x.s!=='#mk [data-q65="paste"]'});
+var Q75SPOT=null,Q75PASTE=null,Q75LP=null;
+var _q75Spot=q65Spot;
+q65Spot=function(){var s=Q75SPOT;if(s&&Date.now()-s.at<15000){Q75SPOT=null;return {page:s.page,x:s.x,y:s.y}}return _q75Spot.apply(this,arguments)};
+var _q75Clip=q65PasteClip;
+q65PasteClip=function(clip,spot){if(!spot&&Q75SPOT&&Date.now()-Q75SPOT.at<15000)spot=q65Spot();return _q75Clip.call(this,clip,spot)};
+function q75PasteAt(sp){Q75SPOT={page:sp.page,x:sp.x,y:sp.y,at:Date.now()};return q65PasteButton()} // must start inside the tap, for the clipboard
+function q75HidePaste(){Q75PASTE=null;var b=document.getElementById('q75paste');if(b)b.remove()}
+function q75ShowPaste(anno,page,cx,cy){
+ var el=document.getElementById('mk');if(!el||!MK)return;q75HidePaste();
+ var p=mkAnnoPoint(anno,cx,cy,page),info=MK.pageInfo[page]&&MK.pageInfo[page].vp1;
+ if(info){p[0]=Math.max(10,Math.min(info.width-10,p[0]));p[1]=Math.max(10,Math.min(info.height-10,p[1]))}
+ Q75PASTE={page:page,x:p[0],y:p[1]};
+ var b=document.createElement('button');b.id='q75paste';b.className='q75paste';b.setAttribute('data-q75','paste');b.textContent='Paste';
+ el.appendChild(b);
+ var w=b.offsetWidth||80,h=b.offsetHeight||40;
+ b.style.left=Math.max(8,Math.min(window.innerWidth-w-8,cx-w/2))+'px';b.style.top=Math.max(8,cy-h-26)+'px';
+ clearTimeout(q75ShowPaste.t);q75ShowPaste.t=setTimeout(q75HidePaste,5000);
+}
+function q75LongPress(){
+ var g=Q75LP;Q75LP=null;if(!g||!MK||MK.mode!=='edit')return;
+ // the waiting finger (a tap or a dot of ink in the making) is dropped: this was a hold, not writing
+ if(MK.touch&&(MK.touch.mode==='pending'||MK.touch.mode==='draw')){clearTimeout(MK.touch.timer);if(MK.drawing)mkCancelStroke();MK.touch=null}
+ MK.textFinger=null;
+ q75ShowPaste(g.anno,g.page,g.x,g.y);
+}
+document.addEventListener('touchstart',function(e){
+ if(e.target&&e.target.closest&&e.target.closest('#q75paste'))return;
+ if(Q75LP){clearTimeout(Q75LP.timer);Q75LP=null}
+ if(document.getElementById('q75paste'))q75HidePaste();
+ if(!MK||MK.mode!=='edit'||e.touches.length!==1)return;
+ var t=e.touches[0];if(t.touchType==='stylus')return;
+ var wrap=e.target.closest&&e.target.closest('#mk .mkpagewrap');if(!wrap)return;
+ var anno=wrap.querySelector('.mkanno');if(!anno)return;
+ Q75LP={id:t.identifier,x:t.clientX,y:t.clientY,anno:anno,page:+anno.getAttribute('data-mkpage'),timer:setTimeout(q75LongPress,550)};
+},{capture:true,passive:true});
+document.addEventListener('touchmove',function(e){
+ if(!Q75LP)return;var t=null;for(var i=0;i<e.touches.length;i++)if(e.touches[i].identifier===Q75LP.id)t=e.touches[i];
+ if(!t||e.touches.length>1||Math.hypot(t.clientX-Q75LP.x,t.clientY-Q75LP.y)>10){clearTimeout(Q75LP.timer);Q75LP=null}
+},{capture:true,passive:true});
+['touchend','touchcancel'].forEach(function(ev){document.addEventListener(ev,function(){if(Q75LP){clearTimeout(Q75LP.timer);Q75LP=null}},{capture:true,passive:true})});
+document.addEventListener('pointerdown',function(e){
+ if(e.pointerType==='touch'||!document.getElementById('q75paste'))return;
+ if(!(e.target.closest&&e.target.closest('#q75paste')))q75HidePaste();
+},true);
+
+/* ---------- your own pen colour palettes (synced) ---------- */
+SETTINGS_KEYS.push('mkPals');
+var Q75BASE=MK_COLORS.pen.slice(),Q75PE=false;
+MK_ICO.pal=mkIco('<path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.3 0 1.9-.8 1.9-1.7 0-1.3-1.2-1.6-1.2-2.8 0-1 .8-1.6 1.8-1.6h2.2c2.3 0 3.8-1.7 3.8-4C20.5 6.6 16.7 3.5 12 3.5z"/><circle cx="7.6" cy="11" r="1.1"/><circle cx="10" cy="7.4" r="1.1"/><circle cx="14.6" cy="7.6" r="1.1"/>',18);
+function q75Pals(){var o=S.mkPals;return (o&&Array.isArray(o.list))?JSON.parse(JSON.stringify(o)):{list:[],on:''}}
+function q75Active(){var o=q75Pals();return o.list.filter(function(x){return x.id===o.on})[0]||null}
+function q75Sync(){var p=q75Active(),c=(p&&p.cols&&p.cols.length?p.cols:Q75BASE).slice();MK_COLORS.pen=c;MK_COLORS.text=c}
+function q75PalSave(o){S.mkPals=o;save();q75Sync();if(MK)mkRerenderChrome()}
+function q75PalSet(id){
+ var o=q75Pals();o.on=id;q75PalSave(o);
+ // the pen (and typing) take the palette's first colour, unless the colour in use is in it
+ ['pen','text'].forEach(function(t){if(MK&&MK.toolColor&&MK_COLORS.pen.indexOf(MK.toolColor[t])<0)MK.toolColor[t]=MK_COLORS.pen[0]});
+ if(MK&&(MK.tool==='pen'||MK.tool==='text'))MK.color=MK.toolColor[MK.tool];
+ if(MK)mkRerenderChrome();
+}
+function q75PalNew(){
+ var o=q75Pals(),p={id:uid(),name:'Palette '+(o.list.length+1),cols:(q75Active()?q75Active().cols:Q75BASE).slice(0,6)};
+ o.list.push(p);o.on=p.id;q75PalSave(o);Q75PE=true;q75PalOpen();
+}
+function q75PalEdit(fn){var o=q75Pals(),p=o.list.filter(function(x){return x.id===o.on})[0];if(!p)return;fn(p);q75PalSave(o);q75PalOpen()}
+function q75Dots(cols){return '<span class="q75dots">'+cols.slice(0,8).map(function(c){return '<i style="background:'+esc(c)+'"></i>'}).join('')+'</span>'}
+function q75PalOpen(anchor){
+ var mk=document.getElementById('mk');if(!mk||!MK)return;
+ var pp=document.getElementById('q75pp');
+ if(anchor&&pp){pp.remove();return} // the palette button again: close
+ if(!pp){pp=document.createElement('div');pp.id='q75pp';mk.appendChild(pp)}
+ if(anchor){var r=anchor.getBoundingClientRect();pp.dataset.x=r.left;pp.dataset.y=r.top;pp.dataset.b=r.bottom}
+ var o=q75Pals(),cur=q75Active();
+ if(Q75PE&&cur){
+  pp.innerHTML='<h4>Edit palette</h4><input class="q75pname" id="q75pname" maxlength="24" value="'+esc(cur.name)+'" aria-label="Palette name">'
+   +'<div class="q75cols">'+cur.cols.map(function(c,i){return '<span class="q75c" style="background:'+esc(c)+'"><button data-q75="rmcol:'+i+'" aria-label="Remove colour">×</button></span>'}).join('')
+   +(cur.cols.length<10?'<label class="q75c q75add" title="Add a colour">+<input type="color" id="q75addcol" value="#7a8fa6"></label>':'')+'</div>'
+   +'<div class="q75acts"><button data-q75="delpal" class="q75del">Delete palette</button><button data-q75="done" class="q75pri">Done</button></div>';
+  var nm=document.getElementById('q75pname');
+  nm.addEventListener('change',function(){var v=nm.value.trim();if(v)q75PalEdit(function(p){p.name=v})});
+  document.getElementById('q75addcol')&&document.getElementById('q75addcol').addEventListener('change',function(e){var v=e.target.value;q75PalEdit(function(p){if(p.cols.length<10)p.cols.push(v)})});
+ }else{
+  Q75PE=false;
+  pp.innerHTML='<h4>Pen colours</h4>'
+   +'<button class="q75row'+(!cur?' on':'')+'" data-q75="pick:"><b>Standard</b>'+q75Dots(Q75BASE)+'</button>'
+   +o.list.map(function(p){return '<button class="q75row'+(cur&&cur.id===p.id?' on':'')+'" data-q75="pick:'+esc(p.id)+'"><b>'+esc(p.name)+'</b>'+q75Dots(p.cols)+'</button>'}).join('')
+   +'<div class="q75acts">'+(cur?'<button data-q75="edit">Edit</button>':'')+'<button data-q75="new">New palette</button></div>';
+ }
+ var w=pp.offsetWidth,h=pp.offsetHeight,x=+pp.dataset.x||12,top=+pp.dataset.y||80,bot=+pp.dataset.b||80;
+ pp.style.left=Math.max(12,Math.min(window.innerWidth-w-12,x))+'px';
+ pp.style.top=(bot+8+h<window.innerHeight-8?bot+8:Math.max(8,top-h-8))+'px';
+}
+document.addEventListener('pointerdown',function(e){
+ var pp=document.getElementById('q75pp');if(!pp||!e.target.closest)return;
+ if(!e.target.closest('#q75pp')&&!e.target.closest('[data-q75="pal"]'))pp.remove();
+},true);
+var _q75TB=mkToolbarHtml;
+mkToolbarHtml=function(){
+ q75Sync();var h=_q75TB.apply(this,arguments);
+ if(MK.tool!=='pen'&&MK.tool!=='text')return h;
+ var cur=q75Active(),nm=cur?cur.name:'Colours';
+ return h.replace('<div class="mkrow"><button class="mkswatch','<div class="mkrow"><button class="q75pal'+(nm.length>10?' q75long':'')+'" data-q75="pal" aria-label="Pen colour palettes" title="Pen colour palettes">'+MK_ICO.pal+'<span>'+esc(nm)+'</span></button><button class="mkswatch');
+};
+if(typeof Q46MK!=='undefined'){var q75pi=Q46MK.s.map(function(x){return x.t}).indexOf('Pen');
+ if(q75pi>-1)Q46MK.s[q75pi].p+=' Scribble back and forth over writing to erase it.'}
+
+/* ---------- pen / eraser switch at the top of the floating menu (Jae: in place of the Pencil's double-tap, which
+   Safari doesn't pass to web pages). Tap: eraser. Tap again: back to the tool you had, same colour and size. ---------- */
+MK_ICO.swap=mkIco('<path d="M4.5 8.5h14l-3.5-3.5"/><path d="M19.5 15.5h-14l3.5 3.5"/>');
+function q75Swap(){
+ if(!MK)return;
+ if(MK.tool==='eraser')mkPickTool(MK.q75prev&&MK.q75prev!=='eraser'?MK.q75prev:'pen');
+ else{MK.q75prev=MK.tool;mkPickTool('eraser')}
+}
+var _q75Float=mkFloatRender;
+mkFloatRender=function(){
+ _q75Float.apply(this,arguments);
+ var el=document.getElementById('mkfloat'),g=el&&el.querySelector('.mkfgrip');
+ if(g&&!el.querySelector('[data-q75="swap"]'))g.insertAdjacentHTML('afterend','<button class="q75swap'+(MK.tool==='eraser'?' on':'')+'" data-q75="swap" aria-label="Switch between pen and eraser" title="Pen / eraser">'+MK_ICO.swap+'</button><span class="mkfsep"></span>');
+};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#mk [data-q75="swap"]');if(!b)return;e.preventDefault();e.stopPropagation();q75Swap()},true);
+
 
 try{spBoot()}catch(e){}
 load();
