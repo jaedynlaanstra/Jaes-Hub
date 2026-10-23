@@ -6030,6 +6030,14 @@ input.q73nm:focus{border-bottom:1px solid #9a7761}
 .q76lab{font-size:13px;color:#6b675f;margin:10px 0 8px}
 .q76gap{height:8px}
 body.q76noic .side .sic,body.q76noic .side .sdot{display:none!important}
+/* v232: the font and size bar under selected text (q77) */
+#mk .q65bar.q77tb{bottom:auto;top:100%;transform:translate(-50%,8px);align-items:center}
+#mk .q65bar.q77tb.up{top:auto;bottom:100%;transform:translate(-50%,-8px)}
+#mk .q65bar.q77tb.up2{top:auto;bottom:100%;transform:translate(-50%,-56px)}
+#mk .q77tb .q77f{padding:6px 8px;font-size:15px}
+#mk .q77tb .q77f.on{background:rgba(255,255,255,.18)}
+#mk .q77tb .q77n{min-width:28px;text-align:center;color:#C9C3B4;font-size:13px}
+#mk .q77sep{width:1px;align-self:stretch;margin:5px 3px;background:rgba(255,255,255,.16)}
 </style>
 </head>
 <body>
@@ -6338,7 +6346,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v231';
+var BUILD='v232';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -24551,7 +24559,7 @@ mkFinishStroke=function(){
  if(d&&(d.tool==='pen'||d.tool==='hi')&&d.t0&&Date.now()-d.t0<350&&d.pts&&d.pts.length){
   var sc=mkScaleFor(d.page),still=d.pts.every(function(q){return Math.hypot(q[0]-d.pts[0][0],q[1]-d.pts[0][1])*sc<6});
   var hit=still&&q75TextHit(d.page,d.pts[0]);
-  if(hit){clearTimeout(MK.holdTimer);clearTimeout(MK.q66t);MK.drawing=null;MK.drawingAnno=null;mkDrawLive(d.page);mkOpenTextEditor(hit);return}
+  if(hit){clearTimeout(MK.holdTimer);clearTimeout(MK.q66t);MK.drawing=null;MK.drawingAnno=null;mkDrawLive(d.page);q77Pick(hit);return}
  }
  return _q75Finish.apply(this,arguments);
 };
@@ -24566,7 +24574,7 @@ function q75TextRow(){
  var sz=ed.size||MK_TXT[ed.style==='h'?'h':'p'].size;
  row.innerHTML='<div class="mktxtseg q75fonts">'+Object.keys(Q75F).map(function(k){return '<button data-q75="font:'+k+'" class="'+(ed.font===k?'on':'')+'"'+(Q75F[k].f?' style="font-family:'+esc(Q75F[k].f)+'"':'')+'>'+Q75F[k].n+'</button>'}).join('')+'</div>'
   +'<div class="q75size"><button data-q75="size:-1" aria-label="Smaller">−</button><span>'+(Math.round(sz*10)/10)+'</span><button data-q75="size:1" aria-label="Bigger">+</button></div>'
-  +(ed.id?'<button class="q75move" data-q75="move">Move</button>':'');
+  ;
  var ta=document.getElementById('mktxtta');if(ta)ta.style.fontFamily=Q75F[ed.font]&&Q75F[ed.font].f||'';
 }
 var _q75Open=mkOpenTextEditor;
@@ -24855,6 +24863,92 @@ ZACT.q69undo=function(){
  return _q76Undo.apply(this,arguments);
 };
 
+
+/* ======================= v232: tap typed text to select it (prefix q77) =======================
+   Jae: tapping text you typed puts the dotted box around it (the Select tool's), with a small bar under it for its
+   font and size (and Edit for the words), so nothing needs the text sheet. Drag inside the box to move it. Tapping
+   anywhere else clears the box and gives you back the tool you had (MK.q77back). Works with the Pencil, a mouse
+   and a finger (a finger on an iPad that has seen the Pencil still scrolls; a still tap picks or clears). ===== */
+function q77Pick(t){
+ if(!MK||!t)return;
+ if(MK.mode!=='edit')mkSetMode('edit');
+ if(MK.tool!=='sel'){MK.q77back=MK.tool;mkPickTool('sel')}
+ MK.q77on=true;q65Select(t.page,{texts:[t.id]});
+}
+function q77One(){var S2=MK&&MK.q65;if(!S2||S2.ids.texts.length!==1||S2.ids.strokes.length||S2.ids.images.length)return null;return q75TextById(S2.ids.texts[0])}
+// Text tool: a tap on text you already typed selects it (a tap on empty paper still starts new text)
+var _q77TextAt=mkTextAt;
+mkTextAt=function(page,p){var hit=q75TextHit(page,p);if(hit){q77Pick(hit);return}return _q77TextAt.apply(this,arguments)};
+// clearing the box gives back the tool you were using
+var _q77Clear=q65Clear;
+q65Clear=function(){
+ var had=MK&&MK.q65,back=MK&&MK.q77back;
+ var r=_q77Clear.apply(this,arguments);
+ if(MK&&had){MK.q77on=false;if(back){MK.q77back=null;if(MK.tool==='sel')mkPickTool(back)}}
+ return r;
+};
+// Select tool: a tap (no loop drawn) on text selects it
+var _q77End=q65End;
+q65End=function(){
+ var g=Q65G,r=_q77End.apply(this,arguments);
+ if(MK&&g&&g.mode==='lasso'&&!g.moved){var hit=q75TextHit(g.page,g.p0);if(hit)q77Pick(hit)}
+ return r;
+};
+// the bar under the box: font, size, Edit
+var _q77SelDraw=q65SelDraw;
+q65SelDraw=function(n){
+ _q77SelDraw.apply(this,arguments);
+ q77AddBar(n);
+ // both bars stay on the screen (on a phone, text near the edge pushed them half off)
+ var el=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .q65sel');
+ if(el)el.querySelectorAll('.q65bar').forEach(function(b){b.style.marginLeft='0px';var r=b.getBoundingClientRect(),dx=0;if(!r.width)return;
+  if(r.left<8)dx=8-r.left;else if(r.right>window.innerWidth-8)dx=window.innerWidth-8-r.right;if(dx)b.style.marginLeft=Math.round(dx)+'px'});
+};
+function q77AddBar(n){
+ var t=q77One();if(!t||t.page!==n)return;
+ var el=document.querySelector('.mkpagebox[data-mkpage="'+n+'"] .q65sel');if(!el||el.querySelector('.q77tb'))return;
+ var b=q65Box(n,MK.q65.ids),H=MK.pageInfo[n].vp1.height,topBar=!(b.y0<60),up=b.y1>H-70;
+ var cur=Q75F[t.font]?t.font:'sans',sz=+t.size||MK_TXT[t.style==='h'?'h':'p'].size;
+ var bar=document.createElement('div');bar.className='q65bar q77tb'+(up?(topBar?' up2':' up'):'');
+ bar.innerHTML=Object.keys(Q75F).map(function(k){return '<button class="q77f'+(cur===k?' on':'')+'" data-q77="font:'+k+'" title="'+Q75F[k].n+'" aria-label="'+Q75F[k].n+'"'+(Q75F[k].f?' style="font-family:'+esc(Q75F[k].f)+'"':'')+'>Aa</button>'}).join('')
+  +'<span class="q77sep"></span><button data-q77="size:-1" aria-label="Smaller">−</button><span class="q77n">'+(Math.round(sz*10)/10)+'</span><button data-q77="size:1" aria-label="Bigger">+</button>'
+  +'<span class="q77sep"></span><button data-q77="edit">Edit</button>';
+ el.appendChild(bar);
+};
+function q77Next(cur,dir){var L=Q75SIZES,j=0;while(j<L.length-1&&L[j]<cur)j++;if(dir>0)j=L[j]>cur?j:Math.min(L.length-1,j+1);else j=Math.max(0,L[j]<cur?j:j-1);return L[j]}
+function q77Change(fn){
+ var t=q77One();if(!t)return;var before=JSON.parse(JSON.stringify(t));
+ fn(t);if(JSON.stringify(t)===JSON.stringify(before))return;
+ t.at=new Date().toISOString();
+ MK.history.push({t:'txt',page:t.page,id:t.id,before:before,after:JSON.parse(JSON.stringify(t))});MK.future=[];
+ mkDrawAnnoForPage(t.page);mkRerenderChrome();mkCommit();
+}
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('#mk [data-q77]');if(!b||!MK)return;e.preventDefault();e.stopPropagation();
+ var a=b.getAttribute('data-q77'),i=a.indexOf(':'),arg=i>-1?a.slice(i+1):'';if(i>-1)a=a.slice(0,i);
+ if(a==='font')q77Change(function(t){if(arg==='sans')delete t.font;else t.font=arg});
+ if(a==='size')q77Change(function(t){t.size=q77Next(+t.size||MK_TXT[t.style==='h'?'h':'p'].size,+arg)});
+ if(a==='edit'){var t=q77One();if(!t)return;q65Clear();mkOpenTextEditor(t)}
+},true);
+// a finger: a still tap on text picks it; a still tap anywhere else clears the box
+var Q77T=null;
+document.addEventListener('touchstart',function(e){
+ Q77T=null;if(!MK||MK.mode!=='edit'||e.touches.length!==1)return;
+ var t=e.touches[0];if(t.touchType==='stylus')return;
+ if(!e.target.closest||!e.target.closest('#mkbody')||e.target.closest('.q65sel'))return;
+ Q77T={id:t.identifier,x:t.clientX,y:t.clientY,at:Date.now(),wrap:e.target.closest('.mkpagewrap')};
+},{capture:true,passive:true});
+document.addEventListener('touchmove',function(e){if(Q77T&&(e.touches.length>1||Math.hypot(e.touches[0].clientX-Q77T.x,e.touches[0].clientY-Q77T.y)>10))Q77T=null},{capture:true,passive:true});
+document.addEventListener('touchend',function(){
+ var g=Q77T;Q77T=null;if(!g||!MK||Date.now()-g.at>400)return;
+ var hit=null;if(g.wrap){var an=g.wrap.querySelector('.mkanno'),pg=+an.getAttribute('data-mkpage');hit=q75TextHit(pg,mkAnnoPoint(an,g.x,g.y,pg))}
+ if(hit)q77Pick(hit);else if(MK.q77on)q65Clear();
+},{passive:true});
+// a mouse or Pencil tap in the grey space around the page clears it too
+document.addEventListener('pointerdown',function(e){
+ if(!MK||!MK.q77on||e.pointerType==='touch'||!e.target.closest)return;
+ if(e.target.closest('#mkbody')&&!e.target.closest('.mkpagewrap'))q65Clear();
+},true);
 
 try{spBoot()}catch(e){}
 load();
