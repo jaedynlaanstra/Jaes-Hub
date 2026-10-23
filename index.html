@@ -6038,6 +6038,48 @@ body.q76noic .side .sic,body.q76noic .side .sdot{display:none!important}
 #mk .q77tb .q77f.on{background:rgba(255,255,255,.18)}
 #mk .q77tb .q77n{min-width:28px;text-align:center;color:#C9C3B4;font-size:13px}
 #mk .q77sep{width:1px;align-self:stretch;margin:5px 3px;background:rgba(255,255,255,.16)}
+/* v233: Book view in the PDF reader (q78) */
+#mk .q78tog{height:34px;border:none;border-radius:9px;background:rgba(255,255,255,.1);color:#EFEAE0;display:flex;align-items:center;gap:8px;padding:0 10px 0 9px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;white-space:nowrap}
+#mk .q78tog.on{background:rgba(255,255,255,.18)}
+#mk .q78sw{position:relative;width:30px;height:18px;border-radius:9px;background:#55524c;transition:background .2s;flex-shrink:0}
+#mk .q78sw i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:7px;background:#fff;transition:left .2s}
+#mk .q78tog.on .q78sw{background:#e8893a}
+#mk .q78tog.on .q78sw i{left:14px}
+@media (max-width:900px){#mk .q78lbl{display:none}#mk .q78tog{gap:6px;padding:0 8px}}
+#mk.q78book .mkbody{background:radial-gradient(ellipse at 50% 45%,#3b3a37 0%,#282724 45%,#1c1a17 85%);scrollbar-gutter:stable;overflow-anchor:none}
+#mk.q78book .mkpages{position:relative;overflow:clip}
+#mk.q78book .mkpagebox{position:absolute;left:0;top:0;display:none;padding-top:0!important}
+#mk.q78book .mkpagebox.q78vis{display:block}
+#mk.q78book .mkpagewrap{box-shadow:none}
+#mk.q78book.q78fit .mkbody,#mk.q78book.q78fit .mkpagewrap,#mk.q78book.q78fit .mkcanvas,#mk.q78book.q78fit .mktext{touch-action:none}
+#mk.q78book.q78fit:not(.mk-edit) .mkpagewrap{cursor:grab}
+#mk.q78book.q78grab .mkpagewrap,#mk.q78grab{cursor:grabbing!important}
+#mk.q78grab .mktext{-webkit-user-select:none;user-select:none}
+#mk .q78under{position:absolute;pointer-events:none;box-shadow:0 1px 1px rgba(0,0,0,.3),0 18px 24px rgba(0,0,0,.42)}
+#mk .q78under i{position:absolute;pointer-events:none}
+#mk .q78sh1{left:1%;right:1%;bottom:-34px;height:50px;background:radial-gradient(ellipse 52% 50% at 50% 22%,rgba(0,0,0,.6) 0%,rgba(0,0,0,.3) 45%,rgba(0,0,0,0) 100%)}
+#mk .q78sh2{left:35%;right:35%;bottom:-16px;height:30px;background:radial-gradient(ellipse 50% 50% at 50% 30%,rgba(0,0,0,.28) 0%,rgba(0,0,0,0) 100%)}
+#mk .q78paper{inset:0;background:#fff}
+#mk .q78edl{left:-3px;top:3px;bottom:1px;width:3px;border-radius:2px 0 0 2px;box-shadow:-1px 1px 2px rgba(0,0,0,.18);background:repeating-linear-gradient(to right,#c9c9c6 0 1px,#f1f1ee 1px 2px)}
+#mk .q78edr{right:-6px;top:4px;bottom:0;width:6px;border-radius:0 2px 2px 0;box-shadow:1px 1px 2px rgba(0,0,0,.2);background:repeating-linear-gradient(to left,#c4c4c1 0 1px,#efefec 1px 2px)}
+#mk .q78over{position:absolute;pointer-events:none}
+#mk .q78over i{position:absolute;top:0;bottom:0}
+#mk .q78ovl{left:0;background:linear-gradient(to right,rgba(20,20,30,.06) 0%,rgba(20,20,30,.035) 12%,rgba(20,20,30,.025) 45%,rgba(20,20,30,.03) 70%,rgba(20,20,30,.04) 84%,rgba(20,20,30,.06) 91%,rgba(20,20,30,.09) 95%,rgba(20,20,30,.14) 98%,rgba(20,20,30,.21) 99.3%,rgba(20,20,30,.30) 100%)}
+#mk .q78ovr{right:0;background:linear-gradient(to right,rgba(20,20,30,.28) 0%,rgba(20,20,30,.17) .7%,rgba(20,20,30,.10) 2%,rgba(20,20,30,.065) 4%,rgba(20,20,30,.05) 7%,rgba(20,20,30,.035) 13%,rgba(20,20,30,.025) 25%,rgba(20,20,30,.02) 50%,rgba(20,20,30,.03) 85%,rgba(20,20,30,.06) 100%)}
+#mk .q78glow{position:absolute;pointer-events:none;background:radial-gradient(ellipse 50% 50% at 62% 0%,rgba(255,255,255,.85) 0%,rgba(255,255,255,.4) 45%,rgba(255,255,255,0) 100%)}
+#mk .q78curl{position:absolute;pointer-events:none;overflow:clip;overflow-clip-margin:120px}
+#mk .q78front,#mk .q78flap{background:#fff;overflow:hidden}
+#mk .q78flap{position:absolute;left:0;top:0;transform-origin:0 0}
+#mk .q78in,#mk .q78grad,#mk .q78fsh{position:absolute;inset:0}
+#mk .q78img{display:block;width:100%;height:100%}
+#mk.q78dark .q78under,#mk.q78dark .q78img{filter:invert(1) hue-rotate(180deg)}
+#mk.q78dark .q78front,#mk.q78dark .q78flap{background:#000}
+#mk.q78dark .q78glow{display:none}
+#mk.q78book .mkmain{position:relative}
+#mk .q78arrow{position:absolute;z-index:4;border-radius:50%;border:none;padding:0;background:rgba(43,42,39,.82);color:#EFEAE0;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3);touch-action:manipulation}
+#mk .q78arrow:disabled{opacity:.3;cursor:default}
+/* a short screen (a phone turned sideways): a slimmer top bar, so the book gets the height */
+@media (max-height:500px){#mk.q78book .mktop{padding-top:calc(env(safe-area-inset-top,0px) + 4px);padding-bottom:4px}#mk.q78book .mkname{display:none}#mk.q78book .mktools:empty{display:none}}
 </style>
 </head>
 <body>
@@ -6346,7 +6388,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v232';
+var BUILD='v233';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -24949,6 +24991,385 @@ document.addEventListener('pointerdown',function(e){
  if(!MK||!MK.q77on||e.pointerType==='touch'||!e.target.closest)return;
  if(e.target.closest('#mkbody')&&!e.target.closest('.mkpagewrap'))q65Clear();
 },true);
+
+/* ======================= v233: Book view for PDFs (prefix q78) =======================
+   A "Book view" switch in the PDF reader's top bar shows two pages side by side, like an open book,
+   and the page curls over as you turn it: drag a page, tap it, use the round arrows or the arrow keys.
+   It reuses the reader's own page boxes, so Markup, notes and pinch zoom all keep working: only
+   mkGeom (where each page sits), mkAnchorAt (which page is under a finger) and mkOnScroll (which
+   pages get drawn) learn about spreads. The pages fit the screen's width AND height, so turning a
+   phone or iPad sideways makes the book fill the screen.
+   The curl is the fold-line model from Jae's design: the fold is the perpendicular bisector of the
+   grab point and the finger, the lifted part is reflected across it. Spreads are (1-2), (3-4)... */
+var Q78G=null,Q78_MS=900,Q78_PTRS={};
+var Q78_SHADE_L='rgba(20,20,30,.06) 0%, rgba(20,20,30,.035) 12%, rgba(20,20,30,.025) 45%, rgba(20,20,30,.03) 70%, rgba(20,20,30,.04) 84%, rgba(20,20,30,.06) 91%, rgba(20,20,30,.09) 95%, rgba(20,20,30,.14) 98%, rgba(20,20,30,.21) 99.3%, rgba(20,20,30,.30) 100%)';
+var Q78_SHADE_R='rgba(20,20,30,.28) 0%, rgba(20,20,30,.17) .7%, rgba(20,20,30,.10) 2%, rgba(20,20,30,.065) 4%, rgba(20,20,30,.05) 7%, rgba(20,20,30,.035) 13%, rgba(20,20,30,.025) 25%, rgba(20,20,30,.02) 50%, rgba(20,20,30,.03) 85%, rgba(20,20,30,.06) 100%)';
+var Q78_ICO='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3 5v13c4-.5 7 0 9 1.5 2-1.5 5-2 9-1.5V5c-4-.5-7 0-9 1.5zM12 6.5v13"/></svg>';
+function q78On(){return !!(MK&&MK.book)}
+function q78Pref(){try{return localStorage.getItem('hub:mkbook')==='1'}catch(e){return false}}
+function q78Spreads(){return Math.ceil(MK.pageCount/2)}
+function q78L(){return 2*(MK.spread||0)+1}
+function q78Counter(){var L=q78L();return L+(L+1<=MK.pageCount?'–'+(L+1):'')+' / '+MK.pageCount}
+function q78CanTurn(dir){var t=(MK.spread||0)+dir;return t>=0&&t<q78Spreads()}
+// room around the book: a little more on big screens, almost none on a phone (or any short screen,
+// like a phone turned sideways), so the pages get as much of the screen as possible
+function q78Pad(cw,ch){var tight=cw<700||ch<560;return {x:tight?8:28,y:tight?8:24,bottom:tight?14:40}}
+
+/* ---------- where the pages sit ---------- */
+var _q78Fit=mkRecomputeFitScale;
+mkRecomputeFitScale=function(){
+ if(!q78On())return _q78Fit.apply(this,arguments);
+ var body=document.getElementById('mkbody');if(!body)return;
+ var P=q78Pad(body.clientWidth,body.clientHeight);
+ var aw=Math.max(200,body.clientWidth-2*P.x-9),ah=Math.max(160,body.clientHeight-P.y-P.bottom);
+ for(var n=1;n<=MK.pageCount;n++){var info=MK.pageInfo[n];if(info)info.fitScale=Math.min(aw/2/info.vp1.width,ah/info.vp1.height)}
+};
+var _q78Geom=mkGeom;
+mkGeom=function(z){
+ if(!q78On())return _q78Geom.apply(this,arguments);
+ var body=document.getElementById('mkbody'),cw=body?body.clientWidth:0,ch=body?body.clientHeight:0,P=q78Pad(cw,ch);
+ var L=q78L(),R=L+1,iL=MK.pageInfo[L]||MK.pageInfo[1];
+ var sz=function(n){var i=MK.pageInfo[n]||iL;return {w:Math.round(i.vp1.width*i.fitScale*z),h:Math.round(i.vp1.height*i.fitScale*z)}};
+ var a=sz(L),b=R<=MK.pageCount?sz(R):a,W2=a.w+b.w,H=Math.max(a.h,b.h);
+ var left=Math.max(P.x,Math.round((cw-W2)/2)),top=Math.max(P.y,Math.round(P.y+(ch-P.y-P.bottom-H)/2));
+ // every page gets a spot: odd pages in the left slot (against the spine), even pages in the right
+ // one, so the page that shows through during a turn is already sitting in the right place
+ var pages={};
+ for(var n=1;n<=MK.pageCount;n++){var s=sz(n);pages[n]={left:n%2?left+a.w-s.w:left+a.w,top:top,w:s.w,h:s.h}}
+ var right=left+W2+P.x,bottom=top+H+P.bottom;
+ return {pages:pages,gap:0,cw:cw,ch:ch,maxLeft:Math.max(0,right-cw),maxTop:Math.max(0,bottom-ch),
+  book:{left:left,top:top,W:a.w,W2:W2,H:H,width:Math.max(cw,right),height:Math.max(ch,bottom)}};
+};
+// a pinch grabs a spot on whichever of the two pages is under your fingers
+var _q78Anchor=mkAnchorAt;
+mkAnchorAt=function(g,cx,cy,sl,st){
+ if(!q78On()||!g.book)return _q78Anchor.apply(this,arguments);
+ var x=cx+sl,y=cy+st,L=q78L(),R=L+1,n=(R<=MK.pageCount&&x>=g.pages[R].left)?R:L,p=g.pages[n];
+ return {n:n,u:(x-p.left)/p.w,v:(y-p.top)/p.h};
+};
+var _q78Resize=mkApplyZoomResize;
+mkApplyZoomResize=function(){var r=_q78Resize.apply(this,arguments);if(MK)q78Place();return r};
+function q78Classes(){
+ var mk=document.getElementById('mk');if(!mk||!MK)return;
+ mk.classList.toggle('q78book',q78On());mk.classList.toggle('q78dark',!!MK.dark);
+ mk.classList.toggle('q78fit',q78On()&&MK.zoom<=1.02);
+}
+// put every page box, the book's paper edges and shadows, and the arrows where they belong
+function q78Place(){
+ var mk=document.getElementById('mk'),pagesEl=document.getElementById('mkpages'),body=document.getElementById('mkbody');
+ if(!mk||!pagesEl||!body)return;
+ var on=q78On();
+ q78Classes();
+ var g=mkGeom(MK.zoom),L=q78L(),show=Q78G?Q78G.show:[L,L+1];
+ for(var n=1;n<=MK.pageCount;n++){
+  var box=pagesEl.querySelector('.mkpagebox[data-mkpage="'+n+'"]'),wrap=box&&box.firstChild;if(!box)continue;
+  if(on){var p=g.pages[n];box.style.left=p.left+'px';box.style.top=p.top+'px';if(wrap)wrap.style.marginLeft='0'}
+  else{box.style.left='';box.style.top=''}
+  box.classList.toggle('q78vis',on&&show.indexOf(n)>-1);
+ }
+ var under=document.getElementById('q78under'),over=document.getElementById('q78over'),glow=document.getElementById('q78glow');
+ if(!on){
+  pagesEl.style.width='';pagesEl.style.height='';
+  [under,over,glow].forEach(function(x){if(x)x.remove()});
+  document.querySelectorAll('#mk .q78arrow').forEach(function(x){x.remove()});
+  return;
+ }
+ var B=g.book;
+ pagesEl.style.width=B.width+'px';pagesEl.style.height=B.height+'px';
+ if(!under){
+  under=document.createElement('div');under.id='q78under';under.className='q78under';
+  under.innerHTML='<i class="q78sh1"></i><i class="q78sh2"></i><i class="q78paper"></i><i class="q78edl"></i><i class="q78edr"></i>';
+ }
+ if(!over){over=document.createElement('div');over.id='q78over';over.className='q78over';over.innerHTML='<i class="q78ovl"></i><i class="q78ovr"></i>'}
+ if(!glow){glow=document.createElement('div');glow.id='q78glow';glow.className='q78glow'}
+ pagesEl.insertBefore(under,pagesEl.firstChild); // under the pages
+ pagesEl.appendChild(over);                       // spine shading over them
+ var curl=document.getElementById('q78curl');if(curl)pagesEl.appendChild(curl);
+ pagesEl.appendChild(glow);                       // the little light at the top of the spine, over everything
+ [under,over].forEach(function(x){x.style.cssText='left:'+B.left+'px;top:'+B.top+'px;width:'+B.W2+'px;height:'+B.H+'px'});
+ over.firstChild.style.width=B.W+'px';over.lastChild.style.left=B.W+'px';
+ glow.style.cssText='left:'+(B.left+B.W-Math.round(B.W*.03))+'px;top:'+B.top+'px;width:'+Math.round(B.W*.09)+'px;height:'+Math.round(B.H*.07)+'px';
+ q78Arrows();
+}
+// the round arrows float over the reading area (not inside the scrolling pages), level with its middle
+function q78Arrows(){
+ var main=document.querySelector('#mk .mkmain'),body=document.getElementById('mkbody');if(!main||!body)return;
+ var narrow=body.clientWidth<700,sz=narrow?38:46;
+ [['prev',-1,'M15 5l-7 7 7 7'],['next',1,'M9 5l7 7-7 7']].forEach(function(o){
+  var b=main.querySelector('.q78arrow[data-q78="'+o[0]+'"]');
+  if(!b){b=document.createElement('button');b.className='q78arrow';b.setAttribute('data-q78',o[0]);b.setAttribute('aria-label',o[1]<0?'Previous pages':'Next pages');
+   b.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="'+o[2]+'"/></svg>';main.appendChild(b)}
+  b.style.width=b.style.height=sz+'px';
+  b.style.top=Math.round(body.offsetTop+body.clientHeight/2-sz/2)+'px';
+  b.style.left=Math.round(o[1]<0?body.offsetLeft+(narrow?6:12):body.offsetLeft+body.clientWidth-sz-(narrow?6:12))+'px';
+  b.disabled=!q78CanTurn(o[1]);
+ });
+}
+// only the open spread (and its neighbours, so a turn has its pages ready) is drawn
+var _q78Scroll=mkOnScroll;
+mkOnScroll=function(){
+ if(!q78On())return _q78Scroll.apply(this,arguments);
+ var L=q78L();
+ for(var n=Math.max(1,L-2);n<=Math.min(MK.pageCount,L+3);n++)if(!MK.rendered[n])mkRenderOnePage(n);
+ if(MK.curPage!==L){MK.curPage=L;mkThumbHighlight()}
+ var el=document.getElementById('mkpageline');if(el)el.textContent=q78Counter();
+};
+// jump straight to a spread (thumbnails, notes, a new page): same zoom, same scroll spot
+function q78Go(s){
+ if(!MK)return;
+ q78Abort();
+ MK.spread=Math.max(0,Math.min(q78Spreads()-1,s));
+ q78Place();
+ var body=document.getElementById('mkbody'),g=mkGeom(MK.zoom);
+ body.scrollLeft=Math.min(body.scrollLeft,g.maxLeft);body.scrollTop=Math.min(body.scrollTop,g.maxTop);
+ mkOnScroll();mkNotesLayout();
+}
+// switch book view on or off. Zoom stays as it is (100% always means "fits the screen")
+function q78Set(on){
+ if(!MK||!!MK.book===on)return;
+ q78Abort();
+ if(MK.touch&&MK.touch.mode!=='draw'&&MK.touch.mode!=='pending')mkSettleFinish();
+ if(MK.touch)return;
+ if(on)MK.spread=Math.floor((MK.curPage-1)/2);
+ var first=q78L();
+ MK.book=on;
+ try{localStorage.setItem('hub:mkbook',on?'1':'0')}catch(e){}
+ mkRecomputeFitScale();mkApplyZoomResize();
+ var body=document.getElementById('mkbody'),g=mkGeom(MK.zoom);
+ if(on){body.scrollLeft=Math.round(g.maxLeft/2);body.scrollTop=0}
+ else{var p=g.pages[first];body.scrollTop=Math.max(0,Math.min(g.maxTop,p.top-g.gap));body.scrollLeft=Math.max(0,Math.min(g.maxLeft,p.left+p.w/2-g.cw/2))}
+ MK.curPage=first;
+ mkOnScroll();mkRerenderChrome();
+}
+
+/* ---------- the page turn ---------- */
+function q78Dims(){var g=mkGeom(MK.zoom);return {W:g.book.W,H:g.book.H,g:g}}
+// a copy of what a page looks like right now (the PDF plus your ink), for the page that's turning
+function q78Snap(n){
+ var c=document.createElement('canvas');c.className='q78img';
+ var src=n>=1&&n<=MK.pageCount&&document.querySelector('.mkcanvas[data-mkpage="'+n+'"]');
+ if(!src||!src.width){c.width=c.height=1;c.style.visibility='hidden';return c}
+ c.width=src.width;c.height=src.height;
+ var x=c.getContext('2d');x.drawImage(src,0,0);
+ var an=document.querySelector('.mkanno[data-mkpage="'+n+'"]');if(an&&an.width)x.drawImage(an,0,0,c.width,c.height);
+ return c;
+}
+function q78Begin(dir,y){
+ var D=q78Dims(),W=D.W,H=D.H,B=D.g.book,L=q78L(),R=L+1;
+ var G0={x:W,y:Math.max(0,Math.min(H,y))};
+ // forward: the right page lifts (its back is the next left page), the next right page shows beneath.
+ // back: the left page lifts, mirrored about the spine
+ var front=dir>0?R:L,back=dir>0?R+1:L-1,show=dir>0?[L,R+2]:[L-2,R];
+ Q78G={dir:dir,G0:G0,M:{x:G0.x,y:G0.y},T:{x:G0.x,y:G0.y},phase:'drag',W:W,H:H,show:show};
+ var old=document.getElementById('q78curl');if(old)old.remove();
+ var mir=dir<0?'transform:scaleX(-1);':'';
+ var gF='linear-gradient('+(dir<0?'to left, '+Q78_SHADE_L:'to right, '+Q78_SHADE_R),gB='linear-gradient('+(dir<0?'to left, '+Q78_SHADE_R:'to right, '+Q78_SHADE_L);
+ var curl=document.createElement('div');curl.id='q78curl';curl.className='q78curl';
+ curl.style.cssText='left:'+B.left+'px;top:'+B.top+'px;width:'+(2*W)+'px;height:'+H+'px;transform-origin:'+W+'px 0;'+mir;
+ var box='position:absolute;left:'+W+'px;top:0;width:'+W+'px;height:'+H+'px;';
+ curl.innerHTML='<div class="q78shade" style="'+box+'"></div>'
+  +'<div class="q78front" style="'+box+'"><div class="q78in" style="'+mir+'"></div><div class="q78grad" style="background:'+gF+'"></div></div>'
+  +'<div class="q78flapw" style="'+box+'visibility:hidden"><div class="q78flap" style="width:'+W+'px;height:'+H+'px"><div class="q78in" style="'+mir+'"></div><div class="q78grad" style="background:'+gB+'"></div><div class="q78fsh"></div></div></div>';
+ curl.querySelector('.q78front .q78in').appendChild(q78Snap(front));
+ curl.querySelector('.q78flap .q78in').appendChild(q78Snap(back));
+ document.getElementById('mkpages').appendChild(curl);
+ Q78G.el={curl:curl,shade:curl.querySelector('.q78shade'),front:curl.querySelector('.q78front'),flapW:curl.querySelector('.q78flapw'),flap:curl.querySelector('.q78flap'),fsh:curl.querySelector('.q78fsh')};
+ q78Place();q78Apply();
+}
+// stop any turn on the spot and put the spread back as it was (a pinch, a zoom, a mode change)
+function q78Abort(){
+ if(Q78G&&Q78G.raf)cancelAnimationFrame(Q78G.raf);
+ if(Q78G&&Q78G.timer)clearTimeout(Q78G.timer);
+ var had=!!Q78G;Q78G=null;
+ var c=document.getElementById('q78curl');if(c)c.remove();
+ if(had&&MK)q78Place();
+}
+function q78Finish(done){
+ var g=Q78G;if(!g)return;
+ if(done)MK.spread+=g.dir;
+ q78Abort();
+ if(done&&MK){mkOnScroll();mkHideBubble();mkNotesLayout()}
+}
+// keeps the paper attached at the spine: the corner can't travel further than it really could
+function q78Constrain(M,G,W,H){
+ var m={x:M.x,y:M.y};
+ for(var i=0;i<2;i++)[{x:0,y:0},{x:0,y:H}].forEach(function(S){
+  var r=Math.hypot(G.x-S.x,G.y-S.y),vx=m.x-S.x,vy=m.y-S.y,l=Math.hypot(vx,vy);
+  if(l>r)m={x:S.x+vx*r/l,y:S.y+vy*r/l};
+ });
+ return m;
+}
+function q78ClipPoly(P,f){
+ var out=[];
+ for(var i=0;i<P.length;i++){
+  var a=P[i],b=P[(i+1)%P.length],fa=f(a),fb=f(b);
+  if(fa>=0)out.push(a);
+  if((fa>=0)!==(fb>=0)){var t=fa/(fa-fb);out.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t])}
+ }
+ return out;
+}
+function q78Poly(pts){return pts.length<3?'polygon(0 0,0 0,0 0)':'polygon('+pts.map(function(p){return p[0].toFixed(1)+'px '+p[1].toFixed(1)+'px'}).join(',')+')'}
+function q78Grad(W,H,P,d,stops){
+ var th=Math.atan2(d.x,-d.y)*180/Math.PI,L=Math.abs(W*d.x)+Math.abs(H*d.y)||1;
+ var t0=((P.x-W/2)*d.x+(P.y-H/2)*d.y)/L+.5;
+ return 'linear-gradient('+th.toFixed(2)+'deg, '+stops.map(function(s){return s[1]+' '+((t0+s[0]/L)*100).toFixed(2)+'%'}).join(', ')+')';
+}
+// draw the page as it is right now: the flat part, the folded-over flap, and the shadows
+function q78Apply(){
+ var g=Q78G;if(!g||!g.el)return;
+ var E=g.el,W=g.W,H=g.H,G=g.G0,M=q78Constrain(g.M,G,W,H);
+ var dx=G.x-M.x,dy=G.y-M.y,d=Math.hypot(dx,dy);
+ if(d<.5){E.front.style.clipPath='none';E.flapW.style.visibility='hidden';E.shade.style.background='none';return}
+ var n={x:dx/d,y:dy/d},F={x:(G.x+M.x)/2,y:(G.y+M.y)/2},rect=[[0,0],[W,0],[W,H],[0,H]];
+ var side=function(p){return (p[0]-F.x)*n.x+(p[1]-F.y)*n.y};
+ E.front.style.clipPath=q78Poly(q78ClipPoly(rect,function(p){return -side(p)}));
+ E.flap.style.clipPath=q78Poly(q78ClipPoly(rect,side).map(function(p){return [W-p[0],p[1]]}));
+ var fn=F.x*n.x+F.y*n.y,nxx=1-2*n.x*n.x,nxy=2*n.x*n.y,nyy=1-2*n.y*n.y;
+ E.flap.style.transform='matrix('+[-nxx,nxy,-nxy,nyy,nxx*W+2*fn*n.x,-nxy*W+2*fn*n.y].map(function(v){return v.toFixed(5)}).join(',')+')';
+ E.flapW.style.visibility='visible';
+ var w=Math.min(d/2,W),prog=Math.max(0,Math.min(1,(W-M.x)/(2*W)));
+ var fade=Math.min(1,d/50)*Math.pow(Math.sin(Math.PI*Math.min(prog,.999)),.7);
+ var A=function(v){return 'rgba(0,0,0,'+(v*fade).toFixed(3)+')'};
+ E.flapW.style.filter='drop-shadow(0 0 '+(3+7*fade).toFixed(1)+'px '+A(.4)+')';
+ E.shade.style.background=q78Grad(W,H,F,n,[[0,A(.3)],[w*.05+4,A(.16)],[w*.15+10,A(.05)],[w*.28+18,'rgba(0,0,0,0)']]);
+ E.fsh.style.background=q78Grad(W,H,{x:W-F.x,y:F.y},{x:-n.x,y:n.y},[[0,A(.12)],[w*.06+4,A(.04)],[w*.2+12,'rgba(0,0,0,0)']]);
+}
+function q78Loop(){if(Q78G&&!Q78G.raf)Q78G.raf=requestAnimationFrame(q78Tick)}
+function q78Tick(now){
+ var g=Q78G;if(!g)return;g.raf=0;
+ if(g.tw){
+  var tw=g.tw;if(tw.t0==null)tw.t0=now;
+  var t=Math.min(1,(now-tw.t0)/tw.ms);
+  var k=tw.out?1-Math.pow(1-t,3):(t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2);
+  g.M={x:tw.a.x+(tw.b.x-tw.a.x)*k,y:tw.a.y+(tw.b.y-tw.a.y)*k-Math.sin(Math.PI*k)*tw.lift};
+  q78Apply();
+  if(t>=1)return q78Finish(tw.done);
+ }else{
+  g.M.x+=(g.T.x-g.M.x)*.3;g.M.y+=(g.T.y-g.M.y)*.3;
+  q78Apply();
+  if(Math.hypot(g.T.x-g.M.x,g.T.y-g.M.y)<.3)return;
+ }
+ q78Loop();
+}
+function q78Tween(b,ms,done,lift,out){
+ var g=Q78G;if(!g)return;
+ g.M=q78Constrain(g.M,g.G0,g.W,g.H);
+ g.tw={a:{x:g.M.x,y:g.M.y},b:b,ms:Math.max(140,ms),done:done,lift:lift||0,out:!!out};g.phase='tween';
+ // a backstop in case the screen stops drawing frames mid-turn (an app switch): land it anyway
+ clearTimeout(g.timer);g.timer=setTimeout(function(){if(Q78G===g)q78Finish(done)},g.tw.ms+600);
+ q78Loop();
+}
+function q78Lift(y){var H=Q78G.H;return ((y-H/2)/(H/2))*H*.16}
+// arrows and keys: turn from the bottom corner
+function q78Turn(dir){
+ if(!q78On()||(Q78G&&Q78G.phase==='tween')||!q78CanTurn(dir))return;
+ if(MK.touch)return;
+ if(Q78G)q78Abort();
+ q78Begin(dir,q78Dims().H*.97);
+ q78Tween({x:-Q78G.W,y:Q78G.G0.y},Q78_MS,true,q78Lift(Q78G.G0.y));
+}
+// let go of a page part-way: does it finish turning, or fall back?
+// vel is how fast your finger was moving sideways (pixels per millisecond, minus = toward the spine),
+// x is where the page's edge is now (W = the page's own edge, 0 = the spine, -W = fully turned)
+function q78ShouldTurn(vel,x,W){
+ // TODO(human): tune how the page turn feels when you let go. This is the rule from the design.
+ return vel<-.5||(vel<.3&&x<W*.45);
+}
+
+/* ---------- dragging a page ---------- */
+function q78Pt(e,dir){
+ var r=document.getElementById('q78under').getBoundingClientRect(),W=Q78G?Q78G.W:r.width/2,x=e.clientX-r.left;
+ return {x:dir>0?x-W:W-x,y:e.clientY-r.top};
+}
+document.addEventListener('pointerdown',function(e){
+ if(e.pointerType==='touch'){Q78_PTRS[e.pointerId]=1;if(Object.keys(Q78_PTRS).length>1&&Q78G&&Q78G.phase==='drag'){q78Abort();return}}
+ if(!q78On()||MK.mode==='edit'||e.button>0||!e.target.closest||!e.target.closest('#mkbody'))return;
+ if(Q78G||MK.touch||!document.getElementById('q78under'))return;
+ // zoomed in, one finger moves around the page instead (the arrows still turn it)
+ if(e.pointerType==='touch'&&MK.zoom>1.02)return;
+ if(Object.keys(Q78_PTRS).length>1)return;
+ var r=document.getElementById('q78under').getBoundingClientRect();
+ if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return;
+ if(mkHitHighlight(e.clientX,e.clientY))return; // a tap on a highlight opens its note, as always
+ var dir=e.clientX-r.left>r.width/2?1:-1;if(!q78CanTurn(dir))return;
+ if(e.pointerType==='mouse')e.preventDefault(); // no text selection while dragging a page
+ var y=e.clientY-r.top;
+ q78Begin(dir,y);
+ var g=Q78G,p=q78Pt(e,dir);
+ g.id=e.pointerId;g.anchor={px:p.x,py:p.y,mx:g.M.x,my:g.M.y,cx:e.clientX,cy:e.clientY};g.vel=0;g.last={x:p.x,t:performance.now()};
+ try{document.getElementById('mkbody').setPointerCapture(e.pointerId)}catch(err){}
+ document.getElementById('mk').classList.add('q78grab');
+});
+document.addEventListener('pointermove',function(e){
+ var g=Q78G;if(!g||g.phase!=='drag'||e.pointerId!==g.id)return;
+ var p=q78Pt(e,g.dir);
+ g.T={x:g.anchor.mx+p.x-g.anchor.px,y:g.anchor.my+p.y-g.anchor.py};
+ var now=performance.now(),dt=now-g.last.t;
+ if(dt>0){g.vel=.6*g.vel+.4*(p.x-g.last.x)/dt;g.last={x:p.x,t:now}}
+ q78Loop();
+});
+function q78Up(e){
+ delete Q78_PTRS[e.pointerId];
+ var g=Q78G;if(!g||g.phase!=='drag'||e.pointerId!==g.id)return;
+ var mk=document.getElementById('mk');if(mk)mk.classList.remove('q78grab');
+ if(e.type==='pointercancel'){q78Tween({x:g.G0.x,y:g.G0.y},300,false,0,true);return}
+ var W=g.W,moved=Math.hypot(e.clientX-g.anchor.cx,e.clientY-g.anchor.cy);
+ if(moved<5)return q78Tween({x:-W,y:g.G0.y},Q78_MS,true,q78Lift(g.G0.y)); // a tap: turn from where you tapped
+ if(q78ShouldTurn(g.vel,g.T.x,W))q78Tween({x:-W,y:g.G0.y},Q78_MS*Math.max(.35,(g.M.x+W)/(2*W)),true,0,true);
+ else q78Tween({x:g.G0.x,y:g.G0.y},Q78_MS*Math.max(.3,(W-g.M.x)/(2*W)),false,0,true);
+}
+document.addEventListener('pointerup',q78Up);
+document.addEventListener('pointercancel',q78Up);
+// a second finger (a pinch) always wins over a page being dragged
+document.addEventListener('touchstart',function(e){if(Q78G&&Q78G.phase==='drag'&&e.touches.length>1)q78Abort()},{capture:true,passive:true});
+document.addEventListener('keydown',function(e){
+ if(!q78On()||e.metaKey||e.ctrlKey||e.altKey)return;
+ var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;
+ if(document.getElementById('mknoteed'))return;
+ if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();q78Turn(1)}
+ else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();q78Turn(-1)}
+});
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('#mk [data-q78]');if(!b||!MK)return;
+ var a=b.getAttribute('data-q78');
+ if(a==='toggle')q78Set(!MK.book);else if(a==='prev')q78Turn(-1);else if(a==='next')q78Turn(1);
+});
+
+/* ---------- the rest of the reader, taught about spreads ---------- */
+var _q78Top=mkTopHtml;
+mkTopHtml=function(){
+ var h=_q78Top.apply(this,arguments),on=q78On();
+ if(on)h=h.replace(/(<span class="mkpage" id="mkpageline">)[^<]*/,'$1'+q78Counter());
+ if(MK.pageCount<2)return h; // a single page has nothing to pair it with
+ return h.replace('<span class="mkpage"','<button class="q78tog'+(on?' on':'')+'" data-q78="toggle" aria-pressed="'+on+'" title="Book view">'+Q78_ICO+'<span class="q78lbl">Book view</span><span class="q78sw"><i></i></span></button><span class="mkpage"');
+};
+var _q78Chrome=mkRerenderChrome;
+mkRerenderChrome=function(){var r=_q78Chrome.apply(this,arguments);if(MK){q78Classes();if(q78On())q78Arrows()}return r};
+var _q78Mode=mkSetMode;
+// mkSetMode rewrites the reader's whole class list, so the book's own classes go straight back on
+mkSetMode=function(){q78Abort();var r=_q78Mode.apply(this,arguments);if(MK)q78Classes();return r};
+var _q78Click=mkClick;
+mkClick=function(e){
+ var b=q78On()&&e.target.closest&&e.target.closest('[data-mk^="thumb:"]');
+ if(b){q78Go(Math.floor((+b.getAttribute('data-mk').split(':')[1]-1)/2));return}
+ if(Q78G&&e.target.closest&&e.target.closest('[data-mk^="zoom"]'))q78Abort();
+ return _q78Click.apply(this,arguments);
+};
+var _q78Note=mkScrollToNote;
+mkScrollToNote=function(nt){if(q78On()){var sp=mkNoteSpot(nt);if(sp&&sp.page)q78Go(Math.floor((sp.page-1)/2))}return _q78Note.apply(this,arguments)};
+var _q78Add=mkAddPage;
+mkAddPage=function(){var r=_q78Add.apply(this,arguments);if(q78On()){mkApplyZoomResize();q78Go(q78Spreads()-1)}return r};
+var _q78ZoomTo=mkZoomTo;
+mkZoomTo=function(){q78Abort();return _q78ZoomTo.apply(this,arguments)};
+var _q78Close=mkClose;
+mkClose=function(){q78Abort();Q78_PTRS={};return _q78Close.apply(this,arguments)};
+// opening a PDF: if book view was on last time (on this device), it opens as a book again
+var _q78Open=mkOpen;
+mkOpen=function(){
+ var r=_q78Open.apply(this,arguments);
+ Promise.resolve(r).then(function(){if(MK&&MK.pageCount>1&&q78Pref()&&!MK.book)q78Set(true)});
+ return r;
+};
 
 try{spBoot()}catch(e){}
 load();
