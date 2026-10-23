@@ -6154,7 +6154,7 @@ var PALETTES=[
 ];
 function defPal(id){for(var i=0;i<PALETTES.length;i++){if(PALETTES[i].id===id)return PALETTES[i]}return PALETTES[5]}
 var REF_CID='__ref__';
-function isRefClass(c){return c&&c.id===REF_CID}
+var isRefClass;
 function ensureRefClass(){
  var c=classById(REF_CID);
  if(!c){
@@ -6388,7 +6388,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v234';
+var BUILD='v235';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -6436,10 +6436,7 @@ function weekStart(offset){
  d.setDate(t.getDate()-((t.getDay()+6)%7)+(offset||0)*7);
  return d;
 }
-function allTasks(){var out=[];S.classes.forEach(function(c){
- (c.tasks||[]).forEach(function(t){out.push({t:t,c:c,kind:'task'})});
- (c.assignments||[]).forEach(function(a){out.push({t:a,c:c,kind:'assign'})});
-});return out}
+var allTasks;
 var SEED=[];
 function seedDueDates(){
  SEED.forEach(function(sd){
@@ -6716,54 +6713,8 @@ function save(){
  scheduleCloudSync();
  persistLocal();
 }
-async function saveFiles(cid,quiet){
- if(!quiet&&mirrorFiles(cid))save();
- var list=FILES[cid]||[];
- for(var i=0;i<list.length;i++){
-  var f=list[i];
-  if(f.saved||!f.data)continue;
-  await idbReady;
-  if(IDB){
-   try{await idbDo('readwrite',function(st){return st.put(f.data,f.id)});f.saved=true;f.store='idb';f.chunks=0;continue}
-   catch(e){}
-  }
-  var n=0,ok=true;
-  for(var j=0;j<f.data.length;j+=CHUNK){
-   try{await sset('hub:fd:'+f.id+':'+n,f.data.slice(j,j+CHUNK))}
-   catch(e){ok=false;break}
-   n++;
-  }
-  if(ok){f.saved=true;f.chunks=n;f.store='keys'}
-  else{
-   f.saved=false;f.chunks=0;
-   for(var k=0;k<n;k++)sdel('hub:fd:'+f.id+':'+k);
-  }
- }
- var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,icon:f.icon,text:f.text,marks:f.marks,marksSyncedAt:f.marksSyncedAt,marksTag:f.marksTag||'',chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
- try{await sset('hub:files:'+cid,JSON.stringify(index))}catch(e){}
- render();
-}
-async function loadFiles(cid){
- var out=[];
- try{
-  var r=await sget('hub:files:'+cid);
-  var index=JSON.parse(r.value);
-  for(var i=0;i<index.length;i++){
-   var f=index[i],data='';
-   if(f.store==='idb'){
-    await idbReady;
-    try{data=(await idbDo('readonly',function(st){return st.get(f.id)}))||''}catch(e){data=''}
-   }else{
-    for(var n=0;n<(f.chunks||0);n++){
-     try{var c=await sget('hub:fd:'+f.id+':'+n);data+=c.value}catch(e){data='';break}
-    }
-   }
-   f.data=data;f.saved=!!data;
-   out.push(f);
-  }
- }catch(e){}
- FILES[cid]=out;
-}
+var saveFiles;
+var loadFiles;
 async function dropFile(cid,i){
  var f=FILES[cid][i];
  await purgeFileData(f);
@@ -6999,29 +6950,7 @@ var IG={
  dots:'<svg viewBox="0 0 24 24" style="stroke:none;fill:#444"><circle cx="12" cy="5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="19" r="1.9"/></svg>'
 };
 function igStep(n,title,text,mock){return '<div class="igstep"><div class="ignum">'+n+'</div><div class="igtxt"><b>'+title+'</b><span>'+text+'</span>'+(mock||'')+'</div></div>'}
-function installGuideHtml(plat){
- guideCss();
- var tabs='<div class="igtabs">'+[['ios','iPhone'],['android','Android'],['desktop','Computer']].map(function(t){return '<button data-xact="plat:'+t[0]+'" class="'+(plat===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>';
- var body='';
- if(plat==='ios'){
-  body=igStep(1,'Open this page in Safari','It has to be Safari, the blue compass icon. It will not work from inside another app.','<div class="igmock wide"><span>'+esc(location.host||'this site')+'</span></div>')
-   +igStep(2,'Tap the Share button','It is at the bottom of the screen, a square with an arrow pointing up.','<div class="igmock">'+IG.share+'<span class="blue">Share</span></div>')
-   +igStep(3,'Scroll down and tap Add to Home Screen','You may need to scroll the list of options to find it.','<div class="igmock wide"><span>Add to Home Screen</span>'+IG.plus+'</div>')
-   +igStep(4,'Tap Add','It is at the top right. The app is now on your home screen.','<div class="igmock"><span class="blue">Add</span></div>')
-   +igStep(5,'Open the new icon and sign in once','Use the same email and password. The icon keeps its own storage, so this one sign-in brings all your stuff across.','<div class="igmock"><img src="apple-touch-icon.png" alt=""><span>Doable</span></div>');
- }else if(plat==='android'){
-  body=igStep(1,'Open this page in Chrome','','<div class="igmock wide"><span>'+esc(location.host||'this site')+'</span></div>')
-   +igStep(2,'Tap the menu','It is the three dots at the top right.','<div class="igmock">'+IG.dots+'<span>Menu</span></div>')
-   +igStep(3,'Tap Install app or Add to Home screen','Chrome shows one or the other. Then confirm.','<div class="igmock wide"><span>Install app</span>'+IG.plus+'</div>')
-   +igStep(4,'Open the new icon and sign in once','Use the same email and password.','<div class="igmock"><img src="apple-touch-icon.png" alt=""><span>Doable</span></div>');
- }else{
-  var url=siteUrl();
-  body='<div class="igqr"><div class="qrbox" data-qr="'+esc(url)+'"></div><div class="qrtxt"><b>Scan this with your phone</b><span>Open your phone camera, point it at the square, and tap the link that appears. Then follow the iPhone or Android steps.</span>'
-   +'<div class="iglink">'+esc(url)+'</div><div class="igbtns"><button data-xact="copylink">Copy link</button>'+(navigator.share?'<button data-xact="sharelink">Send it to myself</button>':'')+'</div></div></div>'
-   +igStep(1,'Want it as an app on this computer too?','In Chrome or Edge, look for the small install icon at the right end of the address bar, and click it. Nothing else is needed. It works fine in a normal tab.');
- }
- return tabs+'<div class="ig">'+body+'</div>';
-}
+var installGuideHtml;
 function loadQrLib(){
  return new Promise(function(res){
   if(window.qrcode)return res(true);
@@ -8642,7 +8571,7 @@ document.addEventListener('visibilitychange',function(){if(document.hidden&&clou
 window.addEventListener('online',function(){scheduleCloudSync(200)});
 setInterval(function(){if(!document.hidden)scheduleCloudSync(0)},90000);
 
-function go(page,cid){if(page==='home')setTimeout(function(){spPoll(true)},50);view.page=page;view.classId=cid||null;view.menu=false;view.modal=null;view.fileQ='';view.appQ='';view.appEdit=false;window.scrollTo(0,0);render()}
+var go;
 
 /* ---------- rendering ---------- */
 function render(){
@@ -8707,10 +8636,10 @@ function pageBgKey(){ // which colour the page's own colour panel edits
  if(view.page==='class')return view.secScope==='all'?'class:*':'class:'+view.classId;
  return view.page;
 }
-function pageKey(){return view.page==='class'?'class:'+view.classId:view.page}
+var pageKey;
 function bannerSize(){return (S.banners&&S.banners[pageKey()])||S.bannerAll||'large'}
-function coverKey(c){return c?'cover:'+c.id:'cover:home'}
-function coverOwner(key){return key==='cover:home'?S:classById(key.split(':')[1])}
+var coverKey;
+var coverOwner;
 function coverBlock(c,overlay){
  var owner=c||(view.page==='home'?homeOwner():(typeof pageCoverOwner==='function'?pageCoverOwner(false):null));
  if(!owner)return '';
@@ -9131,11 +9060,7 @@ document.addEventListener('click',function(e){
 /* v138: every page's colours from one place. colPages() lists Home, the other pages and each class;
    choosing one (the picker at the top of a page's colour panel, or a name under EACH PAGE in All colours)
    goes to that page with its colour panel open, so nothing has to be found by visiting the page first */
-function colPages(){
- var L=[{key:'home',bg:'home',name:'Home'},{key:'calendar',bg:'calendar',name:'Calendar'},{key:'plan',bg:'plan',name:'Plan my week'},{key:'professors',bg:'professors',name:'People'},{key:'apps',bg:'apps',name:'Applications'}];
- S.classes.filter(function(c){return !isRefClass(c)}).forEach(function(c){L.push({key:'class:'+c.id,bg:'class:'+c.id,name:c.name,dot:palHex(c.color)})});
- return L;
-}
+var colPages;
 function colPagePicker(){
  var cur=view.page==='class'?'class:'+view.classId:view.page;
  return '<label class="colpgsel"><span>Page</span><select data-colpagesel="1" aria-label="Which page\u2019s colours">'+colPages().map(function(pg){
@@ -9779,47 +9704,7 @@ function homeGreeting(onCover){
   +txt+(pills?'<div class="h4pills">'+pills+'</div>':'')
   +'<button class="coveredit h4addcov" data-coversheet="'+homeOwnerId()+'" aria-label="Add a cover picture"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m3 16 5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Add a cover</span></button></div>';
 }
-function viewHome(){
- var t=today(),real=cpHomeColors();
- var open=allTasks().filter(function(x){return !x.t.done&&x.t.due&&!isRefClass(x.c)});
- var h='';
- if(!S.classes.filter(function(c){return !isRefClass(c)}).length){
-  h+='<div class="panel" style="margin-bottom:22px;padding:22px 24px">'
-   +'<h2 style="font-size:20px;margin-bottom:6px">Welcome</h2>'
-   +'<div class="field" style="max-width:340px;margin:12px 0 16px"><label for="hubName">What should this hub be called?</label><input id="hubName" data-setname="owner" maxlength="40" placeholder="e.g. Sam\'s hub" value="'+esc(S.owner==='My hub'?'':S.owner)+'"></div>'
-   +'<p style="color:var(--ink2);margin-bottom:14px">New to Doable? Start from scratch. Used it before? Load your backup to bring everything in.</p>'
-   +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-   +'<button data-zact="fresh" style="background:#33312C;color:#fff;border-color:#33312C">Start from scratch</button>'
-   +'<label class="fakebtn"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>'
-   +'<button data-xact="importclass">Import a shared class</button><button data-xact="ics:">Import from a calendar</button></div></div>';
- }
- // no cover picture: the hello sits in a band in the menu colour instead
- h=(S.cover?'':homeGreeting(false))+h+homeAccountCard()+homeInstallCard();
-
- /* ===== Your classes: picture tiles that lift a little under the pointer ===== */
- var classes=S.classes.filter(function(c){return !isRefClass(c)});
- var C='<section class="h4cls" id="h-classes"><div class="h4clshead"><h2>Your classes</h2>'+(classes.length?'<span class="h4n">'+classes.length+'</span>':'')
-  +'<button class="h4btn" data-sheet="addcls">+ Add class</button></div>';
- if(!classes.length)C+='<div class="cpempty">No classes yet. Add one, or import a class a friend shared with you.</div>';
- else C+='<div class="h4clsgrid">'+classes.map(function(c){
-  var hx=palHex(c.color),n=(c.assignments||[]).filter(function(a){return !a.done}).length,g=gradeInfo(c);
-  var nextA=(c.assignments||[]).filter(function(a){return !a.done&&a.due&&parseISO(a.due)>=t}).sort(function(a,b){return a.due<b.due?-1:1})[0];
-  return '<button class="h4tile" data-open="'+c.id+'">'
-   +'<span class="h4tilepic" style="background:'+hx+'">'+(c.cover?'<img src="'+c.cover+'" alt="" loading="lazy" style="object-position:50% '+(c.coverPos==null?50:c.coverPos)+'%;object-fit:'+(c.coverFit==='fit'?'contain':'cover')+'">':'')+'</span>'
-   +'<span class="h4tilebody"><span class="h4tilename"><i style="background:'+hx+'"></i><span>'+esc(c.name)+'</span></span>'
-   +'<span class="h4tilestats"><span>'+(n?n+' open':'All clear')+'</span><span>'+(g.avg!=null?g.avg.toFixed(1).replace(/\.0$/,'')+'%':'—')+'</span></span>'
-   +'<span class="h4tilenext">Next: '+(nextA?esc(nextA.title)+' · '+esc(fmtDue(nextA.due)):'All clear')+'</span></span></button>';
- }).join('')+'</div>';
- C+='</section>';
-
- /* ===== settings row ===== */
- var G=cpSetHead('Home settings','home')+coverControls('home',S)
-  +'<button data-secopen="1">Colours</button></div>';
-
- var top='<div class="h4top">'+homeNextDue(open,t)+homeTermCard()+'</div>';
- var R='<aside class="cprail cphomerail h4rail">'+homeTodayPlan()+homeCalendar()+homeResources()+homeMusicCard()+'</aside>';
- return h+'<div class="cpsplit cphomesplit h4" style="'+cpVarStyle(real)+'"><div class="cpmain">'+top+homeComingUp(open,t)+homeWeekPhone()+C+G+'</div>'+R+'</div>';
-}
+var viewHome;
 // Coming up: this week and next week side by side; folded shut it still shows both counts
 function homeComingUp(open,t){
  var tdS=iso(t),wkEnd=weekStart(1),nxEnd=weekStart(2),ws=weekStart(0);
@@ -10363,13 +10248,7 @@ function planLine(x,day){
   +(dueTxt?'<span class="cplate">'+esc(dueTxt)+'</span>':'')
   +'<span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span></div>';
 }
-function coverControls(id,owner){
- var key='cover:'+id;
- // with a picture, everything lives in its Edit cover button (top-right of the picture) instead
- return (owner.cover?'':'<label class="fakebtn"><input type="file" accept="image/*" data-cover="'+id+'" style="display:none">Add a cover picture</label>')
-  +(owner.cover&&view.paste!==key?'':'<button data-paste="'+key+'">'+(view.paste===key?'Waiting for paste':'Paste a cover')+'</button>')
-  +(view.paste===key?'<div class="pastezone" style="flex-basis:100%" data-drop="'+key+'">Copy an image, then press Ctrl and V<p class="pz2">Or drag an image file onto this box. Press Escape to cancel.</p></div>':'');
-}
+var coverControls;
 
 function viewResources(){
  var h='<div class="rowhead"><h2>Everything you have saved</h2></div><div class="two2">';
@@ -11307,14 +11186,7 @@ function mkCanvasDpr(canvas,n,scale){
  var cssWidth=MK.pageInfo[n].vp1.width*scale;
  return cssWidth>0?canvas.width/cssWidth:1;
 }
-function mkDrawAnnoForPage(n){
- var anno=document.querySelector('.mkanno[data-mkpage="'+n+'"]');if(!anno||!MK)return;
- var scale=mkScaleFor(n),dpr=mkCanvasDpr(anno,n,scale),ctx=anno.getContext('2d');
- ctx.setTransform(dpr,0,0,dpr,0,0);
- ctx.clearRect(0,0,scale*MK.pageInfo[n].vp1.width,scale*MK.pageInfo[n].vp1.height);
- mkStrokesForPage(n).forEach(function(s){mkPaintStroke(ctx,s,scale)});
- mkPaintTexts(ctx,n,scale);
-}
+var mkDrawAnnoForPage;
 /* the stroke you are actively drawing lives on its own overlay canvas, repainted by itself --
    the committed ink underneath never gets touched while you draw, however much of it there is */
 function mkDrawLive(n){
@@ -11548,22 +11420,7 @@ function mkHoldSnap(){
  d.pts=mkStraightPts(d,e);
  mkDrawLive(d.page);
 }
-function mkAppendPoint(clientX,clientY,pressure){
- if(!MK.drawing||!MK.drawingAnno)return;
- var d=MK.drawing,pg=d.page,p=mkAnnoPoint(MK.drawingAnno,clientX,clientY,pg),pr=(pressure===undefined||!pressure)?.5:pressure;
- if(d.straight){d.pts=mkStraightPts(d,p);return}
- d.rawLast=[p[0],p[1],pr];
- var last=d.pts[d.pts.length-1],scale=mkScaleFor(pg);
- if(Math.hypot(p[0]-last[0],p[1]-last[1])*scale<.35)return;
- var k=MK.activePointerType==='pen'?MK_STREAMLINE.pen:MK_STREAMLINE.touch;
- d.pts.push([last[0]+(p[0]-last[0])*k,last[1]+(p[1]-last[1])*k,pr]);
- var hp=d.holdPt;
- if(!hp||Math.hypot(p[0]-hp[0],p[1]-hp[1])>MK_HOLD_EPS){
-  MK.drawing.holdPt=[p[0],p[1]];MK.drawing.holdAt=Date.now();
-  // the Pencil sends nothing while it is perfectly still, so a timer notices the hold
-  if(d.tool==='hi'){clearTimeout(MK.holdTimer);MK.holdTimer=setTimeout(mkHoldSnap,MK_HOLD_MS)}
- }
-}
+var mkAppendPoint;
 var mkRedrawScheduled=false;
 function mkScheduleRedraw(){
  if(mkRedrawScheduled)return;
@@ -12045,14 +11902,7 @@ function mkIdsOf(m){var o={};((m&&m.strokes)||[]).concat((m&&m.notes)||[],(m&&m.
 /* Save: saves this PDF's markup now and waits until your account has the copy, so you can be sure.
    (It also saves on its own a moment after you stop writing; this is the "I'm done, make sure" button.) */
 var MK_ICO_HIST=mkIco('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/><path d="M12 7v5l3 2"/>',18);
-function mkSaveLabel(){
- var f=MK&&MK.f;if(!f)return 'Save';
- if(MK.saveState==='saving')return 'Saving…';
- if(MK.saveState==='saved')return 'Saved ✓';
- if(MK.saveState==='local')return 'Saved on this device';
- if(MK.saveState==='fail')return 'Not saved yet, try again';
- return 'Save';
-}
+var mkSaveLabel;
 function mkSetSave(st){if(!MK)return;MK.saveState=st;var b=document.getElementById('mksavebtn');if(b)b.textContent=mkSaveLabel()}
 async function mkSaveNow(){
  if(!MK)return;var f=MK.f;
@@ -12124,7 +11974,7 @@ var MK_ROW=18,MK_TXT={p:{size:12.5,step:18,w:400,drop:4},h:{size:22,step:36,w:60
 function mkTextStyleSaved(){try{return localStorage.getItem('hub:mktext')==='h'?'h':'p'}catch(e){return 'p'}}
 function mkTexts(){var mk=mkMarks();if(!mk.texts)mk.texts=[];return mk.texts}
 function mkTextsForPage(n){return ((MK.f.marks&&MK.f.marks.texts)||[]).filter(function(t){return t.page===n})}
-function mkTextFont(st,scale){var fam=getComputedStyle(document.body).fontFamily||'sans-serif';return MK_TXT[st].w+' '+(MK_TXT[st].size*scale)+'px '+fam}
+var mkTextFont;
 var mkMeasureCtx=null;
 // splits the text into lines that fit between its left edge and the page's right margin
 function mkTextLines(t){
@@ -13812,24 +13662,7 @@ function spaceSideBg(sp){
  var t=S.spaceTheme&&S.spaceTheme[sp];return (t&&t.sideBg)||SPACE_DEF[sp].sideBg;
 }
 // the menu for Work and Personal: Home, Calendar, Plan my week, then your pages
-function spaceSidebar(){
- var sp=curSpace(),pages=spacePages(sp);
- var h='<aside class="side'+(view.menu?' open':'')+'">'
-  +'<button class="sidehide" data-side="0" title="Hide the menu" aria-label="Hide the menu">«</button>'
-  +sideMe()+spacePill('side')
-  +'<div class="sidescroll">'
-  +sideItem('data-go','home','Home',view.page==='home')
-  +sideItem('data-go','calendar','Calendar',view.page==='calendar')
-  +sideItem('data-go','plan','Plan my week',view.page==='plan')
-  +'<p class="slabel">Pages</p>';
- pages.forEach(function(c){
-  var on=view.page==='page'&&view.classId===c.id;
-  h+='<div class="sitem'+(on?' on':'')+'" data-open="'+c.id+'"><span class="sdot" style="background:'+palHex(c.color)+'"></span><span class="nm2">'+esc(c.name)+'</span></div>';
- });
- h+='<p class="slabel"> </p>'+sideItem('data-znew','1','+ New page',false)+'</div>';
- h+='<div class="sidefoot">'+(q42ShowGet()?sideItem('data-go','install','Get the app',view.page==='install'):'')+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
- return h+'</aside>';
-}
+var spaceSidebar;
 function sideMe(){
  return '<div class="me"><label title="Click to add a picture of you">'
   +'<input type="file" accept="image/*" data-photo="me" style="display:none">'
@@ -13960,16 +13793,7 @@ function zTaskRow(c,t){
  return '<div class="zrow'+(t.done?' done':'')+'"><button class="zck'+(t.done?' y':'')+'" data-tick="'+t.id+'" data-c="'+c.id+'" aria-label="'+(t.done?'Mark not done':'Mark done')+'">'+(t.done?zI(ZIC.check,12):'')+'</button>'
   +'<button class="zrt" data-zact="taskedit:'+c.id+':'+t.id+'">'+esc(t.title)+(t.notes?'<small>'+esc(t.notes.split('\n')[0])+'</small>':'')+'</button>'+zDueChip(t)+'</div>';
 }
-function zListPage(c){
- var gro=c.kind==='groceries',open=c.tasks.filter(function(t){return !t.done}),done=c.tasks.filter(function(t){return t.done});
- if(!gro)open.sort(function(a,b){return (a.due||'9')<(b.due||'9')?-1:(a.due||'9')>(b.due||'9')?1:0});
- var add='<div class="zadd"><input id="zadd-'+c.id+'" data-zenter="taskadd:'+c.id+'" placeholder="'+(gro?'Add an item, like oat milk':'Add a task')+'" autocomplete="off">'
-  +(gro?'':'<input type="date" id="zaddd-'+c.id+'" aria-label="Due date">')+'<button class="zbtn" data-zact="taskadd:'+c.id+'">Add</button></div>';
- var body=add+(open.length?open.map(function(t){return zTaskRow(c,t)}).join(''):'<p class="zempty">'+(gro?'Your list is empty. Add what you need, then tick things off in the store.':'Nothing to do. Add a task above.')+'</p>');
- if(done.length)body+='<details class="zdone"'+(gro?' open':'')+'><summary>'+(gro?'In the cart':'Done')+' · '+done.length+'</summary>'+done.map(function(t){return zTaskRow(c,t)}).join('')
-  +'<button class="zlink" data-zact="cleardone:'+c.id+'">'+(gro?'Clear the ticked items':'Clear finished tasks')+'</button></details>';
- return zCard(gro?'Shopping list':'Tasks',gro?'cart':'check',open.length+(gro?' to buy':' to do'),body,'zlist');
-}
+var zListPage;
 ZACT.taskadd=function(cid){
  var c=classById(cid),t=zv('zadd-'+cid);if(!c||!t)return;
  c.tasks.push(touch({id:uid(),title:t,due:zv('zaddd-'+cid),done:false}));save();render();
@@ -14111,34 +13935,14 @@ ZACT.habitdel=function(cid,hid){var c=classById(cid);if(!c||!confirm('Delete thi
 
 /* Budget: categories with limits, spending, and goals and savings. Amounts are typed in; nothing connects to a bank */
 function zMonth(){var t=today();return iso(t).slice(0,7)}
-function zBudget(c){
- var mo=zMonth(),cats=c.items.filter(function(x){return x.t==='cat'}),sp=c.items.filter(function(x){return x.t==='spend'&&(x.date||'').slice(0,7)===mo});
- var spent=0,inc=0,byCat={};sp.forEach(function(x){var a=+x.amount||0;if(x.income)inc+=a;else{spent+=a;byCat[x.cat]=(byCat[x.cat]||0)+a}});
- var total=cats.reduce(function(s,x){return s+(+x.limit||0)},0);
- return {cats:cats,sp:sp,spent:spent,inc:inc,byCat:byCat,total:total,left:total-spent,goals:c.items.filter(function(x){return x.t==='goal'})};
-}
+var zBudget;
 function zGoalCard(c,g){var pct=g.target?Math.min(100,Math.round((+g.saved||0)/(+g.target)*100)):0;
  return '<section class="zcard zgoal" style="'+zcv(g.color||'mist')+'">'+(g.cover?'<div class="zcover" style="background-image:url('+g.cover+')"></div>':'')
   +'<button class="zch" data-zact="goaledit:'+c.id+':'+g.id+'"><span class="zic">'+zI(ZIC.piggy,16)+'</span><span class="zct">'+esc(g.title)+'</span><span class="zcm">'+(g.date?esc(parseISO(g.date).toLocaleDateString('en-CA',{month:'short',year:'numeric'})):'')+'</span></button>'
   +'<div class="zcb"><div class="zrowb"><span class="zbig" style="font-size:22px">'+money(g.saved)+'</span><span class="zsoft">of '+money(g.target)+'</span></div><div class="zbar"><i style="width:'+pct+'%"></i></div>'
   +'<div class="zrowb"><span class="zsoft">'+pct+'% there</span><button class="zlink" data-zact="goalmoney:'+c.id+':'+g.id+'">+ Add money</button></div></div></section>';
 }
-function zBudgetPage(c){
- var b=zBudget(c),pct=b.total?Math.round(b.spent/b.total*100):0;
- var watch=b.cats.map(function(x){return {c:x,p:x.limit?(b.byCat[x.id]||0)/x.limit:0}}).sort(function(a,z){return z.p-a.p})[0];
- var top='<div class="zg3">'
-  +zCard('Left this month','wallet',esc(today().toLocaleDateString('en-CA',{month:'long'})),'<div class="zrow2">'+zRing(pct,'var(--wc)',78,8,pct+'%')+'<div><div class="zbig">'+money(b.left)+'</div><div class="zsoft">'+money(b.spent)+' of '+money(b.total)+' spent</div></div></div>','',zcv('mist'))
-  +zCard('Goals and savings','piggy','',b.goals.length?'<div class="zbig">'+money(b.goals.reduce(function(s,g){return s+(+g.saved||0)},0))+'</div><div class="zsoft">saved across '+b.goals.length+' goal'+(b.goals.length>1?'s':'')+'</div>':'<div class="zsoft">Add a goal below, like a trip or an emergency fund.</div>','',zcv('sage'))
-  +zCard('Keep an eye on','target','',watch&&watch.p>0?'<div class="zbig" style="font-size:20px">'+esc(watch.c.title)+'</div><div class="zsoft">'+money(b.byCat[watch.c.id]||0)+' of '+money(watch.c.limit)+(watch.p>=1?'. Over the limit.':watch.p>.85?'. Almost at the limit.':'.')+'</div>':'<div class="zsoft">Nothing close to its limit yet.</div>','',zcv('peach'))+'</div>';
- var cats=zCard('Spending by category','list','<button class="zlink" data-zact="catnew:'+c.id+'">+ Category</button>',b.cats.length?b.cats.map(function(x){var s=b.byCat[x.id]||0,p=x.limit?Math.min(100,Math.round(s/x.limit*100)):0;
-   return '<button class="zcat" style="'+zcv(x.color||'grey')+'" data-zact="catedit:'+c.id+':'+x.id+'"><span class="zic small">'+zI(ZIC.wallet,13)+'</span><span>'+esc(x.title)+'</span><span class="zsoft">'+money(s)+' / '+money(x.limit)+'</span><span class="zbar"><i style="width:'+p+'%"></i></span></button>'}).join(''):'<p class="zempty">Add categories with a monthly limit.</p>');
- var rec=b.sp.slice().sort(function(a,z){return (z.date||'')<(a.date||'')?-1:1}).slice(0,10);
- var catBy={};b.cats.forEach(function(x){catBy[x.id]=x});
- var recent=zCard('This month','list','<button class="zlink" data-zact="spendnew:'+c.id+'">+ Add spending</button>',rec.length?rec.map(function(x){var ct=catBy[x.cat];
-   return '<button class="zsp" data-zact="spendedit:'+c.id+':'+x.id+'"><span>'+esc(x.title||'Spending')+'<small>'+esc(x.date?fmtDue(x.date):'')+'</small></span>'+(x.income?zTag('Income','sage'):ct?zTag(ct.title,ct.color||'grey'):'')+'<b'+(x.income?' class="in"':'')+'>'+(x.income?'+':'−')+money(x.amount).replace('$','$')+'</b></button>'}).join(''):'<p class="zempty">Nothing added this month. Tap + Add spending after you buy something.</p>');
- return top+'<div class="zg2">'+cats+recent+'</div><div class="zh2row"><h2 class="zh2">Goals and savings</h2><button class="zbtn" data-zact="goalnew:'+c.id+'">+ Add a goal</button></div>'
-  +(b.goals.length?'<div class="zg3">'+b.goals.map(function(g){return zGoalCard(c,g)}).join('')+'</div>':'<p class="zempty">Save toward something: a trip, a laptop, a rainy-day fund. Add a picture to keep it in mind.</p>');
-}
+var zBudgetPage;
 ZACT.catnew=function(cid){zOpen('zcat',{cid:cid,soft:'sage'})};
 ZACT.catedit=function(cid,id){var x=zItem(classById(cid),id);if(x)zOpen('zcat',{cid:cid,id:id,soft:x.color||'grey'})};
 ZM.zcat={html:function(m){var x=m.id&&zItem(classById(m.cid),m.id);
@@ -14181,18 +13985,7 @@ document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttri
 /* Reading & watch list */
 var RTYPES=[['book','Book'],['show','Show'],['film','Film']];
 var RSTAT={book:[['want','Want to read'],['doing','Reading'],['done','Finished']],show:[['want','Want to watch'],['doing','Watching'],['done','Finished']],film:[['want','Want to watch'],['doing','Watching'],['done','Watched']]};
-function zReadingPage(c){
- var all=c.items.filter(function(x){return x.t==='read'}),f=view.zread||'all';
- var L=all.filter(function(x){return f==='all'||x.type===f||x.status===f});
- var cnt=function(k){return all.filter(function(x){return x.type===k}).length};
- var tabs='<div class="ztabs">'+[['all','All'],['book','Books '+cnt('book')],['show','Shows '+cnt('show')],['film','Films '+cnt('film')],['doing','In progress'],['done','Finished']].map(function(t){return '<button class="'+(f===t[0]?'on':'')+'" data-zact="readf:'+t[0]+'">'+t[1]+'</button>'}).join('')+'<button class="zbtn" data-zact="readnew:'+c.id+'">+ Add</button></div>';
- var card=function(x){var st=(RSTAT[x.type]||RSTAT.book).filter(function(s){return s[0]===x.status})[0]||['want','Want to'];
-  var hue=Math.abs(String(x.title).split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%360;
-  return '<button class="zbk" data-zact="readedit:'+c.id+':'+x.id+'">'+(x.cover?'<img src="'+x.cover+'" alt="">':'<span class="zbkph" style="background:linear-gradient(160deg,hsl('+hue+',22%,72%),hsl('+hue+',20%,52%))"><b>'+esc(x.title)+'</b></span>')
-   +'<b>'+esc(x.title)+'</b>'+(x.by?'<small>'+esc(x.by)+'</small>':'')+'<span>'+zTag(st[1],x.status==='done'?'sage':x.status==='doing'?'mist':'grey')+'</span>'
-   +(x.status==='doing'&&x.progress?'<span class="zbar"><i style="width:'+x.progress+'%"></i></span>':'')+(x.rating?'<span class="zstars">'+'★★★★★'.slice(0,x.rating)+'<i>'+'★★★★★'.slice(x.rating)+'</i></span>':'')+'</button>'};
- return tabs+(L.length?'<div class="zgal">'+L.map(card).join('')+'</div>':'<p class="zempty">'+(all.length?'Nothing here yet.':'Add a book, show or film you want to get to, or one you are into right now.')+'</p>');
-}
+var zReadingPage;
 ZACT.readf=function(f){view.zread=f;render()};
 ZACT.readnew=function(cid){zOpen('zread',{cid:cid})};
 ZACT.readedit=function(cid,id){var x=zItem(classById(cid),id);if(x)zOpen('zread',{cid:cid,id:id,cover:x.cover})};
@@ -14285,7 +14078,7 @@ ZM.zshift={html:function(m){var x=m.id&&zItem(classById(m.cid),m.id);
    main column is a two-across grid (half / full) beside a side column; under 1200px everything is one
    column in list order. Edit mode (Edit Home, or press and hold a widget) makes widgets jiggle with an
    × and a ⋯ menu, like the iPhone; drag to move on a computer, Move up / down anywhere. */
-function zOpenTasks(){return allTasks().filter(function(x){return !x.t.done&&x.t.due&&!isRefClass(x.c)})}
+var zOpenTasks;
 var WDEF={
  nextdue:{name:'Next due',desc:'The next thing due, with a countdown',sp:'all',legacy:1,col:'main',size:'half',r:function(){return homeNextDue(zOpenTasks(),today())}},
  term:{name:'Term progress',desc:'Which week of the term you are in',sp:['school'],legacy:1,col:'main',size:'half',r:function(){return homeTermCard()}},
@@ -14315,22 +14108,14 @@ var DEFAULT_W={
  work:[['nextdue','main','half'],['progress','main','half'],['projects','main','half'],['todo','main','half'],['apps','main','full'],['plan','side'],['week','main','full'],['month','side'],['notes','side'],['music','side']],
  personal:[['nextdue','main','half'],['budget','main','half'],['todo','main','half'],['groceries','main','half'],['habits','main','half'],['reading','main','half'],['week','main','full'],['birthdays','side'],['savings','side'],['month','side'],['music','side']]
 };
-function homeWidgets(sp){
- var L=S.homeW&&S.homeW[sp];
- if(L&&L.length)return L.filter(function(w){return WDEF[w.type]});
- return DEFAULT_W[sp].map(function(d){return {id:'w-'+d[0],type:d[0],col:d[1],size:d[2]||'full'}});
-}
-function setHomeWidgets(sp,L){S.homeW=Object.assign({},S.homeW||{});S.homeW[sp]=L;save()}
+var homeWidgets;
+var setHomeWidgets;
 function zWidgetHtml(w,sp){
  var d=WDEF[w.type];if(!d)return '';
  if(d.legacy)return d.r();
  return zNewWidget(w,d,sp);
 }
-function zWCard(w,d,title,meta,body,href){
- var col=w.color||d.soft||'grey';
- return '<section class="wd'+(w.tint?' tinted':'')+'" style="'+zcv(col)+'">'+(w.cover?'<div class="wdcover" style="background-image:url('+w.cover+')"></div>':'')
-  +'<div class="wdh"'+(href?' data-open="'+href+'" role="button" tabindex="0"':'')+'><span class="wdic">'+zI(ZIC[d.ico]||ZIC.list,w.cover?18:15)+'</span><span class="wdt">'+title+'</span>'+(meta?'<span class="wdm">'+meta+'</span>':'')+'</div><div class="wdb">'+body+'</div></section>';
-}
+var zWCard;
 function zNoPage(kind,sp){return '<p class="zsoft">No '+esc((KINDS[kind].name||'').toLowerCase())+' page yet. <button class="zlink" data-zact="mkpage:'+kind+'">Add one</button></p>'}
 ZACT.mkpage=function(kind){var sp=curSpace(),c=newPage(sp,kind,null,null,spacePages(sp).length);S.classes.push(c);save();go('class',c.id)};
 function zNewWidget(w,d,sp){
@@ -14405,17 +14190,7 @@ function zNewWidget(w,d,sp){
 }
 ZACT.projfrom=function(cid,pid){view.zproj=pid;go('class',cid);view.zproj=pid;render()};
 
-function viewSpaceHome(){
- var sp=curSpace(),L=homeWidgets(sp),edit=!!view.homeEdit;
- var slot=function(w,i){var d=WDEF[w.type],html=zWidgetHtml(w,sp);
-  if(!html&&!edit)return '';
-  return '<div class="zw zw-'+(w.col==='side'?'full':(w.size||'full'))+' zw-'+w.type+'" style="order:'+i+'" data-wid="'+w.id+'"'+(edit?' draggable="true" data-zwdrag="'+w.id+'"':'')+'>'
-   +(edit?'<button class="zwx" data-zact="wdel:'+w.id+'" aria-label="Remove '+esc(d.name)+'">×</button><button class="zwm" data-zact="wmenu:'+w.id+'" aria-label="Options for '+esc(d.name)+'">'+zI(ZIC.dots,14)+'</button>':'')
-   +(html||'<div class="zcard zempty" style="padding:18px">'+esc(d.name)+' (nothing to show yet)</div>')+'</div>'};
- var main=L.map(function(w,i){return w.col!=='side'?slot(w,i):''}).join(''),side=L.map(function(w,i){return w.col==='side'?slot(w,i):''}).join('');
- var bar=edit?'<div class="zedit"><b>Edit widgets</b><span>Drag widgets to move them, or use ⋯. Tap × to remove.</span><button class="zebtn" data-zact="wgal">+ Add widget</button><button class="zebtn fin" data-zact="wdone">Done</button></div>':'';
- return bar+'<div class="zhome'+(edit?' edit':'')+'"><div class="zmain">'+main+'</div><aside class="zside">'+side+'</aside></div>';
-}
+var viewSpaceHome;
 ZACT.wedit=function(){view.homeEdit=true;render();window.scrollTo({top:0,behavior:'smooth'})};
 ZACT.wdone=function(){view.homeEdit=false;render()};
 ZACT.wdel=function(id){var sp=curSpace(),L=homeWidgets(sp).filter(function(w){return w.id!==id});setHomeWidgets(sp,L);render()};
@@ -14542,7 +14317,7 @@ pageBgFor=function(k){var v=_zPageBgFor(k),sp=curSpace(),own=S.theme&&S.theme.pa
 function homeOwnerId(){var sp=curSpace();return sp==='school'?'home':'home-'+sp}
 function homeOwner(){var sp=curSpace();if(sp==='school')return S;S.spaceHome=S.spaceHome||{};if(!S.spaceHome[sp])S.spaceHome[sp]={};return S.spaceHome[sp]}
 function coverOwnerById(id){if(id==='home')return S;var m=/^home-(\w+)$/.exec(id);if(m){S.spaceHome=S.spaceHome||{};S.spaceHome[m[1]]=S.spaceHome[m[1]]||{};return S.spaceHome[m[1]]}return classById(id)}
-coverKey=function(c){return c?'cover:'+c.id:'cover:'+homeOwnerId()};
+
 coverOwner=function(key){return coverOwnerById(key.slice(6))};
 // widgets can be turned into... Home
 viewHome=function(){
@@ -14581,7 +14356,7 @@ viewCalendar=function(){
 };
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute||!t.getAttribute('data-zmix'))return;var m=zMixGet();m[t.getAttribute('data-zmix')]=t.checked;try{localStorage.setItem('hub:calmix:'+curSpace(),JSON.stringify(m))}catch(err){}render()});
 var _zPlan=viewPlan;
-viewPlan=function(){view.noEv=true;try{return _zPlan()}finally{view.noEv=false}};
+
 ZACT.evnew=function(){var sp=curSpace(),c=calPage(sp,true);var t=touch({id:uid(),title:'',due:iso(today()),done:false});zOpen('zevent',{cid:c.id,isNew:true,due:t.due})};
 ZM.zevent={html:function(m){var c=classById(m.cid);if(!c)return null;var ppl=c.contacts||[];
  return '<h3>Add an event</h3><div class="field"><label for="ze1">What</label><input id="ze1" placeholder="Mom’s birthday, dentist, soccer practice"></div>'
@@ -14733,8 +14508,8 @@ function zOcc(start,rep,from,to){
  }
  return out;
 }
-function zNextOcc(start,rep,from){return zOcc(start,rep,from,zAddDays(from,400))[0]||''}
-function zPrevOcc(start,rep,before){var L=zOcc(start,rep,zAddDays(before,-400),zAddDays(before,-1));return L[L.length-1]||''}
+var zNextOcc;
+var zPrevOcc;
 
 /* ---------- the Doable logo (the stacked squares and the tick), drawn so it stays sharp ---------- */
 var DOABLE_LOGO='<svg class="dlg" viewBox="0 0 48 48" aria-hidden="true"><path d="M6.6 8.2 4.2 5.8M10.6 6.2 10 3M5 12.2l-3.2-.5" stroke="#9DB098" stroke-width="2" stroke-linecap="round"/>'
@@ -15097,11 +14872,7 @@ function zBillsIn(b,from,to){
  var out=[];b.bills.forEach(function(x){zOcc(x.due,x.rep||'month',from,to).forEach(function(k){out.push({x:x,d:k,paid:!!(x.paid&&x.paid[k])})})});
  return out.sort(function(a,z){return a.d<z.d?-1:a.d>z.d?1:0});
 }
-function zPayNext(b){
- var td=iso(today()),best=null;
- b.pays.forEach(function(p){var n=zNextOcc(p.due,p.rep||'2week',td);if(n&&(!best||n<best.d))best={p:p,d:n,prev:zPrevOcc(p.due,p.rep||'2week',n)}});
- return best;
-}
+var zPayNext;
 function zPayCard(c,b,compact){
  var nx=zPayNext(b);
  if(!nx)return '<div class="zpay empty"><p class="zsoft">Add your pay day and Doable counts down to it.</p><button class="zbtn" data-zact="paynew:'+c.id+'">+ Add pay day</button></div>';
@@ -15119,46 +14890,7 @@ function zBillRow(c,o){
   +(o.paid?'<span class="zdue">Paid</span>':'<span class="zdue'+(late?' late':cd.n<=3?' soon':'')+'">'+esc(late?cd.t:cd.n===0?'Today':cd.n===1?'Tomorrow':'in '+cd.t)+'</span>')
   +'<b class="zamt">'+money(o.x.amount)+'</b></div>';
 }
-zBudgetPage=function(c){
- var mo=zMonthOf(c),b=zBudget(c,mo),pb=zBudget(c,zMoShift(mo,-1)),cur=mo===zMonth();
- var pct=b.total?Math.round(b.spent/b.total*100):0;
- var nav='<div class="zbnav"><button class="zbtn ghost" data-zact="bmon:-1" aria-label="Previous month">‹</button><b>'+esc(zMoName(mo,true))+'</b><button class="zbtn ghost" data-zact="bmon:1" aria-label="Next month"'+(cur?' disabled':'')+'>›</button>'
-  +(cur?'':'<button class="zlink" data-zact="bmon:0">This month</button>')
-  +'<span class="zgrow"></span><button class="zbtn" data-zact="spendnew:'+c.id+'">+ Spending</button><button class="zbtn ghost" data-zact="spendnew:'+c.id+':in">+ Money in</button><button class="zbtn ghost" data-zact="billnew:'+c.id+'">+ Bill</button></div>';
- var diff=function(now,before,goodUp){if(!before)return '';var d=now-before,up=d>0;if(Math.abs(d)<0.5)return 'Same as '+esc(zMoName(zMoShift(mo,-1)));return '<span class="'+((up===goodUp)?'zgood':'zbad')+'">'+(up?'↑ ':'↓ ')+money(Math.abs(d))+'</span> vs '+esc(zMoName(zMoShift(mo,-1)))};
- var saved=b.goals.reduce(function(s,g){return s+(+g.saved||0)},0);
- var stats='<div class="zstats">'
-  +zStat('arrowin','sage','Money in',money(b.inc),diff(b.inc,pb.inc,true)||'Paycheques and gifts')
-  +zStat('arrowout','peach','Money out',money(b.spent),diff(b.spent,pb.spent,false)||'Everything you spent')
-  +zStat('wallet','mist','Left to spend',money(b.left),b.total?pct+'% of '+money(b.total)+' used':'Add category limits')
-  +zStat('piggy','lavender','Saved',money(saved),b.inc?'Kept this month: '+money(b.inc-b.spent):'Across your goals')+'</div>';
- var segs=zSpendSegs(c,b);
- var pie=zCard('Where it went','target',esc(zMoName(mo)),b.spent?'<div class="zpie">'+zDonut(segs,150,18,money(b.spent),'spent')
-   +zLegend(segs.filter(function(s){return s.v>0}).sort(function(a,z){return z.v-a.v}).map(function(s){return {col:s.col,label:s.label,val:Math.round(s.v/b.spent*100)+'%'}}))+'</div>'
-  :'<p class="zempty">Nothing spent '+(cur?'yet this month':'that month')+'. Your spending pie shows here.</p>');
- var inout=zCard('In and out','wallet','',(b.inc||b.spent)?'<div class="zpie">'+zDonut([{v:b.inc,col:ZC.sage[1]},{v:b.spent,col:ZC.peach[1]}],150,18,(b.inc-b.spent>=0?'+':'−')+money(Math.abs(b.inc-b.spent)).replace('−',''),b.inc-b.spent>=0?'kept':'over')
-   +zLegend([{col:ZC.sage[1],label:'Money in',val:money(b.inc)},{col:ZC.peach[1],label:'Money out',val:money(b.spent)}])+'</div>'
-  :'<p class="zempty">Add money in and spending to compare them.</p>');
- var cats=zCard('Budget by category','list','<button class="zlink" data-zact="catnew:'+c.id+'">+ Category</button>',b.cats.length?b.cats.map(function(x){var s=b.byCat[x.id]||0,p=x.limit?Math.min(100,Math.round(s/x.limit*100)):0,over=x.limit&&s>x.limit;
-   return '<button class="zcat'+(over?' over':'')+'" style="'+zcv(x.color||'grey')+'" data-zact="catedit:'+c.id+':'+x.id+'"><span class="zic small">'+zI(ZIC.wallet,13)+'</span><span>'+esc(x.title)+'</span><span class="zsoft">'+money(s)+' / '+money(x.limit)+'</span><span class="zbar"><i style="width:'+p+'%"></i></span></button>'}).join(''):'<p class="zempty">Add categories with a monthly limit.</p>');
- var mEnd=zMoEnd(mo),bl=zBillsIn(b,mo+'-01',mEnd),due=bl.filter(function(o){return !o.paid}).reduce(function(s,o){return s+(+o.x.amount||0)},0);
- var bills=zCard('Bills','bill',(bl.length?money(due)+' still to pay · ':'')+'<button class="zlink" data-zact="billnew:'+c.id+'">+ Bill</button>',
-  bl.length?bl.map(function(o){return zBillRow(c,o)}).join(''):'<p class="zempty">Add your bills with their due dates, like rent or your phone. They show on your calendar too.</p>','zlist');
- var pay=zCard('Pay day','payday',b.pays.length?'<button class="zlink" data-zact="paynew:'+c.id+'">+ Another</button>':'',zPayCard(c,b),'',zcv('sage'));
- // last six months, money in and out side by side
- var months=[];for(var i=5;i>=0;i--)months.push(zMoShift(mo,-i));
- var vals=months.map(function(m){var x=zBudget(c,m);return {m:m,a:x.inc,o:x.spent}}),mx=Math.max.apply(null,vals.map(function(v){return Math.max(v.a,v.o)}).concat([1]));
- var bars=zCard('Last six months','cal','<span class="zlegi"><i style="background:'+ZC.sage[1]+'"></i>In <i style="background:'+ZC.peach[1]+'"></i>Out</span>','<div class="zbars">'+vals.map(function(v){
-   return '<div class="zbc'+(v.m===mo?' on':'')+'" title="'+esc(zMoName(v.m,true))+': in '+money(v.a)+', out '+money(v.o)+'"><div class="zbcb"><i class="in" style="height:'+(v.a/mx*100)+'%"></i><i class="out" style="height:'+(v.o/mx*100)+'%"></i></div><span>'+esc(zMoName(v.m))+'</span></div>'}).join('')+'</div>');
- var rec=b.sp.slice().sort(function(a,z){return (z.date||'')<(a.date||'')?-1:1});
- var catBy={};b.cats.forEach(function(x){catBy[x.id]=x});
- var recent=zCard(cur?'This month':esc(zMoName(mo,true)),'list',rec.length?rec.length+'':'',rec.length?rec.slice(0,view.zbAll?200:8).map(function(x){var ct=catBy[x.cat];
-   return '<button class="zsp" data-zact="spendedit:'+c.id+':'+x.id+'">'+zLogo(x.title||'',32,x.income?'arrowin':'wallet')+'<span>'+esc(x.title||'Spending')+'<small>'+esc(x.date?parseISO(x.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'')+'</small></span>'+(x.income?zTag('Money in','sage'):ct?zTag(ct.title,ct.color||'grey'):'')+'<b'+(x.income?' class="in"':'')+'>'+(x.income?'+':'−')+money(x.amount)+'</b></button>'}).join('')
-   +(rec.length>8&&!view.zbAll?'<button class="zlink" data-zact="ball">Show all '+rec.length+'</button>':''):'<p class="zempty">Nothing added. Tap + Spending after you buy something, or + Money in when you get paid.</p>');
- return nav+stats+'<div class="zg2">'+pie+inout+'</div><div class="zg2">'+pay+bills+'</div><div class="zg2">'+cats+bars+'</div>'+recent
-  +'<div class="zh2row"><h2 class="zh2">Goals and savings</h2><button class="zbtn" data-zact="goalnew:'+c.id+'">+ Add a goal</button></div>'
-  +(b.goals.length?'<div class="zg3">'+b.goals.map(function(g){return zGoalCard(c,g)}).join('')+'</div>':'<p class="zempty">Save toward something: a trip, a laptop, a rainy-day fund. Add a picture to keep it in mind.</p>');
-};
+
 ZACT.bmon=function(n){n=+n;view.zbMonth=n===0?null:zMoShift(view.zbMonth||zMonth(),n);if(view.zbMonth&&view.zbMonth>zMonth())view.zbMonth=null;view.zbAll=false;render()};
 ZACT.ball=function(){view.zbAll=true;render()};
 ZACT.spendnew=function(cid,kind){zOpen('zspend',{cid:cid,inc:kind==='in'})};
@@ -15242,10 +14974,7 @@ ZACT.taskedit=function(cid,tid){
    Items t:'mood' with id 'mood|YYYY-MM-DD' {d,v (1 awful .. 5 great),note}, one per day, so two
    devices can't make two moods for the same day. */
 var MOODS=[null,{n:'Awful',k:'brick'},{n:'Low',k:'peach'},{n:'Okay',k:'sand'},{n:'Good',k:'sage'},{n:'Great',k:'mist'}];
-function moodFace(v,sz){
- var mouth={1:'M8.2 16.6c1.1-1.5 2.4-2.2 3.8-2.2s2.7.7 3.8 2.2',2:'M8.6 15.8c1-.8 2.1-1.2 3.4-1.2s2.4.4 3.4 1.2',3:'M8.8 15.2h6.4',4:'M8.6 14.2c1 1 2.1 1.5 3.4 1.5s2.4-.5 3.4-1.5',5:'M8 13.6c1 1.9 2.4 2.9 4 2.9s3-1 4-2.9'}[v]||'M8.8 15.2h6.4';
- return '<svg viewBox="0 0 24 24" width="'+(sz||24)+'" height="'+(sz||24)+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><circle cx="9" cy="10" r="1.05" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.05" fill="currentColor" stroke="none"/><path d="'+mouth+'"/></svg>';
-}
+var moodFace;
 function moodOf(c,d){return c?zItem(c,'mood|'+d):null}
 function moodPage(sp,create){
  var c=firstPage(sp,'mood');
@@ -15545,44 +15274,7 @@ viewPage=function(c){
 /* ---------- Plan my week: events and due dates show on their day, and a plain explanation ----------
    Due = when it's due. Planned = the day you'll work on it. Mom expected adding something due tomorrow
    to plan it for tomorrow, so that is now a setting (S.autoPlan) and the page says how it works. */
-viewPlan=function(){
- view.noEv=true;var all;try{all=allTasks().filter(function(x){return !isRefClass(x.c)})}finally{view.noEv=false}
- var evs=allTasks().filter(function(x){return x.ev&&!isRefClass(x.c)});
- var col=cpVarRefs(['kplan','ktray']),real=cpSiteColors('plan'),t=today(),off=view.planWeek||0,td=iso(t);
- var ws=weekStart(off),days=[];for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(iso(d))}
- var we=new Date(ws);we.setDate(ws.getDate()+6);
- var label=off===0?'This week':off===1?'Next week':off===-1?'Last week':'Week of '+ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
- var range=ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+' – '+we.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
- var byDay={};days.forEach(function(d){byDay[d]=[]});
- all.forEach(function(x){var d=planDay(x.t);if(d&&byDay[d])byDay[d].push(x)});
- var horizon=new Date(we);horizon.setDate(we.getDate()+14);
- var tray=all.filter(function(x){
-  if(x.t.done)return false;var pd=planDay(x.t);
-  if(pd&&(byDay[pd]||pd>=iso(weekStart(0))))return false;
-  if(!x.t.due)return x.kind==='task';
-  return parseISO(x.t.due)<=horizon;
- }).sort(function(a,b){return (a.t.due||'9')<(b.t.due||'9')?-1:1});
- var planned=0;days.forEach(function(d){planned+=byDay[d].length});
- var help='';try{if(localStorage.getItem('hub:planhelp')!=='0')help='<div class="zplanhelp"><span class="zic">'+zI(ZIC.list,16)+'</span><div><b>How planning works</b><p><b>Due</b> is when something is due. <b>Plan</b> is the day you’ll work on it, which you choose. Things you add show up under <b>To plan</b>; drag one onto a day (or tap it and pick a day). Events and due dates show on their day in grey so you can plan around them.</p></div><button class="zmini" data-zact="planhelp" aria-label="Hide this">×</button></div>'}catch(e){}
- var W='<section class="cpsec" id="p-week">'+cpHead('kplan',col.kplan,label,planned?planned+' planned':'',esc(range)+(window.matchMedia&&matchMedia('(hover:none)').matches?' · tap any item to choose its day':' · drag work onto a day, or click it to choose a day'),
-   '<div class="cpseg"><button data-planwk="-1" aria-label="Previous week">‹</button><button data-planwk="0">This week</button><button data-planwk="1" aria-label="Next week">›</button></div>');
- W+='<div class="cpweek">'+days.map(function(d){
-  var dd=parseISO(d),isT=d===td,past=dd<t;
-  var dueHere=all.filter(function(x){return x.t.due===d&&!x.t.done&&planDay(x.t)!==d});
-  var evHere=evs.filter(function(x){return x.t.due===d}).sort(function(a,b){return (a.t.time||'')<(b.t.time||'')?-1:1});
-  var info=evHere.map(function(x){return '<button class="zpinfo ev" data-zact="taskedit:'+x.c.id+':'+x.t.id+'"><i style="background:'+palHex(x.c.color)+'"></i><span>'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em> ':'')+esc(x.t.title)+'</span></button>'}).join('')
-   +dueHere.map(function(x){return '<button class="zpinfo due" data-planpick="'+planKey(x)+'" title="Due this day. Tap to choose a day to work on it."><i style="background:'+palHex(x.c.color)+'"></i><span><em>Due</em> '+esc(x.t.title)+'</span></button>'}).join('');
-  return '<div class="cpwday'+(isT?' today':'')+(past?' past':'')+'" data-planday="'+d+'">'
-   +'<div class="cpwhead"><span class="cpwname">'+esc(dd.toLocaleDateString('en-CA',{weekday:'short'}))+'</span><span class="cpwnum">'+dd.getDate()+'</span></div>'
-   +'<div class="cpwlist">'+byDay[d].map(function(x){return planCard(x,d)}).join('')+(info?'<div class="zpinfos">'+info+'</div>':'')
-   +(!byDay[d].length&&!info?'<div class="cpwempty">'+(isT?'Nothing planned today':'Free')+'</div>':'')+'</div></div>';
- }).join('')+'</div></section>';
- var T='<section class="cpsec" id="p-tray">'+cpHead('ktray',col.ktray,'To plan',tray.length?tray.length+'':'',tray.length?'Not on a day yet. Drag each one to the day you’ll work on it':'Everything coming up has a day','');
- T+=tray.length?'<div class="cptray">'+tray.map(function(x){return planCard(x,'')}).join('')+'</div>':'<div class="cpempty">Nothing to plan right now. Tasks and assignments you add will appear here, so you can give each one a day to work on it.</div>';
- T+='</section>';
- var G=cpSetHead('Planner settings','plan')+'<button data-zact="autoplan">Plan new to-dos on their due date: '+(S.autoPlan?'On':'Off')+'</button>'+(help?'':'<button data-zact="planhelpon">How planning works</button>')+'<button data-secopen="1">Colours</button></div>';
- return '<div class="cpsplit cpwide" style="'+cpVarStyle(real)+'"><div class="cpmain">'+help+W+T+G+'</div></div>';
-};
+
 ZACT.planhelp=function(){try{localStorage.setItem('hub:planhelp','0')}catch(e){}render()};
 ZACT.planhelpon=function(){try{localStorage.removeItem('hub:planhelp')}catch(e){}render();window.scrollTo({top:0,behavior:'smooth'})};
 ZACT.autoplan=function(){S.autoPlan=!S.autoPlan;save();render()};
@@ -15793,7 +15485,7 @@ function zBrandDomain(name,site){
  for(var i=0;i<BRAND_KEYS.length;i++){var k=BRAND_KEYS[i];if(n.indexOf(' '+k+' ')>-1)return BRANDS[k]}
  return '';
 }
-function zHueOf(s){return ZC_KEYS[Math.abs(String(s||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%ZC_KEYS.length]}
+var zHueOf;
 // a round logo: the brand's own icon when known, otherwise a soft letter (or the icon passed in)
 function zLogo(name,sz,ico,site){
  sz=sz||28;var dom=zBrandDomain(name,site),k=ZC[zHueOf(name)],letter=esc(String(name||'?').trim().charAt(0).toUpperCase()||'?');
@@ -15846,11 +15538,7 @@ function zRoundDays(startIso,sel,attr,dots){
 }
 
 /* ---------- widgets with more to look at: big numbers, rings, line and bar charts, covers, logos ---------- */
-zWCard=function(w,d,title,meta,body,href,extra){
- var col=w.color||d.soft||'grey',tint=w.tint==null?!!d.tintDef:!!w.tint,dark=!!d.dark&&w.tint==null;
- return '<section class="wd'+(tint&&!dark?' tinted':'')+(dark?' dark':'')+(extra?' '+extra:'')+'" style="'+zcv(col)+'">'+(w.cover?'<div class="wdcover" style="background-image:url('+w.cover+')"></div>':'')
-  +'<div class="wdh"'+(href?' data-open="'+href+'" role="button" tabindex="0"':'')+'><span class="wdic">'+zI(ZIC[d.ico]||ZIC.list,w.cover?18:15)+'</span><span class="wdt">'+title+'</span>'+(meta?'<span class="wdm">'+meta+'</span>':'')+'</div><div class="wdb">'+body+'</div></section>';
-};
+
 var _r7TaskRow=zTaskRow;
 zTaskRow=function(c,t){var h=_r7TaskRow(c,t);if(c.kind==='groceries')return h;var ic=zTaskIco(t.title);return ic?h.replace('<button class="zrt"',zIcoChip(ic,ICO_SOFT[ic],26)+'<button class="zrt"'):h};
 var _r7BillRow=zBillRow;
@@ -15862,7 +15550,7 @@ var QUOTES=[['We are what we repeatedly do. Excellence, then, is not an act, but
  ['Little by little, one travels far.','J.R.R. Tolkien'],['Be gentle with yourself. You’re doing the best you can.',''],['What we plant in the soil of contemplation, we shall reap in the harvest of action.','Meister Eckhart'],['Well begun is half done.','Aristotle'],
  ['Start where you are. Use what you have. Do what you can.','Arthur Ashe'],['Slow progress is still progress.',''],['The best time to plant a tree was 20 years ago. The second best time is now.','Proverb'],['One day or day one. You decide.',''],
  ['Do the hard thing first.',''],['A year from now you’ll wish you had started today.','Karen Lamb'],['Focus on being productive instead of busy.','Tim Ferriss'],['Make it simple, make it doable.','']];
-function zQuote(){var t=today(),n=Math.floor((t-new Date(t.getFullYear(),0,0))/864e5);return QUOTES[n%QUOTES.length]}
+var zQuote;
 var LEAF_ART='<svg class="wdleaf" viewBox="0 0 80 90" aria-hidden="true"><path d="M40 88V40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M40 52C24 52 14 40 13 24c17 1 27 11 27 28z" fill="currentColor" opacity=".5"/><path d="M40 44c0-18 10-30 28-32-1 19-11 31-28 32z" fill="currentColor" opacity=".75"/><path d="M40 66c13 0 22-8 24-21-14 0-23 8-24 21z" fill="currentColor" opacity=".35"/></svg>';
 function zTodayStats(sp){
  var td=iso(today()),ws=iso(weekStart(0)),we=iso(weekStart(1)),open=0,doneWk=0,dueWk=0;
@@ -16709,22 +16397,7 @@ zListPage=function(c){
  return bar+(tab==='wish'?zWishBlock(c):_q9ListPage(c));
 };
 function zWishHue(s){return Math.abs(String(s||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7))%360}
-function zWishBlock(c){
- var L=(c.items||[]).filter(function(x){return x.t==='wish'}),open=L.filter(function(x){return !x.got}),got=L.filter(function(x){return x.got});
- var tot=open.reduce(function(s,x){return s+(+x.price||0)},0);
- var tile=function(x){var host=x.url?cpHost(x.url):'',hue=zWishHue(host||x.title);
-  return '<div class="zwi'+(x.got?' got':'')+'">'
-   +'<div class="zwplate" style="background:linear-gradient(155deg,hsl('+hue+',26%,95%),hsl('+hue+',20%,89%))"><button class="zwpbtn" data-zact="wishedit:'+c.id+':'+x.id+'" aria-label="Edit '+esc(x.title)+'">'+zLogo(host||x.title,46,host?null:'heart',host)+'</button>'
-   +(x.url?'<a class="zwopen" href="'+esc(x.url)+'" target="_blank" rel="noopener" aria-label="Open the link">'+zI(ZIC.extlink,15)+'</a>':'')+'</div>'
-   +'<div class="zwbody"><button class="zwt" data-zact="wishedit:'+c.id+':'+x.id+'">'+esc(x.title)+'</button>'+(host?'<span class="zwhost">'+esc(host)+'</span>':'')
-   +'<div class="zwfoot"><span class="zwprice">'+(x.price?money(x.price):'')+'</span><button class="zwgot'+(x.got?' y':'')+'" data-zact="wishgot:'+c.id+':'+x.id+'" aria-label="'+(x.got?'Not got it yet':'Got it')+'">'+zI(ZIC.check,14)+(x.got?'':'<span>Got it</span>')+'</button></div></div></div>';
- };
- var meta=(open.length?open.length+' thing'+(open.length===1?'':'s')+(tot?' · '+money(tot):'')+' · ':'')+'<button class="zlink" data-zact="wishnew:'+c.id+'">+ Add</button>';
- var body=open.length?'<div class="zwgrid">'+open.map(tile).join('')+'</div>'
-  :'<div class="zpempty"><span class="zic">'+zI(ZIC.heart,20)+'</span><b>Your wishlist is empty</b><span>Things you’d love to have one day. Add a link and Doable shows the store’s logo.</span><button class="zbtn" data-zact="wishnew:'+c.id+'">+ Add something</button></div>';
- if(got.length)body+='<details class="zdone"><summary>Got it · '+got.length+'</summary><div class="zwgrid">'+got.map(tile).join('')+'</div></details>';
- return zCard('Wishlist','heart',meta,body,'zlist zwcard');
-}
+var zWishBlock;
 var _q9WishHtml=ZM.zwish.html;
 ZM.zwish.html=function(m){var h=_q9WishHtml(m),c=classById(m.cid);
  if(m.id&&c&&c.kind==='groceries')h+='<button type="button" class="zlink zw2buy" data-zact="wish2buy:'+m.cid+':'+m.id+'">'+zI(ZIC.cart,15)+' Move it to To buy</button>';
@@ -17047,11 +16720,7 @@ function z1ByDue(a,b){var p=a.due||'9',q=b.due||'9';return p<q?-1:p>q?1:0}
 
 /* ---------- To do ---------- */
 var _q10List=zListPage;
-zListPage=function(c){
- if(c.kind==='todo')return z1Todo(c);
- if(c.kind==='groceries')return z1Shop(c);
- return _q10List(c);
-};
+
 function z1Todo(c){
  var td=iso(today()),ws=iso(weekStart(0)),we=zAddDays(ws,6),T=c.tasks||[],open=T.filter(function(t){return !t.done}),done=T.filter(function(t){return t.done});
  var late=open.filter(function(t){return t.due&&t.due<td}).sort(z1ByDue),tdy=open.filter(function(t){return t.due===td});
@@ -17115,82 +16784,15 @@ ZACT.shoptab=function(cid,t){try{localStorage.setItem('hub:shoptab:'+cid,t)}catc
 
 /* ---------- Habit tracker ---------- */
 var _q10Hab=zHabitsPage;
-zHabitsPage=function(c){
- var H=zHabits(c),td=iso(today()),orig=_q10Hab(c),i0=orig.indexOf('<section class="zcard zhab">');
- if(i0<0)return orig;
- var rest=orig.slice(i0),ie=rest.indexOf('</section>')+10,rows=rest.slice(0,ie),heat=rest.slice(ie);
- var todayH=H.filter(function(h){return zHabitOn(h,td)}),doneT=todayH.filter(function(h){return zHabitDone(c,h,td)}).length;
- var ws=iso(weekStart(0)),sch=0,got=0;for(var k=ws;k<=td;k=zAddDays(k,1))H.forEach(function(h){if(zHabitOn(h,k)){sch++;if(zHabitDone(c,h,k))got++}});
- var t=today(),m0=iso(new Date(t.getFullYear(),t.getMonth(),1)),perfect=0,checks=0;
- for(var d=m0;d<=td;d=zAddDays(d,1)){var s2=0,g2=0;H.forEach(function(h){if(zHabitOn(h,d)){s2++;if(zHabitDone(c,h,d))g2++}});checks+=g2;if(s2&&g2===s2)perfect++}
- var best=null;H.forEach(function(h){var b=zBest(c,h);if(!best||b>best.n)best={n:b,h:h}});
- var wkp=sch?Math.round(got/sch*100):0,Z=ZC.sage;
- var hero=z1Hero({pct:todayH.length?doneT/todayH.length*100:0,big:doneT+'/'+todayH.length,cap:'done today',col:Z[1],track:Z[0],
-  tiles:[['in','check','Habits',String(H.length),H.length?todayH.length+' on today':'Add your first one'],
-   ['use','target','This week',wkp+'%',got+' of '+sch+' check-ins'],
-   ['sav','sun','Perfect days',String(perfect),'this month'],
-   ['out','flame','Check-ins',String(checks),'this month']],
-  mini:[['flame',(best&&best.n?best.n:0)+' best streak'],['target',wkp+'% this week'],['sun',perfect+' perfect days']]});
- var acc=best&&best.n?z1Accent('Best streak','flame',best.n+' day'+(best.n===1?'':'s'),esc(best.h.title),'habitedit:'+c.id+':'+best.h.id):z1Accent('Best streak','flame','0 days','Tick a habit a few days in a row','');
- var quick=z1Card('Today','<span class="zsoft">'+doneT+' of '+todayH.length+'</span>',todayH.length?todayH.map(function(h){var y=zHabitDone(c,h,td);
-   return '<button class="z1hab'+(y?' y':'')+'" style="'+zcv(h.color||'sage')+'" data-zact="htick:'+c.id+':'+h.id+':'+td+'" aria-pressed="'+y+'"><span class="zic">'+zI(ZIC[h.ico]||ZIC.check,16)+'</span><b>'+esc(h.title)+'</b><i>'+zI(ZIC.check,13)+'</i></button>'}).join('')
-  :'<p class="zempty">Nothing on for today.</p>');
- var mxs=Math.max.apply(null,H.map(function(h){return zBest(c,h)}).concat([1]));
- var streaks=z1Card('Streaks','',H.length?H.map(function(h){var st=zStreak(c,h);return z1Bar(h.title,st/mxs*100,(ZC[h.color]||Z)[1],st+' day'+(st===1?'':'s'),'habitedit:'+c.id+':'+h.id)}).join(''):'<p class="zempty">Your streaks show here.</p>');
- var cols=[];for(var j=6;j>=0;j--){var dk=zAddDays(td,-j),s3=0,g3=0;H.forEach(function(h){if(zHabitOn(h,dk)){s3++;if(zHabitDone(c,h,dk))g3++}});
-  cols.push({label:parseISO(dk).toLocaleDateString('en-CA',{weekday:'short'}).replace('.',''),v:s3,d:g3,on:dk===td,title:g3+' of '+s3})}
- var last7=z1Card('Last 7 days','',z1Cols(cols));
- return z1Page({key:c.id+'-hab',hero:hero,left:rows+heat,rail:acc+quick+streaks+last7,pin:quick,
-  chips:[['week','This week',rows],['streaks','Streaks',acc+streaks+last7],['month','Month',heat]]});
-};
+
 
 /* ---------- Projects ---------- */
 var _q10Proj=zProjectsPage;
-zProjectsPage=function(c){
- var board=_q10Proj(c);
- if(view.zproj&&zItem(c,view.zproj))return board; // a project is open: the board and its panel get the full width
- var P=c.items.filter(function(x){return x.t==='proj'}),td=iso(today()),Z=ZC.lavender;
- var by=function(s){return P.filter(function(p){return (p.status||'todo')===s})};
- var st=0,sd=0;P.forEach(function(p){(p.steps||[]).forEach(function(x){st++;if(x.done)sd++})});
- var pct=st?Math.round(sd/st*100):(P.length?Math.round(by('done').length/P.length*100):0);
- var soon=P.filter(function(p){return p.due&&(p.status||'todo')!=='done'&&p.due<=zAddDays(td,21)}).sort(z1ByDue);
- var hero=z1Hero({pct:pct,big:pct+'%',cap:st?'of subtasks done':'of projects done',col:Z[1],track:Z[0],
-  tiles:[['use','folder','Not started',String(by('todo').length),''],['sav','clock','In progress',String(by('doing').length),''],
-   ['in','check','Done',String(by('done').length),''],['out','cal','Due soon',String(soon.length),soon.length?esc(soon[0].title):'Nothing in the next 3 weeks']],
-  mini:[['clock',by('doing').length+' in progress'],['check',by('done').length+' done'],['cal',soon.length+' due soon']]});
- var nx=soon[0];
- var acc=nx?z1Accent('Next deadline','cal',esc(z1When(nx.due)),'<span>'+esc(nx.title)+'</span><span>'+esc(zShortDay(nx.due))+'</span>','projopen:'+c.id+':'+nx.id)
-  :z1Accent('Next deadline','cal','None yet','Give a project a due date to count down to it','');
- var soonC=z1Card('Due soon','',soon.length?soon.map(function(p){var pr=zProjProgress(p);return '<button class="z1proj" data-zact="projopen:'+c.id+':'+p.id+'"><span><b>'+esc(p.title)+'</b><small>'+esc(zShortDay(p.due))+' · '+pr+'%</small></span><span class="zbtrack"><i style="width:'+pr+'%;background:'+Z[1]+'"></i></span></button>'}).join(''):'<p class="zempty">Nothing due in the next three weeks.</p>');
- var tags={};P.forEach(function(p){if(p.tag)tags[p.tag]=(tags[p.tag]||0)+1});var tk=Object.keys(tags).sort(function(a,b){return tags[b]-tags[a]});
- var tagC=tk.length?z1Card('By tag','',tk.map(function(k){return z1Bar(k,tags[k]/P.length*100,Z[1],tags[k]+'')}).join('')):'';
- return z1Page({key:c.id+'-proj',hero:hero,left:board,rail:acc+soonC+tagC,pin:acc,chips:[['board','Board',board],['soon','Due soon',soonC+tagC]]});
-};
+
 
 /* ---------- Reading & Watchlist ---------- */
 var _q10Read=zReadingPage;
-zReadingPage=function(c){
- var tr=rdTrack(c),orig=_q10Read(c);
- if(!tr||view.rdSetup===c.id)return orig;
- var all=c.items.filter(function(x){return x.t==='read'}),doing=all.filter(function(x){return x.status==='doing'}),fin=all.filter(function(x){return x.status==='done'}),want=all.filter(function(x){return x.status!=='doing'&&x.status!=='done'});
- var yr=String(today().getFullYear()),finY=fin.filter(function(x){return String(x.fin||x.savedAt||'').slice(0,4)===yr}).length;
- var rated=all.filter(function(x){return x.rating}),avg=rated.length?rated.reduce(function(s,x){return s+x.rating},0)/rated.length:0,Z=ZC.lavender;
- var onlyBooks=tr.length===1&&tr[0]==='book',onlyWatch=tr.indexOf('book')<0;
- var hero=z1Hero({pct:all.length?fin.length/all.length*100:0,big:String(finY),cap:'finished in '+yr,col:Z[1],track:Z[0],
-  tiles:[['sav','book',onlyWatch?'Watching':onlyBooks?'Reading':'In progress',String(doing.length),doing.length?esc(doing[0].title):'Nothing started'],
-   ['use','list','Up next',String(want.length),want.length?esc(want[0].title):'Add something you want to get to'],
-   ['in','check','Finished',String(fin.length),'all time'],
-   ['out','star','Your rating',avg?avg.toFixed(1)+' ★':'–',rated.length?rated.length+' rated':'Rate what you finish']],
-  mini:[['book',doing.length+' on the go'],['list',want.length+' up next'],['check',fin.length+' finished']]});
- var nw=doing[0],now='';
- if(nw){var p=nw.progress||0;now=z1Card(nw.type==='book'?'Now reading':'Now watching','','<button class="z1now" data-zact="readedit:'+c.id+':'+nw.id+'">'+(nw.cover?'<img src="'+esc(nw.cover)+'" alt="">':'<span class="z1nowph">'+zI(ZIC.book,22)+'</span>')
-  +'<span class="z1nowt"><b>'+esc(nw.title)+'</b>'+(nw.by?'<small>'+esc(nw.by)+'</small>':'')+'<span class="zbtrack"><i style="width:'+p+'%;background:'+Z[1]+'"></i></span><em>'+p+'% through</em></span></button>')}
- var mix='';if(tr.length>1){var segs=[['book','Books','lavender'],['show','Shows','mist'],['film','Films','peach']].filter(function(t){return tr.indexOf(t[0])>-1}).map(function(t){return {v:all.filter(function(x){return (x.type||'book')===t[0]}).length,col:ZC[t[2]][1],label:t[1]}});
-  if(all.length)mix=z1Card('Your list','','<div class="zbwent">'+zDonut(segs,92,14,String(all.length),'')+'<div class="zbwl">'+segs.map(function(s){return '<span><i style="background:'+s.col+'"></i>'+s.label+'<em>'+s.v+'</em></span>'}).join('')+'</div></div>')}
- var top3=rated.slice().sort(function(a,b){return b.rating-a.rating}).slice(0,3);
- var fav=top3.length?z1Card('Favourites','',top3.map(function(x){return z1Li(esc(x.title),'★'.repeat(x.rating),'readedit:'+c.id+':'+x.id)}).join('')):'';
- return z1Page({hero:hero,left:orig,rail:(now||z1Accent('Up next','book',String(want.length),'things on your list','readnew:'+c.id))+mix+fav,pin:now,chips:[['all','',orig]]});
-};
+
 
 /* ---------- Meal prep ---------- */
 var _q10Meals=zMealsPage;
@@ -17317,49 +16919,13 @@ z1Todo=function(c){
 
 /* ---------- Notes ---------- */
 var _q11Notes=zNotesPage;
-zNotesPage=function(c){
- var L=c.items.filter(function(x){return x.t==='note'}).sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1}),F=FILES[c.id]||[];
- var td=iso(today()),ws=iso(weekStart(0)),mo=td.slice(0,7),Z=z1Soft(c);
- var wk=L.filter(function(x){return (x.date||'')>=ws}).length,mn=L.filter(function(x){return (x.date||'').slice(0,7)===mo}).length;
- var words=L.reduce(function(s,x){return s+((x.body||'').trim()?(x.body||'').trim().split(/\s+/).length:0)},0),tot=L.length+F.length;
- var hero=z1Hero({pct:tot?Math.max(6,mn/Math.max(1,L.length)*100):0,big:String(tot),cap:tot===1?'note':'notes and pages',col:Z[1],track:Z[0],
-  tiles:[['sav','note','This week',String(wk),'typed notes'],['use','cal','This month',String(mn),esc(today().toLocaleDateString('en-CA',{month:'long'}))],
-   ['in','pen','Handwritten',String(F.length),F.length?'pages to write on':'Start one with your Pencil'],['out','list','Words',words.toLocaleString('en-CA'),'written so far']],
-  mini:[['note',L.length+' typed'],['pen',F.length+' handwritten'],['list',words.toLocaleString('en-CA')+' words']]});
- var tile=function(x){var k=ZC[zHueOf(x.title||x.id)]||ZC.grey;return '<button class="z2note" data-zact="noteedit:'+c.id+':'+x.id+'" style="--nt:'+k[0]+';--nc:'+k[1]+'"><span class="z2nd">'+esc(x.date?zShortDay(x.date):'')+'</span><b>'+esc(x.title||'Untitled')+'</b><span class="z2nb">'+esc((x.body||'').slice(0,220))+'</span></button>'};
- var pages=F.map(function(f,i){return '<div class="z2page"><a href="#" data-mkopen="'+i+'" data-c="'+c.id+'"><span class="z2pp">'+zI(ZIC.pen,20)+'</span><b>'+esc(f.name)+'</b><small>Handwritten</small></a><button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">'+CP_ICO.more+'</button></div>'}).join('');
- var adds='<span class="zsoft z2hr"><button class="zlink" data-zact="notenew:'+c.id+'">+ Typed note</button> · <button class="zlink" data-zact="notepen:'+c.id+'">+ Handwritten page</button></span>';
- var notesC=z1Card('Notes',adds,L.length?'<div class="z2notes">'+L.map(tile).join('')+'</div>':'<p class="zempty">Type a note, like what was said in a meeting and what to do next.</p>');
- var pagesC=z1Card('Handwritten pages','<button class="zlink" data-zact="notepen:'+c.id+'">+ New page</button>',F.length?'<div class="z2pages">'+pages+'</div>':'<p class="zempty">Pages you write on with your Pencil or finger show here.</p>');
- var last=L[0],acc=last?z1Accent('Latest note','note',esc(last.title||'Untitled'),esc(last.date?zShortDay(last.date):''),'noteedit:'+c.id+':'+last.id):z1Accent('Latest note','note','None yet','Your newest note shows here','notenew:'+c.id);
- acc=acc.replace('<b>','<b class="z2accb">');
- var cols=[];for(var i=5;i>=0;i--){var m=zMoShift(mo,-i);cols.push({label:zMoName(m),v:L.filter(function(x){return (x.date||'').slice(0,7)===m}).length,d:0,on:m===mo})}
- cols.forEach(function(x){x.d=x.v});
- var months=z1Card('Last six months','',z1Cols(cols));
- var quick=z1Card('Start something','','<div class="z2quick"><button data-zact="notenew:'+c.id+'"><span class="zic" style="'+zcv('sand')+'">'+zI(ZIC.note,18)+'</span>Typed note</button><button data-zact="notepen:'+c.id+'"><span class="zic" style="'+zcv('lavender')+'">'+zI(ZIC.pen,18)+'</span>Handwritten page</button></div>');
- return z1Page({key:c.id+'-notes',hero:hero,left:notesC+pagesC,rail:acc+quick+months,pin:acc,chips:[['notes','Notes',notesC],['pages','Handwritten',pagesC],['months','Months',quick+months]]});
-};
+
 
 /* ---------- Applications / Resources ---------- */
 function z2AppUse(){try{return JSON.parse(localStorage.getItem('hub:appuse')||'{}')}catch(e){return {}}}
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.zapp a[href],.z2app a[href]');if(!a)return;var u=z2AppUse(),k=a.getAttribute('href');u[k]={n:((u[k]&&u[k].n)||0)+1,at:Date.now()};try{localStorage.setItem('hub:appuse',JSON.stringify(u))}catch(err){}},true);
 var _q11Apps=zAppsPage;
-zAppsPage=function(c){
- var L=c.links||[],F=FILES[c.id]||[],U=z2AppUse(),Z=z1Soft(c);
- var used=L.map(function(l,i){return {l:l,i:i,n:(U[l.url]&&U[l.url].n)||0,at:(U[l.url]&&U[l.url].at)||0}});
- var top=used.filter(function(x){return x.n}).sort(function(a,b){return b.n-a.n}),lastO=used.filter(function(x){return x.at}).sort(function(a,b){return b.at-a.at})[0];
- var opens=used.reduce(function(s,x){return s+x.n},0);
- var ago=function(t){var m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' days ago'};
- var hero=z1Hero({pct:L.length?100:0,big:String(L.length),cap:L.length===1?'app or site':'apps and sites',col:Z[1],track:Z[0],
-  tiles:[['in','grid','Apps and sites',String(L.length),L.length?'one tap to open':'Add the ones you use most'],['use','note','Files',String(F.length),F.length?'handbooks and forms':'Upload a handbook or form'],
-   ['sav','star','Most used',top[0]?esc(top[0].l.title):'–',top[0]?top[0].n+' open'+(top[0].n===1?'':'s')+' on this device':'Shows once you open a few'],['out','clock','Last opened',lastO?esc(lastO.l.title):'–',lastO?ago(lastO.at):'Nothing opened yet']],
-  mini:[['grid',L.length+' apps'],['note',F.length+' files'],['star',opens+' opens']]});
- var orig=_q11Apps(c),i2=orig.indexOf('<section class="zcard',5),appsC=i2>0?orig.slice(0,i2):orig,filesC=i2>0?orig.slice(i2):'';
- var mostC=z1Card('Most used','',top.length?top.slice(0,5).map(function(x){return '<a class="z1li z2app" href="'+esc(x.l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(x.l.url,x.l.title,x.l.icon)+'<span>'+esc(x.l.title)+'</span><em>'+x.n+'</em></a>'}).join(''):'<p class="zempty">The apps you open most on this device show up here.</p>');
- var acc=lastO?'<a class="zbpay z2acclink" href="'+esc(lastO.l.url)+'" target="_blank" rel="noopener" data-phoneapp="1" style="background:'+chromeHex('sideBg')+';color:#fff"><span class="zbtl">'+zI(ZIC.clock,14)+'Open again</span><b class="z2accb">'+esc(lastO.l.title)+'</b><small>Last opened '+ago(lastO.at)+'</small></a>'
-  :z1Accent('Your apps','grid',String(L.length),'Tap one to open it','');
- return z1Page({key:c.id+'-apps',hero:hero,left:appsC+filesC,rail:acc+mostC,pin:acc,chips:[['apps','Apps',appsC],['files','Files',filesC],['most','Most used',mostC]]});
-};
+
 
 /* ---------- Calendar: a ring for today and a rail with what's next ---------- */
 var _q11Cal=viewCalendar;
@@ -17439,13 +17005,7 @@ var _q11Sizes=zwSizes;
 zwSizes=function(type){return type==='today1c'?['full']:_q11Sizes(type)};
 ['school','work','personal'].forEach(function(sp){if(DEFAULT_W[sp]&&!DEFAULT_W[sp].some(function(d){return d[0]==='today1c'}))DEFAULT_W[sp].unshift(['today1c','main','full'])});
 // add it once to the top of every saved layout (phone, iPad and computer)
-function q11Migrate(){
- S.spacesInit=S.spacesInit||{};if(S.spacesInit.h1c)return;if(sbUser&&(!S.everSynced||!q21Pulled))return;
- var H=S.homeW||{},ch=false;
- Object.keys(H).forEach(function(k){var L=H[k];if(L&&L.length&&!L.some(function(w){return w.type==='today1c'})){L=[{id:'w-today1c',type:'today1c',col:'main',size:'full'}].concat(L);H[k]=L;ch=true}});
- if(ch)S.homeW=Object.assign({},H);
- S.spacesInit=Object.assign({},S.spacesInit,{h1c:true});save();
-}
+var q11Migrate;
 var _q11Load=load;
 load=async function(){await _q11Load();try{q11Migrate()}catch(e){}render()};
 
@@ -17460,11 +17020,9 @@ load=async function(){await _q11Load();try{q11Migrate()}catch(e){}render()};
    are back to how they were before v149. The group cards on To do stay (Jae asked for those). */
 
 /* ---------- back to each page's own layout ---------- */
-zHabitsPage=function(c){var h=_q10Hab(c),i=h.lastIndexOf('<section class="zcard');return (i>0?h.slice(0,i):h)+z3HabitHeat(c)};
+
 zProjectsPage=function(c){var b=_q10Proj(c);if(view.zproj&&zItem(c,view.zproj))return b;return z3Timeline(c)+b};
-zReadingPage=function(c){var h=_q10Read(c),tr=rdTrack(c);if(!tr||view.rdSetup===c.id)return h;
- var shelf=z3Shelf(c);if(!shelf)return h;
- return /<details class="zrdfin"/.test(h)?h.replace(/<details class="zrdfin"[\s\S]*?<\/details>/,shelf):h.replace('<button class="zlink zrdchange"',shelf+'<button class="zlink zrdchange"')};
+
 zMealsPage=_q10Meals;
 zMoodPage=_q10Mood;
 viewCalendar=_q11Cal;
@@ -17540,21 +17098,7 @@ function z3HabitHeat(c){
 }
 
 /* ---------- Projects: a timeline of the next six weeks ---------- */
-function z3Timeline(c){
- var P=c.items.filter(function(x){return x.t==='proj'&&(x.status||'todo')!=='done'});if(!P.length)return '';
- var td=iso(today()),start=iso(weekStart(0)),span=42,pos=function(k){return Math.max(0,Math.min(100,daysBetween(parseISO(start),parseISO(k))/span*100))};
- var dated=P.filter(function(p){return p.due}).sort(function(a,b){return a.due<b.due?-1:1}),undated=P.filter(function(p){return !p.due});
- var axis='';for(var w=0;w<6;w++)axis+='<span>'+esc(parseISO(zAddDays(start,w*7)).toLocaleDateString('en-CA',{month:'short',day:'numeric'}).replace('.',''))+'</span>';
- var tp=pos(td);
- var rows=dated.map(function(p){var pr=zProjProgress(p),late=p.due<td,a=late?Math.max(0,pos(p.due)):tp,b=pos(p.due),beyond=p.due>zAddDays(start,span);
-  var col=(p.status||'todo')==='doing'?'#83708F':'#8C8A84';
-  return '<button class="z3tl" data-zact="projopen:'+c.id+':'+p.id+'"><span class="z3tn"><b>'+esc(p.title)+'</b><small>'+(late?'<span class="z2late">'+esc(cpCountdown(p.due).t)+'</span>':esc(zShortDay(p.due)))+' · '+pr+'%</small></span>'
-   +'<span class="z3tt"><span class="z3bar'+(late?' late':'')+'" style="left:'+Math.min(a,b)+'%;width:'+Math.max(2.5,Math.abs(b-a))+'%;--pc:'+col+'"><i style="width:'+pr+'%"></i></span>'+(beyond?'<em class="z3more">›</em>':'')+'<span class="z3dia" style="left:'+b+'%;--pc:'+(late?'#B66A5E':col)+'"></span></span></button>'}).join('');
- return '<section class="z3card z3time"><div class="z3h"><h3>Timeline</h3><span class="zsoft">The next six weeks</span></div>'
-  +'<div class="z3tl head"><span class="z3tn"></span><span class="z3tt z3axis">'+axis+'<span class="z3now" style="left:'+tp+'%"><em>Today</em></span></span></div>'
-  +(rows||'<p class="zempty">Give your projects due dates to see them on the timeline.</p>')
-  +(undated.length?'<p class="z3nodate">No date yet: '+undated.map(function(p){return '<button class="zlink" data-zact="projopen:'+c.id+':'+p.id+'">'+esc(p.title)+'</button>'}).join(', ')+'</p>':'')+'</section>';
-}
+var z3Timeline;
 
 /* ---------- Reading & Watchlist: what you've finished, as spines on a shelf ---------- */
 function z3Shelf(c){
@@ -17567,19 +17111,7 @@ function z3Shelf(c){
 }
 
 /* ---------- Notes: how much you've been writing ---------- */
-zNotesPage=function(c){
- var L=c.items.filter(function(x){return x.t==='note'}).sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1}),F=FILES[c.id]||[];
- var words=L.reduce(function(s,x){return s+((x.body||'').trim()?(x.body||'').trim().split(/\s+/).length:0)},0);
- var ws=iso(weekStart(0)),wk=[];for(var i=11;i>=0;i--){var a=zAddDays(ws,-7*i),b=zAddDays(a,6);wk.push(L.filter(function(x){return x.date>=a&&x.date<=b}).length)}
- var write='<section class="z3card z3write"><div class="z3wst"><div><b>'+L.length+'</b><small>typed note'+(L.length===1?'':'s')+'</small></div><div><b>'+words.toLocaleString('en-CA')+'</b><small>words</small></div><div><b>'+F.length+'</b><small>handwritten</small></div></div>'
-  +'<div class="z3wsp">'+(L.length?zSpark(wk,64,'#9E8B61'):'')+'<small>Notes per week, the last 12 weeks</small></div></section>';
- var tile=function(x){var k=ZC[zHueOf(x.title||x.id)]||ZC.grey;return '<button class="z2note" data-zact="noteedit:'+c.id+':'+x.id+'" style="--nt:'+k[0]+';--nc:'+k[1]+'"><span class="z2nd">'+esc(x.date?zShortDay(x.date):'')+'</span><b>'+esc(x.title||'Untitled')+'</b><span class="z2nb">'+esc((x.body||'').slice(0,220))+'</span></button>'};
- var pages=F.map(function(f,i){return '<div class="z2page"><a href="#" data-mkopen="'+i+'" data-c="'+c.id+'"><span class="z2pp">'+zI(ZIC.pen,20)+'</span><b>'+esc(f.name)+'</b><small>Handwritten</small></a><button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">'+CP_ICO.more+'</button></div>'}).join('');
- return (L.length||F.length?write:'')
-  +zCard(esc(c.name),'note','<button class="zlink" data-zact="notenew:'+c.id+'">+ Typed note</button> · <button class="zlink" data-zact="notepen:'+c.id+'">+ Handwritten page</button>',
-   L.length?'<div class="z2notes">'+L.map(tile).join('')+'</div>':'<p class="zempty">Type a note, or start a page to write on with your Pencil.</p>','z3notes')
-  +(F.length?zCard('Handwritten pages','pen','','<div class="z2pages">'+pages+'</div>'):'');
-};
+
 
 /* ---------- Applications: the ones you open most, as bars with their icons ---------- */
 function z3MostUsed(c){
@@ -17860,9 +17392,9 @@ var Z5AISLES=[
  ['other','Everything else','cart','grey',null]
 ];
 function z5Aisle(t){if(t.aisle&&Z5AISLES.some(function(a){return a[0]===t.aisle}))return t.aisle;var s=t.title||'';for(var i=0;i<Z5AISLES.length-1;i++)if(Z5AISLES[i][4].test(s))return Z5AISLES[i][0];return 'other'}
-function z5Tab(c){var v='gro';try{v=localStorage.getItem('hub:shoptab:'+c.id)||'gro'}catch(e){}return v==='wish'?'wish':v==='shop'?'shop':'gro'}
+var z5Tab;
 function z5Sort(c,tab){var v='store';try{v=localStorage.getItem('hub:shopsort:'+c.id)||'store'}catch(e){}if(v==='aisle'&&tab!=='gro')v='store';return v==='aisle'||v==='az'?v:'store'}
-function z5In(t,tab){return tab==='shop'?t.list==='shop':t.list!=='shop'}
+var z5In;
 ZACT.shoptab=function(cid,t){if(t==='list')t='gro';try{localStorage.setItem('hub:shoptab:'+cid,t)}catch(e){}view.z5add=null;view.r6enter=1;render()};
 ZACT.z5sort=function(cid,v){try{localStorage.setItem('hub:shopsort:'+cid,v)}catch(e){}view.z5add=null;render()};
 ZACT.z5open=function(key){view.z5add=view.z5add===key?null:key;render();setTimeout(function(){var i=document.getElementById('z5in');if(i)i.focus()},40)};
@@ -17965,7 +17497,7 @@ ZACT.z6me=function(){zOpen('z6me')};
 ZM.z6me={html:function(){return '<h3>Under your name</h3><p class="hint" style="margin:-4px 0 12px">A short line that shows under your picture in the menu, like “Marketing student” or “Mom of two”.</p>'
  +'<div class="field"><label for="z6t">Your line</label><input id="z6t" maxlength="40" value="'+esc(S.tagline||'')+'" placeholder="Marketing student"></div>'},
  save:function(){S.tagline=zv('z6t');save();view.modal=null;render()},saveLabel:'Save'};
-function q16Side(){document.querySelectorAll('.side .me').forEach(function(el){var d=document.createElement('div');d.innerHTML=q16Me();el.replaceWith(d.firstChild)})}
+var q16Side;
 var _q16Render=render;
 render=function(){var before=app.firstElementChild;var r=_q16Render.apply(this,arguments);if(app.firstElementChild!==before)q16Side();return r};
 
@@ -18140,12 +17672,7 @@ zSmall=function(w,d,sp){
 };
 
 /* ---------- the profile card (a Home widget, right column) ---------- */
-function q17Profile(){
- var who=String(S.owner||'').replace(/’/g,"'").replace(/'s\s+hub$/i,'').replace(/^my hub$/i,'').trim()||firstName();
- return '<section class="q17prof"><label class="q17av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
-  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+esc(String(who).charAt(0).toUpperCase())+'</span>')+'<i>'+zI('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',12)+'</i></label>'
-  +'<b>'+esc(who)+'</b><button class="q17tag'+(S.tagline?'':' add')+'" data-zact="z6me">'+esc(S.tagline||'Add a line about you')+'</button></section>';
-}
+var q17Profile;
 WDEF.profile={name:'Your profile',desc:'Your picture, name and a line about you',sp:'all',legacy:1,col:'side',size:'full',r:function(){return q17Profile()}};
 var _q17Sizes=zwSizes;zwSizes=function(type){return type==='profile'?['full']:_q17Sizes(type)};
 ['school','work','personal'].forEach(function(sp){var L=DEFAULT_W[sp];if(L&&!L.some(function(d){return d[0]==='profile'})){var i=L.findIndex(function(d){return d[1]==='side'});L.splice(i<0?L.length:i,0,['profile','side','full'])}});
@@ -18231,7 +17758,7 @@ ZM.zbadd.html=function(m){return _q17Add(m).replace(/<\/div>$/,'<button data-zac
    checklist, a water tracker with a moving wave, a wallet of your budget cards, and a focus timer.
    Recipes (Meal prep) are cards like Jae's picture: title, time chips, the food on a round plate. */
 SETTINGS_KEYS.push('water');
-function q18Deep(){var q=rgb2hsl.apply(null,hex2rgb(chromeHex('sideBg')));return hsl2hex(q[0],Math.min(q[1],22),20)}
+var q18Deep;
 function q18Shape(w,cls,inner,attrs){return '<section class="q18w '+cls+'"'+(attrs||'')+'>'+inner+'</section>'}
 var Q18={};
 /* analog clock: the second hand sweeps, the others move every 20 seconds */
@@ -18288,7 +17815,7 @@ Q18.wallet=function(w,sp){
 /* focus timer: tap to start or pause a 25-minute focus session; the ring drains as time passes */
 function q18F(){try{return JSON.parse(localStorage.getItem('hub:focus')||'{}')}catch(e){return {}}}
 function q18FSet(f){try{localStorage.setItem('hub:focus',JSON.stringify(f))}catch(e){}}
-function q18FLeft(f){return f.end?Math.max(0,f.end-Date.now()):(f.left!=null?f.left:25*60000)}
+var q18FLeft;
 ZACT.q18focus=function(){var f=q18F();if(f.end){f.left=q18FLeft(f);delete f.end}else{f.end=Date.now()+q18FLeft(f);delete f.left}q18FSet(f);render()};
 ZACT.q18reset=function(){q18FSet({});render()};
 Q18.focus=function(w){
@@ -18390,8 +17917,7 @@ function q19Side(){
   for(var n=l.nextElementSibling;n&&!n.classList.contains('slabel');n=n.nextElementSibling)n.classList.toggle('q19hide',shut&&!n.classList.contains('on')&&!n.querySelector('.on'));
  });
 }
-function q19Toggle(l){var k=q19SideKey(l),shut=false;try{shut=localStorage.getItem(k)==='1';localStorage.setItem(k,shut?'0':'1')}catch(e){}
- q19Side();if(shut){for(var n=l.nextElementSibling;n&&!n.classList.contains('slabel');n=n.nextElementSibling){n.classList.add('q19in');(function(el){setTimeout(function(){el.classList.remove('q19in')},400)})(n)}}}
+var q19Toggle;
 document.addEventListener('click',function(e){var l=e.target.closest&&e.target.closest('.side .q19lab');if(!l)return;e.preventDefault();e.stopPropagation();q19Toggle(l)},true);
 document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.classList&&e.target.classList.contains('q19lab')){e.preventDefault();q19Toggle(e.target)}});
 var _q19Render=render;
@@ -18405,7 +17931,7 @@ render=function(){var before=app.firstElementChild;var r=_q19Render.apply(this,a
    widgets bar; bills due in a later month show under "Later" (they used to vanish); the Coming up colour
    in the Colours panel now actually colours the Coming up card. */
 function q20Hex(w,c){var v=w&&w.color;if(v&&/^#/.test(v))return v;if(v&&ZC[v])return ZC[v][1];return c?palHex(c.color):chromeHex('sideBg')}
-function q20Deep(hex){var q=rgb2hsl.apply(null,hex2rgb(hex));return hsl2hex(q[0],Math.min(q[1],26),22)}
+var q20Deep;
 var Q20={};
 Q20.todo=function(w,sp){
  var c=firstPage(sp,'todo');if(!c)return null;
@@ -18530,25 +18056,9 @@ trackChanges=function(){
  q21Seen=cur;
 };
 // a setting this device never stamped is as old as when it started stamping (setBase), not as new as its latest save
-function q21At(st,u){var m=st.setAt;if(!m)return st.settingsSavedAt||'';if(m[u])return m[u];var k=u.split('.')[0];return m[k]||st.setBase||''}
+var q21At;
 var _q21Merge=mergeState;
-mergeState=function(local,remote){
- var out=_q21Merge(local,remote);if(!local||!remote||!out||out===local||out===remote)return out;
- var at={},win=function(u,lv,rv){var la=q21At(local,u),ra=q21At(remote,u);if(la!==ra)return newer(ra,la)?'r':'l';return canon(rv===undefined?null:rv)>canon(lv===undefined?null:lv)?'r':'l'};
- SETTINGS_KEYS.forEach(function(k){
-  var lv=local[k],rv=remote[k],obj=function(v){return v&&typeof v==='object'&&!Array.isArray(v)};
-  if(Q21DEEP[k]&&(obj(lv)||obj(rv))&&!(lv!=null&&!obj(lv))&&!(rv!=null&&!obj(rv))){
-   var o={},subs={};Object.keys(lv||{}).forEach(function(s){subs[s]=1});Object.keys(rv||{}).forEach(function(s){subs[s]=1});
-   Object.keys(subs).forEach(function(s){var u=k+'.'+s,a=(lv||{})[s],b=(rv||{})[s],w=win(u,a,b),v=w==='r'?b:a;if(v!==undefined)o[s]=JSON.parse(JSON.stringify(v))});
-   out[k]=o;
-  }else{var w=win(k,lv,rv),v=w==='r'?rv:lv;if(v===undefined)delete out[k];else out[k]=JSON.parse(JSON.stringify(v))}
- });
- var keys={};[local.setAt||{},remote.setAt||{}].forEach(function(m){Object.keys(m).forEach(function(u){keys[u]=1})});
- Object.keys(keys).forEach(function(u){var a=(local.setAt||{})[u]||'',b=(remote.setAt||{})[u]||'';at[u]=newer(b,a)?b:a});
- out.setAt=at;if(local.setAt||remote.setAt){var lb=local.setAt?local.setBase||'':local.settingsSavedAt||'',rb=remote.setAt?remote.setBase||'':remote.settingsSavedAt||'';out.setBase=newer(rb,lb)?rb:lb}
- out.settingsSavedAt=newer(remote.settingsSavedAt,local.settingsSavedAt)?remote.settingsSavedAt:local.settingsSavedAt;
- return out;
-};
+
 // one-time updates (new widgets etc.) wait until this device has the cloud copy, so a stale phone can't push old layouts
 var q21Pulled=false;
 var _q21MR=mergeRemote;
@@ -19440,15 +18950,7 @@ function q32Bar(c,k,L,hide,phone){
   +'<span class="q32sep"></span>'+bt('q28eye:'+c.id+':'+k,hide[k]?'Show':'Hide',!!hide[k])+'</div>';
 }
 var _q32Apply=q28Apply;
-q28Apply=function(){
- _q32Apply();var c=view.page==='page'&&classById(view.classId);if(!c||c.kind!=='budget')return;var hw=document.querySelector('.zbhw');if(!hw)return;
- var f=q28Find(hw),sz=c.bSize||{};
- if(f.went)f.went.classList.toggle('q32big',sz.went==='l');if(f.six)f.six.classList.toggle('q32big',sz.six==='l');
- if(!q32On())return;
- var L=q28Lay(c),hide={};L.hide.forEach(function(k){hide[k]=1});var phone=!hw.querySelector('.zbdesk');
- Object.keys(f).forEach(function(k){var el=f[k];if(!el)return;el.classList.remove('q28hide');el.classList.add('q32ed');el.classList.toggle('q32off',!!hide[k]);
-  if(!el.querySelector(':scope>.q32tb'))el.insertAdjacentHTML('afterbegin',q32Bar(c,k,L,hide,phone))});
-};
+
 // "Edit page" in the top-right of the Budget cover (or title band), like Edit widgets on Home
 var _q32Render=render;
 render=function(){var r=_q32Render.apply(this,arguments);
@@ -19575,21 +19077,10 @@ ZM.q36sec={html:function(m){var c=classById(m.cid);if(!c)return null;var g=q36Gr
  return h+'<button type="button" class="zbtn ghost" data-zact="q36hide:'+c.id+':'+k+'" data-closesheet="1">Hide this section</button>';
 },saveLabel:'Done',save:function(){view.modal=null;render()}};
 // lay the sections out in the grid (computers), after every redraw
-q28Apply=function(){
- var c=view.page==='page'&&classById(view.classId);if(!c||c.kind!=='budget')return;var hw=document.querySelector('.zbhw');if(!hw)return;
- var g=q36Grid(c),f=q28Find(hw),sz=c.bSize||{},edit=q32On(),hid={};g.hide.forEach(function(k){hid[k]=1});
- if(f.went)f.went.classList.toggle('q32big',sz.went==='l');if(f.six)f.six.classList.toggle('q32big',sz.six==='l');
- var desk=hw.querySelector('.zbdesk');
- if(!desk){Object.keys(f).forEach(function(k){if(f[k])f[k].classList.toggle('q28hide',!!hid[k])});return}
- var grid=hw.querySelector('.q36grid');if(!grid){grid=document.createElement('div');grid.className='q36grid'+(edit?' editing':'');desk.parentNode.insertBefore(grid,desk)}
- g.order.forEach(function(k){var el=f[k];if(!el)return;el.classList.add('q36sec');el.setAttribute('data-q36',k);el.style.gridColumn='span '+Q36SPAN[g.w[k]||'m'];el.classList.toggle('q28hide',!!hid[k]);grid.appendChild(el);
-  if(edit&&!hid[k]&&!el.querySelector(':scope>.q36x'))el.insertAdjacentHTML('afterbegin','<button class="zwx q36x" data-zact="q36hide:'+c.id+':'+k+'" aria-label="Hide this section">×</button><button class="zwm q36m" data-zact="q36menu:'+c.id+':'+k+'" aria-label="Size and more">'+zI(ZIC.dots,14)+'</button>')});
- desk.remove();var b=hw.querySelector('.q28below');if(b)b.remove();
- if(edit){var bar=document.querySelector('.q32bar');if(bar&&!bar.querySelector('.q36hid')&&g.hide.length)bar.querySelector('span').insertAdjacentHTML('afterend','<span class="q36hid">Hidden: '+g.hide.map(function(k){var n=(Q28SEC.filter(function(q){return q[0]===k})[0]||[k,k])[1];return '<button class="zebtn" data-zact="q36show:'+c.id+':'+k+'">+ '+esc(n)+'</button>'}).join('')+'</span>')}
-};
+
 // the edit bar wording
 var _q36Bud=zBudgetPage;
-zBudgetPage=function(c){return _q36Bud(c).replace('<span>Move, resize or hide each section with the buttons on it.</span>','<span>Drag sections to move them. ⋯ changes the size. × hides one.</span>')};
+
 // drag to move (mouse or finger), like Home
 var q36D=null;
 document.addEventListener('pointerdown',function(e){
@@ -19691,14 +19182,10 @@ function q39Times(t){var out=[],rx=/(\d+(?:\.\d+)?)(?:\s*(?:-|–|to)\s*(\d+(?:\
  while((m=rx.exec(t))){var v=+m[1],u=m[3].toLowerCase(),sec=/^h/.test(u)?v*3600:/^s/.test(u)?v:v*60;if(sec>=10&&sec<=86400)out.push({label:m[0],sec:Math.round(sec)})}return out}
 // ---------- timers (keep running when the card closes) ----------
 var Q39T=[],q39Tick=0;
-function q39Beep(){try{var A=window.AudioContext||window.webkitAudioContext,a=new A();[0,.35,.7].forEach(function(t){var o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.value=880;g.gain.setValueAtTime(.0001,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.3,a.currentTime+t+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t+.3);o.connect(g);g.connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+.32)})}catch(e){}
- try{navigator.vibrate&&navigator.vibrate([300,150,300,150,300])}catch(e){}}
+var q39Beep;
 function q39Left(t){return t.end?Math.max(0,Math.round((t.end-Date.now())/1000)):t.left}
 function q39Clock(s){var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+('0'+m).slice(-2):m)+':'+('0'+x).slice(-2)}
-function q39Dock(){var d=document.getElementById('q39dock');if(!Q39T.length){if(d)d.remove();return}
- if(!d){d=document.createElement('div');d.id='q39dock';document.body.appendChild(d)}
- d.innerHTML=Q39T.map(function(t,i){var l=q39Left(t);return '<div class="q39tm'+(l===0?' done':'')+(t.end?'':' paused')+'"><span class="q39tl">'+esc(t.name)+'</span><b>'+(l===0?'Done!':q39Clock(l))+'</b>'
-  +(l===0?'':'<button type="button" data-q39t="pause:'+i+'" aria-label="'+(t.end?'Pause':'Resume')+'">'+(t.end?zI('<path d="M8 5v14M16 5v14"/>',14):zI('<path d="M7 4l12 8-12 8z"/>',14))+'</button>')+'<button type="button" data-q39t="x:'+i+'" aria-label="Stop timer">'+zI('<path d="M6 6l12 12M18 6 6 18"/>',14)+'</button></div>'}).join('')}
+var q39Dock;
 function q39Start(name,sec){Q39T.push({name:name,end:Date.now()+sec*1000,left:sec,rang:false});q39Dock();if(!q39Tick)q39Tick=setInterval(function(){
  Q39T.forEach(function(t){if(t.end&&!t.rang&&q39Left(t)===0){t.rang=true;q39Beep();zToast('⏱ '+esc(t.name)+' is done')}});q39Dock();if(!Q39T.length){clearInterval(q39Tick);q39Tick=0}},1000);zToast('Timer started: '+q39Clock(sec))}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q39t]');if(!b)return;var p=b.getAttribute('data-q39t').split(':'),t=Q39T[+p[1]];if(!t)return;
@@ -19751,8 +19238,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 });
 // "Make now" on every recipe card and at the top of the recipe pop-up
 var _q39Card=q24Card;
-q24Card=function(c,r){var h=_q39Card(c,r);
- return h.replace(/^<button class="q18rec"/,'<div class="q18rec" role="button" tabindex="0"').replace(/<\/button>$/,'<button type="button" class="q39mk" data-zact="q39make:'+c.id+':'+r.id+'">'+zI('<path d="M7 4l12 8-12 8z"/>',12)+' Make now</button></div>')};
+
 var _q39RH=ZM.zrecipe.html;
 ZM.zrecipe.html=function(m){var h=_q39RH(m);if(!h||!m.id)return h;return h.replace(/(<h3>[^<]*<\/h3>)/,'$1<button type="button" class="zbtn q39mkb" data-zact="q39make:'+m.cid+':'+m.id+'">'+zI('<path d="M7 4l12 8-12 8z"/>',13)+' Make now</button>')};
 
@@ -19813,7 +19299,7 @@ syncOnce=async function(){var r=await _q42Sync.apply(this,arguments);try{q42Meta
 
 /* Android: Chrome offers a one-tap install; keep its offer so the guide can show an Install button */
 /* the menu's Get the app item: only on a phone or iPad that is using Doable in the browser, never in the installed app or on a computer */
-function q42ShowGet(){try{return !isInstalledApp()&&onbPlatform()!=='desktop'}catch(e){return false}}
+var q42ShowGet;
 var q42Bip=null;
 window.addEventListener('beforeinstallprompt',function(e){q42Bip=e;if(view.page==='install'||(onb&&onb.step===3))q42Redraw()});
 window.addEventListener('appinstalled',function(){q42Bip=null;q42Redraw()});
@@ -19878,24 +19364,7 @@ window.addEventListener('click',function(e){
    replays it. On phones the menu opens for the menu steps and closes again for the Home steps. */
 SETTINGS_KEYS.push('toured');
 var Q43={on:false,i:0,steps:[],dir:1,el:null,timer:null,auto:false,openedMenu:false};
-function q43Steps(){
- var school=curSpace()==='school';
- return [
-  {t:'Welcome to Doable',p:'Here’s a quick look around, so you know where everything is. It only takes a minute.'},
-  {s:'.menubtn[data-menu="1"]',phone:1,t:'Your menu',p:'Tap here any time to open the menu. Every page lives in it.'},
-  {s:'.side .zpillbtn',menu:1,t:'Your spaces',p:'School, Work and Personal each keep their own pages, like separate profiles. Tap here to switch, or to add or remove a space.'},
-  {s:'.side .q19lab',menu:1,t:school?'Your classes':'Your pages',p:school?'Each class has its own page for assignments, files and links. Tap one to open it.':'To-do lists, budget, meal prep and more. Tap one to open it. Tap the word Pages to fold the list away.'},
-  {s:school?'.side [data-add="class"]':'.side [data-znew]',menu:1,t:school?'Add a class':'Add a page',p:school?'Add each of your classes here.':'Add another page here: pick from to-do list, budget, shopping list, meal prep, habit tracker and more.'},
-  {s:'.side [data-go="calendar"]',menu:1,t:'Calendar',p:'Your events, birthdays and everything that’s due, in one place.'},
-  {s:'.side [data-opencolours]',menu:1,t:'Colours',p:'Change the colour of the menu, your pages and your widgets.'},
-  {s:'.side [data-add="settings"]',menu:1,t:'Settings',p:'Your account, syncing and how things look. You can take this tour again from here.'},
-  {s:'.side [data-go="install"]',menu:1,t:'Get the app',p:'Steps to put Doable on your phone’s home screen, so it opens like a real app. Tap its × to hide it.'},
-  {s:'.hcorner [data-zact="wedit"]',t:'Edit widgets',p:'Add, remove, move and resize the cards on your Home. Tap Done when you’re finished.'},
-  {s:'.hcorner [data-coversheet]',t:'Cover picture',p:'Add or change the picture at the top. Every page can have its own.'},
-  {s:'.zhome .zw',t:'Widgets',p:'Each card shows a bit of one page. Tap it to open that page. Ticks and + buttons work right on the card.'},
-  {t:'You’re all set',p:'Find this tour again any time in Settings, under Look and feel.',end:1}
- ];
-}
+var q43Steps;
 function q43Vis(el){if(!el)return false;var r=el.getBoundingClientRect();return r.width>0&&r.height>0&&r.right>4&&r.left<innerWidth-4}
 function q43Target(st){if(!st.s)return null;var L=document.querySelectorAll(st.s);for(var i=0;i<L.length;i++)if(q43Vis(L[i])||(st.menu&&narrowScreen()))return L[i];return null}
 function q43Start(){
@@ -21213,13 +20682,7 @@ ZACT.q58add=function(cid){
  c.tasks.push(x);save();render();
  setTimeout(function(){var i=document.getElementById('z5top-'+cid);if(i){i.value='';i.focus()}},30);
 };
-function q58ShopCard(c,key,name,logo,L,menu,pair){
- var adding=view.z5add===key;
- return '<section class="q58sc" style="--gt:'+pair[0]+';--gc:'+pair[1]+'"><div class="q58sch">'+logo+'<b>'+esc(name)+'</b><em>'+L.length+'</em>'+(menu||'')+'</div>'
-  +'<div class="q58scb">'+L.map(function(t){return zTaskRow(c,t)}).join('')+'</div>'
-  +(adding?'<div class="z5addin"><input id="z5in" data-zenter="z5add:'+c.id+':'+key+'" placeholder="Add to '+esc(name)+'" autocomplete="off"><button class="zbtn" data-zact="z5add:'+c.id+':'+key+'">Add</button><button class="zmini" data-zact="z5open:'+key+'" aria-label="Close">×</button></div>'
-   :'<button class="z5plus" data-zact="z5open:'+key+'">'+zI(ZIC.plus,14)+'<span>Add item</span></button>')+'</section>';
-}
+var q58ShopCard;
 var _q58Shop=z5Shop;
 z5Shop=function(c){
  var tab=z5Tab(c);if(tab==='wish')return _q58Shop(c);
@@ -21661,29 +21124,7 @@ loadFiles=async function(cid){
  }
  FILES[cid]=out;fidxLoaded[cid]=true;
 };
-saveFiles=async function(cid,quiet){
- if(!quiet&&mirrorFiles(cid))save();
- var list=FILES[cid]||[];
- for(var i=0;i<list.length;i++){
-  var f=list[i];
-  if(f.saved||!f.data)continue;
-  await idbReady;
-  if(IDB){try{await idbDo('readwrite',function(st){return st.put(f.data,f.id)});f.saved=true;f.store='idb';f.chunks=0;continue}catch(e){}}
-  var n=0,ok=true;
-  for(var j=0;j<f.data.length;j+=CHUNK){try{await sset('hub:fd:'+f.id+':'+n,f.data.slice(j,j+CHUNK))}catch(e){ok=false;break}n++}
-  if(ok){f.saved=true;f.chunks=n;f.store='keys'}else{f.saved=false;f.chunks=0;for(var k=0;k<n;k++)sdel('hub:fd:'+f.id+':'+k)}
- }
- // never write this class's list before it was read (it would replace the real one with a partial one)
- if(fidxLoaded[cid]||filesReady){
-  fidxLoaded[cid]=true;
-  var index=list.map(function(f){return {id:f.id,name:f.name,section:f.section,kind:f.kind,ext:f.ext,mime:f.mime,icon:f.icon,text:f.text,marks:f.marks,marksSyncedAt:f.marksSyncedAt,marksTag:f.marksTag||'',chunks:f.saved?f.chunks:0,store:f.store,saved:!!f.saved,cloud:!!f.cloud}});
-  var inIdb=false;
-  if(IDB){try{await idbDo('readwrite',function(st){return st.put({at:Date.now(),list:index},'__fidx:'+cid)});inIdb=true}catch(e){}}
-  var small=inIdb?index.map(function(x){var o=Object.assign({},x);delete o.text;delete o.marks;delete o.marksSyncedAt;delete o.marksTag;return o}):index;
-  try{await sset('hub:files:'+cid,JSON.stringify(small))}catch(e){}
- }
- render();
-};
+
 var _q63Mirror=mirrorFiles;
 mirrorFiles=function(cid){
  var c=classById(cid);if(!c)return false;
@@ -21835,15 +21276,10 @@ var _q64Top=mkTopHtml;
 mkTopHtml=function(){return _q64Top.apply(this,arguments).replace('<span class="mkname" title="','<span class="mkname q64ren" role="button" tabindex="0" aria-label="Rename '+esc(MK.f.name)+'" title="Tap to rename: ')};
 
 /* ---------- categories ---------- */
-function q64SecHex(s){var k=s.color||zHueOf(s.name);return (ZC[k]||ZC.grey)[1]}
+var q64SecHex;
 function q64Secs(c){return (c.sections||[]).slice().sort(function(a,b){return (a.ord||0)-(b.ord||0)})}
 function q64SchoolClasses(){return S.classes.filter(function(k){return !k.kind&&k.id!==REF_CID&&pageSpace(k)==='school'})}
-function q64Cats(c){
- var out=[];
- if(pageSpace(c)==='school')q64SchoolClasses().forEach(function(k){out.push({id:'cls:'+k.id,name:k.name,hex:palHex(k.color),cls:k.id})});
- q64Secs(c).forEach(function(s){out.push({id:s.id,name:s.name,hex:q64SecHex(s)})});
- return out;
-}
+var q64Cats;
 function q64IsDaily(cat){return !!(cat&&!cat.cls&&/daily/i.test(cat.name))}
 // starter categories, once per page: Work gets Daily notes and Meetings, School and Personal get Quick notes
 function q64Init(c){
@@ -25370,48 +24806,62 @@ mkOpen=function(){
  Promise.resolve(r).then(function(){if(MK&&MK.pageCount>1&&q78Pref()&&!MK.book)q78Set(true)});
  return r;
 };
-
-/* ======================= v234: turn book pages while zoomed in (prefix q79) =======================
-   Zoomed in, one finger moves around the page, so it can't also drag the page over. Instead, like a
-   photo viewer: move to the side edge of the book, then swipe again past it and the page turns
-   (swipe left at the right edge = next pages, swipe right at the left edge = back). Works in Reading,
-   and in Markup when a finger is moving the page (once the Pencil has been used). After a zoomed turn
-   you land at the top of the page you'd read next, at the same zoom. */
-var Q79T=null;
+/* ======================= v235: finger page turns when a little zoomed in (prefix q79) =======================
+   At 100% a finger drags the page over (v233). Zoomed in a little (up to Q79_MAX), a finger still can:
+   a clearly sideways drag toward a side you've already scrolled to (left at the right edge, right at
+   the left edge) lifts the page, and the page follows your finger, so you can change your mind by
+   dragging it back. Anything else (up/down, diagonal, away from the edge) just moves around the page.
+   Zoomed in further than that, a finger only ever moves around: use the arrows. Reading mode only. */
+var Q79_MAX=1.5,Q79P=null;
+function q79Ok(){return q78On()&&MK.mode!=='edit'&&MK.zoom>1.02&&MK.zoom<=Q79_MAX+1e-6&&!Q78G&&!MK.touch}
 document.addEventListener('touchstart',function(e){
- Q79T=null;
- if(!q78On()||MK.zoom<=1.02||Q78G||e.touches.length!==1)return;
+ Q79P=null;
+ if(!q79Ok()||e.touches.length!==1)return;
  var t=e.touches[0];if(t.touchType==='stylus'||!e.target.closest||!e.target.closest('#mkbody'))return;
+ var u=document.getElementById('q78under');if(!u)return;
+ var r=u.getBoundingClientRect();if(t.clientX<r.left||t.clientX>r.right||t.clientY<r.top||t.clientY>r.bottom)return;
+ if(mkHitHighlight(t.clientX,t.clientY))return;
  var body=document.getElementById('mkbody'),g=mkGeom(MK.zoom);
- Q79T={id:t.identifier,x:t.clientX,y:t.clientY,atR:body.scrollLeft>=g.maxLeft-2,atL:body.scrollLeft<=2};
+ Q79P={id:t.identifier,x:t.clientX,y:t.clientY,atR:body.scrollLeft>=g.maxLeft-2,atL:body.scrollLeft<=2};
 },{capture:true,passive:true});
+function q79Find(list,id){for(var i=0;i<list.length;i++)if(list[i].identifier===id)return list[i];return null}
 document.addEventListener('touchmove',function(e){
- if(!Q79T)return;
- // a second finger (a pinch), or a finger that's drawing in Markup, is never a page swipe
- if(e.touches.length>1||(MK&&MK.touch&&(MK.touch.mode==='draw'||MK.touch.mode==='pending')))Q79T=null;
-},{capture:true,passive:true});
-document.addEventListener('touchend',function(e){
- var t=Q79T;Q79T=null;if(!t||!q78On()||e.touches.length)return;
- var c=null;for(var i=0;i<e.changedTouches.length;i++)if(e.changedTouches[i].identifier===t.id)c=e.changedTouches[i];
- if(!c)return;
- var dx=c.clientX-t.x,dy=c.clientY-t.y;
- if(Math.abs(dx)<70||Math.abs(dx)<1.5*Math.abs(dy))return;
- var dir=dx<0&&t.atR?1:dx>0&&t.atL?-1:0;if(!dir||!q78CanTurn(dir))return;
- // a Markup finger pan glides to a stop first; turn once it has landed
- var go=function(){if(MK&&!MK.touch&&!Q78G)q78Turn(dir)};
- if(MK.touch)setTimeout(go,360);else go();
-},{capture:true,passive:true});
-var _q79Finish=q78Finish;
-q78Finish=function(done){
- var dir=Q78G&&Q78G.dir,zoomed=MK&&MK.zoom>1.02;
- var r=_q79Finish.apply(this,arguments);
- if(done&&zoomed&&MK&&q78On()){
-  var body=document.getElementById('mkbody'),g=mkGeom(MK.zoom);
-  body.scrollTop=0;body.scrollLeft=dir>0?0:g.maxLeft; // next pages: top of the left page; back: top of the right page
-  mkOnScroll();mkNotesLayout();
+ var g=Q78G;
+ if(g&&g.phase==='drag'&&g.q79){
+  var c=q79Find(e.touches,g.q79);if(!c)return;
+  if(e.cancelable)e.preventDefault();
+  var p=q78Pt(c,g.dir);
+  g.T={x:g.anchor.mx+p.x-g.anchor.px,y:g.anchor.my+p.y-g.anchor.py};
+  var now=performance.now(),dt=now-g.last.t;
+  if(dt>0){g.vel=.6*g.vel+.4*(p.x-g.last.x)/dt;g.last={x:p.x,t:now}}
+  q78Loop();return;
  }
- return r;
-};
+ var P=Q79P;if(!P)return;
+ if(e.touches.length>1){Q79P=null;return}
+ var t=q79Find(e.touches,P.id);if(!t)return;
+ var dx=t.clientX-P.x,dy=t.clientY-P.y;
+ if(Math.hypot(dx,dy)<10)return;
+ Q79P=null; // decided, one way or the other
+ var dir=dx<0&&P.atR?1:dx>0&&P.atL?-1:0;
+ // must be clearly sideways, not already scrolling, and a page there to turn to
+ if(!dir||Math.abs(dx)<2*Math.abs(dy)||!e.cancelable||!q78CanTurn(dir)||!q79Ok())return;
+ e.preventDefault();
+ var r=document.getElementById('q78under').getBoundingClientRect();
+ q78Begin(dir,P.y-r.top);
+ var G=Q78G,p0=q78Pt({clientX:P.x,clientY:P.y},dir);
+ G.q79=P.id;G.id=null;G.anchor={px:p0.x,py:p0.y,mx:G.M.x,my:G.M.y,cx:P.x,cy:P.y};G.vel=0;G.last={x:p0.x,t:performance.now()};
+ var p=q78Pt(t,dir);G.T={x:G.anchor.mx+p.x-p0.x,y:G.anchor.my+p.y-p0.y};q78Loop();
+},{capture:true,passive:false});
+function q79End(e){
+ Q79P=null;
+ var g=Q78G;if(!g||g.phase!=='drag'||!g.q79||q79Find(e.touches,g.q79))return;
+ if(e.type==='touchcancel'){q78Tween({x:g.G0.x,y:g.G0.y},300,false,0,true);return}
+ var W=g.W;
+ if(q78ShouldTurn(g.vel,g.T.x,W))q78Tween({x:-W,y:g.G0.y},Q78_MS*Math.max(.35,(g.M.x+W)/(2*W)),true,0,true);
+ else q78Tween({x:g.G0.x,y:g.G0.y},Q78_MS*Math.max(.3,(W-g.M.x)/(2*W)),false,0,true);
+}
+document.addEventListener('touchend',q79End,{capture:true,passive:true});
+document.addEventListener('touchcancel',q79End,{capture:true,passive:true});
 
 try{spBoot()}catch(e){}
 load();
