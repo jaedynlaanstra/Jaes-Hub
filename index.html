@@ -6080,6 +6080,16 @@ body.q76noic .side .sic,body.q76noic .side .sdot{display:none!important}
 #mk .q78arrow:disabled{opacity:.3;cursor:default}
 /* a short screen (a phone turned sideways): a slimmer top bar, so the book gets the height */
 @media (max-height:500px){#mk.q78book .mktop{padding-top:calc(env(safe-area-inset-top,0px) + 4px);padding-bottom:4px}#mk.q78book .mkname{display:none}#mk.q78book .mktools:empty{display:none}}
+/* v236 (q80): phones whose page starts below the clock strip get the cover as a rounded card lined up with the
+   cards under it; the iPad Home Screen app keeps its layout with the top buttons moved out of the frost */
+@media(max-width:700px){
+ html.q80card .main .coverwrap{width:auto;margin:6px 6px 0;border-radius:16px;clip-path:inset(0 round 16px)}
+ html.q80card .menubtn,html.q80card .homebtn,html.q80card .zpill-top{margin-top:6px}
+ html.q80card .menubtn,html.q80card .homebtn{margin-left:6px}
+}
+html.q80ipad .menubtn,html.q80ipad .homebtn,html.q80ipad .zpill-top,html.q80ipad .hcorner,html.q80ipad .sidehide{margin-top:16px}
+/* the cover's own soft blur under the clock, tinted with the cover colour, so it melts into the iPad's frost */
+html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right:0;top:0;z-index:2;pointer-events:none;height:calc(env(safe-area-inset-top,0px) + 64px);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);background:linear-gradient(to bottom,color-mix(in srgb,var(--q80tint,#000) 35%,transparent),transparent);-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 45%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 45%,transparent)}
 </style>
 </head>
 <body>
@@ -6388,7 +6398,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v235';
+var BUILD='v236';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -24862,6 +24872,75 @@ function q79End(e){
 }
 document.addEventListener('touchend',q79End,{capture:true,passive:true});
 document.addEventListener('touchcancel',q79End,{capture:true,passive:true});
+
+/* ======================= v236: the top edge since iOS 26.1 (prefix q80) =======================
+   iOS 26.1 stopped drawing Home Screen web apps under a clear clock bar, and a page can't turn that off. The
+   iPhone now shows a solid strip in the page's colour above the app (a hard line against the cover photo); the
+   iPad frosts the top of the page under the clock. Phone: when the page starts below the strip (safe-area top 0)
+   the cover is a rounded card with a gap above it, so the strip reads as page. Where the page still draws under
+   the clock (older iOS) the cover stays full width as before. iPad Home Screen app: the top buttons sit a little
+   lower, out of the frost, and while the cover is at the top the page colour iOS frosts with (the same trick as
+   mkDarkEdge) is the colour along the top of the cover photo. localStorage 'hub:q80test'='ipad' fakes the iPad. */
+function q80Mode(){
+ var t='';try{t=localStorage.getItem('hub:q80test')||''}catch(e){}
+ if(t)return t;
+ var ua=navigator.userAgent||'',ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+ if(navigator.standalone!==true||!ios)return '';
+ return Math.min(screen.width,screen.height)>=700?'ipad':'iphone';
+}
+// the average colour of the top 48px of the cover as it is shown (crop, position and zoom included)
+var q80Tints={};
+function q80Tint(img){
+ var cs=getComputedStyle(img),bw=img.clientWidth,bh=img.clientHeight,nw=img.naturalWidth,nh=img.naturalHeight;
+ if(!bw||!bh||!nw||!nh)return null;
+ var src=img.currentSrc||img.src||'',key=src.length+src.slice(0,80)+src.slice(-60)+cs.transform+cs.objectPosition+cs.objectFit+bw+'x'+bh;
+ if(q80Tints[key]!==undefined)return q80Tints[key];
+ var col=null;
+ try{
+  var k=Math.min(1,64/bw),cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(bw*k));cv.height=Math.max(1,Math.round(Math.min(bh,48)*k));
+  var x=cv.getContext('2d'),s=(cs.objectFit==='contain'?Math.min:Math.max)(bw/nw,bh/nh),dw=nw*s,dh=nh*s;
+  var pos=(cs.objectPosition||'50% 50%').split(' '),px=parseFloat(pos[0]),py=parseFloat(pos[1]);
+  if(isNaN(px))px=50;if(isNaN(py))py=50;
+  var z=cs.transform&&cs.transform!=='none'?new DOMMatrix(cs.transform).a||1:1;
+  x.scale(k,k);x.translate(bw/2,bh/2);x.scale(z,z);x.translate(-bw/2,-bh/2);
+  x.drawImage(img,(bw-dw)*px/100,(bh-dh)*py/100,dw,dh);
+  var d=x.getImageData(0,0,cv.width,cv.height).data,R=0,G=0,B=0,W=0;
+  for(var i=0;i<d.length;i+=4){var a=d[i+3]/255;R+=d[i]*a;G+=d[i+1]*a;B+=d[i+2]*a;W+=a}
+  if(W>0)col='#'+[R,G,B].map(function(v){return ('0'+Math.round(v/W).toString(16)).slice(-2)}).join('');
+ }catch(e){col=null} // a picture from another site without permission can't be read
+ q80Tints[key]=col;return col;
+}
+var q80Last,q80Theme=null;
+function q80Edge(){
+ if(q80Mode()!=='ipad')return;
+ var h=document.documentElement,col=null,open=h.classList.contains('mkopen');
+ var cw=document.querySelector('.main .coverwrap'),img=cw&&cw.querySelector('.pagecover');
+ if(img&&!open){
+  var r=cw.getBoundingClientRect();
+  var atTop=r.top+scrollY<=2;cw.classList.toggle('q80top',atTop);
+  if(r.top<=2&&r.bottom>60){if(img.complete)col=q80Tint(img);else img.addEventListener('load',q80Edge,{once:true})}
+ }
+ if(col)h.style.setProperty('--q80tint',col);
+ if(open||col===q80Last)return;
+ q80Last=col;
+ h.style.backgroundColor=col||'';
+ var m=document.querySelector('meta[name=theme-color]');
+ if(m){if(q80Theme==null)q80Theme=m.getAttribute('content');m.setAttribute('content',col||q80Theme)}
+}
+function q80Sync(){
+ var h=document.documentElement;
+ h.classList.toggle('q80ipad',q80Mode()==='ipad');
+ h.classList.toggle('q80card',q52Safe().t<1);
+ q80Last=undefined;q80Edge();
+}
+var _q80Render=render;
+render=function(){var r=_q80Render.apply(this,arguments);try{q80Sync()}catch(e){}return r};
+var q80Scroll=null;
+document.addEventListener('scroll',function(){if(q80Scroll)return;q80Scroll=setTimeout(function(){q80Scroll=null;try{q80Edge()}catch(e){}},90)},{capture:true,passive:true});
+window.addEventListener('resize',function(){try{q80Sync()}catch(e){}});
+// leaving the Markup viewer puts its own saved bar colour back; set the cover colour again after it
+var _q80Dark=mkDarkEdge;
+mkDarkEdge=function(on){if(on&&q80Theme!=null){var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',q80Theme);document.documentElement.style.backgroundColor=''}var r=_q80Dark.apply(this,arguments);if(!on){q80Last=undefined;try{q80Edge()}catch(e){}}return r};
 
 try{spBoot()}catch(e){}
 load();
