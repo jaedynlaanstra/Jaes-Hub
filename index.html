@@ -6090,12 +6090,18 @@ body.q76noic .side .sic,body.q76noic .side .sdot{display:none!important}
  html.q80card .menubtn,html.q80card .homebtn,html.q80card .zpill-top{margin-top:6px}
  html.q80card .menubtn,html.q80card .homebtn{margin-left:6px}
 }
-html.q80ipad .menubtn,html.q80ipad .homebtn,html.q80ipad .zpill-top,html.q80ipad .hcorner,html.q80ipad .sidehide{margin-top:16px}
-/* the cover's own soft blur under the clock, tinted with the cover colour, so it melts into the iPad's frost */
-html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right:0;top:0;z-index:2;pointer-events:none;height:calc(env(safe-area-inset-top,0px) + 64px);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);background:linear-gradient(to bottom,color-mix(in srgb,var(--q80tint,#000) 35%,transparent),transparent);-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 45%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 45%,transparent)}
+html.q80ipad .menubtn,html.q80ipad .homebtn,html.q80ipad .zpill-top,html.q80ipad .hcorner,html.q80ipad .sidehide{margin-top:20px}
+/* v238: the colour carrier for the strip behind the clock (see q80Paint); it paints nothing */
+#q80band{position:fixed;top:0;left:0;right:0;height:14px;z-index:2147483647;pointer-events:none;background-color:#F1EEE8;-webkit-background-clip:text;background-clip:text;color:transparent}
+html.splash-on:has(#splash),html.splash-on:has(#splash) #q80band{background-color:#d9d3c8}
+/* phones: the bar that slides in on scroll is solid, so dark cards don't show through under the clock strip */
+@media(max-width:700px){html.q80card .mbar{background:var(--pagebg,var(--paper,#FBFAF8))}}
+/* iPad: under iOS's solid strip (cover colour) the cover fades in smoothly instead of meeting it at an edge */
+html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right:0;top:0;z-index:2;pointer-events:none;height:calc(env(safe-area-inset-top,0px) + 72px);background:linear-gradient(to bottom,var(--q80tint,#000) 0,var(--q80tint,#000) env(safe-area-inset-top,0px),color-mix(in srgb,var(--q80tint,#000) 70%,transparent) calc(env(safe-area-inset-top,0px) + 14px),color-mix(in srgb,var(--q80tint,#000) 32%,transparent) calc(env(safe-area-inset-top,0px) + 38px),color-mix(in srgb,var(--q80tint,#000) 10%,transparent) calc(env(safe-area-inset-top,0px) + 58px),transparent 100%);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 40%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 40%,transparent)}
 </style>
 </head>
 <body>
+<div id="q80band" aria-hidden="true"></div>
 <div id="splash" aria-hidden="true"><div class="sp-cream" id="spCream"></div><div class="sp-mark"><div id="spSvg"><div class="sp-card" id="spC1" style="left:37%;top:37.5%;background:#b8abca"></div><div class="sp-card" id="spC2" style="left:29.667%;top:29.167%;background:#ecca9f"></div><div class="sp-bump" id="spBump" style="left:21.833%;top:20.833%"><div class="sp-card" id="spC3" style="left:0;top:0;width:100%;height:100%;background:linear-gradient(#91a28d,#7d917c)"></div><svg class="sp-ov" viewBox="321 285 344 344"><path id="spChk" d="M412 466 L462 520 L577 397" pathLength="1" fill="none" stroke="#f7f2ea" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></svg></div><svg class="sp-ov" viewBox="190 160 600 600" style="inset:0"><path class="spk" d="M305 265 L268 228" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M368 238 L358 195" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/><path class="spk" d="M280 326 L232 316" pathLength="1" stroke="#7d917c" stroke-width="24" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" style="opacity:0"/></svg></div></div></div>
 <script>
 /* ---------- opening animation: the Claude Design "App Opening" sequence (3.5s, tap to skip).
@@ -6401,7 +6407,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v237';
+var BUILD='v238';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -24886,19 +24892,20 @@ document.addEventListener('touchcancel',q79End,{capture:true,passive:true});
    mkDarkEdge) is the colour along the top of the cover photo. localStorage 'hub:q80test'='ipad' fakes the iPad. */
 // v237: the iPhone still reports the clock height, so "starts below the strip" can't be read from it; any
 // iOS Home Screen app counts (navigator.standalone, or the display-mode query some iOS 26 installs answer instead)
+function q80Ios(){var ua=navigator.userAgent||'';return /iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)}
 function q80App(){
- var ua=navigator.userAgent||'',ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
  var sa=navigator.standalone===true;try{sa=sa||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches}catch(e){}
- return ios&&sa;
+ return q80Ios()&&sa;
 }
+// v238: the iPad part no longer waits for the Home Screen check (v237 didn't move anything on Jae's iPad)
 function q80Mode(){
  var t='';try{t=localStorage.getItem('hub:q80test')||''}catch(e){}
  if(t)return t;
- if(!q80App())return '';
+ if(!q80Ios())return '';
  return Math.min(screen.width,screen.height)>=700?'ipad':'iphone';
 }
-// shown after the build number in Settings > Sync, so a screenshot says what the device reports
-function q80Info(){try{return ' · top '+Math.round(q52Safe().t)+' · '+(q80Mode()||'web')+' · '+screen.width+'x'+screen.height}catch(e){return ''}}
+// shown after the build number in Settings, so a screenshot says what the device reports
+function q80Info(){try{return ' · top '+Math.round(q52Safe().t)+' · '+(q80Mode()||'web')+(q80App()?' app':'')+' · '+screen.width+'x'+screen.height}catch(e){return ''}}
 // the average colour of the top 48px of the cover as it is shown (crop, position and zoom included)
 var q80Tints={};
 function q80Tint(img){
@@ -24921,37 +24928,72 @@ function q80Tint(img){
  }catch(e){col=null} // a picture from another site without permission can't be read
  q80Tints[key]=col;return col;
 }
-var q80Last,q80Theme=null;
-function q80Edge(){
- if(q80Mode()!=='ipad')return;
- var h=document.documentElement,col=null,open=h.classList.contains('mkopen');
- var cw=document.querySelector('.main .coverwrap'),img=cw&&cw.querySelector('.pagecover');
- if(img&&!open){
-  var r=cw.getBoundingClientRect();
-  var atTop=r.top+scrollY<=2;cw.classList.toggle('q80top',atTop);
-  if(r.top<=2&&r.bottom>60){if(img.complete)col=q80Tint(img);else img.addEventListener('load',q80Edge,{once:true})}
- }
- if(col)h.style.setProperty('--q80tint',col);
- if(open||col===q80Last)return;
- q80Last=col;
- h.style.backgroundColor=col||'';
- var m=document.querySelector('meta[name=theme-color]');
- if(m){if(q80Theme==null)q80Theme=m.getAttribute('content');m.setAttribute('content',col||q80Theme)}
+/* v238: iOS paints the strip behind the clock in the colour of a full-width bar pinned to the top of the page
+   (on iPad this replaces the frost with a solid strip). #q80band is that bar: it paints nothing itself
+   (background-clip:text), only carries the colour of whatever sits just under the clock, worked out from the
+   layers there (page, the dark layer behind the menu, the opening animation, the scroll bar, pop-ups), with the
+   cover counted as its top colour. The page's own colour and theme-color follow too, for iOS versions that use
+   those instead. */
+function q80Rgba(v){
+ var m=/^rgba?\(([^)]+)\)/.exec(v||''),p;
+ if(m){p=m[1].split(/[\s,\/]+/).filter(Boolean).map(parseFloat);return{r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1}}
+ m=/^color\(srgb ([\d.e-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.e-]+))?\)/.exec(v||'');
+ if(m)return{r:m[1]*255,g:m[2]*255,b:m[3]*255,a:m[4]==null?1:+m[4]};
+ return null;
 }
+function q80Hex(c){return '#'+[c.r,c.g,c.b].map(function(v){return ('0'+Math.max(0,Math.min(255,Math.round(v))).toString(16)).slice(-2)}).join('')}
+function q80Under(){
+ var y=Math.max(0,Math.min(innerHeight-1,q52Safe().t+1)),els=document.elementsFromPoint(innerWidth/2,y),layers=[];
+ for(var i=0;i<els.length;i++){
+  var el=els[i];if(el.id==='q80band')continue;
+  var cw=el.closest&&el.closest('.coverwrap');
+  if(cw){var img=cw.querySelector('.pagecover'),tn=img&&img.complete?q80Tint(img):null;if(tn){var t=q80Rgba('rgb('+parseInt(tn.slice(1,3),16)+','+parseInt(tn.slice(3,5),16)+','+parseInt(tn.slice(5,7),16)+')');layers.push(t);break}}
+  var cs=getComputedStyle(el),c=q80Rgba(cs.backgroundColor);
+  if(!c)continue;
+  c.a*=parseFloat(cs.opacity);
+  if(!(c.a>0.01))continue;
+  layers.push(c);if(c.a>=0.99)break;
+ }
+ var o={r:255,g:255,b:255};
+ for(var j=layers.length-1;j>=0;j--){var L=layers[j];o={r:L.r*L.a+o.r*(1-L.a),g:L.g*L.a+o.g*(1-L.a),b:L.b*L.a+o.b*(1-L.a)}}
+ return q80Hex(o);
+}
+var q80Col=null;
+function q80Paint(){
+ if(!q80Mode())return;
+ var h=document.documentElement,cw=document.querySelector('.main .coverwrap');
+ if(cw){
+  var img=cw.querySelector('.pagecover');
+  cw.classList.toggle('q80top',cw.getBoundingClientRect().top+scrollY<=2);
+  if(img&&!img.complete)img.addEventListener('load',q80Paint,{once:true});
+  var tn=img&&img.complete?q80Tint(img):null;if(tn)h.style.setProperty('--q80tint',tn);
+ }
+ var col=q80Under();if(col===q80Col)return;
+ q80Col=col;
+ var band=document.getElementById('q80band');if(band)band.style.backgroundColor=col;
+ if(!q80App())return;
+ h.style.backgroundColor=col;
+ var m=document.querySelector('meta[name=theme-color]');if(m&&!h.classList.contains('mkopen'))m.setAttribute('content',col);
+}
+var q80Soon=null;
+function q80Later(ms){clearTimeout(q80Soon);q80Soon=setTimeout(function(){try{q80Paint()}catch(e){}},ms||60)}
 function q80Sync(){
  var h=document.documentElement;
  h.classList.toggle('q80ipad',q80Mode()==='ipad');
  h.classList.toggle('q80card',q80App()||q52Safe().t<1);
- q80Last=undefined;q80Edge();
+ q80Col=null;q80Paint();
 }
 var _q80Render=render;
 render=function(){var r=_q80Render.apply(this,arguments);try{q80Sync()}catch(e){}return r};
-var q80Scroll=null;
-document.addEventListener('scroll',function(){if(q80Scroll)return;q80Scroll=setTimeout(function(){q80Scroll=null;try{q80Edge()}catch(e){}},90)},{capture:true,passive:true});
+document.addEventListener('scroll',function(){q80Later(90)},{capture:true,passive:true});
+document.addEventListener('transitionend',function(){q80Later(40)},{capture:true,passive:true});
+document.addEventListener('animationend',function(){q80Later(40)},{capture:true,passive:true});
+// a tap may start a fade (menu, pop-up): follow it through instead of only catching the end
+['click','touchend'].forEach(function(t){document.addEventListener(t,function(){[90,200,330,520].forEach(function(ms){setTimeout(function(){try{q80Paint()}catch(e){}},ms)})},{capture:true,passive:true})});
 window.addEventListener('resize',function(){try{q80Sync()}catch(e){}});
-// leaving the Markup viewer puts its own saved bar colour back; set the cover colour again after it
-var _q80Dark=mkDarkEdge;
-mkDarkEdge=function(on){if(on&&q80Theme!=null){var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',q80Theme);document.documentElement.style.backgroundColor=''}var r=_q80Dark.apply(this,arguments);if(!on){q80Last=undefined;try{q80Edge()}catch(e){}}return r};
+try{var q80Obs=new MutationObserver(function(){q80Later(40)});q80Obs.observe(document.body,{childList:true,attributes:true,attributeFilter:['class']});q80Obs.observe(document.documentElement,{attributes:true,attributeFilter:['class']})}catch(e){}
+// the opening animation fades between colours by script, so follow it while it plays
+(function(){var n=0,iv=setInterval(function(){try{q80Paint()}catch(e){}if(!/splash-on/.test(document.documentElement.className)||++n>80){clearInterval(iv);q80Later(40)}},100)})();
 
 try{spBoot()}catch(e){}
 load();
