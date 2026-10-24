@@ -6090,9 +6090,12 @@ body.q76noic .side .sic,body.q76noic .side .sdot{display:none!important}
  html.q80card .menubtn,html.q80card .homebtn,html.q80card .zpill-top{margin-top:6px}
  html.q80card .menubtn,html.q80card .homebtn{margin-left:6px}
 }
-html.q80ipad .menubtn,html.q80ipad .homebtn,html.q80ipad .zpill-top,html.q80ipad .hcorner,html.q80ipad .sidehide{margin-top:20px}
-/* v238: the colour carrier for the strip behind the clock (see q80Paint); it paints nothing */
-#q80band{position:fixed;top:0;left:0;right:0;height:14px;z-index:2147483647;pointer-events:none;background-color:#F1EEE8;-webkit-background-clip:text;background-clip:text;color:transparent}
+html.q80ipad .menubtn,html.q80ipad .homebtn,html.q80ipad .zpill-top,html.q80ipad .hcorner,html.q80ipad .sidehide,html.q80ipad .banner .bancov,html.q80ipad .coverwrap>.coveredit{margin-top:20px}
+/* v239: iPad pages without a cover: the title starts below the lowered menu and home buttons */
+@media(min-width:701px) and (max-width:900px){html.q80ipad .main:not(.hascover) .banner:not(.sz-hidden){padding-top:calc(env(safe-area-inset-top,0px) + 76px)!important}html.q80ipad .main.nohead:not(.hascover) .body{padding-top:calc(env(safe-area-inset-top,0px) + 84px)!important}}
+/* v238: the colour carrier for the strip behind the clock (see q80Paint); it paints nothing. v239: it reaches
+   14px past the clock area, because iOS looks for it about 4px below the clock, not inside it */
+#q80band{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 14px);z-index:2147483647;pointer-events:none;background-color:#F1EEE8;-webkit-background-clip:text;background-clip:text;color:transparent}
 html.splash-on:has(#splash),html.splash-on:has(#splash) #q80band{background-color:#d9d3c8}
 /* phones: the bar that slides in on scroll is solid, so dark cards don't show through under the clock strip */
 @media(max-width:700px){html.q80card .mbar{background:var(--pagebg,var(--paper,#FBFAF8))}}
@@ -6407,7 +6410,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v238';
+var BUILD='v239';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
