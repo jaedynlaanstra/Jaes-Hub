@@ -6083,7 +6083,10 @@ body.q76noic .side .sic,body.q76noic .side .sdot{display:none!important}
 /* v236 (q80): phones whose page starts below the clock strip get the cover as a rounded card lined up with the
    cards under it; the iPad Home Screen app keeps its layout with the top buttons moved out of the frost */
 @media(max-width:700px){
- html.q80card .main .coverwrap{width:auto;margin:6px 6px 0;border-radius:16px;clip-path:inset(0 round 16px)}
+ html.q80card .main .coverwrap{width:auto;margin:calc(env(safe-area-inset-top,0px) + 6px) 6px 0;border-radius:16px;clip-path:inset(0 round 16px)}
+ /* the card already starts below the clock, so what sits inside it no longer adds the clock height */
+ html.q80card .h4ov,html.q80card .coverwrap.hasov .h4ov{padding-top:76px}
+ html.q80card .hcorner,html.q80card .coveredit,html.q80card .banner .bancov{top:12px}
  html.q80card .menubtn,html.q80card .homebtn,html.q80card .zpill-top{margin-top:6px}
  html.q80card .menubtn,html.q80card .homebtn{margin-left:6px}
 }
@@ -6398,7 +6401,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v236';
+var BUILD='v237';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -8569,7 +8572,7 @@ async function cloudSync(force){
   setTimeout(openPendingImport,300);
  }else view.driveError=result.error;
  if(fr.limitName)view.driveError='"'+fr.limitName+'" is not syncing because you are over your file storage allowance (or the file is over 25 MB). It stays on this device. Delete some files to make room, and it will sync on its own.';
- view.syncInfo='build '+BUILD+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
+ view.syncInfo='build '+BUILD+q80Info()+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
  if(result&&result.ok){refreshUsage(!!(fr.moved||fr.limitName));pushRefresh();maybePushPrompt()}
  if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
  driveSyncing=false;
@@ -10398,7 +10401,7 @@ function modalHtml(){
      +'<p class="hint" style="margin:0">Signed in as '+esc(sbUser.email||'your account')+'. Every change syncs automatically, including files.</p>'
      +(view.driveError?'<p class="hint" style="color:#A34A3F;margin:0">'+esc(view.driveError)+'</p>':'')
      +usageLine()
-     +'<p class="hint" style="font-size:10.5px;margin:0;word-break:break-all">'+esc(view.syncInfo||'build '+BUILD)+'</p>'
+     +'<p class="hint" style="font-size:10.5px;margin:0;word-break:break-all">'+esc(view.syncInfo||'build '+BUILD+q80Info())+'</p>'
      +(view.imgInfo?'<p class="hint" style="font-size:11.5px;margin:0">'+esc(view.imgInfo)+(view.imgBad?' Some pictures could not upload (storage may be full).':'')+'</p>':'')
      +'<div class="sgrow"><button data-syncnow="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>'+(driveSyncing?'Syncing…':'Sync now')+'</button>'
      +'<button data-syncpics="1"'+(driveSyncing?' disabled style="opacity:.6"':'')+'>Sync pictures</button>'
@@ -10439,7 +10442,7 @@ function modalHtml(){
      +'<button data-export="1">Export everything</button>'
      +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>',false)
    +(isInstalledApp()?'':'<div class="sgroup" style="padding:6px 0 2px"><button data-xact="openinstall" style="width:100%">Get the app on your phone</button></div>')
-   +'<p class="hint" style="text-align:center;margin-top:10px;opacity:.6">Doable, build '+esc(BUILD)+'</p>';
+   +'<p class="hint" style="text-align:center;margin-top:10px;opacity:.6">Doable, build '+esc(BUILD+q80Info())+'</p>';
  }else if(m.kind==='app'){
   var ap=m.id?appById(m.id):null;
   h='<h3>'+(ap?'Edit app':'Add an app')+'</h3>'
@@ -24881,13 +24884,21 @@ document.addEventListener('touchcancel',q79End,{capture:true,passive:true});
    the clock (older iOS) the cover stays full width as before. iPad Home Screen app: the top buttons sit a little
    lower, out of the frost, and while the cover is at the top the page colour iOS frosts with (the same trick as
    mkDarkEdge) is the colour along the top of the cover photo. localStorage 'hub:q80test'='ipad' fakes the iPad. */
+// v237: the iPhone still reports the clock height, so "starts below the strip" can't be read from it; any
+// iOS Home Screen app counts (navigator.standalone, or the display-mode query some iOS 26 installs answer instead)
+function q80App(){
+ var ua=navigator.userAgent||'',ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+ var sa=navigator.standalone===true;try{sa=sa||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches}catch(e){}
+ return ios&&sa;
+}
 function q80Mode(){
  var t='';try{t=localStorage.getItem('hub:q80test')||''}catch(e){}
  if(t)return t;
- var ua=navigator.userAgent||'',ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
- if(navigator.standalone!==true||!ios)return '';
+ if(!q80App())return '';
  return Math.min(screen.width,screen.height)>=700?'ipad':'iphone';
 }
+// shown after the build number in Settings > Sync, so a screenshot says what the device reports
+function q80Info(){try{return ' · top '+Math.round(q52Safe().t)+' · '+(q80Mode()||'web')+' · '+screen.width+'x'+screen.height}catch(e){return ''}}
 // the average colour of the top 48px of the cover as it is shown (crop, position and zoom included)
 var q80Tints={};
 function q80Tint(img){
@@ -24930,7 +24941,7 @@ function q80Edge(){
 function q80Sync(){
  var h=document.documentElement;
  h.classList.toggle('q80ipad',q80Mode()==='ipad');
- h.classList.toggle('q80card',q52Safe().t<1);
+ h.classList.toggle('q80card',q80App()||q52Safe().t<1);
  q80Last=undefined;q80Edge();
 }
 var _q80Render=render;
