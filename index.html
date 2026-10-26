@@ -5041,6 +5041,22 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .q59list>.q59gh:first-child,.q59files>.q59gh:first-child,.q59files>.q59srch+.q59gh{border-top:none}
 .q59gn{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .q59gh em{font-style:normal;font-size:12.5px;color:var(--ink3);flex:none}
+/* v240: a chapter band can have its own colour, picked in its 3-dots sheet (q81) */
+.q59gh.q81col{background:color-mix(in srgb,var(--q81c) 30%,var(--card));border-color:color-mix(in srgb,var(--q81c) 40%,var(--line))}
+.q59gh.q81col .q59gn{color:color-mix(in srgb,var(--q81c) 45%,var(--ink))}
+.q59gh.q81col em,.q59gh.q81col .q59ga,.q59gh.q81col .q59chev{color:color-mix(in srgb,var(--q81c) 40%,var(--ink2))}
+.q81sws{display:flex;gap:10px;flex-wrap:wrap;padding:4px 2px 2px}
+.sheetlist .q81sw{width:34px;min-width:34px;height:34px;min-height:0;padding:0;border-radius:50%;border:2px solid transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);cursor:pointer}
+.sheetlist .q81sw.on{border-color:var(--card);box-shadow:0 0 0 2px var(--ink2)}
+.sheetlist .q81none{background:var(--card);box-shadow:inset 0 0 0 1px var(--line2);background-image:linear-gradient(135deg,transparent 46%,var(--line2) 46%,var(--line2) 54%,transparent 54%)}
+.q81hex{display:flex;align-items:center;gap:8px;padding:2px}
+.q81pick{position:relative;width:34px;height:34px;flex:none;border-radius:50%;overflow:hidden;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line2);background-image:conic-gradient(from 20deg,#D3A7A6,#D6C083,#94AC9C,#8FB3AE,#8399B5,#A99CBF,#D3A7A6)}
+.q81pick[style*="#"]{background-image:none}
+.q81pick.on{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink2)}
+.q81pick input{position:absolute;inset:-6px;width:calc(100% + 12px);height:calc(100% + 12px);opacity:0;border:0;padding:0;cursor:pointer}
+.q81code{flex:1;min-width:0;height:40px;box-sizing:border-box;border:1px solid var(--line2);border-radius:10px;background:var(--card);color:var(--ink);padding:0 12px;font:inherit;font-size:15px;letter-spacing:.03em}
+.sheetlist .q81btn{width:auto;flex:none;min-height:40px;height:40px;padding:0 14px;font-size:14px;text-align:center}
+.sheetlist .q81none.on{box-shadow:inset 0 0 0 1px var(--line2),0 0 0 2px var(--ink2)}
 .q59chev{margin-left:auto;color:var(--ink3);display:grid;place-items:center;flex:none;transition:transform .2s}
 .q59chev svg{width:14px;height:14px}
 .q59gh.shut .q59chev{transform:rotate(-90deg)}
@@ -6410,7 +6426,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v239';
+var BUILD='v240';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10373,6 +10389,11 @@ function modalHtml(){
    var ordl=cpSections(sc),pos=ordl.indexOf(sch),last=ordl.length-1;
    h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sch.name)+'</h3><div class="sheetlist">'
     +'<button data-sheetdo="chrename">Rename</button>'
+    +'<div class="q81sws" role="group" aria-label="Colour"><button data-sheetdo="chcol-" class="q81sw q81none'+(sch.color?'':' on')+'" aria-label="No colour"></button>'
+    +Q81COLS.map(function(id){return PALETTES.filter(function(pp){return pp.id===id})[0]}).filter(Boolean).map(function(pp){return '<button data-sheetdo="chcol-'+pp.id+'" class="q81sw'+(sch.color===pp.id?' on':'')+'" style="background:'+palHex(pp.id)+'" aria-label="'+pp.name+'"></button>'}).join('')+'</div>'
+    +(function(){var hx=sch.color?q81Hex(sch.color).toUpperCase():'';return '<div class="q81hex"><label class="q81pick'+(/^#/.test(sch.color||'')?' on':'')+'" title="Pick any colour" style="background:'+(hx||'var(--card)')+'"><input type="color" value="'+(hx||'#BDB6A3').toLowerCase()+'" data-q81pick="1" aria-label="Pick any colour"></label>'
+     +'<input class="q81code" data-q81code="1" value="'+hx+'" placeholder="Hex code" maxlength="7" spellcheck="false" autocomplete="off" autocapitalize="characters" aria-label="Hex code">'
+     +'<button type="button" class="q81btn" data-q81copy="1">Copy</button><button type="button" class="q81btn" data-q81paste="1">Paste</button></div>'})()
     +(pos>0?'<button data-sheetdo="chup">Move up</button>':'')
     +(pos<last?'<button data-sheetdo="chdown">Move down</button>':'')
     +(pos>1?'<button data-sheetdo="chtop">Move to the top</button>':'')
@@ -12933,6 +12954,7 @@ document.addEventListener('click',function(e){
   if(sm.what==='chap'){
    var chx=(scc.sections||[])[sm.i];if(!chx){render();return}
    if(act==='chrename'){openModal('section',sm.classId,chx.id);return}
+   if(act.indexOf('chcol-')===0){var ncol=act.slice(6);if(ncol)chx.color=ncol;else delete chx.color;touch(chx);save();render();return}
    if(act==='chremove'){
     scc.sections=scc.sections.filter(function(x){return x!==chx});
     (FILES[sm.classId]||[]).forEach(function(f){if(f.section===chx.id)f.section=''});
@@ -20801,9 +20823,13 @@ render=function(){var r=_q58RenderC.apply(this,arguments);try{q58Class()}catch(e
    be dropped onto the card. Built by swapping the card bodies after each render (q59Fix). Prefix q59. ===== */
 var Q59PLUS='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 var Q59SRCH='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>';
-function q59Band(cid,key,name,n,extra){
+// v240: the colours offered in a chapter's 3-dots sheet (ids from PALETTES)
+var Q81COLS=['blush','peach','butter','sage','seaglass','mist','denim','lavender','mauve','stone'];
+// a band colour is a PALETTES id or, from the picker or hex box, a #RRGGBB code
+function q81Hex(col){return /^#/.test(col||'')?col:palHex(col)}
+function q59Band(cid,key,name,n,extra,col){
  var shut=!!cpShut(cid)[key];
- return '<div class="q59gh'+(shut?' shut':'')+'" data-chap="'+cid+':'+key+'" role="button" aria-expanded="'+(!shut)+'"><span class="q59gn">'+esc(name)+'</span><em>· '+n+'</em>'+(extra||'')+'<span class="q59chev">'+CP_ICO.chev+'</span></div>';
+ return '<div class="q59gh'+(shut?' shut':'')+(col?' q81col" style="--q81c:'+q81Hex(col):'')+'" data-chap="'+cid+':'+key+'" role="button" aria-expanded="'+(!shut)+'"><span class="q59gn">'+esc(name)+'</span><em>· '+n+'</em>'+(extra||'')+'<span class="q59chev">'+CP_ICO.chev+'</span></div>';
 }
 function q59AsgRow(c,a,first){
  var cd=cpCountdown(a.due),late=cd.n!=null&&cd.n<0;
@@ -20846,7 +20872,7 @@ function q59FileList(c){
   if(links.length)h+=q59Band(c.id,'f~links','Links',links.length)+(shut['f~links']?'':lr(null));
  }else{
   secs.forEach(function(s,k){var n=cnt(s.id),sh=!!shut[s.id];
-   h+=q59Band(c.id,s.id,s.name,n,'<button class="q59ga" data-zact="q59fadd:'+c.id+':'+s.id+'" aria-label="Add to '+esc(s.name)+'">'+Q59PLUS+'</button><button class="q59ga" data-sheet="chap" data-i="'+(c.sections||[]).indexOf(s)+'" data-c="'+c.id+'" aria-label="Rename, move or remove '+esc(s.name)+'">'+CP_ICO.more+'</button>')
+   h+=q59Band(c.id,s.id,s.name,n,'<button class="q59ga" data-zact="q59fadd:'+c.id+':'+s.id+'" aria-label="Add to '+esc(s.name)+'">'+Q59PLUS+'</button><button class="q59ga" data-sheet="chap" data-i="'+(c.sections||[]).indexOf(s)+'" data-c="'+c.id+'" aria-label="Rename, move, colour or remove '+esc(s.name)+'">'+CP_ICO.more+'</button>',s.color)
     +(sh?'':(n?'<div data-q59sec="'+s.id+'">'+fr(s.id)+lr(s.id)+'</div>':'<p class="q59none" data-q59sec="'+s.id+'">Nothing here yet.</p>'))});
   var u=cnt('');if(u)h+=q59Band(c.id,'_','Unsorted',u)+(shut['_']?'':'<div data-q59sec="">'+fr('')+lr('')+'</div>');
  }
@@ -24997,6 +25023,32 @@ window.addEventListener('resize',function(){try{q80Sync()}catch(e){}});
 try{var q80Obs=new MutationObserver(function(){q80Later(40)});q80Obs.observe(document.body,{childList:true,attributes:true,attributeFilter:['class']});q80Obs.observe(document.documentElement,{attributes:true,attributeFilter:['class']})}catch(e){}
 // the opening animation fades between colours by script, so follow it while it plays
 (function(){var n=0,iv=setInterval(function(){try{q80Paint()}catch(e){}if(!/splash-on/.test(document.documentElement.className)||++n>80){clearInterval(iv);q80Later(40)}},100)})();
+
+/* ===== v240: any colour for a chapter band: a picker plus a hex box with Copy and Paste, in the chapter's 3-dots sheet. Prefix q81. ===== */
+function q81Norm(v){v=String(v||'').trim().replace(/^#/,'');if(/^[0-9a-f]{3}$/i.test(v))v=v.replace(/./g,'$&$&');return /^[0-9a-f]{6}$/i.test(v)?'#'+v.toUpperCase():''}
+function q81Chap(){var m=view.modal;if(!m||m.kind!=='sheet'||m.what!=='chap')return null;var c=classById(m.classId),s=c&&(c.sections||[])[m.i];return s?{c:c,s:s}:null}
+function q81Set(hx){var o=q81Chap();if(!o||!hx||o.s.color===hx)return;o.s.color=hx;touch(o.s);save();render()}
+// while dragging in the picker: colour the band and the dot right away, save when the picker closes
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute)return;
+ if(t.hasAttribute('data-q81pick')){var o=q81Chap(),hx=q81Norm(t.value);if(!o||!hx)return;var l=t.closest('.q81pick');if(l)l.style.background=hx;var cd=document.querySelector('[data-q81code]');if(cd)cd.value=hx;
+  var b=document.querySelector('.q59gh[data-chap="'+o.c.id+':'+o.s.id+'"]');if(b){b.classList.add('q81col');b.style.setProperty('--q81c',hx)}}
+ else if(t.hasAttribute('data-q81code')){var h2=q81Norm(t.value);if(h2&&t.value.replace('#','').length===6)q81Set(h2)}
+});
+document.addEventListener('change',function(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-q81pick'))q81Set(q81Norm(t.value))});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q81copy],[data-q81paste]');if(!b)return;e.preventDefault();e.stopPropagation();
+ var cd=document.querySelector('[data-q81code]');
+ var flash=function(txt){var was=b.getAttribute('data-q81copy')?'Copy':'Paste';b.textContent=txt;setTimeout(function(){if(b.isConnected)b.textContent=was},1200)};
+ if(b.hasAttribute('data-q81copy')){var hx=cd&&q81Norm(cd.value);if(!hx){flash('No colour');return}
+  var done=function(){flash('Copied')};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(hx).then(done,function(){cd.select();try{document.execCommand('copy');done()}catch(_){}});
+  else{cd.select();try{document.execCommand('copy');done()}catch(_){}}
+ }else{
+  // if the browser won't hand over the clipboard, put the cursor in the box so a normal paste works
+  var fail=function(){if(cd){cd.focus();cd.select()}flash('Paste in the box')};
+  if(navigator.clipboard&&navigator.clipboard.readText)navigator.clipboard.readText().then(function(txt){var hx=q81Norm(txt);if(hx)q81Set(hx);else flash('Not a hex code')},fail);
+  else fail();
+ }
+},true);
 
 try{spBoot()}catch(e){}
 load();
