@@ -6181,6 +6181,10 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 .q84tk details{margin:2px 0 10px}.q84tk summary{cursor:pointer;font-size:13px;color:var(--ink3);margin-bottom:6px}
 .q84ct{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:var(--ink3);margin:2px 0 4px}
 .q84ph{margin:6px 0 10px}.q84ph h3{margin:0}
+.q84av.q84img{background:#fff center/cover no-repeat;border:1px solid var(--line)}
+.q84lg{position:relative;cursor:pointer;flex:none;display:inline-flex}
+.q84lg i{position:absolute;right:-3px;bottom:-3px;width:20px;height:20px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2)}
+.q84lrow{display:flex;align-items:center;gap:12px}.q84lrow .q53up{margin-top:0}
 </style>
 </head>
 <body>
@@ -6490,7 +6494,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v243';
+var BUILD='v244';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -25310,7 +25314,7 @@ function q83SaveTag(c){
 function q84Clients(c){return ((c&&c.items)||[]).filter(function(x){return x.t==='client'}).sort(function(a,b){return String(a.title).localeCompare(String(b.title))})}
 function q84Sel(c){var k=String(view.q84c||'').split(':');if(!c||k[0]!==c.id)return null;var x=zItem(c,k[1]);return x&&x.t==='client'?x:null}
 function q84Projs(c,cl){return c.items.filter(function(x){return x.t==='proj'&&x.client===cl.id})}
-function q84Av(cl,sz){var K=Object.keys(ZC).filter(function(k){return k!=='grey'}),n=Math.abs(String(cl.title||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7)),z=ZC[K[n%K.length]];
+function q84Av(cl,sz){if(cl.logo)return '<span class="q84av q84img" style="background-image:url('+cl.logo+')" role="img" aria-label="'+esc(cl.title)+' logo"></span>';var K=Object.keys(ZC).filter(function(k){return k!=='grey'}),n=Math.abs(String(cl.title||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7)),z=ZC[K[n%K.length]];
  return '<span class="q84av" style="background:'+z[0]+';color:'+z[1]+'">'+esc((String(cl.title||'?').trim()[0]||'?').toUpperCase())+'</span>'}
 // everything still to do for a client: its own tasks and its projects' tasks
 function q84Open(c,cl){var L=(cl.steps||[]).filter(function(s){return !s.done});q84Projs(c,cl).forEach(function(p){L=L.concat((p.steps||[]).filter(function(s){return !s.done}))});return L}
@@ -25332,7 +25336,7 @@ function q84Grid(c){
 function q84Head(c,cl){
  var P=q84Projs(c,cl),O=q84Open(c,cl),td=iso(today()),late=O.filter(function(s){return s.due&&s.due<td}).length;
  return '<section class="z3card q84head"><button class="zlink" data-zact="q84all:'+c.id+'">‹ All clients</button>'
-  +'<div class="q84hrow">'+q84Av(cl)+'<div><h2>'+esc(cl.title)+'</h2>'+(cl.contact?'<small>'+esc(cl.contact)+'</small>':'')+'</div><button class="zbtn" data-zact="q84edit:'+c.id+':'+cl.id+'">Edit</button></div>'
+  +'<div class="q84hrow"><label class="q84lg" title="'+(cl.logo?'Change logo':'Add a logo')+'">'+q84Av(cl)+'<i>'+zI(cl.logo?ZIC.pen:'<path d="M12 5v14M5 12h14"/>',11)+'</i><input type="file" accept="image/*" data-q84logo="'+c.id+':'+cl.id+'" style="display:none"></label><div><h2>'+esc(cl.title)+'</h2>'+(cl.contact?'<small>'+esc(cl.contact)+'</small>':'')+'</div><button class="zbtn" data-zact="q84edit:'+c.id+':'+cl.id+'">Edit</button></div>'
   +'<div class="q84stats"><span>'+P.length+' project'+(P.length===1?'':'s')+'</span><span>'+O.length+' task'+(O.length===1?'':'s')+' to do</span>'+(late?'<span class="late">'+late+' late</span>':'')+'</div>'
   +(cl.notes?'<p class="q84notes">'+esc(cl.notes)+'</p>':'')
   +((cl.links||[]).length?'<div class="q84links">'+cl.links.map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+linkIcon(l.url,l.title)+esc(l.title||cpHost(l.url))+'</a>'}).join('')+'</div>':'')+'</section>';
@@ -25370,7 +25374,7 @@ ZACT.q84tadd=function(cid,clid){var cl=zItem(classById(cid),clid),v=zv('q84new')
  var s={id:uid(),title:v,done:false},d=zv('q84newd');if(d)s.due=d;cl.steps.push(s);touch(cl);save();render();setTimeout(function(){var i=document.getElementById('q84new');if(i)i.focus()},30)};
 ZACT.q84conv=function(cid,pid){var c=classById(cid),p=c&&zItem(c,pid);if(!p)return;
  if(!confirm('Make “'+p.title+'” a client?\n\nIts tasks, links and notes stay with it, and you can add projects under it.'))return;
- p.t='client';['status','due','tag','cover'].forEach(function(k){delete p[k]});touch(p);save();view.zproj=null;view.q84c=cid+':'+pid;render();window.scrollTo(0,0)};
+ p.t='client';if(p.cover&&!p.logo)p.logo=p.cover;['status','due','tag','cover'].forEach(function(k){delete p[k]});touch(p);save();view.zproj=null;view.q84c=cid+':'+pid;render();window.scrollTo(0,0)};
 ZACT.q84cdel=function(cid,clid){var c=classById(cid),cl=c&&zItem(c,clid);if(!cl)return;var P=q84Projs(c,cl);
  if(!confirm('Delete the client “'+cl.title+'”?\n\nIts own tasks are deleted.'+(P.length?' Its '+P.length+' project'+(P.length===1?'':'s')+' will stay, with no client.':'')))return;
  var ids=[];(cl.steps||[]).forEach(function(s){ids=ids.concat(s.files||[])});q53DropFiles(cid,ids);
@@ -25384,6 +25388,9 @@ function q84Keep(){var m=view.modal;if(m&&m.kind==='q84client')['q84n','q84ct','
 ZM.q84client={html:function(m){var c=classById(m.cid),cl=m.clid&&zItem(c,m.clid);if(!c||(m.clid&&!cl))return null;
  var v=function(k,f){return m[k]!=null?m[k]:(cl&&cl[f])||''};
  return '<h3>'+(cl?'Edit client':'New client')+'</h3>'
+  +'<div class="field"><label>Logo or picture <small class="q53opt">optional</small></label><div class="q84lrow">'+q84Av({title:v('q84n','title')||'?',logo:m.logo!=null?m.logo:(cl&&cl.logo)||''})
+  +'<label class="zbtn q53up">'+((m.logo!=null?m.logo:cl&&cl.logo)?'Change':'Add a logo')+'<input type="file" accept="image/*" data-q84mlogo="1" style="display:none"></label>'
+  +((m.logo!=null?m.logo:cl&&cl.logo)?'<button class="zlink" data-zact="q84lrm">Remove</button>':'')+'</div></div>'
   +'<div class="field"><label for="q84n">Name</label><input id="q84n" value="'+esc(v('q84n','title'))+'" placeholder="Who is it for?"></div>'
   +'<div class="field"><label for="q84ct">Contact <small class="q53opt">optional</small></label><input id="q84ct" value="'+esc(v('q84ct','contact'))+'" placeholder="Name, email or phone"></div>'
   +'<div class="field"><label for="q84no">Notes <small class="q53opt">optional</small></label><textarea id="q84no" rows="3" placeholder="Anything to remember about them">'+esc(v('q84no','notes'))+'</textarea></div>'
@@ -25391,9 +25398,15 @@ ZM.q84client={html:function(m){var c=classById(m.cid),cl=m.clid&&zItem(c,m.clid)
    +'<div class="zlkadd"><input id="q84lt" placeholder="Name"><input id="q84lu" placeholder="https://" data-zenter="q84ladd:'+c.id+':'+cl.id+'"><button class="zbtn" data-zact="q84ladd:'+c.id+':'+cl.id+'">Add</button></div></div>':'');
 },save:function(m){var c=classById(m.cid);if(!c)return;var n=zv('q84n');if(!n){zToast('Give the client a name.');return}
  var cl=m.clid&&zItem(c,m.clid);if(!cl){cl={id:uid(),t:'client',steps:[],links:[]};c.items.push(cl)}
- cl.title=n;cl.contact=zv('q84ct');cl.notes=zv('q84no');['contact','notes'].forEach(function(k){if(!cl[k])delete cl[k]});
+ cl.title=n;cl.contact=zv('q84ct');cl.notes=zv('q84no');if(m.logo!=null)cl.logo=m.logo;if(!cl.logo)delete cl.logo;['contact','notes'].forEach(function(k){if(!cl[k])delete cl[k]});
  touch(cl);save();view.modal=null;view.q84c=c.id+':'+cl.id;view.zproj=null;render()},
  saveLabel:'Save',del:function(m){return m.clid?'q84cdel:'+m.cid+':'+m.clid:''}};
+ZACT.q84lrm=function(){q84Keep();if(view.modal)view.modal.logo='';render()};
+// logos: a small square PNG (keeps see-through backgrounds)
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute||!t.files||!t.files[0])return;
+ var a=t.getAttribute('data-q84logo');
+ if(a){var k=a.split(':');shrinkImage(t.files[0],256,function(url){var cl=zItem(classById(k[0]),k[1]);if(cl){cl.logo=url;touch(cl);save();render()}},true);return}
+ if(t.getAttribute('data-q84mlogo')){q84Keep();shrinkImage(t.files[0],256,function(url){if(view.modal&&view.modal.kind==='q84client'){view.modal.logo=url;render()}},true)}});
 // a new project made while a client is open belongs to that client
 var _q84New=ZACT.projnew;
 ZACT.projnew=function(cid){var cl=q84Sel(classById(cid));_q84New.apply(this,arguments);var p=cl&&zItem(classById(cid),view.zproj);if(p&&p.t==='proj'){p.client=cl.id;touch(p);save();render()}};
