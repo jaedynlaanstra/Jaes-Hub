@@ -6126,6 +6126,7 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 .q82wt b{font-weight:500;font-variant-numeric:tabular-nums}
 .q82sum{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;background:#EAE6ED;color:#5E4F69;border-radius:16px;padding:14px 18px;margin-bottom:14px}
 .q82sum small{display:block;font-size:12.5px;opacity:.85}
+.q82sum>span:first-child{display:flex;flex-direction:column;align-items:flex-start}
 .q82sum b{font-family:var(--fh,inherit);font-size:34px;font-weight:var(--wh,500);line-height:1.1;font-variant-numeric:tabular-nums}
 .q82sum>span:last-child{font-size:13px;padding-bottom:5px}
 .q82t{border:1px solid var(--line);border-radius:16px;padding:12px 12px 8px;margin-bottom:12px}
@@ -6146,6 +6147,15 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 .q82sc span{color:var(--ink2)}.q82sc span b{display:inline-block;width:32px;font-weight:500;color:var(--ink)}
 .q82sc em{font-style:normal;font-variant-numeric:tabular-nums}
 @media(max-width:420px){.q82r{grid-template-columns:minmax(0,1fr) 54px 46px 32px 24px;gap:4px}.q82sum b{font-size:28px}}
+/* v242: grade tags in the assignment pop-up (q83), Dean's Honour Roll badge (q82) */
+.q83tp{background:var(--paper,#F6F4F0);border-radius:14px;padding:12px 12px 6px;margin:-4px 0 14px}
+.q83tp .field:last-of-type{margin-bottom:6px}
+.q83hint{margin:2px 0 6px!important;font-size:12.5px}
+.q83del{background:none;border:none;padding:2px 0 8px;font:inherit;font-size:13px;color:#A34A3F;cursor:pointer;min-height:0}
+.q83mh{display:block;font-size:12.5px;color:var(--ink3);min-height:18px;margin-top:3px}
+.q82dh{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;background:#F0EDE3;color:#7E6B44;border-radius:99px;padding:3px 10px 3px 8px;margin-top:6px;white-space:nowrap}
+.q82dh[hidden]{display:none}
+.q82tg.q82hon{background:#F0EDE3;color:#7E6B44}
 </style>
 </head>
 <body>
@@ -6455,7 +6465,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v241';
+var BUILD='v242';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -6590,16 +6600,22 @@ function seedWeights(){
  });
 }
 function gradeInfo(c){
- var list=(c.assignments||[]).filter(function(a){return a.weight!==''&&a.weight!=null&&+a.weight>0});
- var total=0,earned=0,graded=0;
- list.forEach(function(a){
+ // untagged work counts by its own worth; tagged work (v242) counts by its tag (q83Groups): worth each or all
+ // together, with the lowest marks dropped
+ var T=q83Tags(c),total=0,earned=0,graded=0;
+ (c.assignments||[]).forEach(function(a){
+  if(a.tag&&T[a.tag])return;
+  if(a.weight===''||a.weight==null||!(+a.weight>0))return;
   total+=+a.weight;
   if(a.mark!==''&&a.mark!=null){graded+=+a.weight;earned+=(+a.mark)*(+a.weight)/100}
  });
+ var G=q83Groups(c);
+ Object.keys(G).forEach(function(k){var g=G[k];total+=g.total;graded+=g.graded;earned+=g.earned});
  var avg=graded?earned/graded*100:null;
  var remaining=total-graded,need=null;
  if(c.target&&remaining>0){need=(c.target*total/100-earned)/remaining*100}
- return {total:total,graded:graded,earned:earned,avg:avg,remaining:remaining,need:need};
+ var r1=function(x){return Math.round(x*10)/10};
+ return {total:r1(total),graded:r1(graded),earned:earned,avg:avg,remaining:r1(remaining),need:need};
 }
 function seedShorts(){for(var k in SHORTS){var c=classById(k);if(c&&!c.short)c.short=SHORTS[k]}}
 function classLabel(c){return c.short||c.code||c.name}
@@ -9378,7 +9394,7 @@ function viewClass(c){
  var NX='',NXS='';
  if(nextA){
   var ncd=cpCountdown(nextA.due),nl=ncd.n<0,big=ncd.n===0?'Today':String(Math.abs(ncd.n)),unit=ncd.n===0?'':(Math.abs(ncd.n)===1?'day':'days')+(nl?' late':' left');
-  var tags=[nextA.priority||'',nextA.weight!==''&&nextA.weight!=null?nextA.weight+'%':''].filter(Boolean).join(' \u00b7 ');
+  var tags=[nextA.priority||'',q83Worth(c,nextA)].filter(Boolean).join(' \u00b7 ');
   var after=asg.filter(function(a){return a.due&&a!==nextA}).slice(0,2);
   var nDate=esc(withTime(parseISO(nextA.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),nextA.time));
   var nAttr=' data-edit="assign" data-id="'+nextA.id+'" data-c="'+c.id+'" title="Open '+esc(nextA.title)+'"';
@@ -9423,7 +9439,7 @@ function viewClass(c){
     +'<span class="c-count" style="color:'+cdColor+'">'+cd.t+'</span>'
     +'<i class="c-br"></i>'
     +'<span class="c-due'+(late?' late':'')+'">'+(a.due?esc(withTime(parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),a.time)):'')+'</span>'
-    +'<span class="c-worth">'+(a.weight!==''&&a.weight!=null?a.weight+'%':'')+'</span>'
+    +'<span class="c-worth">'+esc(q83Worth(c,a))+'</span>'
     +'<span class="c-prio">'+prioPill(a.priority)+'</span>'
     +'</div>';
   });
@@ -9520,7 +9536,7 @@ function viewClass(c){
   :firstN(finished.map(function(a){
    return '<div class="cpli"><span class="cpgrow">'+esc(a.title)+'</span>'
     +(a.mark!==''&&a.mark!=null
-      ?'<button class="cpmark" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" title="Change the mark" style="background:'+col.done.bg+';color:'+col.done.title+'">'+a.mark+'%</button>'
+      ?'<button class="cpmark" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" title="Change the mark" style="background:'+col.done.bg+';color:'+col.done.title+'">'+esc(q83MarkText(a))+'</button>'
       :'<button class="cpghost" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" style="color:'+col.done.c+'">Add mark</button>')
     +'<span class="cpmeta">'+esc(a.doneAt?parseISO(a.doneAt).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'')+'</span>'
     +'<button class="cpghost" data-undo="'+a.id+'" data-c="'+c.id+'">Put back</button></div>';
@@ -10347,9 +10363,10 @@ function modalHtml(){
    +'<div class="field"><label for="m1">Name</label><input id="m1" value="'+esc(a?a.title:'')+'" placeholder="Campaign audit report"></div>'
    +'<div class="field"><label for="m2">Due date</label><input id="m2" type="date" value="'+esc(a?a.due:'')+'"></div>'
    +'<div class="field"><label for="m7">Due time</label><input id="m7" type="time" value="'+esc(a?(a.time||''):'23:59')+'"></div>'
+   +q83Field(m,a)
    +'<div style="display:flex;gap:10px">'
-   +'<div class="field" style="flex:1"><label for="m14">Worth (%)</label><input id="m14" type="number" step="0.5" min="0" max="100" value="'+esc(a&&a.weight!==undefined?a.weight:'')+'" placeholder="10"></div>'
-   +'<div class="field" style="flex:1"><label for="m15">Your mark (%)</label><input id="m15" type="number" step="0.1" min="0" max="120" value="'+esc(a&&a.mark!==undefined?a.mark:'')+'" placeholder="Once it is back"></div>'
+   +'<div class="field" style="flex:1'+(q83Pick(m,a)?';display:none':'')+'" id="q83wf"><label for="m14">Worth (%)</label><input id="m14" type="number" step="0.5" min="0" max="100" value="'+esc(a&&a.weight!==undefined?a.weight:'')+'" placeholder="10"></div>'
+   +'<div class="field" style="flex:1"><label for="m15">Your mark</label><input id="m15" value="'+esc(a?(a.score||(a.mark!==undefined&&a.mark!==''?a.mark:'')):'')+'" placeholder="85 or 45/60" autocomplete="off"><span class="q83mh" id="q83mh">'+esc(q83MarkHint(a?(a.score||''):''))+'</span></div>'
    +'</div>'
    +'<div class="field"><label for="m6">Priority</label><select id="m6">'
    +['','High','Medium','Low'].map(function(o){return '<option value="'+o+'"'+((a&&a.priority)===o||(!a&&!o)?' selected':'')+'>'+(o||'None')+'</option>'}).join('')
@@ -10619,8 +10636,10 @@ function saveModal(){
   // a step typed but not yet Entered still counts
   var pend=document.getElementById('stepnew');if(pend&&pend.value.trim()){m.steps=m.steps||[];m.steps.push({id:uid(),title:pend.value.trim(),done:false})}
   var stepsOut=(m.steps||[]).filter(function(x){return x.title.trim()});
-  if(m.id){var a=findAsg(m.classId,m.id);a.steps=stepsOut;if(!stepsOut.length)delete a.steps;a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=val('m14')===''?'':+val('m14');a.mark=val('m15')===''?'':+val('m15');touch(a)}
-  else{classById(m.classId).assignments.push(touch({id:uid(),steps:stepsOut.length?stepsOut:undefined,title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:val('m14')===''?'':+val('m14'),mark:val('m15')===''?'':+val('m15'),done:false}))}
+  var mk=q83Mark(val('m15'));if(mk&&mk.bad){zNeed('m15','Type a percent like 85, or what you got out of what, like 45/60.');return}
+  var tg=q83SaveTag(classById(m.classId));if(tg===false)return;
+  if(m.id){var a=findAsg(m.classId,m.id);a.steps=stepsOut;if(!stepsOut.length)delete a.steps;a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=val('m14')===''?'':+val('m14');a.mark=mk?mk.pct:'';q83Put(a,mk,tg);touch(a)}
+  else{classById(m.classId).assignments.push(touch({id:uid(),steps:stepsOut.length?stepsOut:undefined,title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:val('m14')===''?'':+val('m14'),mark:mk?mk.pct:'',done:false}));q83Put(classById(m.classId).assignments[classById(m.classId).assignments.length-1],mk,tg)}
  }else if(m.kind==='app'){
   var an=val('m1'),au=val('m2');if(!an||!au)return;
   if(!/^https?:\/\//i.test(au))au='https://'+au;
@@ -20863,7 +20882,7 @@ function q59Band(cid,key,name,n,extra,col){
 function q59AsgRow(c,a,first){
  var cd=cpCountdown(a.due),late=cd.n!=null&&cd.n<0;
  var pill=a.due?(late?'Late':cd.n===0?'Today':cd.n+'d'):'';
- var sub=[a.due?withTime(parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),a.time):'No due date','worth '+(a.weight!==''&&a.weight!=null?a.weight+'%':'—')];
+ var sub=[a.due?withTime(parseISO(a.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}),a.time):'No due date',q83Worth(c,a)==='Dropped'?'dropped (lowest mark)':'worth '+(q83Worth(c,a)||'—')];
  return '<div class="q59r" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'"><button class="tick" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark '+esc(a.title)+' done"></button>'
   +'<div class="q59rt"><b>'+esc(a.title)+asgFileIcon(c,a)+'</b><small>'+esc(sub.join(' · '))+stepChip(a)+'</small></div>'
   +(pill?'<span class="q59cd'+(late?' late':first?' near':'')+'">'+pill+'</span>':'')+'</div>';
@@ -25102,6 +25121,9 @@ function q82Point(r){
 function q82Calc(rows){var pts=0,cr=0;rows.forEach(function(r){var p=q82Point(r),c=parseFloat(r.credits);if(p==null||!(c>0))return;pts+=p*c;cr+=c});return {gpa:cr?pts/cr:null,credits:cr}}
 function q82All(){var R=[];q82Data().terms.forEach(function(t){R=R.concat(t.rows||[])});return q82Calc(R)}
 function q82Fmt(v){return v==null?'–':v.toFixed(3)}
+// Dean's Honour Roll: a GPA of 3.9 or higher
+function q82Hon(g){return g!=null&&g>=3.9-1e-9}
+function q82Badge(on){return '<span class="q82dh" data-q82dh="1"'+(on?'':' hidden')+'>'+zI(ZIC.cap,14)+'Dean’s Honour Roll</span>'}
 function q82Cr(n){return (Math.round(n*100)/100)+' credit'+(n===1?'':'s')}
 // the widget
 function q82Widget(w,sp){
@@ -25109,14 +25131,14 @@ function q82Widget(w,sp){
  if(a.gpa==null)return zWCard(w,d,d.name,'','<p class="zsoft">Add your grades and credits to see your cumulative GPA.</p><button class="zlink" data-zact="q82open">Open the calculator</button>');
  var recent=T.slice(-3).reverse().map(function(t){var g=q82Calc(t.rows||[]).gpa;return g==null?'':'<div class="q82wt"><span class="q20fade">'+esc(t.name||'Term')+'</span><b>'+q82Fmt(g)+'</b></div>'}).join('');
  return zWCard(w,d,d.name,T.length+' term'+(T.length===1?'':'s'),'<button class="q82wb" data-zact="q82open"><span class="zrow2">'+zRing(a.gpa/4.2*100,'var(--wc)',72,8,'')
-  +'<span><span class="zbig">'+q82Fmt(a.gpa)+'</span><span class="zsoft">Cumulative · '+q82Cr(a.credits)+'</span></span></span></button>'+(recent?'<div class="q82wl">'+recent+'</div>':''));
+  +'<span><span class="zbig">'+q82Fmt(a.gpa)+'</span><span class="zsoft">Cumulative · '+q82Cr(a.credits)+'</span>'+(q82Hon(a.gpa)?'<span>'+q82Badge(true)+'</span>':'')+'</span></span></button>'+(recent?'<div class="q82wl">'+recent+'</div>':''));
 }
 WDEF.gpa={name:'GPA',desc:'Your cumulative GPA, with a calculator for grades and credits',sp:['school'],ico:'cap',soft:'lavender',col:'side',size:'full'};
 var _q82WH=zWidgetHtml;
 zWidgetHtml=function(w,sp){if(w.type==='gpa')return q82Widget(w,sp);return _q82WH(w,sp)};
 var _q82Small=zSmall;
 zSmall=function(w,d,sp){if(w.type!=='gpa')return _q82Small(w,d,sp);var a=q82All();
- return zWCard(w,d,'GPA','','<button class="q82wb" data-zact="q82open"><span class="zsm"><b class="zsmb">'+q82Fmt(a.gpa)+'</b><span class="zsms">'+(a.gpa==null?'Tap to add grades':'Cumulative')+'</span></span></button>')};
+ return zWCard(w,d,'GPA','','<button class="q82wb" data-zact="q82open"><span class="zsm"><b class="zsmb">'+q82Fmt(a.gpa)+'</b><span class="zsms">'+(a.gpa==null?'Tap to add grades':q82Hon(a.gpa)?'Dean’s Honour Roll':'Cumulative')+'</span></span></button>')};
 // the calculator sheet
 ZACT.q82open=function(){if(!q82Data().terms.length)q82Edit(function(g){g.terms.push({id:uid(),name:'',rows:[{id:uid(),name:'',grade:'',credits:''}]})});zOpen('q82gpa')};
 ZM.q82gpa={wide:true,html:function(){
@@ -25128,10 +25150,10 @@ ZM.q82gpa={wide:true,html:function(){
    +'<span class="q82p" data-q82p="'+k+'">'+(p==null?'–':p.toFixed(1))+'</span>'
    +'<button type="button" class="q82x" data-zact="q82rdel:'+t.id+':'+r.id+'" aria-label="Remove course">×</button></div>'};
  return '<h3>GPA calculator</h3><p class="hint" style="margin:-4px 0 14px">Type a letter (A+, B) or a percent (85). Each course counts by its credits. P and blank grades don’t count.</p>'
-  +'<div class="q82sum"><span><small>Cumulative GPA</small><b data-q82cum="1">'+q82Fmt(a.gpa)+'</b></span><span data-q82cr="1">'+q82Cr(a.credits)+'</span></div>'
+  +'<div class="q82sum"><span><small>Cumulative GPA</small><b data-q82cum="1">'+q82Fmt(a.gpa)+'</b>'+q82Badge(q82Hon(a.gpa))+'</span><span data-q82cr="1">'+q82Cr(a.credits)+'</span></div>'
   +T.map(function(t){var g=q82Calc(t.rows||[]);
    return '<div class="q82t"><div class="q82th"><input data-q82f="'+t.id+'~~name" value="'+esc(t.name||'')+'" placeholder="Term name, like 2026 Fall" aria-label="Term name" autocomplete="off">'
-    +'<span class="q82tg" data-q82tg="'+t.id+'">'+q82Fmt(g.gpa)+'</span><button type="button" class="q82x" data-zact="q82tdel:'+t.id+'" aria-label="Delete term">×</button></div>'
+    +'<span class="q82tg'+(q82Hon(g.gpa)?' q82hon':'')+'" data-q82tg="'+t.id+'" title="'+(q82Hon(g.gpa)?'Dean’s Honour Roll for this term':'Term GPA')+'">'+q82Fmt(g.gpa)+'</span><button type="button" class="q82x" data-zact="q82tdel:'+t.id+'" aria-label="Delete term">×</button></div>'
     +'<div class="q82r q82hd"><span>Course</span><span>Grade</span><span>Credits</span><span>Points</span><span></span></div>'
     +(t.rows||[]).map(function(r){return row(t,r)}).join('')
     +'<div class="q82ta"><button type="button" class="zlink" data-zact="q82radd:'+t.id+'">+ Add a course</button><button type="button" class="zlink" data-zact="q82cls:'+t.id+'">+ Add my classes</button></div></div>'}).join('')
@@ -25152,13 +25174,106 @@ ZACT.q82cls=function(tid){var C=S.classes.filter(function(c){return !c.kind&&c.i
  save();render();zToast(n?n+' class'+(n===1?'':'es')+' added. Add their credits.':'Your classes are already here.')};
 // typing: update the numbers in place (no redraw), save when the box is left
 function q82Patch(){var g=q82Data();
- g.terms.forEach(function(t){var e=document.querySelector('[data-q82tg="'+t.id+'"]');if(e)e.textContent=q82Fmt(q82Calc(t.rows||[]).gpa);
+ g.terms.forEach(function(t){var e=document.querySelector('[data-q82tg="'+t.id+'"]'),tg=q82Calc(t.rows||[]).gpa;if(e){e.textContent=q82Fmt(tg);e.classList.toggle('q82hon',q82Hon(tg))}
   (t.rows||[]).forEach(function(r){var p=document.querySelector('[data-q82p="'+t.id+'~'+r.id+'"]'),v=q82Point(r);if(p)p.textContent=v==null?'–':v.toFixed(1)})});
- var a=q82All(),c=document.querySelector('[data-q82cum]'),cr=document.querySelector('[data-q82cr]');if(c)c.textContent=q82Fmt(a.gpa);if(cr)cr.textContent=q82Cr(a.credits)}
+ var a=q82All(),c=document.querySelector('[data-q82cum]'),cr=document.querySelector('[data-q82cr]');if(c)c.textContent=q82Fmt(a.gpa);var dh=document.querySelector('[data-q82dh]');if(dh)dh.hidden=!q82Hon(a.gpa);if(cr)cr.textContent=q82Cr(a.credits)}
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-q82f'))return;
  var k=t.getAttribute('data-q82f').split('~'),v=t.value;
  q82Edit(function(g){g.terms.forEach(function(x){if(x.id!==k[0])return;if(!k[1]){x.name=v;return}x.rows.forEach(function(r){if(r.id===k[1])r[k[2]]=v})})});q82Patch()});
 document.addEventListener('change',function(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-q82f'))save()});
+
+/* ---------- v242: grade tags, drop-the-lowest rules, marks as fractions (q83); Dean's Honour Roll on GPA ----------
+   Each class can have tags (c.gradeTags = [{id,name,worth,mode:'each'|'total',drop}]), picked and edited in the
+   assignment pop-up. "Each one": every tagged assignment is worth `worth`%; "All together": they share it. `drop`
+   lowest marks are left out (only once more than that many are marked). An assignment keeps a.mark as a percent
+   (everything else reads that); a fraction like 45/60 is also kept as a.score so the pop-up shows what was typed. */
+function q83Tags(c){var T={};((c&&c.gradeTags)||[]).forEach(function(t){if(t&&t.id)T[t.id]=t});return T}
+function q83Has(a){return a.mark!==''&&a.mark!=null}
+function q83Groups(c){
+ var T=q83Tags(c),A=(c&&c.assignments)||[],out={};
+ Object.keys(T).forEach(function(id){
+  var t=T[id],L=A.filter(function(a){return a.tag===id}),worth=+t.worth||0;if(!L.length||!(worth>0))return;
+  var drop=Math.max(0,Math.floor(+t.drop||0)),G=L.filter(q83Has).sort(function(x,y){return (+x.mark)-(+y.mark)});
+  var dn=G.length>drop?drop:0,kept=G.slice(dn),dropped={};G.slice(0,dn).forEach(function(a){dropped[a.id]=1});
+  var slots=Math.max(L.length-drop,kept.length,1),total=t.mode==='total'?worth:worth*slots,share=total/slots;
+  var sum=kept.reduce(function(s,a){return s+(+a.mark)},0);
+  out[id]={tag:t,total:total,graded:share*kept.length,earned:sum*share/100,share:share,dropped:dropped};
+ });
+ return out;
+}
+function q83Num(x){return String(Math.round(x*100)/100)}
+// what one assignment is worth, for the lists ("2%", or "Dropped" when it's the lowest quiz)
+function q83Worth(c,a){
+ if(a.tag&&q83Tags(c)[a.tag]){var g=q83Groups(c)[a.tag];if(!g)return '';return g.dropped[a.id]?'Dropped':q83Num(g.share)+'%'}
+ return a.weight!==''&&a.weight!=null?a.weight+'%':'';
+}
+// "85", "85%", "45/60" (or "45 / 60") to a percent; {bad:1} for anything else
+function q83Mark(str){
+ var s=String(str==null?'':str).trim().replace(/\s+/g,'').replace(/,/g,'.');if(!s)return null;
+ var f=/^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/.exec(s);
+ if(f){var d=+f[2];if(!(d>0))return {bad:1};return {pct:Math.round(+f[1]/d*10000)/100,score:f[1]+'/'+f[2]}}
+ s=s.replace(/%$/,'');if(!/^\d+(\.\d+)?$/.test(s)||+s>150)return {bad:1};
+ return {pct:+s};
+}
+function q83Pc(x){return String(Math.round(x*10)/10)+'%'}
+function q83MarkHint(str){var k=q83Mark(str);return k&&k.score?'= '+q83Pc(k.pct):''}
+function q83MarkText(a){return a.score?a.score+' · '+q83Pc(+a.mark):q83Pc(+a.mark)}
+function q83Put(a,mk,tg){if(!a)return;if(mk&&mk.score)a.score=mk.score;else delete a.score;if(tg)a.tag=tg;else delete a.tag}
+function q83Pick(m,a){var c=classById(m.classId);return a&&a.tag&&q83Tags(c)[a.tag]?a.tag:''}
+// the Tag box in the assignment pop-up; picking a tag shows its rules underneath (edited right there)
+function q83Field(m,a){
+ var c=classById(m.classId);if(!c)return '';var L=c.gradeTags||[],sel=q83Pick(m,a),t=sel?q83Tags(c)[sel]:null;
+ var opt=function(v,txt,o){return '<option value="'+esc(v)+'"'+(v===sel?' selected':'')+(o?' data-n="'+esc(o.name||'')+'" data-w="'+esc(String(o.worth==null?'':o.worth))+'" data-m="'+esc(o.mode||'each')+'" data-d="'+esc(String(o.drop||0))+'"':'')+'>'+esc(txt)+'</option>'};
+ var dsel=function(n){return [0,1,2,3,4,5].map(function(k){return '<option value="'+k+'"'+(k===(+n||0)?' selected':'')+'>'+(k?'Drop the lowest'+(k>1?' '+k+' marks':' mark'):'Keep every mark')+'</option>'}).join('')};
+ return '<div class="field"><label for="q83t">Tag</label><select id="q83t" data-q83t="1">'+opt('','No tag')+L.map(function(x){return opt(x.id,x.name||'Untitled',x)}).join('')+opt('+new','+ New tag')+'</select></div>'
+  +'<div class="q83tp" id="q83tp"'+(t?'':' style="display:none"')+'>'
+  +'<div class="field"><label for="q83n">Tag name</label><input id="q83n" value="'+esc(t?t.name||'':'')+'" placeholder="Quizzes" autocomplete="off"></div>'
+  +'<div style="display:flex;gap:10px"><div class="field" style="flex:1"><label for="q83w">Worth (%)</label><input id="q83w" inputmode="decimal" value="'+esc(t?String(t.worth==null?'':t.worth):'')+'" placeholder="2" autocomplete="off"></div>'
+  +'<div class="field" style="flex:1"><label for="q83m">Counts as</label><select id="q83m"><option value="each"'+(!t||t.mode!=='total'?' selected':'')+'>Each one</option><option value="total"'+(t&&t.mode==='total'?' selected':'')+'>All together</option></select></div></div>'
+  +'<div class="field"><label for="q83d">Rule</label><select id="q83d">'+dsel(t?t.drop:0)+'</select></div>'
+  +'<p class="hint q83hint" id="q83hint">'+(t?esc(q83HintFor(t.name,t.worth,t.mode,t.drop)):'')+'</p><button type="button" class="q83del" id="q83del" data-q83del="'+c.id+'"'+(t?'':' style="display:none"')+'>Delete this tag</button></div>';
+}
+function q83HintText(){
+ var v=function(id){return String((document.getElementById(id)||{}).value||'')};
+ return q83HintFor(v('q83n'),v('q83w'),v('q83m'),v('q83d'));
+}
+function q83HintFor(n,w,m,d){
+ w=parseFloat(String(w==null?'':w).replace(',','.'));d=+d||0;n=String(n||'').trim()||'this tag';
+ var a=w>0?(m==='total'?'Everything tagged '+n+' shares '+q83Num(w)+'% of your grade.':'Each one tagged '+n+' is worth '+q83Num(w)+'%.'):'Set what it’s worth.';
+ return a+(d?' The lowest '+(d>1?d+' marks are':'mark is')+' dropped.':'')+' Changes apply to everything with this tag.';
+}
+function q83Sync(){var h=document.getElementById('q83hint');if(h)h.textContent=q83HintText()}
+document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='q83t')return;
+ var v=t.value,p=document.getElementById('q83tp'),wf=document.getElementById('q83wf'),dl=document.getElementById('q83del'),o=t.options[t.selectedIndex];
+ if(p)p.style.display=v?'':'none';if(wf)wf.style.display=v?'none':'';if(dl)dl.style.display=v&&v!=='+new'?'':'none';
+ var set=function(id,x){var el=document.getElementById(id);if(el)el.value=x};
+ if(v==='+new'){set('q83n','');set('q83w','');set('q83m','each');set('q83d','0');var n=document.getElementById('q83n');if(n)n.focus()}
+ else if(v&&o){set('q83n',o.getAttribute('data-n'));set('q83w',o.getAttribute('data-w'));set('q83m',o.getAttribute('data-m')||'each');set('q83d',o.getAttribute('data-d')||'0')}
+ q83Sync()});
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.id)return;
+ if(t.id==='m15'&&document.getElementById('q83mh'))document.getElementById('q83mh').textContent=q83MarkHint(t.value);
+ if(/^q83[nwmd]$/.test(t.id))q83Sync()});
+document.addEventListener('change',function(e){var t=e.target;if(t&&/^q83[md]$/.test(t.id))q83Sync()});
+// delete a tag: its assignments go back to their own worth
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q83del]');if(!b)return;e.preventDefault();e.stopPropagation();
+ var c=classById(b.getAttribute('data-q83del')),sel=document.getElementById('q83t'),id=sel&&sel.value;if(!c||!id||id==='+new')return;
+ var t=q83Tags(c)[id],n=(c.assignments||[]).filter(function(a){return a.tag===id}).length;
+ if(!confirm('Delete the tag '+(t&&t.name?'“'+t.name+'”':'')+'?'+(n?' '+n+' assignment'+(n===1?'':'s')+' will go back to their own worth.':'')))return;
+ c.gradeTags=(c.gradeTags||[]).filter(function(x){return x.id!==id});
+ (c.assignments||[]).forEach(function(a){if(a.tag===id){delete a.tag;touch(a)}});touch(c);save();
+ var o=sel.querySelector('option[value="'+id+'"]');if(o)o.remove();sel.value='';sel.dispatchEvent(new Event('change',{bubbles:true}));zToast('Tag deleted.')},true);
+// on Save: create or update the picked tag; returns its id, '' for none, false when something is missing
+function q83SaveTag(c){
+ var sel=document.getElementById('q83t');if(!sel||!c)return '';var v=sel.value;if(!v)return '';
+ var name=String(document.getElementById('q83n').value||'').trim(),w=parseFloat(String(document.getElementById('q83w').value||'').replace(',','.'));
+ if(!name){zNeed('q83n','Give the tag a name, like Quizzes.');return false}
+ if(!(w>0)||w>100){zNeed('q83w','What is it worth? Type 2 for 2%.');return false}
+ var o={name:name,worth:w,mode:document.getElementById('q83m').value==='total'?'total':'each',drop:+document.getElementById('q83d').value||0};
+ var L=(c.gradeTags||[]).map(function(x){return Object.assign({},x)});
+ if(v==='+new'){var same=L.filter(function(x){return String(x.name||'').toLowerCase()===name.toLowerCase()})[0];if(same)v=same.id;else{v=uid();L.push(Object.assign({id:v},o))}}
+ L.forEach(function(x){if(x.id===v)Object.assign(x,o)});
+ c.gradeTags=L;touch(c);return v;
+}
 
 try{spBoot()}catch(e){}
 load();
