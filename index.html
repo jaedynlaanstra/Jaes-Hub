@@ -6156,6 +6156,31 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 .q82dh{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;background:#F0EDE3;color:#7E6B44;border-radius:99px;padding:3px 10px 3px 8px;margin-top:6px;white-space:nowrap}
 .q82dh[hidden]{display:none}
 .q82tg.q82hon{background:#F0EDE3;color:#7E6B44}
+/* v243: clients on Projects (q84) */
+.q84grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.q84cc{display:flex;flex-direction:column;align-items:flex-start;gap:4px;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important;min-width:0;transition:border-color .15s,transform .15s}
+.q84cc:hover{border-color:var(--line2);transform:translateY(-1px)}
+.q84cc b{font-size:15px;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:4px}
+.q84cc small{font-size:12.5px;color:var(--ink3);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q84cc small.late{color:#A34A3F}
+.q84cc.q84new{align-items:center;justify-content:center;border-style:dashed;color:var(--ink2);font-size:14px;min-height:96px!important}
+.q84av{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font-weight:600;font-size:15px;flex:none}
+.q84head .q84hrow{display:flex;align-items:center;gap:12px;margin:10px 0 6px}
+.q84head .q84av{width:44px;height:44px;font-size:18px}
+.q84head h2{margin:0;font-size:22px;line-height:1.2;overflow-wrap:anywhere}
+.q84head .q84hrow>div{flex:1;min-width:0}
+.q84head .q84hrow small{display:block;font-size:13px;color:var(--ink3);margin-top:2px;overflow-wrap:anywhere}
+.q84stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.q84stats span{font-size:12.5px;background:var(--paper,#F6F4F0);border-radius:99px;padding:4px 10px;color:var(--ink2)}
+.q84stats span.late{color:#A34A3F}
+.q84notes{margin:10px 0 0;font-size:13.5px;color:var(--ink2);white-space:pre-wrap;line-height:1.45}
+.q84links{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.q84links a{display:inline-flex;align-items:center;gap:6px;font-size:13px;border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 6px;color:var(--ink);text-decoration:none}
+.q84links a svg,.q84links a img{width:16px;height:16px}
+.q84tk .q53ts{margin-bottom:8px}
+.q84tk details{margin:2px 0 10px}.q84tk summary{cursor:pointer;font-size:13px;color:var(--ink3);margin-bottom:6px}
+.q84ct{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:var(--ink3);margin:2px 0 4px}
+.q84ph{margin:6px 0 10px}.q84ph h3{margin:0}
 </style>
 </head>
 <body>
@@ -6465,7 +6490,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v242';
+var BUILD='v243';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -19975,6 +20000,7 @@ var Q46PG={
   {s:'[data-zact^="habitnew"]',t:'Add a habit',p:'Pick a name, the days it’s for, a colour and an icon.'},
   {s:'[data-zact^="htick"]',t:'Tick it off',p:'Tap to mark today’s habit done. Your streaks and rings fill in as you go.'}]},
  projects:{n:'Projects',s:[
+  {s:'[data-zact^="q84cnew"],[data-zact^="q84open"]',t:'Clients',p:'Add a client, then open it to keep its projects and tasks together.'},
   {s:'[data-zact^="projnew"]',t:'New project',p:'Add a project with a due date, steps, links and notes.'},
   {s:'.zpcard,.zproj,[data-zact^="projopen"]',t:'Your projects',p:'Tap one to open it. On a computer you can drag it between Not started, In progress and Done.'}]},
  reading:{n:'Reading',s:[
@@ -25274,6 +25300,115 @@ function q83SaveTag(c){
  L.forEach(function(x){if(x.id===v)Object.assign(x,o)});
  c.gradeTags=L;touch(c);return v;
 }
+
+/* ---------- v243: clients on Projects (q84) ----------
+   Jae: "Sometimes I have projects within clients or tasks within clients and right now it's hard to navigate."
+   A client is an item on the Projects page ({t:'client', title, contact, notes, steps[], links[]}). Its steps are
+   tasks of its own (same shape as project tasks, so the task pop-up, files, Calendar and Plan my week all work by
+   its id), and a project belongs to one with p.client. view.q84c = '<pageId>:<clientId>' is the client open now:
+   its page shows the client, its tasks, then the timeline and board with only its projects. */
+function q84Clients(c){return ((c&&c.items)||[]).filter(function(x){return x.t==='client'}).sort(function(a,b){return String(a.title).localeCompare(String(b.title))})}
+function q84Sel(c){var k=String(view.q84c||'').split(':');if(!c||k[0]!==c.id)return null;var x=zItem(c,k[1]);return x&&x.t==='client'?x:null}
+function q84Projs(c,cl){return c.items.filter(function(x){return x.t==='proj'&&x.client===cl.id})}
+function q84Av(cl,sz){var K=Object.keys(ZC).filter(function(k){return k!=='grey'}),n=Math.abs(String(cl.title||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7)),z=ZC[K[n%K.length]];
+ return '<span class="q84av" style="background:'+z[0]+';color:'+z[1]+'">'+esc((String(cl.title||'?').trim()[0]||'?').toUpperCase())+'</span>'}
+// everything still to do for a client: its own tasks and its projects' tasks
+function q84Open(c,cl){var L=(cl.steps||[]).filter(function(s){return !s.done});q84Projs(c,cl).forEach(function(p){L=L.concat((p.steps||[]).filter(function(s){return !s.done}))});return L}
+function q84Row(c,p,s){var td=iso(today());
+ return '<div class="q53t'+(s.done?' y':'')+(s.sub?' sub':'')+(!s.done&&s.due&&s.due<td?' late':'')+'">'
+  +'<button class="zck'+(s.done?' y':'')+'" data-zact="steptick:'+c.id+':'+p.id+':'+s.id+'" aria-label="'+(s.done?'Mark not done':'Mark done')+'">'+(s.done?zI(ZIC.check,11):'')+'</button>'
+  +'<button class="q53tb" data-zact="q53edit:'+c.id+':'+p.id+':'+s.id+'"><span class="q53tt">'+esc(s.title)+'</span><span class="q53tm">'+q53Due(s)+q53Att(s)+'</span></button></div>'}
+// All clients: a card for each, with what's left and the next thing due
+function q84Grid(c){
+ var C=q84Clients(c),td=iso(today());
+ var cards=C.map(function(cl){var P=q84Projs(c,cl),O=q84Open(c,cl),D=O.filter(function(s){return s.due}).sort(function(a,b){return a.due<b.due?-1:1}),late=D.filter(function(s){return s.due<td}).length;
+  return '<button class="q84cc" data-zact="q84open:'+c.id+':'+cl.id+'">'+q84Av(cl)+'<b>'+esc(cl.title)+'</b>'
+   +'<small>'+P.length+' project'+(P.length===1?'':'s')+' · '+O.length+' task'+(O.length===1?'':'s')+' to do</small>'
+   +(late?'<small class="late">'+late+' late</small>':D[0]?'<small>Next: '+esc(D[0].title)+' · '+esc(D[0].due===td?'Today':q53Fmt(D[0].due))+'</small>':'')+'</button>'}).join('');
+ return '<section class="z3card"><div class="z3h"><h3>Clients</h3><span class="zsoft">'+(C.length?C.length+' client'+(C.length===1?'':'s'):'Keep each client’s projects and tasks together')+'</span></div>'
+  +'<div class="q84grid">'+cards+'<button class="q84cc q84new" data-zact="q84cnew:'+c.id+'">+ New client</button></div></section>';
+}
+// one client: who they are, their tasks, then only their projects
+function q84Head(c,cl){
+ var P=q84Projs(c,cl),O=q84Open(c,cl),td=iso(today()),late=O.filter(function(s){return s.due&&s.due<td}).length;
+ return '<section class="z3card q84head"><button class="zlink" data-zact="q84all:'+c.id+'">‹ All clients</button>'
+  +'<div class="q84hrow">'+q84Av(cl)+'<div><h2>'+esc(cl.title)+'</h2>'+(cl.contact?'<small>'+esc(cl.contact)+'</small>':'')+'</div><button class="zbtn" data-zact="q84edit:'+c.id+':'+cl.id+'">Edit</button></div>'
+  +'<div class="q84stats"><span>'+P.length+' project'+(P.length===1?'':'s')+'</span><span>'+O.length+' task'+(O.length===1?'':'s')+' to do</span>'+(late?'<span class="late">'+late+' late</span>':'')+'</div>'
+  +(cl.notes?'<p class="q84notes">'+esc(cl.notes)+'</p>':'')
+  +((cl.links||[]).length?'<div class="q84links">'+cl.links.map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+linkIcon(l.url,l.title)+esc(l.title||cpHost(l.url))+'</a>'}).join('')+'</div>':'')+'</section>';
+}
+function q84Tasks(c,cl){
+ var st=cl.steps||[],open=st.filter(function(s){return !s.done}),done=st.filter(function(s){return s.done});
+ return '<section class="z3card q84tk"><div class="z3h"><h3>Tasks</h3><span class="zsoft">'+(open.length?open.length+' to do':'Not in a project')+'</span></div>'
+  +'<div class="q53ts">'+(open.length?open.map(function(s){return q84Row(c,cl,s)}).join(''):'<p class="q53empty">Tasks for '+esc(cl.title)+' that aren’t part of a project. Each one can have a due date, links and files.</p>')+'</div>'
+  +(done.length?'<details><summary>Done ('+done.length+')</summary><div class="q53ts">'+done.map(function(s){return q84Row(c,cl,s)}).join('')+'</div></details>':'')
+  +'<div class="q53add"><input id="q84new" data-zenter="q84tadd:'+c.id+':'+cl.id+'" placeholder="Add a task for '+esc(cl.title)+'" autocomplete="off"><input type="date" id="q84newd" aria-label="Due date (optional)"><button class="zbtn" data-zact="q84tadd:'+c.id+':'+cl.id+'">Add</button></div></section>';
+}
+var _q84Page=zProjectsPage;
+zProjectsPage=function(c){
+ var cl=q84Sel(c),openP=view.zproj&&zItem(c,view.zproj);
+ if(cl){var keep=function(x){return x.t!=='proj'||x.client===cl.id||x.id===view.zproj};
+  return q84Head(c,cl)+(openP?'':q84Tasks(c,cl)+'<div class="z3h q84ph"><h3>Projects for '+esc(cl.title)+'</h3></div>')+_q84Page(Object.assign({},c,{items:c.items.filter(keep)}))}
+ var h=_q84Page(c),C={};q84Clients(c).forEach(function(x){C[x.id]=x});
+ // on All, each project card says whose it is
+ c.items.forEach(function(p){if(p.t!=='proj'||!C[p.client])return;var i=h.indexOf('data-zdrag="'+c.id+':'+p.id+'"');if(i<0)return;var j=h.indexOf('</b>',i);if(j<0)return;
+  h=h.slice(0,j+4)+'<div class="q84ct">'+zI('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',12)+esc(C[p.client].title)+'</div>'+h.slice(j+4)});
+ if(openP)return h;
+ return q84Grid(c)+(q84Clients(c).length?'<div class="z3h q84ph"><h3>All projects</h3></div>':'')+h;
+};
+// the project panel: pick its client, or turn the project itself into a client
+var _q84Panel=zProjPanel;
+zProjPanel=function(c,p){var h=_q84Panel(c,p),C=q84Clients(c);
+ if(C.length)h=h.replace('<span>Tag</span>','<span>Client</span><select data-zpf="'+c.id+':'+p.id+':client"><option value="">No client</option>'+C.map(function(x){return '<option value="'+x.id+'"'+(p.client===x.id?' selected':'')+'>'+esc(x.title)+'</option>'}).join('')+'</select><span>Tag</span>');
+ if(!p.client)h=h.replace('<button class="zlink danger" data-zact="projdel:','<button class="zlink" data-zact="q84conv:'+c.id+':'+p.id+'" style="display:block;margin-bottom:10px">Make this a client instead</button><button class="zlink danger" data-zact="projdel:');
+ return h};
+ZACT.q84open=function(cid,clid){view.q84c=cid+':'+clid;view.zproj=null;render();window.scrollTo(0,0)};
+ZACT.q84all=function(){view.q84c=null;view.zproj=null;render();window.scrollTo(0,0)};
+ZACT.q84cnew=function(cid){zOpen('q84client',{cid:cid})};
+ZACT.q84edit=function(cid,clid){zOpen('q84client',{cid:cid,clid:clid})};
+ZACT.q84tadd=function(cid,clid){var cl=zItem(classById(cid),clid),v=zv('q84new');if(!cl||!v)return;cl.steps=cl.steps||[];
+ var s={id:uid(),title:v,done:false},d=zv('q84newd');if(d)s.due=d;cl.steps.push(s);touch(cl);save();render();setTimeout(function(){var i=document.getElementById('q84new');if(i)i.focus()},30)};
+ZACT.q84conv=function(cid,pid){var c=classById(cid),p=c&&zItem(c,pid);if(!p)return;
+ if(!confirm('Make “'+p.title+'” a client?\n\nIts tasks, links and notes stay with it, and you can add projects under it.'))return;
+ p.t='client';['status','due','tag','cover'].forEach(function(k){delete p[k]});touch(p);save();view.zproj=null;view.q84c=cid+':'+pid;render();window.scrollTo(0,0)};
+ZACT.q84cdel=function(cid,clid){var c=classById(cid),cl=c&&zItem(c,clid);if(!cl)return;var P=q84Projs(c,cl);
+ if(!confirm('Delete the client “'+cl.title+'”?\n\nIts own tasks are deleted.'+(P.length?' Its '+P.length+' project'+(P.length===1?'':'s')+' will stay, with no client.':'')))return;
+ var ids=[];(cl.steps||[]).forEach(function(s){ids=ids.concat(s.files||[])});q53DropFiles(cid,ids);
+ P.forEach(function(p){delete p.client;touch(p)});c.items=c.items.filter(function(x){return x.id!==clid});
+ view.q84c=null;view.modal=null;save();render()};
+ZACT.q84ladd=function(cid,clid){var cl=zItem(classById(cid),clid),u=zv('q84lu');if(!cl)return;if(!u){zToast('Paste the link first.');return}if(!/^[a-z]+:/i.test(u))u='https://'+u;
+ cl.links=cl.links||[];cl.links.push({id:uid(),title:zv('q84lt')||cpHost(u),url:u});q84Keep();touch(cl);save();render()};
+ZACT.q84ldel=function(cid,clid,lid){var cl=zItem(classById(cid),clid);if(!cl)return;cl.links=(cl.links||[]).filter(function(l){return l.id!==lid});q84Keep();touch(cl);save();render()};
+// adding a link redraws the pop-up: keep what was typed in the other boxes
+function q84Keep(){var m=view.modal;if(m&&m.kind==='q84client')['q84n','q84ct','q84no'].forEach(function(i){var e=document.getElementById(i);if(e)m[i]=e.value})}
+ZM.q84client={html:function(m){var c=classById(m.cid),cl=m.clid&&zItem(c,m.clid);if(!c||(m.clid&&!cl))return null;
+ var v=function(k,f){return m[k]!=null?m[k]:(cl&&cl[f])||''};
+ return '<h3>'+(cl?'Edit client':'New client')+'</h3>'
+  +'<div class="field"><label for="q84n">Name</label><input id="q84n" value="'+esc(v('q84n','title'))+'" placeholder="Who is it for?"></div>'
+  +'<div class="field"><label for="q84ct">Contact <small class="q53opt">optional</small></label><input id="q84ct" value="'+esc(v('q84ct','contact'))+'" placeholder="Name, email or phone"></div>'
+  +'<div class="field"><label for="q84no">Notes <small class="q53opt">optional</small></label><textarea id="q84no" rows="3" placeholder="Anything to remember about them">'+esc(v('q84no','notes'))+'</textarea></div>'
+  +(cl?'<div class="field"><label>Links</label>'+(cl.links||[]).map(function(l){return '<div class="zlk">'+linkIcon(l.url,l.title)+'<a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title||cpHost(l.url))+'</a><small>'+esc(cpHost(l.url))+'</small><button class="zmini" data-zact="q84ldel:'+c.id+':'+cl.id+':'+l.id+'" aria-label="Remove link">×</button></div>'}).join('')
+   +'<div class="zlkadd"><input id="q84lt" placeholder="Name"><input id="q84lu" placeholder="https://" data-zenter="q84ladd:'+c.id+':'+cl.id+'"><button class="zbtn" data-zact="q84ladd:'+c.id+':'+cl.id+'">Add</button></div></div>':'');
+},save:function(m){var c=classById(m.cid);if(!c)return;var n=zv('q84n');if(!n){zToast('Give the client a name.');return}
+ var cl=m.clid&&zItem(c,m.clid);if(!cl){cl={id:uid(),t:'client',steps:[],links:[]};c.items.push(cl)}
+ cl.title=n;cl.contact=zv('q84ct');cl.notes=zv('q84no');['contact','notes'].forEach(function(k){if(!cl[k])delete cl[k]});
+ touch(cl);save();view.modal=null;view.q84c=c.id+':'+cl.id;view.zproj=null;render()},
+ saveLabel:'Save',del:function(m){return m.clid?'q84cdel:'+m.cid+':'+m.clid:''}};
+// a new project made while a client is open belongs to that client
+var _q84New=ZACT.projnew;
+ZACT.projnew=function(cid){var cl=q84Sel(classById(cid));_q84New.apply(this,arguments);var p=cl&&zItem(classById(cid),view.zproj);if(p&&p.t==='proj'){p.client=cl.id;touch(p);save();render()}};
+// opening a project from Home shows it on All
+var _q84From=ZACT.projfrom;
+ZACT.projfrom=function(){view.q84c=null;return _q84From.apply(this,arguments)};
+// a client's own tasks join Calendar, Coming up, Next due and Plan my week; a project's tasks name its client too
+var _q84All=allTasks;
+allTasks=function(){var out=_q84All();
+ S.classes.forEach(function(c){if(c.kind!=='projects')return;var C={};
+  (c.items||[]).forEach(function(cl){if(cl.t!=='client')return;C[cl.id]=cl;
+   var cc={id:c.id,name:cl.title,short:cl.title,color:c.color,space:c.space,kind:'projects'};
+   (cl.steps||[]).forEach(function(s){if(!s.due&&!(s.plan&&s.plan.length))return;out.push({t:q53Px(c,cl,s),c:cc,kind:'task'})})});
+  out.forEach(function(x){var q=x.t&&x.c&&x.c.id===c.id&&x.t.q53;if(!q)return;var p=zItem(c,q.pid);if(p&&p.t==='proj'&&C[p.client])x.c=Object.assign({},x.c,{name:C[p.client].title+' · '+p.title})})});
+ return out};
 
 try{spBoot()}catch(e){}
 load();
