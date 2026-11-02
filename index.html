@@ -6148,10 +6148,6 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 .q82sc em{font-style:normal;font-variant-numeric:tabular-nums}
 @media(max-width:420px){.q82r{grid-template-columns:minmax(0,1fr) 54px 46px 32px 24px;gap:4px}.q82sum b{font-size:28px}}
 /* v242: grade tags in the assignment pop-up (q83), Dean's Honour Roll badge (q82) */
-.q83tp{background:var(--paper,#F6F4F0);border-radius:14px;padding:12px 12px 6px;margin:-4px 0 14px}
-.q83tp .field:last-of-type{margin-bottom:6px}
-.q83hint{margin:2px 0 6px!important;font-size:12.5px}
-.q83del{background:none;border:none;padding:2px 0 8px;font:inherit;font-size:13px;color:#A34A3F;cursor:pointer;min-height:0}
 .q83mh{display:block;font-size:12.5px;color:var(--ink3);min-height:18px;margin-top:3px}
 .q82dh{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;background:#F0EDE3;color:#7E6B44;border-radius:99px;padding:3px 10px 3px 8px;margin-top:6px;white-space:nowrap}
 .q82dh[hidden]{display:none}
@@ -6185,6 +6181,55 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 .q84lg{position:relative;cursor:pointer;flex:none;display:inline-flex}
 .q84lg i{position:absolute;right:-3px;bottom:-3px;width:20px;height:20px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2)}
 .q84lrow{display:flex;align-items:center;gap:12px}.q84lrow .q53up{margin-top:0}
+/* v245: tag pills and the Tags screen in the assignment pop-up (q85), from the Claude Design handoff */
+.q85pills{display:flex;flex-wrap:wrap;gap:6px}
+.q85p{display:inline-flex;align-items:center;gap:6px;height:30px;min-height:0!important;padding:0 12px;border-radius:999px;font:inherit;font-size:12px;font-weight:500;cursor:pointer;color:var(--q85f,#6b675f);background:var(--q85b,#f3f1ec);border:1.5px solid transparent;white-space:nowrap;max-width:100%}
+.q85p>span{overflow:hidden;text-overflow:ellipsis}
+.q85p i{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.q85p em{font-style:normal;font-weight:400;opacity:.65}
+.q85p.on{border-color:var(--q85f,#6b675f)}
+.q85p.add{background:var(--card,#fff);border:1.5px dashed #c9c4ba;color:#6b675f}
+.q85p.add:hover{border-color:#2b2a27;color:#2b2a27}
+.q85lr{display:flex!important;justify-content:space-between;align-items:baseline}
+.q85lk{border:none;background:none;padding:0;min-height:0!important;font:inherit;font-size:11.5px;color:var(--ink);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.q85ro{background:var(--paper,#f7f5f1)!important;color:var(--ink2)}
+.q85note{display:block;font-size:11.5px;color:var(--ink3);line-height:1.4;margin-top:4px}
+.modal.q85on>*:not(.q85tags){display:none!important}
+.q85th{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.q85th h3{margin:0!important}
+.q85back{width:34px;height:34px;min-height:0!important;border-radius:50%;border:none;background:#f5f3ef;font-size:16px;color:#555;cursor:pointer;flex-shrink:0}
+.q85help{font-size:12px;color:var(--ink3);line-height:1.5;margin:0 0 14px}
+.q85row{display:grid;grid-template-columns:20px minmax(0,1fr) 64px 52px 24px;gap:8px;align-items:center}
+.q85hd{font-size:11px;color:var(--ink3);padding:0 2px;margin-bottom:6px}
+.q85rows{display:flex;flex-direction:column;gap:12px}
+.q85row input{height:38px;min-width:0;width:100%;box-sizing:border-box;padding:0 10px;font-size:13px}
+.q85sw{position:relative;width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+.q85dot{width:18px;height:18px;min-height:0!important;border-radius:50%;border:none;padding:0;cursor:pointer}
+.q85pal{position:absolute;top:28px;left:-8px;z-index:5;background:var(--card,#fff);border:1px solid #e6e2da;border-radius:12px;box-shadow:0 8px 24px rgba(40,35,25,.14);padding:10px;display:grid;grid-template-columns:repeat(5,22px);gap:8px}
+.q85pal button{width:22px;height:22px;min-height:0!important;border-radius:50%;border:none;padding:0;cursor:pointer}
+.q85pc{position:relative}
+.q85pc input{padding-right:22px}
+.q85pc span{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;color:#9a958b;pointer-events:none}
+.q85oc{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.q85oc b{font-size:13px;font-weight:400;color:var(--ink)}
+.q85oc small{font-size:10px;color:#9a958b;white-space:nowrap}
+.q85x{width:24px;height:24px;min-height:0!important;border-radius:50%;border:none;background:transparent;color:#9a958b;font-size:16px;cursor:pointer;padding:0}
+.q85x:hover{background:#f5f3ef;color:#2b2a27}
+.q85rule{grid-column:2/5;display:flex;gap:6px;margin-top:-4px}
+.q85rule select{height:28px;min-height:0;padding:0 8px;font-size:11.5px;color:var(--ink3);border-radius:8px;flex:1;min-width:0;background-color:var(--paper,#f7f5f1);border-color:transparent}
+.q85add{width:100%;height:38px;min-height:0!important;margin:14px 0;border-radius:10px;border:1.5px dashed #c9c4ba;background:var(--card,#fff);color:#6b675f;font:inherit;font-size:13px;font-weight:500;cursor:pointer}
+.q85add:hover{border-color:#2b2a27;color:#2b2a27}
+.q85tot{display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:var(--paper,#f7f5f1);border-radius:12px}
+.q85tot>div:first-child{display:flex;justify-content:space-between;font-size:12px}
+.q85tot>div:first-child span{color:var(--ink3)}
+.q85tot b{font-weight:600;color:var(--ink)}
+.q85tot b.ok{color:oklch(0.5 0.12 150)}
+.q85tot b.over{color:oklch(0.5 0.15 25)}
+.q85tot small{font-size:11px;color:var(--ink3)}
+.q85bar{height:6px;border-radius:999px;background:#e6e2da;overflow:hidden;display:flex}
+.q85bar i{height:100%;flex-shrink:0}
+.q85acts{display:flex;justify-content:flex-end;gap:8px}
+.q85acts .q85save{background:#33312C;color:#fff;border-color:#33312C}
 </style>
 </head>
 <body>
@@ -6494,7 +6539,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v244';
+var BUILD='v245';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -6633,7 +6678,7 @@ function gradeInfo(c){
  // together, with the lowest marks dropped
  var T=q83Tags(c),total=0,earned=0,graded=0;
  (c.assignments||[]).forEach(function(a){
-  if(a.tag&&T[a.tag])return;
+  if(a.tag&&T[a.tag]&&!a.wown)return;
   if(a.weight===''||a.weight==null||!(+a.weight>0))return;
   total+=+a.weight;
   if(a.mark!==''&&a.mark!=null){graded+=+a.weight;earned+=(+a.mark)*(+a.weight)/100}
@@ -8687,6 +8732,7 @@ var go;
 
 /* ---------- rendering ---------- */
 function render(){
+ try{cpVisit()}catch(e){}
  var c=(view.page==='class'||view.page==='page')?classById(view.classId):null;
  if(curSpace()!=='school'&&S.spacesInit&&!S.spacesInit[curSpace()])ensureSpace(curSpace());
  var head=c?pal(c.color):{bg:'var(--hdr)',ink:'var(--hdrInk)',ink2:'var(--hdrInk2)',bar:'var(--hdrBar)'};
@@ -9285,8 +9331,24 @@ function cpSpy(){
 window.addEventListener('scroll',function(){if(!cpSpyRaf)cpSpyRaf=requestAnimationFrame(cpSpy)},{passive:true});
 ['wheel','touchmove','keydown'].forEach(function(ev){window.addEventListener(ev,function(){cpSpyLock=0},{passive:true})});
 var CP_TAB_FOR={'c-assign':'asg','c-files':'files','c-links':'files','c-due':'done','c-prof':'info'};
-function cpShut(cid){try{return JSON.parse(localStorage.getItem('hub:chap:'+cid)||'{}')||{}}catch(e){return {}}}
-function cpSetShut(cid,o){try{localStorage.setItem('hub:chap:'+cid,JSON.stringify(o))}catch(e){}}
+/* module bands: Assignments bands ('a~...') are remembered on this device; Files & links bands (v243, Jae)
+   are NOT remembered: they all start closed each time the class page is opened (cpOpenF = the ones opened
+   on this visit, cleared by cpVisit when the page changes) */
+var cpOpenF={},cpVisitKey='';
+function cpVisit(){var k=view.page==='class'?view.classId:'';if(k!==cpVisitKey){cpVisitKey=k;cpOpenF={}}}
+function cpShut(cid){
+ var o={};try{o=JSON.parse(localStorage.getItem('hub:chap:'+cid)||'{}')||{}}catch(e){}
+ var out={},c=classById(cid),op=cpOpenF[cid]||{};
+ Object.keys(o).forEach(function(k){if(k.indexOf('a~')===0&&o[k])out[k]=true});
+ ((c&&c.sections)||[]).map(function(x){return x.id}).concat(['_','f~files','f~links']).forEach(function(k){if(!op[k])out[k]=true});
+ return out;
+}
+function cpSetShut(cid,o){
+ var keep={},op={},c=classById(cid);
+ Object.keys(o).forEach(function(k){if(k.indexOf('a~')===0&&o[k])keep[k]=true});
+ ((c&&c.sections)||[]).map(function(x){return x.id}).concat(['_','f~files','f~links']).forEach(function(k){if(!o[k])op[k]=true});
+ cpOpenF[cid]=op;try{localStorage.setItem('hub:chap:'+cid,JSON.stringify(keep))}catch(e){}
+}
 
 /* ===== Title page: an APA student title page, filled in for each class, copied ready to paste
    into Word (Times New Roman 12 pt, 1.5 spacing, centred, title in bold a few lines down).
@@ -10394,7 +10456,7 @@ function modalHtml(){
    +'<div class="field"><label for="m7">Due time</label><input id="m7" type="time" value="'+esc(a?(a.time||''):'23:59')+'"></div>'
    +q83Field(m,a)
    +'<div style="display:flex;gap:10px">'
-   +'<div class="field" style="flex:1'+(q83Pick(m,a)?';display:none':'')+'" id="q83wf"><label for="m14">Worth (%)</label><input id="m14" type="number" step="0.5" min="0" max="100" value="'+esc(a&&a.weight!==undefined?a.weight:'')+'" placeholder="10"></div>'
+   +q85WorthField(m,a)
    +'<div class="field" style="flex:1"><label for="m15">Your mark</label><input id="m15" value="'+esc(a?(a.score||(a.mark!==undefined&&a.mark!==''?a.mark:'')):'')+'" placeholder="85 or 45/60" autocomplete="off"><span class="q83mh" id="q83mh">'+esc(q83MarkHint(a?(a.score||''):''))+'</span></div>'
    +'</div>'
    +'<div class="field"><label for="m6">Priority</label><select id="m6">'
@@ -10634,7 +10696,8 @@ function modalHtml(){
    +PALETTES.map(function(pp){return '<button class="sw '+(m.color===pp.id?'on':'')+'" style="background:'+pp.bg+'" data-sw="'+pp.id+'" aria-label="'+pp.name+'"></button>'}).join('')
    +'</div></div>';
  }
- return '<div class="modalbg" data-close="1"><div class="modal"><button class="modalx" data-close="1" aria-label="Close">\u00d7</button>'+h
+ if(m.kind==='assign'&&m.q85v==='tags')h+=q85TagsScreen(m);
+ return '<div class="modalbg" data-close="1"><div class="modal'+(m.kind==='assign'&&m.q85v==='tags'?' q85on':'')+'"><button class="modalx" data-close="1" aria-label="Close">\u00d7</button>'+h
   +'<div class="acts">'
   +(m.kind==='class'&&m.classId?'<button data-delclass="'+m.classId+'" style="margin-right:auto;color:#A34A3F">Delete class</button>':'')
   +(m.kind==='app'&&m.id?'<button data-delapp="'+m.id+'" style="margin-right:auto;color:#A34A3F">Remove app</button>':'')
@@ -10667,8 +10730,8 @@ function saveModal(){
   var stepsOut=(m.steps||[]).filter(function(x){return x.title.trim()});
   var mk=q83Mark(val('m15'));if(mk&&mk.bad){zNeed('m15','Type a percent like 85, or what you got out of what, like 45/60.');return}
   var tg=q83SaveTag(classById(m.classId));if(tg===false)return;
-  if(m.id){var a=findAsg(m.classId,m.id);a.steps=stepsOut;if(!stepsOut.length)delete a.steps;a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=val('m14')===''?'':+val('m14');a.mark=mk?mk.pct:'';q83Put(a,mk,tg);touch(a)}
-  else{classById(m.classId).assignments.push(touch({id:uid(),steps:stepsOut.length?stepsOut:undefined,title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:val('m14')===''?'':+val('m14'),mark:mk?mk.pct:'',done:false}));q83Put(classById(m.classId).assignments[classById(m.classId).assignments.length-1],mk,tg)}
+  if(m.id){var a=findAsg(m.classId,m.id);a.steps=stepsOut;if(!stepsOut.length)delete a.steps;a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=q85WOut(a);a.mark=mk?mk.pct:'';q83Put(a,mk,tg);touch(a)}
+  else{classById(m.classId).assignments.push(touch({id:uid(),steps:stepsOut.length?stepsOut:undefined,title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:q85WOut(null),mark:mk?mk.pct:'',done:false}));q83Put(classById(m.classId).assignments[classById(m.classId).assignments.length-1],mk,tg)}
  }else if(m.kind==='app'){
   var an=val('m1'),au=val('m2');if(!an||!au)return;
   if(!/^https?:\/\//i.test(au))au='https://'+au;
@@ -25222,7 +25285,7 @@ function q83Has(a){return a.mark!==''&&a.mark!=null}
 function q83Groups(c){
  var T=q83Tags(c),A=(c&&c.assignments)||[],out={};
  Object.keys(T).forEach(function(id){
-  var t=T[id],L=A.filter(function(a){return a.tag===id}),worth=+t.worth||0;if(!L.length||!(worth>0))return;
+  var t=T[id],L=A.filter(function(a){return a.tag===id&&!a.wown}),worth=+t.worth||0;if(!L.length||!(worth>0))return;
   var drop=Math.max(0,Math.floor(+t.drop||0)),G=L.filter(q83Has).sort(function(x,y){return (+x.mark)-(+y.mark)});
   var dn=G.length>drop?drop:0,kept=G.slice(dn),dropped={};G.slice(0,dn).forEach(function(a){dropped[a.id]=1});
   var slots=Math.max(L.length-drop,kept.length,1),total=t.mode==='total'?worth:worth*slots,share=total/slots;
@@ -25234,7 +25297,7 @@ function q83Groups(c){
 function q83Num(x){return String(Math.round(x*100)/100)}
 // what one assignment is worth, for the lists ("2%", or "Dropped" when it's the lowest quiz)
 function q83Worth(c,a){
- if(a.tag&&q83Tags(c)[a.tag]){var g=q83Groups(c)[a.tag];if(!g)return '';return g.dropped[a.id]?'Dropped':q83Num(g.share)+'%'}
+ if(a.tag&&q83Tags(c)[a.tag]&&!a.wown){var g=q83Groups(c)[a.tag];if(!g)return '';return g.dropped[a.id]?'Dropped':q83Num(g.share)+'%'}
  return a.weight!==''&&a.weight!=null?a.weight+'%':'';
 }
 // "85", "85%", "45/60" (or "45 / 60") to a percent; {bad:1} for anything else
@@ -25248,62 +25311,134 @@ function q83Mark(str){
 function q83Pc(x){return String(Math.round(x*10)/10)+'%'}
 function q83MarkHint(str){var k=q83Mark(str);return k&&k.score?'= '+q83Pc(k.pct):''}
 function q83MarkText(a){return a.score?a.score+' · '+q83Pc(+a.mark):q83Pc(+a.mark)}
-function q83Put(a,mk,tg){if(!a)return;if(mk&&mk.score)a.score=mk.score;else delete a.score;if(tg)a.tag=tg;else delete a.tag}
+function q83Put(a,mk,tg){if(!a)return;if(mk&&mk.score)a.score=mk.score;else delete a.score;if(tg)a.tag=tg;else delete a.tag;if(tg&&view.modal&&view.modal.q85ov)a.wown=1;else delete a.wown}
 function q83Pick(m,a){var c=classById(m.classId);return a&&a.tag&&q83Tags(c)[a.tag]?a.tag:''}
-// the Tag box in the assignment pop-up; picking a tag shows its rules underneath (edited right there)
+/* v245 (q85): the Tag box is a row of coloured pills (Claude Design "Assignment Tags" handoff). "+ Add/edit tags"
+   swaps the pop-up for a Tags screen (name, colour, worth, how it counts, % of the class, running total).
+   Everything lives in view.modal (q85sel picked tag, q85ov worth changed by hand, q85v 'tags', q85d draft rows),
+   so a background redraw rebuilds the same thing. The form stays in the page (hidden) while the Tags screen is
+   open, so nothing typed is lost. A tag's colour is t.hue (oklch); a tagged assignment whose worth was changed
+   by hand has a.wown and counts by its own a.weight. */
+var Q85HUES=[300,250,25,150,75,340,200,110,50,175];
+function q85Col(h,l,ch){return 'oklch('+l+' '+ch+' '+h+')'}
+function q85Hue(t,i){return t&&t.hue!=null?+t.hue:Q85HUES[(i||0)%Q85HUES.length]}
+function q85W(x){var w=parseFloat(String(x==null?'':x).replace(',','.'));return w>0?w:0}
+// how many assignments use a tag, counting the open one by what is picked right now
+function q85Count(c,m,id){
+ var n=((c&&c.assignments)||[]).filter(function(a){return a.tag===id&&!a.wown&&a.id!==m.id}).length;
+ return n+(m.q85sel===id&&!m.q85ov?1:0);
+}
+function q85OfClass(t,n){var w=q85W(t.worth);if(!n||!w)return 0;return t.mode==='total'?w:w*Math.max(n-(+t.drop||0),1)}
+// one item's worth: "3% each" tags are simple; "all together" tags are shared out
+function q85Each(t,n){var w=q85W(t.worth);if(!w)return 0;return t.mode==='total'?w/Math.max(n-(+t.drop||0),1):w}
+function q85Init(m,a){if(m.q85sel===undefined){m.q85sel=q83Pick(m,a);m.q85ov=!!(m.q85sel&&a&&a.wown)}}
 function q83Field(m,a){
- var c=classById(m.classId);if(!c)return '';var L=c.gradeTags||[],sel=q83Pick(m,a),t=sel?q83Tags(c)[sel]:null;
- var opt=function(v,txt,o){return '<option value="'+esc(v)+'"'+(v===sel?' selected':'')+(o?' data-n="'+esc(o.name||'')+'" data-w="'+esc(String(o.worth==null?'':o.worth))+'" data-m="'+esc(o.mode||'each')+'" data-d="'+esc(String(o.drop||0))+'"':'')+'>'+esc(txt)+'</option>'};
- var dsel=function(n){return [0,1,2,3,4,5].map(function(k){return '<option value="'+k+'"'+(k===(+n||0)?' selected':'')+'>'+(k?'Drop the lowest'+(k>1?' '+k+' marks':' mark'):'Keep every mark')+'</option>'}).join('')};
- return '<div class="field"><label for="q83t">Tag</label><select id="q83t" data-q83t="1">'+opt('','No tag')+L.map(function(x){return opt(x.id,x.name||'Untitled',x)}).join('')+opt('+new','+ New tag')+'</select></div>'
-  +'<div class="q83tp" id="q83tp"'+(t?'':' style="display:none"')+'>'
-  +'<div class="field"><label for="q83n">Tag name</label><input id="q83n" value="'+esc(t?t.name||'':'')+'" placeholder="Quizzes" autocomplete="off"></div>'
-  +'<div style="display:flex;gap:10px"><div class="field" style="flex:1"><label for="q83w">Worth (%)</label><input id="q83w" inputmode="decimal" value="'+esc(t?String(t.worth==null?'':t.worth):'')+'" placeholder="2" autocomplete="off"></div>'
-  +'<div class="field" style="flex:1"><label for="q83m">Counts as</label><select id="q83m"><option value="each"'+(!t||t.mode!=='total'?' selected':'')+'>Each one</option><option value="total"'+(t&&t.mode==='total'?' selected':'')+'>All together</option></select></div></div>'
-  +'<div class="field"><label for="q83d">Rule</label><select id="q83d">'+dsel(t?t.drop:0)+'</select></div>'
-  +'<p class="hint q83hint" id="q83hint">'+(t?esc(q83HintFor(t.name,t.worth,t.mode,t.drop)):'')+'</p><button type="button" class="q83del" id="q83del" data-q83del="'+c.id+'"'+(t?'':' style="display:none"')+'>Delete this tag</button></div>';
+ var c=classById(m.classId);if(!c)return '';q85Init(m,a);
+ var T=q83Tags(c);if(m.q85sel&&!T[m.q85sel])m.q85sel='';
+ var pill=function(id,name,t,i){
+  var on=m.q85sel===id,fg=t?q85Col(q85Hue(t,i),0.45,0.13):'',w=t?q85W(t.worth):0;
+  return '<button type="button" class="q85p'+(t?'':' none')+(on?' on':'')+'" data-q85="pick~'+esc(id)+'" aria-pressed="'+on+'"'
+   +(t?' style="--q85f:'+fg+';--q85b:'+q85Col(q85Hue(t,i),0.95,0.04)+'"':'')+'>'
+   +(t?'<i style="background:'+q85Col(q85Hue(t,i),0.62,0.13)+'"></i>':'')+'<span>'+esc(name)+'</span>'
+   +(w?'<em>'+q83Num(w)+'% '+(t.mode==='total'?'total':'each')+'</em>':'')+'</button>'};
+ return '<div class="field q85tf"><label>Tag</label><div class="q85pills">'+pill('','No tag',null)
+  +(c.gradeTags||[]).map(function(t,i){return pill(t.id,t.name||'Untitled',t,i)}).join('')
+  +'<button type="button" class="q85p add" data-q85="tags">+ Add/edit tags</button></div></div>';
 }
-function q83HintText(){
- var v=function(id){return String((document.getElementById(id)||{}).value||'')};
- return q83HintFor(v('q83n'),v('q83w'),v('q83m'),v('q83d'));
+// Worth (%): the tag's value (read only, "Change" to type your own) or a normal box when there's no tag
+function q85WorthField(m,a){
+ var c=classById(m.classId);q85Init(m,a);var t=m.q85sel&&q83Tags(c)[m.q85sel];
+ if(!t)return '<div class="field" style="flex:1"><label for="m14">Worth (%)</label><input id="m14" inputmode="decimal" value="'+esc(a&&a.weight!=null?a.weight:'')+'" placeholder="10" autocomplete="off"></div>';
+ var i=(c.gradeTags||[]).indexOf(t),n=q85Count(c,m,t.id),each=q85Each(t,Math.max(n,1));
+ if(m.q85ov)return '<div class="field" style="flex:1"><label for="m14" class="q85lr">Worth (%)<button type="button" class="q85lk" data-q85="use">Use tag</button></label><input id="m14" inputmode="decimal" value="'+esc(a&&a.wown&&a.weight!=null&&a.weight!==''?a.weight:q83Num(each))+'" placeholder="10" autocomplete="off"></div>';
+ var nm=String(t.name||'this tag').toLowerCase(),d=+t.drop||0;
+ var note=t.mode==='total'?'All '+nm+' share '+q83Num(q85W(t.worth))+'%':'Every '+nm+' is worth '+q83Num(q85W(t.worth))+'%';
+ if(d)note+=', lowest '+(d>1?d+' marks':'mark')+' dropped';
+ return '<div class="field" style="flex:1"><label for="q85wt-'+esc(t.id)+'" class="q85lr">Worth (%)<button type="button" class="q85lk" data-q85="ov">Change</button></label>'
+  +'<input id="q85wt-'+esc(t.id)+'" class="q85ro" readonly value="'+(q85W(t.worth)?q83Num(each):'')+'" placeholder="Not set">'
+  +'<span class="q85note">'+esc(note)+'</span></div>';
 }
-function q83HintFor(n,w,m,d){
- w=parseFloat(String(w==null?'':w).replace(',','.'));d=+d||0;n=String(n||'').trim()||'this tag';
- var a=w>0?(m==='total'?'Everything tagged '+n+' shares '+q83Num(w)+'% of your grade.':'Each one tagged '+n+' is worth '+q83Num(w)+'%.'):'Set what it’s worth.';
- return a+(d?' The lowest '+(d>1?d+' marks are':'mark is')+' dropped.':'')+' Changes apply to everything with this tag.';
+// what to keep as a.weight on Save: your own worth, or (tag in use) whatever it was before
+function q85WOut(a){
+ var m=view.modal||{},v=val('m14');
+ if(m.q85sel&&!m.q85ov)return a&&a.weight!=null?a.weight:'';
+ var w=parseFloat(v.replace(',','.'));return v===''||isNaN(w)?'':w;
 }
-function q83Sync(){var h=document.getElementById('q83hint');if(h)h.textContent=q83HintText()}
-document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='q83t')return;
- var v=t.value,p=document.getElementById('q83tp'),wf=document.getElementById('q83wf'),dl=document.getElementById('q83del'),o=t.options[t.selectedIndex];
- if(p)p.style.display=v?'':'none';if(wf)wf.style.display=v?'none':'';if(dl)dl.style.display=v&&v!=='+new'?'':'none';
- var set=function(id,x){var el=document.getElementById(id);if(el)el.value=x};
- if(v==='+new'){set('q83n','');set('q83w','');set('q83m','each');set('q83d','0');var n=document.getElementById('q83n');if(n)n.focus()}
- else if(v&&o){set('q83n',o.getAttribute('data-n'));set('q83w',o.getAttribute('data-w'));set('q83m',o.getAttribute('data-m')||'each');set('q83d',o.getAttribute('data-d')||'0')}
- q83Sync()});
-document.addEventListener('input',function(e){var t=e.target;if(!t||!t.id)return;
- if(t.id==='m15'&&document.getElementById('q83mh'))document.getElementById('q83mh').textContent=q83MarkHint(t.value);
- if(/^q83[nwmd]$/.test(t.id))q83Sync()});
-document.addEventListener('change',function(e){var t=e.target;if(t&&/^q83[md]$/.test(t.id))q83Sync()});
-// delete a tag: its assignments go back to their own worth
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q83del]');if(!b)return;e.preventDefault();e.stopPropagation();
- var c=classById(b.getAttribute('data-q83del')),sel=document.getElementById('q83t'),id=sel&&sel.value;if(!c||!id||id==='+new')return;
- var t=q83Tags(c)[id],n=(c.assignments||[]).filter(function(a){return a.tag===id}).length;
- if(!confirm('Delete the tag '+(t&&t.name?'“'+t.name+'”':'')+'?'+(n?' '+n+' assignment'+(n===1?'':'s')+' will go back to their own worth.':'')))return;
- c.gradeTags=(c.gradeTags||[]).filter(function(x){return x.id!==id});
- (c.assignments||[]).forEach(function(a){if(a.tag===id){delete a.tag;touch(a)}});touch(c);save();
- var o=sel.querySelector('option[value="'+id+'"]');if(o)o.remove();sel.value='';sel.dispatchEvent(new Event('change',{bubbles:true}));zToast('Tag deleted.')},true);
-// on Save: create or update the picked tag; returns its id, '' for none, false when something is missing
-function q83SaveTag(c){
- var sel=document.getElementById('q83t');if(!sel||!c)return '';var v=sel.value;if(!v)return '';
- var name=String(document.getElementById('q83n').value||'').trim(),w=parseFloat(String(document.getElementById('q83w').value||'').replace(',','.'));
- if(!name){zNeed('q83n','Give the tag a name, like Quizzes.');return false}
- if(!(w>0)||w>100){zNeed('q83w','What is it worth? Type 2 for 2%.');return false}
- var o={name:name,worth:w,mode:document.getElementById('q83m').value==='total'?'total':'each',drop:+document.getElementById('q83d').value||0};
- var L=(c.gradeTags||[]).map(function(x){return Object.assign({},x)});
- if(v==='+new'){var same=L.filter(function(x){return String(x.name||'').toLowerCase()===name.toLowerCase()})[0];if(same)v=same.id;else{v=uid();L.push(Object.assign({id:v},o))}}
- L.forEach(function(x){if(x.id===v)Object.assign(x,o)});
- c.gradeTags=L;touch(c);return v;
+// the Tags screen
+function q85TagsScreen(m){
+ var c=classById(m.classId),D=m.q85d||[];
+ var other=((c&&c.assignments)||[]).reduce(function(s,a){
+  var own=a.id===m.id?!(m.q85sel&&!m.q85ov):!(a.tag&&q83Tags(c)[a.tag]&&!a.wown);
+  var w=a.id===m.id?q85W(val('m14')||(m.q85ov?'':a.weight)):q85W(a.weight);return own?s+w:s},0);
+ if(!m.id&&!(m.q85sel&&!m.q85ov))other+=q85W(val('m14'));
+ var rows=D.map(function(t){
+  var n=q85Count(c,m,t.id),oc=q85OfClass(t,n),h=+t.hue,pk=m.q85pk===t.rid;
+  return '<div class="q85row"><div class="q85sw"><button type="button" class="q85dot" data-q85="pk~'+t.rid+'" aria-label="Change colour" style="background:'+q85Col(h,0.68,0.13)+';box-shadow:0 0 0 3px '+q85Col(h,0.94,0.04)+'"></button>'
+   +(pk?'<div class="q85pal">'+Q85HUES.map(function(x){return '<button type="button" data-q85="hue~'+t.rid+'~'+x+'" aria-label="Colour" style="background:'+q85Col(x,0.68,0.13)+(x===h?';box-shadow:0 0 0 2px #fff,0 0 0 4px '+q85Col(x,0.45,0.13):'')+'"></button>'}).join('')+'</div>':'')+'</div>'
+   +'<input id="q85n-'+t.rid+'" value="'+esc(t.name||'')+'" placeholder="Tag name" autocomplete="off">'
+   +'<div class="q85pc"><input id="q85w-'+t.rid+'" inputmode="decimal" value="'+esc(t.worth==null?'':String(t.worth))+'" placeholder="0" autocomplete="off"><span>%</span></div>'
+   +'<div class="q85oc"><b>'+(q85W(t.worth)?q83Num(oc)+'%':'–')+'</b><small>'+n+' item'+(n===1?'':'s')+'</small></div>'
+   +'<button type="button" class="q85x" data-q85="del~'+t.rid+'" aria-label="Delete tag">×</button>'
+   +'<div class="q85rule"><select id="q85m-'+t.rid+'" aria-label="How it counts"><option value="each"'+(t.mode!=='total'?' selected':'')+'>Worth each</option><option value="total"'+(t.mode==='total'?' selected':'')+'>Shared by all</option></select>'
+   +'<select id="q85d-'+t.rid+'" aria-label="Rule">'+[0,1,2,3,4,5].map(function(k){return '<option value="'+k+'"'+(k===(+t.drop||0)?' selected':'')+'>'+(k?'Drop lowest '+k:'Keep every mark')+'</option>'}).join('')+'</select></div></div>'}).join('');
+ var tot=other,segs=D.map(function(t){var x=q85OfClass(t,q85Count(c,m,t.id));tot+=x;return [x,q85Col(+t.hue,0.68,0.13)]});
+ if(other)segs.push([other,'var(--line2,#D9D4CA)']);
+ var ok=Math.abs(tot-100)<0.01,scale=Math.max(tot,100);
+ return '<div class="q85tags"><div class="q85th"><button type="button" class="q85back" data-q85="back" aria-label="Back">←</button><h3>Tags</h3></div>'
+  +'<p class="q85help">Enter how much one item with each tag is worth. The % of the class is worked out from how many you have.</p>'
+  +(D.length?'<div class="q85row q85hd"><span></span><span>Name</span><span>Each</span><span>Of class</span><span></span></div>':'')
+  +'<div class="q85rows">'+rows+'</div>'
+  +'<button type="button" class="q85add" data-q85="add">+ Add tag</button>'
+  +'<div class="q85tot"><div><span>Total</span><b class="'+(ok?'ok':tot>100?'over':'')+'">'+(ok?'100% ✓':q83Num(tot)+'% of 100%')+'</b></div>'
+  +'<div class="q85bar">'+segs.filter(function(x){return x[0]>0}).map(function(x){return '<i style="width:'+(x[0]/scale*100)+'%;background:'+x[1]+'"></i>'}).join('')+'</div>'
+  +(other?'<small>Includes '+q83Num(other)+'% of work with no tag.</small>':'')+'</div>'
+  +'<div class="acts q85acts"><button type="button" data-q85="back">Cancel</button><button type="button" class="q85save" data-q85="save">Save tags</button></div></div>';
 }
+function q85Row(m,rid){return (m.q85d||[]).filter(function(t){return t.rid===rid})[0]}
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q85]'),m=view.modal;
+ if(!m||m.kind!=='assign'){return}
+ // a tap anywhere else on the Tags screen closes an open colour palette
+ if(!b){if(m.q85pk&&e.target.closest&&e.target.closest('.q85tags')){m.q85pk=null;render()}return}
+ e.preventDefault();e.stopPropagation();
+ var p=b.getAttribute('data-q85').split('~'),c=classById(m.classId);if(!c)return;
+ if(p[0]==='pick'){m.q85sel=p[1]||'';m.q85ov=false}
+ else if(p[0]==='ov'){m.q85ov=true}
+ else if(p[0]==='use'){m.q85ov=false}
+ else if(p[0]==='tags'){m.q85v='tags';m.q85pk=null;m.q85d=(c.gradeTags||[]).map(function(t,i){return {rid:uid(),id:t.id,name:t.name||'',worth:t.worth==null?'':String(t.worth),mode:t.mode==='total'?'total':'each',drop:+t.drop||0,hue:q85Hue(t,i)}});
+  var mb=document.querySelector('.modal');if(mb)mb.scrollTop=0}
+ else if(p[0]==='back'){m.q85v=null;m.q85d=null;m.q85pk=null}
+ else if(p[0]==='add'){var D=m.q85d||(m.q85d=[]),used={};D.forEach(function(t){used[t.hue]=1});
+  var h=Q85HUES.filter(function(x){return !used[x]})[0];if(h==null)h=Q85HUES[D.length%Q85HUES.length];
+  var r={rid:uid(),id:uid(),name:'',worth:'',mode:'each',drop:0,hue:h};D.push(r);m.q85pk=null;render();
+  var f=document.getElementById('q85n-'+r.rid);if(f)f.focus();return}
+ else if(p[0]==='del'){m.q85d=(m.q85d||[]).filter(function(t){return t.rid!==p[1]});m.q85pk=null}
+ else if(p[0]==='pk'){m.q85pk=m.q85pk===p[1]?null:p[1]}
+ else if(p[0]==='hue'){var r2=q85Row(m,p[1]);if(r2)r2.hue=+p[2];m.q85pk=null}
+ else if(p[0]==='save'){
+  var L=(m.q85d||[]).filter(function(t){return String(t.name||'').trim()}).map(function(t){
+   var old=q83Tags(c)[t.id]||{},w=q85W(t.worth);
+   return Object.assign({},old,{id:t.id,name:String(t.name).trim(),worth:w||'',mode:t.mode==='total'?'total':'each',drop:+t.drop||0,hue:+t.hue})});
+  var keep={};L.forEach(function(t){keep[t.id]=1});
+  (c.assignments||[]).forEach(function(a){if(a.tag&&!keep[a.tag]){delete a.tag;delete a.wown;touch(a)}});
+  c.gradeTags=L;touch(c);save();
+  if(m.q85sel&&!keep[m.q85sel]){m.q85sel='';m.q85ov=false}
+  m.q85v=null;m.q85d=null;m.q85pk=null;
+ }
+ render();
+},true);
+// typing in the Tags screen updates the draft (and the % of class) as you go
+document.addEventListener('input',function(e){var t=e.target,m=view.modal;
+ if(t&&t.id==='m15'&&document.getElementById('q83mh'))document.getElementById('q83mh').textContent=q83MarkHint(t.value);
+ if(!t||!m||m.kind!=='assign'||!t.id)return;
+ var k=/^q85([nw])-(.+)$/.exec(t.id);if(!k)return;var r=q85Row(m,k[2]);if(!r)return;
+ if(k[1]==='n')r.name=t.value;else{r.worth=t.value;render()}
+});
+document.addEventListener('change',function(e){var t=e.target,m=view.modal;if(!t||!m||m.kind!=='assign'||!t.id)return;
+ var k=/^q85([md])-(.+)$/.exec(t.id);if(!k)return;var r=q85Row(m,k[2]);if(!r)return;
+ if(k[1]==='m')r.mode=t.value==='total'?'total':'each';else r.drop=+t.value||0;render()});
+// on Save: the picked tag ('' for none); tags themselves are saved on the Tags screen
+function q83SaveTag(c){var m=view.modal||{};if(m.q85v==='tags')return false;return m.q85sel&&q83Tags(c)[m.q85sel]?m.q85sel:''}
 
 /* ---------- v243: clients on Projects (q84) ----------
    Jae: "Sometimes I have projects within clients or tasks within clients and right now it's hard to navigate."
