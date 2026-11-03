@@ -6230,6 +6230,178 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 .q85bar i{height:100%;flex-shrink:0}
 .q85acts{display:flex;justify-content:flex-end;gap:8px}
 .q85acts .q85save{background:#33312C;color:#fff;border-color:#33312C}
+/* v246: Textbooks (tbk): the shelf, its pop-ups, and the full-screen reader */
+.tbk{display:flex;flex-direction:column;gap:40px;padding:6px 0 70px}
+.tbkhd{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.tbkhd h2{margin:0;font-size:20px;font-weight:500;color:var(--ink)}
+.tbkhint{font-size:13.5px;color:#837D6D}
+.tbkht{display:none}
+@media (hover:none){.tbkhp{display:none}.tbkht{display:inline}}
+.tbkclss{border-top:1px solid #E4E0D7;padding-top:34px}
+.tbkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:40px 32px;justify-items:center}
+.tbkit{position:relative;width:186px;display:flex;flex-direction:column;align-items:center;gap:14px;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:center;border-radius:12px}
+.tbkit:focus-visible{outline:2px solid var(--ink3);outline-offset:6px}
+.tbkcv{position:relative;display:block;width:186px;height:246px;border-radius:5px 12px 12px 5px;box-shadow:0 10px 22px rgba(60,45,30,.18);overflow:hidden;transition:transform .15s ease}
+.tbksp{position:absolute;left:0;top:0;bottom:0;width:22px}
+.tbkband{position:absolute;right:20px;top:0;bottom:0;width:10px;background:rgba(0,0,0,.12)}
+.tbklab{position:absolute;left:44px;right:18px;top:40px;padding:10px 8px;background:#F7F0E6;border-radius:3px;color:#4a3d34;font-size:15px;line-height:1.2;text-align:center;overflow-wrap:break-word;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;font-variation-settings:'opsz' 14}
+.tbkcn{position:absolute;left:22px;right:0;bottom:16px;text-align:center;color:rgba(255,255,255,.9);font-size:13px}
+.tbkdz{position:absolute;inset:8px 8px 8px 30px;border:2px dashed #fff;border-radius:8px;background:rgba(40,30,20,.35);color:#fff;font-size:15px;display:none;align-items:center;justify-content:center;padding:12px;text-align:center}
+.tbkover .tbkcv{transform:translateY(-6px) scale(1.03)}
+.tbkover .tbkdz{display:flex}
+.tbkcap{display:block;width:100%;min-width:0}
+.tbkcap b{display:block;font-size:16.5px;font-weight:450;color:var(--ink);white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 20px),transparent)}
+.tbkcap small{display:block;font-size:13.5px;color:#837D6D;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbkmore{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#6B675F;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .15s;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.tbkit:hover .tbkmore,.tbkit:focus-within .tbkmore{opacity:1}
+@media (hover:none){.tbkmore{opacity:.9}}
+.tbkadd .tbktile{width:186px;height:246px;box-sizing:border-box;border:1.5px dashed #D4CFC4;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#A29D93;transition:border-color .2s,color .2s}
+.tbkadd .tbktile span{font-size:14px;color:#837D6D}
+.tbkadd:hover .tbktile{border-color:#A29D93;color:#6B675F}
+.tbkaddl .tbktile{border-radius:8px}
+.tbkpb{position:relative;display:block;width:186px;height:246px;box-sizing:border-box;border-radius:3px 8px 8px 3px;background:#F3EEE6;border:1px solid #E4DCCF;box-shadow:0 10px 22px rgba(60,45,30,.14);overflow:hidden;text-align:left}
+.tbkpband{position:absolute;left:0;right:0;top:0;height:92px;display:flex;align-items:center;justify-content:center}
+.tbkpband img{max-width:70%;max-height:70px;object-fit:contain;border-radius:3px}
+.tbkpsp{position:absolute;left:0;top:0;bottom:0;width:8px;background:rgba(0,0,0,.08)}
+.tbkpt{position:absolute;top:110px;left:20px;right:16px;font-size:15.5px;line-height:1.25;color:#33312C;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.tbkbadge{position:absolute;left:20px;bottom:16px;display:inline-flex;align-items:center;gap:4px;background:#fff;border:1px solid #E4E0D7;border-radius:999px;padding:3px 10px;font-size:12px;color:#6B675F}
+.tbkchips{display:flex;flex-wrap:wrap;gap:8px}
+.tbkchip{display:inline-flex;align-items:center;gap:7px;border:1px solid #D4CFC4;background:#fff;color:#33312C;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;max-width:100%}
+.tbkchip i{width:9px;height:9px;border-radius:50%;flex:none}
+.tbkchip.on{background:#8C6E5B;border-color:#8C6E5B;color:#fff}
+.tbkpdfl{color:#7A5E4B;text-decoration:underline;cursor:pointer}
+.tbkpdfl:hover{color:#5A4334}
+@media (max-width:700px){
+ .tbkgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 14px}
+ .tbkit{width:150px}
+ .tbkcv,.tbkpb,.tbkadd .tbktile{transform:scale(.8);transform-origin:top center;margin-bottom:-49px}
+ .tbkover .tbkcv{transform:translateY(-6px) scale(.84)}
+}
+/* the reader */
+html.tbkon,html.tbkon body{overflow:hidden}
+#tbkr{position:fixed;inset:0;z-index:110;background:#FBFAF8;display:flex;flex-direction:column;color:#33312C;font-family:inherit}
+#tbkr button{font:inherit;color:inherit}
+.tbktop{display:flex;align-items:center;gap:12px;padding:12px 18px;background:#fff;border-bottom:1px solid #E4E0D7;flex:none;min-width:0;padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.tbkback{display:inline-flex;align-items:center;gap:2px;background:none;border:0;padding:4px 2px;font-size:14px;color:#837D6D!important;cursor:pointer;flex:none}
+.tbkback:hover{color:#33312C!important}
+.tbkdiv{width:1px;height:22px;background:#E4E0D7;flex:none}
+.tbkdrw{display:none;background:none;border:0;padding:4px;cursor:pointer;color:#6B675F!important;flex:none}
+.tbkcol{width:12px;height:16px;border-radius:2px 4px 4px 2px;flex:none}
+.tbkttl{font-size:16px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.tbkfill{flex:1 1 0;min-width:0}
+.tbksrch{flex:0 1 300px;min-width:150px;display:flex;align-items:center;gap:8px;border:1px solid #D4CFC4;border-radius:999px;padding:0 12px;height:36px;box-sizing:border-box;color:#A29D93;background:#fff}
+.tbksrch input{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#33312C;padding:0;height:34px}
+.tbksrch input::-webkit-search-cancel-button{display:none}
+.tbksrch button{background:none;border:0;padding:0;color:#7A5E4B!important;font-size:13px;cursor:pointer}
+.tbkpill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:1px solid #D4CFC4;border-radius:999px;background:#fff;font-size:13.5px;cursor:pointer;flex:none;white-space:nowrap}
+.tbkpill.on{background:#8C6E5B;border-color:#8C6E5B;color:#fff!important}
+.tbkpill.on svg{fill:currentColor}
+.tbkseg{display:inline-flex;background:#F1EFEA;border-radius:999px;padding:3px;gap:2px;flex:none}
+.tbkseg button{border:0;background:none;border-radius:999px;padding:6px 12px;font-size:13px;color:#6B675F!important;cursor:pointer;white-space:nowrap}
+.tbkseg button.on{background:#fff;color:#33312C!important;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tbkseg.dark button.on{background:#8C6E5B;color:#fff!important;box-shadow:none}
+.tbkseg.tabs{display:flex;border-radius:10px;margin:14px 14px 8px}
+.tbkseg.tabs button{flex:1;border-radius:8px;padding:7px 4px}
+.tbkbody{flex:1;display:flex;min-height:0;position:relative}
+.tbkleft{width:280px;flex:none;border-right:1px solid #E4E0D7;background:#FBFAF8;display:flex;flex-direction:column;min-height:0}
+.tbkleft.tbkover{background:#F6F3EE}
+.tbklist{flex:1;overflow-y:auto;padding:4px 10px 24px;-webkit-overflow-scrolling:touch}
+.tbkrow{display:flex;align-items:center;border-radius:10px;margin-bottom:2px;width:100%;background:none;border:0;padding:0;text-align:left;cursor:pointer}
+.tbkrow.on{background:#F1EDE6}
+.tbkrow:hover{background:#F6F3EE}.tbkrow.on:hover{background:#F1EDE6}
+button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:0;background:none;border:0;padding:8px;text-align:left;cursor:pointer;border-radius:10px}
+button.tbkrow{padding:8px}
+.tbkmt{width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#4A4638}
+.tbkmx{flex:1;min-width:0}
+.tbkmx b{display:block;font-size:14px;font-weight:400;color:#33312C;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 16px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 16px),transparent)}
+.tbkmx small{display:block;font-size:12px;color:#837D6D;margin-top:1px}
+.tbkcnt{font-style:normal;background:#F4E3B5;color:#5A4A30;border-radius:999px;padding:1px 8px;font-size:11.5px;flex:none}
+.tbkrmore{background:none;border:0;padding:6px;margin-right:4px;border-radius:8px;color:#A29D93!important;cursor:pointer;opacity:0;flex:none}
+.tbkrow:hover .tbkrmore,.tbkrow.on .tbkrmore,.tbkrmore:focus-visible{opacity:1}
+@media (hover:none){.tbkrmore{opacity:1}}
+.tbkaddm{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:10px;padding:10px;border:1.5px dashed #D4CFC4;border-radius:10px;background:none;color:#6B675F!important;font-size:14px;cursor:pointer}
+.tbkaddm:hover{background:#F6F3EE}
+.tbkor{margin:8px 0 0;text-align:center;font-size:12px;color:#A29D93}
+@media (hover:none){.tbkor{display:none}}
+.tbkempty,.tbkhelp{font-size:13px;color:#837D6D;padding:8px 8px 4px;margin:0;line-height:1.5}
+.tbkterm{display:block;width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:9px 8px;cursor:pointer}
+.tbkterm:hover{background:#F6F3EE}
+.tbkterm>span:first-child{display:flex;align-items:baseline;gap:8px}
+.tbkterm b{flex:1;font-size:14px;font-weight:500}
+.tbkterm small{font-size:11.5px;color:#837D6D;flex:none}
+.tbkdef{display:block;font-size:12.5px;color:#6B675F;margin-top:2px;line-height:1.45}
+.tbkdesk{flex:1;min-width:0;overflow:auto;background:#F1EDE8;position:relative;-webkit-overflow-scrolling:touch}
+.tbk-reading .tbkdesk{background:#EFE7DA}
+.tbktools{position:sticky;top:12px;z-index:3;display:flex;align-items:center;gap:2px;width:max-content;margin:12px auto 0;background:#fff;border:1px solid #E4E0D7;border-radius:999px;padding:4px;box-shadow:0 4px 14px rgba(60,45,30,.08)}
+.tbktools button,.tbkfz button{border:0;background:none;border-radius:999px;min-width:32px;height:30px;padding:0 8px;font-size:14px;cursor:pointer;color:#33312C}
+.tbktools button:hover,.tbkfz button:hover{background:#F1EFEA}
+.tbkzv{font-size:12.5px!important;color:#6B675F!important;min-width:46px!important}
+.tbkstage{display:flex;justify-content:center;padding:20px 32px 0}
+.tbkpapers{position:relative;display:flex;gap:4px;align-items:flex-start}
+.tbkpaper{position:relative;background:#fff;border-radius:4px;box-shadow:0 2px 14px rgba(60,45,30,.1);overflow:hidden;width:612px;height:792px;max-width:none}
+.tbk-reading .tbkpaper{background:#FBF6EC}
+.tbk-reading .tbkpaper canvas{mix-blend-mode:multiply}
+.tbkpaper canvas{display:block}
+.tbkhl{position:absolute;inset:0;pointer-events:none}
+.tbkhl i{position:absolute;background:rgba(244,227,181,.75);mix-blend-mode:multiply;border-radius:2px}
+.tbkedge{position:absolute;left:100%;top:64px;display:flex;flex-direction:column;gap:4px}
+.tbkedge button{width:38px;height:46px;border:0;border-radius:0 8px 8px 0;font-size:12px;color:#4A4638!important;cursor:pointer;padding:0;transition:width .15s}
+.tbkedge button.on{width:46px;font-weight:600}
+.tbkpager{display:flex;align-items:center;justify-content:center;gap:22px;padding:18px 0 40px;font-size:13.5px;color:#6B675F}
+.tbkpager button{display:inline-flex;align-items:center;gap:2px;background:none;border:0;cursor:pointer;color:#6B675F!important;font-size:13.5px;padding:6px}
+.tbkpager button:hover{color:#33312C!important}
+.tbkmsg{width:min(560px,80vw);background:#fff;border-radius:12px;padding:40px 28px;text-align:center;box-shadow:0 2px 14px rgba(60,45,30,.08);margin-top:20px}
+.tbkmsg b{font-size:17px;font-weight:500}
+.tbkmsg p{color:#6B675F;font-size:14px;margin:8px 0 14px}
+.tbkmsg .tbkaddm{width:auto;display:inline-flex;padding:10px 20px}
+.tbkright{width:330px;flex:none;background:#fff;border-left:1px solid #E4E0D7;display:flex;flex-direction:column;min-height:0}
+.tbkrh{display:flex;align-items:center;gap:10px;padding:16px 16px 10px}
+.tbkrh b{flex:1;font-size:15px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbkrh button{background:none;border:0;font-size:22px;line-height:1;color:#837D6D!important;cursor:pointer;padding:2px 6px}
+.tbkres{flex:1;overflow-y:auto;padding:0 8px 24px}
+.tbkhit,.tbkterm,.tbkempty{white-space:normal;overflow-wrap:anywhere}
+.tbkhit{display:block;width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:10px 8px;cursor:pointer}
+.tbkhit:hover{background:#F6F3EE}
+.tbkhit small{display:block;font-size:12.5px;color:#837D6D;margin-bottom:3px}
+.tbkhit span{font-size:14px;line-height:1.5;color:#33312C}
+.tbkhit mark{background:#F4E3B5;color:inherit;border-radius:2px;padding:0 1px}
+.tbk-reading .tbktop,.tbk-reading .tbkleft,.tbk-reading .tbkright{display:none}
+.tbkfloat{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:18px;z-index:4;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 36px)}
+.tbkfchip{background:#fff;border:1px solid #E4E0D7;border-radius:999px;padding:7px 14px;font-size:13px;color:#6B675F;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbkfz{display:inline-flex;background:#fff;border:1px solid #E4E0D7;border-radius:999px;padding:2px}
+.tbkfloat .tbkseg{background:#fff;border:1px solid #E4E0D7}
+.tbk-reading .tbkstage{padding-top:64px}
+@media (max-width:1180px){
+ .tbktop{flex-wrap:wrap;row-gap:10px}
+ .tbkfill{display:none}
+ .tbkttl{flex:1}
+ .tbksrch{order:5;flex:1 1 220px}
+ .tbktop .tbkseg,.tbkpill{order:6}
+}
+@media (max-width:1000px){
+ .tbkright{position:absolute;right:0;top:0;bottom:0;z-index:5;box-shadow:-8px 0 24px rgba(60,45,30,.12)}
+}
+@media (max-width:900px){
+ .tbkdrw{display:inline-flex}
+ .tbkleft{position:absolute;left:0;top:0;bottom:0;z-index:6;transform:translateX(-100%);transition:transform .2s ease;box-shadow:8px 0 24px rgba(60,45,30,.12);visibility:hidden}
+ .tbk-d .tbkleft{transform:none;visibility:visible}
+ .tbkpill span{display:none}
+ .tbkpill{padding:0 11px}
+}
+@media (max-width:600px){
+ .tbktop{gap:8px;padding-left:12px;padding-right:12px}
+ .tbkback span{display:none}
+ .tbksrch{flex:1 1 150px;min-width:0}
+ .tbkpill{order:0}
+ .tbkttl{flex:1 1 45%}
+ .tbktop .tbkseg button{padding:6px 10px}
+ .tbkvseg{display:none}
+ .tbkmore{width:26px;height:26px;top:5px;right:5px}
+ .tbkright{width:100%}
+ .tbkstage{padding:14px 12px 0}
+ .tbkedge{display:none}
+ .tbkfchip{display:none}
+}
 </style>
 </head>
 <body>
@@ -6539,7 +6711,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v245';
+var BUILD='v246';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -13953,6 +14125,7 @@ function viewPage(c){
  else if(k==='notes')h=zNotesPage(c);
  else if(k==='shifts')h=zShiftsPage(c);
  else if(k==='health')h=q74Page(c);
+ else if(k==='textbooks')h=tbkShelf(c);
  return '<div class="zpage" style="'+zcv(zSoftOf(c))+'">'+h
   +cpSetHead('Page settings','pg')+'<button data-zact="pageedit:'+c.id+'">Rename or recolour</button>'+coverControls(c.id,c)
   +'<button class="cpdelcls" data-zact="pagedel:'+c.id+'">Delete page</button></div></div>';
@@ -21735,6 +21908,8 @@ sidebar=function(c){
   return '<div class="sitem sico'+(on?' on':'')+'" data-open="'+p.id+'"><span class="sic pg" style="--pgc:'+pp.bar+'">'+zI(ZIC[k.ico]||ZIC.note,15)+'</span><span class="nm2">'+esc(p.name)+'</span></div>'}).join('');
  // v211: Notes always sits under Applications on School; the first tap makes the page
  if(!q64SchoolPage(false))items='<div class="sitem sico" data-zact="q64school" role="button" tabindex="0"><span class="sic pg" style="--pgc:'+defPal(PAGE_PAL.notes).bar+'">'+zI(ZIC.note,15)+'</span><span class="nm2">Notes</span></div>'+items;
+ // v246: Textbooks sits under Notes; the first tap makes the page
+ if(!tbkPage(false))items+='<div class="sitem sico" data-zact="tbkgo" role="button" tabindex="0"><span class="sic pg" style="--pgc:'+defPal(PAGE_PAL.textbooks).bar+'">'+zI(ZIC.book,15)+'</span><span class="nm2">Textbooks</span></div>';
  var i=h.indexOf('<p class="slabel">Classes</p>');if(i<0)return h;
  return h.slice(0,i)+items+h.slice(i);
 };
@@ -25557,6 +25732,491 @@ allTasks=function(){var out=_q84All();
    (cl.steps||[]).forEach(function(s){if(!s.due&&!(s.plan&&s.plan.length))return;out.push({t:q53Px(c,cl,s),c:cc,kind:'task'})})});
   out.forEach(function(x){var q=x.t&&x.c&&x.c.id===c.id&&x.t.q53;if(!q)return;var p=zItem(c,q.pid);if(p&&p.t==='proj'&&C[p.client])x.c=Object.assign({},x.c,{name:C[p.client].title+' · '+p.title})})});
  return out};
+
+/* ---------- v246: Textbooks (tbk). A School page with two shelves: your own books (one PDF per module, dropped on the book)
+   and your class textbooks (the link or PDF saved on each class). A PDF book opens a full-screen reader: module list, search
+   inside the book, bookmarks, a term bank read from each module's "Term Bank" page, reading mode, book view and zoom.
+   Books, modules and bookmarks are items on the page (they sync one by one); module PDFs are ordinary files on the page. ---------- */
+KINDS.textbooks={name:'Textbooks',tpl:'Textbooks',desc:'Your module PDFs as books, plus your class textbooks',ico:'book',col:'clay'};
+PAGE_PAL.textbooks='clay';
+var TBK_TINTS=['#F3DCCB','#E6DEF2','#D7E8DC','#F2E7C6','#D6E4F0','#F1D7DF','#E3E9CF','#EADFD3'];
+var TBK_LEFT='<path d="m15 18-6-6 6-6"/>',TBK_RIGHT='<path d="m9 18 6-6-6-6"/>';
+function tbkPage(create){
+ var c=spacePages('school').filter(function(p){return p.kind==='textbooks'})[0]||null;
+ if(!c&&create){
+  var id='pg-school-textbooks',gone=Object.keys(S.deleted||{}).some(function(k){return k.indexOf(id)>-1}),nt=q64SchoolPage(false);
+  c=newPage('school','textbooks','Textbooks',gone?id+'-'+uid():id,nt?(nt.ord||0)+1:1);S.classes.push(c);save();
+ }
+ return c;
+}
+ZACT.tbkgo=function(){var c=tbkPage(true);view.modal=null;go('class',c.id)};
+function tbkBooks(c){return ((c&&c.items)||[]).filter(function(x){return x.t==='tbook'}).sort(function(a,b){return (a.ord||0)-(b.ord||0)})}
+function tbkMods(c,bid){return ((c&&c.items)||[]).filter(function(x){return x.t==='tmod'&&x.book===bid}).sort(function(a,b){return (a.n||0)-(b.n||0)||((a.at||'')<(b.at||'')?-1:1)})}
+function tbkFile(cid,fid){var L=FILES[cid]||[];for(var i=0;i<L.length;i++)if(L[i].id===fid)return {f:L[i],i:i};return null}
+// a book's cover: the colour you picked, or a deeper shade of its class colour
+function tbkLook(b){
+ var k=b.cls&&classById(b.cls),hex=k?palHex(k.color):'';
+ if(!b.book&&/^#[0-9a-f]{6}$/i.test(hex))return {cover:q72Mix(hex,'#3B2F27',.66),spine:q72Mix(hex,'#3B2F27',.45),chip:q72Mix(hex,'#3B2F27',.66)};
+ var L=q73Look({book:b.book||('p'+q73Hash(b.title)%6),name:b.title});
+ return {cover:L.cover,spine:L.spine,chip:L.dot};
+}
+function tbkDay(at){var d=new Date(at);return isNaN(d)?'':d.toLocaleDateString('en-CA',{month:'short',day:'numeric'})}
+function tbkTitleOf(name){return String(name||'Module').replace(/\.pdf$/i,'').replace(/[_]+/g,' ').replace(/\s+/g,' ').trim()||'Module'}
+function tbkPlural(n,w){return n+' '+w+(n===1?'':'s')}
+
+/* ---------- the shelf ---------- */
+function tbkShelf(c){
+ var mine=tbkBooks(c).map(function(b){
+  var M=tbkMods(c,b.id),n=M.length,L=tbkLook(b),last=M.reduce(function(a,m){return (m.at||'')>a?m.at:a},''),key=c.id+'~'+b.id;
+  var meta=n?(n>1?'Modules 1–'+n:'Module 1')+(last?' · '+tbkDay(last):''):'No modules yet';
+  return '<div class="tbkit" role="button" tabindex="0" data-tbkopen="'+key+'" data-tbkdrop="'+key+'" aria-label="Open '+esc(b.title)+', '+tbkPlural(n,'module')+'">'
+   +'<span class="tbkcv" style="background:'+L.cover+'"><span class="tbksp" style="background:'+L.spine+'"></span><span class="tbkband"></span>'
+   +'<span class="tbklab">'+esc(b.title)+'</span><span class="tbkcn">'+tbkPlural(n,'module')+'</span>'
+   +'<span class="tbkdz">Drop to add Module '+(n+1)+'</span></span>'
+   +'<span class="tbkcap"><b>'+esc(b.title)+'</b><small>'+esc(meta)+'</small></span>'
+   +'<button type="button" class="tbkmore" data-zact="tbkedit:'+c.id+':'+b.id+'" aria-label="Edit '+esc(b.title)+'">'+zI(ZIC.dots,15)+'</button></div>';
+ }).join('');
+ mine+='<button type="button" class="tbkit tbkadd" data-zact="tbknew:'+c.id+'"><span class="tbktile">'+zI(ZIC.plus,24)+'<span>New textbook</span></span></button>';
+ var cls=q64SchoolClasses().filter(function(k){return k.textbook}).map(function(k){
+  var bk=k.textbook,link=bk.type!=='file',bar=palHex(k.color),host='';
+  if(link){try{host=new URL(bk.url).hostname.replace(/^www\./,'')}catch(e){host='Link'}}
+  return '<div class="tbkit tbkcb" role="button" tabindex="0" data-tbkcls="'+k.id+'" aria-label="Open '+esc(bk.title||'textbook')+(link?', opens in a new tab':'')+'">'
+   +'<span class="tbkpb"><span class="tbkpband" style="background:'+q72Mix(bar,'#ffffff',.78)+'">'+(bk.icon?'<img src="'+esc(bk.icon)+'" alt="">':'')+'</span><span class="tbkpsp"></span>'
+   +'<span class="tbkpt">'+esc(bk.title||'Textbook')+'</span><span class="tbkbadge">'+(link?zI('<path d="M7 17 17 7M9 7h8v8"/>',12)+'Link':'PDF')+'</span></span>'
+   +'<span class="tbkcap"><b>'+esc(k.name)+'</b><small>'+esc(link?host:'PDF')+'</small></span>'
+   +'<button type="button" class="tbkmore" data-zact="tbklink:'+c.id+':'+k.id+'" aria-label="Edit '+esc(bk.title||'textbook')+'">'+zI(ZIC.dots,15)+'</button></div>';
+ }).join('');
+ cls+='<button type="button" class="tbkit tbkadd tbkaddl" data-zact="tbkaddlink:'+c.id+'"><span class="tbktile">'+zI(ZIC.plus,24)+'<span>Add link</span></span></button>';
+ return '<div class="tbk">'
+  +'<section class="tbksec"><div class="tbkhd"><h2>My textbooks</h2><span class="tbkhint"><span class="tbkhp">Drop a module’s PDF on a book to add it as the next module.</span><span class="tbkht">Open a book, then tap Add module.</span></span></div><div class="tbkgrid">'+mine+'</div></section>'
+  +'<section class="tbksec tbkclss"><div class="tbkhd"><h2>Class textbooks</h2><span class="tbkhint">Links to your eTexts, or a PDF if you have one.</span></div><div class="tbkgrid">'+cls+'</div></section></div>';
+}
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.closest||t.closest('.tbkmore'))return;
+ var o=t.closest('[data-tbkopen]');if(o){var p=o.getAttribute('data-tbkopen').split('~');tbkOpen({pid:p[0],bid:p[1]});return}
+ var k=t.closest('[data-tbkcls]');if(k)tbkOpenClass(k.getAttribute('data-tbkcls'));
+});
+document.addEventListener('keydown',function(e){
+ if(e.key!=='Enter'&&e.key!==' ')return;var t=e.target;
+ if(t&&t.matches&&t.matches('[data-tbkopen],[data-tbkcls]')){e.preventDefault();t.click()}
+});
+function tbkOpenClass(kid){
+ var k=classById(kid),bk=k&&k.textbook;if(!bk)return;
+ if(bk.type!=='file'){if(bk.url)window.open(bk.url,'_blank','noopener');return}
+ tbkOpen({cls:kid});
+}
+// drop a PDF on a book (shelf) or on the module list (reader)
+function tbkDropFiles(e){var d=e.dataTransfer;return !!(d&&d.types&&[].indexOf.call(d.types,'Files')>-1)}
+document.addEventListener('dragover',function(e){
+ var z=e.target&&e.target.closest&&e.target.closest('[data-tbkdrop]');if(!z||!tbkDropFiles(e))return;
+ e.preventDefault();e.dataTransfer.dropEffect='copy';
+ document.querySelectorAll('.tbkover').forEach(function(x){if(x!==z)x.classList.remove('tbkover')});z.classList.add('tbkover');
+});
+document.addEventListener('dragleave',function(e){
+ var z=e.target&&e.target.closest&&e.target.closest('[data-tbkdrop]');if(!z)return;
+ if(e.relatedTarget&&z.contains(e.relatedTarget))return;z.classList.remove('tbkover');
+});
+document.addEventListener('drop',function(e){
+ var z=e.target&&e.target.closest&&e.target.closest('[data-tbkdrop]');if(!z||!tbkDropFiles(e))return;
+ e.preventDefault();z.classList.remove('tbkover');
+ var p=z.getAttribute('data-tbkdrop').split('~');tbkAddFiles(p[0],p[1],e.dataTransfer.files);
+});
+
+/* ---------- New textbook / Edit textbook ---------- */
+ZACT.tbknew=function(cid){zOpen('tbkbook',{cid:cid,cls:'',book:''})};
+ZACT.tbkedit=function(cid,bid){var c=classById(cid),b=c&&zItem(c,bid);if(!b)return;zOpen('tbkbook',{cid:cid,bid:bid,name:b.title,cls:b.cls||'',book:b.book||''})};
+ZM.tbkbook={html:function(m){
+ var c=classById(m.cid);if(!c)return null;
+ var K=q64SchoolClasses(),k=m.cls&&classById(m.cls),def=k?q72Mix(palHex(k.color),'#3B2F27',.66):'';
+ return '<h3>'+(m.bid?'Edit textbook':'New textbook')+'</h3>'
+  +'<div class="field"><label for="tbkb1">Name</label><input id="tbkb1" maxlength="40" placeholder="'+(k?esc(k.name):'Business Law, Statistics…')+'" value="'+esc(m.name||'')+'"></div>'
+  +(K.length?'<div class="field"><label>Class</label><div class="tbkchips"><button type="button" class="tbkchip'+(!k?' on':'')+'" data-tbkbc="">None</button>'
+   +K.map(function(x){return '<button type="button" class="tbkchip'+(m.cls===x.id?' on':'')+'" data-tbkbc="'+x.id+'"><i style="background:'+palHex(x.color)+'"></i>'+esc(x.name)+'</button>'}).join('')+'</div></div>':'')
+  +'<div class="field"><label>Cover</label><div class="q73sws">'
+   +(k?'<button type="button" class="q73sw'+(!m.book?' on':'')+'" data-tbksw="" style="background:'+def+';--c:'+def+'" aria-label="Class colour" title="Class colour"></button>':'')
+   +q73Swatches(m.book||(k?'':'p0'),'data-tbksw','data-tbkcc="1"')+'</div></div>'
+  +(m.bid?'':'<p class="q64hint">Then drop each module’s PDF on the book, or open it and tap Add module.</p>');
+},save:function(m){
+ var c=classById(m.cid);if(!c)return;c.items=c.items||[];
+ var k=m.cls&&classById(m.cls),name=zv('tbkb1')||(k?k.name:'');
+ if(!name){zNeed('tbkb1','Give it a name first.');return}
+ var b=m.bid&&zItem(c,m.bid);
+ if(!b){b={id:uid(),t:'tbook',ord:tbkBooks(c).reduce(function(n,x){return Math.max(n,(x.ord||0)+1)},0)};c.items.push(b)}
+ b.title=name;
+ if(k)b.cls=k.id;else delete b.cls;
+ if(m.book)b.book=m.book;else if(k)delete b.book;else b.book='p0';
+ touch(b);save();view.modal=null;render();if(TBK)tbkDraw();
+},del:function(m){return m.bid?'tbkdel:'+m.cid+':'+m.bid:''}};
+ZACT.tbkdel=async function(cid,bid){
+ var c=classById(cid),b=c&&zItem(c,bid);if(!b)return;var M=tbkMods(c,bid);
+ if(!confirm('Delete '+b.title+(M.length?' and its '+tbkPlural(M.length,'module'):'')+'? This can’t be undone.'))return;
+ view.modal=null;
+ c.items=c.items.filter(function(x){return !(x.id===bid||(x.t==='tmod'&&x.book===bid)||(x.t==='tbm'&&x.book==='b~'+bid))});
+ touch(c);save();render();
+ for(var i=0;i<M.length;i++){var r=tbkFile(cid,M[i].fid);if(r)await dropFile(cid,r.i)}
+ render();
+};
+
+/* ---------- Add a class textbook link / Edit ---------- */
+ZACT.tbkaddlink=function(cid){var K=q64SchoolClasses(),k=K.filter(function(x){return !x.textbook})[0]||K[0];zOpen('tbklink',{cid:cid,cls:k?k.id:''})};
+ZACT.tbklink=function(cid,kid){var k=classById(kid),bk=k&&k.textbook;if(!bk)return;zOpen('tbklink',{cid:cid,cls:kid,edit:kid,url:bk.type==='file'?'':bk.url||'',title:bk.title||''})};
+ZM.tbklink={html:function(m){
+ var K=q64SchoolClasses();if(!K.length)return '<h3>Add a class textbook link</h3><p class="q64hint">Add a class first, then its textbook.</p>';
+ var k=classById(m.cls),cur=k&&k.textbook,file=!!(cur&&cur.type==='file');
+ return '<h3>'+(m.edit?'Edit class textbook':'Add a class textbook link')+'</h3>'
+  +'<div class="field"><label for="tbl1">Link</label><input id="tbl1" type="url" inputmode="url" autocomplete="off" placeholder="'+(m.edit&&file?'Leave empty to keep the PDF':'Paste the eText link')+'" value="'+esc(m.url||'')+'"></div>'
+  +'<div class="field"><label for="tbl2">Book title</label><input id="tbl2" maxlength="80" placeholder="'+esc(k?k.name+' textbook':'Book title')+'" value="'+esc(m.title||'')+'"></div>'
+  +(m.edit?'':'<div class="field"><label>Class</label><div class="tbkchips">'+K.map(function(x){return '<button type="button" class="tbkchip'+(m.cls===x.id?' on':'')+'" data-tbklc="'+x.id+'"><i style="background:'+palHex(x.color)+'"></i>'+esc(x.name)+'</button>'}).join('')+'</div>'
+   +(cur?'<p class="q64hint">This replaces '+esc(k.name)+'’s textbook now ('+esc(cur.title||'Textbook')+').</p>':'')+'</div>'
+   +'<p class="q64hint">Have the PDF instead? <label class="tbkpdfl">Choose a PDF<input type="file" accept="application/pdf,.pdf" data-tbkcpdf="1" hidden></label></p>');
+},save:function(m){
+ var k=classById(m.cls);if(!k){zToast('Pick a class first');return}
+ var u=zv('tbl1'),t=zv('tbl2'),cur=k.textbook;
+ if(!u&&!(m.edit&&cur)){zNeed('tbl1','Paste a link first.');return}
+ if(u){if(!/^https?:\/\//i.test(u))u='https://'+u;k.textbook={type:'link',title:t||k.name+' textbook',url:u,icon:(cur&&cur.icon)||''}}
+ else cur.title=t||cur.title;
+ touch(k);save();view.modal=null;render();
+},del:function(m){return m.edit?'tbklinkdel:'+m.edit:''}};
+Object.defineProperty(ZM.tbklink,'saveLabel',{get:function(){return view.modal&&view.modal.edit?'Save':'Add link'}});
+ZACT.tbklinkdel=function(kid){var k=classById(kid);if(!k||!confirm('Remove this textbook from '+k.name+'?'))return;k.textbook=null;touch(k);save();view.modal=null;render()};
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.closest||!view.modal)return;var m=view.modal,b;
+ if(m.kind==='tbkbook'){
+  if((b=t.closest('[data-tbkbc]'))){m.cls=b.getAttribute('data-tbkbc');render();return}
+  if((b=t.closest('button[data-tbksw]'))){m.book=b.getAttribute('data-tbksw');render();return}
+ }
+ if(m.kind==='tbklink'&&(b=t.closest('[data-tbklc]'))){m.cls=b.getAttribute('data-tbklc');render()}
+});
+document.addEventListener('input',function(e){
+ var t=e.target,m=view.modal;if(!t||!m)return;
+ if(m.kind==='tbkbook'&&t.id==='tbkb1')m.name=t.value;
+ if(m.kind==='tbklink'){if(t.id==='tbl1')m.url=t.value;if(t.id==='tbl2')m.title=t.value}
+ if(m.kind==='tbkmod'&&t.id==='tbkm1')m.title=t.value;
+});
+document.addEventListener('change',async function(e){
+ var t=e.target,m=view.modal;if(!t||!t.hasAttribute)return;
+ if(m&&m.kind==='tbkbook'&&t.hasAttribute('data-tbkcc')){m.book=t.value;render();return}
+ if(m&&m.kind==='tbklink'&&t.hasAttribute('data-tbkcpdf')){
+  var f=t.files&&t.files[0],k=classById(m.cls);if(!f||!k)return;
+  if(f.size>25000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');return}
+  zToast('Adding '+esc(f.name)+'…');
+  var rec;try{rec=await readFile(f)}catch(err){zToast('Could not read that PDF');return}
+  FILES[k.id]=FILES[k.id]||[];FILES[k.id].push(rec);
+  var old=k.textbook;k.textbook={type:'file',title:zv('tbl2')||tbkTitleOf(f.name),fileId:rec.id,icon:(old&&old.icon)||''};
+  touch(k);save();view.modal=null;render();saveFiles(k.id);zToast('Added to '+esc(k.name));
+  return;
+ }
+ if(t.hasAttribute('data-tbkpick')&&TBK&&TBK.bid){var fl=t.files;tbkAddFiles(TBK.pid,TBK.bid,fl)}
+});
+
+/* ---------- adding modules: each PDF is the next module; its page count and term bank are read once, here ---------- */
+async function tbkAddFiles(pid,bid,list){
+ var c=classById(pid),b=c&&zItem(c,bid);if(!b)return;
+ var L=[].slice.call(list||[]).filter(function(f){return f.type==='application/pdf'||/\.pdf$/i.test(f.name)});
+ if(!L.length){zToast('Only PDFs can be added as modules');return}
+ L.sort(function(x,y){return x.name.localeCompare(y.name,undefined,{numeric:true})});
+ FILES[pid]=FILES[pid]||[];c.items=c.items||[];
+ var added=0;
+ zToast(L.length===1?'Adding '+esc(L[0].name)+'…':'Adding '+L.length+' PDFs…');
+ for(var i=0;i<L.length;i++){
+  var f=L[i];
+  if(f.size>25000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');continue}
+  var rec;try{rec=await readFile(f)}catch(e){zToast('Could not read '+esc(f.name));continue}
+  rec.section=bid;FILES[pid].push(rec);
+  var n=tbkMods(c,bid).reduce(function(a,m){return Math.max(a,m.n||0)},0)+1;
+  var it={id:uid(),t:'tmod',book:bid,fid:rec.id,n:n,title:tbkTitleOf(f.name),at:new Date().toISOString()};
+  try{var lib=await loadPdfJs(),doc=await lib.getDocument({data:b64ToBytes(rec.data)}).promise;it.pages=doc.numPages;it.terms=await tbkTerms(doc);doc.destroy()}catch(e){}
+  c.items.push(touch(it));added++;
+ }
+ if(!added)return;
+ touch(c);save();saveFiles(pid);render();
+ var cnt=tbkMods(c,bid).length;
+ if(TBK&&TBK.bid===bid){TBK.mi=cnt-1;TBK.page=1;tbkDraw(true);zToast(added===1?'Module '+cnt+' added':added+' modules added')}
+ else zToast(added===1?'Added to '+esc(b.title)+' as Module '+cnt:added+' modules added to '+esc(b.title));
+}
+/* the term bank page: a "Term Bank" heading, then each term in one bold font (sometimes with a small chapter
+   number after it) and its definition, which can wrap onto more lines. It may run onto the next page. */
+async function tbkTerms(doc){
+ var out=[],font='',size=0;
+ var sz=function(x){return Math.abs(x.transform[3])||Math.abs(x.transform[0])||0};
+ for(var p=1;p<=doc.numPages&&out.length<400;p++){
+  var tc=await (await doc.getPage(p)).getTextContent(),it=tc.items.filter(function(x){return x.str&&x.str.trim()}),start=-1,top=1e9;
+  for(var i=0;i<it.length;i++)if(/^term bank$/i.test(it[i].str.trim())&&sz(it[i])>=11){start=i+1;top=it[i].transform[5]+1;font=it[start]?it[start].fontName:'';size=it[start]?sz(it[start]):0;break}
+  if(start<0){if(!size)continue;start=0}
+  var cur=null,found=0,low=1e9;
+  for(var j=start;j<it.length;j++){
+   var x=it[j],s=sz(x),bold=x.fontName===font&&Math.abs(s-size)<1.5;
+   if(x.transform[5]>top)continue;                                // printed above the heading (another box on the page)
+   if(cur&&s>size+2)break;                                        // the next heading: the term bank ended
+   if(bold&&cur&&!cur.d){cur.t+=' '+x.str.trim();continue}        // a term that wraps
+   if(bold){cur={t:x.str.trim(),d:'',p:p};out.push(cur);found++;continue}
+   if(!cur)continue;
+   if(!cur.d&&/^\d{1,2}$/.test(x.str.trim())&&s<size*.85)continue; // the small chapter number after a term
+   cur.d=(cur.d+' '+x.str.trim()).trim();low=Math.min(low,x.transform[5]);
+  }
+  if(!found||low>110)break;                                        // it ends on this page
+ }
+ return out.filter(function(x){return x.t&&x.d}).map(function(x){return {t:x.t.replace(/\s+/g,' ').slice(0,80),d:x.d.replace(/\s+/g,' ').slice(0,300),p:x.p}});
+}
+
+/* ---------- the reader (its own layer over the app, so syncing never redraws the page you are reading) ---------- */
+var TBK=null;
+function tbkKey(){return TBK.bid?'b~'+TBK.bid:'c~'+TBK.cls}
+function tbkModsNow(){
+ if(!TBK)return [];
+ if(TBK.bid){var c=classById(TBK.pid);return tbkMods(c,TBK.bid).map(function(m){return {id:m.id,title:m.title||'Module',cid:TBK.pid,fid:m.fid,pages:m.pages||0,terms:m.terms||[],item:m}})}
+ var k=classById(TBK.cls),bk=k&&k.textbook;
+ return bk&&bk.type==='file'?[{id:'c',title:bk.title||'Textbook',cid:k.id,fid:bk.fileId,pages:TBK.cpages||0,terms:TBK.cterms||[]}]:[];
+}
+function tbkBook(){var c=TBK&&TBK.bid&&classById(TBK.pid);return c?zItem(c,TBK.bid):null}
+function tbkName(){var b=tbkBook();if(b)return b.title;var k=TBK&&classById(TBK.cls);return k?(k.textbook&&k.textbook.title)||k.name:'Textbook'}
+function tbkChip(){var b=tbkBook();if(b)return tbkLook(b).chip;var k=TBK&&classById(TBK.cls);return k?palHex(k.color):'#8C6E5B'}
+function tbkStore(name,key,v){
+ var all={};try{all=JSON.parse(localStorage.getItem(name)||'{}')||{}}catch(e){}
+ if(v===undefined)return key?all[key]:all;
+ if(key)all[key]=v;else all=v;try{localStorage.setItem(name,JSON.stringify(all))}catch(e){}
+}
+function tbkOpen(o){
+ var pr=tbkStore('tbk-prefs')||{};
+ TBK=Object.assign({mi:0,page:1,left:'mods',q:'',hits:null,right:null,mode:'markup',spread:!!pr.spread,zoom:pr.zoom||1,docs:{},text:{},gen:0,sgen:0,outline:null,drawer:false},o);
+ var M=tbkModsNow(),pos=tbkStore('tbk-pos',tbkKey()),j=pos?M.map(function(x){return x.id}).indexOf(pos.mod):-1;
+ if(j>-1){TBK.mi=j;TBK.page=pos.page||1}else TBK.mi=Math.max(0,M.length-1);
+ if(innerWidth<600)TBK.spread=false;                           // two pages side by side don't fit a phone
+ var el=document.getElementById('tbkr');if(!el){el=document.createElement('div');el.id='tbkr';el.setAttribute('role','dialog');el.setAttribute('aria-label',tbkName());document.body.appendChild(el)}
+ document.documentElement.classList.add('tbkon');
+ tbkDraw(true);
+}
+function tbkClose(){
+ if(!TBK)return;Object.keys(TBK.docs).forEach(function(k){TBK.docs[k].then(function(d){d.destroy()},function(){})});
+ TBK=null;var el=document.getElementById('tbkr');if(el)el.remove();document.documentElement.classList.remove('tbkon');render();
+}
+function tbkSeg(opts,cur,act,cls){
+ return '<div class="tbkseg'+(cls?' '+cls:'')+'" role="group">'+opts.map(function(o){return '<button type="button" class="'+(cur===o[0]?'on':'')+'" aria-pressed="'+(cur===o[0])+'" data-tbk="'+act+':'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div>';
+}
+function tbkBms(){var c=TBK.bid?classById(TBK.pid):tbkPage(false),k=tbkKey();return ((c&&c.items)||[]).filter(function(x){return x.t==='tbm'&&x.book===k})}
+function tbkBmAt(mid,pg){return tbkBms().filter(function(x){return x.mod===mid&&x.page===pg})[0]||null}
+function tbkPagesTxt(m){return m.pages?tbkPlural(m.pages,'page'):'PDF'}
+function tbkDraw(top){
+ var el=document.getElementById('tbkr');if(!el||!TBK)return;
+ var M=tbkModsNow();if(TBK.mi>=M.length)TBK.mi=Math.max(0,M.length-1);
+ var mod=M[TBK.mi],read=TBK.mode==='reading',cls=!TBK.bid,bm=mod&&tbkBmAt(mod.id,TBK.page);
+ var act=document.activeElement,qFocus=act&&act.id==='tbkq',caret=qFocus?act.selectionStart:0;
+ var deskEl=document.getElementById('tbkdesk'),listEl=el.querySelector('.tbklist'),deskTop=deskEl?deskEl.scrollTop:0,listTop=listEl?listEl.scrollTop:0;
+ var viewSeg=tbkSeg([['page','Page'],['book','Book view']],TBK.spread?'book':'page','view','tbkvseg');
+ var modeSeg=tbkSeg([['markup','Markup'],['reading','Reading']],TBK.mode,'mode','dark');
+ var head='<header class="tbktop"><button type="button" class="tbkback" data-tbk="close">'+zI(TBK_LEFT,16)+'<span>Textbooks</span></button><i class="tbkdiv"></i>'
+  +'<button type="button" class="tbkdrw" data-tbk="drawer" aria-label="'+(cls?'Chapters':'Modules')+'">'+zI(ZIC.list||ZIC.note,17)+'</button>'
+  +'<span class="tbkcol" style="background:'+tbkChip()+'"></span><b class="tbkttl">'+esc(tbkName())+'</b><span class="tbkfill"></span>'
+  +'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this book" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this book">'+(TBK.q?'<button type="button" data-tbk="clear">Clear</button>':'')+'</label>'
+  +'<button type="button" class="tbkpill'+(bm?' on':'')+'" data-tbk="bm" aria-pressed="'+!!bm+'"'+(mod?'':' disabled')+'>'+zI(ZIC.star,15)+'<span>'+(bm?'Bookmarked':'Bookmark')+'</span></button>'
+  +modeSeg+viewSeg+'</header>';
+ // left: modules (or chapters), bookmarks, term bank
+ var list='';
+ if(TBK.left==='mods'){
+  if(cls&&TBK.outline&&TBK.outline.length)list=TBK.outline.map(function(o,i){return '<button type="button" class="tbkrow" data-tbk="go:0:'+o.page+'"><span class="tbkmt" style="background:'+TBK_TINTS[i%8]+'">'+(i+1)+'</span><span class="tbkmx"><b>'+esc(o.title)+'</b><small>p. '+o.page+'</small></span></button>'}).join('');
+  else list=M.map(function(m,i){var cnt=TBK.hits&&TBK.hits.per[m.id]||0;
+   return '<div class="tbkrow'+(i===TBK.mi?' on':'')+'"><button type="button" class="tbkrgo" data-tbk="mod:'+i+'"><span class="tbkmt" style="background:'+TBK_TINTS[i%8]+'">'+(cls?zI(ZIC.book,14):'M'+(i+1))+'</span><span class="tbkmx"><b>'+esc(m.title)+'</b><small>'+(cls?'':'Module '+(i+1)+' · ')+tbkPagesTxt(m)+'</small></span>'+(cnt?'<em class="tbkcnt">'+cnt+'</em>':'')+'</button>'
+    +(cls?'':'<button type="button" class="tbkrmore" data-tbk="modedit:'+m.id+'" aria-label="Rename or delete '+esc(m.title)+'">'+zI(ZIC.dots,14)+'</button>')+'</div>'}).join('');
+  if(!cls)list+='<button type="button" class="tbkaddm" data-tbk="pick">'+zI(ZIC.plus,14)+'<span>Add module '+(M.length+1)+'</span></button><p class="tbkor">or drop a PDF here</p>';
+ }else if(TBK.left==='bms'){
+  var ids=M.map(function(m){return m.id}),B=tbkBms().filter(function(x){return ids.indexOf(x.mod)>-1}).sort(function(a,b){return ids.indexOf(a.mod)-ids.indexOf(b.mod)||a.page-b.page});
+  list=B.length?B.map(function(x){var i=ids.indexOf(x.mod);return '<button type="button" class="tbkrow tbkplain" data-tbk="go:'+i+':'+x.page+'"><span class="tbkmx"><b>'+esc(M[i].title)+'</b><small>'+(cls?'':'Module '+(i+1)+' · ')+'p. '+x.page+'</small></span></button>'}).join('')
+   :'<p class="tbkempty">No bookmarks yet. Tap Bookmark at the top to keep your place.</p>';
+ }else{
+  var T=[];M.forEach(function(m,i){(m.terms||[]).forEach(function(x){T.push({t:x.t,d:x.d,p:x.p,i:i})})});
+  T.sort(function(a,b){return a.t.localeCompare(b.t,undefined,{sensitivity:'base'})});
+  list=T.length?'<p class="tbkhelp">Pulled from each module’s term bank page.</p>'+T.map(function(x){return '<button type="button" class="tbkterm" data-tbk="go:'+x.i+':'+x.p+'"><span><b>'+esc(x.t)+'</b><small>'+(cls?'':'M'+(x.i+1)+' · ')+'p. '+x.p+'</small></span><span class="tbkdef">'+esc(x.d)+'</span></button>'}).join('')
+   :'<p class="tbkempty">'+(cls?'This book has no term bank page.':'No terms yet. They come from a page titled “Term Bank” in each module.')+'</p>';
+ }
+ var left='<aside class="tbkleft"'+(cls?'':' data-tbkdrop="'+TBK.pid+'~'+TBK.bid+'"')+'>'+tbkSeg([['mods',cls?'Chapters':'Modules'],['bms','Bookmarks'],['terms','Term bank']],TBK.left,'left','tabs')+'<div class="tbklist">'+list+'</div></aside>';
+ // the pages
+ var n=mod?(mod.pages||0):0,slots=TBK.spread?[TBK.page,TBK.page+1]:[TBK.page];
+ var papers=mod?slots.map(function(p){return '<div class="tbkpaper" data-pg="'+p+'"><canvas></canvas><div class="tbkhl"></div></div>'}).join('')
+  :'<div class="tbkmsg"><b>No modules yet</b><p>Add your first module’s PDF and it shows here.</p><button type="button" class="tbkaddm" data-tbk="pick">'+zI(ZIC.plus,14)+'<span>Add module 1</span></button></div>';
+ var edge=!cls&&M.length>1?'<div class="tbkedge">'+M.map(function(m,i){return '<button type="button" class="'+(i===TBK.mi?'on':'')+'" style="background:'+TBK_TINTS[i%8]+'" data-tbk="mod:'+i+'" aria-label="Module '+(i+1)+', '+esc(m.title)+'">M'+(i+1)+'</button>'}).join('')+'</div>':'';
+ var zoom='<button type="button" data-tbk="zoom:-1" aria-label="Zoom out">−</button><button type="button" class="tbkzv" data-tbk="zoom:0" aria-label="Reset zoom">'+Math.round(TBK.zoom*100)+'%</button><button type="button" data-tbk="zoom:1" aria-label="Zoom in">+</button>';
+ var desk='<main class="tbkdesk" id="tbkdesk">'+(mod&&!read?'<div class="tbktools">'+zoom+'</div>':'')
+  +'<div class="tbkstage"><div class="tbkpapers'+(TBK.spread?' spread':'')+'" id="tbkpapers">'+papers+edge+'</div></div>'
+  +(mod?'<div class="tbkpager"><button type="button" data-tbk="prev">'+zI(TBK_LEFT,14)+'Prev</button><span id="tbkpn">'+tbkPagerTxt(n)+'</span><button type="button" data-tbk="next">Next'+zI(TBK_RIGHT,14)+'</button></div>':'')+'</main>';
+ // right: search results
+ var right='';
+ if(TBK.right==='find'&&TBK.hits){
+  var H=TBK.hits,rows=H.rows.map(function(r){return '<button type="button" class="tbkhit" data-tbk="go:'+r.mi+':'+r.page+'"><small>'+(cls?'':'Module '+(r.mi+1)+' · ')+'p. '+r.page+'</small><span>'+r.s+'</span></button>'}).join('');
+  right='<aside class="tbkright"><div class="tbkrh"><b>'+(H.busy?'Searching…':tbkPlural(H.n,'match').replace('matchs','matches')+' for “'+esc(H.q)+'”')+'</b><button type="button" data-tbk="rclose" aria-label="Close search results">×</button></div>'
+   +'<div class="tbkres">'+(rows||(H.busy?'':'<p class="tbkempty">No matches in this book.</p>'))+(H.n>H.rows.length?'<p class="tbkempty">Showing the first '+H.rows.length+'.</p>':'')+'</div></aside>';
+ }
+ var float=read?'<div class="tbkfloat"><span class="tbkfchip">'+esc(tbkName())+(mod&&!cls?' · Module '+(TBK.mi+1):'')+'</span><span class="tbkfz">'+zoom+'</span>'+modeSeg+viewSeg+'</div>':'';
+ el.className='tbk-'+TBK.mode+(right?' tbk-r':'')+(TBK.drawer?' tbk-d':'');
+ el.innerHTML=head+'<div class="tbkbody">'+left+desk+right+'</div>'+float+'<input type="file" id="tbkfile" accept="application/pdf,.pdf" multiple hidden data-tbkpick="1">';
+ var d2=document.getElementById('tbkdesk'),l2=el.querySelector('.tbklist');
+ if(d2)d2.scrollTop=top?0:deskTop;if(l2)l2.scrollTop=listTop;
+ if(qFocus){var q=document.getElementById('tbkq');if(q){q.focus();try{q.setSelectionRange(caret,caret)}catch(e){}}}
+ tbkPaint();
+}
+function tbkPagerTxt(n){
+ var p=TBK.page;if(!n)return 'Page '+p;
+ return TBK.spread&&p<n?'Pages '+p+'–'+(p+1)+' of '+n:'Page '+p+' of '+n;
+}
+function tbkDoc(mod,f){
+ if(!TBK.docs[mod.fid])TBK.docs[mod.fid]=loadPdfJs().then(function(lib){if(!lib)throw new Error('reader');return lib.getDocument({data:b64ToBytes(f.data)}).promise});
+ return TBK.docs[mod.fid];
+}
+async function tbkPaint(){
+ if(!TBK)return;var gen=++TBK.gen,M=tbkModsNow(),mod=M[TBK.mi];if(!mod)return;
+ var desk=document.getElementById('tbkdesk'),wrap=document.getElementById('tbkpapers');if(!desk||!wrap)return;
+ var r=tbkFile(mod.cid,mod.fid);
+ var msg=function(t){wrap.innerHTML='<div class="tbkmsg"><p>'+t+'</p></div>'};
+ if(!r||!r.f.data){msg(r&&r.f.cloud?'This PDF is still downloading from your account. It opens here as soon as it arrives.':'This PDF isn’t saved on this device.');return}
+ var doc;try{doc=await tbkDoc(mod,r.f)}catch(e){delete TBK.docs[mod.fid];msg('Could not open this PDF.');return}
+ if(!TBK||gen!==TBK.gen)return;
+ var n=doc.numPages;
+ if(mod.item&&mod.item.pages!==n){mod.item.pages=n;touch(mod.item);save()}
+ mod.pages=n;
+ if(TBK.page>n)TBK.page=n;if(TBK.page<1)TBK.page=1;
+ if(TBK.spread&&TBK.page%2===0)TBK.page--;
+ if(!TBK.bid&&!TBK.outline)tbkOutline(doc);
+ if(!TBK.bid){TBK.cpages=n;if(!TBK.cterms){TBK.cterms=[];if(n<=60)tbkTerms(doc).then(function(t){if(TBK&&!TBK.bid&&t.length){TBK.cterms=t;tbkDraw()}},function(){})}}
+ var pn=document.getElementById('tbkpn');if(pn)pn.textContent=tbkPagerTxt(n);
+ var row=document.querySelector('#tbkr .tbkrow.on small');if(row)row.textContent=(mod.item?'Module '+(TBK.mi+1)+' · ':'')+tbkPagesTxt(mod);
+ tbkStore('tbk-pos',tbkKey(),{mod:mod.id,page:TBK.page});
+ var read=TBK.mode==='reading',edge=wrap.querySelector('.tbkedge')?52:0,pad=innerWidth<700?24:64;
+ var W=Math.min(TBK.spread?1500:(read?860:820),Math.max(240,desk.clientWidth-pad-edge))*TBK.zoom;
+ var P=wrap.querySelectorAll('.tbkpaper'),pw=TBK.spread?(W-4)/2:W,dpr=Math.min(window.devicePixelRatio||1,2);
+ for(var s=0;s<P.length;s++){
+  var el=P[s],num=TBK.page+s;
+  if(num>n){el.style.visibility='hidden';continue}
+  el.setAttribute('data-pg',num);
+  var page=await doc.getPage(num);if(!TBK||gen!==TBK.gen)return;
+  var v1=page.getViewport({scale:1}),vp=page.getViewport({scale:pw/v1.width}),cv=el.querySelector('canvas');
+  el.style.width=vp.width+'px';el.style.height=vp.height+'px';
+  cv.width=Math.floor(vp.width*dpr);cv.height=Math.floor(vp.height*dpr);cv.style.width=vp.width+'px';cv.style.height=vp.height+'px';
+  try{await page.render({canvasContext:cv.getContext('2d'),viewport:vp,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null}).promise}catch(e){}
+  if(!TBK||gen!==TBK.gen)return;
+  tbkMarkHits(page,vp,el.querySelector('.tbkhl'));
+ }
+}
+// yellow marks over the words you searched for
+async function tbkMarkHits(page,vp,box){
+ if(!box)return;box.innerHTML='';var q=String(TBK.q||'').trim().toLowerCase();if(!q||!PDFJS)return;
+ var tc=await page.getTextContent(),h='';
+ tc.items.forEach(function(it){
+  var s=it.str||'',lo=s.toLowerCase(),at=lo.indexOf(q);if(at<0||!s.length)return;
+  var tx=PDFJS.Util.transform(vp.transform,it.transform),fh=Math.hypot(tx[2],tx[3]),w=it.width*vp.scale;
+  while(at>-1){h+='<i style="left:'+(tx[4]+w*at/s.length).toFixed(1)+'px;top:'+(tx[5]-fh).toFixed(1)+'px;width:'+(w*q.length/s.length).toFixed(1)+'px;height:'+(fh*1.2).toFixed(1)+'px"></i>';at=lo.indexOf(q,at+q.length)}
+ });
+ box.innerHTML=h;
+}
+// a class PDF's own chapters (its bookmarks/outline), top level only
+async function tbkOutline(doc){
+ TBK.outline=[];
+ try{
+  var O=await doc.getOutline()||[],out=[];
+  for(var i=0;i<O.length&&out.length<80;i++){
+   var d=O[i].dest;if(typeof d==='string')d=await doc.getDestination(d);if(!d||!d[0])continue;
+   var idx=typeof d[0]==='object'?await doc.getPageIndex(d[0]):d[0];out.push({title:O[i].title||'Chapter',page:idx+1});
+  }
+  if(TBK&&!TBK.bid){TBK.outline=out;if(out.length)tbkDraw()}
+ }catch(e){}
+}
+async function tbkPageTexts(mod){
+ if(TBK.text[mod.fid])return TBK.text[mod.fid];
+ var r=tbkFile(mod.cid,mod.fid);if(!r||!r.f.data)return [];
+ var doc=await tbkDoc(mod,r.f),out=[];
+ for(var p=1;p<=doc.numPages;p++){var tc=await (await doc.getPage(p)).getTextContent();out.push(tc.items.map(function(x){return x.str}).join(' ').replace(/\s+/g,' '))}
+ TBK.text[mod.fid]=out;return out;
+}
+async function tbkSearch(q){
+ q=String(q||'').trim();if(!TBK)return;
+ if(!q){tbkClear();return}
+ var gen=++TBK.sgen,M=tbkModsNow(),ql=q.toLowerCase();
+ TBK.q=q;TBK.right='find';TBK.hits={q:q,busy:true,rows:[],per:{},n:0};tbkDraw();
+ for(var i=0;i<M.length;i++){
+  var T;try{T=await tbkPageTexts(M[i])}catch(e){T=[]}
+  if(!TBK||gen!==TBK.sgen)return;
+  T.forEach(function(t,pi){var lo=t.toLowerCase(),at=lo.indexOf(ql);
+   while(at>-1){TBK.hits.n++;TBK.hits.per[M[i].id]=(TBK.hits.per[M[i].id]||0)+1;
+    if(TBK.hits.rows.length<300){var a=Math.max(0,at-50),b=Math.min(t.length,at+ql.length+70);
+     TBK.hits.rows.push({mi:i,page:pi+1,s:(a?'…':'')+esc(t.slice(a,at))+'<mark>'+esc(t.slice(at,at+ql.length))+'</mark>'+esc(t.slice(at+ql.length,b))+(b<t.length?'…':'')})}
+    at=lo.indexOf(ql,at+ql.length)}});
+ }
+ TBK.hits.busy=false;tbkDraw();
+}
+function tbkClear(){if(!TBK)return;TBK.sgen++;TBK.q='';TBK.hits=null;if(TBK.right==='find')TBK.right=null;tbkDraw()}
+function tbkGo(mi,page,top){
+ var M=tbkModsNow();if(!M[mi])return;var changed=mi!==TBK.mi||page!==TBK.page;
+ TBK.mi=mi;TBK.page=Math.max(1,page);if(TBK.spread&&TBK.page%2===0)TBK.page--;
+ if(innerWidth<900)TBK.drawer=false;
+ tbkDraw(top||changed);
+}
+async function tbkStep(dir){
+ var M=tbkModsNow(),mod=M[TBK.mi];if(!mod)return;var n=mod.pages||1,step=TBK.spread?2:1,p=TBK.page+dir*step;
+ if(p>=1&&p<=n){tbkGo(TBK.mi,p,true);return}
+ if(dir>0&&TBK.mi<M.length-1){tbkGo(TBK.mi+1,1,true);return}
+ if(dir<0&&TBK.mi>0){var pm=M[TBK.mi-1],np=pm.pages;
+  if(!np){var r=tbkFile(pm.cid,pm.fid);if(r&&r.f.data){try{np=(await tbkDoc(pm,r.f)).numPages}catch(e){}}}
+  tbkGo(TBK.mi-1,np||1,true);
+ }
+}
+function tbkPrefs(){tbkStore('tbk-prefs',null,{spread:TBK.spread,zoom:TBK.zoom})}
+document.addEventListener('click',function(e){
+ var b=e.target&&e.target.closest&&e.target.closest('#tbkr [data-tbk]');if(!b||!TBK)return;
+ var p=b.getAttribute('data-tbk').split(':'),a=p[0];
+ if(a==='close')return tbkClose();
+ if(a==='drawer'){TBK.drawer=!TBK.drawer;return tbkDraw()}
+ if(a==='left'){TBK.left=p[1];return tbkDraw()}
+ if(a==='mod')return tbkGo(+p[1],1,true);
+ if(a==='go')return tbkGo(+p[1],+p[2],true);
+ if(a==='prev')return tbkStep(-1);
+ if(a==='next')return tbkStep(1);
+ if(a==='clear')return tbkClear();
+ if(a==='rclose'){TBK.right=null;return tbkDraw()}
+ if(a==='mode'){TBK.mode=p[1];return tbkDraw()}
+ if(a==='view'){TBK.spread=p[1]==='book';if(TBK.spread&&TBK.page%2===0)TBK.page--;tbkPrefs();return tbkDraw()}
+ if(a==='zoom'){var z=+p[1];TBK.zoom=z?Math.min(2,Math.max(.5,Math.round((TBK.zoom+z*.1)*10)/10)):1;tbkPrefs();return tbkDraw()}
+ if(a==='pick'){var f=document.getElementById('tbkfile');if(f){f.value='';f.click()}return}
+ if(a==='modedit'){var c=classById(TBK.pid),m=c&&zItem(c,p[1]);if(m)zOpen('tbkmod',{cid:TBK.pid,mid:m.id,title:m.title||''});return}
+ if(a==='bm'){
+  var M=tbkModsNow(),mod=M[TBK.mi];if(!mod)return;var pg=TBK.bid?classById(TBK.pid):tbkPage(true);if(!pg)return;
+  var cur=tbkBmAt(mod.id,TBK.page);pg.items=pg.items||[];
+  if(cur)pg.items=pg.items.filter(function(x){return x.id!==cur.id});
+  else pg.items.push(touch({id:uid(),t:'tbm',book:tbkKey(),mod:mod.id,page:TBK.page}));
+  touch(pg);save();return tbkDraw();
+ }
+});
+document.addEventListener('keydown',function(e){
+ if(!TBK)return;var t=e.target;
+ if(t&&t.id==='tbkq'){if(e.key==='Enter'){e.preventDefault();tbkSearch(t.value)}else if(e.key==='Escape'&&t.value){e.preventDefault();tbkClear()}return}
+ if(view.modal||(t&&/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+ if(e.key==='Escape'){e.preventDefault();if(TBK.mode==='reading'){TBK.mode='markup';tbkDraw()}else tbkClose()}
+ else if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();tbkStep(1)}
+ else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();tbkStep(-1)}
+});
+document.addEventListener('search',function(e){if(TBK&&e.target&&e.target.id==='tbkq'&&!e.target.value)tbkClear()},true);
+var tbkRT=0;window.addEventListener('resize',function(){if(!TBK)return;clearTimeout(tbkRT);tbkRT=setTimeout(function(){if(TBK)tbkPaint()},150)});
+// a module that arrives or changes from your other device shows up in an open reader
+var _tbkRender=render,tbkSig='';
+render=function(){
+ var r=_tbkRender.apply(this,arguments);
+ if(TBK){var s=tbkModsNow().map(function(m){var f=tbkFile(m.cid,m.fid);return m.id+(f&&f.f.data?'+':'-')+m.title}).join('|')+tbkName();
+  if(s!==tbkSig){tbkSig=s;tbkDraw()}}
+ return r;
+};
+
+/* ---------- rename or delete a module ---------- */
+ZM.tbkmod={html:function(m){
+ var c=classById(m.cid),x=c&&zItem(c,m.mid);if(!x)return null;
+ return '<h3>Module '+(tbkMods(c,x.book).indexOf(x)+1)+'</h3><div class="field"><label for="tbkm1">Name</label><input id="tbkm1" maxlength="80" value="'+esc(m.title||'')+'"></div>';
+},save:function(m){
+ var c=classById(m.cid),x=c&&zItem(c,m.mid);if(!x)return;var t=zv('tbkm1');if(!t){zNeed('tbkm1','Give it a name first.');return}
+ x.title=t;touch(x);save();view.modal=null;render();if(TBK)tbkDraw();
+},del:function(m){return 'tbkmoddel:'+m.cid+':'+m.mid}};
+ZACT.tbkmoddel=async function(cid,mid){
+ var c=classById(cid),x=c&&zItem(c,mid);if(!x)return;
+ if(!confirm('Delete '+(x.title||'this module')+' from the book? This can’t be undone.'))return;
+ view.modal=null;c.items=c.items.filter(function(y){return !(y.id===mid||(y.t==='tbm'&&y.mod===mid))});
+ touch(c);save();render();if(TBK)tbkDraw();
+ var r=tbkFile(cid,x.fid);if(r)await dropFile(cid,r.i);
+};
 
 try{spBoot()}catch(e){}
 load();
