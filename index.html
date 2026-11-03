@@ -6284,8 +6284,8 @@ html.tbkon,html.tbkon body{overflow:hidden}
 #tbkr .tbklist,#tbkr .tbkres,#tbkhost #mk .mknoteslist{scrollbar-width:none;-ms-overflow-style:none}
 #tbkr .tbklist::-webkit-scrollbar,#tbkr .tbkres::-webkit-scrollbar,#tbkhost #mk .mknoteslist::-webkit-scrollbar{display:none}
 /* the pages: no up/down bar, but a slim left/right bar shows when you're zoomed in wider than the screen */
-#tbkhost #mk .mkbody::-webkit-scrollbar{width:0;height:10px;background:transparent}
-#tbkhost #mk .mkbody::-webkit-scrollbar-thumb{background:rgba(74,70,56,.28);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
+#tbkhost #mk .mkbody::-webkit-scrollbar{width:0;height:14px;background:transparent}
+#tbkhost #mk .mkbody::-webkit-scrollbar-thumb{background:rgba(74,70,56,.3);border-radius:14px;border:3px solid transparent;background-clip:padding-box}
 #tbkhost #mk .mkbody::-webkit-scrollbar-thumb:hover{background-color:rgba(74,70,56,.45)}
 #tbkhost #mk .mkbody::-webkit-scrollbar-track,#tbkhost #mk .mkbody::-webkit-scrollbar-corner{background:transparent}
 @supports not selector(::-webkit-scrollbar){#tbkhost #mk .mkbody{scrollbar-width:thin;scrollbar-color:rgba(74,70,56,.3) transparent}}
@@ -6339,8 +6339,6 @@ html.tbkon,html.tbkon body{overflow:hidden}
 .tbk-c .tbkleft{transform:translateX(-100%);opacity:0;pointer-events:none}
 .tbkdesk{margin-left:310px}
 .tbk-c .tbkdesk{margin-left:0}
-.tbkstick{position:sticky;top:0;height:0;z-index:3}
-.tbkstick .tbkedge{position:absolute}
 .tbkleft.tbkover{background:#F6F3EE}
 .tbklist{flex:1;overflow-y:auto;padding:4px 10px 24px;-webkit-overflow-scrolling:touch}
 .tbkrow{display:flex;align-items:center;border-radius:10px;margin-bottom:2px;width:100%;background:none;border:0;padding:0;text-align:left;cursor:pointer}
@@ -6369,11 +6367,21 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .tbkhit,.tbkterm,.tbkempty{white-space:normal;overflow-wrap:anywhere}
 .tbkdesk{flex:1;min-width:0;position:relative;background:#F1EDE8;overflow:hidden}
 .tbkhost{position:absolute;inset:0}
-.tbkedge{position:absolute;left:0;top:64px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:4px;visibility:hidden}
-.tbkedge button{width:38px;height:44px;border:0;border-radius:0 9px 9px 0;font-size:12px;color:#4A4638!important;cursor:pointer;padding:0 0 0 4px;display:flex;align-items:center;justify-content:center;transition:width .15s}
-.tbkedge button:hover{width:44px}
-.tbkedge button.on{width:48px;font-weight:600}
-.tbkedge svg{width:14px;height:14px}
+.tbkedge{position:absolute;top:14px;right:14px;z-index:6;visibility:hidden}
+.tbkjump{display:flex;align-items:center;gap:8px;height:38px;padding:0 10px 0 5px;border:1px solid #E4E0D7;border-radius:999px;background:#fff;color:#33312C;font:inherit;font-size:13px;cursor:pointer;box-shadow:0 4px 14px rgba(60,45,30,.1);transition:box-shadow .2s ease}
+.tbkjump:hover,.tbkjump.on{box-shadow:0 6px 18px rgba(60,45,30,.16)}
+.tbkjump .tbkmt{width:28px;height:28px;border-radius:50%;font-size:11px}
+.tbkjump svg{color:#837D6D;transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.tbkjump.on svg{transform:rotate(180deg)}
+.tbkjl{max-width:150px;white-space:nowrap;overflow:hidden}
+.tbkjlong{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 14px),transparent)}
+.tbkjmenu{position:absolute;right:0;top:46px;width:270px;max-height:min(60vh,420px);overflow-y:auto;background:#fff;border:1px solid #E4E0D7;border-radius:14px;padding:6px;box-shadow:0 12px 32px rgba(60,45,30,.16);transform-origin:top right;animation:tbkpop .2s cubic-bezier(.4,0,.2,1);scrollbar-width:none}
+.tbkjmenu::-webkit-scrollbar{display:none}
+@keyframes tbkpop{from{opacity:0;transform:translateY(-4px) scale(.97)}to{opacity:1;transform:none}}
+.tbkjmenu button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:7px;border-radius:10px;text-align:left;cursor:pointer;font:inherit}
+.tbkjmenu button:hover{background:#F6F3EE}
+.tbkjmenu button.on{background:#F1EDE6}
+@media (max-width:600px){.tbkjl{display:none}.tbkjump{padding-right:8px}.tbkedge{top:10px;right:10px}.tbkjmenu{width:min(270px,calc(100vw - 20px))}}
 .tbkpill{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;display:flex;align-items:center;gap:2px;background:#fff;border:1px solid #E4E0D7;border-radius:999px;padding:4px;box-shadow:0 4px 14px rgba(60,45,30,.1);white-space:nowrap}
 .tbkpill:empty{display:none}
 .tbkpill button{border:0;background:none;border-radius:999px;min-width:32px;height:30px;padding:0 8px;font-size:14px;cursor:pointer;color:#33312C;display:inline-flex;align-items:center;justify-content:center}
@@ -6438,10 +6446,6 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .tbkhost{transition:opacity .17s ease}
 .tbkhost.tbkfade,.tbkedge.tbkfade{opacity:0}
 .tbkedge{transition:opacity .17s ease}
-.tbkedge.tbkmini{gap:3px}
-.tbkedge.tbkmini button{width:24px;height:24px;font-size:9.5px;border-radius:7px 0 0 7px;padding:0;box-shadow:-1px 1px 4px rgba(60,45,30,.12)}
-.tbkedge.tbkmini button.on,.tbkedge.tbkmini button:hover{width:28px;margin-left:-4px}
-.tbkedge.tbkmini svg{width:11px;height:11px}
 #tbkhost #mk .mktools:empty{display:none}
 /* Book view in Textbooks: plain and flat (no page shadows, no spine shading); the page turns without a cast shadow */
 #tbkhost #mk .q78shade,#tbkhost #mk .q78fsh{display:none}
@@ -6484,7 +6488,6 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  .tbktop .tbkseg button{padding:6px 10px}
  .tbkvseg{display:none}
  .tbkright{width:100%}
- .tbkedge{display:none}
  .tbkmore{width:26px;height:26px;top:5px;right:5px}
 }
 </style>
@@ -6796,7 +6799,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v250';
+var BUILD='v251';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -24899,7 +24902,7 @@ function q78Counter(){var L=q78L();return L+(L+1<=MK.pageCount?'–'+(L+1):'')+'
 function q78CanTurn(dir){var t=(MK.spread||0)+dir;return t>=0&&t<q78Spreads()}
 // room around the book: a little more on big screens, almost none on a phone (or any short screen,
 // like a phone turned sideways), so the pages get as much of the screen as possible
-function q78Pad(cw,ch){var tight=cw<700||ch<560;return {x:tight?8:(MK&&MK.fitW?(tbkTabsOn()?118:70):28),y:tight?8:24,bottom:tight?14:(MK&&MK.fitW?64:40)}} // Textbooks: room for the side arrows, the module tabs and the page pill
+function q78Pad(cw,ch){var tight=cw<700||ch<560;return {x:tight?8:(MK&&MK.fitW?70:28),y:tight?8:24,bottom:tight?14:(MK&&MK.fitW?64:40)}} // Textbooks: room for the side arrows, the module tabs and the page pill
 
 /* ---------- where the pages sit ---------- */
 var _q78Fit=mkRecomputeFitScale;
@@ -26159,7 +26162,7 @@ function tbkDraw(){
  var hd=document.getElementById('tbkhandle');if(hd)hd.setAttribute('aria-label','Show the '+(cls?'chapters':'modules'));
  var l2=left.querySelector('.tbklist');if(l2)l2.scrollTop=listTop;
  // module tabs on the right edge
- tbkEdge().innerHTML=!cls&&M.length>1?M.map(function(m,i){return '<button type="button" class="'+(i===TBK.mi?'on':'')+'" style="background:'+tbkTint(m,i)+'" data-tbk="mod:'+i+'" aria-label="'+esc(tbkLbl(M,i))+', '+esc(m.title)+'">'+tbkTile(M,i)+'</button>'}).join(''):'';
+ tbkEdge().innerHTML=tbkJumpHtml(M,cls);
  // the page pill: page number, turn, zoom
  document.getElementById('tbkpill').innerHTML=mod?'<button type="button" class="tbkpv" data-tbk="prev" aria-label="Previous page">'+zI(TBK_LEFT,16)+'</button><span id="tbkpn"></span><button type="button" class="tbkpv" data-tbk="next" aria-label="Next page">'+zI(TBK_RIGHT,16)+'</button>'
   +'<button type="button" class="tbkbarb" id="tbkbarb" data-tbk="bar" aria-label="Show or hide the Markup bar" title="Markup bar">'+zI('<path d="m6 9 6 6 6-6"/>',16)+'</button><i></i><button type="button" data-tbk="zoom:-1" aria-label="Zoom out">−</button><button type="button" class="tbkzv" data-tbk="zoom:0" id="tbkzv" aria-label="Back to 100%"></button><button type="button" data-tbk="zoom:1" aria-label="Zoom in">+</button>':'';
@@ -26182,23 +26185,23 @@ function tbkDraw(){
 function tbkRefit(ms){clearTimeout(tbkRefit.t);tbkRefit.t=setTimeout(function(){if(tbkHosted()){mkRefitKeepingPlace();mkFloatRender();tbkPlaceTabs()}},ms||30)}
 function tbkTabsOn(){return !!(TBK&&TBK.bid&&tbkModsNow().length>1)}
 // the module tabs stick out of the right side of the pages you're looking at (like paper tabs on a binder)
+// a small drop-down at the top right of the pages: the open module, and a quick list of the others
+function tbkJumpHtml(M,cls){
+ if(cls||M.length<2)return '';var i0=TBK.mi,m0=M[i0];if(!m0)return '';
+ return '<button type="button" class="tbkjump'+(TBK.jump?' on':'')+'" data-tbk="jump" aria-haspopup="true" aria-expanded="'+!!TBK.jump+'" aria-label="Switch module">'
+  +'<span class="tbkmt" style="background:'+tbkTint(m0,i0)+'">'+tbkTile(M,i0)+'</span><span class="tbkjl'+(tbkLbl(M,i0).length>18?' tbkjlong':'')+'">'+esc(tbkLbl(M,i0))+'</span>'+zI('<path d="m6 9 6 6 6-6"/>',15)+'</button>'
+  +(TBK.jump?'<div class="tbkjmenu" role="menu">'+M.map(function(m,i){return '<button type="button" role="menuitem" class="'+(i===i0?'on':'')+'" data-tbk="mod:'+i+'"><span class="tbkmt" style="background:'+tbkTint(m,i)+'">'+tbkTile(M,i)+'</span><span class="tbkmx"><b>'+esc(m.title)+'</b><small>'+esc(tbkLbl(M,i))+(tbkModDay(m.item)?' · '+esc(tbkModDay(m.item)):'')+'</small></span></button>'}).join('')+'</div>':'');
+}
+function tbkJump(open){if(!TBK)return;TBK.jump=open;tbkEdge().innerHTML=tbkJumpHtml(tbkModsNow(),!TBK.bid)}
+document.addEventListener('click',function(e){if(TBK&&TBK.jump&&!(e.target.closest&&e.target.closest('#tbkedge')))tbkJump(false)},true);
 var TBK_EDGE=null;
 function tbkEdge(){var e=document.getElementById('tbkedge')||TBK_EDGE;if(!e){e=document.createElement('div');e.id='tbkedge';e.className='tbkedge'}return TBK_EDGE=e}
 // the module tabs live INSIDE the page list, in a sticky strip at the right edge of the pages, so they scroll, zoom and
 // glide with the pages themselves (no catching up after you move). Zoomed past the screen they go small on the right side.
 function tbkPlaceTabs(){
  var ed=tbkEdge(),desk=document.getElementById('tbkdesk');if(!desk)return;
- var pages=document.getElementById('mkpages'),body=document.getElementById('mkbody');
- if(!tbkHosted()||!ed.children.length||!pages||!body){ed.style.visibility='hidden';if(ed.parentNode!==desk)desk.appendChild(ed);return}
- var right=0;
- pages.querySelectorAll('.mkpagewrap').forEach(function(w){if(!w.offsetParent||w.offsetWidth<20)return;var box=w.closest('.mkpagebox');
-  right=Math.max(right,(box?box.offsetLeft:0)+w.offsetLeft+w.offsetWidth)});
- if(!right){ed.style.visibility='hidden';return}
- var mini=right+44>body.clientWidth;ed.classList.toggle('tbkmini',mini);ed.style.visibility='visible';
- if(mini){if(ed.parentNode!==desk)desk.appendChild(ed);ed.style.left=(desk.clientWidth-28)+'px';ed.style.top='14px';return}
- var st=pages.querySelector('.tbkstick');if(!st){st=document.createElement('div');st.className='tbkstick';pages.insertBefore(st,pages.firstChild)}
- if(ed.parentNode!==st)st.appendChild(ed);
- ed.style.left=Math.round(right-4)+'px';ed.style.top='64px';
+ if(ed.parentNode!==desk)desk.appendChild(ed);
+ ed.style.visibility=tbkHosted()&&ed.children.length?'visible':'hidden';
 }
 // opening or closing the list: the page glides from where it was to its new size and place (measure, refit, then animate back)
 function tbkRefRect(){var b=document.getElementById('mkbody');if(!b)return null;var br=b.getBoundingClientRect(),best=null;
@@ -26402,7 +26405,8 @@ document.addEventListener('click',function(e){
  if(a==='close')return tbkClose();
  if(a==='panel'){if(innerWidth<=900)TBK.drawer=!TBK.drawer;else{TBK.collapsed=!TBK.collapsed;tbkPrefs()}return tbkDraw()}
  if(a==='left'){TBK.left=p[1];return tbkDraw()}
- if(a==='mod')return tbkGo(+p[1]);
+ if(a==='jump')return tbkJump(!TBK.jump);
+ if(a==='mod'){if(TBK.jump)tbkJump(false);return tbkGo(+p[1])}
  if(a==='go')return tbkGo(+p[1],+p[2]);
  if(a==='prev')return tbkStep(-1);
  if(a==='next')return tbkStep(1);
