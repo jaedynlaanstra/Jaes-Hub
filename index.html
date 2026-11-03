@@ -6281,8 +6281,14 @@ html.q80ipad .coverwrap.q80top::before{content:'';position:absolute;left:0;right
 html.tbkon,html.tbkon body{overflow:hidden}
 #tbkr{position:fixed;inset:0;z-index:110;background:#FBFAF8;display:flex;flex-direction:column;color:#33312C;font-family:inherit}
 #tbkr button{font:inherit;color:inherit}
-#tbkr .tbklist,#tbkr .tbkres,#tbkhost #mk .mkbody,#tbkhost #mk .mknoteslist{scrollbar-width:none;-ms-overflow-style:none}
-#tbkr .tbklist::-webkit-scrollbar,#tbkr .tbkres::-webkit-scrollbar,#tbkhost #mk .mkbody::-webkit-scrollbar,#tbkhost #mk .mknoteslist::-webkit-scrollbar{display:none}
+#tbkr .tbklist,#tbkr .tbkres,#tbkhost #mk .mknoteslist{scrollbar-width:none;-ms-overflow-style:none}
+#tbkr .tbklist::-webkit-scrollbar,#tbkr .tbkres::-webkit-scrollbar,#tbkhost #mk .mknoteslist::-webkit-scrollbar{display:none}
+/* the pages: no up/down bar, but a slim left/right bar shows when you're zoomed in wider than the screen */
+#tbkhost #mk .mkbody::-webkit-scrollbar{width:0;height:10px;background:transparent}
+#tbkhost #mk .mkbody::-webkit-scrollbar-thumb{background:rgba(74,70,56,.28);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
+#tbkhost #mk .mkbody::-webkit-scrollbar-thumb:hover{background-color:rgba(74,70,56,.45)}
+#tbkhost #mk .mkbody::-webkit-scrollbar-track,#tbkhost #mk .mkbody::-webkit-scrollbar-corner{background:transparent}
+@supports not selector(::-webkit-scrollbar){#tbkhost #mk .mkbody{scrollbar-width:thin;scrollbar-color:rgba(74,70,56,.3) transparent}}
 .tbktop{display:flex;align-items:center;gap:12px;padding:12px 18px;background:#fff;border-bottom:1px solid #E4E0D7;flex:none;min-width:0;padding-top:calc(12px + env(safe-area-inset-top,0px));position:relative;z-index:3}
 .tbkback{display:inline-flex;align-items:center;gap:2px;background:none;border:0;padding:4px 2px;font-size:14px;color:#837D6D!important;cursor:pointer;flex:none}
 .tbkback:hover{color:#33312C!important}
@@ -6328,9 +6334,13 @@ html.tbkon,html.tbkon body{overflow:hidden}
 .tbkth{display:flex;align-items:baseline;gap:8px}
 .tbkth b{flex:1;font-size:14.5px;font-weight:500;color:#33312C}
 .tbkdict .tbkdef{font-size:13px;line-height:1.5;margin-top:3px}
-.tbkleft{width:280px;flex:none;border-right:1px solid #E4E0D7;background:#FBFAF8;display:flex;flex-direction:column;min-height:0}
-.tbkleft{transition:margin-left .38s cubic-bezier(.4,0,.2,1),opacity .3s ease}
-.tbk-c .tbkleft{margin-left:-281px;opacity:0;pointer-events:none}
+.tbkleft{width:310px;flex:none;border-right:1px solid #E4E0D7;background:#FBFAF8;display:flex;flex-direction:column;min-height:0}
+#tbkr .tbkleft{position:absolute;left:0;top:0;bottom:0;transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .3s ease,visibility .38s}
+.tbk-c .tbkleft{transform:translateX(-100%);opacity:0;pointer-events:none}
+.tbkdesk{margin-left:310px}
+.tbk-c .tbkdesk{margin-left:0}
+.tbkstick{position:sticky;top:0;height:0;z-index:3}
+.tbkstick .tbkedge{position:absolute}
 .tbkleft.tbkover{background:#F6F3EE}
 .tbklist{flex:1;overflow-y:auto;padding:4px 10px 24px;-webkit-overflow-scrolling:touch}
 .tbkrow{display:flex;align-items:center;border-radius:10px;margin-bottom:2px;width:100%;background:none;border:0;padding:0;text-align:left;cursor:pointer}
@@ -6393,7 +6403,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 #tbkhost #mk .mkpagewrap{box-shadow:0 2px 14px rgba(60,45,30,.12)}
 #tbkhost #mk .mkbody{padding-bottom:64px;box-sizing:border-box}
 /* the Markup bar: one thin cream strip (tools, sizes, then colours), folding away smoothly */
-#tbkhost #mk .mktools{display:flex;align-items:center;gap:8px;background:#E7DFD3;border-top:1px solid #DDD3C5;padding:6px 12px calc(env(safe-area-inset-bottom,0px) + 6px);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;max-height:72px;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .32s cubic-bezier(.4,0,.2,1),opacity .25s ease}
+#tbkhost #mk .mktools{display:flex;align-items:center;gap:8px;background:#E3D8CE;border-top:1px solid #D6C9BD;padding:6px 12px calc(env(safe-area-inset-bottom,0px) + 6px);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;max-height:72px;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .32s cubic-bezier(.4,0,.2,1),opacity .25s ease}
 #tbkhost #mk .mktools::-webkit-scrollbar{display:none}
 #tbkr.tbk-tmin #mk .mktools{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-top-color:transparent}
 #tbkhost #mk .mktools .mkrow{padding:0;gap:6px;flex:none;overflow:visible}
@@ -6404,22 +6414,22 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 #tbkhost #mk .mktools .mksizebtn{width:36px;height:36px}
 #tbkhost #mk .mktools .mksep{height:22px;background:rgba(74,70,56,.18)}
 #tbkhost #mk .mktools .mkrow button.mkswatch,#tbkhost #mk .mktools .mkrow label.mkswatch{width:28px;height:28px;min-width:28px;max-width:28px;border-color:rgba(74,70,56,.16)}
-#tbkhost #mk .mkrow button.mkswatch.on,#tbkhost #mk .mkrow label.mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #E7DFD3,0 0 0 3.5px #8C6E5B}
+#tbkhost #mk .mkrow button.mkswatch.on,#tbkhost #mk .mkrow label.mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #E3D8CE,0 0 0 3.5px #8C6E5B}
 #tbkhost #mk .mktools .mkrow button.q75pal{color:#4A4638;height:32px;padding:0 10px 0 8px}
-#tbkhost #mk .mkswatch.mkcustom i{background:#E7DFD3;color:#4A4638}
+#tbkhost #mk .mkswatch.mkcustom i{background:#E3D8CE;color:#4A4638}
 #tbkhost #mk .mktxthint{color:#837D6D}
 /* the movable tool menu, in the same cream */
-#tbkhost #mk .mkfloat{background:rgba(231,223,211,.97);border-color:#DDD3C5;box-shadow:0 6px 22px rgba(60,45,30,.16)}
+#tbkhost #mk .mkfloat{background:rgba(227,216,206,.97);border-color:#D6C9BD;box-shadow:0 6px 22px rgba(60,45,30,.16)}
 #tbkhost #mk .mkfloat button{color:rgba(74,70,56,.8)}
 #tbkhost #mk .mkfloat button.on{background:#fff;color:#33312C}
 #tbkhost #mk .mkfloat .mkfsep{background:rgba(74,70,56,.16)}
 #tbkhost #mk .mkfgrip i{background:rgba(74,70,56,.3)}
 #tbkhost #mk .mkfloat button.tbkfc i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(74,70,56,.2)}
-#tbkhost #mk .tbkfpop{position:fixed;z-index:7;display:grid;grid-template-columns:repeat(4,30px);gap:8px;padding:10px;background:rgba(231,223,211,.98);border:1px solid #DDD3C5;border-radius:14px;box-shadow:0 8px 24px rgba(60,45,30,.18)}
+#tbkhost #mk .tbkfpop{position:fixed;z-index:7;display:grid;grid-template-columns:repeat(4,30px);gap:8px;padding:10px;background:rgba(227,216,206,.98);border:1px solid #D6C9BD;border-radius:14px;box-shadow:0 8px 24px rgba(60,45,30,.18)}
 #tbkhost #mk .tbkfpop .mkswatch{width:30px;height:30px;min-width:30px;max-width:30px;border-radius:50%;border:2px solid rgba(74,70,56,.16);padding:0;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center}
-#tbkhost #mk .tbkfpop .mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #E7DFD3,0 0 0 3.5px #8C6E5B}
+#tbkhost #mk .tbkfpop .mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #E3D8CE,0 0 0 3.5px #8C6E5B}
 #tbkhost #mk .tbkfpop .mkswatch input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer}
-#tbkhost #mk .tbkfpop .mkcustom i{position:absolute;inset:4px;border-radius:50%;background:#E7DFD3;display:flex;align-items:center;justify-content:center;font-style:normal;color:#4A4638}
+#tbkhost #mk .tbkfpop .mkcustom i{position:absolute;inset:4px;border-radius:50%;background:#E3D8CE;display:flex;align-items:center;justify-content:center;font-style:normal;color:#4A4638}
 .tbkbarb{display:none!important}
 .tbkpill.tbk-ed .tbkbarb{display:inline-flex!important}
 .tbkbarb svg{transition:transform .3s cubic-bezier(.4,0,.2,1)}
@@ -6456,6 +6466,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  .tbkright{position:absolute;right:0;top:0;bottom:0;z-index:6;box-shadow:-8px 0 24px rgba(60,45,30,.12)}
 }
 @media (max-width:900px){
+ .tbkdesk{margin-left:0!important}
  .tbkleft{position:absolute;left:0;top:0;bottom:0;z-index:6;transform:translateX(-100%);transition:transform .38s cubic-bezier(.4,0,.2,1),visibility .38s;margin-left:0!important;opacity:1!important;pointer-events:auto!important;box-shadow:8px 0 24px rgba(60,45,30,.12);visibility:hidden}
  .tbk-c .tbkleft{display:flex}
  .tbk-d .tbkleft{transform:none;visibility:visible}
@@ -6785,7 +6796,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v249';
+var BUILD='v250';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26081,7 +26092,7 @@ function tbkOpen(o){
  if(j>-1){TBK.mi=j;TBK.page=pos.page||1}else TBK.mi=Math.max(0,M.length-1);
  if(innerWidth<600)TBK.spread=false;                           // two pages side by side don't fit a phone
  var el=document.getElementById('tbkr');if(el)el.remove();
- el=document.createElement('div');el.id='tbkr';el.setAttribute('role','dialog');el.setAttribute('aria-label',tbkName());
+ TBK_EDGE=null;el=document.createElement('div');el.id='tbkr';el.setAttribute('role','dialog');el.setAttribute('aria-label',tbkName());
  el.innerHTML='<header class="tbktop" id="tbkhd"></header><div class="tbkbody"><aside class="tbkleft" id="tbkleft"></aside>'
   +'<main class="tbkdesk" id="tbkdesk"><div class="tbkhost" id="tbkhost"></div><button type="button" class="tbkhandle" id="tbkhandle" data-tbk="panel" aria-label="Show the modules">'+zI(TBK_RIGHT,18)+'</button><div class="tbkedge" id="tbkedge"></div><div class="tbkpill" id="tbkpill"></div></main>'
   +'<aside class="tbkright" id="tbkright"></aside></div><input type="file" id="tbkfile" accept="application/pdf,.pdf" multiple hidden data-tbkpick="1">';
@@ -26091,6 +26102,7 @@ function tbkOpen(o){
 }
 function tbkUnmount(){
  if(!TBK)return;
+ var ed=tbkEdge(),desk=document.getElementById('tbkdesk');if(desk&&ed.parentNode!==desk){ed.style.visibility='hidden';desk.appendChild(ed)}
  if(MK&&TBK.mounted){tbkSavePos();mkClose()}
  TBK.mounted=null;var h=document.getElementById('tbkhost');if(h)h.innerHTML='';
 }
@@ -26147,7 +26159,7 @@ function tbkDraw(){
  var hd=document.getElementById('tbkhandle');if(hd)hd.setAttribute('aria-label','Show the '+(cls?'chapters':'modules'));
  var l2=left.querySelector('.tbklist');if(l2)l2.scrollTop=listTop;
  // module tabs on the right edge
- document.getElementById('tbkedge').innerHTML=!cls&&M.length>1?M.map(function(m,i){return '<button type="button" class="'+(i===TBK.mi?'on':'')+'" style="background:'+tbkTint(m,i)+'" data-tbk="mod:'+i+'" aria-label="'+esc(tbkLbl(M,i))+', '+esc(m.title)+'">'+tbkTile(M,i)+'</button>'}).join(''):'';
+ tbkEdge().innerHTML=!cls&&M.length>1?M.map(function(m,i){return '<button type="button" class="'+(i===TBK.mi?'on':'')+'" style="background:'+tbkTint(m,i)+'" data-tbk="mod:'+i+'" aria-label="'+esc(tbkLbl(M,i))+', '+esc(m.title)+'">'+tbkTile(M,i)+'</button>'}).join(''):'';
  // the page pill: page number, turn, zoom
  document.getElementById('tbkpill').innerHTML=mod?'<button type="button" class="tbkpv" data-tbk="prev" aria-label="Previous page">'+zI(TBK_LEFT,16)+'</button><span id="tbkpn"></span><button type="button" class="tbkpv" data-tbk="next" aria-label="Next page">'+zI(TBK_RIGHT,16)+'</button>'
   +'<button type="button" class="tbkbarb" id="tbkbarb" data-tbk="bar" aria-label="Show or hide the Markup bar" title="Markup bar">'+zI('<path d="m6 9 6 6 6-6"/>',16)+'</button><i></i><button type="button" data-tbk="zoom:-1" aria-label="Zoom out">−</button><button type="button" class="tbkzv" data-tbk="zoom:0" id="tbkzv" aria-label="Back to 100%"></button><button type="button" data-tbk="zoom:1" aria-label="Zoom in">+</button>':'';
@@ -26159,28 +26171,50 @@ function tbkDraw(){
    +'<div class="tbkres">'+(rows||(H.busy?'':'<p class="tbkempty">No matches in this book.</p>'))+(H.n>H.rows.length?'<p class="tbkempty">Showing the first '+H.rows.length+'.</p>':'')+'</div>';
  }
  right.innerHTML=rh;
- var was=el.className;
+ var was=el.className,glide=tbkHosted()&&/tbk-c/.test(was)!==!!TBK.collapsed&&innerWidth>900?tbkRefRect():null;
  el.className=(rh?'tbk-r':'')+(TBK.drawer?' tbk-d':'')+(TBK.collapsed?' tbk-c':'')+(TBK.spread?' tbk-b':'');
  if(qFocus){var q=document.getElementById('tbkq');if(q){q.focus();try{q.setSelectionRange(caret,caret)}catch(e){}}}
  tbkSync();
- if(was!==el.className&&tbkHosted())tbkRefit((/tbk-c/.test(was))!==TBK.collapsed?400:30);
+ if(glide)tbkGlide(glide);else if(was!==el.className&&tbkHosted())tbkRefit(30);
  tbkMount();
 }
 // the panels opened or closed: the pages re-fit the new space, keeping your place
 function tbkRefit(ms){clearTimeout(tbkRefit.t);tbkRefit.t=setTimeout(function(){if(tbkHosted()){mkRefitKeepingPlace();mkFloatRender();tbkPlaceTabs()}},ms||30)}
 function tbkTabsOn(){return !!(TBK&&TBK.bid&&tbkModsNow().length>1)}
 // the module tabs stick out of the right side of the pages you're looking at (like paper tabs on a binder)
+var TBK_EDGE=null;
+function tbkEdge(){var e=document.getElementById('tbkedge')||TBK_EDGE;if(!e){e=document.createElement('div');e.id='tbkedge';e.className='tbkedge'}return TBK_EDGE=e}
+// the module tabs live INSIDE the page list, in a sticky strip at the right edge of the pages, so they scroll, zoom and
+// glide with the pages themselves (no catching up after you move). Zoomed past the screen they go small on the right side.
 function tbkPlaceTabs(){
- var ed=document.getElementById('tbkedge'),host=document.getElementById('tbkhost');if(!ed||!host)return;
- if(!tbkHosted()||!ed.children.length){ed.style.visibility='hidden';return}
- var hr=host.getBoundingClientRect(),right=0,top=1e9;
- document.querySelectorAll('#tbkhost .mkpagewrap').forEach(function(w){var r=w.getBoundingClientRect();
-  if(r.width<20||r.bottom<hr.top+60||r.top>hr.bottom-60||!w.offsetParent)return;right=Math.max(right,r.right);top=Math.min(top,r.top)});
+ var ed=tbkEdge(),desk=document.getElementById('tbkdesk');if(!desk)return;
+ var pages=document.getElementById('mkpages'),body=document.getElementById('mkbody');
+ if(!tbkHosted()||!ed.children.length||!pages||!body){ed.style.visibility='hidden';if(ed.parentNode!==desk)desk.appendChild(ed);return}
+ var right=0;
+ pages.querySelectorAll('.mkpagewrap').forEach(function(w){if(!w.offsetParent||w.offsetWidth<20)return;var box=w.closest('.mkpagebox');
+  right=Math.max(right,(box?box.offsetLeft:0)+w.offsetLeft+w.offsetWidth)});
  if(!right){ed.style.visibility='hidden';return}
- var mini=right-hr.left>hr.width-50;ed.classList.toggle('tbkmini',mini);ed.style.visibility='visible';
- if(mini){ed.style.left=(hr.width-28)+'px';ed.style.top='14px';return}  // zoomed in past the screen: small tabs on the right side
- ed.style.left=Math.round(right-hr.left-4)+'px';
- ed.style.top=Math.round(Math.max(14,Math.min(top-hr.top+40,hr.height-ed.offsetHeight-80)))+'px';
+ var mini=right+44>body.clientWidth;ed.classList.toggle('tbkmini',mini);ed.style.visibility='visible';
+ if(mini){if(ed.parentNode!==desk)desk.appendChild(ed);ed.style.left=(desk.clientWidth-28)+'px';ed.style.top='14px';return}
+ var st=pages.querySelector('.tbkstick');if(!st){st=document.createElement('div');st.className='tbkstick';pages.insertBefore(st,pages.firstChild)}
+ if(ed.parentNode!==st)st.appendChild(ed);
+ ed.style.left=Math.round(right-4)+'px';ed.style.top='64px';
+}
+// opening or closing the list: the page glides from where it was to its new size and place (measure, refit, then animate back)
+function tbkRefRect(){var b=document.getElementById('mkbody');if(!b)return null;var br=b.getBoundingClientRect(),best=null;
+ document.querySelectorAll('#tbkhost .mkpagewrap').forEach(function(w){if(best||!w.offsetParent)return;var r=w.getBoundingClientRect();if(r.bottom>br.top+20&&r.top<br.bottom-20&&r.width>20)best=w});
+ return best?{w:best,r:best.getBoundingClientRect()}:null}
+function tbkGlide(old){
+ if(!old||!tbkHosted())return tbkRefit(30);
+ mkRefitKeepingPlace();mkFloatRender();tbkPlaceTabs();
+ var body=document.getElementById('mkbody');if(!body||!document.contains(old.w))return;
+ var O=old.r,N=old.w.getBoundingClientRect();if(!N.width)return;
+ var s=O.width/N.width,dx=O.left-N.left,dy=O.top-N.top;if(Math.abs(dx)<1&&Math.abs(dy)<1&&Math.abs(s-1)<.005)return;
+ var kids=[].slice.call(body.children);
+ kids.forEach(function(k){var kr=k.getBoundingClientRect();k.style.transition='none';k.style.transformOrigin=(N.left-kr.left)+'px '+(N.top-kr.top)+'px';k.style.transform='translate('+dx+'px,'+dy+'px) scale('+s+')'});
+ void body.offsetWidth;
+ kids.forEach(function(k){k.style.transition='transform .38s cubic-bezier(.4,0,.2,1)';k.style.transform=''});
+ clearTimeout(tbkGlide.t);tbkGlide.t=setTimeout(function(){kids.forEach(function(k){k.style.transition='';k.style.transformOrigin=''})},420);
 }
 // the bits of the top bar and pill that follow the reader (page, zoom, mode, notes, bookmark)
 function tbkSync(){
@@ -26212,11 +26246,11 @@ async function tbkMount(){
  var r=mod&&tbkFile(mod.cid,mod.fid),want=mod&&r&&r.f.data?mod.fid:null;
  if(want&&TBK.mounted===want&&tbkHosted())return;
  // another module: the page fades out, the new one fades in
- if(tbkHosted()&&!TBK.faded){TBK.faded=true;TBK.mounting=true;host.classList.add('tbkfade');document.getElementById('tbkedge').classList.add('tbkfade');
+ if(tbkHosted()&&!TBK.faded){TBK.faded=true;TBK.mounting=true;host.classList.add('tbkfade');tbkEdge().classList.add('tbkfade');
   await new Promise(function(ok){setTimeout(ok,170)});if(!TBK)return;TBK.mounting=false;return tbkMount()}
  TBK.faded=false;
  var target=TBK.page;tbkUnmount();TBK.page=target;            // closing the old module must not change where the new one opens
- var unfade=function(){host.classList.remove('tbkfade');var e=document.getElementById('tbkedge');if(e)e.classList.remove('tbkfade')};
+ var unfade=function(){host.classList.remove('tbkfade');tbkEdge().classList.remove('tbkfade')};
  var msg=function(t,b,add){unfade();host.innerHTML='<div class="tbkmsg">'+(b?'<b>'+b+'</b>':'')+'<p>'+t+'</p>'+(add?'<button type="button" class="tbkaddm" data-tbk="pick">'+zI(ZIC.plus,14)+'<span>Add module 1</span></button>':'')+'</div>'};
  if(!mod){msg('Add your first module’s PDF and it shows here.','No modules yet',!!TBK.bid);return}
  if(!want){msg(r&&r.f.cloud?'This PDF is still downloading from your account. It opens here as soon as it arrives.':'This PDF isn’t saved on this device.');return}
@@ -26237,7 +26271,7 @@ async function tbkMount(){
   if(!TBK.cterms){TBK.cterms=[];if(MK.pageCount<=60)tbkTerms(MK.doc).then(function(t){if(TBK&&!TBK.bid&&t.length){TBK.cterms=t;tbkDraw()}},function(){})}}
  var row=document.querySelector('#tbkleft .tbkrow.on small');if(row)row.textContent=(now.item&&tbkNumOf(tbkModsNow(),TBK.mi)?'Module '+tbkNumOf(tbkModsNow(),TBK.mi)+' · ':'')+tbkPlural(MK.pageCount,'page')+(now.item&&tbkModDay(now.item)?' · '+tbkModDay(now.item):'');
  var sp=TBK.page?null:tbkStore('tbk-mpos',want);tbkMkGo(sp?sp.p:TBK.page||1,false,sp?sp.o:0);TBK.page=MK.curPage;
- var body=document.getElementById('mkbody');if(body){body.addEventListener('scroll',tbkOnScroll,{passive:true});body.addEventListener('scroll',tbkPlaceTabs,{passive:true})}
+ var body=document.getElementById('mkbody');if(body){body.addEventListener('scroll',tbkOnScroll,{passive:true});0}
  setTimeout(function(){tbkSync();tbkMarkSpans();tbkPlaceTabs();unfade()},60);
 }
 function tbkMkGo(n,smooth,off){
