@@ -6807,6 +6807,10 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  .q86fhead h2{flex:1 1 100%}
 }
 .q86rn .q86aopen{margin-left:10px;padding:1px 10px;font-size:12.5px}
+/* v256: Week / Month switch on the Calendar's due list */
+#k-week .kwbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#k-week .kwbar .cpseg button:disabled{opacity:.4;cursor:default}
+@media (max-width:700px){#k-week .kwbar{justify-content:flex-start;width:100%}}
 </style>
 </head>
 <body>
@@ -7116,7 +7120,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v255';
+var BUILD='v256';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10496,6 +10500,7 @@ function cpDueRow(x,highlight){
   +'<span class="c-cls"><span class="cpclspill" style="background:'+p.bg+';color:'+p.ink2+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(x.c))+'</span></span>'
   +'</div>';
 }
+function kwMode(){try{return localStorage.getItem('hub:kwmode')||'week'}catch(e){return 'week'}}
 function viewCalendar(){
  var col=cpVarRefs(['kcal','kweek']),real=cpSiteColors('calendar'),t=today();
  var base=view.calMonth?parseISO(view.calMonth+'-01'):new Date(t.getFullYear(),t.getMonth(),1);
@@ -10505,12 +10510,17 @@ function viewCalendar(){
  var M='<section class="cpsec" id="k-cal">'+cpHead('kcal',col.kcal,esc(label),inMonth.length?inMonth.length+' due':'',inMonth.length?(openM?openM+' still to do':'All done this month'):'Nothing due this month',
    '<div class="cpseg"><button data-mon="-1" aria-label="Previous month">‹ Previous</button><button data-mon="0">Today</button><button data-mon="1" aria-label="Next month">Next ›</button></div>')
   +'<div class="cpcalwrap">'+calendarTable()+'</div></section>';
- var end=new Date(t);end.setDate(t.getDate()+7);
- var wk=allTasks().filter(function(x){var d=parseISO(x.t.due);return d&&d>=t&&d<end&&!isRefClass(x.c)})
+ // v256: Week (the next seven days) or Month (the rest of this month, or any month with the arrows)
+ var kwM=kwMode()==='month',kwOff=view.kwOff||0,from=t,end=new Date(t);end.setDate(t.getDate()+7),kwTitle='Next seven days';
+ if(kwM){var m0=new Date(t.getFullYear(),t.getMonth()+kwOff,1);from=kwOff?m0:t;end=new Date(m0.getFullYear(),m0.getMonth()+1,1);
+  var mn=m0.toLocaleDateString('en-CA',{month:'long'})+(m0.getFullYear()!==t.getFullYear()?' '+m0.getFullYear():'');kwTitle=kwOff?mn:'Rest of '+mn}
+ var wk=allTasks().filter(function(x){var d=parseISO(x.t.due);return d&&d>=from&&d<end&&!isRefClass(x.c)})
   .sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:((a.t.time||'')<(b.t.time||'')?-1:1)});
  var openW=wk.filter(function(x){return !x.t.done}).length;
- var W='<section class="cpsec cphome" id="k-week">'+cpHead('kweek',col.kweek,'Next seven days',openW?openW+' to do':'',wk.length?'Tap a row to open its class':'Clear week ahead','');
- if(!wk.length)W+='<div class="cpempty">Nothing due in the next seven days.</div>';
+ var kwSeg='<div class="kwbar">'+(kwM?'<span class="cpseg kwnav"><button data-zact="kwn:-1" aria-label="Previous month"'+(kwOff<=0?' disabled':'')+'>‹</button><button data-zact="kwn:0"'+(kwOff?'':' disabled')+'>This month</button><button data-zact="kwn:1" aria-label="Next month">›</button></span>':'')
+  +'<span class="cpseg kwseg" role="group" aria-label="Show"><button class="'+(kwM?'':'on')+'" data-zact="kwm:week" aria-pressed="'+!kwM+'">Week</button><button class="'+(kwM?'on':'')+'" data-zact="kwm:month" aria-pressed="'+kwM+'">Month</button></span></div>';
+ var W='<section class="cpsec cphome" id="k-week">'+cpHead('kweek',col.kweek,esc(kwTitle),openW?openW+' to do':'',wk.length?'Tap a row to open its class':(kwM?'Clear month':'Clear week ahead'),kwSeg);
+ if(!wk.length)W+='<div class="cpempty">'+(kwM?'Nothing due '+(kwOff?'in '+esc(kwTitle):'for the rest of this month')+'.':'Nothing due in the next seven days.')+'</div>';
  else{
   var days={};wk.forEach(function(x){(days[x.t.due]=days[x.t.due]||[]).push(x)});
   W+='<div class="cpbody">'+Object.keys(days).sort().map(function(k){
@@ -26862,6 +26872,10 @@ function viewClass(c){
  return '<div class="q86" style="'+vars+'"><div class="q86top">'+tabs+q86TopRight(c)+'</div>'
   +'<div class="q86panel'+(tab==='overview'?' first':'')+'" role="tabpanel"'+(view.q86minH&&view.q86minH.cid===c.id&&view.q86minH.h?' style="min-height:'+view.q86minH.h+'px"':'')+'>'+ask+body+'</div></div>';
 }
+
+/* v256: Week / Month switch on the Calendar's due list (kwMode, viewCalendar) */
+ZACT.kwm=function(m){try{localStorage.setItem('hub:kwmode',m)}catch(e){}view.kwOff=0;render()};
+ZACT.kwn=function(n){n=+n;view.kwOff=n?Math.max(0,(view.kwOff||0)+n):0;render()};
 
 try{spBoot()}catch(e){}
 load();
