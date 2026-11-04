@@ -6410,21 +6410,21 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 #tbkhost #mk .mktop{display:none}
 #tbkhost #mk .mkpagewrap{box-shadow:0 2px 14px rgba(60,45,30,.12)}
 #tbkhost #mk .mkbody{padding-bottom:64px;box-sizing:border-box}
-/* the Markup bar: one thin cream strip (tools, sizes, then colours), folding away smoothly */
-#tbkhost #mk .mktools{display:flex;align-items:center;gap:8px;background:#E3D8CE;border-top:1px solid #D6C9BD;padding:6px 12px calc(env(safe-area-inset-bottom,0px) + 6px);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;max-height:72px;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .32s cubic-bezier(.4,0,.2,1),opacity .25s ease}
+/* the Markup bar: one thin white strip (tools, sizes, then colours), folding away smoothly; the tool you're on in cream */
+#tbkhost #mk .mktools{display:flex;align-items:center;gap:8px;background:#fff;border-top:1px solid #E4E0D7;padding:6px 12px calc(env(safe-area-inset-bottom,0px) + 6px);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;max-height:72px;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .32s cubic-bezier(.4,0,.2,1),opacity .25s ease}
 #tbkhost #mk .mktools::-webkit-scrollbar{display:none}
 #tbkr.tbk-tmin #mk .mktools{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-top-color:transparent}
 #tbkhost #mk .mktools .mkrow{padding:0;gap:6px;flex:none;overflow:visible}
 #tbkhost #mk .mktools .mkrow+.mkrow{margin:0;padding-left:10px;border-left:1px solid rgba(74,70,56,.16)}
-#tbkhost #mk .mktools .mkrow button{background:rgba(74,70,56,.07);color:#4A4638;min-width:36px;height:36px;border-radius:10px}
-#tbkhost #mk .mktools .mkrow button.on{background:#fff;color:#33312C;box-shadow:0 1px 3px rgba(60,45,30,.14)}
+#tbkhost #mk .mktools .mkrow button{background:transparent;color:#4A4638;min-width:36px;height:36px;border-radius:10px}
+#tbkhost #mk .mktools .mkrow button.on{background:#F1EFE9;color:#33312C;box-shadow:none}
 #tbkhost #mk .mktools .mkrow button svg{width:19px;height:19px}
 #tbkhost #mk .mktools .mksizebtn{width:36px;height:36px}
 #tbkhost #mk .mktools .mksep{height:22px;background:rgba(74,70,56,.18)}
 #tbkhost #mk .mktools .mkrow button.mkswatch,#tbkhost #mk .mktools .mkrow label.mkswatch{width:28px;height:28px;min-width:28px;max-width:28px;border-color:rgba(74,70,56,.16)}
-#tbkhost #mk .mkrow button.mkswatch.on,#tbkhost #mk .mkrow label.mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #E3D8CE,0 0 0 3.5px #8C6E5B}
+#tbkhost #mk .mkrow button.mkswatch.on,#tbkhost #mk .mkrow label.mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #8C6E5B}
 #tbkhost #mk .mktools .mkrow button.q75pal{color:#4A4638;height:32px;padding:0 10px 0 8px}
-#tbkhost #mk .mkswatch.mkcustom i{background:#E3D8CE;color:#4A4638}
+#tbkhost #mk .mkswatch.mkcustom i{background:#F1EFE9;color:#4A4638}
 #tbkhost #mk .mktxthint{color:#837D6D}
 /* the movable tool menu: white, the tool you're on in the same cream as a picked tab */
 #tbkhost #mk .mkfloat{background:#fff;border-color:#E4E0D7;box-shadow:0 6px 22px rgba(60,45,30,.14)}
@@ -6435,9 +6435,9 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 #tbkhost #mk .mkfloat button.tbkfc i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(74,70,56,.2)}
 #tbkhost #mk .tbkfpop{position:fixed;z-index:7;display:grid;grid-template-columns:repeat(4,30px);gap:8px;padding:10px;background:#fff;border:1px solid #E4E0D7;border-radius:14px;box-shadow:0 8px 24px rgba(60,45,30,.18)}
 #tbkhost #mk .tbkfpop .mkswatch{width:30px;height:30px;min-width:30px;max-width:30px;border-radius:50%;border:2px solid rgba(74,70,56,.16);padding:0;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center}
-#tbkhost #mk .tbkfpop .mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #E3D8CE,0 0 0 3.5px #8C6E5B}
+#tbkhost #mk .tbkfpop .mkswatch.on{border-color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #8C6E5B}
 #tbkhost #mk .tbkfpop .mkswatch input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer}
-#tbkhost #mk .tbkfpop .mkcustom i{position:absolute;inset:4px;border-radius:50%;background:#E3D8CE;display:flex;align-items:center;justify-content:center;font-style:normal;color:#4A4638}
+#tbkhost #mk .tbkfpop .mkcustom i{position:absolute;inset:4px;border-radius:50%;background:#F1EFE9;display:flex;align-items:center;justify-content:center;font-style:normal;color:#4A4638}
 .tbkbarb{display:none!important}
 .tbkpill.tbk-ed .tbkbarb{display:inline-flex!important}
 .tbkbarb svg{transition:transform .3s cubic-bezier(.4,0,.2,1)}
@@ -6490,6 +6490,13 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  .tbkright{width:100%}
  .tbkmore{width:26px;height:26px;top:5px;right:5px}
 }
+/* v253: the page and zoom pill sits at the top right, under the module pill */
+.tbkpill{left:auto;right:14px;bottom:auto;top:14px;transform:none;transition:none}
+.tbkpill.tbkpj{top:62px}
+@media (max-width:600px){.tbkpill{right:10px;top:10px}.tbkpill.tbkpj{top:56px}}
+/* the book's name never fades when it fits: the fade sits in its own spare space, and search gives way first */
+.tbkttl{padding-right:18px;flex:0 1 auto}
+.tbksrch{flex-shrink:4}
 /* v252: term bank folds, opens wide, and the term you're on */
 .tbkdict .tbkdh>svg{flex:none;color:#6B675F;transition:transform .25s ease}
 .tbkdict.tbkshut .tbkdh>svg{transform:rotate(-90deg)}
@@ -6818,7 +6825,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v252';
+var BUILD='v253';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26262,7 +26269,7 @@ function tbkSync(){
  document.querySelectorAll('#tbkhd [data-tbk^="mode:"]').forEach(function(b){var o=b.getAttribute('data-tbk')==='mode:'+TBK.mode;b.classList.toggle('on',o);b.setAttribute('aria-pressed',o)});
  var pill=document.getElementById('tbkpill'),tb=host&&document.getElementById('mktoolbar');  // the page pill sits above the Markup bar
  var edit=host&&MK.mode==='edit';el2=document.getElementById('tbkr');if(el2)el2.classList.toggle('tbk-tmin',!!TBK.barMin);
- if(pill){pill.classList.toggle('tbk-ed',!!edit);pill.style.bottom=edit&&tb&&!TBK.barMin?(tb.scrollHeight+12)+'px':''}
+ if(pill){pill.classList.toggle('tbk-ed',!!edit);pill.classList.toggle('tbkpj',!!tbkJumpHtml(M,!TBK.bid))}
  var vs=document.querySelector('#tbkhd .tbkvseg');if(vs)vs.classList.toggle('tbkoff',host&&MK.pageCount<2);
 }
 // Book view through the reader's own switch, without changing the remembered choice for class files
@@ -26301,7 +26308,7 @@ async function tbkMount(){
  if(now.item&&now.item.pages!==MK.pageCount){now.item.pages=MK.pageCount;touch(now.item);save()}
  if(!TBK.bid){TBK.cpages=MK.pageCount;if(!TBK.outline)tbkOutline(MK.doc);
   if(!TBK.cterms){TBK.cterms=[];if(MK.pageCount<=60)tbkTerms(MK.doc).then(function(t){if(TBK&&!TBK.bid&&t.length){TBK.cterms=t;tbkDraw()}},function(){})}}
- var row=document.querySelector('#tbkleft .tbkrow.on small');if(row)row.textContent=(now.item&&tbkNumOf(tbkModsNow(),TBK.mi)?'Module '+tbkNumOf(tbkModsNow(),TBK.mi)+' · ':'')+tbkPlural(MK.pageCount,'page')+(now.item&&tbkModDay(now.item)?' · '+tbkModDay(now.item):'');
+ var row=document.querySelector('#tbkleft .tbkrow.on small');if(row)row.textContent=tbkPlural(MK.pageCount,'page')+(now.item&&tbkModDay(now.item)?' · '+tbkModDay(now.item):'');
  var sp=TBK.page?null:tbkStore('tbk-mpos',want);tbkMkGo(sp?sp.p:TBK.page||1,false,sp?sp.o:0);TBK.page=MK.curPage;
  var body=document.getElementById('mkbody');if(body){body.addEventListener('scroll',tbkOnScroll,{passive:true});0}
  setTimeout(function(){tbkSync();tbkMarkSpans();tbkPlaceTabs();unfade()},60);
