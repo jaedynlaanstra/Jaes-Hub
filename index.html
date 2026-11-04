@@ -6631,10 +6631,16 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86 .cptp>summary::-webkit-details-marker{display:none}
 .q86 .cptp .cpdot{width:8px;height:8px;border-radius:50%;background:var(--q86a)!important}
 .q86 .cptp .cpcardtitle{font-size:14.5px!important;font-weight:400!important;flex:1;margin:0!important;color:var(--q86i1)!important}
-.q86 .cptp .tpchev{width:24px;height:24px;border-radius:50%;background:#fff;border:1px solid var(--q86line);display:inline-flex;align-items:center;justify-content:center;color:var(--q86i3);transition:transform .2s}
-.q86 .cptp .tpchev svg{width:12px;height:12px}
+.q86 .cptp .tpchev{width:24px;height:24px;border-radius:50%;background:#fff;border:1px solid var(--q86line);display:inline-flex;align-items:center;justify-content:center;color:var(--q86i3);transition:transform .2s;margin-left:auto;padding:0;flex-shrink:0;box-sizing:border-box}
+.q86 .cptp .tpchev svg{display:block;width:12px;height:12px;margin:0;transform:none}
+.q86 .cptp:not([open]) .tpchev{transform:none}
 .q86 .cptp[open] .tpchev{transform:rotate(180deg)}
-.q86 .cptp .cpcardbody{padding:0 20px 18px!important;display:flex;flex-direction:column;gap:10px}
+.q86 .cptp[open]>summary{border-bottom:0!important}
+.q86 .cptp .cpcardbody{padding:6px 20px 20px!important;display:flex;flex-direction:column;gap:12px}
+.q86 .cptp .tpmore>summary{list-style:none;display:flex;align-items:center;gap:6px}
+.q86 .cptp .tpmore>summary::-webkit-details-marker{display:none}
+.q86 .cptp .tpmore>summary::after{content:'';width:6px;height:6px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(-45deg);transition:transform .2s;margin-left:2px}
+.q86 .cptp .tpmore[open]>summary::after{transform:rotate(45deg)}
 .q86 .cptp select,.q86 .cptp input{background:#fff;border:1px solid var(--q86line);border-radius:10px;padding:8px 12px;font-size:14.5px;width:100%;color:var(--q86i1)}
 .q86 .cptp select{font-size:14px;color:var(--q86i2)}
 .q86 .cptp .tpf{display:flex;flex-direction:column;gap:4px;margin:0}
@@ -6653,7 +6659,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86seg{display:inline-flex;background:var(--q86tile);border-radius:10px;padding:3px}
 .q86seg button{background:transparent;border:0;border-radius:8px;padding:6px 14px;font-size:14px;color:var(--q86i3)!important;cursor:pointer;white-space:nowrap}
 .q86seg button.on{background:#fff;color:var(--q86i1)!important;box-shadow:0 1px 2px rgba(60,50,40,.08)}
-.q86tr{display:grid;grid-template-columns:36px minmax(0,1fr) 220px 90px 110px;align-items:center;padding:13px 4px;border-bottom:1px solid var(--q86hair2);gap:0;cursor:pointer;min-width:0}
+.q86tr{display:grid;grid-template-columns:36px minmax(0,1fr) 220px 90px 110px 34px;align-items:center;padding:13px 4px;border-bottom:1px solid var(--q86hair2);gap:0;cursor:pointer;min-width:0}
 .q86tr:hover .q86rn{color:var(--q86ink)}
 .q86th{font-size:12px;color:var(--q86i4);padding-top:0;cursor:default}
 .q86tn{min-width:0}
@@ -6691,6 +6697,10 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86dots{background:none;border:0;color:var(--q86i4);cursor:pointer;width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .q86dots:hover{background:var(--q86tile);color:var(--q86i1)}
 .q86dots svg{width:16px;height:16px}
+.q86 .q86adots{width:26px;height:26px;min-height:0;min-width:0;padding:0;margin-left:-4px;color:#BDB6AA}
+.q86next .q86adots{margin-left:0}
+.q86lrow .fi,.q86lrow .favtile,.q86lrow img{width:20px!important;height:20px!important;font-size:11px!important;border-radius:50%;object-fit:cover;flex-shrink:0}
+.q86lrow .q86bk{width:14px;height:19px}
 .q86dz{border:1.5px dashed var(--q86bl2);background:var(--q86blush);border-radius:14px;padding:36px 20px;text-align:center;margin-top:14px;display:flex;flex-direction:column;gap:4px}
 .q86dz b{font-weight:500}
 .q86dz span{font-size:13.5px;color:var(--q86i4)}
@@ -6767,12 +6777,12 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  .q86mods::-webkit-scrollbar{display:none}
  .q86ml{display:none}
  .q86mi{flex-shrink:0;max-width:220px;background:var(--q86soft);box-shadow:0 0 0 1px var(--q86hair)}
- .q86tr{grid-template-columns:36px minmax(0,1fr) 150px 70px 110px}
+ .q86tr{grid-template-columns:36px minmax(0,1fr) 150px 70px 110px 34px}
 }
 @media (max-width:760px){
  .q86panel{padding:20px 16px;margin-bottom:24px}
  .q86tab{padding:10px 14px;font-size:14px;gap:6px}
- .q86tr{grid-template-columns:36px minmax(0,1fr) auto}
+ .q86tr{grid-template-columns:36px minmax(0,1fr) auto 30px}
  .q86tr .q86cdue,.q86tr .q86cw{display:none}
  .q86th{display:none}
  .q86tn .q86tsub{display:block}
@@ -7106,7 +7116,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v254';
+var BUILD='v255';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -15020,7 +15030,7 @@ document.addEventListener('click',function(e){
 /* ---------- covers: classes and pages get the same look as Home (title inside the picture) ---------- */
 function pageCoverOverlay(c){
  var eb=c.kind?spaceById(pageSpace(c)).name:[c.code,c.day,c.room].filter(Boolean).join(' · ');
- var pins=c.kind?'':(c.links||[]).filter(function(l){return l.pinned}).map(function(l){
+ var pins=c.kind||view.page==='class'?'':(c.links||[]).filter(function(l){return l.pinned}).map(function(l){ // v255: class pages show pinned links beside the + instead
    return '<a class="h4pill" href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a>'}).join('');
  return '<div class="h4ov cpov"><div class="h4hi">'+(eb?'<p class="h4hello">'+esc(eb)+'</p>':'')+'<h1 class="h4day cpovt">'+esc(c.name)+'</h1></div>'+(pins?'<div class="h4pills">'+pins+'</div>':'')+'</div>';
 }
@@ -26565,6 +26575,7 @@ function q86Photo(ct,sz){
 }
 // the assignment's instructions file: PDFs open in the markup reader
 function q86AOpen(c,a){if(!a.fileId)return '';var h=fileById(c.id,a.fileId);if(!h)return '';return '<button class="q86open q86aopen" data-openasgfile="'+a.fileId+'" data-c="'+c.id+'" title="Open '+esc(h.f.name)+'">Open</button>'}
+function q86ADots(c,a){return '<button class="q86dots q86adots" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'" aria-label="Edit '+esc(a.title)+'" title="Edit">'+CP_ICO.more+'</button>'}
 function q86Chip(n){
  if(n==null)return '';
  if(n<0)return '<span class="q86chip late">Late</span>';
@@ -26596,8 +26607,8 @@ function q86TopRight(c){
    :'<a class="q86pill" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">'+ic+'<span class="q20fade">'+esc(bk.title||'Textbook')+'</span></a>';
  }
  q86PinList(c).forEach(function(p){h+=p.html});
- // without a cover photo the pinned links have nowhere else to show, so they sit here too
- if(!c.cover)(c.links||[]).forEach(function(l){if(l.pinned)h+='<a class="q86pill" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+linkIcon(l.url,l.title,l.icon)+'<span class="q20fade">'+esc(l.title)+'</span></a>'});
+ // pinned links sit here, beside the + (not on the cover photo)
+ (c.links||[]).forEach(function(l){if(l.pinned)h+='<a class="q86pill" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+linkIcon(l.url,l.title,l.icon)+'<span class="q20fade">'+esc(l.title)+'</span></a>'});
  h+='<span class="q86pinw"><button class="q86add'+(view.q86pin?' on':'')+'" data-zact="q86pin" aria-label="Pin something to the top" title="Pin a textbook, link or file">'+Q86PLUS+'</button>'+(view.q86pin?q86PinMenu(c):'')+'</span>';
  return '<div class="q86pins">'+h+'</div>';
 }
@@ -26631,7 +26642,11 @@ document.addEventListener('click',function(e){if(!view.q86pin||!e.target.closest
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&view.q86pin){view.q86pin=false;render()}});
 
 // ---- the tabs ----
-ZACT.q86tab=function(t){view.q86tab=view.q86tab||{};view.q86tab[view.classId]=t;view.q86pin=false;render()};
+ZACT.q86tab=function(t){view.q86tab=view.q86tab||{};view.q86tab[view.classId]=t;view.q86pin=false;
+ // a shorter tab would make the page shorter and pull you back up: the panel keeps just enough height to stay put
+ var se=document.scrollingElement||document.documentElement,top=se.scrollTop,p=document.querySelector('.q86panel');
+ view.q86minH=p&&top?{cid:view.classId,h:Math.max(0,Math.round(top+window.innerHeight-(se.scrollHeight-p.offsetHeight)))}:null;
+ render();se.scrollTop=top;setTimeout(function(){se.scrollTop=top},0)};
 ZACT.q86grp=function(k){var o=q86Shut();if(o[k])delete o[k];else o[k]=1;q86Set('hub:q86shut',JSON.stringify(o));render()};
 ZACT.q86seg=function(m){view.q86seg=m;render()};
 ZACT.q86mod=function(id){view.q86mod=view.q86mod||{};view.q86mod[view.classId]=id;view.q86fq='';render()};
@@ -26662,12 +26677,12 @@ function q86Overview(c,A){
     h+='<div class="q86next" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'"><div class="q86cnt">'+(cd.n===0?'<b class="tdy">Today</b>':'<b>'+cd.n+'</b><small>'+(cd.n===1?'day left':'days left')+'</small>')+'</div>'
      +'<div class="q86nb"><div class="q86nl">Next due · '+esc(q86Day(d,{weekday:'short',month:'short',day:'numeric'}))+(a.time?' · '+esc(fmtTime(a.time)):'')+'</div>'
      +'<div class="q86nt"><span class="q20fade">'+esc(a.title)+'</span></div><div class="q86nm">'+esc(q86Meta(c,a).replace(/^[^·]*· ?/,''))+stepChip(a)+'</div></div>'
-     +'<div class="q86nact">'+q86AOpen(c,a)+'<button class="q86done" data-tickasg="'+a.id+'" data-c="'+c.id+'">Mark done</button></div></div>';
+     +'<div class="q86nact">'+q86AOpen(c,a)+'<button class="q86done" data-tickasg="'+a.id+'" data-c="'+c.id+'">Mark done</button>'+q86ADots(c,a)+'</div></div>';
     return;
    }
    h+='<div class="q86row" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'"><button class="q86ck" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark '+esc(a.title)+' done"></button>'
     +'<div class="q86date">'+(d?'<small>'+esc(q86Day(d,{weekday:'short'}))+'</small><b>'+d.getDate()+'</b>':'<small>—</small>')+'</div>'
-    +'<div class="q86rt"><div class="q86rn"><span class="q20fade">'+esc(a.title)+'</span></div><small>'+esc(q86Meta(c,a))+stepChip(a)+'</small></div>'+q86AOpen(c,a)+q86Chip(cd.n)+'</div>';
+    +'<div class="q86rt"><div class="q86rn"><span class="q20fade">'+esc(a.title)+'</span></div><small>'+esc(q86Meta(c,a))+stepChip(a)+'</small></div>'+q86AOpen(c,a)+q86Chip(cd.n)+q86ADots(c,a)+'</div>';
   });
  });
  if(!open.length)h='<div class="q86empty">'+((c.assignments||[]).length?'All caught up. Finished work is under Assignments, Completed.':'Nothing here yet. Add assignments as they come in, with a due date and how much they’re worth.')
@@ -26691,7 +26706,8 @@ function q86Rail(c,A){
    +(bk.icon?'<img src="'+bk.icon+'" alt="">':'')+'<span class="q20fade">'+esc(bk.title||'Textbook')+'</span>'+Q86EXT+(bk.type==='file'?'</button>':'</a>'):'')
   +(c.links||[]).filter(function(l){return l.pinned}).map(function(l){return '<a class="q86ln" href="'+esc(l.url)+'" target="_blank" rel="noopener"><span class="q20fade">'+esc(l.title)+'</span>'+Q86EXT+'</a>'}).join('')
   +'</div></section>';
- h+='<div class="q86tpw">'+tpCard(c)+'</div>';
+ var tpo=q86Get('hub:q86tp','0')==='1',tpc=tpCard(c).replace(' open data-tptoggle="1"',' data-tptoggle="1"').replace(' data-tptoggle="1"',' data-q86tp="1"'+(tpo?' open':''));
+ h+='<div class="q86tpw">'+tpc+'</div>';
  return h+'</div></aside>';
 }
 function q86Assign(c){
@@ -26702,13 +26718,13 @@ function q86Assign(c){
   +'<button class="q86btn" data-add="assign" data-c="'+c.id+'">+ Add assignment</button></div>';
  if(mode==='open'){
   if(!open.length)return h+'<div class="q86empty">'+(done.length?'Nothing outstanding.':'Nothing here yet. Add assignments as they come in.')+'</div>';
-  h+='<div class="q86tbl"><div class="q86tr q86th"><span></span><span>Assignment</span><span class="q86cdue">Due</span><span class="q86cw">Worth</span><span class="q86ct">Time left</span></div>';
+  h+='<div class="q86tbl"><div class="q86tr q86th"><span></span><span>Assignment</span><span class="q86cdue">Due</span><span class="q86cw">Worth</span><span class="q86ct">Time left</span><span></span></div>';
   open.forEach(function(a){
    var cd=a.due?cpCountdown(a.due):{n:null};
    h+='<div class="q86tr" data-edit="assign" data-id="'+a.id+'" data-c="'+c.id+'"><span><button class="q86ck" data-tickasg="'+a.id+'" data-c="'+c.id+'" aria-label="Mark '+esc(a.title)+' done"></button></span>'
     +'<span class="q86tn"><span class="q86rn"><span class="q20fade">'+esc(a.title)+'</span>'+stepChip(a)+q86AOpen(c,a)+'</span><small class="q86tsub">'+esc(q86Meta(c,a))+'</small></span>'
     +'<span class="q86cdue">'+(a.due?esc(withTime(q86Day(parseISO(a.due),{weekday:'short',month:'short',day:'numeric'}),a.time)):'—')+'</span>'
-    +'<span class="q86cw">'+esc(q83Worth(c,a)||'—')+'</span><span class="q86ct">'+(cd.n==null?'':cd.n<0?'<span class="q86chip late">'+esc(cd.t)+'</span>':'<span class="q86chip'+(cd.n<=7?' hot':'')+'">'+(cd.n===0?'Today':cd.n===1?'Tomorrow':'In '+cd.n+' days')+'</span>')+'</span></div>';
+    +'<span class="q86cw">'+esc(q83Worth(c,a)||'—')+'</span><span class="q86ct">'+(cd.n==null?'':cd.n<0?'<span class="q86chip late">'+esc(cd.t)+'</span>':'<span class="q86chip'+(cd.n<=7?' hot':'')+'">'+(cd.n===0?'Today':cd.n===1?'Tomorrow':'In '+cd.n+' days')+'</span>')+'</span><span>'+q86ADots(c,a)+'</span></div>';
   });
   return h+'</div>';
  }
@@ -26812,10 +26828,10 @@ function q86Info(c){
   :'<span class="q86sub">No project linked</span><button class="q86pillb" data-edit="class" data-c="'+c.id+'">Add link</button>';
  var left='<div class="q86il0">'+top+row('Grade',gr)+row('Professor',pb)+row('Reference files',rb)+row('Claude project','<div class="q86cp">'+cp+'</div>',true)+'</div>';
  var bk=c.textbook,lk='<section class="q86card"><div class="q86ch"><span>Links</span><button class="q86link q86acc" data-add="link" data-c="'+c.id+'" data-sec="_">+ Add</button></div>'
-  +'<div class="q86lrow"><a class="q20fade" href="'+esc(c.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener">FanshaweOnline</a><button class="q86ed" data-edit="class" data-c="'+c.id+'" aria-label="Edit the FanshaweOnline link">'+Q86PEN+'</button></div>'
-  +(bk?'<div class="q86lrow">'+(bk.type==='file'?'<button class="q86lb" data-openbook="'+c.id+'">':'<a class="q86lb" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">')+(bk.icon?'<img src="'+bk.icon+'" alt="">':'')+'<span class="q20fade">'+esc(bk.title||'Textbook')+'</span>'+(bk.type==='file'?'</button>':'</a>')+'<button class="q86ed" data-add="book" data-c="'+c.id+'" aria-label="Edit the textbook">'+Q86PEN+'</button></div>':'')
-  +(c.links||[]).map(function(l,i){return l.section&&(c.sections||[]).some(function(s){return s.id===l.section})?'':'<div class="q86lrow"><a class="q20fade" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a><button class="q86ed" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="Edit '+esc(l.title)+'">'+Q86PEN+'</button></div>'}).join('')+'</section>';
- var tp=tpCard(c).replace('<details class="cpcard cptp" id="c-title"','<details open class="cpcard cptp q86tpopen" id="c-title"');
+  +'<div class="q86lrow">'+linkIcon(c.fol||'https://www.fanshaweonline.ca/d2l/home','FanshaweOnline')+'<a class="q20fade" href="'+esc(c.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener">FanshaweOnline</a><button class="q86ed" data-edit="class" data-c="'+c.id+'" aria-label="Edit the FanshaweOnline link">'+Q86PEN+'</button></div>'
+  +(bk?'<div class="q86lrow">'+(bk.type==='file'?'<button class="q86lb" data-openbook="'+c.id+'">':'<a class="q86lb" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">')+(bk.icon?'<img src="'+bk.icon+'" alt="">':'<span class="q86bk" style="background:'+q72Mix(palHex(c.color),'#3B2F27',.66)+'"></span>')+'<span class="q20fade">'+esc(bk.title||'Textbook')+'</span>'+(bk.type==='file'?'</button>':'</a>')+'<button class="q86ed" data-add="book" data-c="'+c.id+'" aria-label="Edit the textbook">'+Q86PEN+'</button></div>':'')
+  +(c.links||[]).map(function(l,i){return l.section&&(c.sections||[]).some(function(s){return s.id===l.section})?'':'<div class="q86lrow">'+linkIcon(l.url,l.title,l.icon)+'<a class="q20fade" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a><button class="q86ed" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="Edit '+esc(l.title)+'">'+Q86PEN+'</button></div>'}).join('')+'</section>';
+ var tp=tpCard(c).replace(' open data-tptoggle="1"','').replace(' data-tptoggle="1"','').replace('<details class="cpcard cptp" id="c-title"','<details open class="cpcard cptp q86tpopen" id="c-title"');
  var setOn=view.q86set===c.id;
  var st='<section class="q86card q86set'+(setOn?' on':'')+'"><button class="q86setb" data-zact="q86set:'+c.id+'" aria-expanded="'+setOn+'"><span>Class settings</span><span class="q86tog">'+Q86CHEV+'</span></button>'
   +(setOn?'<div class="q86setl"><button data-edit="class" data-c="'+c.id+'">Edit class</button><button data-secopen="1">Colours</button><button data-xact="shareclass:'+c.id+'">Share this class</button>'
@@ -26824,6 +26840,7 @@ function q86Info(c){
    +'<button class="q86del" data-delclass="'+c.id+'">Delete class</button></div>':'')+'</section>';
  return '<div class="q86info">'+left+'<div class="q86ir">'+lk+tp+st+'</div></div>';
 }
+document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.getAttribute&&d.getAttribute('data-q86tp'))q86Set('hub:q86tp',d.open?'1':'0')},true);
 ZACT.q86set=function(cid){view.q86set=view.q86set===cid?null:cid;render()};
 
 function viewClass(c){
@@ -26843,7 +26860,7 @@ function viewClass(c){
  var body=tab==='assign'?q86Assign(c):tab==='files'?q86Files(c):tab==='info'?q86Info(c):q86Overview(c,A);
  var vars='--q86a:'+A.a+';--q86ah:'+A.hover+';--q86ink:'+A.ink+';--q86blush:'+A.blush+';--q86bl:'+A.line+';--q86bl2:'+A.line2;
  return '<div class="q86" style="'+vars+'"><div class="q86top">'+tabs+q86TopRight(c)+'</div>'
-  +'<div class="q86panel'+(tab==='overview'?' first':'')+'" role="tabpanel">'+ask+body+'</div></div>';
+  +'<div class="q86panel'+(tab==='overview'?' first':'')+'" role="tabpanel"'+(view.q86minH&&view.q86minH.cid===c.id&&view.q86minH.h?' style="min-height:'+view.q86minH.h+'px"':'')+'>'+ask+body+'</div></div>';
 }
 
 try{spBoot()}catch(e){}
