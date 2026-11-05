@@ -6854,6 +6854,13 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .wdglance{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
 /* Plan my week: every week row is the same height */
 .q58grid{grid-auto-rows:1fr}
+/* v264 (q92): covers get a soft blur behind the heading, strongest at the bottom, so the title reads on busy photos */
+.coverwrap.hasov .h4ov::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to top,#000 30%,transparent);mask-image:linear-gradient(to top,#000 30%,transparent)}
+/* v264: class page Next due card a touch darker */
+.q86next{background:color-mix(in srgb,var(--q86a) 9%,var(--q86blush));border-color:color-mix(in srgb,var(--q86a) 14%,var(--q86bl))}
+/* v264: module tiles in Files & links show the module's colour; Edit sits beside Add */
+.q86mt.q92c{background:color-mix(in srgb,var(--q92c) 55%,#fff);color:color-mix(in srgb,var(--q92c) 35%,#222)}
+.q92acts{display:flex;align-items:center;gap:8px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -7163,7 +7170,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v263';
+var BUILD='v264';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -20339,7 +20346,7 @@ q43Steps=function(){
   {s:'.side [data-go="calendar"]',menu:1,t:'Calendar',p:'Events, birthdays and everything that’s due, in one place. Tap + Add event to put something on it.'},
   {s:'.side [data-go="plan"]',menu:1,t:'Plan my week',p:'Pick which day you’ll work on each thing. Plan it for me can do it for you.'},
   {s:'.side [data-go="professors"]',menu:1,t:'People',p:'Your professors and classmates, with their email and phone.'},
-  {s:'.side .q19lab',menu:1,t:school?'Your classes':'Your pages',p:school?'Each class has its own page for assignments, files and links. Open a PDF in a class to highlight it and write on it.':'To-do lists, budget, meal prep and more. Tap one to open it. Tap the word Pages to fold the list away.'},
+  {s:school?'.side .q19lab~.q19lab':'.side .q19lab',menu:1,t:school?'Your classes':'Your pages',p:school?'Each class has its own page for assignments, files and links. Open a PDF in a class to highlight it and write on it.':'To-do lists, budget, meal prep and more. Tap one to open it. Tap the word Pages to fold the list away.'},
   {s:school?'.side [data-add="class"]':'.side [data-znew]',menu:1,t:school?'Add a class':'Add a page',p:school?'Add each of your classes here.':'Add another page here: to-do list, budget, shopping list, meal prep, habit tracker and more.'},
   {s:'.side [data-opencolours]',menu:1,t:'Look and feel',p:'Colours, card style, cover pictures and the order of your '+(school?'classes':'pages')+'. The paint button in the corner opens the same thing.'},
   {s:'.side [data-add="settings"]',menu:1,t:'Settings',p:'Your account and syncing. Everything syncs between your devices on its own; if a photo doesn’t show up on another device, Sync pictures in here fixes it.'},
@@ -22048,7 +22055,10 @@ sidebar=function(c){
  // v246: Textbooks sits under Notes; the first tap makes the page
  if(!tbkPage(false))items+='<div class="sitem sico" data-zact="tbkgo" role="button" tabindex="0"><span class="sic pg" style="--pgc:'+defPal(PAGE_PAL.textbooks).bar+'">'+zI(ZIC.book,15)+'</span><span class="nm2">Textbooks</span></div>';
  var i=h.indexOf('<p class="slabel">Classes</p>');if(i<0)return h;
- return h.slice(0,i)+items+h.slice(i);
+ h=h.slice(0,i)+items+h.slice(i);
+ // v264: a "Pages" heading under Home folds Calendar to Textbooks away (q19Side); Home always stays
+ var j=h.indexOf('data-go="calendar"');j=j<0?-1:h.lastIndexOf('<div',j);
+ return j<0?h:h.slice(0,j)+'<p class="slabel">Pages</p>'+h.slice(j);
 };
 
 /* ---------- the Notes widget on Home (every space): newest notes with their paper, and New note ---------- */
@@ -26827,7 +26837,7 @@ function q86Assign(c){
 function q86Groups(c){
  var files=FILES[c.id]||[],links=c.links||[],secs=cpSections(c),ids={};secs.forEach(function(s){ids[s.id]=1});
  var inS=function(x,sid){return ((x.section&&ids[x.section])?x.section:'')===sid};
- var out=secs.map(function(s){return {id:s.id,name:s.name,F:files.map(function(f,i){return {f:f,i:i}}).filter(function(x){return inS(x.f,s.id)}),L:links.map(function(l,i){return {l:l,i:i}}).filter(function(x){return inS(x.l,s.id)})}});
+ var out=secs.map(function(s){return {id:s.id,name:s.name,color:s.color,F:files.map(function(f,i){return {f:f,i:i}}).filter(function(x){return inS(x.f,s.id)}),L:links.map(function(l,i){return {l:l,i:i}}).filter(function(x){return inS(x.l,s.id)})}});
  out.unsorted={id:'_',name:'Unsorted',F:files.map(function(f,i){return {f:f,i:i}}).filter(function(x){return inS(x.f,'')}),L:[]};
  out.links={id:'links',name:'Class links',F:[],L:links.map(function(l,i){return {l:l,i:i}}).filter(function(x){return inS(x.l,'')})};
  return out;
@@ -26857,7 +26867,8 @@ function q86FilesRight(c){
  if(!g)g=G.filter(function(x){return x.id===cur})[0]||G[0]||(G.unsorted.F.length||!G.links.L.length?G.unsorted:G.links);
  var isL=g.id==='links',n=g.F.length+g.L.length,sec=g.id==='_'||isL?'':g.id;
  var h='<div class="q86fhead"><h2><span class="q20fade">'+esc(g.id==='_'&&!G.length?'Files':g.name)+'</span>'+(g.id===cur&&cur?'<span class="q86wk">This week</span>':'')+'</h2>'
-  +(isL?'<button class="q86btn" data-add="link" data-c="'+c.id+'" data-sec="_">+ Add link</button>':'<button class="q86btn" data-zact="q59fadd:'+c.id+':'+sec+'">+ Add file or link</button>')+'</div>';
+  +'<span class="q92acts">'+(sec?'<button class="q86pillb" data-sheet="chap" data-i="'+(c.sections||[]).map(function(s){return s.id}).indexOf(sec)+'" data-c="'+c.id+'" aria-label="Rename, move, colour or remove '+esc(g.name)+'">Edit</button>':'')
+  +(isL?'<button class="q86btn" data-add="link" data-c="'+c.id+'" data-sec="_">+ Add link</button>':'<button class="q86btn" data-zact="q59fadd:'+c.id+':'+sec+'">+ Add file or link</button>')+'</span></div>';
  var drop=' data-q86drop="'+c.id+'~'+sec+'"';
  if(!n)return h+(isL?'<p class="q86none">No class links yet.</p>':'<div class="q86dz"'+drop+'><b>No files yet</b><span>Drop slides here, or paste a link</span></div>');
  h+=g.F.map(function(x){return q86FileRow(c,x)}).join('')+g.L.map(function(x){return q86LinkRow(c,x)}).join('');
@@ -26867,11 +26878,11 @@ function q86FilesRight(c){
 function q86Files(c){
  var G=q86Groups(c),cur=q86CurMod(c),sel=(view.q86mod||{})[c.id];
  var selId=sel&&(sel==='links'||sel==='_'||G.some(function(x){return x.id===sel}))?sel:(cur||(G[0]&&G[0].id)||(G.unsorted.F.length||!G.links.L.length?'_':'links'));
- var item=function(id,tile,name,n,hot){return '<button class="q86mi'+(selId===id?' on':'')+'" data-zact="q86mod:'+id+'"><span class="q86mt'+(hot?' hot':'')+'">'+tile+'</span><span class="q86mn q20fade">'+esc(name)+'</span><span class="q86mc">'+n+'</span></button>'};
+ var item=function(id,tile,name,n,hot,col){return '<button class="q86mi'+(selId===id?' on':'')+'" data-zact="q86mod:'+id+'"><span class="q86mt'+(col?' q92c" style="--q92c:'+esc(q81Hex(col)):hot?' hot':'')+'">'+tile+'</span><span class="q86mn q20fade">'+esc(name)+'</span><span class="q86mc">'+n+'</span></button>'};
  var L='<div class="q86fl"><label class="q86fs">'+Q86SRCH+'<input id="q86fs" type="search" placeholder="Search files and links" value="'+esc(view.q86fq||'')+'" autocomplete="off"></label><div class="q86mods">'
   +item('links','↗','Class links',G.links.L.length);
  if(G.length)L+='<div class="q86ml">Modules</div>';
- G.forEach(function(g,k){var m=/^(?:chapter|ch\.?|week|wk|module|mod|unit)\s*(\d+)/i.exec(g.name);L+=item(g.id,m?m[1]:String(k+1),g.name,g.F.length+g.L.length,g.id===cur)});
+ G.forEach(function(g,k){var m=/^(?:chapter|ch\.?|week|wk|module|mod|unit)\s*(\d+)/i.exec(g.name);L+=item(g.id,m?m[1]:String(k+1),g.name,g.F.length+g.L.length,g.id===cur,g.color)});
  if(G.unsorted.F.length||!G.length)L+=item('_','—',G.length?'Unsorted':'Files',G.unsorted.F.length);
  L+='</div><button class="q86link q86newmod" data-add="section" data-c="'+c.id+'">+ New module</button></div>';
  if(!sel){view.q86mod=view.q86mod||{};view.q86mod[c.id]=selId}
