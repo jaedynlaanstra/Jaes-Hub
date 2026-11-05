@@ -6854,13 +6854,18 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .wdglance{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
 /* Plan my week: every week row is the same height */
 .q58grid{grid-auto-rows:1fr}
-/* v264 (q92): covers get a soft blur behind the heading, strongest at the bottom, so the title reads on busy photos */
-.coverwrap.hasov .h4ov::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to top,#000 30%,transparent);mask-image:linear-gradient(to top,#000 30%,transparent)}
+/* v266 (q93): covers get a soft blur behind the heading: a blurred copy of the photo, faded in over the bottom half (no backdrop-filter, which drew a hard line and cost speed) */
+.coverwrap.hasov .q93cvb{position:absolute;inset:-20px;width:calc(100% + 40px);height:calc(100% + 40px);z-index:1;pointer-events:none;filter:blur(9px);-webkit-mask-image:linear-gradient(to top,#000 0,rgba(0,0,0,.85) 14%,rgba(0,0,0,.45) 30%,rgba(0,0,0,.15) 42%,transparent 52%);mask-image:linear-gradient(to top,#000 0,rgba(0,0,0,.85) 14%,rgba(0,0,0,.45) 30%,rgba(0,0,0,.15) 42%,transparent 52%)}
+.main.enter .coverwrap.hasov .q93cvb{animation:q93in .8s ease both}
+@keyframes q93in{from{opacity:0}to{opacity:1}}
 /* v264: class page Next due card a touch darker */
 .q86next{background:color-mix(in srgb,var(--q86a) 9%,var(--q86blush));border-color:color-mix(in srgb,var(--q86a) 14%,var(--q86bl))}
 /* v264: module tiles in Files & links show the module's colour; Edit sits beside Add */
 .q86mt.q92c{background:color-mix(in srgb,var(--q92c) 55%,#fff);color:color-mix(in srgb,var(--q92c) 35%,#222)}
 .q92acts{display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* v265: Class info's class time pill sits further left, so its words line up with "Class time" and the room line */
+.q86it1 .q86when{margin-left:-18px}
+@media (max-width:760px){.q86it1 .q86when{margin-left:-10px;margin-right:-10px}}
 </style>
 </head>
 <body>
@@ -7170,7 +7175,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v264';
+var BUILD='v266';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -9448,6 +9453,7 @@ function coverBlock(c,overlay){
  var h='<div class="coverwrap'+(on?' repos':'')+(ov?' hasov':'')+'"'+(on?' data-repos="'+key+'"':'')+' style="'+(ov?'--cvh:'+hgt+'px':'height:'+hgt+'px')+'">'
   +(fit?'<img class="coverblur" src="'+cv+'" alt="">':'')
   +'<img class="pagecover" src="'+cv+'" style="object-fit:'+(fit?'contain':'cover')+';object-position:50% '+pos+'%;transform:scale('+(z/100)+')" alt="">'
+  +(ov?'<img class="q93cvb" src="'+cv+'" style="object-fit:'+(fit?'contain':'cover')+';object-position:50% '+pos+'%" alt="" aria-hidden="true">':'')
   +(on?'<span class="coverhint">'+(fit?'Showing the whole picture':'Drag the picture up or down')+'</span>':'')
   +(on?'':(overlay||'')+'<button class="coveredit" data-coversheet="'+(c?c.id:(view.page==='home'?homeOwnerId():pageCoverId()))+'" aria-label="Change the cover picture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.2L15.8 5a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Edit cover</span></button>')
   +'</div>';
