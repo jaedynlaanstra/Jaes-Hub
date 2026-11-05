@@ -84,7 +84,8 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .sitem{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:14px;color:var(--sideInk,#C6C0B4);cursor:pointer;line-height:1.35}
 .sitem:hover{background:rgba(255,255,255,.07);color:var(--sideBright,#FFFDF8)}
 .sitem.on{background:rgba(255,255,255,.11);color:var(--sideBright,#FFFDF8)}
-.sitem .nm2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sitem .nm2{overflow:hidden;white-space:nowrap;min-width:0}
+.sitem .nm2.over{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 22px),transparent)}
 .pickpanel,.modal,.appgrid,.tbl{scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.14) transparent}
 .pickpanel::-webkit-scrollbar,.modal::-webkit-scrollbar{width:7px}
 .pickpanel::-webkit-scrollbar-track,.modal::-webkit-scrollbar-track{background:transparent}
@@ -226,46 +227,6 @@ input::placeholder,textarea::placeholder{color:var(--ink3)}
 .coverbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 40px;background:#F6F4F0;border-bottom:1px solid var(--line)}
 .coverbar input[type=range]{width:170px}
 .coverbar .lbl2{font-size:12.5px;color:var(--ink2)}
-@media(max-width:700px){
-  .body{padding:18px 16px 70px}
-  .banner{padding-left:16px!important;padding-right:16px!important}
-  .banner{padding-top:calc(env(safe-area-inset-top,0px) + 18px)}
-  .banner.sz-large{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}
-  .banner.sz-hidden{padding-top:env(safe-area-inset-top,0px)}
-  .hero{flex-direction:column;align-items:stretch;gap:14px}
-  .hero .day{font-size:28px}
-  .wx{min-width:0;width:100%}
-  .stats{grid-template-columns:1fr}
-  .cards,.classcards,.appgrid{grid-template-columns:1fr 1fr}
-  .classcards{grid-template-columns:1fr}
-  .cards{grid-template-columns:1fr}
-  .two,.two2,.split{grid-template-columns:1fr!important}
-  .rail{position:static;flex-direction:column}
-  .rowhead{flex-wrap:wrap}
-  .tick{width:22px;height:22px}
-  .x{padding:8px 10px;font-size:18px}
-  button,.fakebtn{min-height:38px}
-  button.ghost{min-height:34px}
-  .item{padding:9px 0}
-  .tbl thead{display:none}
-  .tbl,.tbl tbody{display:block}
-  .tbl tr{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;padding:11px 0;border-bottom:1px solid var(--line)}
-  .tbl td{border:none;padding:0}
-  .tbl td:nth-child(1){order:0}
-  .tbl td:nth-child(2){flex:1 1 60%;order:1}
-  .tbl td:nth-child(3),.tbl td:nth-child(4),.tbl td:nth-child(5),.tbl td:nth-child(6){order:2;font-size:12.5px;color:var(--ink2)}
-  .tbl td:nth-child(3){margin-left:32px}
-  .modalbg{align-items:flex-end;padding:0}
-  .modal{max-width:none;width:100%;border-radius:18px 18px 0 0;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
-  .pickpanel{left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;height:var(--pkh,46vh);max-height:none;border-radius:18px 18px 0 0;padding-top:8px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
-  .pickbtn{right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
-  .coverwrap{max-height:190px}
-  .pencil{width:30px;height:30px}
-  .search input{font-size:16px}
-  input,select,textarea{font-size:16px}
-  .quick{gap:8px}
-  .qlink{padding:9px 12px;font-size:14px}
-}
 @media(max-width:720px){.coverwrap{height:170px}.coverbar{padding:12px 18px}}
 .classcard{display:flex!important;flex-direction:column;justify-content:flex-start;align-items:stretch;border:1px solid var(--line);border-radius:14px;padding:20px 22px;overflow:hidden;cursor:pointer;background:var(--card);text-align:left;display:block;width:100%;min-height:132px}
 .classcard:hover{background:#FAF8F5;border-color:var(--line2)}
@@ -295,7 +256,7 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .asg summary::marker{content:''}
 .asgbody{padding:0 15px 14px 43px;font-size:13.5px;color:var(--ink2);white-space:pre-wrap}
 .snip{font-size:12px;color:var(--ink2);background:#F7F5F0;border-radius:7px;padding:7px 10px;margin:0 0 8px 29px}
-.lab2{font-size:11px;color:var(--ink3);letter-spacing:.05em;text-transform:uppercase;margin:14px 0 4px;display:flex;align-items:center}
+.lab2{font-size:11px;color:var(--ink3);letter-spacing:.01em;margin:14px 0 4px;display:flex;align-items:center}
 .asgbody .acts2{display:flex;gap:7px;margin-top:11px}
 .late{color:#A34A3F}
 .more summary{list-style:none;cursor:pointer;font-size:13px;color:var(--ink2);padding:10px 0 2px}
@@ -1371,8 +1332,8 @@ a.cpitemname:hover{text-decoration:underline}
 .hcal{background:color-mix(in srgb,var(--sideBg) 12%,var(--card));border-radius:16px;padding:16px 16px 14px;color:color-mix(in srgb,var(--sideBg) 75%,#000);cursor:pointer}
 .hcal .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .hcal .top svg{width:26px;height:26px;flex:none;opacity:.85}
-.hcal .top b{display:block;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:1.2}
-.hcal .top span{display:block;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;opacity:.8}
+.hcal .top b{display:block;font-size:13px;font-weight:600;letter-spacing:.01em;line-height:1.2}
+.hcal .top span{display:block;font-size:12.5px;letter-spacing:.01em;opacity:.8}
 .hcal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-variant-numeric:tabular-nums}
 .hcal .g .h{font-size:12px;font-weight:600;padding-bottom:4px;color:var(--ink)}
 .hcal .g .d{position:relative;font-size:13px;color:var(--ink);height:30px;display:grid;place-items:center;border-radius:50%}
@@ -3002,7 +2963,7 @@ input[type=date],input[type=time]{min-width:0;max-width:100%;box-sizing:border-b
 .zpdue{font-size:12px;color:var(--ink3);white-space:nowrap}
 .zpdue.hot{color:#97724F;font-weight:500}
 .zpdue.late{color:#9c4a41;font-weight:500}
-.zplmv{flex:none;width:36px;height:36px;border-radius:50%;border:none;background:var(--card);color:var(--ink2);display:grid;place-items:center;cursor:pointer;min-height:0!important;box-shadow:0 0 0 1px var(--line);transition:background .2s,color .2s}
+.zplmv{flex:none;width:36px;height:36px;padding:0!important;border-radius:50%;border:none;background:var(--card);color:var(--ink2);display:grid;place-items:center;cursor:pointer;min-height:0!important;box-shadow:0 0 0 1px var(--line);transition:background .2s,color .2s}
 .zpl.open .zplmv{background:var(--cp-kplan-c);color:var(--cp-kplan-on);box-shadow:none}
 .zplpick{margin-top:10px;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--line);animation:zin .25s ease}
 .zplpick>p{margin:0 0 2px;font-size:12.5px;color:var(--ink3)}
@@ -5039,7 +5000,7 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .q59list,.q59files{padding:0!important;margin:0!important}
 .q59gh{display:flex;align-items:center;gap:6px;padding:10px 18px;background:color-mix(in srgb,var(--paper) 75%,var(--card));border-top:1px solid var(--line);border-bottom:1px solid var(--line);cursor:pointer;user-select:none;min-height:42px}
 .q59list>.q59gh:first-child,.q59files>.q59gh:first-child,.q59files>.q59srch+.q59gh{border-top:none}
-.q59gn{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.q59gn{font-size:12.5px;font-weight:600;letter-spacing:.01em;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .q59gh em{font-style:normal;font-size:12.5px;color:var(--ink3);flex:none}
 /* v240: a chapter band can have its own colour, picked in its 3-dots sheet (q81) */
 .q59gh.q81col{background:color-mix(in srgb,var(--q81c) 30%,var(--card));border-color:color-mix(in srgb,var(--q81c) 40%,var(--line))}
@@ -6537,6 +6498,49 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  .tbktop .tbksrch{order:5;flex:1 1 170px;min-width:0}
  .tbktop .tbkseg{order:6}
 }
+/* v260: reader top bar (q88) -- name on the left, page and zoom in the centre, tools on the right */
+.tbktop{flex-wrap:nowrap;gap:12px}
+.tbkhl{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:10px}
+.tbkhc{flex:none;display:flex;justify-content:center}
+.tbkhr{flex:1 1 0;min-width:max-content;display:flex;align-items:center;justify-content:flex-end;gap:10px}
+.tbkhr1,.tbkhm{display:flex;align-items:center;gap:8px}
+.tbktop .tbkttl{flex:0 1 auto;min-width:0}
+.tbktop .tbkpill{position:static;transform:none;box-shadow:none;border-color:#E4E0D7;padding:2px;left:auto;right:auto;top:auto;bottom:auto}
+.tbktop .tbkpill button{height:30px}
+.tbkback{background:#fff;border:1px solid #D4CFC4;border-radius:999px;height:36px;padding:0 13px 0 8px;gap:4px;color:#33312C!important;font-size:13.5px;max-width:190px}
+.tbkback span{white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 12px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 12px),transparent);padding-right:4px}
+.tbkback:hover{background:#F6F3EE}
+.tbksave{font-size:12.5px;color:#A29D93;white-space:nowrap;flex:none}
+.tbksave:empty{display:none}
+.tbktop .tbksrch{flex:none;width:250px;min-width:0;animation:q88in .22s cubic-bezier(.4,0,.2,1)}
+@keyframes q88in{from{width:36px;opacity:.4}to{width:250px;opacity:1}}
+.tbksx{font-size:19px!important;line-height:1;color:#837D6D!important;padding:0 2px!important}
+@media (max-width:1280px){#tbknotes span{display:none}#tbknotes{padding:0 11px}}
+/* tablets and small laptops: name and tools on the first row, page and zoom centred under them */
+@media (max-width:1279px){
+ .tbktop{flex-wrap:wrap;row-gap:10px}
+ .tbkhl{order:1}
+ .tbkhr{order:2;flex:0 0 auto;min-width:0}
+ .tbkhc{order:3;flex:1 0 100%}
+ .tbktop .tbksrch{width:200px}
+ @keyframes q88in{from{width:36px;opacity:.4}to{width:200px;opacity:1}}
+}
+/* phones: back, name and tools first; then the page and Markup/Reading. Search opens over the first row */
+@media (max-width:600px){
+ .tbkhr{display:contents}
+ .tbkhl{flex:1 1 150px}
+ .tbkhr1{order:2}
+ .tbkhc{order:3;flex:0 1 auto;min-width:0;justify-content:flex-start}
+ .tbktop .tbkpill span{padding:0 2px;font-size:12.5px}
+ .tbktop .tbkpill button{min-width:30px;padding:0 6px}
+ .tbkhm{margin-left:auto}
+ .tbkhm{order:4}
+ .tbktop .tbkpz{display:none}
+ .tbkback{width:36px;padding:0;justify-content:center;flex:none}
+ .tbkback span{display:none}
+ .tbktop .tbksrch{position:absolute;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));width:auto;z-index:8;box-shadow:0 4px 14px rgba(60,45,30,.12);animation:none}
+ .tbktop .tbkhl .tbkdiv{display:none}
+}
 /* v254: class page redesign (q86): folder tabs joined to one white panel */
 .q86{--q86line:#E4E0D7;--q86hair:#EEEAE3;--q86hair2:#F0ECE5;--q86i1:#33312C;--q86i2:#6B675F;--q86i3:#8A8478;--q86i4:#A29D93;--q86chip:#EFE9E4;--q86tile:#F1EDE7;--q86soft:#FAF8F5;color:var(--q86i1);font-size:15px;line-height:1.5}
 :where(.q86) button{font-family:inherit;color:inherit;font-size:inherit;box-shadow:none;transform:none}
@@ -6588,7 +6592,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86ov{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:start}
 .q86h2row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px}
 .q86gh{display:flex;align-items:center;gap:10px;width:100%;margin-top:14px;padding:4px 4px 8px;background:none;border:0;cursor:pointer;text-align:left}
-.q86gl{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--q86i4);white-space:nowrap}
+.q86gl{font-size:11.5px;letter-spacing:.01em;color:var(--q86i4);white-space:nowrap}
 .q86gc{font-size:12px;background:var(--q86tile);color:var(--q86i3);border-radius:999px;padding:0 8px}
 .q86gs{font-size:12.5px;color:var(--q86i4);white-space:nowrap}
 .q86gline{flex:1;height:1px;background:var(--q86hair);min-width:10px}
@@ -6599,7 +6603,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86 .q86ck{min-height:0;min-width:0;width:22px;height:22px;border-radius:50%;border:1.5px solid #CFC8BD;background:#fff;cursor:pointer;flex-shrink:0;padding:0}
 .q86ck:hover{border-color:var(--q86a);background:var(--q86blush)}
 .q86date{width:42px;text-align:center;flex-shrink:0;line-height:1.1}
-.q86date small{display:block;font-size:11px;text-transform:uppercase;color:var(--q86i4);letter-spacing:.04em}
+.q86date small{display:block;font-size:11px;color:var(--q86i4);letter-spacing:.04em}
 .q86date b{display:block;font-size:20px;font-weight:400;line-height:1.05}
 .q86rt{flex:1;min-width:0}
 .q86rn{display:flex;align-items:center;font-size:15.5px;min-width:0}
@@ -6699,7 +6703,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86fs{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--q86line);border-radius:10px;padding:0 12px;color:var(--q86i4);margin-bottom:10px}
 .q86fs input{border:0!important;outline:0;background:none!important;padding:9px 0!important;font-size:14px;width:100%;min-width:0;box-shadow:none!important}
 .q86mods{display:flex;flex-direction:column;gap:2px}
-.q86ml{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--q86i4);padding:14px 12px 4px}
+.q86ml{font-size:11.5px;letter-spacing:.01em;color:var(--q86i4);padding:14px 12px 4px}
 .q86mi{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;font-size:14px;color:var(--q86i2)!important;background:transparent;border:0;cursor:pointer;text-align:left;min-width:0}
 .q86mi:hover{background:rgba(255,255,255,.6)}
 .q86mi.on{background:#fff;color:var(--q86i1)!important;box-shadow:0 0 0 1px var(--q86line)}
@@ -6836,6 +6840,20 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 #k-week .kwbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 #k-week .kwbar .cpseg button:disabled{opacity:.4;cursor:default}
 @media (max-width:700px){#k-week .kwbar{justify-content:flex-start;width:100%}}
+/* ===== v260b: fixes from the customer test (prefix q91) ===== */
+/* tab rows that scroll sideways on a phone fade at the edge that has more */
+.q86tabs.q91more{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+.q86tabs.q91less{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px);mask-image:linear-gradient(90deg,transparent,#000 36px)}
+.q86tabs.q91more.q91less{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent)}
+/* small round buttons keep their look but get a finger-sized tap area on touch screens */
+@media (pointer:coarse){
+ :is(.tick,.hntick,.zck,.q86ck,.q86dots,.zchev,.q43gx,.q53i,.zhd){position:relative}
+ :is(.tick,.hntick,.h4tick,.zck,.q86ck,.q86dots,.zchev,.q43gx,.q53i,.zhd)::before{content:'';position:absolute;inset:-9px;border-radius:50%}
+}
+/* Plan my week: every week row is the same height */
+.q58grid{grid-auto-rows:1fr}
+/* class page title: one line; a long name fades at the end instead of growing the header */
+.cpov .cpovt{white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
 </style>
 </head>
 <body>
@@ -7145,7 +7163,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v258';
+var BUILD='v260';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -7299,12 +7317,8 @@ function gradeInfo(c){
 }
 function seedShorts(){for(var k in SHORTS){var c=classById(k);if(c&&!c.short)c.short=SHORTS[k]}}
 function classLabel(c){return c.short||c.code||c.name}
-function seedFOL(){
- if(!S.homeLinks)S.homeLinks=[];
- if(!S.homeLinks.some(function(l){return /fanshaweonline/.test(l.url)})){
-  S.homeLinks.push({title:'Fanshawe Online',url:'https://www.fanshaweonline.ca/d2l/home',quiet:true});
- }
-}
+// v260b: a class's own course site (Edit class); named FanshaweOnline when it is one, else Course site
+function q91SiteName(u){return /fanshaweonline/i.test(u||'')?'FanshaweOnline':/brightspace|d2l/i.test(u||'')?'Brightspace':/canvas|instructure/i.test(u||'')?'Canvas':/moodle/i.test(u||'')?'Moodle':/blackboard/i.test(u||'')?'Blackboard':'Course site'}
 function seedScratch(){
  var c=classById('c4');
  if(c&&!c.links.some(function(l){return /scratch\.mit\.edu/.test(l.url)})){
@@ -7497,7 +7511,6 @@ async function load(){
  if(!S.seededProfs){seedProfs();S.seededProfs=true;save()}
  if(!S.timesParsed){addTimes();S.timesParsed=true;save()}
  if(!S.scratch){seedScratch();S.scratch=true;save()}
- if(!S.fol){seedFOL();S.fol=true;save()}
  if(!S.meets){seedMeets();S.meets=true;save()}
  if(!S.appsSeeded){seedApps();S.appsSeeded=true;save()}
  if(!S.shorts){seedShorts();S.shorts=true;save()}
@@ -7516,11 +7529,19 @@ async function load(){
 }
 
 var WMO={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Cloudy',45:'Fog',48:'Freezing fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',56:'Freezing drizzle',57:'Freezing drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Showers',82:'Heavy showers',85:'Snow showers',86:'Snow showers',95:'Thunderstorms',96:'Thunderstorms',99:'Thunderstorms'};
+// v260b: the weather is for the city set in Settings (S.wxPlace). Hubs made at Fanshawe before this keep London, Ontario.
+function q91Place(){
+ if(S.wxPlace&&S.wxPlace.lat!=null)return S.wxPlace;
+ var fan=(S.homeLinks||[]).some(function(l){return /fanshawe/i.test(l.url||'')})||(S.classes||[]).some(function(c){return /fanshawe/i.test(c.fol||'')});
+ return fan?{name:'London, Ontario',lat:42.9834,lon:-81.2331}:null;
+}
 async function fetchWeather(){
+ var pl=q91Place();
+ if(!pl){view.wx={state:'none'};if(view.page==='home')render();return}
  view.wx={state:'loading'};
  if(view.page==='home')render();
  try{
-  var u='https://api.open-meteo.com/v1/forecast?latitude=42.9834&longitude=-81.2331&current=temperature_2m,apparent_temperature,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1';
+  var u='https://api.open-meteo.com/v1/forecast?latitude='+(+pl.lat)+'&longitude='+(+pl.lon)+'&current=temperature_2m,apparent_temperature,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1';
   var r=await fetch(u);
   var d=await r.json();
   if(d&&d.current&&typeof d.current.temperature_2m==='number'){
@@ -7533,19 +7554,21 @@ async function fetchWeather(){
    return;
   }
   throw new Error('bad shape');
- }catch(e){}
- try{
-  var r2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
-    tools:[{type:'web_search_20250305',name:'web_search'}],
-    messages:[{role:'user',content:'Search for the current weather in London, Ontario, Canada. Reply with only a JSON object, no other text and no code fences: {"temp":<current temperature in celsius as a number>,"cond":"<short description, two words max>","hi":<today high in celsius>,"lo":<today low in celsius>}'}]})});
-  var d2=await r2.json();
-  var txt=(d2.content||[]).filter(function(b){return b.type==='text'}).map(function(b){return b.text}).join(' ');
-  var m=txt.replace(/```json|```/g,'').match(/\{[\s\S]*\}/);
-  var w=JSON.parse(m[0]);
-  view.wx={state:'ok',temp:Math.round(w.temp),cond:w.cond||'',hi:Math.round(w.hi),lo:Math.round(w.lo),slow:true};
- }catch(e2){view.wx={state:'off'}}
+ }catch(e){view.wx={state:'off'}}
  if(view.page==='home')render();
+}
+// finds a city by name (Open-Meteo, free, no key) and keeps it as this hub's weather city
+async function q91SetCity(name){
+ name=String(name||'').trim().slice(0,60);
+ if(!name){S.wxPlace=null;save();fetchWeather();render();return}
+ view.wxNote='Looking for '+name+'…';render();
+ try{
+  var r=await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&language=en&format=json&name='+encodeURIComponent(name.split(',')[0]));
+  var d=await r.json(),g=d&&d.results&&d.results[0];
+  if(!g){view.wxNote='Could not find that city. Try just the city name.';render();return}
+  S.wxPlace={name:g.name+(g.admin1?', '+g.admin1:g.country?', '+g.country:''),lat:g.latitude,lon:g.longitude};
+  view.wxNote='';save();fetchWeather();render();
+ }catch(e){view.wxNote='Could not look that up. Check your connection and try again.';render()}
 }
 
 function wxType(w){
@@ -7595,13 +7618,14 @@ function wxIcon(type){
 }
 function wxCard(){
  var w=view.wx||{state:'loading'};
- if(w.state==='loading')return '<div class="wx w-cloudy light"><div><p class="cond">London, Ontario</p><p class="hl">Checking the weather</p></div></div>';
- if(w.state==='off')return '<div class="wx w-cloudy light"><div style="flex:1"><p class="cond">London, Ontario</p><p class="hl">Weather did not load</p></div><button data-wx="1">Try again</button></div>';
+ if(w.state==='loading')return '<div class="wx w-cloudy light"><div><p class="cond">'+(q91Place()?esc(q91Place().name):'')+'</p><p class="hl">Checking the weather</p></div></div>';
+ if(w.state==='none')return '<div class="wx w-cloudy light"><div style="flex:1"><p class="cond">Weather</p><p class="hl">Set your city in Settings, Your hub</p></div></div>';
+ if(w.state==='off')return '<div class="wx w-cloudy light"><div style="flex:1"><p class="cond">'+(q91Place()?esc(q91Place().name):'')+'</p><p class="hl">Weather did not load</p></div><button data-wx="1">Try again</button></div>';
  var type=wxType(w);
  var extra=[];
  if(w.feels!=null&&w.feels!==w.temp)extra.push('feels like '+w.feels+'\u00b0');
  if(w.pop!=null&&w.pop>=20)extra.push(w.pop+'% chance of rain');
- return '<div class="wx w-'+type+' '+(WX_DARK[type]?'dark':'light')+'" title="London, Ontario">'
+ return '<div class="wx w-'+type+' '+(WX_DARK[type]?'dark':'light')+'" title="'+(q91Place()?esc(q91Place().name):'')+'">'
   +wxIcon(type)
   +'<span class="temp">'+w.temp+'\u00b0</span>'
   +'<div><p class="cond">'+esc(w.cond)+'</p>'
@@ -8823,7 +8847,7 @@ function sameData(local,remote){
  var total=Math.max(a.length,b.length,1);
  return (shared/total)>=0.8;
 }
-var SETTINGS_KEYS=['homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage','termDates','music','spClient','school'];
+var SETTINGS_KEYS=['wxPlace','homeLinks','theme','apps','banners','bannerAll','remind','sideHidden','cover','avatar','owner','term','titlePage','termDates','music','spClient','school'];
 function mergeState(local,remote){
  // field-by-field, most recently touched item wins, using each item's own savedAt
  if(!remote)return local;
@@ -9613,8 +9637,8 @@ function sidebar(c){
    +'<span class="nm2">'+esc(cl.name)+'</span></div>';
   if(on){
    h+='<div class="ssub">'
-    // this class's own FanshaweOnline page (set its address in Edit class); opens in a new tab
-    +'<a class="sitem sfol" href="'+esc(cl.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener"><span class="nm2">FanshaweOnline</span><span class="sext">↗</span></a>'
+    // this class's own course site (set its address in Edit class); only when one is set
+    +(cl.fol?'<a class="sitem sfol" href="'+esc(cl.fol)+'" target="_blank" rel="noopener"><span class="nm2">'+q91SiteName(cl.fol)+'</span><span class="sext">↗</span></a>':'')
     +sideItem('data-scroll','c-assign','Assignments',false)
     +sideItem('data-scroll','c-files','Files & links',false)
     +sideItem('data-scroll','c-info','Class info',false)
@@ -9628,8 +9652,17 @@ function sidebar(c){
  h+='<div class="sidefoot">'+(q42ShowGet()?sideItem('data-go','install','Get the app',view.page==='install'):'')+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
+// one menu row . v260b folded in the old r6 (icons), q43 (Get the app with its ×) and q46 (Look and feel) wrappers
 function sideItem(attr,key,label,on){
- return '<div class="sitem'+(on?' on':'')+'" '+attr+'="'+key+'"><span class="nm2">'+esc(label)+'</span></div>';
+ if(attr==='data-opencolours'&&label==='Colours')label='Look and feel';
+ if(attr==='data-go'&&key==='install')return '<div class="sitem sico q43get'+(on?' on':'')+'" data-go="install"><span class="sic">'+zI(ZIC.mobile,17)+'</span><span class="nm2">'+esc(label)+'</span><button type="button" class="q43gx" data-q43gx="1" aria-label="Hide Get the app" title="Hide this">×</button></div>';
+ var ic=null;
+ if(attr==='data-go')ic={home:ZIC.home,calendar:ZIC.cal,plan:ZIC.list,professors:ZIC.people,apps:ZIC.grid,install:ZIC.plus}[key];
+ else if(attr==='data-add')ic=key==='settings'?ZIC.gear:key==='class'?ZIC.plus:null;
+ else if(attr==='data-opencolours')ic=ZIC.palette;
+ else if(attr==='data-znew')ic=ZIC.plus;
+ if(!ic)return '<div class="sitem'+(on?' on':'')+'" '+attr+'="'+key+'"><span class="nm2">'+esc(label)+'</span></div>';
+ return '<div class="sitem sico'+(on?' on':'')+'" '+attr+'="'+key+'"><span class="sic">'+zI(ic,17)+'</span><span class="nm2">'+esc(label)+'</span></div>';
 }
 
 function dueCard(t,c,kind){
@@ -10034,7 +10067,7 @@ function tpCard(c){
   +'<div class="tphint">Times New Roman, 12 pt, 1.5 spacing, with a page break after. Add the page number in Word: Insert, Page Number, top right.</div>'
   +'<details class="tpmore"><summary>Name, school, course and instructor</summary>'
   +fld('tpauthor','Your name (and student number)',me.author,L.author||'Jane Doe 1234567','data-tpset="author"')
-  +fld('tpschool','School (every class)',me.school,'Lawrence Kinlin School of Business, Fanshawe College','data-tpset="school"')
+  +fld('tpschool','School (every class)',me.school,'Your school or college','data-tpset="school"')
   +fld('tpcourse','Course (this class)',tp.course,(c.code?c.code+': ':'')+c.name,'data-tpset="course" data-c="'+c.id+'"')
   +fld('tpprof','Instructor (this class)',tp.prof,tpProfOf(c)||'Dr. Name','data-tpset="prof" data-c="'+c.id+'"')
   +'</details></div></details>';
@@ -10138,7 +10171,7 @@ function homeGreeting(onCover){
  var pills=(curSpace()==='school'?(S.homeLinks||[]):[]).map(function(l){
    return '<a class="h4pill" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+linkIcon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a>';
   }).join('')
-  +(w.temp!=null?'<button class="h4pill h4wx" data-wx="1" title="London, Ontario. Tap to refresh"><i class="'+wxIco+'"></i><span><b>'+w.temp+'°</b><span class="wxc"> '+esc(w.cond||'')+'</span></span></button>':'');
+  +(w.temp!=null?'<button class="h4pill h4wx" data-wx="1" title="'+(q91Place()?esc(q91Place().name):'')+'. Tap to refresh"><i class="'+wxIco+'"></i><span><b>'+w.temp+'°</b><span class="wxc"> '+esc(w.cond||'')+'</span></span></button>':'');
  var txt='<div class="h4hi"><p class="h4hello">'+esc(hello+(who?', '+who:''))+'</p>'
   +'<p class="h4day" data-fit="18">'+esc(t.toLocaleDateString('en-CA',{weekday:'long'}))+', <span class="nw">'+esc(t.toLocaleDateString('en-CA',{month:'long',day:'numeric'}))+'</span></p></div>';
  if(onCover)return '<div class="h4ov">'+txt+(pills?'<div class="h4pills">'+pills+'</div>':'')+'</div>';
@@ -10860,6 +10893,8 @@ function modalHtml(){
    +sg('sync','Account and sync',syncRight,syncBody,!sbUser||!!view.driveError)
    +sg('hub','Your hub',S.owner,
      '<div class="field" style="margin:0"><label for="setOwner">Hub name</label><input id="setOwner" data-setname="owner" maxlength="40" value="'+esc(S.owner)+'"></div>'
+     +'<div class="field" style="margin:0"><label for="setWx">Weather city</label><input id="setWx" data-wxcity="1" maxlength="60" placeholder="Your city, like Toronto" value="'+esc(S.wxPlace&&S.wxPlace.name||(q91Place()?q91Place().name:''))+'"></div>'
+     +(view.wxNote?'<p class="hint" style="margin:0">'+esc(view.wxNote)+'</p>':'')
      +'<div class="field" style="margin:0"><label for="setTerm">Term label</label><input id="setTerm" data-setname="term" maxlength="40" value="'+esc(S.term)+'"></div>'
      +'<div class="field" style="margin:0"><label for="setMusic">Music on Home</label><select id="setMusic" data-musicsvcsel="1"><option value="spotify"'+((S.music&&S.music.svc)==='apple'?'':' selected')+'>Spotify</option><option value="apple"'+((S.music&&S.music.svc)==='apple'?' selected':'')+'>Apple Music</option></select></div>'
      +(SPOTIFY_CLIENT_ID?'':'<div class="field" style="margin:0"><label for="setSpClient">Spotify Client ID</label><input id="setSpClient" data-setname="spClient" maxlength="64" placeholder="From developer.spotify.com, your Doable app" value="'+esc(S.spClient||'')+'"><span class="hint" style="margin:4px 0 0">Paste it once and the Connect Spotify button appears on Home, on all your devices.</span></div>')
@@ -10884,7 +10919,7 @@ function modalHtml(){
      +'<button data-export="1">Export everything</button>'
      +'<label class="fakebtn" style="text-align:center"><input type="file" accept="application/json,.json" data-import="1" style="display:none">Import a backup</label>',false)
    +(isInstalledApp()?'':'<div class="sgroup" style="padding:6px 0 2px"><button data-xact="openinstall" style="width:100%">Get the app on your phone</button></div>')
-   +'<p class="hint" style="text-align:center;margin-top:10px;opacity:.6">Doable, build '+esc(BUILD+q80Info())+'</p>';
+   +'<p class="hint" style="text-align:center;margin-top:10px;opacity:.6">Doable, build '+esc(BUILD)+'</p>';
  }else if(m.kind==='app'){
   var ap=m.id?appById(m.id):null;
   h='<h3>'+(ap?'Edit app':'Add an app')+'</h3>'
@@ -10940,7 +10975,7 @@ function modalHtml(){
      +S.classes.filter(function(cl){return !isRefClass(cl)}).map(function(cl){return '<option value="'+cl.id+'">'+esc(cl.name)+'</option>'}).join('')+'</select></div>')
    +'<div class="field"><label for="m1">Name</label><input id="m1" value="'+esc(ct?ct.name:'')+'" placeholder="Dr. Casey Boyle"></div>'
    +'<div class="field"><label for="m5">Role</label><input id="m5" value="'+esc(ct?ct.role:'Professor')+'" placeholder="Professor, dean, tutor"></div>'
-   +'<div class="field"><label for="m2">Email</label><input id="m2" value="'+esc(ct?ct.email:'')+'" placeholder="name@fanshawec.ca"></div>'
+   +'<div class="field"><label for="m2">Email</label><input id="m2" value="'+esc(ct?ct.email:'')+'" placeholder="name@school.ca"></div>'
    +'<div class="field"><label for="m3">Office</label><input id="m3" value="'+esc(ct?ct.office:'')+'" placeholder="B2043"></div>'
    +'<div class="field"><label for="m4">Office hours</label><input id="m4" value="'+esc(ct?ct.hours:'')+'" placeholder="Tuesdays 1 to 3 pm"></div>';
  }else if(m.kind==='refedit'){
@@ -10965,7 +11000,7 @@ function modalHtml(){
    +'<div class="field"><label for="m13">Target grade (%)</label><input id="m13" type="number" min="0" max="100" value="'+esc(c2&&c2.target?c2.target:'')+'" placeholder="85"></div>'
    +'<div class="field"><label for="m3">When it meets</label><input id="m3" value="'+esc(c2?c2.day:'')+'" placeholder="Mondays 12 to 3 pm"></div>'
    +'<div class="field"><label for="m9">Room</label><input id="m9" value="'+esc(c2?(c2.room||''):'')+'" placeholder="Room L5015"></div>'
-   +'<div class="field"><label for="m14">FanshaweOnline link for this class</label><input id="m14" value="'+esc(c2?(c2.fol||''):'')+'" placeholder="Paste the address of this class in FOL"></div>'
+   +'<div class="field"><label for="m14">Course site link</label><input id="m14" value="'+esc(c2?(c2.fol||''):'')+'" placeholder="This class on your school\'s site (optional)"></div>'
    +'<div class="field"><label for="m11">Claude project link</label><input id="m11" value="'+esc(c2?(c2.claude||''):'')+'" placeholder="https://claude.ai/project/..."></div>'
    +'<div class="field"><label>Colour</label><div class="swatches">'
    +PALETTES.map(function(pp){return '<button class="sw '+(m.color===pp.id?'on':'')+'" style="background:'+pp.bg+'" data-sw="'+pp.id+'" aria-label="'+pp.name+'"></button>'}).join('')
@@ -10995,10 +11030,10 @@ function saveModal(){
  var m=view.modal;
  if(ZM[m.kind]){if(ZM[m.kind].save)ZM[m.kind].save(m);return}
  if(m.kind==='task'){
-  var t=val('m1');if(!t)return;
+  var t=val('m1');if(!t){zNeed('m1','Give it a name first.');return}
   classById(m.classId).tasks.push(touch({id:uid(),title:t,due:val('m2'),done:false}));
  }else if(m.kind==='assign'){
-  var ti=val('m1');if(!ti)return;
+  var ti=val('m1');if(!ti){zNeed('m1','Give it a name first.');return}
   var fid=val('m10')||(view.modal.pendingFileId||'');
   // a step typed but not yet Entered still counts
   var pend=document.getElementById('stepnew');if(pend&&pend.value.trim()){m.steps=m.steps||[];m.steps.push({id:uid(),title:pend.value.trim(),done:false})}
@@ -11008,14 +11043,14 @@ function saveModal(){
   if(m.id){var a=findAsg(m.classId,m.id);a.steps=stepsOut;if(!stepsOut.length)delete a.steps;a.title=ti;a.due=val('m2');a.notes=val('m3');a.priority=val('m6');a.time=val('m7');a.fileId=fid;a.weight=q85WOut(a);a.mark=mk?mk.pct:'';q83Put(a,mk,tg);touch(a)}
   else{classById(m.classId).assignments.push(touch({id:uid(),steps:stepsOut.length?stepsOut:undefined,title:ti,due:val('m2'),time:val('m7'),notes:val('m3'),priority:val('m6'),fileId:fid,weight:q85WOut(null),mark:mk?mk.pct:'',done:false}));q83Put(classById(m.classId).assignments[classById(m.classId).assignments.length-1],mk,tg)}
  }else if(m.kind==='app'){
-  var an=val('m1'),au=val('m2');if(!an||!au)return;
+  var an=val('m1'),au=val('m2');if(!an){zNeed('m1','Give it a name first.');return}if(!au){zNeed('m2','Paste the address first.');return}
   if(!/^https?:\/\//i.test(au))au='https://'+au;
   S.apps=S.apps||[];
   var ico=view.modal.pendingIcon;
   if(m.id){var ap2=appById(m.id);ap2.title=an;ap2.url=au;if(ico!==undefined)ap2.icon=ico}
   else S.apps.push({id:uid(),title:an,url:au,icon:ico||''});
  }else if(m.kind==='section'){
-  var sn=val('m1');if(!sn)return;
+  var sn=val('m1');if(!sn){zNeed('m1','Give it a name first.');return}
   var sc=classById(m.classId);
   sc.sections=sc.sections||[];
   if(m.id){var esec2=sc.sections.filter(function(x){return x.id===m.id})[0];if(esec2){esec2.name=sn;touch(esec2)}}
@@ -11032,7 +11067,7 @@ function saveModal(){
   }else return;
   save();closeModal();window.scrollTo({top:0,behavior:'smooth'});return;
  }else if(m.kind==='link'){
-  var n=val('m1'),u=val('m2');if(!n||!u)return;
+  var n=val('m1'),u=val('m2');if(!n){zNeed('m1','Give it a name first.');return}if(!u){zNeed('m2','Paste the address first.');return}
   if(!/^https?:\/\//i.test(u))u='https://'+u;
   var lcls=classById(m.classId);
   if(m.id){
@@ -11049,7 +11084,7 @@ function saveModal(){
   if(!c)return;
   if(m.id){var ct=contactById(c,m.id);ct.name=val('m1');ct.role=val('m5');ct.email=val('m2');ct.office=val('m3');ct.hours=val('m4');touch(ct)}
   else{
-   var nm=val('m1');if(!nm&&!val('m2'))return;
+   var nm=val('m1');if(!nm&&!val('m2')){zNeed('m1','Add a name or an email first.');return}
    c.contacts.push(touch({id:uid(),name:nm,role:val('m5'),email:val('m2'),office:val('m3'),hours:val('m4'),photo:''}));
   }
  }else if(m.kind==='note'){
@@ -11062,7 +11097,7 @@ function saveModal(){
   if(view.modal.pendingIcon!==undefined)rf2.icon=view.modal.pendingIcon;
   mirrorFiles(rcid2);saveFiles(rcid2,true);
  }else if(m.kind==='class'){
-  var cn=val('m1');if(!cn)return;
+  var cn=val('m1');if(!cn){zNeed('m1','Give the class a name first.');return}
   if(m.classId){var cc=classById(m.classId);cc.name=cn;cc.code=val('m2');cc.day=val('m3');cc.room=val('m9');cc.claude=val('m11');cc.fol=val('m14');cc.short=val('m12');cc.target=val('m13')?+val('m13'):'';cc.color=m.color}
   else{S.classes.push({id:uid(),name:cn,code:val('m2'),day:val('m3'),room:val('m9'),claude:val('m11'),fol:val('m14'),color:m.color,contacts:[],assignments:[],tasks:[],links:[]})}
  }
@@ -13518,6 +13553,7 @@ document.addEventListener('change',function(e){
   if(fa){var fd=tpDraft(fc.id);fd.title=fa.title;fd.due=fa.due||'';tpSaveDraft(fc.id);render()}
   return;
  }
+ if(t.dataset&&t.dataset.wxcity){q91SetCity(t.value);return}
  if(t.dataset&&t.dataset.setname){
   var nm=t.value.trim().slice(0,40),key=t.dataset.setname;
   S[key]=nm||(key==='owner'?'My hub':'');
@@ -14080,6 +14116,9 @@ function ensureSpace(sp){
  S.spacesInit=Object.assign({},S.spacesInit);S.spacesInit[sp]=true;
  save();
 }
+// v260b: no name set yet (a new user who skipped sign-up): say "Hi there" and show a person, not "Hi, You!" and a Y
+function q91Unnamed(){return firstName()==='You'}
+var Q91PERSON='<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4.5 20.5c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/>';
 function firstName(){
  var o=String(S.owner||'').replace(/’/g,"'").replace(/'s\s+hub$/i,'').replace(/^my hub$/i,'').trim();
  return o.split(/\s+/)[0]||'You';
@@ -14282,7 +14321,13 @@ ZM.ztask={html:function(m){var c=classById(m.cid),t=c&&zTask(c,m.tid);if(!t)retu
  if(document.getElementById('zt5'))t.who=zv('zt5');if(document.getElementById('zt6'))t.rep=document.getElementById('zt6').checked?'year':'';
  touch(t);save();view.modal=null;render()},
  del:function(m){return 'taskdel:'+m.cid+':'+m.tid}};
-ZACT.taskdel=function(cid,tid){var c=classById(cid);if(!c)return;c.tasks=c.tasks.filter(function(t){return t.id!==tid});save();view.modal=null;render()};
+// v260b: deleting a to-do shows Undo for a few seconds (putting it back stamps it newer than the deletion, so sync keeps it)
+ZACT.taskdel=function(cid,tid){var c=classById(cid);if(!c)return;var i=c.tasks.findIndex(function(t){return t.id===tid});if(i<0)return;
+ view.q91undo={cid:cid,i:i,t:JSON.parse(JSON.stringify(c.tasks[i]))};c.tasks.splice(i,1);save();view.modal=null;render();
+ zToast('Deleted '+esc(view.q91undo.t.title||'the to-do'),'<button data-zact="q91undel">Undo</button>')};
+ZACT.q91undel=function(){var u=view.q91undo,c=u&&classById(u.cid);if(!c)return;view.q91undo=null;
+ if(!c.tasks.some(function(t){return t.id===u.t.id}))c.tasks.splice(Math.min(u.i,c.tasks.length),0,touch(u.t));
+ if(S.deleted)delete S.deleted['i:'+c.id+':tasks:'+u.t.id];save();render()};
 
 /* Projects: a board, and a panel with subtasks, links and notes */
 var PSTAT=[['todo','Not started','grey'],['doing','In progress','sand'],['done','Done','sage']];
@@ -14746,6 +14791,10 @@ sidebar=function(c){
  return h.replace('<div class="sidescroll">',spacePill('side')+'<div class="sidescroll">');
 };
 go=function(page,cid){
+ // v260b: these three used to be separate wrappers (r6, q32, q69); now they run here, first
+ if(document.getElementById('q69sh'))q69SheetClose(); // a share/devices sheet closes when you move
+ view.q32edit=false; // leaving a page ends its edit mode
+ view.r6enter=1; // the new page plays its enter motion
  var c=page==='class'&&cid?classById(cid):null;
  if(c&&pageSpace(c)!==curSpace()){try{localStorage.setItem('hub:space',pageSpace(c))}catch(e){}view.homeEdit=false} // opening something from another space (a mixed-in calendar item) moves you there
  if(c&&c.kind==='cal'){page='calendar';cid=null}else if(c&&c.kind)page='page';
@@ -14986,16 +15035,6 @@ var DOABLE_LOGO='<svg class="dlg" viewBox="0 0 48 48" aria-hidden="true"><path d
 function doableBrand(){return '<div class="dbrand" data-go="home" role="button" tabindex="0" aria-label="Doable, go to Home">'+DOABLE_LOGO+'<span>Doable</span></div>'}
 
 /* ---------- the menu: icons on the main items, page icons in each page's colour ---------- */
-var _r6SideItem=sideItem;
-sideItem=function(attr,key,label,on){
- var ic=null;
- if(attr==='data-go')ic={home:ZIC.home,calendar:ZIC.cal,plan:ZIC.list,professors:ZIC.people,apps:ZIC.grid,install:ZIC.plus}[key];
- else if(attr==='data-add')ic=key==='settings'?ZIC.gear:key==='class'?ZIC.plus:null;
- else if(attr==='data-opencolours')ic=ZIC.palette;
- else if(attr==='data-znew')ic=ZIC.plus;
- if(!ic)return _r6SideItem(attr,key,label,on);
- return '<div class="sitem sico'+(on?' on':'')+'" '+attr+'="'+key+'"><span class="sic">'+zI(ic,17)+'</span><span class="nm2">'+esc(label)+'</span></div>';
-};
 spaceSidebar=function(){
  var sp=curSpace(),pages=spacePages(sp);
  var h='<aside class="side'+(view.menu?' open':'')+'">'
@@ -15024,8 +15063,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.
 
 /* ---------- motion: things fade up when you arrive on a page, rings draw, ticks pop, pop-ups glide in ---------- */
 var r6LastModal=null,r6Swallow=0;
-var _r6Go=go;
-go=function(){view.r6enter=1;return _r6Go.apply(this,arguments)};
 view.r6enter=1;
 function r6Motion(){return !(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
 function r6After(){
@@ -16157,7 +16194,7 @@ zNewWidget=function(w,d,sp){
    +tile('check','sand',st.open,'to do',st.dueWk?'<span class="zbar"><i style="width:'+Math.round(st.doneWk/st.dueWk*100)+'%"></i></span>':'',firstPage(sp,'todo')?'data-open="'+firstPage(sp,'todo').id+'"':'')
    +(hc2?tile('flame','sage',hab==null?'–':hab+'%','habits today',hab!=null?'<span class="zbar"><i style="width:'+hab+'%"></i></span>':'','data-open="'+hc2.id+'"'):'')
    +(bc2?tile('wallet','mist',money(bb2.spent),'spent in '+esc(t.toLocaleDateString('en-CA',{month:'short'})),bb2.total?'<span class="zbar"><i style="width:'+Math.min(100,Math.round(bb2.spent/bb2.total*100))+'%"></i></span>':'','data-open="'+bc2.id+'"'):'')
-   +tile('smile',mavg?MOODS[mavg].k:'rose',mavg?MOODS[mavg].n:'–','mood this week','',mc2?'data-open="'+mc2.id+'"':'data-zact="mkpage:mood"')+'</div>');
+   +(mc2||sp==='personal'?tile('smile',mavg?MOODS[mavg].k:'rose',mavg?MOODS[mavg].n:'–','mood this week','',mc2?'data-open="'+mc2.id+'"':'data-zact="mkpage:mood"'):'')+'</div>');
  }
  case 'meals':{
   var ml=firstPage(sp,'meals');if(!ml)return zWCard(w,d,d.name,'',zNoPage('meals',sp));
@@ -17955,7 +17992,7 @@ render=function(){var before=app.firstElementChild;var r=_q15Render.apply(this,a
 homeGreeting=_q13HG;
 SETTINGS_KEYS.push('tagline');
 function q16Me(){
- var nm=firstName(),ini=esc(String(nm||'?').charAt(0).toUpperCase());
+ var nm=firstName(),ini=q91Unnamed()?zI(Q91PERSON,20):esc(String(nm||'?').charAt(0).toUpperCase());
  return '<div class="me2"><label class="me2av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
   +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+ini+'</span>')
   +'<i>'+zI('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',12)+'</i></label>'
@@ -18240,7 +18277,7 @@ Q18.aclock=function(w){
 };
 /* Today: the date big on the left, today's events and due work on the right, a red line for "now" */
 function q18Today(){
- var td=iso(today()),A=allTasks().filter(function(x){return !isRefClass(x.c)&&(x.t.due===td||planDay(x.t)===td)});
+ var td=iso(today()),A=allTasks().filter(function(x){return !isRefClass(x.c)&&x.t.due===td});
  return A.sort(function(a,b){return (a.t.time||'00:00')<(b.t.time||'00:00')?-1:1});
 }
 Q18.agenda=function(w){
@@ -18370,8 +18407,8 @@ ZM.zrecipe.save=function(m){var c=classById(m.cid),p=+zv('zp8')||0,k=+zv('zp9')|
 q17Profile=function(){
  var nm=firstName();
  return '<section class="q17prof q19prof" style="background:'+q18Deep()+'"><label class="q17av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
-  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+esc(String(nm).charAt(0).toUpperCase())+'</span>')+'<i>'+zI('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',12)+'</i></label>'
-  +'<b>Hi, '+esc(nm)+'!</b><button class="q17tag'+(S.tagline?'':' add')+'" data-zact="z6me">'+esc(S.tagline||'Add a line about you')+'</button></section>';
+  +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+(q91Unnamed()?zI(Q91PERSON,22):esc(String(nm).charAt(0).toUpperCase()))+'</span>')+'<i>'+zI('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',12)+'</i></label>'
+  +'<b>'+(q91Unnamed()?'Hi there!':'Hi, '+esc(nm)+'!')+'</b><button class="q17tag'+(S.tagline?'':' add')+'" data-zact="z6me">'+esc(S.tagline||'Add a line about you')+'</button></section>';
 };
 WDEF.profile.r=function(){return q17Profile()};
 
@@ -18379,6 +18416,8 @@ WDEF.profile.r=function(){return q17Profile()};
 function q19SideKey(l){return 'hub:sideshut:'+curSpace()+':'+l.textContent.trim().toLowerCase()}
 function q19Side(){
  document.querySelectorAll('.side .slabel').forEach(function(l){
+  // a blank label is only a gap (above "Add a class"): never a fold-up heading, and what follows always shows
+  if(!l.textContent.trim()){for(var b=l.nextElementSibling;b&&!b.classList.contains('slabel');b=b.nextElementSibling)b.classList.remove('q19hide');return}
   var shut=false;try{shut=localStorage.getItem(q19SideKey(l))==='1'}catch(e){}
   if(!l.classList.contains('q19lab')){l.classList.add('q19lab');l.setAttribute('role','button');l.setAttribute('tabindex','0');l.insertAdjacentHTML('beforeend','<span class="q19chev">'+CP_ICO.chev+'</span>')}
   l.setAttribute('aria-expanded',String(!shut));l.classList.toggle('shut',shut);
@@ -18473,7 +18512,7 @@ WDEF.reading.name='Reading & watching';
 function q20Depth(){return S.cardDepth===false?'flat':S.cardDepth==='deep'?'deep':'soft'}
 ZACT.q20depth=function(v){S.cardDepth=v==='flat'?false:v==='deep'?'deep':true;save();render()};
 var _q20Render=render;
-render=function(){var r=_q20Render.apply(this,arguments);document.querySelectorAll('.q20fade').forEach(function(el){el.classList.toggle('over',el.scrollWidth>el.clientWidth+1)});var d=q20Depth();document.body.classList.toggle('zdepth',d!=='flat');document.body.classList.toggle('zdeep',d==='deep');document.body.classList.toggle('zflat',d==='flat');return r};
+render=function(){var r=_q20Render.apply(this,arguments);document.querySelectorAll('.q20fade,.sitem .nm2').forEach(function(el){el.classList.toggle('over',el.scrollWidth>el.clientWidth+1)});var d=q20Depth();document.body.classList.toggle('zdepth',d!=='flat');document.body.classList.toggle('zdeep',d==='deep');document.body.classList.toggle('zflat',d==='flat');return r};
 function q20DepthSeg(){var d=q20Depth();return '<span class="q20dseg" role="group" aria-label="Card depth"><em>Depth</em>'+[['flat','Flat'],['soft','Soft'],['deep','Deep']].map(function(o){return '<button class="'+(d===o[0]?'on':'')+'" data-zact="q20depth:'+o[0]+'" aria-pressed="'+(d===o[0])+'">'+o[1]+'</button>'}).join('')+'</span>'}
 var _q20VSH=viewSpaceHome;
 viewSpaceHome=function(){var h=_q20VSH.apply(this,arguments);return h.replace('<button class="zebtn" data-zact="wgal">',q20DepthSeg()+'<button class="zebtn" data-zact="wgal">')};
@@ -19431,7 +19470,6 @@ render=function(){var r=_q32Render.apply(this,arguments);
    box.insertBefore(b,box.firstChild)}}
  return r};
 // leaving the Budget page ends editing
-var _q32Go=go;go=function(){view.q32edit=false;return _q32Go.apply(this,arguments)};
 
 
 /* ======================= v176: light or dark widgets; Doable's own colour picker; roomier small To do =======================
@@ -19778,11 +19816,6 @@ document.addEventListener('click',function(e){
  ev.userChoice.then(function(c){if(c&&c.outcome==='accepted'){q42Bip=null;q42Redraw()}}).catch(function(){});
 });
 ZIC.mobile='<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M11 18.2h2"/>';
-var _q42SideItem=sideItem;
-sideItem=function(attr,key,label,on){
- if(attr==='data-go'&&key==='install')return '<div class="sitem sico'+(on?' on':'')+'" data-go="install"><span class="sic">'+zI(ZIC.mobile,17)+'</span><span class="nm2">'+esc(label)+'</span></div>';
- return _q42SideItem(attr,key,label,on);
-};
 installGuideHtml=function(plat){
  guideCss();
  var tabs='<div class="igtabs">'+[['ios','iPhone or iPad'],['android','Android'],['desktop','Computer']].map(function(t){return '<button data-xact="plat:'+t[0]+'" class="'+(plat===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>';
@@ -19813,11 +19846,6 @@ installGuideHtml=function(plat){
 /* ---------- "Get the app" in the menu: stays until you close it with its × (per device); never in the installed app ---------- */
 function q43GetHidden(){try{return localStorage.getItem('hub:getappx')==='1'}catch(e){return false}}
 q42ShowGet=function(){try{return !isInstalledApp()&&!q43GetHidden()}catch(e){return false}};
-var _q43SideItem=sideItem;
-sideItem=function(attr,key,label,on){
- if(attr==='data-go'&&key==='install')return '<div class="sitem sico q43get'+(on?' on':'')+'" data-go="install"><span class="sic">'+zI(ZIC.mobile,17)+'</span><span class="nm2">'+esc(label)+'</span><button type="button" class="q43gx" data-q43gx="1" aria-label="Hide Get the app" title="Hide this">×</button></div>';
- return _q43SideItem(attr,key,label,on);
-};
 window.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('[data-q43gx]');if(!b)return;
  e.preventDefault();e.stopPropagation();
@@ -20268,8 +20296,6 @@ modalHtml=function(){var h=_q46MH.apply(this,arguments);if(!view.modal||view.mod
   '<button data-opencolours="1" class="q46colbtn">'+zI(ZIC.palette,15)+' Colours: menu, pages and widgets</button><div class="q46look">'+q46LookRows()+'</div>')
   .replace(/(<button data-syncpics="1"[^>]*>Sync pictures<\/button><button data-sbsignout="1"[^>]*>Sign out<\/button><\/div>)/,'$1<p class="hint q46pics" style="margin:0">Photos and covers sync on their own. If a picture shows up blank on another device, tap Sync pictures on the device that has it, then on the other one.</p>')};
 // the menu item and the corner paint button say Look and feel
-var _q46SideItem=sideItem;
-sideItem=function(attr,key,label,on){if(attr==='data-opencolours'&&label==='Colours')label='Look and feel';return _q46SideItem(attr,key,label,on)};
 
 /* ---------- tours: the engine runs any list of steps; the main tour, then one per page the first time it opens ---------- */
 function q46Seen(k){return !!(S.tourSeen&&S.tourSeen[k])}
@@ -23293,8 +23319,6 @@ function q69SheetClose(){
  var f=document.getElementById('q69fab');if(f)f.classList.remove('hide');
 }
 // leaving the page or the phone size closes the sheet
-var _q69Go=go;
-go=function(){if(document.getElementById('q69sh'))q69SheetClose();return _q69Go.apply(this,arguments)};
 
 /* ---------- 3. Other devices ---------- */
 function q69Kind(){return onbPlatform()==='desktop'?'computer':'mobile'}
@@ -26113,14 +26137,14 @@ function tbkPrefs(){tbkStore('tbk-prefs',null,{spread:TBK.spread,mode:TBK.mode,c
 function tbkHosted(){return !!(MK&&TBK&&TBK.mounted&&document.querySelector('#tbkhost #mk'))}
 function tbkOpen(o){
  var pr=tbkStore('tbk-prefs')||{};
- TBK=Object.assign({mi:0,page:1,left:o&&o.fid?'pages':'mods',q:'',hits:null,right:null,mode:pr.mode==='markup'?'markup':'reading',spread:!!pr.spread,collapsed:!!pr.collapsed,barMin:!!pr.barMin,wide:!!pr.wide,term:null,tshut:null,docs:{},text:{},sgen:0,outline:null,drawer:false,mounted:null},o);
+ TBK=Object.assign({from:{page:view.page,classId:view.classId},mi:0,page:1,left:o&&o.fid?'pages':'mods',q:'',hits:null,right:null,mode:pr.mode==='markup'?'markup':'reading',spread:!!pr.spread,collapsed:!!pr.collapsed,barMin:!!pr.barMin,wide:!!pr.wide,term:null,tshut:null,docs:{},text:{},sgen:0,outline:null,drawer:false,mounted:null},o);
  var M=tbkModsNow(),pos=tbkStore('tbk-pos',tbkKey()),j=pos?M.map(function(x){return x.id}).indexOf(pos.mod):-1;
  if(j>-1){TBK.mi=j;TBK.page=pos.page||1}else TBK.mi=Math.max(0,M.length-1);
  if(innerWidth<600)TBK.spread=false;                           // two pages side by side don't fit a phone
  var el=document.getElementById('tbkr');if(el)el.remove();
  TBK_EDGE=null;el=document.createElement('div');el.id='tbkr';el.setAttribute('role','dialog');el.setAttribute('aria-label',tbkName());
  el.innerHTML='<header class="tbktop" id="tbkhd"></header><div class="tbkbody"><aside class="tbkleft" id="tbkleft"></aside>'
-  +'<main class="tbkdesk" id="tbkdesk"><div class="tbkhost" id="tbkhost"></div><button type="button" class="tbkhandle" id="tbkhandle" data-tbk="panel" aria-label="Show the modules">'+zI(TBK_RIGHT,18)+'</button><div class="tbkedge" id="tbkedge"></div><div class="tbkpill" id="tbkpill"></div></main>'
+  +'<main class="tbkdesk" id="tbkdesk"><div class="tbkhost" id="tbkhost"></div><button type="button" class="tbkhandle" id="tbkhandle" data-tbk="panel" aria-label="Show the modules">'+zI(TBK_RIGHT,18)+'</button><div class="tbkedge" id="tbkedge"></div></main>'
   +'<aside class="tbkright" id="tbkright"></aside></div><input type="file" id="tbkfile" accept="application/pdf,.pdf" multiple hidden data-tbkpick="1">';
  document.body.appendChild(el);
  document.documentElement.classList.add('tbkon');
@@ -26135,7 +26159,8 @@ function tbkUnmount(){
 function tbkClose(){
  if(!TBK)return;tbkUnmount();
  Object.keys(TBK.docs).forEach(function(k){TBK.docs[k].then(function(d){d.destroy()},function(){})});
- TBK=null;var el=document.getElementById('tbkr');if(el)el.remove();document.documentElement.classList.remove('tbkon');render();
+ var fr=TBK.from;TBK=null;var el=document.getElementById('tbkr');if(el)el.remove();document.documentElement.classList.remove('tbkon');
+ if(fr&&(fr.page!==view.page||fr.classId!==view.classId)&&(!fr.classId||classById(fr.classId)))go(fr.page,fr.classId);else render();
 }
 function tbkSeg(opts,cur,act,cls){
  return '<div class="tbkseg'+(cls?' '+cls:'')+'" role="group">'+opts.map(function(o){return '<button type="button" class="'+(cur===o[0]?'on':'')+'" aria-pressed="'+(cur===o[0])+'" data-tbk="'+act+':'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div>';
@@ -26152,14 +26177,19 @@ function tbkDraw(){
  var listEl=el.querySelector('.tbklist'),listTop=listEl?listEl.scrollTop:0;
  // top bar
  var fm=!!TBK.fid;
- document.getElementById('tbkhd').innerHTML='<button type="button" class="tbkback" data-tbk="close">'+zI(TBK_LEFT,16)+'<span>'+(fm?'Back':'Textbooks')+'</span></button><i class="tbkdiv"></i>'
-  +'<span class="tbkcol" style="background:'+tbkChip()+'"></span><b class="tbkttl">'+esc(tbkName())+'</b><span class="tbkfill"></span>'
-  +'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this '+(fm?'PDF':'book')+'" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this '+(fm?'PDF':'book')+'">'+(TBK.q?'<button type="button" data-tbk="clear">Clear</button>':'')+'</label>'
+ var sOpen=!!(TBK.sopen||TBK.q),hdEl=document.getElementById('tbkhd'),oldSave=document.getElementById('tbksave');
+ hdEl.classList.toggle('tbk-so',sOpen);
+ hdEl.innerHTML='<div class="tbkhl"><button type="button" class="tbkback" data-tbk="close" aria-label="Back to '+esc(tbkFromName())+'">'+zI(TBK_LEFT,16)+'<span>'+esc(tbkFromName())+'</span></button><i class="tbkdiv"></i>'
+  +'<span class="tbkcol" style="background:'+tbkChip()+'"></span><b class="tbkttl">'+esc(tbkName())+'</b><span class="tbksave" id="tbksave" aria-live="polite">'+(oldSave?oldSave.textContent:'')+'</span></div>'
+  +'<div class="tbkhc"><div class="tbkpill" id="tbkpill"></div></div>'
+  +'<div class="tbkhr"><div class="tbkhr1">'
+  +(sOpen?'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this '+(fm?'PDF':'book')+'" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this '+(fm?'PDF':'book')+'"><button type="button" class="tbksx" data-tbk="sclose" aria-label="Close search">×</button></label>'
+   :'<button type="button" class="tbkpill2 tbkic tbksbtn" data-tbk="sopen" aria-label="Search in this '+(fm?'PDF':'book')+'" title="Search">'+zI(ZIC.search,16)+'</button>')
   +'<button type="button" class="tbkpill2" data-tbk="notes" id="tbknotes" aria-label="Notes"'+(mod?'':' disabled')+'>'+zI(ZIC.note,15)+'<span>Notes</span><em id="tbknc"></em></button>'
   +(fm?'<button type="button" class="tbkpill2 tbkic" data-tbk="openext" aria-label="Open in a new tab" title="Open in a new tab"'+(mod?'':' disabled')+'>'+zI('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',16)+'</button>'
    :'<button type="button" class="tbkpill2 tbkic" data-tbk="bm" id="tbkbm" aria-label="Bookmark this page" title="Bookmark"'+(mod?'':' disabled')+'>'+zI(TBK_BM,16)+'</button>')
-  +tbkSeg([['markup','Markup'],['reading','Reading']],TBK.mode,'mode','dark')
-  +tbkSeg([['page','Page'],['book','Book view']],TBK.spread?'book':'page','view','tbkvseg');
+  +'</div><div class="tbkhm">'+tbkSeg([['markup','Markup'],['reading','Reading']],TBK.mode,'mode','dark')
+  +tbkSeg([['page','Page'],['book','Book view']],TBK.spread?'book':'page','view','tbkvseg')+'</div></div>';
  // left: modules (or chapters), bookmarks, term bank
  var list='';
  if(TBK.left==='pages')list=tbkPagesHtml();
@@ -26195,7 +26225,7 @@ function tbkDraw(){
  tbkEdge().innerHTML=tbkJumpHtml(M,cls);
  // the page pill: page number, turn, zoom
  document.getElementById('tbkpill').innerHTML=mod?'<button type="button" class="tbkpv" data-tbk="prev" aria-label="Previous page">'+zI(TBK_LEFT,16)+'</button><span id="tbkpn"></span><button type="button" class="tbkpv" data-tbk="next" aria-label="Next page">'+zI(TBK_RIGHT,16)+'</button>'
-  +'<button type="button" class="tbkbarb" id="tbkbarb" data-tbk="bar" aria-label="Show or hide the Markup bar" title="Markup bar">'+zI('<path d="m6 9 6 6 6-6"/>',16)+'</button><i></i><button type="button" data-tbk="zoom:-1" aria-label="Zoom out">−</button><button type="button" class="tbkzv" data-tbk="zoom:0" id="tbkzv" aria-label="Back to 100%"></button><button type="button" data-tbk="zoom:1" aria-label="Zoom in">+</button>':'';
+  +'<button type="button" class="tbkbarb" id="tbkbarb" data-tbk="bar" aria-label="Show or hide the Markup bar" title="Markup bar">'+zI('<path d="m6 9 6 6 6-6"/>',16)+'</button><span class="tbkpz"><i></i><button type="button" data-tbk="zoom:-1" aria-label="Zoom out">−</button><button type="button" class="tbkzv" data-tbk="zoom:0" id="tbkzv" aria-label="Back to 100%"></button><button type="button" data-tbk="zoom:1" aria-label="Zoom in">+</button></span>':'';
  // right: search results
  var right=document.getElementById('tbkright'),rh='';
  if(TBK.right==='find'&&TBK.hits){
@@ -26498,6 +26528,8 @@ document.addEventListener('click',function(e){
  if(a==='prev')return tbkStep(-1);
  if(a==='next')return tbkStep(1);
  if(a==='clear')return tbkClear();
+ if(a==='sopen'){TBK.sopen=true;tbkDraw();var qi=document.getElementById('tbkq');if(qi)qi.focus();return}
+ if(a==='sclose'){TBK.sopen=false;if(TBK.q)return tbkClear();return tbkDraw()}
  if(a==='rclose'){TBK.right=null;return tbkDraw()}
  if(a==='mode'){TBK.mode=p[1];tbkPrefs();if(host){mkSetMode(p[1]==='markup'?'edit':'read');mkRerenderChrome()}return tbkSync()}
  if(a==='view'){TBK.spread=p[1]==='book';tbkPrefs();if(host)tbkBookView(TBK.spread);tbkDraw();return setTimeout(tbkPlaceTabs,80)}
@@ -26520,7 +26552,7 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('keydown',function(e){
  if(!TBK)return;var t=e.target;
- if(t&&t.id==='tbkq'){if(e.key==='Enter'){e.preventDefault();tbkSearch(t.value)}else if(e.key==='Escape'&&t.value){e.preventDefault();tbkClear()}return}
+ if(t&&t.id==='tbkq'){if(e.key==='Enter'){e.preventDefault();tbkSearch(t.value)}else if(e.key==='Escape'){e.preventDefault();if(t.value)tbkClear();else{TBK.sopen=false;tbkDraw()}}return}
  if(view.modal||document.getElementById('mknoteed')||document.getElementById('mkver')||(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable)))return;
  if(e.key==='Escape'){e.preventDefault();tbkClose();return}
  if(e.metaKey||e.ctrlKey||e.altKey||(typeof q78On==='function'&&q78On()))return; // Book view turns its own pages
@@ -26744,7 +26776,7 @@ function q86Rail(c,A){
    +(pr.email?'<a class="q86mail q20fade" href="'+mailto(pr,c)+'" target="_blank" rel="noopener" data-phoneapp="1">'+esc(pr.email)+'</a>':'')+'</div></div>'
   :'<button class="q86link" data-add="contact" data-c="'+c.id+'">+ Add your professor</button>')+'</section>';
  h+='<section class="q86rs"><div class="q86lab">Links</div><div class="q86links">'
-  +'<a class="q86ln" href="'+esc(c.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener"><span class="q20fade">FanshaweOnline</span>'+Q86EXT+'</a>'
+  +(c.fol?'<a class="q86ln" href="'+esc(c.fol)+'" target="_blank" rel="noopener"><span class="q20fade">'+q91SiteName(c.fol)+'</span>'+Q86EXT+'</a>':'')
   +(bk?(bk.type==='file'?'<button class="q86ln" data-openbook="'+c.id+'">':'<a class="q86ln" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">')
    +(bk.icon?'<img src="'+bk.icon+'" alt="">':'')+'<span class="q20fade">'+esc(bk.title||'Textbook')+'</span>'+Q86EXT+(bk.type==='file'?'</button>':'</a>'):'')
   +(c.links||[]).filter(function(l){return l.pinned}).map(function(l){return '<a class="q86ln" href="'+esc(l.url)+'" target="_blank" rel="noopener"><span class="q20fade">'+esc(l.title)+'</span>'+Q86EXT+'</a>'}).join('')
@@ -26871,7 +26903,7 @@ function q86Info(c){
   :'<span class="q86sub">No project linked</span><button class="q86pillb" data-edit="class" data-c="'+c.id+'">Add link</button>';
  var left='<div class="q86il0">'+top+row('Grade',gr)+row('Professor',pb)+row('Reference files',rb)+row('Claude project','<div class="q86cp">'+cp+'</div>',true)+'</div>';
  var bk=c.textbook,lk='<section class="q86card"><div class="q86ch"><span>Links</span><button class="q86link q86acc" data-add="link" data-c="'+c.id+'" data-sec="_">+ Add</button></div>'
-  +'<div class="q86lrow">'+linkIcon(c.fol||'https://www.fanshaweonline.ca/d2l/home','FanshaweOnline')+'<a class="q20fade" href="'+esc(c.fol||'https://www.fanshaweonline.ca/d2l/home')+'" target="_blank" rel="noopener">FanshaweOnline</a><button class="q86ed" data-edit="class" data-c="'+c.id+'" aria-label="Edit the FanshaweOnline link">'+Q86PEN+'</button></div>'
+  +(c.fol?'<div class="q86lrow">'+linkIcon(c.fol,q91SiteName(c.fol))+'<a class="q20fade" href="'+esc(c.fol)+'" target="_blank" rel="noopener">'+q91SiteName(c.fol)+'</a><button class="q86ed" data-edit="class" data-c="'+c.id+'" aria-label="Edit the course site link">'+Q86PEN+'</button></div>':'')
   +(bk?'<div class="q86lrow">'+(bk.type==='file'?'<button class="q86lb" data-openbook="'+c.id+'">':'<a class="q86lb" href="'+esc(bk.url||'#')+'" target="_blank" rel="noopener">')+(bk.icon?'<img src="'+bk.icon+'" alt="">':'<span class="q86bk" style="background:'+q72Mix(palHex(c.color),'#3B2F27',.66)+'"></span>')+'<span class="q20fade">'+esc(bk.title||'Textbook')+'</span>'+(bk.type==='file'?'</button>':'</a>')+'<button class="q86ed" data-add="book" data-c="'+c.id+'" aria-label="Edit the textbook">'+Q86PEN+'</button></div>':'')
   +(c.links||[]).map(function(l,i){return l.section&&(c.sections||[]).some(function(s){return s.id===l.section})?'':'<div class="q86lrow">'+linkIcon(l.url,l.title,l.icon)+'<a class="q20fade" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title)+'</a><button class="q86ed" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="Edit '+esc(l.title)+'">'+Q86PEN+'</button></div>'}).join('')+'</section>';
  var tp=tpCard(c).replace(' open data-tptoggle="1"','').replace(' data-tptoggle="1"','').replace('<details class="cpcard cptp" id="c-title"','<details open class="cpcard cptp q86tpopen" id="c-title"');
@@ -26970,6 +27002,29 @@ var _q87TB=mkToolbarHtml;
 mkToolbarHtml=function(){var h=_q87TB.apply(this,arguments);
  if(!TBK||!MK_HOST&&!tbkHosted()||window.innerWidth>=600)return h;
  return '<div class="mkrow q87ur"><button data-mk="undo" aria-label="Undo" title="Undo"'+(MK.history.length?'':' disabled')+'>'+MK_ICO.undo+'</button><button data-mk="redo" aria-label="Redo" title="Redo"'+(MK.future.length?'':' disabled')+'>'+MK_ICO.redo+'</button></div>'+h};
+/* ===== v260b: fixes from the customer test (prefix q91). Tab rows say when there is more to swipe to. ===== */
+function q91TabFade(el){var m=el.scrollWidth-el.clientWidth;el.classList.toggle('q91more',m>2&&el.scrollLeft<m-2);el.classList.toggle('q91less',m>2&&el.scrollLeft>2)}
+(function(){
+ var _q91Render=render;
+ render=function(){var r=_q91Render.apply(this,arguments);document.querySelectorAll('.q86tabs').forEach(q91TabFade);return r};
+ document.addEventListener('scroll',function(e){var t=e.target;if(t&&t.classList&&t.classList.contains('q86tabs'))q91TabFade(t)},true);
+ window.addEventListener('resize',function(){document.querySelectorAll('.q86tabs').forEach(q91TabFade)});
+})();
+/* ===== v260: the reader's top bar (q88): back to where you came from on the left with the name and a quiet "Saved",
+   page and zoom in the centre, a magnifying glass that opens the search, then Notes, Markup/Reading and Book view. ===== */
+function tbkFromName(){
+ var fr=TBK&&TBK.from;if(!fr)return 'Back';
+ var c=fr.classId&&(fr.page==='class'||fr.page==='page')&&classById(fr.classId);if(c)return c.name||'Back';
+ var n=String(fr.page||'');return n?n.charAt(0).toUpperCase()+n.slice(1):'Back';
+}
+// the markup's own "Saving… / Saved" (the same one the old viewer showed) also shows next to the name
+var _q88Save=mkSetSave;
+mkSetSave=function(){var r=_q88Save.apply(this,arguments),t=document.getElementById('tbksave');if(t)t.textContent=MK?mkSaveLabel():'';return r};
+// an empty search box closes again when you tap away
+document.addEventListener('focusout',function(e){
+ if(!TBK||!e.target||e.target.id!=='tbkq')return;
+ setTimeout(function(){var q=document.getElementById('tbkq');if(!TBK||!q||document.activeElement===q||q.value||TBK.q)return;TBK.sopen=false;tbkDraw()},180);
+});
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
