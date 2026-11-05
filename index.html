@@ -6591,21 +6591,25 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86next{display:flex;align-items:center;gap:18px;padding:16px 20px;margin-bottom:6px;background:var(--q86blush);border:1px solid var(--q86bl);border-radius:14px;cursor:pointer;min-width:0}
 .q86gh+.q86next{margin-top:0}
 .q86cnt{width:48px;text-align:center;flex-shrink:0}
-.q86cnt b{display:block;font-size:32px;font-weight:400;color:var(--q86a);line-height:1}
+.q86cnt b{display:block;font-size:32px;font-weight:400;color:var(--q86ink);line-height:1}
 .q86cnt b.tdy{font-size:17px}
-.q86cnt small{display:block;font-size:11.5px;color:var(--q86i4);margin-top:3px;line-height:1.2}
+.q86cnt small{display:block;font-size:11.5px;color:var(--q86i2);margin-top:3px;line-height:1.2}
 .q86nb{flex:1;min-width:0;border-left:1px solid var(--q86bl);padding-left:18px}
-.q86nl{font-size:12px;color:var(--q86a)}
+.q86nl{font-size:12px;color:var(--q86ink)}
 .q86nt{display:flex;align-items:center;font-size:17px;min-width:0}
 .q86nt>.q20fade{white-space:nowrap;overflow:hidden;min-width:0}
-.q86nm{font-size:13px;color:var(--q86i4)}
+.q86nm{font-size:13px;color:var(--q86i2)}
 .q86nact{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .q86done{background:#fff;border:1px solid var(--q86bl2);color:var(--q86ink)!important;border-radius:999px;padding:7px 16px;font-size:13.5px;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .q86done:hover{background:var(--q86a);border-color:var(--q86a);color:#fff!important}
 .q86rail{position:sticky;top:20px}
 .q86rc{border:1px solid var(--q86line);border-radius:16px;background:var(--q86soft);overflow:hidden}
 .q86rs{padding:16px 20px;border-bottom:1px solid var(--q86hair);min-width:0}
-.q86rs1{padding:18px 20px}
+.q86when{background:var(--q86a);color:#fff;border-radius:16px;padding:12px 18px;margin-bottom:12px;min-width:0}
+.q86when .q86lab{color:rgba(255,255,255,.78);margin-bottom:1px}
+.q86when .q86big{font-size:15.5px;line-height:1.35}
+.q86when .q86sub{color:rgba(255,255,255,.85);font-size:13px}
+.q86when .q86link{color:#fff;text-decoration:underline;font-size:13px;margin-top:2px}
 .q86big{font-size:16px;min-width:0}
 .q86big .q20fade,.q86pt .q20fade{display:block;white-space:nowrap;overflow:hidden}
 .q86labrow{display:flex;justify-content:space-between;gap:8px}
@@ -7120,7 +7124,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v256';
+var BUILD='v257';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26701,9 +26705,9 @@ function q86Overview(c,A){
  return '<div class="q86ov">'+left+q86Rail(c,A)+'</div>';
 }
 function q86Rail(c,A){
- var gi=gradeInfo(c),pr=q86Prof(c),bk=c.textbook,h='<aside class="q86rail"><div class="q86rc">';
- h+='<section class="q86rs q86rs1"><div class="q86lab">Class</div><div class="q86big"><span class="q20fade">'+esc(c.day||'Time not set')+'</span></div><div class="q86sub">'+esc([c.room,c.code].filter(Boolean).join(' · ')||'Add the room in Edit class')+'</div>'
-  +(c.day&&c.room?'':'<button class="q86link" data-edit="class" data-c="'+c.id+'">Edit class</button>')+'</section>';
+ var gi=gradeInfo(c),pr=q86Prof(c),bk=c.textbook,h='<aside class="q86rail">';
+ h+='<section class="q86when"><div class="q86lab">When and where</div><div class="q86big"><span class="q20fade">'+esc(c.day||'Time not set')+'</span></div><div class="q86sub">'+esc([c.room,c.code].filter(Boolean).join(' · ')||'Add the room in Edit class')+'</div>'
+  +(c.day&&c.room?'':'<button class="q86link" data-edit="class" data-c="'+c.id+'">Edit class</button>')+'</section><div class="q86rc">';
  h+='<section class="q86rs"><div class="q86lab q86labrow"><span>Grade</span>'+(gi.avg!=null?'<span>on '+gi.graded+'% of the course</span>':'')+'</div>'
   +(gi.avg!=null?'<div class="q86grade">'+gi.avg.toFixed(1)+'%</div><div class="q86bar"><i style="width:'+Math.min(100,gi.graded)+'%"></i></div>'
    :'<div class="q86sub">'+(gi.total?'No marks yet. Add them as work comes back.':'Give assignments a worth (%) to see your grade.')+'</div>')+'</section>';
