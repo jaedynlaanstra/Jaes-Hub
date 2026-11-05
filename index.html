@@ -7175,7 +7175,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v267';
+var BUILD='v268';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -9357,7 +9357,7 @@ async function cloudSync(force){
   try{fr=await syncFiles(force||forceImg)}catch(e){fr.errs++}
   setTimeout(openPendingImport,300);
  }else view.driveError=result.error;
- if(fr.limitName)view.driveError='"'+fr.limitName+'" is not syncing because you are over your file storage allowance (or the file is over 25 MB). It stays on this device. Delete some files to make room, and it will sync on its own.';
+ if(fr.limitName)view.driveError='"'+fr.limitName+'" is not syncing because you are over your file storage allowance (or the file is over 30 MB). It stays on this device. Delete some files to make room, and it will sync on its own.';
  view.syncInfo='build '+BUILD+q80Info()+' · '+(fr.errs?fr.errs+' file(s) waiting to sync, will retry':'all files up to date');
  if(result&&result.ok){refreshUsage(!!(fr.moved||fr.limitName));pushRefresh();maybePushPrompt()}
  if(force){var el=Date.now()-startedAt;if(el<500)await new Promise(function(r){setTimeout(r,500-el)})}
@@ -13137,7 +13137,7 @@ async function addFiles(cid,list,section){
  FILES[cid]=FILES[cid]||[];
  for(var i=0;i<list.length;i++){
   var f=list[i];
-  if(f.size>25000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file. Try splitting it or exporting a smaller version.');continue}
+  if(f.size>30000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 30 MB per file. Try splitting it or exporting a smaller version.');continue}
   try{var rec=await readFile(f);if(section)rec.section=section;FILES[cid].push(rec)}catch(e){}
  }
  render();
@@ -13159,7 +13159,7 @@ function replaceFilePick(cid,i){
 }
 async function replaceFile(cid,i,file){
  var list=FILES[cid]||[],old=list[i];if(!old)return;
- if(file.size>25000000){alert(file.name+' is '+(file.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');return}
+ if(file.size>30000000){alert(file.name+' is '+(file.size/1048576).toFixed(0)+' MB, and the limit is 30 MB per file.');return}
  var fresh;
  try{fresh=await readFile(file)}catch(e){alert('Could not read that file.');return}
  fresh.id=old.id;
@@ -13622,7 +13622,7 @@ document.addEventListener('change',function(e){
  }
  if(t.dataset&&t.dataset.asgfile&&t.files[0]&&view.modal){
   var acid=view.modal.classId,af=t.files[0];
-  if(af.size>25000000){alert(af.name+' is '+(af.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');t.value='';return}
+  if(af.size>30000000){alert(af.name+' is '+(af.size/1048576).toFixed(0)+' MB, and the limit is 30 MB per file.');t.value='';return}
   (async function(){
    FILES[acid]=FILES[acid]||[];
    var rec=await readFile(af);
@@ -20169,7 +20169,7 @@ ZACT.q45kind=function(k){var m=view.modal;if(m){m.bk=k;render()}};
 ZM.q45book={wide:true,html:function(m){var c=classById(m.cid);if(!c)return null;var b=m.id&&zItem(c,m.id),v=function(k){return m[k]!=null?m[k]:(b?b[k]||'':'')};
  var curFile=b&&b.fid&&(FILES[c.id]||[]).filter(function(f){return f.id===b.fid})[0];
  var seg='<div class="z4seg q45seg">'+[['pdf','PDF file'],['link','Link'],['shelf','On my shelf']].map(function(k){return '<button type="button" class="'+(m.bk===k[0]?'on':'')+'" data-zact="q45kind:'+k[0]+'">'+k[1]+'</button>'}).join('')+'</div>';
- var src=m.bk==='pdf'?'<div class="field"><label>The PDF</label><div class="q45file"><label class="zbtn">'+zI('<path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/>',14)+' '+(m.fname||curFile?'Choose a different PDF':'Choose a PDF')+'<input type="file" accept="application/pdf,.pdf" data-q45pdf="1" style="display:none"></label><span class="q20fade">'+esc(m.fname||(curFile&&curFile.name)||'')+'</span></div><p class="hint">Up to 25 MB. The cover is made from its first page.</p></div>'
+ var src=m.bk==='pdf'?'<div class="field"><label>The PDF</label><div class="q45file"><label class="zbtn">'+zI('<path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/>',14)+' '+(m.fname||curFile?'Choose a different PDF':'Choose a PDF')+'<input type="file" accept="application/pdf,.pdf" data-q45pdf="1" style="display:none"></label><span class="q20fade">'+esc(m.fname||(curFile&&curFile.name)||'')+'</span></div><p class="hint">Up to 30 MB. The cover is made from its first page.</p></div>'
   :m.bk==='link'?'<div class="field"><label for="q45l">Link to the cookbook</label><div class="zfind"><input id="q45l" value="'+esc(v('link'))+'" placeholder="Paste a link" inputmode="url" autocomplete="off"><button type="button" class="zbtn ghost q43pst" data-zact="q45paste">Paste</button><button type="button" class="zbtn" data-zact="q45linkcov">Get the cover</button></div><p class="hint">A cookbook online, a store page or a PDF someone shared.</p></div>'
   :'<p class="hint" style="margin:0 0 12px">For a cookbook in your kitchen. Find its cover by name below, or take a photo of it.</p>';
  var res=m.results==='loading'?'<p class="zsoft">Looking…</p>':Array.isArray(m.results)?(m.results.length?'<div class="q45res">'+m.results.map(function(x,i){return '<button type="button" data-zact="q45pickcov:'+i+'"><img src="'+esc(x.cover)+'" alt=""><small class="q20fade">'+esc(x.title)+'</small></button>'}).join('')+'</div>':'<p class="zsoft">No covers found by that name. Try fewer words, or use your own photo.</p>'):'';
@@ -20191,7 +20191,7 @@ ZM.q45book={wide:true,html:function(m){var c=classById(m.cid);if(!c)return null;
  FILES[c.id]=FILES[c.id]||[];
  var dropOld=function(){if(!b.fid)return;var k=FILES[c.id].findIndex(function(f){return f.id===b.fid});if(k>-1)dropFile(c.id,k);delete b.fid};
  if(m.bk==='pdf'&&q45File){
-  if(q45File.size>25000000){zToast('That PDF is '+(q45File.size/1048576).toFixed(0)+' MB. The limit is 25 MB per file.');return}
+  if(q45File.size>30000000){zToast('That PDF is '+(q45File.size/1048576).toFixed(0)+' MB. The limit is 30 MB per file.');return}
   var rec;try{rec=await readFile(q45File)}catch(e){zToast('Couldn’t read that PDF.');return}
   dropOld();rec.name=q45File.name;FILES[c.id].push(rec);b.fid=rec.id;saveFiles(c.id);
  }else if(m.bk!=='pdf')dropOld();
@@ -20784,7 +20784,7 @@ document.addEventListener('change',async function(e){var t=e.target;if(!t||!t.ma
  var k=t.getAttribute('data-q53files').split(':'),f=q53Find(k[0],k[1],k[2]);if(!f||!t.files||!t.files.length)return;
  FILES[k[0]]=FILES[k[0]]||[];var added=0;
  for(var i=0;i<t.files.length;i++){var file=t.files[i];
-  if(file.size>25000000){zToast(file.name+' is '+(file.size/1048576).toFixed(0)+' MB. The limit is 25 MB per file.');continue}
+  if(file.size>30000000){zToast(file.name+' is '+(file.size/1048576).toFixed(0)+' MB. The limit is 30 MB per file.');continue}
   try{var rec=await readFile(file);rec.name=file.name;rec.section='proj:'+k[1];FILES[k[0]].push(rec);f.s.files=f.s.files||[];f.s.files.push(rec.id);added++}catch(er){zToast('Couldn’t read '+file.name+'.')}}
  if(!added)return;saveFiles(k[0]);touch(f.p);save();render();if(sbUser)cloudSync(true)},true);
 // deleting a project also deletes its tasks' files
@@ -22325,7 +22325,7 @@ function q65AddText(text,spot){
 function q65PickImage(){
  var inp=document.getElementById('q65file');
  if(!inp){inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.id='q65file';inp.style.display='none';document.body.appendChild(inp);
-  inp.addEventListener('change',function(){var f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(f.size>25*1024*1024){zToast('That picture is over 25 MB.');return}q65AddImageBlob(f)})}
+  inp.addEventListener('change',function(){var f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(f.size>30*1024*1024){zToast('That picture is over 30 MB.');return}q65AddImageBlob(f)})}
  inp.click();
 }
 
@@ -23461,7 +23461,7 @@ var q70In=document.createElement('input');q70In.type='file';q70In.accept='image/
 q70In.addEventListener('change',function(){
  var f=q70In.files&&q70In.files[0];q70In.value='';if(!f)return;
  var pdf=q70IsPdf(f);
- if(f.size>25*1024*1024){zToast('That '+(pdf?'PDF':'picture')+' is too big (25 MB limit).');return}
+ if(f.size>30*1024*1024){zToast('That '+(pdf?'PDF':'picture')+' is too big (30 MB limit).');return}
  if(pdf)zToast('Reading the first page of your PDF…');
  q70Process(f).then(function(r){
   S.noteTpl=S.noteTpl||{};
@@ -24240,7 +24240,7 @@ ZACT.q74add=async function(cid,j){
  d.busy=true;var media=[],i;
  for(i=0;i<d.media.length;i++){
   var m=d.media[i];
-  if(m.file.size>25000000){zToast('“'+m.file.name+'” is over 25 MB, so it was skipped.');continue}
+  if(m.file.size>30000000){zToast('“'+m.file.name+'” is over 30 MB, so it was skipped.');continue}
   try{var rec=await readFile(m.file);rec.section='q74';(FILES[cid]=FILES[cid]||[]).push(rec);media.push({f:rec.id,v:m.v?1:0})}catch(e){}
  }
  q74Free(d);
@@ -26075,7 +26075,7 @@ document.addEventListener('change',async function(e){
  if(m&&m.kind==='tbkbook'&&t.hasAttribute('data-tbkcc')){m.book=t.value;render();return}
  if(m&&m.kind==='tbklink'&&t.hasAttribute('data-tbkcpdf')){
   var f=t.files&&t.files[0],k=classById(m.cls);if(!f||!k)return;
-  if(f.size>25000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');return}
+  if(f.size>30000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 30 MB per file.');return}
   zToast('Adding '+esc(f.name)+'…');
   var rec;try{rec=await readFile(f)}catch(err){zToast('Could not read that PDF');return}
   FILES[k.id]=FILES[k.id]||[];FILES[k.id].push(rec);
@@ -26097,7 +26097,7 @@ async function tbkAddFiles(pid,bid,list){
  zToast(L.length===1?'Adding '+esc(L[0].name)+'…':'Adding '+L.length+' PDFs…');
  for(var i=0;i<L.length;i++){
   var f=L[i];
-  if(f.size>25000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 25 MB per file.');continue}
+  if(f.size>30000000){alert(f.name+' is '+(f.size/1048576).toFixed(0)+' MB, and the limit is 30 MB per file.');continue}
   var rec;try{rec=await readFile(f)}catch(e){zToast('Could not read '+esc(f.name));continue}
   rec.section=bid;FILES[pid].push(rec);
   var n=tbkMods(c,bid).reduce(function(a,m){return Math.max(a,m.n||0)},0)+1;
