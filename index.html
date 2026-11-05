@@ -7175,7 +7175,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v266';
+var BUILD='v267';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -14139,7 +14139,11 @@ function firstName(){
 /* items that live on a page (c.items), found by id */
 function zItem(c,id){var L=(c&&c.items)||[];for(var i=0;i<L.length;i++)if(L[i].id===id)return L[i];return null}
 function zTask(c,id){var L=(c&&c.tasks)||[];for(var i=0;i<L.length;i++)if(L[i].id===id)return L[i];return null}
-function money(n){n=+n||0;var neg=n<0;n=Math.abs(n);return (neg?'−':'')+'$'+n.toLocaleString('en-CA',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})}
+// v267: the two number formatters are made once (toLocaleString with options builds a new one every call, and Home calls this hundreds of times)
+var MONEY_F=null;
+function money(n){n=+n||0;var neg=n<0;n=Math.abs(n);
+ if(!MONEY_F)try{MONEY_F=[new Intl.NumberFormat('en-CA',{minimumFractionDigits:0,maximumFractionDigits:2}),new Intl.NumberFormat('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})]}catch(e){MONEY_F=false}
+ return (neg?'−':'')+'$'+(MONEY_F?MONEY_F[n%1?1:0].format(n):n.toLocaleString('en-CA',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2}))}
 function zRing(pct,col,sz,w,label){sz=sz||64;w=w||7;var r=(sz-w)/2,c=2*Math.PI*r;pct=Math.max(0,Math.min(100,pct||0));
  return '<svg class="zring" width="'+sz+'" height="'+sz+'" viewBox="0 0 '+sz+' '+sz+'" aria-hidden="true"><circle cx="'+sz/2+'" cy="'+sz/2+'" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="'+w+'"/><circle cx="'+sz/2+'" cy="'+sz/2+'" r="'+r+'" fill="none" style="stroke:'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(c*pct/100)+' '+c+'" transform="rotate(-90 '+sz/2+' '+sz/2+')"/>'+(label!=null?'<text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" font-size="'+(sz/4.4)+'" fill="currentColor" font-family="inherit">'+esc(label)+'</text>':'')+'</svg>'}
 function zTag(t,k){var c=ZC[k]||ZC.grey;return '<span class="ztg" style="background:'+c[0]+';color:'+c[1]+'">'+esc(t)+'</span>'}
@@ -15459,15 +15463,17 @@ var _r6AllTasks=allTasks;
 allTasks=function(){
  var out=_r6AllTasks();
  if(view.noEv)return out;
- var from=zAddDays(iso(today()),-62),to=zAddDays(iso(today()),400);
+ var td=iso(today()),from=zAddDays(td,-62),to=zAddDays(td,400);
  if(view.calMonth){var a=view.calMonth+'-01';if(a<from)from=zAddDays(a,-7);var e=zMoEnd(view.calMonth);if(e>to)to=zAddDays(e,7)}
  S.classes.forEach(function(c){
   if(c.kind!=='budget')return;
   (c.items||[]).forEach(function(x){
    if((x.t!=='bill'&&x.t!=='pay')||x.cal===false||!x.due)return;
    var cc={id:c.id,name:x.t==='bill'?'Bills':'Pay day',short:x.t==='bill'?'Bills':'Pay day',color:x.t==='bill'?'sand':'sage',space:c.space,kind:'budget'};
+   // v267: the title and today's date are worked out once per bill, not once per date (this runs for 460 days ahead)
+   var ttl=x.t==='bill'?x.title+' · '+money(x.amount):(x.title||'Pay day')+(x.amount?' · +'+money(x.amount):'');
    zOcc(x.due,x.rep||(x.t==='bill'?'month':'2week'),from,to).forEach(function(k){
-    out.push({t:{id:x.id+'@'+k,title:x.t==='bill'?x.title+' · '+money(x.amount):(x.title||'Pay day')+(x.amount?' · +'+money(x.amount):''),due:k,done:x.t==='bill'?!!(x.paid&&x.paid[k]):k<iso(today()),bill:x.t==='bill',pay:x.t==='pay'},c:cc,kind:'task',ev:true});
+    out.push({t:{id:x.id+'@'+k,title:ttl,due:k,done:x.t==='bill'?!!(x.paid&&x.paid[k]):k<td,bill:x.t==='bill',pay:x.t==='pay'},c:cc,kind:'task',ev:true});
    });
   });
  });
