@@ -256,7 +256,7 @@ h2,h3,.rowhead h2{color:var(--head,var(--ink))}
 .asg summary::marker{content:''}
 .asgbody{padding:0 15px 14px 43px;font-size:13.5px;color:var(--ink2);white-space:pre-wrap}
 .snip{font-size:12px;color:var(--ink2);background:#F7F5F0;border-radius:7px;padding:7px 10px;margin:0 0 8px 29px}
-.lab2{font-size:11px;color:var(--ink3);letter-spacing:.01em;margin:14px 0 4px;display:flex;align-items:center}
+.lab2{font-size:11px;color:var(--ink3);letter-spacing:.05em;text-transform:uppercase;margin:14px 0 4px;display:flex;align-items:center}
 .asgbody .acts2{display:flex;gap:7px;margin-top:11px}
 .late{color:#A34A3F}
 .more summary{list-style:none;cursor:pointer;font-size:13px;color:var(--ink2);padding:10px 0 2px}
@@ -1332,8 +1332,8 @@ a.cpitemname:hover{text-decoration:underline}
 .hcal{background:color-mix(in srgb,var(--sideBg) 12%,var(--card));border-radius:16px;padding:16px 16px 14px;color:color-mix(in srgb,var(--sideBg) 75%,#000);cursor:pointer}
 .hcal .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .hcal .top svg{width:26px;height:26px;flex:none;opacity:.85}
-.hcal .top b{display:block;font-size:13px;font-weight:600;letter-spacing:.01em;line-height:1.2}
-.hcal .top span{display:block;font-size:12.5px;letter-spacing:.01em;opacity:.8}
+.hcal .top b{display:block;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:1.2}
+.hcal .top span{display:block;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;opacity:.8}
 .hcal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-variant-numeric:tabular-nums}
 .hcal .g .h{font-size:12px;font-weight:600;padding-bottom:4px;color:var(--ink)}
 .hcal .g .d{position:relative;font-size:13px;color:var(--ink);height:30px;display:grid;place-items:center;border-radius:50%}
@@ -5000,7 +5000,7 @@ body.q48lt .side .sidefoot{background:rgba(0,0,0,.04)}
 .q59list,.q59files{padding:0!important;margin:0!important}
 .q59gh{display:flex;align-items:center;gap:6px;padding:10px 18px;background:color-mix(in srgb,var(--paper) 75%,var(--card));border-top:1px solid var(--line);border-bottom:1px solid var(--line);cursor:pointer;user-select:none;min-height:42px}
 .q59list>.q59gh:first-child,.q59files>.q59gh:first-child,.q59files>.q59srch+.q59gh{border-top:none}
-.q59gn{font-size:12.5px;font-weight:600;letter-spacing:.01em;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.q59gn{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .q59gh em{font-style:normal;font-size:12.5px;color:var(--ink3);flex:none}
 /* v240: a chapter band can have its own colour, picked in its 3-dots sheet (q81) */
 .q59gh.q81col{background:color-mix(in srgb,var(--q81c) 30%,var(--card));border-color:color-mix(in srgb,var(--q81c) 40%,var(--line))}
@@ -6592,7 +6592,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86ov{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:start}
 .q86h2row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px}
 .q86gh{display:flex;align-items:center;gap:10px;width:100%;margin-top:14px;padding:4px 4px 8px;background:none;border:0;cursor:pointer;text-align:left}
-.q86gl{font-size:11.5px;letter-spacing:.01em;color:var(--q86i4);white-space:nowrap}
+.q86gl{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--q86i4);white-space:nowrap}
 .q86gc{font-size:12px;background:var(--q86tile);color:var(--q86i3);border-radius:999px;padding:0 8px}
 .q86gs{font-size:12.5px;color:var(--q86i4);white-space:nowrap}
 .q86gline{flex:1;height:1px;background:var(--q86hair);min-width:10px}
@@ -6603,7 +6603,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86 .q86ck{min-height:0;min-width:0;width:22px;height:22px;border-radius:50%;border:1.5px solid #CFC8BD;background:#fff;cursor:pointer;flex-shrink:0;padding:0}
 .q86ck:hover{border-color:var(--q86a);background:var(--q86blush)}
 .q86date{width:42px;text-align:center;flex-shrink:0;line-height:1.1}
-.q86date small{display:block;font-size:11px;color:var(--q86i4);letter-spacing:.04em}
+.q86date small{display:block;font-size:11px;text-transform:uppercase;color:var(--q86i4);letter-spacing:.04em}
 .q86date b{display:block;font-size:20px;font-weight:400;line-height:1.05}
 .q86rt{flex:1;min-width:0}
 .q86rn{display:flex;align-items:center;font-size:15.5px;min-width:0}
@@ -6703,7 +6703,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86fs{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--q86line);border-radius:10px;padding:0 12px;color:var(--q86i4);margin-bottom:10px}
 .q86fs input{border:0!important;outline:0;background:none!important;padding:9px 0!important;font-size:14px;width:100%;min-width:0;box-shadow:none!important}
 .q86mods{display:flex;flex-direction:column;gap:2px}
-.q86ml{font-size:11.5px;letter-spacing:.01em;color:var(--q86i4);padding:14px 12px 4px}
+.q86ml{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--q86i4);padding:14px 12px 4px}
 .q86mi{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;font-size:14px;color:var(--q86i2)!important;background:transparent;border:0;cursor:pointer;text-align:left;min-width:0}
 .q86mi:hover{background:rgba(255,255,255,.6)}
 .q86mi.on{background:#fff;color:var(--q86i1)!important;box-shadow:0 0 0 1px var(--q86line)}
@@ -6850,6 +6850,8 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  :is(.tick,.hntick,.zck,.q86ck,.q86dots,.zchev,.q43gx,.q53i,.zhd){position:relative}
  :is(.tick,.hntick,.h4tick,.zck,.q86ck,.q86dots,.zchev,.q43gx,.q53i,.zhd)::before{content:'';position:absolute;inset:-9px;border-radius:50%}
 }
+/* At a glance: the tiles share the row evenly, however many the space has (Work may have only one) */
+.wdglance{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
 /* Plan my week: every week row is the same height */
 .q58grid{grid-auto-rows:1fr}
 /* class page title: one line; a long name fades at the end instead of growing the header */
@@ -7163,7 +7165,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v260';
+var BUILD='v261';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -9652,7 +9654,7 @@ function sidebar(c){
  h+='<div class="sidefoot">'+(q42ShowGet()?sideItem('data-go','install','Get the app',view.page==='install'):'')+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
 }
-// one menu row . v260b folded in the old r6 (icons), q43 (Get the app with its ×) and q46 (Look and feel) wrappers
+// one menu row. v260b folded in the old r6 (icons), q43 (Get the app with its ×) and q46 (Look and feel) wrappers
 function sideItem(attr,key,label,on){
  if(attr==='data-opencolours'&&label==='Colours')label='Look and feel';
  if(attr==='data-go'&&key==='install')return '<div class="sitem sico q43get'+(on?' on':'')+'" data-go="install"><span class="sic">'+zI(ZIC.mobile,17)+'</span><span class="nm2">'+esc(label)+'</span><button type="button" class="q43gx" data-q43gx="1" aria-label="Hide Get the app" title="Hide this">×</button></div>';
