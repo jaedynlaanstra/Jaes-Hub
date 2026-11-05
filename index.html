@@ -6854,8 +6854,6 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .wdglance{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
 /* Plan my week: every week row is the same height */
 .q58grid{grid-auto-rows:1fr}
-/* class page title: one line; a long name fades at the end instead of growing the header */
-.cpov .cpovt{white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
 </style>
 </head>
 <body>
@@ -7165,7 +7163,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v262';
+var BUILD='v263';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
