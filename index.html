@@ -6516,6 +6516,27 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 #tbkhost #mk .mktext span.tbktm{background:rgba(244,214,120,.6);border-radius:3px;box-shadow:0 0 0 3px rgba(244,214,120,.6)}
 @media (max-width:900px){.tbk-w .tbkleft{width:min(600px,92vw)}}
 @media (max-width:600px){.tbktbar [data-tbk="twide"]{display:none}}
+/* v258: a class PDF's pages in the side list (q87) */
+.tbklt{display:block;font-size:15px;font-weight:500;color:#33312C;padding:6px 4px 2px}
+.tbkpgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;padding:6px 6px 0}
+.tbkpg{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;min-width:0;font:inherit}
+.tbkpgc{display:block;width:100%;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(60,45,30,.12);outline:2px solid transparent;outline-offset:2px;transition:outline-color .15s ease}
+.tbkpgc canvas{display:block;width:100%;height:100%}
+.tbkpg:hover .tbkpgc{outline-color:#E4E0D7}
+.tbkpg.on .tbkpgc{outline-color:#8C6E5B}
+.tbkpg small{font-size:12px;color:#837D6D;line-height:1}
+.tbkpg.on small{color:#33312C;font-weight:500}
+@media (max-width:600px){.tbkpgs{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 10px}}
+#tbkhost #mk .mktools .q87ur button:disabled{opacity:.35}
+/* phones: the reader's top bar in two rows -- back, name, Notes and the extra button; then search and Markup/Reading */
+@media (max-width:600px){
+ .tbktop{row-gap:8px}
+ .tbktop .tbkdiv{display:none}
+ .tbktop .tbkttl{flex:1 1 150px;min-width:0;padding-right:16px}
+ .tbktop .tbkpill2{order:2}
+ .tbktop .tbksrch{order:5;flex:1 1 170px;min-width:0}
+ .tbktop .tbkseg{order:6}
+}
 /* v254: class page redesign (q86): folder tabs joined to one white panel */
 .q86{--q86line:#E4E0D7;--q86hair:#EEEAE3;--q86hair2:#F0ECE5;--q86i1:#33312C;--q86i2:#6B675F;--q86i3:#8A8478;--q86i4:#A29D93;--q86chip:#EFE9E4;--q86tile:#F1EDE7;--q86soft:#FAF8F5;color:var(--q86i1);font-size:15px;line-height:1.5}
 :where(.q86) button{font-family:inherit;color:inherit;font-size:inherit;box-shadow:none;transform:none}
@@ -7124,7 +7145,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v257';
+var BUILD='v258';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26070,9 +26091,10 @@ async function tbkTerms(doc){
    The engine (#mk) is mounted inside #tbkhost, so Markup, notes, pinch zoom, Book view page turns and markup sync are
    exactly the ones class files use; its own top bar is hidden and this bar drives it. Syncing never redraws the page. ---------- */
 var TBK=null,MK_HOST=null;
-function tbkKey(){return TBK.bid?'b~'+TBK.bid:'c~'+TBK.cls}
+function tbkKey(){return TBK.fid?'f~'+TBK.fid:TBK.bid?'b~'+TBK.bid:'c~'+TBK.cls}
 function tbkModsNow(){
  if(!TBK)return [];
+ if(TBK.fid){var r=tbkFile(TBK.fcid,TBK.fid);return r?[{id:'f',title:r.f.name,cid:TBK.fcid,fid:TBK.fid,pages:TBK.cpages||0,terms:[]}]:[]} // v258: any class PDF, one "module"
  if(TBK.bid){var c=classById(TBK.pid);return tbkMods(c,TBK.bid).map(function(m){return {id:m.id,title:m.title||'Module',cid:TBK.pid,fid:m.fid,pages:m.pages||0,terms:m.terms||[],item:m}})}
  var k=classById(TBK.cls),bk=k&&k.textbook;
  return bk&&bk.type==='file'?[{id:'c',title:bk.title||'Textbook',cid:k.id,fid:bk.fileId,pages:TBK.cpages||0,terms:TBK.cterms||[]}]:[];
@@ -26080,8 +26102,8 @@ function tbkModsNow(){
 function tbkTint(m,i){return (m&&m.item&&m.item.tint)||TBK_TINTS[i%8]}
 function tbkModDay(x){return x?tbkDay(x.date||x.at):''}
 function tbkBook(){var c=TBK&&TBK.bid&&classById(TBK.pid);return c?zItem(c,TBK.bid):null}
-function tbkName(){var b=tbkBook();if(b)return b.title;var k=TBK&&classById(TBK.cls);return k?(k.textbook&&k.textbook.title)||k.name:'Textbook'}
-function tbkChip(){var b=tbkBook();if(b)return tbkLook(b).chip;var k=TBK&&classById(TBK.cls);return k?(k.textbook&&k.textbook.color)||palHex(k.color):'#8C6E5B'}
+function tbkName(){if(TBK&&TBK.fid){var r=tbkFile(TBK.fcid,TBK.fid);return r?r.f.name:'PDF'}var b=tbkBook();if(b)return b.title;var k=TBK&&classById(TBK.cls);return k?(k.textbook&&k.textbook.title)||k.name:'Textbook'}
+function tbkChip(){if(TBK&&TBK.fid){var fc=classById(TBK.fcid);return fc?palHex(fc.color):'#8C6E5B'}var b=tbkBook();if(b)return tbkLook(b).chip;var k=TBK&&classById(TBK.cls);return k?(k.textbook&&k.textbook.color)||palHex(k.color):'#8C6E5B'}
 function tbkStore(name,key,v){
  var all={};try{all=JSON.parse(localStorage.getItem(name)||'{}')||{}}catch(e){}
  if(v===undefined)return key?all[key]:all;
@@ -26091,7 +26113,7 @@ function tbkPrefs(){tbkStore('tbk-prefs',null,{spread:TBK.spread,mode:TBK.mode,c
 function tbkHosted(){return !!(MK&&TBK&&TBK.mounted&&document.querySelector('#tbkhost #mk'))}
 function tbkOpen(o){
  var pr=tbkStore('tbk-prefs')||{};
- TBK=Object.assign({mi:0,page:1,left:'mods',q:'',hits:null,right:null,mode:pr.mode==='markup'?'markup':'reading',spread:!!pr.spread,collapsed:!!pr.collapsed,barMin:!!pr.barMin,wide:!!pr.wide,term:null,tshut:null,docs:{},text:{},sgen:0,outline:null,drawer:false,mounted:null},o);
+ TBK=Object.assign({mi:0,page:1,left:o&&o.fid?'pages':'mods',q:'',hits:null,right:null,mode:pr.mode==='markup'?'markup':'reading',spread:!!pr.spread,collapsed:!!pr.collapsed,barMin:!!pr.barMin,wide:!!pr.wide,term:null,tshut:null,docs:{},text:{},sgen:0,outline:null,drawer:false,mounted:null},o);
  var M=tbkModsNow(),pos=tbkStore('tbk-pos',tbkKey()),j=pos?M.map(function(x){return x.id}).indexOf(pos.mod):-1;
  if(j>-1){TBK.mi=j;TBK.page=pos.page||1}else TBK.mi=Math.max(0,M.length-1);
  if(innerWidth<600)TBK.spread=false;                           // two pages side by side don't fit a phone
@@ -26129,16 +26151,19 @@ function tbkDraw(){
  var mod=M[TBK.mi],cls=!TBK.bid,act=document.activeElement,qFocus=act&&act.id==='tbkq',caret=qFocus?act.selectionStart:0;
  var listEl=el.querySelector('.tbklist'),listTop=listEl?listEl.scrollTop:0;
  // top bar
- document.getElementById('tbkhd').innerHTML='<button type="button" class="tbkback" data-tbk="close">'+zI(TBK_LEFT,16)+'<span>Textbooks</span></button><i class="tbkdiv"></i>'
+ var fm=!!TBK.fid;
+ document.getElementById('tbkhd').innerHTML='<button type="button" class="tbkback" data-tbk="close">'+zI(TBK_LEFT,16)+'<span>'+(fm?'Back':'Textbooks')+'</span></button><i class="tbkdiv"></i>'
   +'<span class="tbkcol" style="background:'+tbkChip()+'"></span><b class="tbkttl">'+esc(tbkName())+'</b><span class="tbkfill"></span>'
-  +'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this book" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this book">'+(TBK.q?'<button type="button" data-tbk="clear">Clear</button>':'')+'</label>'
+  +'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this '+(fm?'PDF':'book')+'" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this '+(fm?'PDF':'book')+'">'+(TBK.q?'<button type="button" data-tbk="clear">Clear</button>':'')+'</label>'
   +'<button type="button" class="tbkpill2" data-tbk="notes" id="tbknotes" aria-label="Notes"'+(mod?'':' disabled')+'>'+zI(ZIC.note,15)+'<span>Notes</span><em id="tbknc"></em></button>'
-  +'<button type="button" class="tbkpill2 tbkic" data-tbk="bm" id="tbkbm" aria-label="Bookmark this page" title="Bookmark"'+(mod?'':' disabled')+'>'+zI(TBK_BM,16)+'</button>'
+  +(fm?'<button type="button" class="tbkpill2 tbkic" data-tbk="openext" aria-label="Open in a new tab" title="Open in a new tab"'+(mod?'':' disabled')+'>'+zI('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',16)+'</button>'
+   :'<button type="button" class="tbkpill2 tbkic" data-tbk="bm" id="tbkbm" aria-label="Bookmark this page" title="Bookmark"'+(mod?'':' disabled')+'>'+zI(TBK_BM,16)+'</button>')
   +tbkSeg([['markup','Markup'],['reading','Reading']],TBK.mode,'mode','dark')
   +tbkSeg([['page','Page'],['book','Book view']],TBK.spread?'book':'page','view','tbkvseg');
  // left: modules (or chapters), bookmarks, term bank
  var list='';
- if(TBK.left==='mods'){
+ if(TBK.left==='pages')list=tbkPagesHtml();
+ else if(TBK.left==='mods'){
   if(cls&&TBK.outline&&TBK.outline.length)list=TBK.outline.map(function(o,i){return '<button type="button" class="tbkrow" data-tbk="go:0:'+o.page+'"><span class="tbkmt" style="background:'+TBK_TINTS[i%8]+'">'+(i+1)+'</span><span class="tbkmx"><b>'+esc(o.title)+'</b><small>p. '+o.page+'</small></span></button>'}).join('');
   else list=M.map(function(m,i){var cnt=TBK.hits&&TBK.hits.per[m.id]||0,day=tbkModDay(m.item);
    return '<div class="tbkrow'+(i===TBK.mi?' on':'')+'"><button type="button" class="tbkrgo" data-tbk="mod:'+i+'"><span class="tbkmt" style="background:'+tbkTint(m,i)+'">'+(cls?zI(ZIC.book,14):tbkTile(M,i))+'</span>'+tbkTwoLine(M,i,cls,tbkPagesTxt(m)+(day?' · '+esc(day):''))+(cnt?'<em class="tbkcnt">'+cnt+'</em>':'')+'</button>'
@@ -26162,8 +26187,9 @@ function tbkDraw(){
  }
  var left=document.getElementById('tbkleft');
  if(cls)left.removeAttribute('data-tbkdrop');else left.setAttribute('data-tbkdrop',TBK.pid+'~'+TBK.bid);
- left.innerHTML='<div class="tbklhd">'+tbkSeg([['mods',cls?'Chapters':'Modules'],['bms','Bookmarks'],['terms','Term bank']],TBK.left,'left','tabs')+'<button type="button" class="tbklx" data-tbk="panel" aria-label="Hide this list" title="Hide">'+zI(TBK_LEFT,17)+'</button></div><div class="tbklist">'+list+'</div>';
- var hd=document.getElementById('tbkhandle');if(hd)hd.setAttribute('aria-label','Show the '+(cls?'chapters':'modules'));
+ left.innerHTML='<div class="tbklhd">'+(fm?(TBK.outline&&TBK.outline.length?tbkSeg([['pages','Pages'],['mods','Chapters']],TBK.left,'left','tabs'):'<b class="tbklt">Pages</b>'):tbkSeg([['mods',cls?'Chapters':'Modules'],['bms','Bookmarks'],['terms','Term bank']],TBK.left,'left','tabs'))+'<button type="button" class="tbklx" data-tbk="panel" aria-label="Hide this list" title="Hide">'+zI(TBK_LEFT,17)+'</button></div><div class="tbklist">'+list+'</div>';
+ var hd=document.getElementById('tbkhandle');if(hd)hd.setAttribute('aria-label','Show the '+(fm?'pages':cls?'chapters':'modules'));
+ left.classList.toggle('tbkpgmode',TBK.left==='pages');if(TBK.left==='pages')tbkThumbsFill();
  var l2=left.querySelector('.tbklist');if(l2)l2.scrollTop=listTop;
  // module tabs on the right edge
  tbkEdge().innerHTML=tbkJumpHtml(M,cls);
@@ -26239,6 +26265,7 @@ function tbkSync(){
  var edit=host&&MK.mode==='edit';el2=document.getElementById('tbkr');if(el2)el2.classList.toggle('tbk-tmin',!!TBK.barMin);
  if(pill){pill.classList.toggle('tbk-ed',!!edit);pill.classList.toggle('tbkpj',!!tbkJumpHtml(M,!TBK.bid))}
  var vs=document.querySelector('#tbkhd .tbkvseg');if(vs)vs.classList.toggle('tbkoff',host&&MK.pageCount<2);
+ tbkThumbCur(pg);
 }
 // Book view through the reader's own switch, without changing the remembered choice for class files
 function tbkBookView(on){
@@ -26259,7 +26286,7 @@ async function tbkMount(){
  var target=TBK.page;tbkUnmount();TBK.page=target;            // closing the old module must not change where the new one opens
  var unfade=function(){host.classList.remove('tbkfade');tbkEdge().classList.remove('tbkfade')};
  var msg=function(t,b,add){unfade();host.innerHTML='<div class="tbkmsg">'+(b?'<b>'+b+'</b>':'')+'<p>'+t+'</p>'+(add?'<button type="button" class="tbkaddm" data-tbk="pick">'+zI(ZIC.plus,14)+'<span>Add module 1</span></button>':'')+'</div>'};
- if(!mod){msg('Add your first module’s PDF and it shows here.','No modules yet',!!TBK.bid);return}
+ if(!mod){if(TBK.fid)msg('This PDF isn’t here any more.');else msg('Add your first module’s PDF and it shows here.','No modules yet',!!TBK.bid);return}
  if(!want){msg(r&&r.f.cloud?'This PDF is still downloading from your account. It opens here as soon as it arrives.':'This PDF isn’t saved on this device.');return}
  TBK.mounting=true;TBK.mounted=want;
  var keep=null;try{keep=localStorage.getItem('hub:mkbook');localStorage.setItem('hub:mkbook',TBK.spread?'1':'0')}catch(e){}
@@ -26275,10 +26302,11 @@ async function tbkMount(){
  if(TBK.spread&&MK.pageCount>1&&!MK.book)tbkBookView(true);
  if(now.item&&now.item.pages!==MK.pageCount){now.item.pages=MK.pageCount;touch(now.item);save()}
  if(!TBK.bid){TBK.cpages=MK.pageCount;if(!TBK.outline)tbkOutline(MK.doc);
-  if(!TBK.cterms){TBK.cterms=[];if(MK.pageCount<=60)tbkTerms(MK.doc).then(function(t){if(TBK&&!TBK.bid&&t.length){TBK.cterms=t;tbkDraw()}},function(){})}}
+  if(!TBK.cterms){TBK.cterms=[];if(MK.pageCount<=60&&!TBK.fid)tbkTerms(MK.doc).then(function(t){if(TBK&&!TBK.bid&&t.length){TBK.cterms=t;tbkDraw()}},function(){})}}
  var row=document.querySelector('#tbkleft .tbkrow.on small');if(row)row.textContent=tbkPlural(MK.pageCount,'page')+(now.item&&tbkModDay(now.item)?' · '+tbkModDay(now.item):'');
  var sp=TBK.page?null:tbkStore('tbk-mpos',want);tbkMkGo(sp?sp.p:TBK.page||1,false,sp?sp.o:0);TBK.page=MK.curPage;
  var body=document.getElementById('mkbody');if(body){body.addEventListener('scroll',tbkOnScroll,{passive:true});0}
+ TBK.thumbs={};if(TBK.fid)tbkDraw();
  setTimeout(function(){tbkSync();tbkMarkSpans();tbkPlaceTabs();unfade()},60);
 }
 function tbkMkGo(n,smooth,off){
@@ -26476,6 +26504,7 @@ document.addEventListener('click',function(e){
  if(a==='zoom'){if(!host)return;mkSettleFinish();var z=+p[1];mkZoomTo(z?MK.zoom+z*.1:1);tbkSync();return setTimeout(tbkPlaceTabs,80)}
  if(a==='notes'){if(!host)return;mkToggleNotes();mkRerenderChrome();return}
  if(a==='bar'){TBK.barMin=!TBK.barMin;tbkPrefs();return tbkSync()}
+ if(a==='openext'){if(TBK.fid){var ro=tbkFile(TBK.fcid,TBK.fid);if(ro)openFile(TBK.fcid,ro.i)}return}
  if(a==='pick'){var f=document.getElementById('tbkfile');if(f){f.value='';f.click()}return}
  if(a==='modedit'){
   var c=classById(TBK.pid),x=c&&zItem(c,p[1]);if(!x)return;var i=tbkMods(c,x.book).indexOf(x);
@@ -26881,6 +26910,66 @@ function viewClass(c){
 ZACT.kwm=function(m){try{localStorage.setItem('hub:kwmode',m)}catch(e){}view.kwOff=0;render()};
 ZACT.kwn=function(n){n=+n;view.kwOff=n?Math.max(0,(view.kwOff||0)+n):0;render()};
 
+/* ===== v258: every class PDF opens in the Textbooks reader layout (prefix q87). The same top bar, page pill, white Markup
+   bar and floating tool menu; the side list shows the PDF's pages (and its chapters, when it has any) instead of modules.
+   The arrow at the top opens the file in a new tab, as the old viewer's did. Handwritten notes keep their own viewer
+   (they need + Page and rename). ===== */
+function tbkPagesHtml(){
+ if(!tbkHosted())return '<p class="tbkempty">Opening the pages…</p>';
+ var h='',cur=MK.curPage||1;
+ for(var n=1;n<=MK.pageCount;n++){var info=MK.pageInfo[n],ar=info?(info.vp1.width/info.vp1.height).toFixed(4):'0.7727';
+  h+='<button type="button" class="tbkpg'+(n===cur?' on':'')+'" data-tbk="go:0:'+n+'" data-tbkpn="'+n+'" aria-label="Page '+n+'"><span class="tbkpgc" data-tbkpg="'+n+'" style="aspect-ratio:'+ar+'"></span><small>'+n+'</small></button>'}
+ return '<div class="tbkpgs">'+h+'</div>';
+}
+// each page picture is drawn once (when it scrolls into the list) and kept, so redrawing the list never flickers
+var Q87Q=[],Q87Busy=false,Q87IO=null;
+function tbkThumbsFill(){
+ if(!tbkHosted())return;var list=document.querySelector('#tbkleft .tbklist');if(!list)return;
+ if(TBK.thumbDoc!==MK.doc){TBK.thumbDoc=MK.doc;TBK.thumbs={};Q87Q=[]}
+ if(Q87IO)Q87IO.disconnect();
+ Q87IO='IntersectionObserver' in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var n=+e.target.getAttribute('data-tbkpg');Q87IO.unobserve(e.target);q87Want(n)}})},{root:list,rootMargin:'300px 0px'}):null;
+ list.querySelectorAll('.tbkpgc').forEach(function(ph){var n=+ph.getAttribute('data-tbkpg'),c=TBK.thumbs[n];
+  if(c&&c.nodeType)ph.appendChild(c);else if(Q87IO)Q87IO.observe(ph);else q87Want(n)});
+ tbkThumbCur(MK.curPage||1,true);
+}
+function q87Want(n){if(Q87Q.indexOf(n)<0)Q87Q.push(n);q87Run()}
+async function q87Run(){
+ if(Q87Busy)return;Q87Busy=true;
+ try{
+  while(Q87Q.length&&tbkHosted()){
+   var n=Q87Q.shift(),doc=MK.doc;if(TBK.thumbs[n])continue;TBK.thumbs[n]=1;
+   try{
+    var page=await mkGetPage(n),w=Math.round(132*Math.min(2,window.devicePixelRatio||1)),vp=page.getViewport({scale:w/page.getViewport({scale:1}).width});
+    var cv=document.createElement('canvas');cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
+    await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
+    if(!tbkHosted()||MK.doc!==doc)break;
+    TBK.thumbs[n]=cv;var ph=document.querySelector('#tbkleft .tbkpgc[data-tbkpg="'+n+'"]');if(ph)ph.appendChild(cv);
+   }catch(e){if(TBK&&TBK.thumbs)delete TBK.thumbs[n]}
+  }
+ }finally{Q87Busy=false}
+}
+// the page you're reading is lit in the list, and the list follows along when you scroll past the ones in view
+function tbkThumbCur(pg,force){
+ if(!TBK||TBK.left!=='pages')return;var list=document.querySelector('#tbkleft .tbklist');if(!list)return;
+ var on=list.querySelector('.tbkpg.on'),now=list.querySelector('.tbkpg[data-tbkpn="'+pg+'"]');
+ if(on===now&&!force)return;if(on)on.classList.remove('on');if(!now)return;now.classList.add('on');
+ var lr=list.getBoundingClientRect(),r=now.getBoundingClientRect();
+ if(r.top<lr.top+8||r.bottom>lr.bottom-8)list.scrollTop+=r.top-lr.top-(lr.height-r.height)/2;
+}
+// opening a class PDF from anywhere (Files, an assignment, search) lands here
+var _q87Open=mkOpen;
+mkOpen=function(cid,i,startEdit){
+ var f=(FILES[cid]||[])[i];
+ if(MK_HOST||!f||f.kind!=='pdf'||!f.data||(f.marks&&f.marks.paper))return _q87Open.apply(this,arguments);
+ if(MK&&!TBK)mkClose();if(TBK)tbkClose();
+ var o={fcid:cid,fid:f.id};if(startEdit)o.mode='markup';
+ tbkOpen(o);return Promise.resolve();
+};
+// on a phone the floating tool menu is hidden, so the Markup bar gets undo and redo at its start
+var _q87TB=mkToolbarHtml;
+mkToolbarHtml=function(){var h=_q87TB.apply(this,arguments);
+ if(!TBK||!MK_HOST&&!tbkHosted()||window.innerWidth>=600)return h;
+ return '<div class="mkrow q87ur"><button data-mk="undo" aria-label="Undo" title="Undo"'+(MK.history.length?'':' disabled')+'>'+MK_ICO.undo+'</button><button data-mk="redo" aria-label="Redo" title="Redo"'+(MK.future.length?'':' disabled')+'>'+MK_ICO.redo+'</button></div>'+h};
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
