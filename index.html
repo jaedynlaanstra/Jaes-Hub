@@ -9395,7 +9395,7 @@ function render(){
  else if(view.page==='class')body=viewClass(c);
  else if(view.page==='page')body=c?viewPage(c):'<p class="zempty">This page was deleted.</p>';
 
- app.innerHTML='<div class="wrap">'
+ app.innerHTML=q93Slim('<div class="wrap">'
   +'<div class="mbar'+(view.scrolled?' show':'')+'" id="mbar"><button class="mbar-btn" data-menu="1" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>'
   +'<span class="mbar-title">'+esc(title)+'</span>'+(view.page==='home'?'<span style="width:36px"></span>':'<button class="mbar-btn" data-go="home" aria-label="Go to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>')+'</div>'
   +'<div class="layout">'
@@ -9421,7 +9421,7 @@ function render(){
   +(view.storageOk?'':'<p class="hint" style="margin:12px 40px">Saving failed, most likely because storage is full. Delete a few uploaded files and try again.</p>')
   +'</div>'
   +(view.modal?modalHtml():'')
-  +pickerHtml();
+  +pickerHtml());
  applyTheme();
 }
 
@@ -27052,6 +27052,27 @@ document.addEventListener('focusout',function(e){
  if(!TBK||!e.target||e.target.id!=='tbkq')return;
  setTimeout(function(){var q=document.getElementById('tbkq');if(!TBK||!q||document.activeElement===q||q.value||TBK.q)return;TBK.sopen=false;tbkDraw()},180);
 });
+/* ===== v266: faster redraws (q93). Photos (covers, class tiles, icons) are stored as long data: text, and every
+   redraw pasted all of it back into the page (over 1 MB on Home), so each tap re-read it. q93Slim swaps each big
+   picture for a short blob: link made once per picture and reused, so a redraw only handles the short link. The saved
+   data is untouched; this only changes what goes into the page. ===== */
+var q93M=null,q93Keys=[];
+function q93Url(d){
+ if(!q93M)q93M=new Map();
+ var u=q93M.get(d);if(u)return u;
+ try{var c=d.indexOf(','),mime=d.slice(5,d.indexOf(';')),bin=atob(d.slice(c+1)),a=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);
+  u=URL.createObjectURL(new Blob([a],{type:mime}));
+ }catch(e){return d}
+ q93M.set(d,u);q93Keys.push(d);
+ // keep at most 120 pictures; the oldest link is let go (only pictures no longer shown would still use it)
+ if(q93Keys.length>120){var old=q93Keys.shift(),ou=q93M.get(old);q93M.delete(old);setTimeout(function(){try{URL.revokeObjectURL(ou)}catch(e){}},5000)}
+ return u;
+}
+function q93Slim(h){
+ if(typeof URL==='undefined'||!URL.createObjectURL||h.indexOf('data:image/')<0)return h;
+ return h.replace(/data:image\/[a-z.+-]+;base64,[A-Za-z0-9+\/=]{3000,}/g,q93Url);
+}
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
