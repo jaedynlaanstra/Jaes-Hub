@@ -7165,7 +7165,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v261';
+var BUILD='v262';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -25892,7 +25892,11 @@ function tbkMods(c,bid){return ((c&&c.items)||[]).filter(function(x){return x.t=
 // a module counts in the numbering; an extra (a midterm review, a cheat sheet) sits in the book without a number
 var TBK_EXTRA_RE=/review|midterm|mid-term|final|exam|quiz|cheat|sheet|summary|rapid/i;
 function tbkIsExtra(m){return !!m&&(m.item?m.item.kind:m.kind)==='extra'}
-function tbkNumOf(list,i){if(tbkIsExtra(list[i]))return 0;var n=0;for(var j=0;j<=i;j++)if(!tbkIsExtra(list[j]))n++;return n}
+// v262: a module can carry its own number (num), so a book can skip one (1, 2, 4); the ones after it count on from there
+function tbkOwnNum(m){var x=m&&(m.item||m),v=x&&parseInt(x.num,10);return v>0?v:0}
+function tbkNumOf(list,i){if(tbkIsExtra(list[i]))return 0;var n=0;for(var j=0;j<=i;j++)if(!tbkIsExtra(list[j]))n=tbkOwnNum(list[j])||n+1;return n}
+function tbkNextNum(list){for(var i=list.length-1;i>=0;i--)if(!tbkIsExtra(list[i]))return tbkNumOf(list,i)+1;return 1}
+function tbkNumRange(list){var a=0,b=0;list.forEach(function(m,i){var n=tbkNumOf(list,i);if(n){if(!a)a=n;b=n}});return a?(a===b?'Module '+a:'Modules '+a+'–'+b):''}
 function tbkModCount(list){return list.filter(function(m){return !tbkIsExtra(m)}).length}
 function tbkLbl(list,i){var n=tbkNumOf(list,i);return n?'Module '+n:(list[i].title||'Extra')}
 function tbkTile(list,i){var n=tbkNumOf(list,i);return n?'M'+n:zI(ZIC.note,14)}
@@ -25912,11 +25916,11 @@ function tbkPlural(n,w){return n+' '+w+(n===1?'':'s')}
 function tbkShelf(c){
  var mine=tbkBooks(c).map(function(b){
   var M=tbkMods(c,b.id),n=tbkModCount(M),L=tbkLook(b),last=M.reduce(function(a,m){var d=m.date||(m.at||'').slice(0,10);return d>a?d:a},''),key=c.id+'~'+b.id;
-  var meta=n?(n>1?'Modules 1–'+n:'Module 1')+(last?' · '+tbkDay(last):''):'No modules yet';
+  var meta=n?tbkNumRange(M)+(last?' · '+tbkDay(last):''):'No modules yet';
   return '<div class="tbkit" role="button" tabindex="0" data-tbkopen="'+key+'" data-tbkdrop="'+key+'" aria-label="Open '+esc(b.title)+', '+tbkPlural(n,'module')+'">'
    +'<span class="tbkcv" style="background:'+L.cover+'"><span class="tbksp" style="background:'+L.spine+'"></span><span class="tbkband"></span>'
    +'<span class="tbklab">'+esc(b.title)+'</span><span class="tbkcn">'+tbkPlural(n,'module')+'</span>'
-   +'<span class="tbkdz">Drop to add Module '+(n+1)+'</span></span>'
+   +'<span class="tbkdz">Drop to add Module '+tbkNextNum(M)+'</span></span>'
    +'<span class="tbkcap"><b>'+esc(b.title)+'</b><small>'+esc(meta)+'</small></span>'
    +'<button type="button" class="tbkmore" data-zact="tbkedit:'+c.id+':'+b.id+'" aria-label="Edit '+esc(b.title)+'">'+zI(ZIC.dots,15)+'</button></div>';
  }).join('');
@@ -26079,12 +26083,14 @@ async function tbkAddFiles(pid,bid,list){
   var n=tbkMods(c,bid).reduce(function(a,m){return Math.max(a,m.n||0)},0)+1;
   var it={id:uid(),t:'tmod',book:bid,fid:rec.id,n:n,title:tbkTitleOf(f.name),at:new Date().toISOString()};
   if(TBK_EXTRA_RE.test(f.name)&&!/module|chapter|\bmod[\s_-]?\d|\bch[\s_-]?\d/i.test(f.name))it.kind='extra'; // not a module: no number
+  else{var fm=/(?:module|\bmod|chapter|\bch)[\s_.-]*(\d{1,3})(?!\d)/i.exec(f.name),fn=fm?parseInt(fm[1],10):0,ML0=tbkMods(c,bid);
+   if(fn>0&&fn!==tbkNextNum(ML0))it.num=fn}                                 // v262: "Module 4.pdf" after Module 2 stays Module 4
   try{var lib=await loadPdfJs(),doc=await lib.getDocument({data:b64ToBytes(rec.data)}).promise;it.pages=doc.numPages;it.terms=await tbkTerms(doc);doc.destroy()}catch(e){}
   c.items.push(touch(it));added++;
  }
  if(!added)return;
  touch(c);save();saveFiles(pid);render();
- var ML=tbkMods(c,bid),last=ML[ML.length-1],what=added===1?(tbkIsExtra(last)?esc(last.title):'Module '+tbkModCount(ML)):added+' PDFs';
+ var ML=tbkMods(c,bid),last=ML[ML.length-1],what=added===1?(tbkIsExtra(last)?esc(last.title):'Module '+tbkNumOf(ML,ML.length-1)):added+' PDFs';
  if(TBK&&TBK.bid===bid){TBK.mi=ML.length-1;TBK.page=1;tbkDraw(true);zToast(what+' added')}
  else zToast('Added '+what+' to '+esc(b.title));
 }
@@ -26200,7 +26206,7 @@ function tbkDraw(){
   else list=M.map(function(m,i){var cnt=TBK.hits&&TBK.hits.per[m.id]||0,day=tbkModDay(m.item);
    return '<div class="tbkrow'+(i===TBK.mi?' on':'')+'"><button type="button" class="tbkrgo" data-tbk="mod:'+i+'"><span class="tbkmt" style="background:'+tbkTint(m,i)+'">'+(cls?zI(ZIC.book,14):tbkTile(M,i))+'</span>'+tbkTwoLine(M,i,cls,tbkPagesTxt(m)+(day?' · '+esc(day):''))+(cnt?'<em class="tbkcnt">'+cnt+'</em>':'')+'</button>'
     +(cls?'':'<button type="button" class="tbkrmore" data-tbk="modedit:'+m.id+'" aria-label="Edit '+esc(m.title)+'">'+zI(ZIC.dots,14)+'</button>')+'</div>'}).join('');
-  if(!cls)list+='<button type="button" class="tbkaddm" data-tbk="pick">'+zI(ZIC.plus,14)+'<span>Add module '+(tbkModCount(M)+1)+'</span></button><p class="tbkor">or drop a PDF here</p>';
+  if(!cls)list+='<button type="button" class="tbkaddm" data-tbk="pick">'+zI(ZIC.plus,14)+'<span>Add module '+tbkNextNum(M)+'</span></button><p class="tbkor">or drop a PDF here</p>';
  }else if(TBK.left==='bms'){
   var ids=M.map(function(m){return m.id}),B=tbkBms().filter(function(x){return ids.indexOf(x.mod)>-1}).sort(function(a,b){return ids.indexOf(a.mod)-ids.indexOf(b.mod)||a.page-b.page});
   list=B.length?B.map(function(x){var i=ids.indexOf(x.mod);return '<button type="button" class="tbkrow tbkplain" data-tbk="go:'+i+':'+x.page+'"><span class="tbkmx"><b>'+esc(M[i].title)+'</b><small>'+(cls||!tbkNumOf(M,i)?'':'Module '+tbkNumOf(M,i)+' · ')+'p. '+x.page+'</small></span></button>'}).join('')
@@ -26542,7 +26548,7 @@ document.addEventListener('click',function(e){
  if(a==='pick'){var f=document.getElementById('tbkfile');if(f){f.value='';f.click()}return}
  if(a==='modedit'){
   var c=classById(TBK.pid),x=c&&zItem(c,p[1]);if(!x)return;var i=tbkMods(c,x.book).indexOf(x);
-  zOpen('tbkmod',{cid:TBK.pid,mid:x.id,title:x.title||'',date:x.date||(x.at?iso(new Date(x.at)):''),tint:tbkTint({item:x},i),extra:x.kind==='extra'});return;
+  zOpen('tbkmod',{cid:TBK.pid,mid:x.id,title:x.title||'',date:x.date||(x.at?iso(new Date(x.at)):''),tint:tbkTint({item:x},i),extra:x.kind==='extra',num:String(tbkNumOf(tbkMods(classById(TBK.pid),x.book),tbkMods(classById(TBK.pid),x.book).indexOf(x))||'')});return;
  }
  if(a==='bm'){
   var M=tbkModsNow(),mod=M[TBK.mi];if(!mod)return;var pg=TBK.bid?classById(TBK.pid):tbkPage(true);if(!pg)return;
@@ -26574,8 +26580,10 @@ render=function(){
 ZM.tbkmod={html:function(m){
  var c=classById(m.cid),x=c&&zItem(c,m.mid);if(!x)return null;
  var ML=tbkMods(c,x.book),k=ML.indexOf(x),own=!!m.tint&&TBK_TINTS.indexOf(m.tint)<0;
- return '<h3>'+esc(m.extra?'Not a module':'Module '+(ML.slice(0,k+1).filter(function(y){return y===x||!tbkIsExtra(y)}).length))+'</h3><div class="field"><label for="tbkm1">Name</label><input id="tbkm1" maxlength="80" value="'+esc(m.title||'')+'"></div>'
+ var auto=k>0?tbkNextNum(ML.slice(0,k)):1,num=m.num!=null&&m.num!==''?m.num:String(auto);
+ return '<h3>'+esc(m.extra?'Not a module':'Module '+(parseInt(num,10)>0?parseInt(num,10):auto))+'</h3><div class="field"><label for="tbkm1">Name</label><input id="tbkm1" maxlength="80" value="'+esc(m.title||'')+'"></div>'
   +'<div class="field"><label>Type</label><div class="tbkchips"><button type="button" class="tbkchip'+(m.extra?'':' on')+'" data-tbkmk="m">Module (numbered)</button><button type="button" class="tbkchip'+(m.extra?' on':'')+'" data-tbkmk="x">Not a module, like a review</button></div></div>'
+  +(m.extra?'':'<div class="field"><label for="tbkm3">Module number</label><input id="tbkm3" type="number" inputmode="numeric" min="1" max="999" value="'+esc(num)+'"></div>')
   +'<div class="field"><label for="tbkm2">Date</label><input id="tbkm2" type="date" value="'+esc(m.date||'')+'"></div>'
   +'<div class="field"><label>Colour</label><div class="q73sws">'+TBK_TINTS.map(function(h){var on=m.tint===h;return '<button type="button" class="q73sw'+(on?' on':'')+'" data-tbkmt="'+h+'" style="background:'+h+';--c:'+q72Mix(h,'#000000',.62)+'" aria-label="Colour" aria-pressed="'+on+'"></button>'}).join('')
    +'<label class="q73sw q73cust'+(own?' on':'')+'" style="'+(own?'--c:'+q72Mix(m.tint,'#000000',.62)+';background:'+m.tint:'')+'" title="Any colour">'+(own?'':'+')+'<input type="color" value="'+(own?m.tint:'#d6e4f0')+'" data-tbkmc="1" aria-label="Any colour"></label></div></div>';
@@ -26584,9 +26592,11 @@ ZM.tbkmod={html:function(m){
  x.title=t;var d=zv('tbkm2');if(d)x.date=d;else delete x.date;
  var i=tbkMods(c,x.book).indexOf(x);if(m.tint&&m.tint!==TBK_TINTS[i%8])x.tint=m.tint;else delete x.tint;
  if(m.extra)x.kind='extra';else delete x.kind;
+ var ML=tbkMods(c,x.book),k=ML.indexOf(x),auto=k>0?tbkNextNum(ML.slice(0,k)):1,nv=parseInt(zv('tbkm3'),10);
+ if(!m.extra&&nv>0&&nv<1000&&nv!==auto)x.num=nv;else delete x.num;            // only a number that breaks the count is kept
  touch(x);save();view.modal=null;render();if(TBK)tbkDraw();
 },del:function(m){return 'tbkmoddel:'+m.cid+':'+m.mid}};
-function tbkModKeep(){var n=document.getElementById('tbkm1'),d=document.getElementById('tbkm2');if(n)view.modal.title=n.value;if(d)view.modal.date=d.value}
+function tbkModKeep(){var n=document.getElementById('tbkm1'),d=document.getElementById('tbkm2'),u=document.getElementById('tbkm3');if(n)view.modal.title=n.value;if(d)view.modal.date=d.value;if(u)view.modal.num=u.value}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-tbkmt],[data-tbkmk]');if(!b||!view.modal||view.modal.kind!=='tbkmod')return;tbkModKeep();
  if(b.hasAttribute('data-tbkmk'))view.modal.extra=b.getAttribute('data-tbkmk')==='x';else view.modal.tint=b.getAttribute('data-tbkmt');render()});
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.hasAttribute||!t.hasAttribute('data-tbkmc')||!view.modal||view.modal.kind!=='tbkmod')return;tbkModKeep();view.modal.tint=t.value;render()});
