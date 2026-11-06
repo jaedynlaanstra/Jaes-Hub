@@ -6869,6 +6869,12 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 /* v265: Class info's class time pill sits further left, so its words line up with "Class time" and the room line */
 .q86it1 .q86when{margin-left:-18px}
 @media (max-width:760px){.q86it1 .q86when{margin-left:-10px;margin-right:-10px}}
+/* v270: Word buttons on the Title page card (q94) */
+.cptp .q94row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cptp .q94btn{font:inherit;font-size:14px;padding:9px 10px;border-radius:10px;border:1px solid var(--q86line,rgba(0,0,0,.12));background:#fff;color:var(--q86i1,inherit);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.cptp .q94btn:hover{border-color:var(--q86a,#888)}
+.cptp .q94st{font-size:12.5px;line-height:1.45;color:var(--q86i2,var(--ink2));background:var(--q86soft,rgba(0,0,0,.035));border-radius:10px;padding:8px 12px}
+.cptp .q94st a{color:var(--q86ink,inherit);font-weight:600;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -7178,7 +7184,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v269';
+var BUILD='v270';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10080,6 +10086,7 @@ function tpCard(c){
   +fld('tpdue','Due date',d.due,'','data-tp="due" data-c="'+c.id+'"','date')
   +'<div class="tpprev" id="tpprev">'+tpPreview(c)+'</div>'
   +'<button class="tpcopy" data-tpcopy="'+c.id+'">Copy for Word</button>'
+  +q94Row(c)
   +'<div class="tphint">Times New Roman, 12 pt, 1.5 spacing, with a page break after. Add the page number in Word: Insert, Page Number, top right.</div>'
   +'<details class="tpmore"><summary>Name, school, course and instructor</summary>'
   +fld('tpauthor','Your name (and student number)',me.author,L.author||'Jane Doe 1234567','data-tpset="author"')
@@ -13277,7 +13284,7 @@ async function ask(cid){
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
- var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-tpcopy],[data-sp],[data-termedit],[data-musicsvc],[data-musicedit],[data-musicsave],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
+ var el=e.target.closest('[data-go],[data-open],[data-range],[data-asgview],[data-wx],[data-tpcopy],[data-q94word],[data-q94new],[data-sp],[data-termedit],[data-musicsvc],[data-musicedit],[data-musicsave],[data-add],[data-edit],[data-tick],[data-tickasg],[data-undo],[data-del],[data-delfile],[data-openfile],[data-savefile],[data-renamefile],[data-index],[data-delsection],[data-openasgfile],[data-editapp],[data-delapp],[data-appedit],[data-appiconreset],[data-refreset],[data-linkiconreset],[data-delcover],[data-dellinkicon],[data-delbookicon],[data-side],[data-sheet],[data-sheetdo],[data-opencolours],[data-remindon],[data-remindoff],[data-sbsignin],[data-sbsignup],[data-sbsignout],[data-syncnow],[data-syncpics],[data-studygo],[data-studyclose],[data-editsurf],[data-fontpair],[data-surfreset],[data-bannersize],[data-bannerall],[data-picker],[data-preset],[data-saved],[data-delsaved],[data-savepal],[data-resetpal],[data-repos],[data-reposdone],[data-coverfit],[data-openbook],[data-delbook],[data-pin],[data-dellink],[data-delcontact],[data-replacefile],[data-mkopen],[data-refedit],[data-chap],[data-chapall],[data-cpjump],[data-stepm],[data-steptick],[data-planpick],[data-planoff],[data-plantoggle],[data-planwk],[data-cptab],[data-hrange],[data-dedupe],[data-secopen],[data-secscope],[data-chreset],[data-secbold],[data-secreset],[data-secall],[data-secallreset],[data-mon],[data-close],[data-menu],[data-paste],[data-export],[data-savemodal],[data-sw],[data-scroll],[data-ask],[data-delclass]');
  if(!el)return;
  if(el.closest('summary'))e.preventDefault();
  var d=el.dataset;
@@ -13341,6 +13348,8 @@ document.addEventListener('click',function(e){
  if(d.musicedit){view.musicEdit=true;view.musicErr='';render();return}
  if(d.musicsave){var mu2=Object.assign({},S.music||{}),sv2=mu2.svc||'spotify',mv=(document.getElementById('musicurl')||{}).value||'';if(!musicEmbed(sv2,mv)){view.musicErr='That doesn\u2019t look like a '+(sv2==='spotify'?'Spotify':'Apple Music')+' link. In the app, tap Share, then Copy link.';render();return}mu2[sv2]=mv.trim();S.music=mu2;view.musicEdit=false;view.musicErr='';save();render();return}
  if(d.tpcopy){var tcc=classById(d.tpcopy);if(tcc)tpCopy(tcc,el);return}
+ if(d.q94word){var q9c=classById(d.q94word);if(q9c)q94OpenWord(q9c,el);return}
+ if(d.q94new){var q9n=classById(d.q94new);if(q9n)q94NewDoc(q9n,el);return}
  if(d.add){openModal(d.add,d.c||view.classId);if(d.sec&&view.modal)view.modal.section=d.sec==='_'?'':d.sec;return}
  if(d.edit){openModal(d.edit,d.c||view.classId,d.id);return}
  if(d.ask){ask(d.ask);return}
@@ -27084,6 +27093,40 @@ function q93Slim(h){
  if(typeof URL==='undefined'||!URL.createObjectURL||h.indexOf('data:image/')<0)return h;
  return h.replace(/data:image\/[a-z.+-]+;base64,[A-Za-z0-9+\/=]{3000,}/g,q93Url);
 }
+/* v270: Word buttons on the Title page card (prefix q94).
+   Both copy the title page first (same as Copy for Word), then open Word on the web in whatever
+   Microsoft account you're already signed in to: "Open Word" opens Word's home page; "New Word doc"
+   opens a brand-new blank doc (word.new). Nothing is saved to the computer. A website can't type into
+   Word or rename its doc, so you paste (Cmd+V / Ctrl+V) and click the name at the top to rename it;
+   the card shows the name to use. */
+function q94St(cid,v){view.q94st=view.q94st||{};if(v!==undefined){view.q94st[cid]=v;var el=document.getElementById('q94st');if(el){el.outerHTML=q94StHtml(cid)}}return view.q94st[cid]}
+function q94StHtml(cid){
+ var v=(view.q94st||{})[cid];if(!v)return '<div id="q94st" hidden></div>';
+ return '<div id="q94st" class="q94st">'+v+'</div>';
+}
+function q94Row(c){
+ return '<div class="q94row"><button class="q94btn" data-q94word="'+c.id+'">Open Word</button><button class="q94btn" data-q94new="'+c.id+'">New Word doc</button></div>'+q94StHtml(c.id);
+}
+// the doc name: the project name, or the course if there is none yet
+function q94Base(c){
+ var L=tpLines(c),n=(L.title||((L.course||c.name||'Class')+' title page'));
+ n=n.replace(/[\\\/:*?"<>|]/g,' ').replace(/\s+/g,' ').trim().replace(/^\.+/,'').slice(0,80).trim();
+ return n||'Title page';
+}
+function q94Mac(){return /Mac|iPhone|iPad|iPod/.test(navigator.platform||navigator.userAgent)}
+function q94Go(c,btn,url,label,isNew){
+ tpCopy(c,null); // the copy happens straight away, inside your tap
+ window.open(url,'_blank','noopener');
+ var k=q94Mac()?'⌘V':'Ctrl+V';
+ q94St(c.id,isNew
+  ?'Copied. In the new doc, press <b>'+k+'</b> to paste, then click <b>Document</b> at the top and name it <b>'+esc(q94Base(c))+'</b>.'
+  :'Copied. Open a document in Word and press <b>'+k+'</b> to paste.');
+ if(btn){btn.textContent='Copied';setTimeout(function(){btn.textContent=label},2600)}
+}
+function q94OpenWord(c,btn){q94Go(c,btn,'https://www.office.com/launch/word','Open Word',false)}
+function q94NewDoc(c,btn){q94Go(c,btn,'https://word.new','New Word doc',true)}
+
+
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
