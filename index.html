@@ -6259,6 +6259,8 @@ html.tbkon,html.tbkon body{overflow:hidden}
 .tbkpanel.on{color:#33312C!important}
 .tbkcol{width:12px;height:16px;border-radius:2px 4px 4px 2px;flex:none}
 .tbkttl{font-size:16px;font-weight:500;white-space:nowrap;overflow:hidden;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
+button.tbkren{appearance:none;background:none;border:0;color:inherit;font-family:inherit;text-align:left;cursor:pointer;border-radius:8px;padding:3px 18px 3px 6px;margin:0 0 0 -6px}
+button.tbkren:hover{background:rgba(127,127,127,.12)}
 .tbkfill{flex:1 1 0;min-width:0}
 .tbksrch{flex:0 1 300px;min-width:150px;display:flex;align-items:center;gap:8px;border:1px solid #D4CFC4;border-radius:999px;padding:0 12px;height:36px;box-sizing:border-box;color:#A29D93;background:#fff}
 .tbksrch input{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#33312C;padding:0;height:34px}
@@ -6875,6 +6877,8 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .cptp .q94btn:hover{border-color:var(--q86a,#888)}
 .cptp .q94st{font-size:12.5px;line-height:1.45;color:var(--q86i2,var(--ink2));background:var(--q86soft,rgba(0,0,0,.035));border-radius:10px;padding:8px 12px}
 .cptp .q94st a{color:var(--q86ink,inherit);font-weight:600;white-space:nowrap}
+/* v272: iPad (iOS 26.1 frosts the top ~90pt of Home Screen apps): the Textbooks top bar starts below the frost */
+html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 </style>
 </head>
 <body>
@@ -7184,7 +7188,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v270';
+var BUILD='v272';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -11456,6 +11460,13 @@ function mkCss(){
   +'#mk .mkfloat.show{display:flex}'
   +'#mk .mkfgrip{width:40px;height:20px;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none}'
   +'#mk .mkfgrip i{width:18px;height:4px;border-radius:2px;background:rgba(239,234,224,.3)}'
+  +'#mk .mkfloat{touch-action:none;-webkit-user-select:none;user-select:none}'
+  +'#mk .mkfloat.mkfdrag{cursor:grabbing}#mk .mkfloat.mkfdrag button{pointer-events:none}'
+  +'#mk .mkfloat .mkfmax{display:none}'
+  +'#mk .mkfloat.mkfmin{padding:4px 5px 5px}'
+  +'#mk .mkfloat.mkfmin>:not(.mkfgrip):not(.mkfmax){display:none!important}'
+  +'#mk .mkfloat.mkfmin .mkfmax{display:flex}'
+  +'#mk .mkfloat .mkfhide{height:30px}'
   +'#mk .mkfloat button{position:relative;width:42px;height:42px;border-radius:12px;border:none;background:transparent;color:rgba(239,234,224,.75);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}'
   +'#mk .mkfloat button.on{background:rgba(239,234,224,.16);color:#fff}'
   +'#mk .mkfloat button:disabled{opacity:.35}'
@@ -12913,17 +12924,31 @@ function mkPickTool(t){
 /* the little floating tool menu (Markup mode, iPad/computer): pen, highlighter, eraser and undo,
    draggable by its grip to wherever you are writing; the spot is remembered on this device */
 function mkFloatPos(){var o=null;try{o=JSON.parse(localStorage.getItem('hub:mkfloat')||'null')}catch(e){}return o}
+// v271: the menu always stays below whatever bar is at the top (the reader's header on an iPad is much taller than
+// the old 56px), so its top can't slide under it and become impossible to grab
+function mkFloatBounds(){
+ var top=56,bot=window.innerHeight-6;
+ ['tbkhd','mktop','mktoolbar'].forEach(function(id){var e=document.getElementById(id);if(!e||!e.offsetHeight)return;var r=e.getBoundingClientRect();
+  if(r.bottom<=0||r.top>=window.innerHeight)return;
+  if(r.top<window.innerHeight/2)top=Math.max(top,r.bottom+8);else bot=Math.min(bot,r.top-8)});
+ return {top:top,bot:bot};
+}
 function mkFloatPlace(el,x,y){
- var w=el.offsetWidth||52,h=el.offsetHeight||200;
- x=Math.max(6,Math.min(window.innerWidth-w-6,x));y=Math.max(56,Math.min(window.innerHeight-h-6,y));
+ var w=el.offsetWidth||52,h=el.offsetHeight||200,b=mkFloatBounds();
+ x=Math.max(6,Math.min(window.innerWidth-w-6,x));y=Math.max(b.top,Math.min(b.bot-h,y));
  el.style.left=x+'px';el.style.top=y+'px';return [x,y];
 }
+function mkFloatMin(v){if(v===undefined){try{return localStorage.getItem('hub:mkfmin')==='1'}catch(e){return false}}try{localStorage.setItem('hub:mkfmin',v?'1':'0')}catch(e){}}
+var MK_FMIN='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 14 5-5 5 5"/></svg>';
 function mkFloatRender(){
  var el=document.getElementById('mkfloat');if(!el||!MK)return;
  var show=MK.mode==='edit'&&window.innerWidth>=600;
  el.classList.toggle('show',show);if(!show)return;
  var dot=function(t){return MK.toolColor[t]?'<b style="background:'+MK.toolColor[t]+'"></b>':''};
+ var min=mkFloatMin(),curIco=MK_ICO[MK.tool]||MK_ICO.pen;
+ el.classList.toggle('mkfmin',min);
  el.innerHTML='<div class="mkfgrip" data-mkfgrip="1" title="Drag to move"><i></i></div>'
+  +'<button class="mkfmax on" data-mkfmin="0" aria-label="Show the tools" title="Show the tools">'+curIco+dot(MK.tool)+'</button>'
   +'<button class="'+(MK.tool==='pen'?'on':'')+'" data-mk="ftool:pen" aria-label="Pen">'+MK_ICO.pen+dot('pen')+'</button>'
   +'<button class="'+(MK.tool==='hi'?'on':'')+'" data-mk="ftool:hi" aria-label="Highlighter">'+MK_ICO.hi+dot('hi')+'</button>'
   +'<button class="'+(MK.tool==='eraser'?'on':'')+'" data-mk="ftool:eraser" aria-label="Eraser">'+MK_ICO.eraser+'</button>'
@@ -12935,17 +12960,30 @@ function mkFloatRender(){
  else mkFloatPlace(el,window.innerWidth-el.offsetWidth-16,Math.round(window.innerHeight*.3));
  if(!el.dataset.wired){
   el.dataset.wired='1';
+  // drag the menu by any part of it: a press that moves more than a few pixels moves the menu (and its tap is
+  // cancelled); a press that stays still is an ordinary tap on that button
   el.addEventListener('pointerdown',function(e){
-   if(!e.target.closest('[data-mkfgrip]'))return;
-   e.preventDefault();e.stopPropagation();
-   var r=el.getBoundingClientRect(),dx=e.clientX-r.left,dy=e.clientY-r.top,id=e.pointerId;
-   var mv=function(ev){if(ev.pointerId!==id)return;ev.preventDefault();mkFloatPlace(el,ev.clientX-dx,ev.clientY-dy)};
+   if(e.button>0)return;e.stopPropagation();
+   var grip=!!e.target.closest('[data-mkfgrip]');if(grip)e.preventDefault();
+   var r=el.getBoundingClientRect(),sx=e.clientX,sy=e.clientY,dx=sx-r.left,dy=sy-r.top,id=e.pointerId,moved=false;
+   var mv=function(ev){if(ev.pointerId!==id)return;
+    if(!moved){if(Math.abs(ev.clientX-sx)+Math.abs(ev.clientY-sy)<(grip?2:9))return;moved=true;el.classList.add('mkfdrag')}
+    ev.preventDefault();mkFloatPlace(el,ev.clientX-dx,ev.clientY-dy)};
    var up=function(ev){if(ev.pointerId!==id)return;window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
+    el.classList.remove('mkfdrag');if(!moved)return;MK_FDRAG=Date.now();
     var rr=el.getBoundingClientRect();try{localStorage.setItem('hub:mkfloat',JSON.stringify({x:rr.left/window.innerWidth,y:rr.top/window.innerHeight}))}catch(err){}};
    window.addEventListener('pointermove',mv,{passive:false});window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);
   });
  }
 }
+var MK_FDRAG=0;
+// the tap that ends a drag doesn't also press the button under the finger; the round arrow tucks the menu away
+window.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.closest||!t.closest('#mkfloat'))return;
+ if(Date.now()-MK_FDRAG<450){MK_FDRAG=0;e.preventDefault();e.stopPropagation();return}
+ var m=t.closest('[data-mkfmin]');if(!m)return;
+ e.preventDefault();e.stopPropagation();mkFloatMin(m.getAttribute('data-mkfmin')==='1');mkFloatRender();
+},true);
 function mkRerenderChrome(){
  var top=document.getElementById('mktop'),tools=document.getElementById('mktoolbar');
  if(top)top.innerHTML=mkTopHtml();
@@ -20487,7 +20525,7 @@ function q46StepsFor(k){
  L.push({t:'That’s it',p:'You can see these tips again any time from Look and feel.',end:1});
  return L;
 }
-function q46Ready(){if(Q43.on||document.getElementById('onb')||document.getElementById('ztour'))return false;
+function q46Ready(){if(Q43.on||document.getElementById('onb')||document.getElementById('ztour')||document.getElementById('tbkr'))return false; // v271: no page tour over the open reader
  try{if(q43New())return false}catch(e){}
  return !!(S.toured||(function(){try{return localStorage.getItem('hub:tour')}catch(e){return null}})());}
 var q46Wait=null;
@@ -26216,17 +26254,18 @@ function tbkDraw(){
  var mod=M[TBK.mi],cls=!TBK.bid,act=document.activeElement,qFocus=act&&act.id==='tbkq',caret=qFocus?act.selectionStart:0;
  var listEl=el.querySelector('.tbklist'),listTop=listEl?listEl.scrollTop:0;
  // top bar
- var fm=!!TBK.fid;
- var sOpen=!!(TBK.sopen||TBK.q),hdEl=document.getElementById('tbkhd'),oldSave=document.getElementById('tbksave');
+ var fm=!!TBK.fid,note=tbkIsNote();
+ var sOpen=!note&&!!(TBK.sopen||TBK.q),hdEl=document.getElementById('tbkhd'),oldSave=document.getElementById('tbksave');
  hdEl.classList.toggle('tbk-so',sOpen);
  hdEl.innerHTML='<div class="tbkhl"><button type="button" class="tbkback" data-tbk="close" aria-label="Back to '+esc(tbkFromName())+'">'+zI(TBK_LEFT,16)+'<span>'+esc(tbkFromName())+'</span></button><i class="tbkdiv"></i>'
-  +'<span class="tbkcol" style="background:'+tbkChip()+'"></span><b class="tbkttl">'+esc(tbkName())+'</b><span class="tbksave" id="tbksave" aria-live="polite">'+(oldSave?oldSave.textContent:'')+'</span></div>'
+  +'<span class="tbkcol" style="background:'+tbkChip()+'"></span>'+(note?'<button type="button" class="tbkttl tbkren" data-tbk="rename" title="Tap to rename" aria-label="Rename '+esc(tbkName())+'">'+esc(tbkName())+'</button>':'<b class="tbkttl">'+esc(tbkName())+'</b>')+'<span class="tbksave" id="tbksave" aria-live="polite">'+(oldSave?oldSave.textContent:'')+'</span></div>'
   +'<div class="tbkhc"><div class="tbkpill" id="tbkpill"></div></div>'
   +'<div class="tbkhr"><div class="tbkhr1">'
-  +(sOpen?'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this '+(fm?'PDF':'book')+'" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this '+(fm?'PDF':'book')+'"><button type="button" class="tbksx" data-tbk="sclose" aria-label="Close search">×</button></label>'
+  +(note?'':sOpen?'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this '+(fm?'PDF':'book')+'" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this '+(fm?'PDF':'book')+'"><button type="button" class="tbksx" data-tbk="sclose" aria-label="Close search">×</button></label>'
    :'<button type="button" class="tbkpill2 tbkic tbksbtn" data-tbk="sopen" aria-label="Search in this '+(fm?'PDF':'book')+'" title="Search">'+zI(ZIC.search,16)+'</button>')
   +'<button type="button" class="tbkpill2" data-tbk="notes" id="tbknotes" aria-label="Notes"'+(mod?'':' disabled')+'>'+zI(ZIC.note,15)+'<span>Notes</span><em id="tbknc"></em></button>'
-  +(fm?'<button type="button" class="tbkpill2 tbkic" data-tbk="openext" aria-label="Open in a new tab" title="Open in a new tab"'+(mod?'':' disabled')+'>'+zI('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',16)+'</button>'
+  +(note?'<button type="button" class="tbkpill2" data-tbk="addpage" aria-label="Add a page"'+(mod?'':' disabled')+'>'+zI(ZIC.plus,15)+'<span>Page</span></button>'
+   :fm?'<button type="button" class="tbkpill2 tbkic" data-tbk="openext" aria-label="Open in a new tab" title="Open in a new tab"'+(mod?'':' disabled')+'>'+zI('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',16)+'</button>'
    :'<button type="button" class="tbkpill2 tbkic" data-tbk="bm" id="tbkbm" aria-label="Bookmark this page" title="Bookmark"'+(mod?'':' disabled')+'>'+zI(TBK_BM,16)+'</button>')
   +'</div><div class="tbkhm">'+tbkSeg([['markup','Markup'],['reading','Reading']],TBK.mode,'mode','dark')
   +tbkSeg([['page','Page'],['book','Book view']],TBK.spread?'book':'page','view','tbkvseg')+'</div></div>';
@@ -26409,6 +26448,15 @@ mkFloatRender=function(){
  if(!el.querySelector('[data-tbkfc]'))el.insertAdjacentHTML('beforeend','<span class="mkfsep"></span><button type="button" class="tbkfc" data-tbkfc="1" aria-label="Colour" title="Colour"><i style="background:'+esc(MK.color||'#000')+'"></i></button>');
  return r;
 };
+// v271: the last thing in the floating menu is a small arrow that tucks it away into one round button (any PDF viewer)
+var _q95Float=mkFloatRender;
+mkFloatRender=function(){
+ var r=_q95Float.apply(this,arguments),el=document.getElementById('mkfloat');
+ if(el&&el.classList.contains('show')&&!el.querySelector('[data-mkfmin="1"]')){
+  el.insertAdjacentHTML('beforeend','<button type="button" class="mkfhide" data-mkfmin="1" aria-label="Tuck the tools away" title="Tuck away">'+MK_FMIN+'</button>');
+  var p=mkFloatPos();if(p)mkFloatPlace(el,p.x*innerWidth,p.y*innerHeight);else mkFloatPlace(el,parseFloat(el.style.left)||0,parseFloat(el.style.top)||0)}
+ return r;
+};
 // the pop-up shows the same colours as the Markup bar (so palettes work the same); picking one closes it
 function tbkColPop(open){
  var old=document.getElementById('tbkfpop');if(old)old.remove();if(!open)return;
@@ -26576,6 +26624,9 @@ document.addEventListener('click',function(e){
  if(a==='zoom'){if(!host)return;mkSettleFinish();var z=+p[1];mkZoomTo(z?MK.zoom+z*.1:1);tbkSync();return setTimeout(tbkPlaceTabs,80)}
  if(a==='notes'){if(!host)return;mkToggleNotes();mkRerenderChrome();return}
  if(a==='bar'){TBK.barMin=!TBK.barMin;tbkPrefs();return tbkSync()}
+ if(a==='addpage'){if(host&&tbkIsNote()){mkAddPage();tbkDraw()}return}
+ if(a==='rename'){var rn=TBK.fid&&tbkFile(TBK.fcid,TBK.fid);if(!rn)return;var v=prompt('Name this note',rn.f.name);if(v==null)return;v=v.trim();if(!v||v===rn.f.name)return;
+  rn.f.name=v;saveFiles(TBK.fcid);var dlg=document.getElementById('tbkr');if(dlg)dlg.setAttribute('aria-label',v);return tbkDraw()}
  if(a==='openext'){if(TBK.fid){var ro=tbkFile(TBK.fcid,TBK.fid);if(ro)openFile(TBK.fcid,ro.i)}return}
  if(a==='pick'){var f=document.getElementById('tbkfile');if(f){f.value='';f.click()}return}
  if(a==='modedit'){
@@ -26991,8 +27042,9 @@ ZACT.kwn=function(n){n=+n;view.kwOff=n?Math.max(0,(view.kwOff||0)+n):0;render()}
 
 /* ===== v258: every class PDF opens in the Textbooks reader layout (prefix q87). The same top bar, page pill, white Markup
    bar and floating tool menu; the side list shows the PDF's pages (and its chapters, when it has any) instead of modules.
-   The arrow at the top opens the file in a new tab, as the old viewer's did. Handwritten notes keep their own viewer
-   (they need + Page and rename). ===== */
+   The arrow at the top opens the file in a new tab, as the old viewer's did. Since v271 handwritten notes open here
+   too: their top bar has "+ Page" instead of search and the arrow, and tapping the name renames the note. ===== */
+function tbkIsNote(){if(!TBK||!TBK.fid)return false;var r=tbkFile(TBK.fcid,TBK.fid);return !!(r&&r.f.marks&&r.f.marks.paper)}
 function tbkPagesHtml(){
  if(!tbkHosted())return '<p class="tbkempty">Opening the pages…</p>';
  var h='',cur=MK.curPage||1;
@@ -27039,9 +27091,10 @@ function tbkThumbCur(pg,force){
 var _q87Open=mkOpen;
 mkOpen=function(cid,i,startEdit){
  var f=(FILES[cid]||[])[i];
- if(MK_HOST||!f||f.kind!=='pdf'||!f.data||(f.marks&&f.marks.paper))return _q87Open.apply(this,arguments);
+ if(MK_HOST||!f||f.kind!=='pdf'||!f.data)return _q87Open.apply(this,arguments);
  if(MK&&!TBK)mkClose();if(TBK)tbkClose();
- var o={fcid:cid,fid:f.id};if(startEdit)o.mode='markup';
+ // v271: handwritten notes open here too, ready to write (Markup) unless asked otherwise
+ var o={fcid:cid,fid:f.id};if(startEdit||(startEdit===undefined&&f.marks&&f.marks.paper))o.mode='markup';
  tbkOpen(o);return Promise.resolve();
 };
 // on a phone the floating tool menu is hidden, so the Markup bar gets undo and redo at its start
