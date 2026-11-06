@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#23201B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Doable">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Doable</title>
@@ -7188,7 +7188,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v272';
+var BUILD='v273';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -25531,7 +25531,8 @@ var q80Soon=null;
 function q80Later(ms){clearTimeout(q80Soon);q80Soon=setTimeout(function(){try{q80Paint()}catch(e){}},ms||60)}
 function q80Sync(){
  var h=document.documentElement;
- h.classList.toggle('q80ipad',q80Mode()==='ipad');
+ var q80t='';try{q80t=localStorage.getItem('hub:q80test')||''}catch(e){}
+ h.classList.toggle('q80ipad',q80Mode()==='ipad'&&(q52Safe().t>0||!!q80t)); // v273: no frost when the page starts below the clock
  h.classList.toggle('q80card',q80App()||q52Safe().t<1);
  q80Col=null;q80Paint();
 }
