@@ -6074,6 +6074,9 @@ html.q80ipad .menubtn,html.q80ipad .homebtn,html.q80ipad .zpill-top,html.q80ipad
    14px past the clock area, because iOS looks for it about 4px below the clock, not inside it */
 #q80band{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 14px);z-index:2147483647;pointer-events:none;background-color:#F1EEE8;-webkit-background-clip:text;background-clip:text;color:transparent}
 html.splash-on:has(#splash),html.splash-on:has(#splash) #q80band{background-color:#d9d3c8}
+/* v275: with the plain status bar (page starts below the clock) iOS only takes the bar colour from a fixed layer
+   that really paints (the login screen matched, the invisible band didn't), so the band paints a thin strip */
+html.q80solid #q80band{height:6px;-webkit-background-clip:border-box;background-clip:border-box}
 /* phones: the bar that slides in on scroll is solid, so dark cards don't show through under the clock strip */
 @media(max-width:700px){html.q80card .mbar{background:var(--pagebg,var(--paper,#FBFAF8))}}
 /* iPad: under iOS's solid strip (cover colour) the cover fades in smoothly instead of meeting it at an edge */
@@ -7188,7 +7191,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v274';
+var BUILD='v275';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -25534,6 +25537,7 @@ function q80Sync(){
  var q80t='';try{q80t=localStorage.getItem('hub:q80test')||''}catch(e){}
  h.classList.toggle('q80ipad',q80Mode()==='ipad'&&(q52Safe().t>0||!!q80t)); // v273: no frost when the page starts below the clock
  h.classList.toggle('q80card',q80App()||q52Safe().t<1);
+ h.classList.toggle('q80solid',!!q80Mode()&&q52Safe().t<1); // v275
  q80Col=null;q80Paint();
 }
 var _q80Render=render;
