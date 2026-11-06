@@ -6734,6 +6734,9 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86dz b{font-weight:500}
 .q86dz span{font-size:13.5px;color:var(--q86i4)}
 .q86dz.over,.q86more.over{background:var(--q86bl);border-color:var(--q86a)}
+.q86files{border-radius:14px}
+.q86files.over{outline:2px dashed var(--q86a);outline-offset:8px}
+.q86files.over .q86dz,.q86files.over .q86more{background:var(--q86bl);border-color:var(--q86a)}
 .q86more{font-size:13.5px;color:var(--q86a);padding:14px 4px;border:1.5px dashed transparent;border-radius:12px}
 .q86none{color:var(--q86i3);font-size:14px;padding:14px 4px}
 /* Class info tab */
@@ -7175,7 +7178,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v268';
+var BUILD='v269';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26898,12 +26901,14 @@ function q86Files(c){
  if(G.unsorted.F.length||!G.length)L+=item('_','—',G.length?'Unsorted':'Files',G.unsorted.F.length);
  L+='</div><button class="q86link q86newmod" data-add="section" data-c="'+c.id+'">+ New module</button></div>';
  if(!sel){view.q86mod=view.q86mod||{};view.q86mod[c.id]=selId}
- return '<div class="q86files">'+L+'<div class="q86fr2" id="q86fr">'+q86FilesRight(c)+'</div></div>';
+ // the whole Files & links box takes dropped files (into the module on show); the dashed strips inside still work too
+ var dsec=selId==='_'||selId==='links'?'':selId;
+ return '<div class="q86files" data-q86drop="'+c.id+'~'+dsec+'">'+L+'<div class="q86fr2" id="q86fr">'+q86FilesRight(c)+'</div></div>';
 }
 document.addEventListener('input',function(e){if(!e.target||e.target.id!=='q86fs')return;view.q86fq=e.target.value;var c=classById(view.classId),el=document.getElementById('q86fr');if(c&&el){el.innerHTML=q86FilesRight(c);el.querySelectorAll('.q20fade').forEach(function(x){x.classList.toggle('over',x.scrollWidth>x.clientWidth+1)})}});
 document.addEventListener('dragover',function(e){var z=e.target.closest&&e.target.closest('[data-q86drop]');if(!z||!e.dataTransfer||[].indexOf.call(e.dataTransfer.types||[],'Files')<0)return;e.preventDefault();z.classList.add('over')});
 document.addEventListener('dragleave',function(e){var z=e.target.closest&&e.target.closest('[data-q86drop]');if(z&&!z.contains(e.relatedTarget))z.classList.remove('over')});
-document.addEventListener('drop',function(e){var z=e.target.closest&&e.target.closest('[data-q86drop]');if(!z||!e.dataTransfer||!e.dataTransfer.files||!e.dataTransfer.files.length)return;e.preventDefault();z.classList.remove('over');
+document.addEventListener('drop',function(e){var z=e.target.closest&&e.target.closest('[data-q86drop]');if(!z||!e.dataTransfer||!e.dataTransfer.files||!e.dataTransfer.files.length)return;e.preventDefault();z.classList.remove('over');var zw=z.closest('.q86files');if(zw){zw.classList.remove('over');zw.querySelectorAll('.over').forEach(function(x){x.classList.remove('over')})}
  var p=z.getAttribute('data-q86drop').split('~');addFiles(p[0],[].slice.call(e.dataTransfer.files),p[1]||undefined)});
 // ---- Class info ----
 function q86Info(c){
