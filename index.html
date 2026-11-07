@@ -6913,8 +6913,24 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 .q97v b{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
 .q97v small{font-size:11.5px;color:#837D6D}
 .q97none{font-size:13px;color:#837D6D;margin:2px 6px}
-.q97tip{font-size:12px;line-height:1.45;color:#6B5F4F;background:#F6F1E8;border-radius:12px;padding:8px 10px;margin:0 0 12px}
-.q97tip b{font-weight:600}
+.q97vadd{display:flex;align-items:center;gap:8px;width:100%;border:1px dashed #D4CFC4;background:transparent;border-radius:12px;padding:9px 10px;margin-top:6px;font:inherit;font-size:13px;color:#5F5A4E;cursor:pointer}
+.q97vadd:hover{background:#F6F3EE}
+.q97addh{display:flex;align-items:center;gap:6px;margin:-4px 0 10px -4px}
+.q97addh b{font-size:14px;font-weight:600}
+#tbkr .q97bk{width:30px;height:30px;border:none;border-radius:50%;background:transparent;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#tbkr .q97bk:hover{background:#F1EDE6}
+.q97card{border:1px solid #E9E4DA;border-radius:14px;padding:11px 12px;margin-top:8px}
+.q97ct{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.q97ct b{font-size:13.5px;font-weight:600}
+.q97ok{display:inline-flex;align-items:center;gap:4px;font-style:normal;font-size:12px;color:#5F6B5F;background:#EEF3EE;border-radius:999px;padding:2px 8px}
+.q97card p{font-size:12.5px;line-height:1.45;color:#6F6A5D;margin:5px 0 0}
+.q97card p b{font-weight:600;color:#4A4638}
+#tbkr .q97add{margin-top:9px;height:32px;padding:0 16px;border:none;border-radius:999px;background:#33312C;color:#F4EFE6;font-size:13px;cursor:pointer}
+#tbkr .q97lnk{margin-top:7px;border:none;background:none;padding:0;font-size:12.5px;color:#837D6D;text-decoration:underline;cursor:pointer}
+.q97prog{height:6px;border-radius:6px;background:#EEE9E0;overflow:hidden;margin-top:10px}
+.q97prog i{display:block;height:100%;background:#A8C4B2;border-radius:6px;transition:width .3s}
+.q97pt{display:block;font-size:12px;color:#837D6D;margin-top:5px}
+.q97err{display:block;font-size:12px;color:#A0584A;margin-top:6px}
 .q97chk{display:flex;gap:7px;align-items:flex-start;font-size:12px;line-height:1.45;color:#5F6B5F;background:#EEF3EE;border-radius:12px;padding:8px 10px;margin:12px 0 0}
 .q97chk svg{flex:none;margin-top:1px}
 .q97chk.q97chk0{color:#837D6D;background:#F6F3EE}
@@ -7233,7 +7249,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v276';
+var BUILD='v277';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -27238,7 +27254,7 @@ function q94NewDoc(c,btn){q94Go(c,btn,'https://word.new','New Word doc',true)}
    - a page that is a scanned picture (no real text inside) or whose hidden text is garbage (a broken font map) is read
      with text recognition (Tesseract, loaded only when needed) from the picture of the page instead
    Nothing is saved or synced; the voice, speed and checking all happen on the device. ===== */
-var Q97={edges:{},open:false,playing:false,fid:null,page:1,si:0,cur:null,gen:0,cache:{},raw:{},u:null,wd:0,ocrW:null,stats:{},shown:0,userAt:0,pausedAt:0,auto:false,pop:false,st:''};
+var Q97={edges:{},done:{},aiFail:false,popView:'main',adding:false,addErr:'',open:false,playing:false,fid:null,page:1,si:0,cur:null,gen:0,cache:{},raw:{},u:null,wd:0,ocrW:null,stats:{},shown:0,userAt:0,pausedAt:0,auto:false,pop:false,st:''};
 var Q97_RATES=[.75,.9,1,1.1,1.25,1.5,2];
 var Q97_PGNUM=/^\s*(?:page\s*)?(?:\d{1,4}|[ivxlc]{1,7})(?:\s*(?:of|\/)\s*\d{1,4})?\s*$/i;
 var Q97_BUL=/^\s*(?:[•●▪◦■□▸►‣⁃∙·«»©®°¢\u2022\uF0B7\uF0A7\uF076\uF0D8\uF0FC\uF0A8\uF0E0]|[-–—*>](?=\s))\s*/;
@@ -27274,14 +27290,11 @@ function q97Voices(){
  }).sort(function(a,b){return b.s-a.s||String(a.v.name).localeCompare(b.v.name)}).map(function(x){return x.v});
 }
 function q97Voice(){var V=q97Voices(),want=q97Prefs().voice;for(var i=0;i<V.length;i++)if(V[i].voiceURI===want||V[i].name===want)return V[i];return V[0]||null}
-function q97Natural(V){return (V||[]).some(function(v){return /premium|enhanced|natural|neural|google|siri/i.test(v.name||'')})}
-// the device voices that sound like a person are a free download from Apple; until one is there, say where to get it
-function q97Tip(){
- var ua=navigator.userAgent||'',ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),chrome=/Chrome\//.test(ua)&&!/Edg\//.test(ua);
- if(ios)return '<b>For a more natural voice:</b> open Settings › Accessibility › Spoken Content › Voices › English, download a voice marked <b>Enhanced</b> or <b>Premium</b> (Ava and Zoe sound best), then come back here and pick it.';
- if(/Macintosh/.test(ua))return '<b>For a more natural voice:</b> open System Settings › Accessibility › Spoken Content › System voice › Manage Voices, download <b>Ava (Premium)</b> or <b>Zoe (Premium)</b>, then reopen Doable'+(chrome?' in Safari (Chrome on a Mac can’t use those voices)':'')+' and pick it here.';
- return '<b>For a more natural voice:</b> add a natural English voice in your device’s speech settings, then pick it here.';
+function q97VoiceOpts(){ // the AI voices (once added) first, then this device's own voices
+ var o=[];if(q97AiHas())Q97_AI.forEach(function(x){o.push({id:'k:'+x[0],name:x[1],meta:x[2]+' · AI voice'})});
+ q97Voices().forEach(function(v){o.push({id:v.voiceURI,name:q97VoiceName(v),meta:q97VoiceMeta(v)})});return o;
 }
+function q97CurVoiceId(){var w=q97Prefs().voice;if(w&&w.indexOf('k:')===0&&q97AiHas())return w;var v=q97Voice();return v?v.voiceURI:''}
 function q97VoiceName(v){return v?String(v.name).replace(/\s*\((?:English|Anglais)[^)]*\)+/i,'').replace(/\s*\((?:enhanced|premium)\)/i,'').replace(/^(?:Microsoft|Google)\s+/,'').replace(/\s+Online.*$/,'').trim()||v.name:'Device voice'}
 function q97VoiceMeta(v){var l=String(v.lang||'').replace('_','-'),reg={'en-US':'US','en-GB':'UK','en-CA':'Canada','en-AU':'Australia','en-IE':'Ireland','en-IN':'India','en-ZA':'South Africa','en-NZ':'New Zealand'}[l]||l;
  return reg+(/premium|enhanced|natural|neural/i.test(v.name)?' · natural':'')}
@@ -27471,14 +27484,116 @@ function q97Page(mod,p){
   q97Count(mod.fid,'text');if(cut)q97Count(mod.fid,'cut');
   return {n:n,kind:'text',cut:cut,sents:q97Build(L,skip)};
  })();
- Q97.cache[key]=pr;pr.catch(function(){delete Q97.cache[key]});return pr;
+ Q97.cache[key]=pr;pr.then(function(v){Q97.done[key]=v},function(){delete Q97.cache[key]});return pr;
+}
+
+/* ---------- v277: the natural AI voice (Kokoro, free and open source) ----------
+   Added from "+ Add a voice". The voice model (about 90 MB) comes from Hugging Face and the code from jsDelivr (both free
+   public hosts, never Supabase), once per device; the browser keeps it, so later it starts in about a second, offline too.
+   It runs in background workers (2 to 3 on a computer, 1 on an iPhone/iPad to save memory), each making the speech for a
+   sentence while the one before plays, so there are no gaps. Played through an <audio> element (iOS plays it on silent). */
+var Q97K={ws:[],q:[],cache:new Map(),prog:null,boot:null};
+var Q97_AI=[['af_heart','Heart','US'],['af_bella','Bella','US'],['am_michael','Michael','US'],['am_fenrir','Fenrir','US'],['bf_emma','Emma','UK'],['bm_george','George','UK']];
+var Q97K_SRC="import {KokoroTTS} from 'https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/+esm';\n"
+ +"let tts=null;\n"
+ +"self.onmessage=async e=>{const m=e.data;try{\n"
+ +" if(m.type==='load'){tts=await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX',{dtype:'q8',device:'wasm',progress_callback:p=>{if(p&&p.status==='progress'&&/onnx/.test(p.file||''))self.postMessage({type:'prog',p:p.progress})}});self.postMessage({type:'ready'})}\n"
+ +" if(m.type==='gen'){const a=await tts.generate(m.text,{voice:m.voice});const b=await a.toBlob().arrayBuffer();self.postMessage({type:'wav',buf:b},[b])}\n"
+ +"}catch(err){self.postMessage({type:'err',msg:String(err&&err.message||err)})}};";
+function q97Apple(){var ua=navigator.userAgent||'';return {ios:/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),phone:/iPhone|iPod/.test(ua),mac:/Macintosh/.test(ua)&&!(navigator.maxTouchPoints>1),edge:/Edg\//.test(ua),chrome:/Chrome\//.test(ua)&&!/Edg\//.test(ua),mobile:/Android|iPhone|iPad|iPod|Mobile/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)}}
+function q97KSize(){if(q97Apple().ios)return 1;if((navigator.deviceMemory||8)<4)return 1;return Math.max(1,Math.min(3,Math.floor((navigator.hardwareConcurrency||4)/3)))}
+function q97AiHas(){return !!q97Prefs().ai}
+function q97AiOn(){var v=q97Prefs().voice;return !!(q97AiHas()&&v&&v.indexOf('k:')===0&&!Q97.aiFail&&typeof Worker!=='undefined')}
+function q97KWorker(){
+ var w;try{w=new Worker(URL.createObjectURL(new Blob([Q97K_SRC],{type:'text/javascript'})),{type:'module'})}catch(e){return null}
+ w.ready=false;w.job=null;
+ w.loadP=new Promise(function(ok,no){w.okL=ok;w.noL=no});w.loadP.catch(function(){});
+ w.onmessage=function(ev){var d=ev.data||{};
+  if(d.type==='prog'){Q97K.prog=Math.min(100,Math.round(d.p||0));q97KShowProg();return}
+  if(d.type==='ready'){w.ready=true;Q97K.prog=100;w.okL();q97KPump();return}
+  if(d.type==='wav'){var j=w.job;w.job=null;if(j){j.url=URL.createObjectURL(new Blob([d.buf],{type:'audio/wav'}));j.ok(j.url)}q97KPump();return}
+  if(d.type==='err'){var j2=w.job;w.job=null;if(j2){Q97K.cache.delete(j2.key);j2.no(new Error(d.msg))}else w.noL(new Error(d.msg));q97KPump()}
+ };
+ w.onerror=function(){if(!w.ready)w.noL(new Error('worker'))};
+ w.postMessage({type:'load'});Q97K.ws.push(w);return w;
+}
+// the first worker downloads (or reloads) the model; the helpers start once it's saved, so it only downloads once
+function q97KBoot(){
+ if(Q97K.boot)return Q97K.boot;
+ var w=q97KWorker();
+ Q97K.boot=w?w.loadP.then(function(){for(var i=1;i<q97KSize();i++)q97KWorker()}):Promise.reject(new Error('worker'));
+ Q97K.boot.catch(function(){q97KStop()});
+ return Q97K.boot;
+}
+function q97KStop(){Q97K.ws.forEach(function(w){try{w.terminate()}catch(e){}});Q97K.ws=[];Q97K.boot=null;Q97K.prog=null;
+ Q97K.q.splice(0).forEach(function(e){e.no(new Error('stopped'))});Q97K.cache.forEach(function(e){if(e.url)URL.revokeObjectURL(e.url)});Q97K.cache.clear()}
+function q97KPump(){Q97K.ws.forEach(function(w){if(!w.ready||w.job||!Q97K.q.length)return;var e=Q97K.q.shift();w.job=e;w.postMessage({type:'gen',text:e.text,voice:e.vid.slice(2)})})}
+// the speech for one sentence (made once, kept for the last 24 sentences)
+function q97KGet(key,text,vid){
+ var have=Q97K.cache.get(key);if(have)return have.p;
+ var e={key:key,text:text,vid:vid};e.p=new Promise(function(ok,no){e.ok=ok;e.no=no});e.p.catch(function(){Q97K.cache.delete(key)});
+ Q97K.cache.set(key,e);Q97K.q.push(e);
+ if(Q97K.cache.size>24){var it=Q97K.cache.keys(),k;while(Q97K.cache.size>24&&!(k=it.next()).done){var o=Q97K.cache.get(k.value);if(o&&o.url){URL.revokeObjectURL(o.url);Q97K.cache.delete(k.value)}}}
+ q97KBoot().then(q97KPump,function(err){Q97K.q.splice(0).forEach(function(x){x.no(err)})});
+ return e.p;
+}
+function q97KDrop(){Q97K.q.splice(0).forEach(function(e){Q97K.cache.delete(e.key);e.no(new Error('dropped'))})} // after a skip: forget work not started yet
+function q97KShowProg(){var b=document.getElementById('q97kbar'),t=document.getElementById('q97kpt');if(b)b.style.width=(Q97K.prog||0)+'%';if(t)t.textContent='Downloading… '+(Q97K.prog||0)+'%';
+ if(Q97.playing&&q97AiOn()&&Q97K.prog<100)q97Status('Downloading the voice… '+(Q97K.prog||0)+'%')}
+function q97Au(){if(!Q97.au){Q97.au=new Audio();Q97.au.preload='auto';try{Q97.au.setAttribute('playsinline','')}catch(e){}}return Q97.au}
+function q97Silent(){
+ if(Q97.sil)return Q97.sil;
+ var n=800,b=new ArrayBuffer(44+n*2),v=new DataView(b),w=function(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
+ w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+ v.setUint32(24,8000,true);v.setUint32(28,16000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+ return (Q97.sil=URL.createObjectURL(new Blob([b],{type:'audio/wav'})));
+}
+function q97AiAhead(mod,vid){ // make the next few sentences while this one plays (into the next page too)
+ var p=Q97.page,i=Q97.si,n=0,pg=Q97.done[mod.fid+':'+p],guard=0;
+ while(n<6&&pg&&guard++<60){i++;
+  if(i>=pg.sents.length){p++;i=-1;pg=Q97.done[mod.fid+':'+p];continue}
+  q97KGet(mod.fid+':'+p+':'+i+':'+vid,q97Say(pg.sents[i].t),vid);n++}
+}
+function q97SpeakAi(s,gen,pg,mod){
+ var vid=q97Prefs().voice,key=mod.fid+':'+Q97.page+':'+Q97.si+':'+vid,ready=Q97K.ws.some(function(w){return w.ready});
+ var t=setTimeout(function(){if(gen===Q97.gen)q97Status(ready?'Getting the next part ready…':Q97K.prog!=null&&Q97K.prog<100?'Downloading the voice… '+Q97K.prog+'%':'Starting the voice…')},500);
+ q97KGet(key,q97Say(s.t),vid).then(function(url){
+  clearTimeout(t);if(gen!==Q97.gen||!Q97.playing)return;
+  q97Status('Page '+Q97.page+(pg.kind==='scan'?' · scanned':''));
+  var au=q97Au();au.onended=au.onerror=null;au.src=url;au.playbackRate=q97Rate();try{au.preservesPitch=true;au.webkitPreservesPitch=true}catch(e){}
+  au.onended=function(){if(gen!==Q97.gen)return;Q97.si++;q97Speak()};
+  au.onerror=function(){if(gen!==Q97.gen)return;Q97.si++;q97Speak()};
+  var pl=au.play();if(pl&&pl.catch)pl.catch(function(){if(gen===Q97.gen){q97Pause();q97Status('Tap play to listen')}});
+ },function(){
+  clearTimeout(t);if(gen!==Q97.gen||!Q97.playing)return;
+  Q97.aiFail=true;q97Status('Using the device voice for now');q97Speak();   // offline on the first go, or the device can't run it
+ });
+ q97AiAhead(mod,vid);
+}
+// "+ Add a voice": the three free ways to a nicer voice
+function q97AddHtml(){
+ var A=q97Apple(),has=q97AiHas(),k='';
+ k+='<div class="q97card"><div class="q97ct"><b>Natural AI voice</b>'+(has?'<em class="q97ok">'+zI(Q97_IC.tick,13)+'Added</em>':'')+'</div>'
+  +'<p>Sounds like a real narrator, with 6 voices to pick from. Downloads once (about 90 MB, best on Wi-Fi), then works offline.'+(A.phone?' On an iPhone it can pause between sentences.':'')+'</p>';
+ if(Q97.adding)k+='<div class="q97prog"><i id="q97kbar" style="width:'+(Q97K.prog||0)+'%"></i></div><small class="q97pt" id="q97kpt">'+(Q97K.prog?'Downloading… '+Q97K.prog+'%':'Starting the download…')+'</small>';
+ else if(has)k+='<button type="button" class="q97lnk" data-q97="airm">Remove it from this device</button>';
+ else k+=(Q97.addErr?'<small class="q97err">'+esc(Q97.addErr)+'</small>':'')+'<button type="button" class="q97add" data-q97="aiadd">Add</button>';
+ k+='</div>';
+ if(A.ios||A.mac)k+='<div class="q97card"><div class="q97ct"><b>Apple Premium voices</b></div><p>'
+  +(A.ios?'Free from Apple. Open Settings › Accessibility › Spoken Content › Voices › English, download one marked <b>Premium</b> (Ava and Zoe sound best), then pick it here.'
+   :'Free from Apple. Open System Settings › Accessibility › Spoken Content › System voice › Manage Voices, download <b>Ava (Premium)</b> or <b>Zoe (Premium)</b>, then pick it here'+(A.chrome?' (in Safari: Chrome on a Mac can’t use them)':'')+'.')+'</p></div>';
+ if(!A.mobile)k+='<div class="q97card"><div class="q97ct"><b>Microsoft Edge voices</b></div><p>'
+  +(A.edge?'You’re in Edge, so its natural voices (like Ava and Andrew) are already in your list.':'Open Doable in Microsoft Edge (free) to get its natural voices, like Ava and Andrew. They need the internet while reading.')+'</p></div>';
+ return '<div class="q97addh"><button type="button" class="q97bk" data-q97="vback" aria-label="Back to voices">'+zI('<path d="m15 6-6 6 6 6"/>',16)+'</button><b>Add a voice</b></div>'+k;
 }
 
 /* ---------- the voice ---------- */
 function q97Mod(){var M=TBK?tbkModsNow():[];return M[TBK?TBK.mi:0]||null}
 function q97Unlock(){ // iPhone/iPad only let a page talk when the first words start inside a tap
+ if(q97AiOn()){try{var au=q97Au();au.src=q97Silent();var pl=au.play();if(pl&&pl.catch)pl.catch(function(){})}catch(e){}q97KBoot().catch(function(){});return}
  try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);if(speechSynthesis.paused)speechSynthesis.resume()}catch(e){}
 }
+function q97Hush(){try{speechSynthesis.cancel()}catch(e){}if(Q97.au){Q97.au.onended=Q97.au.onerror=null;try{Q97.au.pause()}catch(e){}}}
 async function q97Speak(){
  var gen=Q97.gen;if(!Q97.playing||!TBK)return;
  var mod=q97Mod();if(!mod){q97Pause();return}
@@ -27501,6 +27616,7 @@ async function q97Speak(){
  var s=pg.sents[Q97.si];
  q97Status('Page '+Q97.page+(pg.kind==='scan'?' · scanned':''));
  q97Follow();q97Light(true);
+ if(q97AiOn()){q97SpeakAi(s,gen,pg,mod);if(Q97.si===0&&Q97.page<pg.n)q97Page(mod,Q97.page+1).catch(function(){});return}
  var u=new SpeechSynthesisUtterance(q97Say(s.t)),v=q97Voice();
  if(v){u.voice=v;u.lang=v.lang}else u.lang='en-US';
  u.rate=q97Rate();Q97.u=u;
@@ -27514,7 +27630,7 @@ async function q97Speak(){
  Q97.wd=setTimeout(check,s.t.length/(13*u.rate)*1000+3500);
  if(Q97.si===0&&Q97.page<pg.n)q97Page(mod,Q97.page+1).catch(function(){}); // check the next page while this one is read
 }
-function q97Restart(){Q97.gen++;clearTimeout(Q97.wd);try{speechSynthesis.cancel()}catch(e){}if(Q97.playing)setTimeout(q97Speak,70);else q97Light(true);q97Bar()}
+function q97Restart(){Q97.gen++;clearTimeout(Q97.wd);q97Hush();q97KDrop();if(Q97.playing)setTimeout(q97Speak,70);else q97Light(true);q97Bar()}
 function q97Play(){
  if(!q97Ok()||!TBK)return;
  q97Unlock();
@@ -27525,7 +27641,7 @@ function q97Play(){
  Q97.playing=true;Q97.pausedAt=0;Q97.shown=0;Q97.gen++;q97Bar();q97Speak();
 }
 function q97Pause(){
- Q97.playing=false;Q97.gen++;clearTimeout(Q97.wd);try{speechSynthesis.cancel()}catch(e){}
+ Q97.playing=false;Q97.gen++;clearTimeout(Q97.wd);q97Hush();
  Q97.pausedAt=TBK?tbkCurPage():0;                                // play again = carry on, unless you've gone to another page since
  q97Status(Q97.cur?'Paused · page '+Q97.page:'Paused');q97Bar();
 }
@@ -27594,7 +27710,8 @@ function q97Pop(){
  var desk=document.getElementById('tbkdesk'),p=document.getElementById('q97pop');
  if(!Q97.open||!Q97.pop||!desk){if(p)p.remove();return}
  if(!p||p.parentNode!==desk){if(p)p.remove();p=document.createElement('div');p.id='q97pop';p.className='q97pop';desk.appendChild(p)}
- var rate=q97Rate(),V=q97Voices(),cv=q97Voice(),fid=Q97.fid||(q97Mod()||{}).fid,s=q97Count(fid),checked=s.text+s.scan+s.fixed+s.blank+s.fail;
+ if(Q97.popView==='add'){p.innerHTML=q97AddHtml();return}
+ var rate=q97Rate(),O=q97VoiceOpts(),cur=q97CurVoiceId(),fid=Q97.fid||(q97Mod()||{}).fid,s=q97Count(fid),checked=s.text+s.scan+s.fixed+s.blank+s.fail;
  var lines=[];
  if(checked){
   lines.push(tbkPlural(checked,'page')+' checked');
@@ -27605,10 +27722,10 @@ function q97Pop(){
  }
  var lt=(document.getElementById('q97vl')||{}).scrollTop||0;
  p.innerHTML='<div class="q97ph">Speed</div><div class="q97rates">'+Q97_RATES.map(function(r){return '<button type="button" class="'+(r===rate?'on':'')+'" data-q97="rate:'+r+'" aria-pressed="'+(r===rate)+'">'+q97RateTxt(r)+'</button>'}).join('')+'</div>'
-  +(q97Natural(V)?'':'<p class="q97tip">'+q97Tip()+'</p>')
-  +'<div class="q97ph">Voice</div><div class="q97vl" id="q97vl">'+(V.length?V.map(function(v,i){var on=cv&&v.voiceURI===cv.voiceURI;
-    return '<button type="button" class="q97v'+(on?' on':'')+'" data-q97="voice:'+i+'" aria-pressed="'+!!on+'"><span><b>'+esc(q97VoiceName(v))+'</b><small>'+esc(q97VoiceMeta(v))+'</small></span>'+(on?zI(Q97_IC.tick,16):'')+'</button>'}).join('')
+  +'<div class="q97ph">Voice</div><div class="q97vl" id="q97vl">'+(O.length?O.map(function(v,i){var on=v.id===cur;
+    return '<button type="button" class="q97v'+(on?' on':'')+'" data-q97="voice:'+i+'" aria-pressed="'+on+'"><span><b>'+esc(v.name)+'</b><small>'+esc(v.meta)+'</small></span>'+(on?zI(Q97_IC.tick,16):'')+'</button>'}).join('')
    :'<p class="q97none">Using this device’s voice.</p>')+'</div>'
+  +'<button type="button" class="q97vadd" data-q97="vadd">'+zI('<path d="M12 5v14M5 12h14"/>',15)+'<span>Add a voice</span></button>'
   +(lines.length?'<p class="q97chk">'+zI(Q97_IC.tick,14)+'<span>'+esc(lines.join(' · '))+'</span></p>':'<p class="q97chk q97chk0">Each page is checked before it’s read: page numbers and headers are skipped, and scanned pages are read from the picture.</p>');
  var vl=document.getElementById('q97vl');if(vl&&lt)vl.scrollTop=lt;
 }
@@ -27623,8 +27740,15 @@ document.addEventListener('click',function(e){
  if(a[0]==='fwd')return q97Skip(1);
  if(a[0]==='close')return q97Close();
  if(a[0]==='set'){Q97.pop=!Q97.pop;return q97Bar()}
- if(a[0]==='rate'){q97Prefs({rate:+a[1]});if(Q97.playing)q97Restart();else q97Bar();return}
- if(a[0]==='voice'){var v=q97Voices()[+a[1]];if(v){q97Prefs({voice:v.voiceURI});if(Q97.playing)q97Restart();else q97Bar()}return}
+ if(a[0]==='rate'){q97Prefs({rate:+a[1]});if(Q97.playing&&q97AiOn()&&Q97.au){Q97.au.playbackRate=+a[1];q97Bar()}else if(Q97.playing)q97Restart();else q97Bar();return}
+ if(a[0]==='voice'){var v=q97VoiceOpts()[+a[1]];if(v){q97Prefs({voice:v.id});if(v.id.indexOf('k:')===0)Q97.aiFail=false;if(Q97.playing){q97Unlock();q97Restart()}else q97Bar()}return}
+ if(a[0]==='vadd'){Q97.popView='add';Q97.addErr='';return q97Pop()}
+ if(a[0]==='vback'){Q97.popView='main';return q97Pop()}
+ if(a[0]==='aiadd'){Q97.adding=true;Q97.addErr='';Q97K.prog=null;q97Pop();
+  q97KBoot().then(function(){Q97.adding=false;Q97.aiFail=false;q97Prefs({ai:true,voice:'k:af_heart'});Q97.popView='main';q97Pop();if(Q97.playing){q97Unlock();q97Restart()}else q97Bar()},
+   function(){Q97.adding=false;Q97.addErr='Couldn’t download it. Check the internet and try again.';q97Pop()});return}
+ if(a[0]==='airm'){q97KStop();q97Prefs({ai:false,voice:''});try{caches.delete('transformers-cache');caches.delete('kokoro-voices')}catch(err){}
+  if(Q97.playing)q97Restart();Q97.popView='main';return q97Pop()}
 });
 if(q97Ok()){try{speechSynthesis.addEventListener('voiceschanged',function(){if(Q97.pop)q97Pop()})}catch(e){}}
 // the Listen button sits before Notes in the reader's top bar (not on handwritten notes, which have no printed words)
@@ -27646,7 +27770,7 @@ tbkDraw=function(){
  return r;
 };
 var _q97Close=tbkClose;
-tbkClose=function(){q97Close();Q97.cache={};Q97.raw={};Q97.edges={};Q97.stats={};return _q97Close.apply(this,arguments)};
+tbkClose=function(){q97Close();q97KStop();Q97.popView='main';Q97.cache={};Q97.raw={};Q97.edges={};Q97.done={};Q97.stats={};return _q97Close.apply(this,arguments)};
 
 
 try{spBoot()}catch(e){}
