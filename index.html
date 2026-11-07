@@ -6533,7 +6533,8 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 /* v279: on laptops the open search is a little wider (it now holds 3/16 and the arrows); Listen shows just its icon meanwhile */
 @media (min-width:1280px){.tbktop.tbk-so .tbksrch{width:290px;animation-name:q98in}}
 @keyframes q98in{from{width:36px;opacity:.4}to{width:290px;opacity:1}}
-@media (min-width:1280px) and (max-width:1699px){.tbktop.tbk-so #q97btn span{display:none}.tbktop.tbk-so #q97btn{padding:0 11px}}
+/* v280: Listen is just its icon everywhere; Back just says Back */
+#tbkhd #q97btn{padding:0 11px}
 /* v279: on an iPad the open search takes the room the name doesn't need (it was squeezed into 200px) */
 @media (min-width:601px) and (max-width:1279px){
  .tbktop.tbk-so .tbkhr{flex:1 1 auto}
@@ -7302,7 +7303,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v279';
+var BUILD='v280';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26376,7 +26377,7 @@ function tbkDraw(){
  var fm=!!TBK.fid,note=tbkIsNote();
  var sOpen=!note&&!!(TBK.sopen||TBK.q),hdEl=document.getElementById('tbkhd'),oldSave=document.getElementById('tbksave');
  hdEl.classList.toggle('tbk-so',sOpen);
- hdEl.innerHTML='<div class="tbkhl"><button type="button" class="tbkback" data-tbk="close" aria-label="Back to '+esc(tbkFromName())+'">'+zI(TBK_LEFT,16)+'<span>'+esc(tbkFromName())+'</span></button><i class="tbkdiv"></i>'
+ hdEl.innerHTML='<div class="tbkhl"><button type="button" class="tbkback" data-tbk="close" aria-label="Back to '+esc(tbkFromName())+'">'+zI(TBK_LEFT,16)+'<span>Back</span></button><i class="tbkdiv"></i>'
   +'<span class="tbkcol" style="background:'+tbkChip()+'"></span>'+(note?'<button type="button" class="tbkttl tbkren" data-tbk="rename" title="Tap to rename" aria-label="Rename '+esc(tbkName())+'">'+esc(tbkName())+'</button>':'<b class="tbkttl">'+esc(tbkName())+'</b>')+'<span class="tbksave" id="tbksave" aria-live="polite">'+(oldSave?oldSave.textContent:'')+'</span></div>'
   +'<div class="tbkhc"><div class="tbkpill" id="tbkpill"></div></div>'
   +'<div class="tbkhr"><div class="tbkhr1">'
@@ -27896,7 +27897,7 @@ tbkDraw=function(){
    var btn=document.createElement('button');btn.type='button';btn.id='q97btn';btn.className='tbkpill2 q97btn'+(Q97.open?' on':'');
    btn.setAttribute('data-q97','open');btn.setAttribute('aria-pressed',String(Q97.open));btn.setAttribute('aria-label','Read aloud');btn.title='Read aloud';
    if(!tbkModsNow()[TBK.mi])btn.disabled=true;
-   btn.innerHTML=zI(Q97_IC.spk,16)+'<span>Listen</span>';
+   btn.innerHTML=zI(Q97_IC.spk,16);
    row.insertBefore(btn,nb||null);
   }
   if(Q97.open&&tbkIsNote())q97Close();
