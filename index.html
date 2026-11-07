@@ -6882,6 +6882,48 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .cptp .q94st a{color:var(--q86ink,inherit);font-weight:600;white-space:nowrap}
 /* v272: iPad (iOS 26.1 frosts the top ~90pt of Home Screen apps): the Textbooks top bar starts below the frost */
 html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
+/* v276: Read aloud in the reader (q97): Listen in the top bar, a small player at the bottom of the pages, the sentence being read lit up */
+#tbkhd .tbkpill2.q97btn.on{background:#F1EDE6}
+#tbkhost #mk .mktext span.q97on,#tbkhost #mk .mktext mark.q97m{background:rgba(168,196,178,.42);color:transparent;border-radius:3px;box-shadow:0 0 0 2px rgba(168,196,178,.42)}
+.q97bar{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:8;display:flex;align-items:center;gap:2px;height:50px;padding:0 6px 0 16px;background:#fff;border:1px solid #E4E0D7;border-radius:999px;box-shadow:0 8px 26px rgba(60,45,30,.14);color:#33312C;animation:q97in .26s cubic-bezier(.4,0,.2,1) both;max-width:calc(100% - 32px);box-sizing:border-box}
+@keyframes q97in{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+.q97bar button{flex:none;width:40px;height:40px;border:none;border-radius:50%;background:transparent;color:inherit;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;font:inherit}
+.q97bar button:hover{background:#F1EDE8}
+#tbkr .q97bar .q97play{width:42px;height:42px;background:#33312C;color:#F4EFE6;margin:0 2px}
+#tbkr .q97bar .q97play:hover{background:#4A4638}
+.q97bar .q97play svg path{fill:currentColor}
+.q97bar .q97play svg path[d^="M9 5.5"]{fill:none;stroke-width:2.6}
+.q97bar .q97sp{width:auto;min-width:44px;padding:0 10px;border-radius:999px;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.q97bar .q97sp.on{background:#F1EDE8}
+.q97bar .q97x{color:#837D6D}
+.q97spl{margin-right:4px}
+.q97st{width:150px;font-size:12.5px;color:#837D6D;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent);margin-right:4px}
+.q97pop{position:absolute;left:50%;bottom:calc(78px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9;width:min(340px,calc(100% - 32px));box-sizing:border-box;background:#fff;border:1px solid #E4E0D7;border-radius:18px;box-shadow:0 10px 30px rgba(60,45,30,.16);padding:14px 14px 12px;color:#33312C;animation:q97pin .2s cubic-bezier(.4,0,.2,1) both}
+@keyframes q97pin{from{opacity:0;transform:translate(-50%,6px)}to{opacity:1;transform:translate(-50%,0)}}
+.q97ph{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#837D6D;margin:0 2px 7px}
+.q97rates{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
+.q97rates button{height:32px;border:1px solid #E4E0D7;border-radius:10px;background:#fff;font:inherit;font-size:12.5px;color:inherit;cursor:pointer;padding:0;font-variant-numeric:tabular-nums}
+#tbkr .q97rates button.on{background:#EDE6DA;border-color:#BDB3A2;color:#33312C;font-weight:600}
+.q97vl{max-height:min(210px,34vh);overflow:auto;margin:0 -4px;scrollbar-width:none}
+.q97vl::-webkit-scrollbar{display:none}
+.q97v{display:flex;align-items:center;gap:10px;width:100%;border:none;background:transparent;border-radius:12px;padding:8px 10px;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.q97v:hover{background:#F6F3EE}
+.q97v.on{background:#F1EDE8}
+.q97v span{flex:1;min-width:0;display:flex;flex-direction:column}
+.q97v b{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.q97v small{font-size:11.5px;color:#837D6D}
+.q97none{font-size:13px;color:#837D6D;margin:2px 6px}
+.q97tip{font-size:12px;line-height:1.45;color:#6B5F4F;background:#F6F1E8;border-radius:12px;padding:8px 10px;margin:0 0 12px}
+.q97tip b{font-weight:600}
+.q97chk{display:flex;gap:7px;align-items:flex-start;font-size:12px;line-height:1.45;color:#5F6B5F;background:#EEF3EE;border-radius:12px;padding:8px 10px;margin:12px 0 0}
+.q97chk svg{flex:none;margin-top:1px}
+.q97chk.q97chk0{color:#837D6D;background:#F6F3EE}
+@media (max-width:600px){
+ .q97st{width:78px}
+ .q97spl{display:none}
+ .q97bar{padding-left:12px}
+ .q97bar button{width:36px}
+}
 </style>
 </head>
 <body>
@@ -7191,7 +7233,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v275';
+var BUILD='v276';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -11245,8 +11287,11 @@ function linkIcon(url,title,custom,mono){
 var PDFJS=null,pdfjsTried=false;
 async function loadPdfJs(){
  if(PDFJS)return PDFJS;
- if(pdfjsTried)return null;
+ if(pdfjsTried)return loadPdfJs.p||null;   // v276: a second caller while it's still loading waits for it (it used to get nothing)
  pdfjsTried=true;
+ return (loadPdfJs.p=loadPdfJsNow());
+}
+async function loadPdfJsNow(){
  try{
   await new Promise(function(res,rej){
    var done=false;
@@ -27183,6 +27228,425 @@ function q94Go(c,btn,url,label,isNew){
 }
 function q94OpenWord(c,btn){q94Go(c,btn,'https://www.office.com/launch/word','Open Word',false)}
 function q94NewDoc(c,btn){q94Go(c,btn,'https://word.new','New Word doc',true)}
+/* ===== v276: Read aloud in the reader (prefix q97). "Listen" in the reader's top bar reads the open PDF out loud with
+   the device's own voice (free, works offline, iPhone/iPad/Mac), from the page you're on, lighting up the sentence
+   it's reading and following the pages (and on into the next module). Every page is CHECKED before it's read:
+   - the words are put back into lines and sentences (words split over two lines joined, bullets dropped, headings
+     kept apart so they don't run into the next sentence, very long sentences split at a comma so the voice never stops)
+   - running headers, footers, page numbers and footnote marks are skipped (a line at the top or bottom that repeats
+     on the pages around it, or is only a number)
+   - a page that is a scanned picture (no real text inside) or whose hidden text is garbage (a broken font map) is read
+     with text recognition (Tesseract, loaded only when needed) from the picture of the page instead
+   Nothing is saved or synced; the voice, speed and checking all happen on the device. ===== */
+var Q97={edges:{},open:false,playing:false,fid:null,page:1,si:0,cur:null,gen:0,cache:{},raw:{},u:null,wd:0,ocrW:null,stats:{},shown:0,userAt:0,pausedAt:0,auto:false,pop:false,st:''};
+var Q97_RATES=[.75,.9,1,1.1,1.25,1.5,2];
+var Q97_PGNUM=/^\s*(?:page\s*)?(?:\d{1,4}|[ivxlc]{1,7})(?:\s*(?:of|\/)\s*\d{1,4})?\s*$/i;
+var Q97_BUL=/^\s*(?:[•●▪◦■□▸►‣⁃∙·«»©®°¢\u2022\uF0B7\uF0A7\uF076\uF0D8\uF0FC\uF0A8\uF0E0]|[-–—*>](?=\s))\s*/;
+var Q97_ABBR=/(?:^|[\s(\[“"'])(?:e\.g|i\.e|etc|vs|v|mr|mrs|ms|dr|prof|sr|jr|st|no|nos|vol|fig|figs|pp?|ch|sec|art|arts|inc|ltd|co|corp|dept|est|approx|al|ed|eds|rev|gov|u\.s|u\.k|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec|ss?|cf|para|ex|ref)\.$/i;
+var Q97_SILLY=/^(albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|pipe organ|superstar|trinoids|whisper|wobble|zarvox|deranged|hysterical|junior|ralph|fred|kathy|princess|rocko|shelley|sandy|reed|eddy|flo|grandma|grandpa)\b/i;
+var Q97_IC={
+ spk:'<path d="M11 5 6.5 9H3.5v6h3l4.5 4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18.3 6.3a8.4 8.4 0 0 1 0 11.4"/>',
+ play:'<path d="M8 5.8v12.4a.8.8 0 0 0 1.2.7l10-6.2a.8.8 0 0 0 0-1.4l-10-6.2A.8.8 0 0 0 8 5.8z"/>',
+ pause:'<path d="M9 5.5v13M15 5.5v13"/>',
+ back:'<path d="M12 7 7 12l5 5M18 7l-5 5 5 5"/>',
+ fwd:'<path d="m12 7 5 5-5 5M6 7l5 5-5 5"/>',
+ x:'<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+ tick:'<path d="m5 12.5 4.5 4.5L19 7.5"/>'
+};
+function q97Ok(){return typeof window.speechSynthesis!=='undefined'&&typeof window.SpeechSynthesisUtterance!=='undefined'}
+function q97Prefs(v){var o={};try{o=JSON.parse(localStorage.getItem('tbk-tts')||'{}')||{}}catch(e){}if(v){Object.assign(o,v);try{localStorage.setItem('tbk-tts',JSON.stringify(o))}catch(e){}}return o}
+function q97Rate(){var r=+q97Prefs().rate;return Q97_RATES.indexOf(r)>-1?r:1}
+function q97RateTxt(r){return String(r).replace(/^0/,'')+'×'}
+
+/* ---------- voices: the nicest English voice on this device first, joke voices left out ---------- */
+function q97Voices(){
+ if(!q97Ok())return [];
+ var V=[];try{V=speechSynthesis.getVoices()||[]}catch(e){}
+ var loc=String(navigator.language||'en-US').toLowerCase();
+ return V.filter(function(v){return /^en(?:[-_]|$)/i.test(v.lang||'')&&!Q97_SILLY.test(v.name||'')}).map(function(v){
+  var s=0,n=v.name||'',l=String(v.lang||'').toLowerCase().replace('_','-');
+  if(/premium|enhanced|natural|neural|siri/i.test(n))s+=4;
+  if(/google/i.test(n))s+=2;
+  if(/samantha|ava|allison|karen|daniel|serena|moira|tessa|evan|zoe|nathan|aaron|nicky|jenny|aria|guy/i.test(n))s+=1;
+  if(l===loc)s+=2;else if(l==='en-us'||l==='en-ca')s+=1;
+  if(v.default)s+=.5;
+  return {v:v,s:s};
+ }).sort(function(a,b){return b.s-a.s||String(a.v.name).localeCompare(b.v.name)}).map(function(x){return x.v});
+}
+function q97Voice(){var V=q97Voices(),want=q97Prefs().voice;for(var i=0;i<V.length;i++)if(V[i].voiceURI===want||V[i].name===want)return V[i];return V[0]||null}
+function q97Natural(V){return (V||[]).some(function(v){return /premium|enhanced|natural|neural|google|siri/i.test(v.name||'')})}
+// the device voices that sound like a person are a free download from Apple; until one is there, say where to get it
+function q97Tip(){
+ var ua=navigator.userAgent||'',ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),chrome=/Chrome\//.test(ua)&&!/Edg\//.test(ua);
+ if(ios)return '<b>For a more natural voice:</b> open Settings › Accessibility › Spoken Content › Voices › English, download a voice marked <b>Enhanced</b> or <b>Premium</b> (Ava and Zoe sound best), then come back here and pick it.';
+ if(/Macintosh/.test(ua))return '<b>For a more natural voice:</b> open System Settings › Accessibility › Spoken Content › System voice › Manage Voices, download <b>Ava (Premium)</b> or <b>Zoe (Premium)</b>, then reopen Doable'+(chrome?' in Safari (Chrome on a Mac can’t use those voices)':'')+' and pick it here.';
+ return '<b>For a more natural voice:</b> add a natural English voice in your device’s speech settings, then pick it here.';
+}
+function q97VoiceName(v){return v?String(v.name).replace(/\s*\((?:English|Anglais)[^)]*\)+/i,'').replace(/\s*\((?:enhanced|premium)\)/i,'').replace(/^(?:Microsoft|Google)\s+/,'').replace(/\s+Online.*$/,'').trim()||v.name:'Device voice'}
+function q97VoiceMeta(v){var l=String(v.lang||'').replace('_','-'),reg={'en-US':'US','en-GB':'UK','en-CA':'Canada','en-AU':'Australia','en-IE':'Ireland','en-IN':'India','en-ZA':'South Africa','en-NZ':'New Zealand'}[l]||l;
+ return reg+(/premium|enhanced|natural|neural/i.test(v.name)?' · natural':'')}
+
+/* ---------- checking a page ---------- */
+// the page's words with where they sit (top-down y), in the order the PDF stores them
+function q97Raw(doc,fid,p){
+ var key=fid+':'+p;if(Q97.raw[key])return Q97.raw[key];
+ var pr=(async function(){
+  var page=await doc.getPage(p),vp=page.getViewport({scale:1}),tc=await page.getTextContent(),H=vp.height,items=[],ix=0;
+  tc.items.forEach(function(it){
+   if(typeof it.str!=='string')return;
+   if(!it.str.trim()){if(items.length&&it.str.length)items[items.length-1].sp=true;return}
+   var tr=it.transform||[1,0,0,1,0,0],h=Math.abs(it.height||0)||Math.hypot(tr[2],tr[3])||8;
+   var s=it.str.normalize?it.str.normalize('NFKC'):it.str;              // ligatures (ﬁ ﬂ) back into plain letters
+   items.push({s:s,x:tr[4],y:H-tr[5],w:it.width||0,h:h,ix:ix++,sp:/\s$/.test(it.str)});
+  });
+  return {W:vp.width,H:H,items:items,page:page};
+ })();
+ Q97.raw[key]=pr;pr.catch(function(){delete Q97.raw[key]});return pr;
+}
+// words → lines (stream order, which is the reading order in almost every PDF; put back by position when it isn't)
+function q97Lines(R){
+ if(R.L)return R.L;
+ var L=[],cur=null;
+ R.items.forEach(function(it){
+  var same=cur&&Math.abs(it.y-cur.y)<Math.max(it.h,cur.h)*.55&&it.x>=cur.x1-cur.h*2&&it.x-cur.x1<cur.h*5;
+  if(!same){cur={y:it.y,h:it.h,x0:it.x,x1:it.x+it.w,its:[]};L.push(cur)}
+  cur.its.push(it);cur.x1=Math.max(cur.x1,it.x+it.w);cur.h=Math.max(cur.h,it.h);
+ });
+ // footnote marks: small raised numbers inside a line
+ L.forEach(function(l){var hs=l.its.map(function(i){return i.h}).sort(function(a,b){return a-b}),mh=hs[Math.floor(hs.length/2)]||l.h;
+  l.mh=mh;l.its=l.its.filter(function(i,k){return !(k>0&&/^[\d*†‡,]{1,4}$/.test(i.s.trim())&&i.h<mh*.8&&i.y<l.y-mh*.2)})});
+ L=L.filter(function(l){return l.its.length});
+ // a page whose stream jumps up and down a lot is put back in order by position (two columns kept apart)
+ var up=0;for(var i=1;i<L.length;i++)if(L[i].y<L[i-1].y-L[i-1].h*2&&L[i].x0<=L[i-1].x0+R.W*.2)up++;
+ if(L.length>8&&up>L.length*.2){
+  var right=L.filter(function(l){return l.x0>R.W*.45}).length,narrow=L.filter(function(l){return l.x1<R.W*.56}).length,two=right>L.length*.25&&narrow>L.length*.25;
+  L.sort(function(a,b){var ca=two&&a.x0>R.W*.45?1:0,cb=two&&b.x0>R.W*.45?1:0;return ca-cb||a.y-b.y||a.x0-b.x0});
+ }
+ L.forEach(function(l){var t='';l.its.forEach(function(it,k){
+  if(k){var pv=l.its[k-1],gap=it.x-(pv.x+pv.w);if(!/\s$/.test(t)&&!/^\s/.test(it.s)&&(gap>pv.h*.18||pv.sp))t+=' '}
+  it.at=t.length;t+=it.s});l.t=t});
+ R.L=L;return L;
+}
+function q97Key(t){return String(t).toLowerCase().replace(/\d+/g,'#').replace(/\s+/g,' ').trim()}
+function q97IsEdge(R,l){return l.y<R.H*.085||l.y-l.h>R.H*.915}
+function q97EdgeSet(R){var o={};q97Lines(R).forEach(function(l){if(q97IsEdge(R,l))o[q97Key(l.t)]=1});return o}
+// is the hidden text real words? 'few' = next to none, 'bad' = garbage (wrong font map), 'ok'
+function q97Quality(t){
+ var letters=(t.match(/[A-Za-zÀ-ɏ]/g)||[]).length;if(letters<25)return 'few';
+ var odd=(t.match(/[-�\u0000-\u0008\u000E-\u001F]/g)||[]).length;if(odd>letters*.15)return 'bad';
+ var words=t.match(/[A-Za-z]{2,}/g)||[],vw=words.filter(function(w){return /[aeiouy]/i.test(w)}).length;
+ if(words.length>=12&&vw/words.length<.6)return 'bad';
+ if(letters>200&&(t.match(/\s/g)||[]).length<letters/40)return 'bad';
+ return 'ok';
+}
+// how much of the page is covered by pictures (a scan is one picture over the whole page)
+async function q97ImgCover(page,R){
+ try{
+  var ops=await page.getOperatorList(),O=PDFJS&&PDFJS.OPS;if(!O)return 0;
+  var paint=[O.paintImageXObject,O.paintInlineImageXObject,O.paintImageMaskXObject,O.paintJpegXObject,O.paintImageXObjectRepeat].filter(function(x){return x!=null});
+  var m=[1,0,0,1,0,0],st=[],best=0,fa=ops.fnArray,aa=ops.argsArray;
+  for(var i=0;i<fa.length;i++){var f=fa[i];
+   if(f===O.save)st.push(m.slice());else if(f===O.restore)m=st.pop()||[1,0,0,1,0,0];
+   else if(f===O.transform){var a=aa[i];m=[m[0]*a[0]+m[2]*a[1],m[1]*a[0]+m[3]*a[1],m[0]*a[2]+m[2]*a[3],m[1]*a[2]+m[3]*a[3],m[0]*a[4]+m[2]*a[5]+m[4],m[1]*a[4]+m[3]*a[5]+m[5]]}
+   else if(paint.indexOf(f)>-1)best=Math.max(best,Math.abs(m[0]*m[3]-m[1]*m[2])/(R.W*R.H||1));
+  }
+  return Math.min(1,best);
+ }catch(e){return 0}
+}
+// lines → sentences, each knowing which words on the page it came from (for the light-up)
+function q97Build(L,skip){
+ var out=[],buf='',map=[],prev=null;
+ var lens=L.map(function(l){return (l.t||'').length}).sort(function(a,b){return a-b}),medLen=lens[Math.floor(lens.length/2)]||40;
+ function flush(){
+  if(buf.trim())q97Split(buf).forEach(function(r){
+   var t=buf.slice(r[0],r[1]).replace(/\s+/g,' ').trim();if(!/[A-Za-z0-9]/.test(t))return;
+   var ix=[],pt=[];map.forEach(function(m){if(m.b>r[0]&&m.a<r[1]){ix.push(m.ix);pt.push({ix:m.ix,s:Math.max(r[0],m.a)-m.a+m.o,e:Math.min(r[1],m.b)-m.a+m.o})}});
+   out.push({t:t,ix:ix,pt:pt});
+  });
+  buf='';map=[];
+ }
+ L.forEach(function(l,i){
+  if(skip&&skip[i])return;
+  var t=l.t||'',bm=Q97_BUL.exec(t),cut=bm?bm[0].length:0;t=t.slice(cut).replace(/\s+$/,'');if(!t.trim())return;
+  var brk=!prev||!!l.brk||!!bm;
+  if(!brk){
+   var hh=Math.max(l.h||10,prev.h||10),gap=(l.y||0)-(prev.y||0),ratio=(l.mh||l.h||10)/(prev.mh||prev.h||10);
+   if(gap>hh*1.9)brk=true;                                         // a gap between paragraphs
+   else if(ratio>1.3||ratio<.77)brk=true;                          // a heading in a bigger (or smaller) size
+   else if(prev.t.length<Math.max(18,medLen*.6)&&!/[.!?:;,\-–—]["'”’)\]]?$/.test(prev.t)&&/^["“(]?[A-Z0-9]/.test(t))brk=true; // a short title line
+  }
+  if(brk)flush();
+  else if(/[A-Za-z]-$/.test(buf)&&/^[a-z]/.test(t)){buf=buf.slice(0,-1);if(map.length)map[map.length-1].b=Math.min(map[map.length-1].b,buf.length)} // con- / tract
+  else if(buf&&!/\s$/.test(buf))buf+=' ';
+  var base=buf;
+  (l.its||[]).forEach(function(it){var a=it.at-cut,b=a+it.s.length;if(b<=0)return;map.push({a:base.length+Math.max(0,a),b:base.length+b,ix:it.ix,o:a<0?-a:0})});
+  buf+=t;prev={t:t,y:l.y,h:l.h,mh:l.mh};
+ });
+ flush();return out;
+}
+// one paragraph → sentence ranges; abbreviations (e.g., Smith v. Jones, s. 12, J. Smith) don't end a sentence
+function q97Split(txt){
+ var out=[],a=0,re=/[.!?]+["'”’)\]]*(?=\s+["'“‘(\[]?[A-Z0-9§])/g,m;
+ while((m=re.exec(txt))){
+  var dot=m.index+1,end=m.index+m[0].length,tail=txt.slice(Math.max(a,dot-9),dot);
+  if(txt[m.index]==='.'&&(Q97_ABBR.test(tail)||/(?:^|\s)[A-Z]\.$/.test(tail)))continue;
+  out.push([a,end]);a=end;while(txt[a]===' ')a++;
+ }
+ if(a<txt.length)out.push([a,txt.length]);
+ // very long ones are broken at ; or , so the voice never cuts out and the light-up stays small
+ var res=[];out.forEach(function(r){
+  var s=r[0],e=r[1];
+  while(e-s>240){var cutAt=-1,win=txt.slice(s,s+240);
+   ['; ',': ',', ',' – ',' — '].some(function(c){var k=win.lastIndexOf(c);if(k>80){cutAt=s+k+c.length;return true}return false});
+   if(cutAt<0){var k2=win.lastIndexOf(' ');cutAt=k2>80?s+k2+1:s+240}
+   res.push([s,cutAt]);s=cutAt;
+  }
+  res.push([s,e]);
+ });
+ return res;
+}
+// the words the voice says: links, "e.g." and symbols said the way a person would
+function q97Say(t){
+ return String(t).replace(/\bhttps?:\/\/\S+|\bwww\.\S+/gi,'a web link').replace(/\be\.g\.,?/gi,'for example,').replace(/\bi\.e\.,?/gi,'that is,')
+  .replace(/§§?\s*/g,'section ').replace(/\s*&\s*/g,' and ').replace(/[_|~^`]+/g,' ').replace(/\s+/g,' ').trim();
+}
+// text recognition for scanned pages (loaded the first time a scan turns up)
+function q97Ocr(){
+ if(Q97.ocrW)return Q97.ocrW;
+ Q97.ocrW=new Promise(function(ok,no){
+  var go=function(){try{window.Tesseract.createWorker('eng',1,{workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js',corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1'}).then(ok,no)}catch(e){no(e)}};
+  if(window.Tesseract)return go();
+  var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';sc.onload=go;sc.onerror=function(){no(new Error('ocr'))};document.head.appendChild(sc);
+ });
+ Q97.ocrW.catch(function(){Q97.ocrW=null});
+ return Q97.ocrW;
+}
+async function q97OcrPage(page){
+ var w=await q97Ocr(),v1=page.getViewport({scale:1}),sc=Math.min(2.5,1800/v1.width),vp=page.getViewport({scale:sc});
+ var cv=document.createElement('canvas');cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
+ var cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);
+ await page.render({canvasContext:cx,viewport:vp,intent:'print'}).promise;          // 'print' draws straight away (no waiting on screen frames)
+ var res=await w.recognize(cv,{},{text:true,blocks:true}),d=(res&&res.data)||{},L=[],cs=[],cvH=cv.height||1;
+ cv.width=cv.height=0;
+ (d.blocks||[]).forEach(function(b){(b.paragraphs||[]).forEach(function(pa){(pa.lines||[]).forEach(function(ln,li){
+  var W=ln.words||[],c=W.length?W.reduce(function(s,x){return s+(x.confidence||0)},0)/W.length:(ln.confidence||0);
+  var t=String(ln.text||'').replace(/\s+/g,' ').trim().replace(/^[eoc*](?=\s+[A-Z])/,'•');if(!t||c<55)return; // smudges and pictures come back as low-confidence junk; a round bullet often reads as e, o or «
+  cs.push(c);var bb=ln.bbox||{};L.push({t:t,its:[],y:bb.y0||0,h:(bb.y1-bb.y0)||10,brk:li===0,edge:(bb.y0||0)<cvH*.085||(bb.y0||0)>cvH*.915});
+ })})});
+ if(!L.length&&d.text&&(d.confidence||0)>=55){var blank=false;String(d.text).split('\n').forEach(function(t,k){t=t.trim();if(!t){blank=true;return}L.push({t:t,its:[],y:k*12,h:10,brk:blank});blank=false});cs.push(d.confidence)}
+ if(L.length&&Q97_PGNUM.test(L[L.length-1].t))L.pop();
+ if(L.length&&Q97_PGNUM.test(L[0].t))L.shift();
+ return {conf:cs.length?Math.round(cs.reduce(function(s,x){return s+x},0)/cs.length):0,L:L};
+}
+function q97Count(fid,k){var s=Q97.stats[fid]||(Q97.stats[fid]={text:0,scan:0,fixed:0,cut:0,blank:0,fail:0});if(k)s[k]=(s[k]||0)+1;return s}
+// one checked page: {n (pages in the PDF), kind text|scan|blank|fail, sents}
+function q97Page(mod,p){
+ var key=mod.fid+':'+p;if(Q97.cache[key])return Q97.cache[key];
+ var pr=(async function(){
+  var r=tbkFile(mod.cid,mod.fid);if(!r||!r.f.data)throw new Error('gone');
+  var doc=await tbkDoc(mod,r.f),n=doc.numPages;p=Math.max(1,Math.min(n,p));
+  var R=await q97Raw(doc,mod.fid,p),L=q97Lines(R),q=q97Quality(L.map(function(l){return l.t}).join(' '));
+  if(q!=='ok'){
+   var cover=q==='bad'?1:await q97ImgCover(R.page,R);
+   if(q==='bad'||cover>.5){
+    try{
+     var o=await q97OcrPage(R.page),ek={},seen={};
+     o.L.forEach(function(l){if(l.edge)ek[q97Key(l.t)]=1});Q97.edges[mod.fid+':'+p]=ek;
+     // a scan's running header: skipped when the same line was at the top or bottom of a scanned page next to it
+     for(var dd=-2;dd<=2;dd++){var ne=dd&&Q97.edges[mod.fid+':'+(p+dd)];if(ne)Object.keys(ne).forEach(function(k){seen[k]=1})}
+     var sk=o.L.map(function(l){return !!(l.edge&&seen[q97Key(l.t)])}),oc=sk.filter(Boolean).length;
+     q97Count(mod.fid,q==='bad'?'fixed':'scan');if(oc)q97Count(mod.fid,'cut');
+     return {n:n,kind:'scan',conf:o.conf,cut:oc,sents:q97Build(o.L,sk)}}
+    catch(e){if(q==='bad'||!L.length){q97Count(mod.fid,'fail');return {n:n,kind:'fail',sents:[]}}}
+   }
+   if(!L.length){q97Count(mod.fid,'blank');return {n:n,kind:'blank',sents:[]}}
+  }
+  // running headers and footers: a line at the very top or bottom that is a page number or repeats on the pages around it
+  var near=[],keys={};
+  for(var d=-2;d<=2;d++){var pp=p+d;if(d&&pp>=1&&pp<=n)near.push(pp)}
+  for(var j=0;j<near.length;j++){try{var es=q97EdgeSet(await q97Raw(doc,mod.fid,near[j]));Object.keys(es).forEach(function(k){keys[k]=(keys[k]||0)+1})}catch(e){}}
+  var need=Math.min(2,near.length),cut=0;
+  var skip=L.map(function(l){if(!q97IsEdge(R,l))return false;var t=l.t.trim();
+   var yes=Q97_PGNUM.test(t)||(need&&(keys[q97Key(t)]||0)>=need);if(yes)cut++;return yes});
+  q97Count(mod.fid,'text');if(cut)q97Count(mod.fid,'cut');
+  return {n:n,kind:'text',cut:cut,sents:q97Build(L,skip)};
+ })();
+ Q97.cache[key]=pr;pr.catch(function(){delete Q97.cache[key]});return pr;
+}
+
+/* ---------- the voice ---------- */
+function q97Mod(){var M=TBK?tbkModsNow():[];return M[TBK?TBK.mi:0]||null}
+function q97Unlock(){ // iPhone/iPad only let a page talk when the first words start inside a tap
+ try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);if(speechSynthesis.paused)speechSynthesis.resume()}catch(e){}
+}
+async function q97Speak(){
+ var gen=Q97.gen;if(!Q97.playing||!TBK)return;
+ var mod=q97Mod();if(!mod){q97Pause();return}
+ if(mod.fid!==Q97.fid){if(!Q97.auto){q97Pause();Q97.fid=mod.fid;Q97.page=tbkCurPage();Q97.si=0;q97Bar();return}Q97.auto=false;Q97.fid=mod.fid}
+ var key=mod.fid+':'+Q97.page;
+ if(!Q97.cache[key]||!Q97.cur||Q97.cur.p!==Q97.page)q97Status('Checking page '+Q97.page+'…');
+ var slow=setTimeout(function(){if(gen===Q97.gen)q97Status('Reading a scanned page…')},1800);
+ var pg;try{pg=await q97Page(mod,Q97.page)}catch(e){pg={n:Q97.cur?Q97.cur.n:Q97.page,kind:'fail',sents:[]}}
+ clearTimeout(slow);
+ if(gen!==Q97.gen||!Q97.playing||!TBK)return;
+ pg.p=Q97.page;Q97.cur=pg;
+ if(Q97.si<0)Q97.si=Math.max(0,pg.sents.length-1);
+ if(Q97.si>=pg.sents.length){                                    // this page is done: the next page, then the next module
+  Q97.si=0;
+  if(Q97.page<pg.n){Q97.page++;return q97Speak()}
+  var M=tbkModsNow();
+  if(TBK.mi<M.length-1){Q97.auto=true;Q97.page=1;tbkGo(TBK.mi+1,1);Q97.shown=0;return q97Speak()}
+  q97Pause();q97Status('Finished');return;
+ }
+ var s=pg.sents[Q97.si];
+ q97Status('Page '+Q97.page+(pg.kind==='scan'?' · scanned':''));
+ q97Follow();q97Light(true);
+ var u=new SpeechSynthesisUtterance(q97Say(s.t)),v=q97Voice();
+ if(v){u.voice=v;u.lang=v.lang}else u.lang='en-US';
+ u.rate=q97Rate();Q97.u=u;
+ var next=function(){if(gen!==Q97.gen)return;clearTimeout(Q97.wd);Q97.si++;q97Speak()};
+ u.onend=next;
+ u.onerror=function(e){if(gen!==Q97.gen)return;if(e&&(e.error==='interrupted'||e.error==='canceled'))return;clearTimeout(Q97.wd);setTimeout(next,150)};
+ try{speechSynthesis.speak(u)}catch(e){q97Pause();q97Status('This device can’t read aloud');return}
+ // some browsers forget to say they finished: a watchdog moves on when nothing is being spoken any more
+ clearTimeout(Q97.wd);
+ var check=function(){if(gen!==Q97.gen||!Q97.playing)return;if(!speechSynthesis.speaking&&!speechSynthesis.pending){Q97.si++;q97Speak()}else Q97.wd=setTimeout(check,1500)};
+ Q97.wd=setTimeout(check,s.t.length/(13*u.rate)*1000+3500);
+ if(Q97.si===0&&Q97.page<pg.n)q97Page(mod,Q97.page+1).catch(function(){}); // check the next page while this one is read
+}
+function q97Restart(){Q97.gen++;clearTimeout(Q97.wd);try{speechSynthesis.cancel()}catch(e){}if(Q97.playing)setTimeout(q97Speak,70);else q97Light(true);q97Bar()}
+function q97Play(){
+ if(!q97Ok()||!TBK)return;
+ q97Unlock();
+ var mod=q97Mod();if(!mod)return;
+ var here=tbkCurPage();
+ // a new start, or you went to another page while it was paused: read from the page you're on
+ if(mod.fid!==Q97.fid||!Q97.cur||(Q97.pausedAt&&here!==Q97.pausedAt)){Q97.fid=mod.fid;Q97.page=here;Q97.si=0;Q97.cur=null}
+ Q97.playing=true;Q97.pausedAt=0;Q97.shown=0;Q97.gen++;q97Bar();q97Speak();
+}
+function q97Pause(){
+ Q97.playing=false;Q97.gen++;clearTimeout(Q97.wd);try{speechSynthesis.cancel()}catch(e){}
+ Q97.pausedAt=TBK?tbkCurPage():0;                                // play again = carry on, unless you've gone to another page since
+ q97Status(Q97.cur?'Paused · page '+Q97.page:'Paused');q97Bar();
+}
+function q97Skip(dir){ // back / next sentence (across pages); it carries on reading from there
+ if(!Q97.cur||!TBK)return;
+ if(dir<0){if(Q97.si>0)Q97.si--;else if(Q97.page>1){Q97.page--;Q97.si=-1}}
+ else Q97.si++;
+ q97Unlock();Q97.playing=true;Q97.pausedAt=0;Q97.shown=0;q97Restart();
+}
+function q97Open(){
+ if(!q97Ok()){if(typeof toast==='function')toast('This browser can’t read aloud');return}
+ Q97.open=true;Q97.pop=false;q97Bar();q97Play();
+}
+function q97Close(){
+ if(Q97.playing)q97Pause();
+ Q97.open=false;Q97.pop=false;Q97.cur=null;Q97.fid=null;Q97.si=0;Q97.pausedAt=0;
+ q97Light(false);var b=document.getElementById('q97bar');if(b)b.remove();var pp=document.getElementById('q97pop');if(pp)pp.remove();
+ var lb=document.getElementById('q97btn');if(lb){lb.classList.remove('on');lb.setAttribute('aria-pressed','false')}
+}
+
+/* ---------- on the page: the light-up and following along ---------- */
+function q97Light(scroll){
+ document.querySelectorAll('#tbkhost .q97on').forEach(function(s){s.classList.remove('q97on')});
+ document.querySelectorAll('#tbkhost .mktext mark.q97m').forEach(function(m){var sp=m.parentNode;if(sp)sp.textContent=sp.textContent});
+ if(!Q97.open||!Q97.cur||Q97.cur.kind!=='text'||!TBK||TBK.mounted!==Q97.fid||!tbkHosted())return;
+ var s=Q97.cur.sents[Q97.si];if(!s||!s.ix.length)return;
+ var box=document.querySelector('#tbkhost .mkpagebox[data-mkpage="'+Q97.page+'"] .mktext');if(!box)return;
+ var spans=[].filter.call(box.querySelectorAll('span'),function(x){return !x.classList.contains('markedContent')&&!x.querySelector('span')&&(x.textContent||'').trim()});
+ // the whole printed piece when the sentence covers it, else only the sentence's own part of it
+ var first=null;(s.pt||s.ix.map(function(i){return {ix:i,s:0,e:1e9}})).forEach(function(q){var sp=spans[q.ix];if(!sp)return;
+  var t=sp.textContent,a=Math.max(0,q.s),b=Math.min(t.length,q.e);
+  if(sp.querySelector('mark')||(a<=0&&b>=t.trimEnd().length))sp.classList.add('q97on');
+  else if(b>a){sp.innerHTML=esc(t.slice(0,a))+'<mark class="q97m">'+esc(t.slice(a,b))+'</mark>'+esc(t.slice(b));sp.setAttribute('data-tbkq','')}
+  if(!first)first=sp});
+ if(!scroll||!first||Date.now()-Q97.userAt<4000)return;
+ var body=document.getElementById('mkbody');if(!body||(typeof q78On==='function'&&q78On()))return;
+ var br=body.getBoundingClientRect(),r=first.getBoundingClientRect();
+ if(r.top<br.top+br.height*.12||r.bottom>br.top+br.height*.82){var to=body.scrollTop+(r.top-br.top)-br.height*.3;if(body.scrollTo)body.scrollTo({top:to,behavior:'smooth'});else body.scrollTop=to}
+}
+function q97Follow(){
+ if(!TBK||TBK.mounted!==Q97.fid||!tbkHosted()||Q97.shown===Q97.page)return;
+ if(Date.now()-Q97.userAt<4000&&Q97.shown)return;
+ Q97.shown=Q97.page;if(tbkCurPage()!==Q97.page)tbkMkGo(Q97.page,true);
+}
+// the page's words are drawn again when you scroll or zoom; keep the light on the sentence being read
+setInterval(function(){if(Q97.open&&Q97.cur&&Q97.cur.kind==='text'&&!document.querySelector('#tbkhost .q97on,#tbkhost mark.q97m'))q97Light(false);if(Q97.open&&Q97.playing&&TBK&&TBK.mounted===Q97.fid&&Q97.shown!==Q97.page)q97Follow()},700);
+['wheel','touchmove','keydown'].forEach(function(ev){document.addEventListener(ev,function(e){if(Q97.open&&e.target&&e.target.closest&&e.target.closest('#tbkhost'))Q97.userAt=Date.now()},{passive:true,capture:true})});
+
+/* ---------- the player ---------- */
+function q97Status(t){Q97.st=t;var e=document.getElementById('q97st');if(e)e.textContent=t}
+function q97Bar(){
+ var lb=document.getElementById('q97btn');if(lb){lb.classList.toggle('on',Q97.open);lb.setAttribute('aria-pressed',String(Q97.open))}
+ var desk=document.getElementById('tbkdesk'),b=document.getElementById('q97bar');
+ if(!Q97.open||!desk){if(b)b.remove();return}
+ if(!b||b.parentNode!==desk){if(b)b.remove();b=document.createElement('div');b.id='q97bar';b.className='q97bar';b.setAttribute('role','region');b.setAttribute('aria-label','Read aloud');desk.appendChild(b)}
+ var pl=Q97.playing;
+ b.innerHTML='<span class="q97st" id="q97st" aria-live="polite">'+esc(Q97.st||'')+'</span>'
+  +'<button type="button" data-q97="back" aria-label="Back one sentence" title="Back">'+zI(Q97_IC.back,18)+'</button>'
+  +'<button type="button" class="q97play" data-q97="play" aria-label="'+(pl?'Pause':'Play')+'" title="'+(pl?'Pause':'Play')+'">'+zI(pl?Q97_IC.pause:Q97_IC.play,19)+'</button>'
+  +'<button type="button" data-q97="fwd" aria-label="Next sentence" title="Next">'+zI(Q97_IC.fwd,18)+'</button>'
+  +'<button type="button" class="q97sp'+(Q97.pop?' on':'')+'" data-q97="set" aria-label="Speed and voice" aria-expanded="'+Q97.pop+'" title="Speed and voice"><span class="q97spl">Speed </span>'+q97RateTxt(q97Rate())+'</button>'
+  +'<button type="button" class="q97x" data-q97="close" aria-label="Stop reading aloud" title="Stop">'+zI(Q97_IC.x,16)+'</button>';
+ q97Pop();
+}
+function q97Pop(){
+ var desk=document.getElementById('tbkdesk'),p=document.getElementById('q97pop');
+ if(!Q97.open||!Q97.pop||!desk){if(p)p.remove();return}
+ if(!p||p.parentNode!==desk){if(p)p.remove();p=document.createElement('div');p.id='q97pop';p.className='q97pop';desk.appendChild(p)}
+ var rate=q97Rate(),V=q97Voices(),cv=q97Voice(),fid=Q97.fid||(q97Mod()||{}).fid,s=q97Count(fid),checked=s.text+s.scan+s.fixed+s.blank+s.fail;
+ var lines=[];
+ if(checked){
+  lines.push(tbkPlural(checked,'page')+' checked');
+  if(s.cut)lines.push('page numbers and headers skipped');
+  if(s.scan)lines.push(tbkPlural(s.scan,'scanned page')+' read from the picture');
+  if(s.fixed)lines.push(tbkPlural(s.fixed,'page')+' with broken text read from the picture');
+  if(s.fail)lines.push(tbkPlural(s.fail,'page')+' couldn’t be read');
+ }
+ var lt=(document.getElementById('q97vl')||{}).scrollTop||0;
+ p.innerHTML='<div class="q97ph">Speed</div><div class="q97rates">'+Q97_RATES.map(function(r){return '<button type="button" class="'+(r===rate?'on':'')+'" data-q97="rate:'+r+'" aria-pressed="'+(r===rate)+'">'+q97RateTxt(r)+'</button>'}).join('')+'</div>'
+  +(q97Natural(V)?'':'<p class="q97tip">'+q97Tip()+'</p>')
+  +'<div class="q97ph">Voice</div><div class="q97vl" id="q97vl">'+(V.length?V.map(function(v,i){var on=cv&&v.voiceURI===cv.voiceURI;
+    return '<button type="button" class="q97v'+(on?' on':'')+'" data-q97="voice:'+i+'" aria-pressed="'+!!on+'"><span><b>'+esc(q97VoiceName(v))+'</b><small>'+esc(q97VoiceMeta(v))+'</small></span>'+(on?zI(Q97_IC.tick,16):'')+'</button>'}).join('')
+   :'<p class="q97none">Using this device’s voice.</p>')+'</div>'
+  +(lines.length?'<p class="q97chk">'+zI(Q97_IC.tick,14)+'<span>'+esc(lines.join(' · '))+'</span></p>':'<p class="q97chk q97chk0">Each page is checked before it’s read: page numbers and headers are skipped, and scanned pages are read from the picture.</p>');
+ var vl=document.getElementById('q97vl');if(vl&&lt)vl.scrollTop=lt;
+}
+document.addEventListener('click',function(e){
+ var b=e.target&&e.target.closest&&e.target.closest('#tbkr [data-q97]');
+ if(!b){if(Q97.pop&&!(e.target.closest&&e.target.closest('#q97pop'))){Q97.pop=false;q97Bar()}return}
+ if(!TBK)return;
+ var a=b.getAttribute('data-q97').split(':');
+ if(a[0]==='open'){if(Q97.open)q97Close();else q97Open();return}
+ if(a[0]==='play'){if(Q97.playing)q97Pause();else q97Play();return}
+ if(a[0]==='back')return q97Skip(-1);
+ if(a[0]==='fwd')return q97Skip(1);
+ if(a[0]==='close')return q97Close();
+ if(a[0]==='set'){Q97.pop=!Q97.pop;return q97Bar()}
+ if(a[0]==='rate'){q97Prefs({rate:+a[1]});if(Q97.playing)q97Restart();else q97Bar();return}
+ if(a[0]==='voice'){var v=q97Voices()[+a[1]];if(v){q97Prefs({voice:v.voiceURI});if(Q97.playing)q97Restart();else q97Bar()}return}
+});
+if(q97Ok()){try{speechSynthesis.addEventListener('voiceschanged',function(){if(Q97.pop)q97Pop()})}catch(e){}}
+// the Listen button sits before Notes in the reader's top bar (not on handwritten notes, which have no printed words)
+var _q97Draw=tbkDraw;
+tbkDraw=function(){
+ var r=_q97Draw.apply(this,arguments);
+ try{
+  var row=document.querySelector('#tbkhd .tbkhr1'),nb=document.getElementById('tbknotes');
+  if(row&&!document.getElementById('q97btn')&&q97Ok()&&!tbkIsNote()){
+   var btn=document.createElement('button');btn.type='button';btn.id='q97btn';btn.className='tbkpill2 q97btn'+(Q97.open?' on':'');
+   btn.setAttribute('data-q97','open');btn.setAttribute('aria-pressed',String(Q97.open));btn.setAttribute('aria-label','Read aloud');btn.title='Read aloud';
+   if(!tbkModsNow()[TBK.mi])btn.disabled=true;
+   btn.innerHTML=zI(Q97_IC.spk,16)+'<span>Listen</span>';
+   row.insertBefore(btn,nb||null);
+  }
+  if(Q97.open&&tbkIsNote())q97Close();
+  q97Bar();
+ }catch(e){}
+ return r;
+};
+var _q97Close=tbkClose;
+tbkClose=function(){q97Close();Q97.cache={};Q97.raw={};Q97.edges={};Q97.stats={};return _q97Close.apply(this,arguments)};
 
 
 try{spBoot()}catch(e){}
