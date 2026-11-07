@@ -6530,6 +6530,17 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
  .tbktop .tbksrch{width:200px}
  @keyframes q88in{from{width:36px;opacity:.4}to{width:200px;opacity:1}}
 }
+/* v279: on laptops the open search is a little wider (it now holds 3/16 and the arrows); Listen shows just its icon meanwhile */
+@media (min-width:1280px){.tbktop.tbk-so .tbksrch{width:290px;animation-name:q98in}}
+@keyframes q98in{from{width:36px;opacity:.4}to{width:290px;opacity:1}}
+@media (min-width:1280px) and (max-width:1699px){.tbktop.tbk-so #q97btn span{display:none}.tbktop.tbk-so #q97btn{padding:0 11px}}
+/* v279: on an iPad the open search takes the room the name doesn't need (it was squeezed into 200px) */
+@media (min-width:601px) and (max-width:1279px){
+ .tbktop.tbk-so .tbkhr{flex:1 1 auto}
+ .tbktop.tbk-so .tbkhr1{flex:1 1 auto}
+ .tbktop.tbk-so .tbksrch{flex:1 1 auto;width:auto;min-width:230px;max-width:420px;margin-left:auto;animation:none}
+ .tbktop.tbk-so .tbkhl{flex:1 1 200px;min-width:200px}
+}
 /* phones: back, name and tools first; then the page and Markup/Reading. Search opens over the first row */
 @media (max-width:600px){
  .tbkhr{display:contents}
@@ -6644,6 +6655,7 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 .q86big .q20fade,.q86pt .q20fade{display:block;white-space:nowrap;overflow:hidden}
 .q86labrow{display:flex;justify-content:space-between;gap:8px}
 .q86grade{font-size:26px;color:var(--q86a);line-height:1.2;margin-bottom:8px}
+.q86rtg{font-size:13px;line-height:1.4;color:var(--q86i3);margin-top:9px}
 .q86bar{height:4px;background:#E9E3DB;border-radius:2px;overflow:hidden}
 .q86bar i{display:block;height:100%;background:var(--q86a);border-radius:2px}
 .q86bar5{height:5px}
@@ -6871,9 +6883,10 @@ button.tbkrow,.tbkrgo{display:flex;align-items:center;gap:10px;flex:1;min-width:
 /* v264: module tiles in Files & links show the module's colour; Edit sits beside Add */
 .q86mt.q92c{background:color-mix(in srgb,var(--q92c) 55%,#fff);color:color-mix(in srgb,var(--q92c) 35%,#222)}
 .q92acts{display:flex;align-items:center;gap:8px;flex-shrink:0}
-/* v265: Class info's class time pill sits further left, so its words line up with "Class time" and the room line */
-.q86it1 .q86when{margin-left:-18px}
-@media (max-width:760px){.q86it1 .q86when{margin-left:-10px;margin-right:-10px}}
+/* v279: Class info's class time pill is smaller and only as wide as its words; its left edge lines up with "Class time"
+   and the room line under it (v265 pulled it left so the words lined up instead, which looked off-centre to Jae) */
+.q86info .q86it1 .q86when{display:inline-block;max-width:100%;box-sizing:border-box;margin:5px 0 9px;padding:7px 14px;border-radius:12px;font-size:19px;line-height:1.3}
+@media (max-width:760px){.q86info .q86it1 .q86when{font-size:17px}}
 /* v270: Word buttons on the Title page card (q94) */
 .cptp .q94row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cptp .q94btn{font:inherit;font-size:14px;padding:9px 10px;border-radius:10px;border:1px solid var(--q86line,rgba(0,0,0,.12));background:#fff;color:var(--q86i1,inherit);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -6949,6 +6962,29 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 .q97chk{display:flex;gap:7px;align-items:flex-start;font-size:12px;line-height:1.45;color:#5F6B5F;background:#EEF3EE;border-radius:12px;padding:8px 10px;margin:12px 0 0}
 .q97chk svg{flex:none;margin-top:1px}
 .q97chk.q97chk0{color:#837D6D;background:#F6F3EE}
+/* v279 (q98): search arrows in the reader, a size button in the floating tool menu, the read-aloud loading card */
+.tbksrch .q98cnt{flex:none;font-size:12.5px;color:#837D6D;font-variant-numeric:tabular-nums;white-space:nowrap}
+#tbkr .tbksrch .q98nav{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#5F5A4E!important;padding:0}
+#tbkr .tbksrch .q98nav:hover{background:#F1EDE6}
+.tbksrch .q98nav+.q98nav{margin-left:-6px}
+#tbkr .tbkhit.on{background:#F1EDE6}
+#tbkhost #mk .mktext mark.tbkm.q98cur{background:rgba(222,132,74,.72);box-shadow:0 0 0 2px rgba(222,132,74,.72)}
+#mk .mkfloat button.q98szb i{display:block;border-radius:50%;background:currentColor}
+#mk .q98szpop{position:fixed;z-index:7;display:flex;gap:6px;padding:8px;background:#fff;border:1px solid #E4E0D7;border-radius:14px;box-shadow:0 8px 24px rgba(60,45,30,.18)}
+#mk .q98szpop button{width:38px;height:38px;min-width:38px;border-radius:50%;border:0;background:transparent;color:#4A4638;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#mk .q98szpop button:hover{background:#F6F3EE}
+#mk .q98szpop button.on{background:#F1EFE9;box-shadow:inset 0 0 0 1.5px #BDB3A2}
+#mk .q98szpop button i{display:block;border-radius:50%;background:currentColor}
+.q97ld{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);width:max-content;max-width:min(300px,calc(100vw - 32px));box-sizing:border-box;background:#fff;border:1px solid #E4E0D7;border-radius:14px;box-shadow:0 8px 24px rgba(60,45,30,.14);padding:10px 14px 9px;color:#33312C;white-space:normal}
+.q97ldt{display:flex;align-items:center;gap:8px;font-size:13.5px}
+.q97ldt b{font-weight:600;flex:1}
+.q97ldt .q97spin{flex:none;color:#7E9C88}
+.q97ldp{font-size:12.5px;color:#837D6D;font-variant-numeric:tabular-nums}
+.q97ldb{height:5px;border-radius:5px;background:#EEE9E0;overflow:hidden;margin:8px 0 6px;min-width:220px;position:relative}
+.q97ldb i{display:block;height:100%;background:#A8C4B2;border-radius:5px;transition:width .3s}
+.q97ldb.q97ldi i{width:35%;position:absolute;left:0;top:0;animation:q97ldm 1.3s ease-in-out infinite}
+@keyframes q97ldm{from{transform:translateX(-100%)}to{transform:translateX(290%)}}
+.q97ld small{display:block;font-size:12px;color:#837D6D;line-height:1.4}
 @media (max-width:600px){
  .q97st{width:56px}
  .q97spl,.q97vn{display:none}
@@ -7266,7 +7302,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v278';
+var BUILD='v279';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26344,7 +26380,7 @@ function tbkDraw(){
   +'<span class="tbkcol" style="background:'+tbkChip()+'"></span>'+(note?'<button type="button" class="tbkttl tbkren" data-tbk="rename" title="Tap to rename" aria-label="Rename '+esc(tbkName())+'">'+esc(tbkName())+'</button>':'<b class="tbkttl">'+esc(tbkName())+'</b>')+'<span class="tbksave" id="tbksave" aria-live="polite">'+(oldSave?oldSave.textContent:'')+'</span></div>'
   +'<div class="tbkhc"><div class="tbkpill" id="tbkpill"></div></div>'
   +'<div class="tbkhr"><div class="tbkhr1">'
-  +(note?'':sOpen?'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this '+(fm?'PDF':'book')+'" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this '+(fm?'PDF':'book')+'"><button type="button" class="tbksx" data-tbk="sclose" aria-label="Close search">×</button></label>'
+  +(note?'':sOpen?'<label class="tbksrch">'+zI(ZIC.search,15)+'<input id="tbkq" type="search" placeholder="Search in this '+(fm?'PDF':'book')+'" value="'+esc(TBK.q)+'" enterkeyhint="search" aria-label="Search in this '+(fm?'PDF':'book')+'">'+tbkHitNav()+'<button type="button" class="tbksx" data-tbk="sclose" aria-label="Close search">×</button></label>'
    :'<button type="button" class="tbkpill2 tbkic tbksbtn" data-tbk="sopen" aria-label="Search in this '+(fm?'PDF':'book')+'" title="Search">'+zI(ZIC.search,16)+'</button>')
   +'<button type="button" class="tbkpill2" data-tbk="notes" id="tbknotes" aria-label="Notes"'+(mod?'':' disabled')+'>'+zI(ZIC.note,15)+'<span>Notes</span><em id="tbknc"></em></button>'
   +(note?'<button type="button" class="tbkpill2" data-tbk="addpage" aria-label="Add a page"'+(mod?'':' disabled')+'>'+zI(ZIC.plus,15)+'<span>Page</span></button>'
@@ -26391,7 +26427,7 @@ function tbkDraw(){
  // right: search results
  var right=document.getElementById('tbkright'),rh='';
  if(TBK.right==='find'&&TBK.hits){
-  var H=TBK.hits,rows=H.rows.map(function(r){return '<button type="button" class="tbkhit" data-tbk="go:'+r.mi+':'+r.page+'"><small>'+(cls?'':esc(tbkLbl(M,r.mi))+' · ')+'p. '+r.page+'</small><span>'+r.s+'</span></button>'}).join('');
+  var H=TBK.hits,rows=H.rows.map(function(r,k){return '<button type="button" class="tbkhit'+(k===TBK.hi?' on':'')+'" data-tbk="hitgo:'+k+'"><small>'+(cls?'':esc(tbkLbl(M,r.mi))+' · ')+'p. '+r.page+'</small><span>'+r.s+'</span></button>'}).join('');
   rh='<div class="tbkrh"><b>'+(H.busy?'Searching…':H.n+(H.n===1?' match':' matches')+' for “'+esc(H.q)+'”')+'</b><button type="button" data-tbk="rclose" aria-label="Close search results">×</button></div>'
    +'<div class="tbkres">'+(rows||(H.busy?'':'<p class="tbkempty">No matches in this book.</p>'))+(H.n>H.rows.length?'<p class="tbkempty">Showing the first '+H.rows.length+'.</p>':'')+'</div>';
  }
@@ -26584,7 +26620,7 @@ async function tbkSearch(q){
  q=String(q||'').trim();if(!TBK)return;
  if(!q){tbkClear();return}
  var gen=++TBK.sgen,M=tbkModsNow(),ql=q.toLowerCase();
- TBK.q=q;TBK.right='find';TBK.hits={q:q,busy:true,rows:[],per:{},n:0};tbkDraw();
+ TBK.q=q;TBK.right='find';TBK.hits={q:q,busy:true,rows:[],per:{},n:0};TBK.hi=-1;tbkDraw();
  for(var i=0;i<M.length;i++){
   var T;try{T=await tbkPageTexts(M[i])}catch(e){T=[]}
   if(!TBK||gen!==TBK.sgen)return;
@@ -26699,6 +26735,8 @@ document.addEventListener('click',function(e){
  if(a==='prev')return tbkStep(-1);
  if(a==='next')return tbkStep(1);
  if(a==='clear')return tbkClear();
+ if(a==='hit')return tbkHitStep(+p[1]);
+ if(a==='hitgo')return tbkHitGo(+p[1]);
  if(a==='sopen'){TBK.sopen=true;tbkDraw();var qi=document.getElementById('tbkq');if(qi)qi.focus();return}
  if(a==='sclose'){TBK.sopen=false;if(TBK.q)return tbkClear();return tbkDraw()}
  if(a==='rclose'){TBK.right=null;return tbkDraw()}
@@ -26726,7 +26764,7 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('keydown',function(e){
  if(!TBK)return;var t=e.target;
- if(t&&t.id==='tbkq'){if(e.key==='Enter'){e.preventDefault();tbkSearch(t.value)}else if(e.key==='Escape'){e.preventDefault();if(t.value)tbkClear();else{TBK.sopen=false;tbkDraw()}}return}
+ if(t&&t.id==='tbkq'){if(e.key==='Enter'){e.preventDefault();var H=TBK.hits;if(H&&!H.busy&&H.rows.length&&t.value.trim()===TBK.q)tbkHitStep(e.shiftKey?-1:1);else tbkSearch(t.value)}else if(e.key==='Escape'){e.preventDefault();if(t.value)tbkClear();else{TBK.sopen=false;tbkDraw()}}return}
  if(view.modal||document.getElementById('mknoteed')||document.getElementById('mkver')||(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable)))return;
  if(e.key==='Escape'){e.preventDefault();tbkClose();return}
  if(e.metaKey||e.ctrlKey||e.altKey||(typeof q78On==='function'&&q78On()))return; // Book view turns its own pages
@@ -26943,13 +26981,24 @@ function q86Overview(c,A){
  var left='<div class="q86ovl"><div class="q86h2row"><h2>Coming up</h2><button class="q86link" data-zact="q86tab:assign">All assignments →</button></div>'+h+'</div>';
  return '<div class="q86ov">'+left+q86Rail(c,A)+'</div>';
 }
+// v279: the Grade card also says what the target grade means (it was only on the Info tab)
+function q86RailTarget(c,gi){
+ var t=+c.target;if(!(t>0)||!gi.total)return '';
+ var msg;
+ if(gi.need==null)msg=gi.avg==null?'':(gi.avg>=t?'Target '+t+'% reached':'Target was '+t+'%');
+ else if(gi.avg==null)msg='Target '+t+'%, so aim for about that on each';
+ else if(gi.need<=0)msg='Target '+t+'% is locked in';
+ else if(gi.need>100)msg='Target '+t+'% is out of reach now';
+ else msg='Need about '+gi.need.toFixed(0)+'% on what’s left for '+t+'%';
+ return msg?'<div class="q86rtg">'+esc(msg)+'</div>':'';
+}
 function q86Rail(c,A){
  var gi=gradeInfo(c),pr=q86Prof(c),bk=c.textbook,h='<aside class="q86rail">';
  h+='<section class="q86when"><div class="q86lab">When and where</div><div class="q86big"><span class="q20fade">'+esc(c.day||'Time not set')+'</span></div><div class="q86sub">'+esc([c.room,c.code].filter(Boolean).join(' · ')||'Add the room in Edit class')+'</div>'
   +(c.day&&c.room?'':'<button class="q86link" data-edit="class" data-c="'+c.id+'">Edit class</button>')+'</section><div class="q86rc">';
  h+='<section class="q86rs"><div class="q86lab q86labrow"><span>Grade</span>'+(gi.avg!=null?'<span>on '+gi.graded+'% of the course</span>':'')+'</div>'
   +(gi.avg!=null?'<div class="q86grade">'+gi.avg.toFixed(1)+'%</div><div class="q86bar"><i style="width:'+Math.min(100,gi.graded)+'%"></i></div>'
-   :'<div class="q86sub">'+(gi.total?'No marks yet. Add them as work comes back.':'Give assignments a worth (%) to see your grade.')+'</div>')+'</section>';
+   :'<div class="q86sub">'+(gi.total?'No marks yet. Add them as work comes back.':'Give assignments a worth (%) to see your grade.')+'</div>')+q86RailTarget(c,gi)+'</section>';
  h+='<section class="q86rs"><div class="q86lab">Professor</div>'+(pr?'<div class="q86prof">'+q86Photo(pr,36)+'<div class="q86pt"><div class="q20fade">'+esc(pr.name||'Unnamed')+'</div>'
    +(pr.email?'<a class="q86mail q20fade" href="'+mailto(pr,c)+'" target="_blank" rel="noopener" data-phoneapp="1">'+esc(pr.email)+'</a>':'')+'</div></div>'
   :'<button class="q86link" data-add="contact" data-c="'+c.id+'">+ Add your professor</button>')+'</section>';
@@ -27565,7 +27614,20 @@ function q97KGet(key,text,vid){
 function q97KDrop(){Q97K.q.splice(0).forEach(function(e){Q97K.cache.delete(e.key);e.no(new Error('dropped'))})} // after a skip: forget work not started yet
 function q97KShowProgBar(){if(Q97.open)q97Bar()}
 function q97KShowProg(){var b=document.getElementById('q97kbar'),t=document.getElementById('q97kpt');if(b)b.style.width=(Q97K.prog||0)+'%';if(t)t.textContent='Downloading… '+(Q97K.prog||0)+'%';
- if(Q97.playing&&q97AiOn()&&Q97K.prog<100)q97Status('Downloading the voice… '+(Q97K.prog||0)+'%')}
+ if(Q97.playing&&q97AiOn()&&Q97K.prog<100)q97Status('Loading voice…');
+ // v279: the loading card above the player follows the download (it appears the first time a % arrives)
+ var ld=document.getElementById('q97ld');if(!ld||!/q97ldd/.test(ld.className)){if(Q97.open&&q97LdOn())q97Bar();return}
+ var li=ld.querySelector('.q97ldb i'),lp=ld.querySelector('.q97ldp');if(li)li.style.width=(Q97K.prog||0)+'%';if(lp)lp.textContent=(Q97K.prog||0)+'%'}
+// v279: while the AI voice gets ready, a small card above the player says so in full (the player's status line is
+// short and cut off long text): "Downloading the voice 42%" with a bar the first time, "Getting the voice ready" after
+function q97LdDl(){return q97AiOn()&&Q97K.prog!=null&&Q97K.prog<100}
+function q97LdOn(){return !!(Q97.open&&!Q97.pop&&q97AiOn()&&!Q97.aiFail&&(q97LdDl()||(Q97K.boot||Q97.wait)&&!Q97K.ws.some(function(w){return w.ready})))}
+function q97LdHtml(){
+ if(!q97LdOn())return '';var dl=q97LdDl(),pc=Q97K.prog||0;
+ return '<div class="q97ld'+(dl?' q97ldd':'')+'" id="q97ld" role="status"><div class="q97ldt">'+Q97_SPIN+'<b>'+(dl?'Downloading the voice':'Getting the voice ready')+'</b>'+(dl?'<span class="q97ldp">'+pc+'%</span>':'')+'</div>'
+  +'<div class="q97ldb'+(dl?'':' q97ldi')+'"><i'+(dl?' style="width:'+pc+'%"':'')+'></i></div>'
+  +'<small>'+(dl?'One time only. After this it works offline.':'This can take a few seconds.')+'</small></div>';
+}
 function q97Au(){if(!Q97.au){Q97.au=new Audio();Q97.au.preload='auto';try{Q97.au.setAttribute('playsinline','')}catch(e){}}return Q97.au}
 function q97Silent(){
  if(Q97.sil)return Q97.sil;
@@ -27583,7 +27645,7 @@ function q97AiAhead(mod,vid){ // make the next few sentences while this one play
 function q97SpeakAi(s,gen,pg,mod){
  var vid=q97Prefs().voice,key=mod.fid+':'+Q97.page+':'+Q97.si+':'+vid,ready=Q97K.ws.some(function(w){return w.ready});
  var hit=Q97K.cache.get(key);if(!(hit&&hit.url))q97Wait(true);
- var t=setTimeout(function(){if(gen===Q97.gen)q97Status(ready?'Getting the next part ready…':Q97K.prog!=null&&Q97K.prog<100?'Downloading the voice… '+Q97K.prog+'%':'Starting the voice…')},500);
+ var t=setTimeout(function(){if(gen===Q97.gen)q97Status(ready?'Getting the next part ready…':'Loading voice…')},500);
  q97KGet(key,q97Say(s.t),vid).then(function(url){
   clearTimeout(t);if(gen!==Q97.gen||!Q97.playing)return;
   q97Wait(false);q97Status('Page '+Q97.page+(pg.kind==='scan'?' · scanned':''));
@@ -27767,7 +27829,7 @@ function q97Bar(){
   +'<button type="button" data-q97="fwd" aria-label="Next sentence" title="Next">'+zI(Q97_IC.fwd,18)+'</button>'
   +'<button type="button" class="q97sp'+(Q97.pop==='speed'?' on':'')+'" data-q97="set" aria-label="Speed" aria-expanded="'+(Q97.pop==='speed')+'" title="Speed"><span class="q97spl">Speed </span>'+q97RateTxt(q97Rate())+'</button>'
   +'<button type="button" class="q97sp q97vb'+(Q97.pop==='voice'?' on':'')+'" data-q97="voices" aria-label="Voice: '+esc(q97CurName())+'" aria-expanded="'+(Q97.pop==='voice')+'" title="Voice">'+zI(Q97_IC.mic,16)+'<span class="q97vn">'+esc(q97CurName())+'</span></button>'
-  +'<button type="button" class="q97x" data-q97="close" aria-label="Stop reading aloud" title="Stop">'+zI(Q97_IC.x,16)+'</button>';
+  +'<button type="button" class="q97x" data-q97="close" aria-label="Stop reading aloud" title="Stop">'+zI(Q97_IC.x,16)+'</button>'+q97LdHtml();
  var vn=b.querySelector('.q97vn');if(vn)vn.classList.toggle('q97fd',vn.scrollWidth>vn.clientWidth+1); // fade only a name that doesn't fit
  q97Pop();
 }
@@ -27845,6 +27907,85 @@ tbkDraw=function(){
 var _q97Close=tbkClose;
 tbkClose=function(){q97Close();q97KStop();Q97.popView='main';Q97.cache={};Q97.raw={};Q97.edges={};Q97.done={};Q97.stats={};return _q97Close.apply(this,arguments)};
 
+
+/* ===== v279: textbook search arrows, pen sizes in the floating menu (prefix q98; tbkHit* keep the reader's own names) =====
+   Search: the open search box shows "3/16" and up/down arrows; each tap goes to the next (or previous) place the word
+   appears, turning the page and lighting that one word up darker than the others. Enter does the same once the
+   results are in (Shift+Enter goes back). Tapping a result in the list makes it the current one.
+   Floating menu: a round "size" button after the colour shows the pen's current size; tapping it opens the sizes
+   (the same ones as the Markup bar) beside the menu. */
+function tbkHitNav(){
+ var H=TBK&&TBK.hits;if(!H||H.busy||!H.rows.length)return '';
+ var k=TBK.hi>-1?TBK.hi:-1;
+ return '<span class="q98cnt" id="q98cnt">'+(k>-1?(k+1)+'/'+H.n:H.n)+'</span>'
+  +'<button type="button" class="q98nav" data-tbk="hit:-1" aria-label="Previous match" title="Previous">'+zI('<path d="m6 15 6-6 6 6"/>',16)+'</button>'
+  +'<button type="button" class="q98nav" data-tbk="hit:1" aria-label="Next match" title="Next">'+zI('<path d="m6 9 6 6 6-6"/>',16)+'</button>';
+}
+function tbkHitStep(d){
+ var H=TBK&&TBK.hits;if(!H||H.busy||!H.rows.length)return;var n=H.rows.length;
+ var k=TBK.hi>-1?TBK.hi+d:(d>0?q98First():n-1);
+ tbkHitGo(((k%n)+n)%n);
+}
+// the first time: start from the page you're on, not the top of the book
+function q98First(){var H=TBK.hits,pg=tbkCurPage();for(var k=0;k<H.rows.length;k++){var r=H.rows[k];if(r.mi>TBK.mi||r.mi===TBK.mi&&r.page>=pg)return k}return 0}
+function tbkHitGo(k){
+ var H=TBK&&TBK.hits,r=H&&H.rows[k];if(!r)return;TBK.hi=k;
+ var c=document.getElementById('q98cnt');if(c)c.textContent=(k+1)+'/'+H.n;
+ document.querySelectorAll('#tbkright .tbkhit').forEach(function(b,i){b.classList.toggle('on',i===k);if(i===k){var L=b.closest('.tbkres');if(L){var lr=L.getBoundingClientRect(),br=b.getBoundingClientRect();if(br.top<lr.top||br.bottom>lr.bottom)L.scrollTop+=br.top-lr.top-(lr.height-br.height)/2}}});
+ tbkGo(r.mi,r.page);q98Show(0);
+}
+// which of this page's matches it is (the 2nd "the" on page 4), then light that mark up once the page's words are drawn
+function q98Show(n){
+ clearTimeout(q98Show.t);var H=TBK&&TBK.hits,r=H&&H.rows[TBK.hi];if(!r)return;
+ var nth=0;for(var i=0;i<TBK.hi;i++)if(H.rows[i].mi===r.mi&&H.rows[i].page===r.page)nth++;
+ document.querySelectorAll('#tbkhost mark.tbkm.q98cur').forEach(function(m){m.classList.remove('q98cur')});
+ var box=tbkHosted()&&!TBK.mounting&&TBK.mi===r.mi&&document.querySelector('#tbkhost .mktext[data-mkpage="'+r.page+'"]');
+ if(box)tbkMarkSpans();
+ var M=box?box.querySelectorAll('mark.tbkm'):[];
+ if(!M.length){if(n<30)q98Show.t=setTimeout(function(){q98Show(n+1)},150);return}
+ var m=M[Math.min(nth,M.length-1)];m.classList.add('q98cur');
+ if(typeof q78On==='function'&&q78On())return;                 // Book view shows the whole page anyway
+ var b=document.getElementById('mkbody');if(!b)return;
+ var br=b.getBoundingClientRect(),mr=m.getBoundingClientRect();
+ if(mr.top<br.top+60||mr.bottom>br.bottom-60){var y=b.scrollTop+(mr.top-br.top)-b.clientHeight*.35;if(b.scrollTo)b.scrollTo({top:Math.max(0,y),behavior:'smooth'});else b.scrollTop=Math.max(0,y)}
+}
+// a new search or a cleared one forgets the current match
+var _q98Clear=tbkClear;
+tbkClear=function(){if(TBK)TBK.hi=-1;return _q98Clear.apply(this,arguments)};
+
+// ---- pen sizes in the floating menu ----
+function q98HasSize(){return !!(MK&&MK_SIZES[MK.tool])}
+var _q98Float=mkFloatRender;
+mkFloatRender=function(){
+ var r=_q98Float.apply(this,arguments),el=document.getElementById('mkfloat');
+ if(!el||!el.classList.contains('show')||!q98HasSize()){q98SizePop(false);return r}
+ if(!el.querySelector('[data-q98sz]')){
+  var px=(MK_SIZE_DOTS[MK.tool]||{})[MK.size]||8,h='<button type="button" class="q98szb" data-q98sz="1" aria-label="Size: '+esc(MK_SIZE_NAMES[MK.size]||'')+'" title="Size"><i style="width:'+px+'px;height:'+px+'px"></i></button>';
+  var fc=el.querySelector('[data-tbkfc]'),hide=el.querySelector('[data-mkfmin="1"]');
+  if(fc)fc.insertAdjacentHTML('afterend',h);
+  else if(hide)hide.insertAdjacentHTML('beforebegin','<span class="mkfsep"></span>'+h);
+  else el.insertAdjacentHTML('beforeend','<span class="mkfsep"></span>'+h);
+  var p=mkFloatPos();if(p)mkFloatPlace(el,p.x*innerWidth,p.y*innerHeight);
+ }
+ if(document.getElementById('q98szpop'))q98SizePop(true);       // keep an open size list showing the tool you're on
+ return r;
+};
+function q98SizePop(open){
+ var old=document.getElementById('q98szpop');if(old)old.remove();if(!open||!q98HasSize())return;
+ var mk=document.getElementById('mk'),fl=document.getElementById('mkfloat'),btn=fl&&fl.querySelector('[data-q98sz]');if(!mk||!fl||!btn)return;
+ var D=MK_SIZE_DOTS[MK.tool]||{},pop=document.createElement('div');pop.id='q98szpop';pop.className='q98szpop';
+ pop.innerHTML=Object.keys(MK_SIZES[MK.tool]).map(function(sz){return '<button type="button" class="'+(MK.size===sz?'on':'')+'" data-mk="size:'+sz+'" aria-label="'+MK_SIZE_NAMES[sz]+'" title="'+MK_SIZE_NAMES[sz]+'" aria-pressed="'+(MK.size===sz)+'"><i style="width:'+D[sz]+'px;height:'+D[sz]+'px"></i></button>'}).join('');
+ mk.appendChild(pop);
+ var fr=fl.getBoundingClientRect(),br=btn.getBoundingClientRect(),pw=pop.offsetWidth,ph=pop.offsetHeight,left=fr.left-pw-10<8?fr.right+10:fr.left-pw-10;
+ pop.style.left=Math.round(Math.min(innerWidth-pw-8,Math.max(8,left)))+'px';
+ pop.style.top=Math.round(Math.max(60,Math.min(innerHeight-ph-8,br.top+br.height/2-ph/2)))+'px';
+}
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.closest)return;
+ if(t.closest('[data-q98sz]')){e.stopPropagation();if(typeof tbkColPop==='function')tbkColPop(false);q98SizePop(!document.getElementById('q98szpop'));return}
+ if(t.closest('#q98szpop [data-mk^="size:"]')){setTimeout(function(){q98SizePop(false)},0);return}
+ if(!t.closest('#q98szpop'))q98SizePop(false);
+},true);
 
 try{spBoot()}catch(e){}
 load();
