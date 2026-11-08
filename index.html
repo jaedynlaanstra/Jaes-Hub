@@ -7306,7 +7306,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v281';
+var BUILD='v282';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -27997,20 +27997,28 @@ document.addEventListener('click',function(e){
    size and the next ones fill in underneath (with the existing "dense" flow). Runs right after each render
    (so drag animations measure the final spots) and whenever a widget's size changes. */
 var Q99_UNIT=2,q99RO=null,q99T=0;
+/* how many screen pixels one CSS pixel is inside the widgets (the text-size setting zooms .main) */
+function q99Scale(g){var p=document.createElement('div');p.style.cssText='position:absolute;visibility:hidden;height:100px;width:1px;pointer-events:none';g.appendChild(p);var k=p.getBoundingClientRect().height/100;p.remove();return k>0?k:1}
 function q99Lay(){
  var home=document.querySelector('.zhome');if(!home)return;
  var mainc=home.querySelector('.zmain'),grids=[];
  if(mainc&&getComputedStyle(mainc).display==='contents')grids.push(home);
  else home.querySelectorAll('.zmain,.zside').forEach(function(g){grids.push(g)});
+ grids=grids.filter(function(g){return getComputedStyle(g).display==='grid'});if(!grids.length)return;
+ grids.forEach(function(g){g.classList.add('q99m')}); /* switch stretching off before measuring anything */
+ var k=q99Scale(grids[0]);
+ /* every small widget gets the same height: the tallest small one's natural height */
+ var smalls=[].slice.call(home.querySelectorAll('.zw-small')).filter(function(w){return w.offsetParent});
+ smalls.forEach(function(w){w.style.minHeight=''});
+ var tall=0;smalls.forEach(function(w){tall=Math.max(tall,w.getBoundingClientRect().height/k)});
+ if(tall)smalls.forEach(function(w){w.style.minHeight=Math.ceil(tall)+'px'});
  grids.forEach(function(g){
-  if(getComputedStyle(g).display!=='grid')return;
-  g.classList.add('q99m');
   var gap=parseFloat(getComputedStyle(g).columnGap)||0;
   g.querySelectorAll('.zw').forEach(function(w){
    if(w.parentNode!==g&&w.parentNode.parentNode!==g)return;
    if(!q99RO&&window.ResizeObserver)q99RO=new ResizeObserver(function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,30)});
    if(q99RO&&!w.q99o){w.q99o=1;q99RO.observe(w)}
-   var h=w.getBoundingClientRect().height;
+   var h=w.getBoundingClientRect().height/k;
    if(!h){w.style.gridRowEnd='';return}
    var span='span '+Math.max(1,Math.ceil((h+gap)/Q99_UNIT));
    if(w.style.gridRowEnd!==span)w.style.gridRowEnd=span;
