@@ -6994,6 +6994,9 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
  .q97bar{padding-left:12px}
  .q97bar button{width:36px}
 }
+/* v281 (q99): Home widgets keep their own height (no stretching to the tallest in the row); smaller ones stack in the space beside a tall one */
+.zmain.q99m,.zside.q99m,.zhome.q99m{grid-auto-rows:2px!important;row-gap:0!important;align-items:start!important}
+.q99m .zw{align-self:start!important}
 </style>
 </head>
 <body>
@@ -7303,7 +7306,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v280';
+var BUILD='v281';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -27987,6 +27990,36 @@ document.addEventListener('click',function(e){
  if(t.closest('#q98szpop [data-mk^="size:"]')){setTimeout(function(){q98SizePop(false)},0);return}
  if(!t.closest('#q98szpop'))q98SizePop(false);
 },true);
+
+/* v281: Home widgets keep their own height (prefix q99).
+   The widget grids used to stretch every widget to the tallest one in its row. Now each grid gets tiny 2px rows
+   and every widget spans just enough rows for its own height plus the gap, so short widgets sit at their natural
+   size and the next ones fill in underneath (with the existing "dense" flow). Runs right after each render
+   (so drag animations measure the final spots) and whenever a widget's size changes. */
+var Q99_UNIT=2,q99RO=null,q99T=0;
+function q99Lay(){
+ var home=document.querySelector('.zhome');if(!home)return;
+ var mainc=home.querySelector('.zmain'),grids=[];
+ if(mainc&&getComputedStyle(mainc).display==='contents')grids.push(home);
+ else home.querySelectorAll('.zmain,.zside').forEach(function(g){grids.push(g)});
+ grids.forEach(function(g){
+  if(getComputedStyle(g).display!=='grid')return;
+  g.classList.add('q99m');
+  var gap=parseFloat(getComputedStyle(g).columnGap)||0;
+  g.querySelectorAll('.zw').forEach(function(w){
+   if(w.parentNode!==g&&w.parentNode.parentNode!==g)return;
+   if(!q99RO&&window.ResizeObserver)q99RO=new ResizeObserver(function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,30)});
+   if(q99RO&&!w.q99o){w.q99o=1;q99RO.observe(w)}
+   var h=w.getBoundingClientRect().height;
+   if(!h){w.style.gridRowEnd='';return}
+   var span='span '+Math.max(1,Math.ceil((h+gap)/Q99_UNIT));
+   if(w.style.gridRowEnd!==span)w.style.gridRowEnd=span;
+  });
+ });
+}
+var _q99Render=render;
+render=function(){var r=_q99Render.apply(this,arguments);try{q99Lay()}catch(e){}return r};
+window.addEventListener('resize',function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,60)});
 
 try{spBoot()}catch(e){}
 load();
