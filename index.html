@@ -7001,8 +7001,9 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 .q101w{position:relative;display:inline-flex;flex:none;font-style:normal}
 .q101i{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-style:normal;background:#fff;
  box-shadow:0 1px 2px rgba(40,30,20,.08),0 3px 10px rgba(40,30,20,.07);transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease}
-html body .q101i>img,html body .q101i>svg{width:100%!important;height:100%!important;object-fit:cover;border-radius:0!important;background:none!important;filter:none!important;display:block;margin:0}
-html body .q101i.glyph>img,html body .q101i.glyph>svg,html body .q101i.load>img{width:64%!important;height:64%!important;object-fit:contain}
+html body .q101i>img,html body .q101i>svg{width:60%!important;height:60%!important;object-fit:contain;border-radius:0!important;background:none!important;filter:none!important;display:block;margin:0}
+/* v285: every logo sits on the same white tile at the same size, never cropped (edge-to-edge ones looked huge and got cut off) */
+html body .q101i.tall>img{width:55%!important;height:55%!important}
 .q101i.load>img{opacity:0}
 .q101i.let{background:var(--q101c);color:#fff;font-weight:600;font-size:19px;letter-spacing:0}
 .zapp a .q101i{width:52px;height:52px;border-radius:14px;font-size:22px}
@@ -7342,7 +7343,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v284';
+var BUILD='v285';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -28098,12 +28099,20 @@ function q101Google(url){
  var h=u.hostname.toLowerCase(),pa=u.pathname.toLowerCase(),k='';
  if(h==='docs.google.com')k=pa.indexOf('/spreadsheets')===0?'sheets':pa.indexOf('/presentation')===0?'slides':pa.indexOf('/forms')===0?'forms':'docs';
  else{var m=/^(mail|drive|calendar|meet|keep|chat|sheets|slides|forms)\.google\.com$/.exec(h);if(m)k=m[1]==='mail'?'gmail':m[1]}
- return k?'https://ssl.gstatic.com/images/branding/product/2x/'+k+'_2020q4_48dp.png':'';
+ if(k)return 'https://ssl.gstatic.com/images/branding/product/2x/'+k+'_2020q4_48dp.png';
+ // v285: Microsoft 365 apps too (office.com/launch/word showed a grey "DOC" page icon)
+ var ms='',lm=/^\/launch\/(word|excel|powerpoint|onenote|outlook|teams|onedrive)/.exec(pa),cm=/^(word|excel|powerpoint|onenote|outlook|teams|onedrive)\.cloud\.microsoft$/.exec(h);
+ if(/(^|\.)office\.com$/.test(h)&&lm)ms=lm[1];
+ else if(cm)ms=cm[1];
+ else if(/^outlook\.(office|office365|live)\.com$/.test(h))ms='outlook';
+ else if(/^teams\.(microsoft|live)\.com$/.test(h))ms='teams';
+ else if(h==='onedrive.live.com'&&!urlFileKind(url))ms='onedrive';
+ return ms?'https://res.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/'+ms+'_48x1.svg':'';
 }
 function q101Icon(url,title,custom,pinned){
  var host='';try{host=new URL(url).hostname}catch(e){}
  var gq=custom?'':q101Google(url);
- if(gq)return '<i class="q101w"><i class="q101i glyph"><img src="'+gq+'" alt=""></i>'+(pinned?Q100PIN:'')+'</i>';
+ if(gq)return '<i class="q101w"><i class="q101i glyph'+(/\/(docs|sheets|slides|forms)_/.test(gq)?' tall':'')+'"><img src="'+gq+'" alt=""></i>'+(pinned?Q100PIN:'')+'</i>';
  var L=esc(((title||host||'?').trim().charAt(0)||'?').toUpperCase()),col=q101Col(host||title),inner;
  var fk=custom?null:urlFileKind(url),hit=host&&Q101[host];
  if(custom)inner='<i class="q101i full"><img src="'+esc(custom)+'" alt=""></i>';
