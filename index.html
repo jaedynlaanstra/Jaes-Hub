@@ -6997,6 +6997,31 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 /* v281 (q99): Home widgets keep their own height (no stretching to the tallest in the row); smaller ones stack in the space beside a tall one */
 .zmain.q99m,.zside.q99m,.zhome.q99m{grid-auto-rows:2px!important;row-gap:0!important;align-items:start!important}
 .q99m .zw{align-self:start!important}
+/* v287 (q103): Small/Square and Medium widgets have fixed heights on shared lines; the card fills the box, extra content fades */
+.zhome.q103 .zw.q103fix>:not(button){height:100%!important;min-height:0!important;max-height:100%!important;overflow:hidden;box-sizing:border-box}
+.zhome.q103 .zw.q103fix>details:not([open]){height:auto!important}
+.q103fd{overflow:hidden!important;flex-shrink:1!important;min-height:0!important;-webkit-mask-image:linear-gradient(#000 calc(100% - 26px),transparent);mask-image:linear-gradient(#000 calc(100% - 26px),transparent)}
+.q103hid{visibility:hidden!important}
+/* v287 (q103): small lists (Bills, Coming up, Birthdays, To do) */
+.zw-half .h4upgrid{grid-template-columns:minmax(0,1fr);gap:16px}
+.q103bl,.q103cl{display:flex;flex-direction:column;min-width:0;width:100%;margin-top:2px}
+.zw .wdb:has(>.q103bl),.zw .wdb:has(>.q103cl){justify-content:flex-start!important;min-height:0}
+.q103br,.q103cr{display:flex;align-items:center;gap:8px;min-width:0;width:100%;padding:5px 0;border:0;border-top:1px solid var(--line,rgba(0,0,0,.07));background:none;border-radius:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.q103br:first-child,.q103cr:first-child{border-top:0}
+.q103br .zlogo{flex:none}
+.q103bn{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.q103bn b,.q103cr b{font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
+.q103bn small{font-size:11px;color:var(--ink3)}
+.q103br em{font-style:normal;font-size:12.5px;font-weight:500;flex:none;font-variant-numeric:tabular-nums}
+.q103cr i{width:7px;height:7px;border-radius:50%;flex:none}
+.q103cr b{flex:1;min-width:0}
+.q103cr small{flex:none;font-size:11px;color:var(--ink3)}
+.q103br small.late,.q103cr small.late{color:#B5574B}
+.q103tl .q21list{margin-top:6px;min-width:0}
+.q103tl .q21row{padding:7px 0}
+.zhome.q103 .zw.q103fix>.wd>.wdb{flex:1 1 auto;min-height:0}
+.zhome.q103 :is(.zw-budget,.zw-savings,.zw-habits,.zw-money,.zw-payday,.zw-mood,.zw-quote,.zw-spending,.zw-glance,.zw-streak).zw-half.q103fix>.wd>.wdb{justify-content:center}
+.zhome.q103 .zw.q103fix>.wd>.wdb>.zcols{flex:1 1 auto;height:auto!important;min-height:56px;max-height:150px}
 /* v284: app icons (q101): sharp, full colour, no box in a box, springy hover */
 .q101w{position:relative;display:inline-flex;flex:none;font-style:normal}
 .q101i{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-style:normal;background:#fff;
@@ -7034,6 +7059,14 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .cpappic,.zapp>a{position:relative}
 .q100pin{position:absolute;top:-6px;right:-6px;z-index:1;font-style:normal;width:17px;height:17px;border-radius:50%;background:var(--card);box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2,#6b6660)}
 .q100pin svg{width:10px;height:10px;fill:currentColor}
+
+/* v286: calendar tap-to-add (q102) */
+#k-cal .q58cwd,#k-cal .cpcal td[data-q102day]{cursor:pointer}
+@media (hover:hover){#k-cal .q58cwd::after{content:'+ Add';margin-top:auto;padding:4px 6px;font-size:11.5px;color:var(--ink3);opacity:0;transition:opacity .15s}}
+#k-cal .cpcal td[data-q102day]{position:relative}
+#k-cal .cpcal td[data-q102day]::after{content:'+';position:absolute;top:4px;right:7px;font-size:14px;line-height:1;color:var(--ink3);opacity:0;transition:opacity .15s}
+@media (hover:hover){#k-cal .q58cwd:hover::after,#k-cal .cpcal td[data-q102day]:hover::after{opacity:1}#k-cal .q58cwd:hover{background:color-mix(in srgb,var(--paper) 55%,var(--card))}}
+.q102dadd{align-self:flex-start;margin-top:8px}
 </style>
 </head>
 <body>
@@ -7343,7 +7376,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v285';
+var BUILD='v287';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10715,7 +10748,7 @@ function calendarTable(){
   h+='<tr>';
   for(var d=0;d<7;d++){
    var k=iso(cur),off=cur.getMonth()!==m;
-   h+='<td class="'+(off?'off':'')+(k===tstr?' today':'')+'"><span class="dnum">'+cur.getDate()+'</span>';
+   h+='<td class="'+(off?'off':'')+(k===tstr?' today':'')+'" data-q102day="'+k+'"><span class="dnum">'+cur.getDate()+'</span>';
    (byDay[k]||[]).forEach(function(x){
     var p=pal(x.c.color);
     h+='<div class="chip" style="background:'+p.bg+';color:'+p.ink+';border-left:3px solid '+p.bar+(x.t.done?';opacity:.5;text-decoration:line-through':'')+'" '+(x.ev?'data-zact="taskedit:'+x.c.id+':'+x.t.id+'"':'data-open="'+x.c.id+'"')+' title="'+esc(x.t.title+' · '+x.c.name)+'">'+esc(x.t.title)+'</div>';
@@ -15390,8 +15423,11 @@ function zSmall(w,d,sp){
    var bb=zBudget(bc);
    if(w.type==='payday'){var nx=zPayNext(bb);if(!nx)return card(d.name,'–','Add your pay day',bc.id);var pc=cpCountdown(nx.d);
     return card('Pay day',pc.n===0?'Today':pc.n+' day'+(pc.n===1?'':'s'),esc(parseISO(nx.d).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})),bc.id)}
-   if(w.type==='bills'){var nb2=zBillsIn(bb,zAddDays(td,-31),zAddDays(td,45)).filter(function(o){return !o.paid})[0];if(!nb2)return card('Bills','All paid','Nothing due soon',bc.id);var bcd=cpCountdown(nb2.d);
-    return card('Next bill',money(nb2.x.amount),esc(nb2.x.title)+' · '+(bcd.n<0?bcd.t:bcd.n===0?'today':bcd.n===1?'tomorrow':'in '+bcd.t),bc.id)}
+   if(w.type==='bills'){ /* v287: every bill coming up, not just the next one */
+    var BL=zBillsIn(bb,zAddDays(td,-31),zAddDays(td,45)).filter(function(o){return !o.paid});if(!BL.length)return card('Bills','All paid','Nothing due soon',bc.id);
+    var tot=BL.filter(function(o){return o.d<=zAddDays(td,30)}).reduce(function(s,o){return s+(+o.x.amount||0)},0);
+    return zWCard(w,d,'Bills',money(tot),'<div class="q103bl">'+BL.map(function(o){var bcd=cpCountdown(o.d),late=o.d<td;
+     return '<button class="q103br" data-zact="billedit:'+bc.id+':'+o.x.id+'">'+zLogo(o.x.title,22,'wallet')+'<span class="q103bn"><b>'+esc(o.x.title)+'</b><small'+(late?' class="late"':'')+'>'+esc(late?bcd.t:bcd.n===0?'Today':bcd.n===1?'Tomorrow':'in '+bcd.t)+'</small></span><em>'+money(o.x.amount)+'</em></button>'}).join('')+'</div>',bc.id)}
    return zWCard(w,d,'In and out','','<div class="zsm row">'+zDonut([{v:bb.inc,col:ZC.sage[1]},{v:bb.spent,col:ZC.peach[1]}],58,9)+'<div><b class="zsmb">'+(bb.inc-bb.spent>=0?'+':'−')+money(Math.abs(bb.inc-bb.spent))+'</b><span class="zsms">kept this month</span></div></div>',bc.id);
   case 'todo':case 'groceries':
    if(!c)return card(d.name,'–','No page yet');
@@ -15426,8 +15462,9 @@ function zSmall(w,d,sp){
   case 'birthdays':
    var nb=zBirthdays(sp)[0];
    if(!nb)return card(d.name,'–','None yet');
-   var cd2=cpCountdown(nb.next);
-   return zWCard(w,d,'Birthdays','','<div class="zsm"><b class="zsmb">'+(cd2.n===0?'Today':cd2.n===1?'Tomorrow':cd2.n+' days')+'</b><span class="zsms">'+esc(nb.t.title)+'</span></div>','');
+   /* v287: a list of the next birthdays, not just one */
+   return zWCard(w,d,'Birthdays','','<div class="q103cl">'+zBirthdays(sp).slice(0,8).map(function(o){var cd2=cpCountdown(o.next);
+    return '<div class="q103cr"><i style="background:'+((typeof q24BdCol==='function'&&q24BdCol(o))||'#C0A0AA')+'"></i><b>'+esc(o.t.title)+'</b><small>'+(cd2.n===0?'Today':cd2.n===1?'Tmrw':cd2.n+'d')+'</small></div>'}).join('')+'</div>','');
   case 'apps':
    var ap=q100Apps(sp);
    if(!ap)return card(d.name,'–','No page yet');
@@ -15967,7 +16004,7 @@ zNewWidget=function(w,d,sp){
   var bc=firstPage(sp,'budget');if(!bc)return zWCard(w,d,d.name,'',zNoPage('budget',sp));
   var b=zBudget(bc);
   if(w.type==='payday')return zWCard(w,d,d.name,'',zPayCard(bc,b,true),bc.id);
-  if(w.type==='bills'){var bl=zBillsIn(b,zAddDays(td,-31),zAddDays(td,30)).filter(function(o){return !o.paid||o.d>=td}).slice(0,4);
+  if(w.type==='bills'){var bl=zBillsIn(b,zAddDays(td,-31),zAddDays(td,30)).filter(function(o){return !o.paid||o.d>=td}).slice(0,8);
    return zWCard(w,d,d.name,'',bl.length?bl.map(function(o){return zBillRow(bc,o)}).join(''):'<p class="zsoft">No bills coming up. <button class="zlink" data-zact="billnew:'+bc.id+'">Add a bill</button></p>',bc.id)}
   return zWCard(w,d,d.name,esc(t.toLocaleDateString('en-CA',{month:'long'})),'<div class="zpie sm">'+zDonut([{v:b.inc,col:ZC.sage[1]},{v:b.spent,col:ZC.peach[1]}],96,12,(b.inc-b.spent>=0?'+':'−')+money(Math.abs(b.inc-b.spent)),'')
    +zLegend([{col:ZC.sage[1],label:'In',val:money(b.inc)},{col:ZC.peach[1],label:'Out',val:money(b.spent)}])+'</div>',bc.id);
@@ -18890,7 +18927,12 @@ function q21Todo(w,sp){
   +(t.due&&sz!=='small'?'<em class="q21due">'+esc(t.due<td?'Late':t.due===td?'Today':parseISO(t.due).toLocaleDateString('en-CA',{weekday:'short'}).replace(/\./g,''))+'</em>':'')+'</div>'};
  var drow=function(t){return '<div class="q21row y"><button class="q21ckd" data-tick="'+t.id+'" data-c="'+c.id+'" aria-label="Mark '+esc(t.title)+' not done">'+zI(ZIC.check,11)+'</button><span class="q20fade">'+esc(t.title)+'</span></div>'};
  if(sz==='small'){
-  if(q21Look(w,'count')==='ring'){
+  /* v287: the small size is a list by default (Square keeps the big number) */
+  var look=q21Look(w,w.q103sq?'count':'list');
+  if(look==='list'&&!w.q103sq){
+   return q18Shape(w,'q21td sq q103tl',head+'<span class="q21left">'+open.length+(late?' · '+late+' late':'')+'</span></div><div class="q21list">'+(open.length?open.map(row).join(''):'<p class="q21none">Nothing to do. Nice.</p>')+'</div>',attrs);
+  }
+  if(look==='ring'){
    var tot=open.length+doneT.length,p=tot?doneT.length/tot:0,r=40,L=2*Math.PI*r;
    return q18Shape(w,'q21td sq ring',head+'</div><div class="q21ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="'+r+'" class="tr"/><circle cx="50" cy="50" r="'+r+'" class="pr" style="stroke-dasharray:'+(p*L).toFixed(1)+' '+L.toFixed(1)+'"/></svg><div><b>'+open.length+'</b><span>left</span></div></div>'
     +'<p class="q21foot">'+(doneT.length?doneT.length+' done today':open.length?'Nothing done yet today':'All done')+'</p>',attrs);
@@ -19022,7 +19064,7 @@ zwSizes=function(type){return type==='agenda'?['small','half','full']:_q21Sizes(
 var _q21Menu=ZM.zwmenu.html;
 ZM.zwmenu.html=function(m){
  var h=_q21Menu(m);if(!h)return h;var w=homeWidgets(curSpace()).filter(function(x){return x.id===m.wid})[0];if(!w||(w.type!=='todo'&&w.type!=='reading'))return h;
- var opts=w.type==='todo'?[['count','Big number'],['ring','Ring']]:[['poster','Now watching'],['next','With up next']],cur=q21Look(w,opts[0][0]);
+ var opts=w.type==='todo'?(zwSize(w)==='sq'?[['count','Big number'],['ring','Ring']]:[['list','List'],['count','Big number'],['ring','Ring']]):[['poster','Now watching'],['next','With up next']],cur=q21Look(w,opts[0][0]);
  var f='<div class="field"><label>Look'+(zwSize(w)!=='small'?' (small size)':'')+'</label><div class="zseg">'+opts.map(function(o){return '<button class="'+(cur===o[0]?'on':'')+'" data-zact="wset:'+w.id+':style:'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div></div>';
  return h.replace(/(<div class="field"><label>Size<\/label>[\s\S]*?<\/div><\/div>)/,'$1'+f);
 };
@@ -19197,7 +19239,7 @@ var _q23Sizes=zwSizes;
 zwSizes=function(type){var L=_q23Sizes(type);if(Q23SQ[type]&&L.indexOf('sq')<0)L=['sq'].concat(L);return L};
 var _q23WH=zWidgetHtml;
 zWidgetHtml=function(w,sp){
- if(zwSize(w)==='sq'){var w2=Object.assign({},w,{size:'small'}),h=null;try{h=zSmall(w2,WDEF[w.type],sp)}catch(e){h=null}if(h)return h}
+ if(zwSize(w)==='sq'){var w2=Object.assign({},w,{size:'small',q103sq:1}),h=null;try{h=zSmall(w2,WDEF[w.type],sp)}catch(e){h=null}if(h)return h}
  return _q23WH(w,sp);
 };
 
@@ -21067,6 +21109,10 @@ var _q55Small=zSmall;
 zSmall=function(w,d,sp){var t=w.type,td=iso(today());
  var card=function(title,ico,big,sub,extra,href){return zWCard(w,Object.assign({},d,{ico:ico}),title,'','<div class="zsm">'+(extra||'')+'<b class="zsmb">'+big+'</b>'+(sub?'<span class="zsms">'+sub+'</span>':'')+'</div>',href||'')};
  if(t==='comingup'){var we=zAddDays(iso(weekStart(0)),6),nw=zAddDays(we,7),O=zOpenTasks(),wk=O.filter(function(x){return x.t.due<=we}),late=wk.filter(function(x){return x.t.due<td}).length,nx=O.filter(function(x){return x.t.due>we&&x.t.due<=nw}).length;
+  /* v287: the small size lists what's coming up (Square keeps the count) */
+  if(!w.q103sq){var U=O.filter(function(x){return x.t.due<=nw}).sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0});
+   return zWCard(w,Object.assign({},d,{ico:'calendar'}),'Coming up',String(U.length),U.length?'<div class="q103cl">'+U.map(function(x){var dd=x.t.due,lt=dd<td;
+    return '<button class="q103cr" data-open="'+x.c.id+'"><i style="background:'+palHex(x.c.color)+'"></i><b>'+esc(x.t.title)+'</b><small'+(lt?' class="late"':'')+'>'+esc(lt?'Late':dd===td?'Today':dd===zAddDays(td,1)?'Tmrw':parseISO(dd).toLocaleDateString('en-CA',{weekday:'short'}).replace(/\./g,''))+'</small></button>'}).join('')+'</div>':'<span class="zsms">Nothing due for two weeks</span>','')}
   return card('Coming up','calendar',wk.length,'due this week'+(late?' · <span class="q55late">'+late+' late</span>':'')+(nx?'<br>'+nx+' next week':''),'')}
  if(t==='week'){var ws=iso(weekStart(0)),O2=zOpenTasks(),cnt={};O2.forEach(function(x){cnt[x.t.due]=(cnt[x.t.due]||0)+1});
   var days='';for(var i=0;i<7;i++){var k=zAddDays(ws,i);days+='<span class="q55d'+(k===td?' tdy':'')+(cnt[k]?' has':'')+'"><i>'+WK_L[i]+'</i><b>'+parseISO(k).getDate()+'</b></span>'}
@@ -21347,7 +21393,7 @@ function q58CalWeek(){
  var days=[];for(var i=0;i<7;i++)days.push(zAddDays(ws,i));
  var by=q58CalItems(days[0],days[6]),td=iso(today());
  return '<div class="q58cw">'+days.map(function(k){var L=by[k]||[];
-  return '<div class="q58cwd'+(k===td?' t':'')+'"><button class="q58cwh" data-zact="q58cd:'+k+'" aria-label="Open '+esc(q58Fd(k,{weekday:'long',month:'long',day:'numeric'}))+'"><span>'+esc(q58Fd(k,{weekday:'short'}))+'</span><b>'+parseISO(k).getDate()+'</b></button>'
+  return '<div class="q58cwd'+(k===td?' t':'')+'" data-q102day="'+k+'"><button class="q58cwh" data-zact="q58cd:'+k+'" aria-label="Open '+esc(q58Fd(k,{weekday:'long',month:'long',day:'numeric'}))+'"><span>'+esc(q58Fd(k,{weekday:'short'}))+'</span><b>'+parseISO(k).getDate()+'</b></button>'
    +'<div class="q58cwl">'+L.map(function(x){var p=pal(x.c.color);return '<div class="chip q58chip" style="background:'+p.bg+';color:'+p.ink+';border-left:3px solid '+p.bar+(x.t.done?';opacity:.55;text-decoration:line-through':'')+'" '+q58CalAct(x)+' title="'+esc(x.t.title+' · '+(x.c.name||''))+'">'+(x.t.time?'<em>'+esc(fmtTime(x.t.time))+'</em>':'')+'<span>'+esc(x.t.title)+'</span></div>'}).join('')
    +(L.length?'':'<small class="q58free">Nothing</small>')+'</div></div>'}).join('')+'</div>';
 }
@@ -21359,7 +21405,7 @@ function q58CalDay(){
    +'<span class="q58cdt">'+esc(x.t.time?fmtTime(x.t.time):(x.ev?'All day':'Due'))+'</span><span class="q58cdn"><b>'+esc(x.t.title)+'</b><small>'+esc(x.c.name||'')+'</small></span></div>'};
  return '<div class="q58cday">'
   +(L.length?(allDay.length?'<h4>All day and due</h4>'+allDay.map(row).join(''):'')+(timed.length?'<h4>By time</h4>'+timed.map(row).join(''):'')
-   :'<p class="q58empty">Nothing on this day.</p>')+'</div>';
+   :'<p class="q58empty">Nothing on this day.</p>')+'<button class="zlink q102dadd" data-q102day="'+k+'">+ Add to this day</button></div>';
 }
 var _q58CT=calendarTable;
 calendarTable=function(){var m=q58CMode();if(m==='week')return q58CalWeek();if(m==='day')return q58CalDay();return _q58CT.apply(this,arguments)};
@@ -28048,23 +28094,58 @@ function q99Lay(){
  grids=grids.filter(function(g){return getComputedStyle(g).display==='grid'});if(!grids.length)return;
  grids.forEach(function(g){g.classList.add('q99m')}); /* switch stretching off before measuring anything */
  var k=q99Scale(grids[0]);
- /* every small widget gets the same height: the tallest small one's natural height */
- var smalls=[].slice.call(home.querySelectorAll('.zw-small')).filter(function(w){return w.offsetParent});
- smalls.forEach(function(w){w.style.minHeight=''});
- var tall=0;smalls.forEach(function(w){tall=Math.max(tall,w.getBoundingClientRect().height/k)});
- if(tall)smalls.forEach(function(w){w.style.minHeight=Math.ceil(tall)+'px'});
+ /* v287 (q103): every widget sits on the same lines. Small and Square = one row (R), Medium = two rows plus the gap
+    between them (so two smalls stacked = one medium), Large = its own height (it is full width, nothing beside it).
+    R follows the width of a small widget, kept between 150 and 180px. Content that doesn't fit fades at the bottom. */
+ home.classList.add('q103');
+ var g0=grids[0],cs0=getComputedStyle(g0),gap0=parseFloat(cs0.columnGap)||0,cols=cs0.gridTemplateColumns.split(' ').length;
+ var sw=(g0.getBoundingClientRect().width/k-gap0*(cols-1))/cols;if(cols>=8)sw=sw*2+gap0; /* computers: a small is 2 of 8 columns */
+ var R=Math.round(Math.max(150,Math.min(180,sw*0.9)));if((R+Math.round(gap0))%2)R++;
+ home.style.setProperty('--q103r',R+'px');
  grids.forEach(function(g){
-  var gap=parseFloat(getComputedStyle(g).columnGap)||0;
+  var gap=Math.round(parseFloat(getComputedStyle(g).columnGap)||0);
   g.querySelectorAll('.zw').forEach(function(w){
    if(w.parentNode!==g&&w.parentNode.parentNode!==g)return;
    if(!q99RO&&window.ResizeObserver)q99RO=new ResizeObserver(function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,30)});
    if(q99RO&&!w.q99o){w.q99o=1;q99RO.observe(w)}
-   var h=w.getBoundingClientRect().height/k;
+   var c=w.classList,H=c.contains('zw-sq')||c.contains('zw-small')?R:c.contains('zw-half')?2*R+gap:0;
+   w.style.minHeight='';
+   if(H){if(w.style.height!==H+'px')w.style.height=H+'px';c.add('q103fix');q103Fit(w,k)}
+   else if(c.contains('q103fix')){w.style.height='';c.remove('q103fix');q103Fit(w,k)}
+   var h=H||w.getBoundingClientRect().height/k;
    if(!h){w.style.gridRowEnd='';return}
    var span='span '+Math.max(1,Math.ceil((h+gap)/Q99_UNIT));
    if(w.style.gridRowEnd!==span)w.style.gridRowEnd=span;
   });
  });
+}
+/* v287 (q103): a widget's content that runs past its box fades out at the bottom (boxes never grow). The part of
+   the widget that crosses the bottom edge gets a max height and a soft fade, so the card itself stays solid. */
+function q103Fit(w,k){
+ var inner=null;for(var i=0;i<w.children.length;i++){var ch=w.children[i];if(ch.tagName!=='BUTTON'&&ch.offsetParent){inner=ch;break}}
+ w.querySelectorAll('.q103fd').forEach(function(e){e.classList.remove('q103fd');e.style.maxHeight=''});
+ w.querySelectorAll('.q103hid').forEach(function(e){e.classList.remove('q103hid')});
+ if(!inner||!w.classList.contains('q103fix'))return;
+ if(inner.scrollHeight<=inner.clientHeight+1)return;
+ var ib=inner.getBoundingClientRect(),pb=parseFloat(getComputedStyle(inner).paddingBottom)||0,lim=ib.bottom-pb*k;
+ var vis=function(e){return e.offsetParent&&e.getBoundingClientRect().height>0&&getComputedStyle(e).position!=='absolute'};
+ /* walk down the part that crosses the bottom edge: a list gets cut with a fade, pieces wholly below are hidden */
+ var el=inner,pick=null;
+ for(var d=0;d<6&&el;d++){
+  var kids=[].slice.call(el.children).filter(vis);
+  var over=kids.filter(function(e){return e.getBoundingClientRect().bottom>lim+1||e.scrollHeight>e.clientHeight+1});
+  if(!over.length)break;
+  var o=over[0];
+  if(o.getBoundingClientRect().top>=lim-6){ /* starts below the edge */
+   if(el===inner){over.forEach(function(e){e.classList.add('q103hid')});break}
+   pick=el;break;
+  }
+  if(o.children.length!==1){pick=o;break}
+  el=o;
+ }
+ if(!pick||pick===inner)return;
+ var mh=Math.max(0,Math.floor((lim-pick.getBoundingClientRect().top)/k));
+ pick.classList.add('q103fd');pick.style.maxHeight=mh+'px';
 }
 var _q99Render=render;
 render=function(){var r=_q99Render.apply(this,arguments);try{q99Lay()}catch(e){}return r};
@@ -28156,6 +28237,39 @@ ZM.q101pick={html:function(m){
    :'<p class="zsoft">No apps yet.</p>')
   +'<button class="zlink" style="margin-top:12px" '+add+'>+ Add an app</button>';
 }};
+
+/* ---------- v286: Calendar, tap a day to add something (q102) ---------- */
+// pages that can hold a dated item in the space you are in: classes (assignments), to-do and calendar pages (tasks)
+function q102Pages(){return (S.classes||[]).filter(function(c){return !isRefClass(c)&&(!c.kind||c.kind==='todo'||c.kind==='cal')})}
+function q102Open(k){
+ var L=q102Pages();if(!L.length){zToast('Add a '+(curSpace()==='school'?'class':'page')+' first, then you can add things to the calendar.');return}
+ var last='';try{last=localStorage.getItem('hub:q102c')||''}catch(e){}
+ if(!L.some(function(c){return c.id===last}))last=L[0].id;
+ zOpen('q102add',{day:k,cid:last});
+}
+ZM.q102add={saveLabel:'Add',html:function(m){
+ var L=q102Pages(),sch=curSpace()==='school';
+ return '<h3>Add to '+esc(q58Fd(m.day,{weekday:'long',month:'long',day:'numeric'}))+'</h3>'
+  +'<div class="field"><label for="q102n">What</label><input id="q102n" maxlength="200" placeholder="'+(sch?'Quiz 4, essay draft, reading':'Call the bank, team meeting')+'"></div>'
+  +'<div class="zfrow"><div class="field"><label for="q102d">Date</label><input id="q102d" type="date" value="'+esc(m.day)+'"></div>'
+  +'<div class="field"><label for="q102t">Time (optional)</label><input id="q102t" type="time"></div></div>'
+  +(L.length>1?'<div class="field"><label for="q102c">'+(sch?'Which class':'Which page')+'</label><select id="q102c">'+L.map(function(c){return '<option value="'+c.id+'"'+(c.id===m.cid?' selected':'')+'>'+esc(c.name)+'</option>'}).join('')+'</select></div>':'');
+},save:function(m){
+ var t=zv('q102n');if(!t){zNeed('q102n','Give it a name first.');return}
+ var c=classById(zv('q102c')||m.cid);if(!c)return;
+ var due=zv('q102d')||m.day,tm=zv('q102t');
+ if(!c.kind){c.assignments=c.assignments||[];c.assignments.push(touch({id:uid(),title:t,due:due,time:tm,notes:'',priority:'',fileId:'',done:false}))}
+ else{c.tasks=c.tasks||[];c.tasks.push(touch({id:uid(),title:t,due:due,time:tm,done:false}))}
+ try{localStorage.setItem('hub:q102c',c.id)}catch(e){}
+ view.modal=null;save();render();zToast('Added to '+c.name);
+}};
+// a tap on a day's empty space (not on an item or the day's name) opens it
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.closest)return;
+ var d=t.closest('[data-q102day]');if(!d||!d.closest('#k-cal'))return;
+ if(!d.classList.contains('q102dadd')&&t.closest('.chip,button,a,input,[data-open],[data-zact]'))return;
+ e.preventDefault();q102Open(d.getAttribute('data-q102day'));
+});
 
 try{spBoot()}catch(e){}
 load();
