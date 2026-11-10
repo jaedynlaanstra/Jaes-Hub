@@ -6997,9 +6997,41 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 /* v281 (q99): Home widgets keep their own height (no stretching to the tallest in the row); smaller ones stack in the space beside a tall one */
 .zmain.q99m,.zside.q99m,.zhome.q99m{grid-auto-rows:2px!important;row-gap:0!important;align-items:start!important}
 .q99m .zw{align-self:start!important}
+/* v284: app icons (q101): sharp, full colour, no box in a box, springy hover */
+.q101w{position:relative;display:inline-flex;flex:none;font-style:normal}
+.q101i{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-style:normal;background:#fff;
+ box-shadow:0 1px 2px rgba(40,30,20,.08),0 3px 10px rgba(40,30,20,.07);transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease}
+html body .q101i>img,html body .q101i>svg{width:100%!important;height:100%!important;object-fit:cover;border-radius:0!important;background:none!important;filter:none!important;display:block;margin:0}
+html body .q101i.glyph>img,html body .q101i.glyph>svg,html body .q101i.load>img{width:64%!important;height:64%!important;object-fit:contain}
+.q101i.load>img{opacity:0}
+.q101i.let{background:var(--q101c);color:#fff;font-weight:600;font-size:19px;letter-spacing:0}
+.zapp a .q101i{width:52px;height:52px;border-radius:14px;font-size:22px}
+.wdapps.sm .q101i{width:38px;height:38px;border-radius:11px;font-size:16px}
+.cpappic{width:auto;height:auto}
+@media (hover:hover){
+ .wdapps a:hover .q101i,.cpapp:hover .q101i,.zapp a:hover .q101i,.q101add:hover .q101i,.q101po:hover .q101i{transform:translateY(-4px) scale(1.09) rotate(-4deg);box-shadow:0 2px 4px rgba(40,30,20,.08),0 10px 22px rgba(40,30,20,.16)}
+ .wdapps a:hover span,.q101add:hover span{color:var(--ink)}
+}
+.wdapps a:active .q101i,.cpapp:active .q101i,.zapp a:active .q101i,.q101add:active .q101i,.q101po:active .q101i{transform:scale(.9);transition-duration:.12s}
+.wdapps a span{transition:color .2s}
+@media (prefers-reduced-motion:reduce){.q101i{transition:box-shadow .2s}.wdapps a:hover .q101i,.cpapp:hover .q101i,.zapp a:hover .q101i,.q101add:hover .q101i,.q101po:hover .q101i,.q101i{transform:none!important}}
+.q101add{display:flex;flex-direction:column;align-items:center;gap:6px;font:inherit;font-size:11.5px;color:var(--ink3);background:none;border:0;padding:0;cursor:pointer;min-width:0}
+.q101add .q101i{background:transparent;box-shadow:none;border:1.5px dashed var(--line2,#cfc8bd);box-sizing:border-box}
+html body .q101add .q101i>svg{width:20px!important;height:20px!important;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.wdapps.sm .q101add{display:none}
+html body .q101add,html body .q101add:hover,html body .q101add:active,html body .q101add:focus{background:none!important;box-shadow:none!important;border:0!important}
+html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{background:var(--paper)}
+.q101pk{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.q101po{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 6px 10px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;min-width:0;transition:border-color .2s,background .2s}
+.q101po>span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q101po.on{border-color:var(--ink2);background:var(--paper);color:var(--ink)}
+.q101tk{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line2,#cfc8bd);display:flex;align-items:center;justify-content:center;background:var(--card);transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .2s}
+.q101tk svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.q101po.on .q101tk{background:#33312C;border-color:#33312C;transform:scale(1.08)}
+.q101po.on .q101tk svg{opacity:1}
 /* v283: pin badge on pinned apps (q100) */
 .cpappic,.zapp>a{position:relative}
-.q100pin{position:absolute;top:-5px;right:-5px;width:17px;height:17px;border-radius:50%;background:var(--card);box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2,#6b6660)}
+.q100pin{position:absolute;top:-6px;right:-6px;z-index:1;font-style:normal;width:17px;height:17px;border-radius:50%;background:var(--card);box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2,#6b6660)}
 .q100pin svg{width:10px;height:10px;fill:currentColor}
 </style>
 </head>
@@ -7310,7 +7342,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v283';
+var BUILD='v284';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10777,8 +10809,8 @@ function viewApps(){
  if(!apps.length)A+='<div class="cpempty">Nothing here yet. Add the sites you open every day, like your school portal, email or Google Drive.</div>';
  else if(!shown.length)A+='<div class="cpempty">No apps match.</div>';
  else A+='<div class="cpapps">'+shown.map(function(a){
-  var ic=a.icon?'<img src="'+a.icon+'" alt="">':linkIcon(a.url,a.title).replace('class="fi round"','');
-  var host=cpHost(a.url);if(a.pinned)ic+=Q100PIN;
+  var ic=q101Icon(a.url,a.title,a.icon,a.pinned);
+  var host=cpHost(a.url);
   if(view.appEdit)return '<button class="cpapp editing" data-editapp="'+a.id+'"><span class="cpappic">'+ic+'</span><span class="cpappnm">'+esc(a.title)+'</span><span class="cpapphost">Tap to edit</span></button>';
   return '<a class="cpapp" data-phoneapp="1" href="'+esc(a.url)+'" target="_blank" rel="noopener"><span class="cpappic">'+ic+'</span><span class="cpappnm">'+esc(a.title)+'</span><span class="cpapphost">'+esc(host)+'</span></a>';
  }).join('')+'</div>';
@@ -14732,7 +14764,7 @@ ZM.zwish={html:function(m){var x=m.id&&zItem(classById(m.cid),m.id);
 /* Applications / Resources: your links as app tiles, plus files */
 function zAppsPage(c){
  var L=c.links||[],F=FILES[c.id]||[];
- var tiles=L.length?'<div class="zapps">'+L.map(function(l,i){return '<div class="zapp"><a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+(l.pinned?Q100PIN:'')+'<span>'+esc(l.title)+'</span></a><button class="cpdots" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(l.title)+'">'+CP_ICO.more+'</button></div>'}).join('')+'</div>'
+ var tiles=L.length?'<div class="zapps">'+L.map(function(l,i){return '<div class="zapp"><a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+q101Icon(l.url,l.title,l.icon,l.pinned)+'<span>'+esc(l.title)+'</span></a><button class="cpdots" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(l.title)+'">'+CP_ICO.more+'</button></div>'}).join('')+'</div>'
   :'<p class="zempty">Add the apps and sites you open most, like your email, schedule or bank. They open with one tap.</p>';
  var files=F.map(function(f,i){var nm=f.kind==='pdf'?'<a class="cpitemname" href="#" data-mkopen="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>':'<a class="cpitemname" href="#" data-openfile="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>';
   return '<div class="cpitem">'+cpTile(cpFileLabel(f),f.icon)+'<span class="cpitemtext">'+nm+'</span><button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">'+CP_ICO.more+'</button></div>'}).join('');
@@ -14881,7 +14913,7 @@ function zNewWidget(w,d,sp){
   var ap=q100Apps(sp);
   if(!ap)return zWCard(w,d,d.name,'',zNoPage('apps',sp));
   var A=ap.list;
-  return zWCard(w,d,esc(ap.name),A.length?A.length+'':'',A.length?'<div class="wdapps">'+A.slice(0,8).map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a>'}).join('')+'</div>':'<p class="zsoft">No apps yet. <button class="zlink" '+(ap.id==='apps'?'data-add="app"':'data-add="link" data-c="'+ap.id+'"')+'>Add one</button></p>',ap.id);
+  return zWCard(w,d,esc(ap.name),A.length?A.length+'':'',A.length?'<div class="wdapps q101g">'+A.slice(0,8).map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+q101Icon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a>'}).join('')+q101AddTile()+'</div>':'<p class="zsoft">No apps yet. <button class="zlink" '+(ap.id==='apps'?'data-add="app"':'data-add="link" data-c="'+ap.id+'"')+'>Add one</button></p>',ap.id);
  }
  if(w.type==='shifts'){
   if(!c)return zWCard(w,d,d.name,'',zNoPage('shifts',sp));
@@ -15399,7 +15431,7 @@ function zSmall(w,d,sp){
    var ap=q100Apps(sp);
    if(!ap)return card(d.name,'–','No page yet');
    var A=ap.list.slice(0,4);
-   return zWCard(w,d,esc(ap.name),'',A.length?'<div class="wdapps sm">'+A.map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1" title="'+esc(l.title)+'">'+linkIcon(l.url,l.title,l.icon)+'</a>'}).join('')+'</div>':'<span class="zsms">No apps yet</span>',ap.id);
+   return zWCard(w,d,esc(ap.name),'',A.length?'<div class="wdapps sm q101g">'+A.map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1" title="'+esc(l.title)+'">'+q101Icon(l.url,l.title,l.icon)+'</a>'}).join('')+'</div>':'<span class="zsms">No apps yet</span>',ap.id);
   case 'shifts':
    if(!c)return card(d.name,'–','No page yet');
    var SH=c.items.filter(function(x){return x.t==='shift'}),ws2=iso(weekStart(0)),we2=iso(weekStart(1));
@@ -28047,8 +28079,74 @@ function q100Apps(sp){
  if(sp==='school'){L=S.apps||[];name='Applications';id='apps'}
  else{var c=firstPage(sp,'apps');if(!c)return null;L=c.links||[];name=c.name;id=c.id}
  var P=L.filter(function(a){return a.pinned});
- return {list:P.length?P:L,name:name,id:id,pinned:P.length};
+ return {list:P.length?P:L,all:L,name:name,id:id,pinned:P.length};
 }
+
+/* v284: App icons, sharp and in full colour (q101). Jae: the icons looked blurry, dull and boxed. The old ones were
+   each site's tiny favicon.ico (often 16px) stretched to 40-48px, washed out by .fi.round's saturate(.55), on a
+   beige tile behind the favicon's own white square. Now each app tries, in order: the site's apple-touch-icon
+   (180px, a full square app icon, shown edge to edge), Google's 128px favicon (shown smaller on a clean white
+   tile), then a coloured letter tile. The answer is remembered per site on this device so redraws don't flicker.
+   Hover: a springy lift and tilt. "Choose" on the Home card opens a picker to tick which apps show. */
+var Q101K='hub:q101ic',Q101={};
+try{Q101=JSON.parse(localStorage.getItem(Q101K)||'{}')||{}}catch(e){Q101={}}
+var Q101COL=['#5E8C6A','#C0714F','#5A78B5','#B05A78','#8466B0','#C2913A','#3F8F8E','#9A6B4F'];
+function q101Col(k){var h=0;k=String(k||'');for(var i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))|0;return Q101COL[Math.abs(h)%Q101COL.length]}
+// Google's apps all share google.com's "G" favicon, so Gmail, Drive, Docs... get their own icons from Google
+function q101Google(url){
+ var u;try{u=new URL(url)}catch(e){return ''}
+ var h=u.hostname.toLowerCase(),pa=u.pathname.toLowerCase(),k='';
+ if(h==='docs.google.com')k=pa.indexOf('/spreadsheets')===0?'sheets':pa.indexOf('/presentation')===0?'slides':pa.indexOf('/forms')===0?'forms':'docs';
+ else{var m=/^(mail|drive|calendar|meet|keep|chat|sheets|slides|forms)\.google\.com$/.exec(h);if(m)k=m[1]==='mail'?'gmail':m[1]}
+ return k?'https://ssl.gstatic.com/images/branding/product/2x/'+k+'_2020q4_48dp.png':'';
+}
+function q101Icon(url,title,custom,pinned){
+ var host='';try{host=new URL(url).hostname}catch(e){}
+ var gq=custom?'':q101Google(url);
+ if(gq)return '<i class="q101w"><i class="q101i glyph"><img src="'+gq+'" alt=""></i>'+(pinned?Q100PIN:'')+'</i>';
+ var L=esc(((title||host||'?').trim().charAt(0)||'?').toUpperCase()),col=q101Col(host||title),inner;
+ var fk=custom?null:urlFileKind(url),hit=host&&Q101[host];
+ if(custom)inner='<i class="q101i full"><img src="'+esc(custom)+'" alt=""></i>';
+ else if(fk)inner='<i class="q101i glyph">'+fileTypeSvg(fk)+'</i>';
+ else if(!host||(hit&&hit.k==='let'))inner='<i class="q101i let" style="--q101c:'+col+'">'+L+'</i>';
+ else if(hit)inner='<i class="q101i '+hit.k+'"><img src="'+esc(hit.s)+'" alt=""></i>';
+ else inner='<i class="q101i load" style="--q101c:'+col+'" data-l="'+L+'"><img src="https://'+esc(host)+'/apple-touch-icon.png" data-h="'+esc(host)+'" data-s="0" alt="" onload="q101Ok(this)" onerror="q101Next(this)"></i>';
+ return '<i class="q101w">'+inner+(pinned?Q100PIN:'')+'</i>';
+}
+function q101Keep(host,v){v.at=Date.now();Q101[host]=v;try{localStorage.setItem(Q101K,JSON.stringify(Q101))}catch(e){}}
+function q101Ok(img){
+ var st=+img.getAttribute('data-s'),w=img.naturalWidth||0,host=img.getAttribute('data-h'),box=img.parentNode;
+ if(st===0&&w<57)return q101Next(img);         // a tiny apple icon is no better than the favicon
+ if(st===1&&w<=16)return q101Next(img);        // Google's blank globe, or a 16px favicon: the letter tile is cleaner
+ var k=st===0?'full':'glyph';
+ q101Keep(host,{s:img.src,k:k});
+ if(box)box.className='q101i '+k;
+ img.removeAttribute('onload');img.removeAttribute('onerror');
+}
+function q101Next(img){
+ var st=+img.getAttribute('data-s')+1,host=img.getAttribute('data-h'),box=img.parentNode;
+ if(st===1){img.setAttribute('data-s','1');img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(host)+'&sz=128';return}
+ if(navigator.onLine!==false)q101Keep(host,{k:'let'});
+ if(box){box.className='q101i let';box.textContent=box.getAttribute('data-l')||'?'}
+}
+function q101AddTile(){
+ return '<button class="q101add" data-zact="q101pick" aria-label="Choose which apps show here"><i class="q101i"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i><span>Choose</span></button>';
+}
+ZACT.q101pick=function(){zOpen('q101pick')};
+ZACT.q101tog=function(id,i){
+ var L=id==='apps'?S.apps:((classById(id)||{}).links),a=L&&L[+i];if(!a)return;
+ if(a.pinned)delete a.pinned;else a.pinned=true;save();render();
+};
+ZM.q101pick={html:function(m){
+ var ap=q100Apps(curSpace());if(!ap)return null;
+ var add=ap.id==='apps'?'data-add="app"':'data-add="link" data-c="'+ap.id+'"';
+ return '<h3>Apps on Home</h3><p class="hint" style="margin:-4px 0 12px">Tap the apps you want on your Home screen.'+(ap.pinned?'':' Nothing is picked yet, so all of them show.')+'</p>'
+  +(ap.all.length?'<div class="q101pk">'+ap.all.map(function(a,i){
+    return '<button class="q101po'+(a.pinned?' on':'')+'" data-zact="q101tog:'+ap.id+':'+i+'" aria-pressed="'+(a.pinned?'true':'false')+'">'+q101Icon(a.url,a.title,a.icon)
+     +'<span>'+esc(a.title)+'</span><i class="q101tk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12.5 4 4 8-9"/></svg></i></button>'}).join('')+'</div>'
+   :'<p class="zsoft">No apps yet.</p>')
+  +'<button class="zlink" style="margin-top:12px" '+add+'>+ Add an app</button>';
+}};
 
 try{spBoot()}catch(e){}
 load();
