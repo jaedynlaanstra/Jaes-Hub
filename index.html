@@ -6997,6 +6997,10 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 /* v281 (q99): Home widgets keep their own height (no stretching to the tallest in the row); smaller ones stack in the space beside a tall one */
 .zmain.q99m,.zside.q99m,.zhome.q99m{grid-auto-rows:2px!important;row-gap:0!important;align-items:start!important}
 .q99m .zw{align-self:start!important}
+/* v283: pin badge on pinned apps (q100) */
+.cpappic,.zapp>a{position:relative}
+.q100pin{position:absolute;top:-5px;right:-5px;width:17px;height:17px;border-radius:50%;background:var(--card);box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2,#6b6660)}
+.q100pin svg{width:10px;height:10px;fill:currentColor}
 </style>
 </head>
 <body>
@@ -7306,7 +7310,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v282';
+var BUILD='v283';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -10774,7 +10778,7 @@ function viewApps(){
  else if(!shown.length)A+='<div class="cpempty">No apps match.</div>';
  else A+='<div class="cpapps">'+shown.map(function(a){
   var ic=a.icon?'<img src="'+a.icon+'" alt="">':linkIcon(a.url,a.title).replace('class="fi round"','');
-  var host=cpHost(a.url);
+  var host=cpHost(a.url);if(a.pinned)ic+=Q100PIN;
   if(view.appEdit)return '<button class="cpapp editing" data-editapp="'+a.id+'"><span class="cpappic">'+ic+'</span><span class="cpappnm">'+esc(a.title)+'</span><span class="cpapphost">Tap to edit</span></button>';
   return '<a class="cpapp" data-phoneapp="1" href="'+esc(a.url)+'" target="_blank" rel="noopener"><span class="cpappic">'+ic+'</span><span class="cpappnm">'+esc(a.title)+'</span><span class="cpapphost">'+esc(host)+'</span></a>';
  }).join('')+'</div>';
@@ -11005,7 +11009,7 @@ function modalHtml(){
    h='<h3 style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(sl.title)+'</h3><div class="sheetlist">'
     +'<button data-sheetdo="openlink">Open</button>'
     +'<button data-sheetdo="edit">Edit</button>'
-    +'<button data-sheetdo="pin">'+(sl.pinned?'Unpin from the top':'Pin to the top')+'</button>'
+    +'<button data-sheetdo="pin">'+(sc.kind==='apps'?(sl.pinned?'Unpin from Home':'Pin to Home'):(sl.pinned?'Unpin from the top':'Pin to the top'))+'</button>'
     +((sc.sections||[]).length?'<label class="sheetmove">Chapter<select data-sheetmove="1">'+sectionOptions(sc,sl.section||'')+'</select></label>':'')
     +'<button data-sheetdo="delete" class="danger">Delete</button></div>';
   }
@@ -11078,7 +11082,8 @@ function modalHtml(){
       +'<label class="fakebtn"><input type="file" accept="image/*" data-appmodalicon="1" style="display:none">Choose a picture</label>'
       +(cur?'<button class="ghost" data-appiconreset="1">Use the site icon</button>':'')
       +'<span class="hint" style="margin:0;flex-basis:100%">Or copy a picture and press Ctrl and V.</span></div></div>';
-    })();
+    })()
+   +'<label class="zcheck"><input type="checkbox" id="q100pin"'+(ap&&ap.pinned?' checked':'')+'> Pin to Home</label>';
  }else if(m.kind==='section'){
   var esec=m.id?(function(){var cc=classById(m.classId);for(var k=0;k<(cc.sections||[]).length;k++){if(cc.sections[k].id===m.id)return cc.sections[k]}return null})():null;
   h='<h3>'+(esec?'Rename section':'New section')+'</h3><div class="field"><label for="m1">Name</label>'
@@ -11192,8 +11197,9 @@ function saveModal(){
   if(!/^https?:\/\//i.test(au))au='https://'+au;
   S.apps=S.apps||[];
   var ico=view.modal.pendingIcon;
-  if(m.id){var ap2=appById(m.id);ap2.title=an;ap2.url=au;if(ico!==undefined)ap2.icon=ico}
-  else S.apps.push({id:uid(),title:an,url:au,icon:ico||''});
+  var pinEl=document.getElementById('q100pin'),pinOn=!!(pinEl&&pinEl.checked);
+  if(m.id){var ap2=appById(m.id);ap2.title=an;ap2.url=au;if(ico!==undefined)ap2.icon=ico;if(pinOn)ap2.pinned=true;else delete ap2.pinned}
+  else S.apps.push(pinOn?{id:uid(),title:an,url:au,icon:ico||'',pinned:true}:{id:uid(),title:an,url:au,icon:ico||''});
  }else if(m.kind==='section'){
   var sn=val('m1');if(!sn){zNeed('m1','Give it a name first.');return}
   var sc=classById(m.classId);
@@ -13455,7 +13461,7 @@ document.addEventListener('click',function(e){
  if(d.sw){view.modal.color=d.sw;render();return}
  if(d.delclass){var dcl=classById(d.delclass);if(confirm('Delete '+(dcl?'\u201c'+dcl.name+'\u201d':'this class')+'?\n\nAre you sure? This cannot be undone. Its assignments, files, links and notes will be deleted on all your devices.')){S.classes=S.classes.filter(function(c){return c.id!==d.delclass});save();purgeOrphanFiles();view.modal=null;go('home')}return}
  if(d.go){go(d.go);return}
- if(d.open){go('class',d.open);return}
+ if(d.open){if(d.open==='apps'){go('apps');return}go('class',d.open);return}
  if((d.scroll==='c-info'||d.scroll==='c-title')&&window.innerWidth<1200&&view.classId){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);view.cinfo=view.classId;view.cinfoAnim=true;render();return}
  if(d.scroll){view.menu=false;if(d.scroll==='c-title')tpSetOpen(true);if(d.scroll==='c-info'){try{localStorage.setItem('hub:fold:info','1')}catch(e){}}render();var tg=document.getElementById(d.scroll);if(tg)tg.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(d.range){view.range=d.range;render();return}
@@ -14726,7 +14732,7 @@ ZM.zwish={html:function(m){var x=m.id&&zItem(classById(m.cid),m.id);
 /* Applications / Resources: your links as app tiles, plus files */
 function zAppsPage(c){
  var L=c.links||[],F=FILES[c.id]||[];
- var tiles=L.length?'<div class="zapps">'+L.map(function(l,i){return '<div class="zapp"><a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a><button class="cpdots" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(l.title)+'">'+CP_ICO.more+'</button></div>'}).join('')+'</div>'
+ var tiles=L.length?'<div class="zapps">'+L.map(function(l,i){return '<div class="zapp"><a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+(l.pinned?Q100PIN:'')+'<span>'+esc(l.title)+'</span></a><button class="cpdots" data-sheet="link" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options for '+esc(l.title)+'">'+CP_ICO.more+'</button></div>'}).join('')+'</div>'
   :'<p class="zempty">Add the apps and sites you open most, like your email, schedule or bank. They open with one tap.</p>';
  var files=F.map(function(f,i){var nm=f.kind==='pdf'?'<a class="cpitemname" href="#" data-mkopen="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>':'<a class="cpitemname" href="#" data-openfile="'+i+'" data-c="'+c.id+'">'+esc(f.name)+'</a>';
   return '<div class="cpitem">'+cpTile(cpFileLabel(f),f.icon)+'<span class="cpitemtext">'+nm+'</span><button class="cpdots" data-sheet="file" data-i="'+i+'" data-c="'+c.id+'" aria-label="More options">'+CP_ICO.more+'</button></div>'}).join('');
@@ -14800,7 +14806,7 @@ var WDEF={
  savings:{name:'Savings goal',desc:'Your biggest goal, with its picture',sp:['personal'],ico:'piggy',soft:'mist',col:'side',size:'full',page:'budget'},
  reading:{name:'Reading now',desc:'What you are reading or watching',sp:['personal'],ico:'book',soft:'lavender',col:'main',size:'half',page:'reading'},
  birthdays:{name:'Birthdays coming up',desc:'From your calendar',sp:['personal'],ico:'cake',soft:'rose',col:'side',size:'full'},
- apps:{name:'Applications',desc:'Your apps, one tap away',sp:['work','personal'],ico:'grid',soft:'grey',col:'main',size:'full',page:'apps'},
+ apps:{name:'Applications',desc:'The apps you pin, one tap away',sp:['school','work','personal'],ico:'grid',soft:'grey',col:'main',size:'full',page:'apps'},
  shifts:{name:'Shifts and hours',desc:'Hours this week and your next shift',sp:['work','personal'],ico:'clock',soft:'clay',col:'side',size:'full',page:'shifts'},
  notes:{name:'Latest notes',desc:'Your three newest notes',sp:['work','personal'],ico:'note',soft:'clay',col:'side',size:'full',page:'notes'}
 };
@@ -14872,9 +14878,10 @@ function zNewWidget(w,d,sp){
    :'<p class="zsoft">No birthdays in the next two months. Add them on the calendar and tick “Repeats every year”.</p>');
  }
  if(w.type==='apps'){
-  if(!c)return zWCard(w,d,d.name,'',zNoPage('apps',sp));
-  var A=c.links||[];
-  return zWCard(w,d,esc(c.name),A.length?A.length+'':'',A.length?'<div class="wdapps">'+A.slice(0,8).map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a>'}).join('')+'</div>':'<p class="zsoft">No apps yet. <button class="zlink" data-add="link" data-c="'+c.id+'">Add one</button></p>',c.id);
+  var ap=q100Apps(sp);
+  if(!ap)return zWCard(w,d,d.name,'',zNoPage('apps',sp));
+  var A=ap.list;
+  return zWCard(w,d,esc(ap.name),A.length?A.length+'':'',A.length?'<div class="wdapps">'+A.slice(0,8).map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1">'+linkIcon(l.url,l.title,l.icon)+'<span>'+esc(l.title)+'</span></a>'}).join('')+'</div>':'<p class="zsoft">No apps yet. <button class="zlink" '+(ap.id==='apps'?'data-add="app"':'data-add="link" data-c="'+ap.id+'"')+'>Add one</button></p>',ap.id);
  }
  if(w.type==='shifts'){
   if(!c)return zWCard(w,d,d.name,'',zNoPage('shifts',sp));
@@ -15389,9 +15396,10 @@ function zSmall(w,d,sp){
    var cd2=cpCountdown(nb.next);
    return zWCard(w,d,'Birthdays','','<div class="zsm"><b class="zsmb">'+(cd2.n===0?'Today':cd2.n===1?'Tomorrow':cd2.n+' days')+'</b><span class="zsms">'+esc(nb.t.title)+'</span></div>','');
   case 'apps':
-   if(!c)return card(d.name,'–','No page yet');
-   var A=(c.links||[]).slice(0,4);
-   return zWCard(w,d,esc(c.name),'',A.length?'<div class="wdapps sm">'+A.map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1" title="'+esc(l.title)+'">'+linkIcon(l.url,l.title,l.icon)+'</a>'}).join('')+'</div>':'<span class="zsms">No apps yet</span>',c.id);
+   var ap=q100Apps(sp);
+   if(!ap)return card(d.name,'–','No page yet');
+   var A=ap.list.slice(0,4);
+   return zWCard(w,d,esc(ap.name),'',A.length?'<div class="wdapps sm">'+A.map(function(l){return '<a href="'+esc(l.url)+'" target="_blank" rel="noopener" data-phoneapp="1" title="'+esc(l.title)+'">'+linkIcon(l.url,l.title,l.icon)+'</a>'}).join('')+'</div>':'<span class="zsms">No apps yet</span>',ap.id);
   case 'shifts':
    if(!c)return card(d.name,'–','No page yet');
    var SH=c.items.filter(function(x){return x.t==='shift'}),ws2=iso(weekStart(0)),we2=iso(weekStart(1));
@@ -28028,6 +28036,19 @@ function q99Lay(){
 var _q99Render=render;
 render=function(){var r=_q99Render.apply(this,arguments);try{q99Lay()}catch(e){}return r};
 window.addEventListener('resize',function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,60)});
+
+/* v283: Pin apps to Home (q100). Jae: pick which apps show on the Home screen. School apps (S.apps) get a
+   "Pin to Home" tick in their sheet; Work/Personal apps pages use the link's own pinned flag ("Pin to Home" in
+   its ... menu). The Applications home card (now offered in School too) shows the pinned ones, or all of them
+   while nothing is pinned yet. */
+var Q100PIN='<i class="q100pin" aria-label="Pinned to Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3l6 6-3 1-4 4 1 5-2 2-4-4-5 5-1-1 5-5-4-4 2-2 5 1 4-4z"/></svg></i>';
+function q100Apps(sp){
+ var L,name,id;
+ if(sp==='school'){L=S.apps||[];name='Applications';id='apps'}
+ else{var c=firstPage(sp,'apps');if(!c)return null;L=c.links||[];name=c.name;id=c.id}
+ var P=L.filter(function(a){return a.pinned});
+ return {list:P.length?P:L,name:name,id:id,pinned:P.length};
+}
 
 try{spBoot()}catch(e){}
 load();
