@@ -7071,6 +7071,31 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 #k-cal .cpcal td[data-q102day]::after{content:'+';position:absolute;top:4px;right:7px;font-size:14px;line-height:1;color:var(--ink3);opacity:0;transition:opacity .15s}
 @media (hover:hover){#k-cal .q58cwd:hover::after,#k-cal .cpcal td[data-q102day]:hover::after{opacity:1}#k-cal .q58cwd:hover{background:color-mix(in srgb,var(--paper) 55%,var(--card))}}
 .q102dadd{align-self:flex-start;margin-top:8px}
+
+/* v289: computers get a band above the page with your name and picture; the page curves up over the cover; the menu logo uses the menu's colours (q104) */
+.dbrand{--dlgS:color-mix(in srgb,var(--sideBright,#FFFDF8) 50%,var(--sideBg));--dlgA:color-mix(in srgb,var(--sideBright,#FFFDF8) 24%,var(--sideBg));--dlgB:color-mix(in srgb,var(--sideBright,#FFFDF8) 58%,var(--sideBg));--dlgC:color-mix(in srgb,var(--sideBright,#FFFDF8) 94%,var(--sideBg));--dlgT:var(--sideBg)}
+#q104top{display:none}
+@media(min-width:901px){
+ html.q104pc .main{margin-top:calc(64px / var(--fscale,1));min-height:calc(100vh - 76px)}
+ html.q104pc #r6frame i{top:64px;box-shadow:0 0 0 90px var(--sideBg)}
+ html.q104pc .side{padding-top:20px}
+ html.q104pc .side .sidehide{top:21px}
+ html.q104pc .side .me{display:none}
+ html.q104pc .sideshow{top:13px}
+ html.q104pc .zedit{top:72px}
+ html.q104pc .cptabs{top:64px!important}
+ html.q104pc #q104top{display:flex;align-items:center;gap:10px;position:fixed;top:0;left:256px;height:64px;z-index:46;color:var(--sideBright,#FFFDF8);max-width:40vw;transition:left .38s cubic-bezier(.4,0,.2,1)}
+ html.q104pc body.r6noside #q104top{left:70px}
+ #q104top label{display:block;cursor:pointer;flex:none;border-radius:50%}
+ #q104top .avatar,#q104top .avatarempty{width:34px;height:34px;border-radius:50%;object-fit:cover;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);border:1px solid color-mix(in srgb,var(--sideBright,#fff) 22%,transparent);box-sizing:border-box}
+ #q104top .avatarempty svg{width:18px;height:18px;fill:color-mix(in srgb,var(--sideBright,#fff) 60%,var(--sideBg))}
+ #q104top label:hover{opacity:.85}
+ #q104top b{font-size:14.5px;font-weight:500;white-space:nowrap;overflow:hidden;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+ /* the page sits on the cover like a sheet with rounded top corners */
+ .main>.coverwrap~.body{position:relative;z-index:3;margin-top:-26px;border-radius:26px 26px 0 0;background:inherit}
+ .main>.coverwrap.hasov{min-height:calc(var(--cvh,240px) + 26px)}
+ .main>.coverwrap.hasov .h4ov{padding-bottom:48px}
+}
 </style>
 </head>
 <body>
@@ -7380,7 +7405,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v288';
+var BUILD='v289';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -15294,9 +15319,10 @@ var zNextOcc;
 var zPrevOcc;
 
 /* ---------- the Doable logo (the stacked squares and the tick), drawn so it stays sharp ---------- */
-var DOABLE_LOGO='<svg class="dlg" viewBox="0 0 48 48" aria-hidden="true"><path d="M6.6 8.2 4.2 5.8M10.6 6.2 10 3M5 12.2l-3.2-.5" stroke="#9DB098" stroke-width="2" stroke-linecap="round"/>'
- +'<rect x="16.5" y="18.5" width="24" height="24" rx="6" fill="#B9AAC9"/><rect x="12.5" y="14.5" width="24" height="24" rx="6" fill="#E9CBA3"/><rect x="8" y="10" width="24" height="24" rx="6" fill="#83977F"/>'
- +'<path d="M14.2 22.4l4.3 4.2 7.6-8.2" fill="none" stroke="#FBF8F2" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// v289: each part takes its colour from a --dlg* variable (the menu logo uses the menu's colours; elsewhere the original colours)
+var DOABLE_LOGO='<svg class="dlg" viewBox="0 0 48 48" aria-hidden="true"><path d="M6.6 8.2 4.2 5.8M10.6 6.2 10 3M5 12.2l-3.2-.5" style="stroke:var(--dlgS,#9DB098)" stroke-width="2" stroke-linecap="round"/>'
+ +'<rect x="16.5" y="18.5" width="24" height="24" rx="6" style="fill:var(--dlgA,#B9AAC9)"/><rect x="12.5" y="14.5" width="24" height="24" rx="6" style="fill:var(--dlgB,#E9CBA3)"/><rect x="8" y="10" width="24" height="24" rx="6" style="fill:var(--dlgC,#83977F)"/>'
+ +'<path d="M14.2 22.4l4.3 4.2 7.6-8.2" fill="none" style="stroke:var(--dlgT,#FBF8F2)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function doableBrand(){return '<div class="dbrand" data-go="home" role="button" tabindex="0" aria-label="Doable, go to Home">'+DOABLE_LOGO+'<span>Doable</span></div>'}
 
 /* ---------- the menu: icons on the main items, page icons in each page's colour ---------- */
@@ -28278,6 +28304,23 @@ document.addEventListener('click',function(e){
  if(!d.classList.contains('q102dadd')&&t.closest('.chip,button,a,input,[data-open],[data-zact]'))return;
  e.preventDefault();q102Open(d.getAttribute('data-q102day'));
 });
+
+/* ===== v289: name and picture in the band above the page on computers (prefix q104) ===== */
+try{if(!q80Ios())document.documentElement.classList.add('q104pc')}catch(e){}
+function q104Html(){
+ return '<label title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+  +(S.avatar?'<img class="avatar" src="'+S.avatar+'" alt="You">'
+   :'<span class="avatarempty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></span>')
+  +'</label><b>'+esc(firstName())+'</b>';
+}
+function q104Paint(){
+ var on=!!document.querySelector('aside.side,.sideshow')&&!!document.querySelector('.main'),el=document.getElementById('q104top');
+ if(!on){if(el)el.remove();return}
+ if(!el){el=document.createElement('div');el.id='q104top';document.body.appendChild(el)}
+ var h=q104Html();if(el.getAttribute('data-h')!==h){el.innerHTML=h;el.setAttribute('data-h',h)}
+}
+var _q104Render=render;
+render=function(){var r=_q104Render.apply(this,arguments);try{q104Paint()}catch(e){}return r};
 
 try{spBoot()}catch(e){}
 load();
