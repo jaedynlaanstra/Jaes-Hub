@@ -7021,6 +7021,10 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 .q103tl .q21row{padding:7px 0}
 .zhome.q103 .zw.q103fix>.wd>.wdb{flex:1 1 auto;min-height:0}
 .zhome.q103 :is(.zw-budget,.zw-savings,.zw-habits,.zw-money,.zw-payday,.zw-mood,.zw-quote,.zw-spending,.zw-glance,.zw-streak).zw-half.q103fix>.wd>.wdb{justify-content:center}
+.zhome.q103 .zw.q103fix .wdapps{flex:1 1 auto;align-content:space-evenly}
+/* v288: smaller rows, so Small widgets sit a little tighter */
+.zhome.q103 .zw-small.q103fix .wdh,.zhome.q103 .zw-sq.q103fix .wdh{padding-top:11px}
+.zhome.q103 .zw-small.q103fix .q103br,.zhome.q103 .zw-small.q103fix .q103cr{padding:4px 0}
 .zhome.q103 .zw.q103fix>.wd>.wdb>.zcols{flex:1 1 auto;height:auto!important;min-height:56px;max-height:150px}
 /* v284: app icons (q101): sharp, full colour, no box in a box, springy hover */
 .q101w{position:relative;display:inline-flex;flex:none;font-style:normal}
@@ -7376,7 +7380,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v287';
+var BUILD='v288';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -21117,6 +21121,10 @@ zSmall=function(w,d,sp){var t=w.type,td=iso(today());
  if(t==='week'){var ws=iso(weekStart(0)),O2=zOpenTasks(),cnt={};O2.forEach(function(x){cnt[x.t.due]=(cnt[x.t.due]||0)+1});
   var days='';for(var i=0;i<7;i++){var k=zAddDays(ws,i);days+='<span class="q55d'+(k===td?' tdy':'')+(cnt[k]?' has':'')+'"><i>'+WK_L[i]+'</i><b>'+parseISO(k).getDate()+'</b></span>'}
   var n=O2.filter(function(x){return x.t.due>=ws&&x.t.due<=zAddDays(ws,6)}).length;
+  /* v288: the small size lists what's due this week (Jae: it said how many, not what). Square keeps the day strip. */
+  if(!w.q103sq){var WL=O2.filter(function(x){return x.t.due<=zAddDays(ws,6)}).sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0});
+   return zWCard(w,Object.assign({},d,{ico:'calendar'}),'This week',String(WL.length),WL.length?'<div class="q103cl">'+WL.map(function(x){var dd=x.t.due,lt=dd<td;
+    return '<button class="q103cr" data-open="'+x.c.id+'"><i style="background:'+palHex(x.c.color)+'"></i><b>'+esc(x.t.title)+'</b><small'+(lt?' class="late"':'')+'>'+esc(lt?'Late':dd===td?'Today':parseISO(dd).toLocaleDateString('en-CA',{weekday:'short'}).replace(/\./g,''))+'</small></button>'}).join('')+'</div>':'<span class="zsms">Nothing due this week</span>','')}
   return zWCard(w,Object.assign({},d,{ico:'calendar'}),'This week','','<div class="q55wk">'+days+'</div><span class="zsms">'+(n?n+' due this week':'Nothing due this week')+'</span>','')}
  if(t==='classes'){var C=q55School();
   return card('Your classes','book',C.length,C.length===1?'class':'classes','<span class="q55dots">'+C.slice(0,8).map(function(c){return '<i style="background:'+palHex(c.color)+'"></i>'}).join('')+'</span>',C[0]?C[0].id:'')}
@@ -28096,11 +28104,11 @@ function q99Lay(){
  var k=q99Scale(grids[0]);
  /* v287 (q103): every widget sits on the same lines. Small and Square = one row (R), Medium = two rows plus the gap
     between them (so two smalls stacked = one medium), Large = its own height (it is full width, nothing beside it).
-    R follows the width of a small widget, kept between 150 and 180px. Content that doesn't fit fades at the bottom. */
+    R follows the width of a small widget, kept between 118 and 138px (v288: smaller, Jae found 150-180 too big). Content that doesn't fit fades at the bottom. */
  home.classList.add('q103');
  var g0=grids[0],cs0=getComputedStyle(g0),gap0=parseFloat(cs0.columnGap)||0,cols=cs0.gridTemplateColumns.split(' ').length;
  var sw=(g0.getBoundingClientRect().width/k-gap0*(cols-1))/cols;if(cols>=8)sw=sw*2+gap0; /* computers: a small is 2 of 8 columns */
- var R=Math.round(Math.max(150,Math.min(180,sw*0.9)));if((R+Math.round(gap0))%2)R++;
+ var R=cols<=2?150:Math.round(Math.max(118,Math.min(138,sw*0.62))); /* phones: narrow smalls need a little more height */if((R+Math.round(gap0))%2)R++;
  home.style.setProperty('--q103r',R+'px');
  grids.forEach(function(g){
   var gap=Math.round(parseFloat(getComputedStyle(g).columnGap)||0);
