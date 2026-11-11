@@ -7090,7 +7090,8 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
  #q104top .avatar,#q104top .avatarempty{width:34px;height:34px;border-radius:50%;object-fit:cover;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);border:1px solid color-mix(in srgb,var(--sideBright,#fff) 22%,transparent);box-sizing:border-box}
  #q104top .avatarempty svg{width:18px;height:18px;fill:color-mix(in srgb,var(--sideBright,#fff) 60%,var(--sideBg))}
  #q104top label:hover{opacity:.85}
- #q104top b{font-size:14.5px;font-weight:500;white-space:nowrap;overflow:hidden;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+ #q104top b{font-size:14.5px;font-weight:500;white-space:nowrap;overflow:hidden;min-width:0}
+ #q104top b.q104fd{-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)} /* fade only a name too long to fit */
  /* the page sits on the cover like a sheet with rounded top corners */
  .main>.coverwrap~.body{position:relative;z-index:3;margin-top:-26px;border-radius:26px 26px 0 0;background:inherit}
  .main>.coverwrap.hasov{min-height:calc(var(--cvh,240px) + 26px)}
@@ -7405,7 +7406,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v289';
+var BUILD='v291';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -28318,6 +28319,7 @@ function q104Paint(){
  if(!on){if(el)el.remove();return}
  if(!el){el=document.createElement('div');el.id='q104top';document.body.appendChild(el)}
  var h=q104Html();if(el.getAttribute('data-h')!==h){el.innerHTML=h;el.setAttribute('data-h',h)}
+ var b=el.querySelector('b');if(b)b.classList.toggle('q104fd',b.scrollWidth>b.clientWidth+1);
 }
 var _q104Render=render;
 render=function(){var r=_q104Render.apply(this,arguments);try{q104Paint()}catch(e){}return r};
