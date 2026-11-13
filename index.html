@@ -7113,6 +7113,90 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
  .main>.coverwrap.hasov{min-height:calc(var(--cvh,240px) + 26px)}
  .main>.coverwrap.hasov .h4ov{padding-bottom:48px}
 }
+/* v293 (q107): Coming up with a day strip, Notes with + and recent notes, no fades, small menu arrows, space pill at the top */
+.q107wrap{white-space:normal!important;text-overflow:clip!important;overflow-wrap:anywhere;-webkit-line-clamp:unset!important;max-height:none!important}
+.q107cuw>.wdb{flex:1 1 auto;min-height:0;padding:0}
+.q107cu{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;padding:6px 16px 14px}
+.q107hl,.q107all{margin-left:auto;border:0;background:none;font:inherit;font-size:12.5px;color:var(--ink3);cursor:pointer;padding:2px 0;min-height:0!important;white-space:nowrap}
+.q107hl:hover,.q107all:hover{color:var(--ink)}
+.q107strip{display:flex;gap:4px;margin:2px 0 12px}
+.q107d{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 5px;border:0;border-radius:12px;background:color-mix(in srgb,var(--wc) 8%,transparent);font:inherit;cursor:pointer;min-height:0!important;transition:background .15s}
+.q107d:hover{background:color-mix(in srgb,var(--wc) 16%,transparent)}
+.q107d span{font-size:10.5px;color:var(--ink3);line-height:1.2}
+.q107d b{font-size:15px;font-weight:500;line-height:1.15;color:var(--ink)}
+.q107d i{display:flex;gap:2px;height:5px;align-items:center}
+.q107d i em{width:4px;height:4px;border-radius:50%;background:var(--wc)}
+.q107d.tdy b{color:var(--wc);font-weight:700}
+.q107d.tdy:not(.on){box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--wc) 45%,transparent)}
+.q107d.on,.q107d.on:hover{background:var(--wc)}
+.q107d.on span,.q107d.on b{color:#fff}.q107d.on i em{background:#fff}
+.q107d.q107lt{background:color-mix(in srgb,#B5574B 12%,transparent)}
+.q107d.q107lt span,.q107d.q107lt b{color:#A34A3F}
+.q107d.q107lt.on{background:#A34A3F}.q107d.q107lt.on span,.q107d.q107lt.on b{color:#fff}
+.q107lh{display:flex;align-items:baseline;gap:6px;padding:0 0 7px;border-bottom:1px solid var(--line)}
+.q107lh b{font-size:13.5px;font-weight:600;color:var(--ink)}
+.q107lh>span{font-size:12px;color:var(--ink3)}
+.q107list{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.zw-full .q107list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));column-gap:28px;overflow:visible}
+.q107r{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.q107list>.q107r:last-of-type{border-bottom:0}
+.zw-full .q107list>.q107r{border-bottom:1px solid var(--line)}
+.q107tk{flex:none;width:18px;height:18px;margin-top:1px;border-radius:50%;border:1.6px solid var(--c);background:none;padding:0;cursor:pointer;min-height:0!important}
+.q107tk:hover{background:color-mix(in srgb,var(--c) 30%,transparent)}
+.q107w{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;border:0;background:none;padding:0;font:inherit;text-align:left;color:inherit;cursor:pointer;min-height:0!important}
+.q107w b{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.3;overflow-wrap:anywhere}
+.q107w small{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:11.5px;color:var(--ink3);line-height:1.2}
+.q107w small i{width:7px;height:7px;border-radius:50%;flex:none}
+.q107w small em{font-style:normal}
+.q107r.late .q107w small em{color:#A34A3F;font-weight:500}
+.q107none{margin:auto 0;padding:16px 0;text-align:center;font-size:13px;color:var(--ink3)}
+.q107more{grid-column:1/-1;border:0;background:none;font:inherit;font-size:12.5px;color:var(--ink3);padding:10px 0 0;cursor:pointer;text-align:left;min-height:0!important}
+/* Applications: the small labels sit right above the edge, so a bit more room under them looks even with the title */
+.zhome .zw-apps:not(.q103fix) .wdapps{margin-bottom:7px}
+/* small lists: the day goes under the title, so a long title gets the whole width */
+.zhome .zw-small .q103cr{flex-wrap:wrap;column-gap:8px;row-gap:1px}
+.zhome .zw-small .q103cr b{flex:1 1 calc(100% - 16px)}
+.zhome .zw-small .q103cr small{margin-left:15px}
+/* Notes */
+.q107plus{margin-left:auto;width:30px;height:30px;border-radius:50%;border:0;display:grid;place-items:center;background:var(--wc);color:#fff;cursor:pointer;flex:none;padding:0;min-height:0!important;transition:transform .2s}
+.q107plus:hover{transform:scale(1.08)}
+.q107ttl{border:0;background:none;font:inherit;color:inherit;padding:0;cursor:pointer;min-height:0!important;text-align:left}
+.q107nw>.wdb{flex:1 1 auto;min-height:0}
+.q107nl{display:flex;flex-direction:column;padding:0;min-width:0}
+.q107nr{display:flex;flex-direction:column;gap:1px;padding:6px 0;border-top:1px solid var(--line);text-decoration:none;min-width:0}
+.q107nr:first-child{border-top:0}
+.q107nr b{font-size:13px;font-weight:500;color:var(--ink);overflow-wrap:anywhere;line-height:1.25}
+.q107nr small,.q107nt small{font-size:11px;color:var(--ink3)}
+.zw-small .q107nr small{display:none}
+.zw-small .q107nr{padding:7px 0}
+.q107ng{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0;align-items:start}
+.q107nt{display:flex;flex-direction:column;gap:3px;text-decoration:none;min-width:0}
+.q107nt .q64th{width:100%;aspect-ratio:auto;height:58px;margin-bottom:3px;box-shadow:none}
+.q107nt .q64p-typed>b{display:none}
+.q107nt .q64p-typed{padding:9px 10px;justify-content:flex-start}
+.q107nt .q64p-typed>span{flex:none;line-height:14px;max-height:28px}
+.q107ng.lg .q64p-typed>span{max-height:56px}
+.q107ng:not(.lg) .q64th{height:56px}
+.q107ng:not(.lg) .q107nt small{display:none}
+.q107ng:not(.lg){grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px}
+.q107ng{padding-top:2px}
+.q107more.q107fitm{padding-top:8px;color:var(--ink2)}
+.q107ng.lg .q64th{height:80px}
+.q107nt b{font-size:12.5px;font-weight:500;color:var(--ink);line-height:1.25;overflow-wrap:anywhere}
+.q107nt:hover .q64th,.q107nr:hover b{opacity:.8}
+.q107ne{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;flex:1 1 auto;padding:0;text-align:center}
+.q107ne p{margin:0;font-size:13px;color:var(--ink3)}
+.q107nb{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:99px;border:0;background:var(--wc);color:#fff;font:inherit;font-size:13px;cursor:pointer;min-height:0!important}
+/* the menu: a small arrow right after "Pages" / "Classes", no circle, the same colour as the word */
+.side .q19lab{justify-content:flex-start!important;gap:5px}
+.side .q19chev,.side .q19lab:hover .q19chev{width:auto;height:auto;border-radius:0;background:none!important;color:inherit}
+.side .q19chev svg{width:11px;height:11px;stroke-width:2.6}
+/* the space pill beside your name at the top (computers); the menu doesn't need its own then */
+@media(min-width:901px){html.q104pc .side .zpill-side{display:none}}
+#q104top{max-width:none}
+#q104top .zpill{margin:0 0 0 8px}
+#q104top .zpillbtn b{font-size:11px;font-weight:400;overflow:visible;opacity:.8}
+#q104top .zpill-band .zpilllist{top:40px}
 </style>
 </head>
 <body>
@@ -7422,7 +7506,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v292';
+var BUILD='v293';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -9903,7 +9987,7 @@ function sidebar(c){
     +'</div>';
   }
  });
- h+='<p class="slabel">\u00a0</p>'+sideItem('data-add','class','Add a class',false);
+ h+=sideItem('data-add','class','Add a class',false); /* v293: inside the Classes list, so it folds away with it */
  h+='</div>';
  h+='<div class="sidefoot">'+(q42ShowGet()?sideItem('data-go','install','Get the app',view.page==='install'):'')+sideItem('data-opencolours','1','Colours',false)+sideItem('data-add','settings','Settings',false)+'</div>';
  return h+'</aside>';
@@ -20653,7 +20737,7 @@ q43Steps=function(){
  return [
   {t:'Welcome to Doable',p:'Here’s a quick look around, so you know where everything is. It takes about a minute, and each page shows you its own tips the first time you open it.'},
   {s:'.menubtn[data-menu="1"]',phone:1,t:'Your menu',p:'Tap here any time to open the menu. Every page lives in it.'},
-  {s:'.side .zpillbtn',menu:1,t:'Your spaces',p:'School, Work and Personal each keep their own pages, like separate profiles. Tap here to switch, or to add or remove a space.'},
+  {s:'html.q104pc #q104top .zpillbtn,html:not(.q104pc) .side .zpillbtn',menu:1,t:'Your spaces',p:'School, Work and Personal each keep their own pages, like separate profiles. Tap here to switch, or to add or remove a space.'},
   {s:'.side [data-go="home"]',menu:1,t:'Home',p:'Your Home shows a little of everything, with widgets you can choose.'},
   {s:'.side [data-go="calendar"]',menu:1,t:'Calendar',p:'Events, birthdays and everything that’s due, in one place. Tap + Add event to put something on it.'},
   {s:'.side [data-go="plan"]',menu:1,t:'Plan my week',p:'Pick which day you’ll work on each thing. Plan it for me can do it for you.'},
@@ -28369,6 +28453,162 @@ zwSizes=function(type){var L=_q105Sizes(type),o=[];
  if(L.indexOf('full')>-1&&(Q105LONG[type]||!o.length))o.push('full');
  return o.length?o:L};
 ZW_SIZES=[['small','Small'],['half','Medium'],['large','Large'],['full','Long']];
+
+/* ===== v293: widgets that are easy to use (prefix q107) =====
+   Jae: Coming up was the worst (Small cut things off, the bigger one wasn't centred and you couldn't tap a day to
+   see what's due); fades everywhere; uneven padding (Applications sat too close to the bottom); Notes was too
+   basic (a count, no recent notes, no +); any size a widget can't really fill should go. Also: the menu arrows
+   were too big (they sit right after "Pages"/"Classes" now, no circle, same colour as the words), "Add a class"
+   lives inside the Classes list, and the space pill sits beside your name at the top on computers. */
+
+/* 1. Sizes: each widget offers only the sizes its design fills (no count-only Smalls, no half-empty Larges) */
+var Q107SZ={
+ nextdue:['small','half'],term:['small','half'],comingup:['large','full'],week:['small','half','large','full'],
+ classes:['half','large','full'],plan:['small','half','large'],month:['large','full'],resources:['half'],
+ music:['half'],clock:['small','half'],todo:['small','half','large','full'],projects:['half','large'],
+ progress:['small','half','large'],habits:['small','half','large'],groceries:['small','half','large'],
+ budget:['small','half','large'],savings:['small','half'],reading:['half','large'],birthdays:['small','half','large'],
+ apps:['half','full'],shifts:['half','large'],notes:['small','half','large'],mood:['small','half'],
+ payday:['small','half'],bills:['small','half','large','full'],money:['small','half','large'],quote:['small','half'],
+ streak:['small','half'],spending:['small','half','large'],glance:['half','large','full'],meals:['small','half','large'],
+ profile:['full'],aclock:['small'],water:['small'],focus:['small'],agenda:['small','half'],
+ todaylist:['small','half','large'],wallet:['small','half'],gpa:['small','half']
+};
+var _q107Sizes=zwSizes;
+zwSizes=function(type){return Q107SZ[type]?Q107SZ[type].slice():_q107Sizes(type)};
+/* a widget saved at a size it no longer has takes the nearest one (a Small grows to Medium, not to Long) */
+zwSize=function(w){var s=w.size||'full',L=zwSizes(w.type);if(s==='sq')s='small';if(L.indexOf(s)>-1)return s;
+ var near={small:['half','large','full'],half:['large','small','full'],large:['half','full','small'],full:['large','half','small']}[s]||['full','large','half','small'];
+ for(var i=0;i<near.length;i++)if(L.indexOf(near[i])>-1)return near[i];return L[0]||'full'};
+/* the drawing code sees Large as the old Medium; keep the real size on the copy so new designs can tell */
+var _q107Rw=q105Rw;
+q105Rw=function(w,sz){sz=sz||zwSize(w);var r=_q107Rw(w,sz);if(r===w)r=Object.assign({},w);r.q107sz=sz;return r};
+function q107Sz(w){return w.q107sz||zwSize(w)}
+
+/* 2. Coming up: a strip of the next 7 days (plus Late). Tap a day to see only what's due then; tap it again
+   (or Show all) for everything. The list scrolls inside its box, so nothing is cut or faded. */
+function q107Row(x,td){
+ var cd=cpCountdown(x.t.due),lt=x.t.due<td,hx=palHex(x.c.color),n=Math.abs(cd.n);
+ var day=parseISO(x.t.due).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'}).replace(/\./g,'');
+ var when=lt?n+(n===1?' day':' days')+' late':cd.n===0?'Today':cd.n===1?'Tomorrow':day;
+ var ed=x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"';
+ return '<div class="q107r'+(lt?' late':'')+'"><button class="q107tk" style="--c:'+hx+'" data-'+(x.kind==='assign'?'tickasg':'tick')+'="'+x.t.id+'" data-c="'+x.c.id+'" aria-label="Mark '+esc(x.t.title)+' done" title="Mark done"></button>'
+  +'<button class="q107w" '+ed+'><b>'+esc(x.t.title)+'</b><small><i style="background:'+hx+'"></i>'+esc(classLabel(x.c))+'<span>·</span><em>'+esc(when)+'</em></small></button></div>';
+}
+function q107CU(w){
+ var t=today(),td=iso(t),open=zOpenTasks(),sz=q107Sz(w);
+ var by=function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:((a.t.time||'')<(b.t.time||'')?-1:1)};
+ var days=[];for(var i=0;i<7;i++)days.push(iso(new Date(t.getFullYear(),t.getMonth(),t.getDate()+i)));
+ var late=open.filter(function(x){return x.t.due<td}).sort(by),wk=open.filter(function(x){return x.t.due>=td&&x.t.due<=days[6]}).sort(by);
+ var later=open.filter(function(x){return x.t.due>days[6]}).length;
+ var sel=(view.q107cu||{})[w.id]||'';if((sel==='late'&&!late.length)||(sel&&sel!=='late'&&days.indexOf(sel)<0))sel='';
+ var wid=String(w.id).replace(/:/g,'~'),cnt=function(k){return wk.filter(function(x){return x.t.due===k}).length};
+ var dots=function(n){var s='';for(var j=0;j<Math.min(n,3);j++)s+='<em></em>';return s};
+ var strip=(late.length?'<button class="q107d q107lt'+(sel==='late'?' on':'')+'" data-zact="q107cu:'+wid+':late" aria-pressed="'+(sel==='late')+'" aria-label="'+late.length+' late"><span>Late</span><b>'+late.length+'</b><i></i></button>':'')
+  +days.map(function(k,i){var dt=parseISO(k),n=cnt(k);
+   return '<button class="q107d'+(sel===k?' on':'')+(i===0?' tdy':'')+'" data-zact="q107cu:'+wid+':'+k+'" aria-pressed="'+(sel===k)+'" aria-label="'+esc(dt.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+', '+n+' due">'
+    +'<span>'+esc(dt.toLocaleDateString('en-CA',{weekday:'short'}).replace(/\./g,'').slice(0,3))+'</span><b>'+dt.getDate()+'</b><i>'+dots(n)+'</i></button>'}).join('');
+ var list=sel==='late'?late:sel?wk.filter(function(x){return x.t.due===sel}):late.concat(wk);
+ var head=sel==='late'?'Past due':sel===td?'Due today':sel?'Due '+parseISO(sel).toLocaleDateString('en-CA',{weekday:'long',month:'short',day:'numeric'}).replace(/\./g,''):'Next 7 days';
+ var cap=sz==='full'&&!sel?8:99,rows=list.slice(0,cap).map(function(x){return q107Row(x,td)}).join('');
+ var more=list.length>cap?'<button class="q107more" data-go="calendar">'+(list.length-cap)+' more in the calendar ›</button>':'';
+ var side=sel?'<button class="q107all" data-zact="q107cu:'+wid+':">Show all</button>':later?'<button class="q107all" data-go="calendar">'+later+' later ›</button>':'';
+ var body='<div class="q107cu q107nofit"><div class="q107strip">'+strip+'</div><div class="q107lh"><b>'+head+'</b><span>'+list.length+'</span>'+side+'</div>'
+  +'<div class="q107list">'+(rows?rows+more:'<p class="q107none">'+(sel?'Nothing due this day.':'Nothing due in the next 7 days.')+'</p>')+'</div></div>';
+ return zWCard(w,Object.assign({},WDEF.comingup,{ico:'cal'}),'Coming up','<button class="q107hl" data-go="calendar">Calendar ›</button>',body,'',' q107cuw');
+}
+ZACT.q107cu=function(wid,day){wid=String(wid).replace(/~/g,':');day=typeof day==='string'?day:'';
+ view.q107cu=Object.assign({},view.q107cu);var cur=view.q107cu[wid]||'';view.q107cu[wid]=day&&day!==cur?day:'';render()};
+
+/* 3. Notes: a + for a new note right in the header, and your newest notes to tap open
+   (Small: a short list; Medium: three paper previews; Large: six) */
+function q107Notes(w,sp){
+ var d=WDEF.notes,c=firstPage(sp,'notes'),sz=q107Sz(w),N=c?q64Notes(c):[],cats=c?q64Cats(c):[];
+ var plus='<button class="q107plus" data-zact="q107note:'+sp+'" aria-label="New note" title="New note">'+zI(ZIC.plus,16)+'</button>';
+ var nm=c?'<button class="q107ttl" data-open="'+c.id+'">'+esc(c.name)+'</button>':'Notes',body;
+ var ttl=function(n){return n.f?n.f.name:(n.x.title||'Untitled')};
+ if(!N.length)body='<div class="q107ne"><p>'+(c?'No notes yet.':'Typed or handwritten notes, all in one place.')+'</p><button class="q107nb" data-zact="q107note:'+sp+'">'+zI(ZIC.plus,14)+'<span>New note</span></button></div>';
+ else if(sz==='small')body='<div class="q107nl">'+N.slice(0,2).map(function(n){
+   return '<a href="#" class="q107nr" '+q64OpenAttr(n)+'><b>'+esc(ttl(n))+'</b><small>'+esc(q64When(n.at))+'</small></a>'}).join('')+'</div>';
+ else body='<div class="q107ng'+(sz==='large'?' lg':'')+'">'+N.slice(0,sz==='large'?6:2).map(function(n){
+   var cat=cats.filter(function(k){return k.id===n.cat})[0];
+   return '<a href="#" class="q107nt" '+q64OpenAttr(n)+'>'+q64Thumb(n)+'<b>'+esc(ttl(n))+'</b><small>'+esc(cat&&sz==='large'?cat.name:q64When(n.at))+'</small></a>'}).join('')+'</div>';
+ return zWCard(w,d,nm,plus,body,'',' q107nw');
+}
+ZACT.q107note=function(sp){var c=firstPage(sp,'notes');
+ if(!c){if(sp==='school')c=q64SchoolPage(true);else{ZACT.mkpage('notes');return}}
+ ZACT.q64new(c.id)};
+var _q107WH=zWidgetHtml;
+zWidgetHtml=function(w,sp){if(w.type==='comingup')return q107CU(w);if(w.type==='notes')return q107Notes(w,sp);return _q107WH.apply(this,arguments)};
+var _q107Small=zSmall;
+zSmall=function(w,d,sp){if(w.type==='notes')return q107Notes(w,sp);if(w.type==='comingup')return q107CU(w);return _q107Small.apply(this,arguments)};
+
+/* Coming up shows only whole rows; the rest wait behind "N more" (tap a day to see just that day) */
+function q107FitList(w){
+ var L=w.querySelector('.q107list');if(!L)return;var m=L.querySelector('.q107fitm');if(m)m.remove();
+ var rows=[].slice.call(L.querySelectorAll('.q107r'));rows.forEach(function(r){r.style.display=''});
+ if(!w.classList.contains('q103fix'))return;var last=rows[rows.length-1];if(!last||last.getBoundingClientRect().bottom<=w.getBoundingClientRect().bottom-14)return;
+ var lim=Math.min(L.getBoundingClientRect().bottom,w.getBoundingClientRect().bottom-14),hid=0,btn=document.createElement('button');
+ btn.className='q107more q107fitm';btn.setAttribute('data-go','calendar');L.appendChild(btn);
+ for(var i=rows.length-1;i>0;i--){btn.textContent=(hid+1)+' more ›';rows[i].style.display='none';hid++;
+  if(btn.getBoundingClientRect().bottom<=lim+1)break}
+ btn.textContent=hid+' more in the calendar ›';
+ if(btn.getBoundingClientRect().bottom>lim+1)btn.textContent=hid+' more ›';
+}
+
+/* 4. No fades anywhere (Jae hates them): every sideways or bottom fade on text, rows and lists is switched off
+   and the text wraps onto the next line instead. The blurred cover edge is a picture blend, not a fade, and stays. */
+function q107NoFades(){
+ var walk=function(rules){for(var i=0;i<rules.length;i++){var r=rules[i];
+  if(r.cssRules&&!r.selectorText){walk(r.cssRules);continue}
+  if(!r.style||!r.selectorText)continue;
+  var m=r.style.getPropertyValue('mask-image')||r.style.getPropertyValue('-webkit-mask-image')||r.style.webkitMaskImage||'';
+  if(!/gradient/.test(m)||/q93cvb|coverwrap/.test(r.selectorText))continue;
+  r.style.removeProperty('mask-image');r.style.removeProperty('-webkit-mask-image');try{r.style.webkitMaskImage=''}catch(e){}
+  /* text that faded sideways wraps instead (a scrolling strip of tabs keeps its one line) */
+  if(/90deg|to right/.test(m)&&!/tabs|q91|scroll/.test(r.selectorText)&&!/auto|scroll/.test(r.style.overflowX||''))wrap.push(r.selectorText);
+ }};
+ var wrap=[];
+ [].forEach.call(document.styleSheets,function(s){try{walk(s.cssRules)}catch(e){}});
+ if(wrap.length){var st=document.createElement('style');st.id='q107wrapcss';
+  st.textContent=wrap.map(function(x){return x+'{white-space:normal!important;overflow-wrap:anywhere;text-overflow:clip!important}'}).join('\n');document.head.appendChild(st)}
+}
+try{q107NoFades()}catch(e){}
+/* text inside a widget that would end in "..." wraps instead (only the ones that are actually cut) */
+function q107Unclip(w){
+ w.querySelectorAll('*').forEach(function(e){if(e.children.length>2||!e.offsetParent)return;var cs=getComputedStyle(e);
+  if(cs.whiteSpace==='nowrap'&&(cs.textOverflow==='ellipsis'||cs.overflow==='hidden')&&e.scrollWidth>e.clientWidth+1)e.classList.add('q107wrap');
+  else if(cs.webkitLineClamp&&cs.webkitLineClamp!=='none'&&e.scrollHeight>e.clientHeight+1)e.classList.add('q107wrap')});
+}
+/* the body of a fixed box sits in the middle when there's room to spare (the old cards kept everything at the
+   top and left a gap at the bottom); lists stay at the top unless they're empty */
+var Q107LIST={comingup:1,week:1,classes:1,plan:1,todo:1,projects:1,habits:1,groceries:1,reading:1,birthdays:1,bills:1,shifts:1,todaylist:1,agenda:1,notes:1,budget:1,spending:1,money:1,meals:1,progress:1,glance:1};
+function q107Even(w,k){
+ var inner=null;for(var i=0;i<w.children.length;i++){var ch=w.children[i];if(ch.tagName!=='BUTTON'&&ch.offsetParent){inner=ch;break}}
+ if(!inner)return;inner.style.paddingTop='';inner.style.paddingBottom='';
+ if(!w.classList.contains('q103fix')||w.querySelector('.q107nofit'))return;
+ var r=w.getBoundingClientRect(),t=1e9,b=-1e9;
+ inner.querySelectorAll('*').forEach(function(e){if(e.children.length||!e.offsetParent||e.classList.contains('q105cut')||e.closest('.q105cut'))return;var q=e.getBoundingClientRect();if(!q.height||!q.width||q.top>=r.bottom-1)return;
+  var cs=getComputedStyle(e);if(cs.position==='absolute'||cs.visibility==='hidden')return;t=Math.min(t,q.top);b=Math.max(b,q.bottom)});
+ if(b<0)return;var top=(t-r.top)/k,bot=(r.bottom-Math.min(b,r.bottom))/k,H=r.height/k;
+ var type=(w.className.match(/zw-(\w+)/g)||[]).map(function(x){return x.slice(3)}).filter(function(x){return WDEF[x]})[0];
+ if(Q107LIST[type]&&(b-t)/k>H*0.45)return;
+ if(bot-top>10){var pt=parseFloat(getComputedStyle(inner).paddingTop)||0;inner.style.paddingTop=(pt+Math.floor((bot-top)/2))+'px'}
+}
+var _q107Fit=q103Fit;
+q103Fit=function(w,k){
+ try{q107Unclip(w)}catch(e){}
+ if(w.querySelector('.q107nofit')){w.querySelectorAll('.q105cut').forEach(function(e){e.classList.remove('q105cut')});try{q107FitList(w)}catch(e){}return}
+ _q107Fit(w,k);try{q107Even(w,k)}catch(e){}
+};
+
+/* widgets without a fixed box (Long) wrap cut text too */
+var _q107Lay=q99Lay;
+q99Lay=function(){var r=_q107Lay.apply(this,arguments);try{document.querySelectorAll('.zhome .zw:not(.q103fix)').forEach(q107Unclip)}catch(e){}return r};
+
+/* 6. The space pill (School / Work / Personal) sits beside your name in the band at the top on computers */
+var _q107TopHtml=q104Html;
+q104Html=function(){return _q107TopHtml()+spacePill('band')};
 
 try{spBoot()}catch(e){}
 load();
