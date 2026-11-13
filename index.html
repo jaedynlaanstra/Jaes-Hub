@@ -3687,8 +3687,12 @@ body.zdepth .z5grp,body.zdepth .z5top{background-image:linear-gradient(180deg,rg
 /* menu: Pages / Classes open and close */
 .q19lab{display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-radius:10px;-webkit-user-select:none;user-select:none}
 .q19lab:hover{opacity:1;color:var(--sideInk,#fff)}
-.q19chev{display:grid;place-items:center;transition:transform .25s}
-.q19chev svg{width:14px;height:14px}
+/* v292: the open/close arrow is a clear round button (it was a faint 14px line) */
+.q19lab{opacity:1!important;padding-right:4px!important}
+.q19chev{display:grid;place-items:center;transition:transform .25s,background .2s;width:24px;height:24px;border-radius:50%;flex:none;
+ background:color-mix(in srgb,var(--sideBright,#FFFDF8) 16%,transparent);color:var(--sideBright,#FFFDF8)}
+.q19chev svg{width:15px;height:15px;stroke-width:2.6}
+.q19lab:hover .q19chev{background:color-mix(in srgb,var(--sideBright,#FFFDF8) 26%,transparent)}
 .q19lab.shut .q19chev{transform:rotate(-90deg)}
 .q19hide{display:none!important}
 .q19in{animation:zin .3s cubic-bezier(.2,.7,.2,1) both}
@@ -7000,10 +7004,11 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 /* v287 (q103): Small/Square and Medium widgets have fixed heights on shared lines; the card fills the box, extra content fades */
 .zhome.q103 .zw.q103fix>:not(button){height:100%!important;min-height:0!important;max-height:100%!important;overflow:hidden;box-sizing:border-box}
 .zhome.q103 .zw.q103fix>details:not([open]){height:auto!important}
-.q103fd{overflow:hidden!important;flex-shrink:1!important;min-height:0!important;-webkit-mask-image:linear-gradient(#000 calc(100% - 26px),transparent);mask-image:linear-gradient(#000 calc(100% - 26px),transparent)}
+.q105cut{display:none!important}
+.zhome.q103 .zw.q103fix .h4next .ti{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .q103hid{visibility:hidden!important}
 /* v287 (q103): small lists (Bills, Coming up, Birthdays, To do) */
-.zw-half .h4upgrid{grid-template-columns:minmax(0,1fr);gap:16px}
+:is(.zw-half,.zw-large) .h4upgrid{grid-template-columns:minmax(0,1fr);gap:16px}
 .q103bl,.q103cl{display:flex;flex-direction:column;min-width:0;width:100%;margin-top:2px}
 .zw .wdb:has(>.q103bl),.zw .wdb:has(>.q103cl){justify-content:flex-start!important;min-height:0}
 .q103br,.q103cr{display:flex;align-items:center;gap:8px;min-width:0;width:100%;padding:5px 0;border:0;border-top:1px solid var(--line,rgba(0,0,0,.07));background:none;border-radius:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
@@ -7020,12 +7025,23 @@ html.q80ipad .tbktop{padding-top:calc(env(safe-area-inset-top,0px) + 52px)}
 .q103tl .q21list{margin-top:6px;min-width:0}
 .q103tl .q21row{padding:7px 0}
 .zhome.q103 .zw.q103fix>.wd>.wdb{flex:1 1 auto;min-height:0}
-.zhome.q103 :is(.zw-budget,.zw-savings,.zw-habits,.zw-money,.zw-payday,.zw-mood,.zw-quote,.zw-spending,.zw-glance,.zw-streak).zw-half.q103fix>.wd>.wdb{justify-content:center}
+.zhome.q103 :is(.zw-budget,.zw-savings,.zw-habits,.zw-money,.zw-payday,.zw-mood,.zw-quote,.zw-spending,.zw-glance,.zw-streak):is(.zw-half,.zw-large).q103fix>.wd>.wdb{justify-content:safe center}
 .zhome.q103 .zw.q103fix .wdapps{flex:1 1 auto;align-content:space-evenly}
 /* v288: smaller rows, so Small widgets sit a little tighter */
 .zhome.q103 .zw-small.q103fix .wdh,.zhome.q103 .zw-sq.q103fix .wdh{padding-top:11px}
 .zhome.q103 .zw-small.q103fix .q103br,.zhome.q103 .zw-small.q103fix .q103cr{padding:4px 0}
 .zhome.q103 .zw.q103fix>.wd>.wdb>.zcols{flex:1 1 auto;height:auto!important;min-height:56px;max-height:150px}
+/* v292 (q106): one corner size for every widget card (round ones stay round); Medium streak and spending fit their box */
+.zhome .zw:not(:is(.zw-aclock,.zw-water,.zw-focus).zw-small)>:not(button){border-radius:22px!important}
+.zhome.q103 .zw-half.q103fix>.wd>.wdb>.zcols{min-height:34px}
+.zhome .zw-half .wdstreak{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:16px;align-items:center;justify-content:center}
+.zhome .zw-half .wdstreak .wdflame{grid-row:1/3;margin:0}
+.zhome .zw-half .wdstreak b{margin:0;align-self:end;text-align:left}
+.zhome .zw-half .wdstreak small{align-self:start;text-align:left}
+.zhome.q103 .zw-money.zw-half.q103fix .zspark{flex:1 1 auto;min-height:28px;margin:6px 0 0;display:flex}
+.zhome.q103 .zw-money.zw-half.q103fix .zspark>svg{height:100%!important;width:100%}
+.zhome.q103 .zw-half.q103fix .wdbud{align-items:center}.zhome.q103 .zw-half.q103fix .wdbud .zleg{display:none}
+.zhome.q103 .zw-half.q103fix .wdbud .zdwrap{width:74px!important;height:74px!important}.zhome.q103 .zw-half.q103fix .wdbud .zdwrap>svg{width:74px;height:74px}
 /* v284: app icons (q101): sharp, full colour, no box in a box, springy hover */
 .q101w{position:relative;display:inline-flex;flex:none;font-style:normal}
 .q101i{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-style:normal;background:#fff;
@@ -7406,7 +7422,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v291';
+var BUILD='v292';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -9879,15 +9895,11 @@ function sidebar(c){
   var p=pal(cl.color),on=c&&c.id===cl.id;
   h+='<div class="sitem'+(on?' on':'')+'" data-open="'+cl.id+'"><span class="sdot" style="background:'+p.bar+'"></span>'
    +'<span class="nm2">'+esc(cl.name)+'</span></div>';
-  if(on){
+  /* v292: the quick-jump links under the open class are gone (Jae: they just take up room); only the class's
+     own course site stays, when one is set */
+  if(on&&cl.fol){
    h+='<div class="ssub">'
-    // this class's own course site (set its address in Edit class); only when one is set
-    +(cl.fol?'<a class="sitem sfol" href="'+esc(cl.fol)+'" target="_blank" rel="noopener"><span class="nm2">'+q91SiteName(cl.fol)+'</span><span class="sext">↗</span></a>':'')
-    +sideItem('data-scroll','c-assign','Assignments',false)
-    +sideItem('data-scroll','c-files','Files & links',false)
-    +sideItem('data-scroll','c-info','Class info',false)
-    +sideItem('data-scroll','c-title','Title page',false)
-    +(LOCAL?'':sideItem('data-scroll','c-overview','Ask the files',false))
+    +'<a class="sitem sfol" href="'+esc(cl.fol)+'" target="_blank" rel="noopener"><span class="nm2">'+q91SiteName(cl.fol)+'</span><span class="sext">↗</span></a>'
     +'</div>';
   }
  });
@@ -15425,7 +15437,10 @@ function zwSizes(type){
  if({comingup:1,week:1,classes:1,month:1,resources:1,music:1}[type])return ['half','full'];
  return ['small','half','full'];
 }
-function zwSize(w){var s=w.size||'full';if(zwSizes(w.type).indexOf(s)<0)s='full';return s}
+function zwSize(w){var s=w.size||'full',L=zwSizes(w.type);if(s==='sq')s='small'; /* v290: Square is now the Small square */
+ if(L.indexOf(s)<0)s=(s==='full'||s==='half')&&L.indexOf('large')>-1?'large':L.indexOf('full')>-1?'full':L[L.length-1]||'full';return s}
+/* v290 (q105): the copy of a widget that its drawing code sees. Large draws the original Medium design in a 2x2 box. */
+function q105Rw(w,sz){sz=sz||zwSize(w);var r=sz==='large'?'half':sz;return w.size===r?w:Object.assign({},w,{size:r})}
 // a compact version of a widget for the small size
 function zSmall(w,d,sp){
  var t=today(),td=iso(t),c=d.page?firstPage(sp,d.page):null;
@@ -15520,7 +15535,7 @@ function zNdColor(o){
 }
 viewSpaceHome=function(){
  var sp=curSpace(),L=view.zwLive||homeWidgets(sp),edit=!!view.homeEdit,ph=zwPhone();
- var slot=function(w,i){var d=WDEF[w.type],sz=zwSize(w),html='';
+ var slot=function(w0,i){var d=WDEF[w0.type],sz=zwSize(w0),w=q105Rw(w0,sz),html='';
   if(sz==='small'){try{html=zSmall(w,d,sp)}catch(e){html=null}}
   if(!html)html=zWidgetHtml(w,sp);
   if(!html&&!edit)return '';
@@ -19404,8 +19419,8 @@ ZM.ztask.save=function(m){var c=classById(m.cid),t=c&&zTask(c,m.tid);var r=_q24T
 var _q24Menu=ZM.zwmenu.html;
 ZM.zwmenu.html=function(m){
  var h=_q24Menu(m);if(!h)return h;var sp=curSpace(),w=homeWidgets(sp).filter(function(x){return x.id===m.wid})[0];if(!w)return h;
- var d=WDEF[w.type],sz=zwSize(w),html=null;
- try{if(sz==='small'){html=zSmall(w,d,sp)}if(!html)html=zWidgetHtml(w,sp)}catch(e){html=null}
+ var d=WDEF[w.type],sz=zwSize(w),html=null,wr=q105Rw(w,sz);
+ try{if(sz==='small'){html=zSmall(wr,d,sp)}if(!html)html=zWidgetHtml(wr,sp)}catch(e){html=null}
  if(!html)return h;
  var el=document.querySelector('.zhome [data-wid="'+w.id+'"]'),wd=el?Math.round(el.getBoundingClientRect().width):0;
  var st='';if(d&&d.legacy&&w.color&&w.type!=='nextdue'&&w.type!=='music'){var bg=/^#/.test(w.color)?'color-mix(in srgb,'+w.color+' 22%,var(--card))':(ZC[w.color]||ZC.grey)[0];st='--wbg:'+bg}
@@ -19437,7 +19452,7 @@ document.addEventListener('change',function(e){var t=e.target;if(t&&t.hasAttribu
 q18Deep=function(){var q=rgb2hsl.apply(null,hex2rgb(chromeHex('sideBg')));return hsl2hex(q[0],Math.min(q[1]*1.15,36),22)};
 q20Deep=function(hex){var q=rgb2hsl.apply(null,hex2rgb(hex));return hsl2hex(q[0],Math.min(Math.max(q[1],16)*1.2,42),24)};
 // live: the preview in the widget menu and the widget itself follow the wheel as you drag; letting go saves
-function q25WidgetHtml(w){var sp=curSpace(),d=WDEF[w.type],sz=zwSize(w),h=null;try{if(sz==='small')h=zSmall(w,d,sp);if(!h)h=zWidgetHtml(w,sp)}catch(e){h=null}return h}
+function q25WidgetHtml(w){var sp=curSpace(),d=WDEF[w.type],sz=zwSize(w),h=null;w=q105Rw(w,sz);try{if(sz==='small')h=zSmall(w,d,sp);if(!h)h=zWidgetHtml(w,sp)}catch(e){h=null}return h}
 function q25Live(id,col){
  var w0=homeWidgets(curSpace()).filter(function(x){return x.id===id})[0];if(!w0)return;
  var w=Object.assign({},w0,{color:col}),h=q25WidgetHtml(w);if(!h)return;var d=WDEF[w.type];
@@ -28129,21 +28144,30 @@ function q99Lay(){
  grids=grids.filter(function(g){return getComputedStyle(g).display==='grid'});if(!grids.length)return;
  grids.forEach(function(g){g.classList.add('q99m')}); /* switch stretching off before measuring anything */
  var k=q99Scale(grids[0]);
- /* v287 (q103): every widget sits on the same lines. Small and Square = one row (R), Medium = two rows plus the gap
-    between them (so two smalls stacked = one medium), Large = its own height (it is full width, nothing beside it).
-    R follows the width of a small widget, kept between 118 and 138px (v288: smaller, Jae found 150-180 too big). Content that doesn't fit fades at the bottom. */
+ /* v290 (q105): Apple sizes. Each grid is cut into squares about 165px wide (2 on a phone, 4 on an iPad or a
+    laptop, 8 on a big screen; the side panel is always 2). Small = 1 square, Medium = 2 wide x 1 tall,
+    Large = 2 x 2, Long = full width at its own height. Everything lands on the same lines. */
  home.classList.add('q103');
- var g0=grids[0],cs0=getComputedStyle(g0),gap0=parseFloat(cs0.columnGap)||0,cols=cs0.gridTemplateColumns.split(' ').length;
- var sw=(g0.getBoundingClientRect().width/k-gap0*(cols-1))/cols;if(cols>=8)sw=sw*2+gap0; /* computers: a small is 2 of 8 columns */
- var R=cols<=2?150:Math.round(Math.max(118,Math.min(138,sw*0.62))); /* phones: narrow smalls need a little more height */if((R+Math.round(gap0))%2)R++;
- home.style.setProperty('--q103r',R+'px');
+ /* v292 (q106): also watch the home area itself, so a rotate or Split View change always re-lays the grid
+    (the window resize event can fire before the new width is known) */
+ if(!q99RO&&window.ResizeObserver)q99RO=new ResizeObserver(function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,30)});
+ if(q99RO&&!home.q99o){home.q99o=1;q99RO.observe(home)}
+ var Umain=0;
+ grids.sort(function(a,b){return (a.classList.contains('zside')?1:0)-(b.classList.contains('zside')?1:0)});
  grids.forEach(function(g){
-  var gap=Math.round(parseFloat(getComputedStyle(g).columnGap)||0);
+  var gap=Math.round(parseFloat(getComputedStyle(g).columnGap)||0),W=g.getBoundingClientRect().width/k,side=g.classList.contains('zside');
+  var n=side?2:Math.max(2,Math.floor((W+gap)/(150+gap)));if(n>2&&n%2)n--;
+  var U=Math.floor((W-gap*(n-1))/n);if((U+gap)%2)U--;
+  if(side&&Umain)U=Umain;else if(!side)Umain=U; /* the side panel's rows match the main rows, so both columns share the same lines */
+  var cols='repeat('+n+',minmax(0,1fr))';if(g.style.gridTemplateColumns!==cols)g.style.gridTemplateColumns=cols;
+  g.style.setProperty('--q105u',U+'px');
   g.querySelectorAll('.zw').forEach(function(w){
    if(w.parentNode!==g&&w.parentNode.parentNode!==g)return;
    if(!q99RO&&window.ResizeObserver)q99RO=new ResizeObserver(function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,30)});
    if(q99RO&&!w.q99o){w.q99o=1;q99RO.observe(w)}
-   var c=w.classList,H=c.contains('zw-sq')||c.contains('zw-small')?R:c.contains('zw-half')?2*R+gap:0;
+   var c=w.classList,sm=c.contains('zw-small')||c.contains('zw-sq'),lg=c.contains('zw-large'),md=c.contains('zw-half');
+   var H=sm||md?U:lg?2*U+gap:0,colv=sm?'span 1':md||lg?'span '+Math.min(2,n):'1 / -1';
+   if(w.style.gridColumn!==colv)w.style.gridColumn=colv;
    w.style.minHeight='';
    if(H){if(w.style.height!==H+'px')w.style.height=H+'px';c.add('q103fix');q103Fit(w,k)}
    else if(c.contains('q103fix')){w.style.height='';c.remove('q103fix');q103Fit(w,k)}
@@ -28154,33 +28178,41 @@ function q99Lay(){
   });
  });
 }
-/* v287 (q103): a widget's content that runs past its box fades out at the bottom (boxes never grow). The part of
-   the widget that crosses the bottom edge gets a max height and a soft fade, so the card itself stays solid. */
+/* v290 (q105): content that doesn't fit its box is never cut or faded (Jae hates the fade). The list that crosses
+   the bottom edge shows only the rows that fit whole; anything else that would be cut is left out. */
 function q103Fit(w,k){
  var inner=null;for(var i=0;i<w.children.length;i++){var ch=w.children[i];if(ch.tagName!=='BUTTON'&&ch.offsetParent){inner=ch;break}}
- w.querySelectorAll('.q103fd').forEach(function(e){e.classList.remove('q103fd');e.style.maxHeight=''});
- w.querySelectorAll('.q103hid').forEach(function(e){e.classList.remove('q103hid')});
+ w.querySelectorAll('.q105cut').forEach(function(e){e.classList.remove('q105cut')});
  if(!inner||!w.classList.contains('q103fix'))return;
- if(inner.scrollHeight<=inner.clientHeight+1)return;
- var ib=inner.getBoundingClientRect(),pb=parseFloat(getComputedStyle(inner).paddingBottom)||0,lim=ib.bottom-pb*k;
- var vis=function(e){return e.offsetParent&&e.getBoundingClientRect().height>0&&getComputedStyle(e).position!=='absolute'};
- /* walk down the part that crosses the bottom edge: a list gets cut with a fade, pieces wholly below are hidden */
- var el=inner,pick=null;
- for(var d=0;d<6&&el;d++){
-  var kids=[].slice.call(el.children).filter(vis);
-  var over=kids.filter(function(e){return e.getBoundingClientRect().bottom>lim+1||e.scrollHeight>e.clientHeight+1});
-  if(!over.length)break;
-  var o=over[0];
-  if(o.getBoundingClientRect().top>=lim-6){ /* starts below the edge */
-   if(el===inner){over.forEach(function(e){e.classList.add('q103hid')});break}
-   pick=el;break;
+ for(var pass=0;pass<4;pass++){
+  /* v292 (q106): overflow can hide one or two levels down (the widget body clips its own content), so look there too */
+  var spill=function(e,d){if(e.scrollHeight>e.clientHeight+1)return true;if(!d)return false;for(var j=0;j<e.children.length;j++){var x=e.children[j];if(x.offsetParent&&spill(x,d-1))return true}return false};
+  if(!spill(inner,2))return;
+  var ib=inner.getBoundingClientRect(),pb=parseFloat(getComputedStyle(inner).paddingBottom)||0,lim=ib.bottom-pb*k+1;
+  var vis=function(e){var cs=getComputedStyle(e);return e.offsetParent&&e.getBoundingClientRect().height>0&&cs.position!=='absolute'&&cs.position!=='fixed'};
+  /* walk down into the part that crosses the bottom edge: pieces that start below it are left out, a row or a
+     small piece that crosses it is left out whole, a big block that crosses it is opened up and trimmed inside */
+  var el=inner,done=false,cutAny=false;
+  for(var d=0;d<8&&el&&!done;d++){
+   var kids=[].slice.call(el.children).filter(vis),o=null;
+   kids.forEach(function(e){var r=e.getBoundingClientRect();if(r.top>=lim-8){e.classList.add('q105cut');cutAny=true}
+    else if(!o&&(r.bottom>lim||e.scrollHeight>e.clientHeight+1))o=e});
+   if(!o)break;
+   var oh=o.getBoundingClientRect().height;
+   if(!o.children.length||o.tagName.toLowerCase()==='svg'||(kids.length>=2&&oh<96)){ /* a row, a tile or an icon: whole or not at all (and its neighbours on the same line) */
+    /* v292 (q106): a big neighbour (a whole column) is opened up and trimmed inside instead of dropped */
+    var big=null;kids.forEach(function(e){var r=e.getBoundingClientRect();if(r.bottom<=lim)return;
+     if(e!==o&&e.children.length&&r.height>=96&&e.tagName.toLowerCase()!=='svg')big=big||e;else e.classList.add('q105cut')});
+    if(big){el=big;continue}
+    done=true;break}
+   el=o;
   }
-  if(o.children.length!==1){pick=o;break}
-  el=o;
+  if(!done&&!cutAny)return;
+  /* a heading left with nothing under it goes too */
+  w.querySelectorAll('.q105cut').forEach(function(e){var p=e.parentNode;if(!p||p===inner||p.classList.contains('q105cut'))return;
+   var left=[].slice.call(p.children).filter(function(x){return !x.classList.contains('q105cut')&&x.offsetParent});
+   if(left.length===1&&left[0]===p.firstElementChild&&p.children.length>2&&left[0].className.replace(' q105cut','')!==p.children[1].className.replace(' q105cut',''))p.classList.add('q105cut')});
  }
- if(!pick||pick===inner)return;
- var mh=Math.max(0,Math.floor((lim-pick.getBoundingClientRect().top)/k));
- pick.classList.add('q103fd');pick.style.maxHeight=mh+'px';
 }
 var _q99Render=render;
 render=function(){var r=_q99Render.apply(this,arguments);try{q99Lay()}catch(e){}return r};
@@ -28323,6 +28355,20 @@ function q104Paint(){
 }
 var _q104Render=render;
 render=function(){var r=_q104Render.apply(this,arguments);try{q104Paint()}catch(e){}return r};
+
+/* v290: Apple-size widgets (q105). Jae wanted Apple's SIZES (not a new look): Small = one square, Medium = two
+   squares wide and one tall, Large = two by two (it shows the original Medium design), Long = full width for the
+   few widgets where a long row makes sense (Applications is a skinny row). The grid (q99Lay) works in squares;
+   content that doesn't fit shows fewer rows instead of fading (q103Fit). Square merged into Small. */
+var Q105NOMED={comingup:1,month:1}; /* a calendar or two-week list can't work two squares wide and one tall */
+var Q105LONG={comingup:1,week:1,classes:1,apps:1,glance:1,today1c:1,profile:1,bills:1,todo:1,month:1};
+var _q105Sizes=zwSizes;
+zwSizes=function(type){var L=_q105Sizes(type),o=[];
+ if(L.indexOf('small')>-1||L.indexOf('sq')>-1)o.push('small');
+ if(L.indexOf('half')>-1){if(!Q105NOMED[type])o.push('half');o.push('large')}
+ if(L.indexOf('full')>-1&&(Q105LONG[type]||!o.length))o.push('full');
+ return o.length?o:L};
+ZW_SIZES=[['small','Small'],['half','Medium'],['large','Large'],['full','Long']];
 
 try{spBoot()}catch(e){}
 load();
