@@ -7190,7 +7190,7 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 /* the menu: a small arrow right after "Pages" / "Classes", no circle, the same colour as the word */
 .side .q19lab{justify-content:flex-start!important;gap:5px}
 .side .q19chev,.side .q19lab:hover .q19chev{width:auto;height:auto;border-radius:0;background:none!important;color:inherit}
-.side .q19chev svg{width:11px;height:11px;stroke-width:2.6}
+.side .q19chev svg{width:13px;height:13px;stroke-width:2.4;stroke:currentColor!important;fill:none!important;opacity:1!important}
 /* the space pill beside your name at the top (computers); the menu doesn't need its own then */
 @media(min-width:901px){html.q104pc .side .zpill-side{display:none}}
 #q104top{max-width:none}
@@ -7506,7 +7506,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v293';
+var BUILD='v294';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -18811,12 +18811,14 @@ q17Profile=function(){
 WDEF.profile.r=function(){return q17Profile()};
 
 /* ---------- the menu: tap "Pages" (or "Classes") to open or close that list; the page you're on stays ---------- */
-function q19SideKey(l){return 'hub:sideshut:'+curSpace()+':'+l.textContent.trim().toLowerCase()}
+function q19SideKey(l){return 'hub:sideshut2:'+curSpace()+':'+l.textContent.trim().toLowerCase()}
+/* v294: Pages starts open and Classes starts closed until you change them */
+function q19Shut(l){var v=null;try{v=localStorage.getItem(q19SideKey(l))}catch(e){}return v==='1'||(v==null&&l.textContent.trim().toLowerCase()==='classes')}
 function q19Side(){
  document.querySelectorAll('.side .slabel').forEach(function(l){
   // a blank label is only a gap (above "Add a class"): never a fold-up heading, and what follows always shows
   if(!l.textContent.trim()){for(var b=l.nextElementSibling;b&&!b.classList.contains('slabel');b=b.nextElementSibling)b.classList.remove('q19hide');return}
-  var shut=false;try{shut=localStorage.getItem(q19SideKey(l))==='1'}catch(e){}
+  var shut=q19Shut(l);
   if(!l.classList.contains('q19lab')){l.classList.add('q19lab');l.setAttribute('role','button');l.setAttribute('tabindex','0');l.insertAdjacentHTML('beforeend','<span class="q19chev">'+CP_ICO.chev+'</span>')}
   l.setAttribute('aria-expanded',String(!shut));l.classList.toggle('shut',shut);
   for(var n=l.nextElementSibling;n&&!n.classList.contains('slabel');n=n.nextElementSibling)n.classList.toggle('q19hide',shut&&!n.classList.contains('on')&&!n.querySelector('.on'));
@@ -19235,7 +19237,7 @@ window.addEventListener('click',function(e){
 
 /* ---------- Pages / Classes in the menu: fold open and shut smoothly ---------- */
 q19Toggle=function(l){
- var k=q19SideKey(l),shut=false;try{shut=localStorage.getItem(k)==='1'}catch(e){}
+ var k=q19SideKey(l),shut=q19Shut(l);
  var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
  var items=[];for(var n=l.nextElementSibling;n&&!n.classList.contains('slabel');n=n.nextElementSibling)if(!n.classList.contains('on')&&!n.querySelector('.on'))items.push(n);
  var set=function(v){try{localStorage.setItem(k,v)}catch(e){}};
@@ -28605,6 +28607,18 @@ q103Fit=function(w,k){
 /* widgets without a fixed box (Long) wrap cut text too */
 var _q107Lay=q99Lay;
 q99Lay=function(){var r=_q107Lay.apply(this,arguments);try{document.querySelectorAll('.zhome .zw:not(.q103fix)').forEach(q107Unclip)}catch(e){}return r};
+
+/* v294: tapping a widget button (a day, a tab) redrew Home with the grid a few pixels tall for a moment, so the
+   page jumped to the top before the widgets got their sizes back. Put the scroll back once everything is laid out. */
+var q107Key=null,_q107R=render;
+render=function(){var k=view.page+':'+(view.classId||''),y=window.scrollY,same=k===q107Key;q107Key=k;
+ var r=_q107R.apply(this,arguments);if(same&&y>0&&Math.abs(window.scrollY-y)>1)window.scrollTo(0,y);return r};
+
+/* v294: switching School / Work / Personal keeps your place on the page instead of jumping to the top */
+var _q107SetSpace=setSpace;
+setSpace=function(id){var y=window.scrollY,r=_q107SetSpace.apply(this,arguments);
+ if(y>0&&view.page==='home'){var put=function(){var m=document.scrollingElement.scrollHeight-window.innerHeight;window.scrollTo(0,Math.max(0,Math.min(y,m)))};put();setTimeout(put,60);setTimeout(put,250)}
+ return r};
 
 /* 6. The space pill (School / Work / Personal) sits beside your name in the band at the top on computers */
 var _q107TopHtml=q104Html;
