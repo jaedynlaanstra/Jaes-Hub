@@ -7258,7 +7258,7 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108empty{margin:8px 0;font-size:13px;color:var(--ink3);line-height:1.45}
 .q108empty.sm{font-size:12.5px;margin:4px 0 8px}
 .q108empty svg{vertical-align:-2px;color:#B08A2E}
-.q108add{display:grid;grid-template-columns:minmax(0,150px) auto;justify-content:start;gap:6px;margin-top:12px}
+.q108add{display:grid;grid-template-columns:minmax(0,150px) auto minmax(0,1fr);gap:6px;margin-top:12px}
 .q108add.wsel{grid-template-columns:132px minmax(0,1fr) auto;justify-content:stretch}
 .q108add>input{grid-column:1/-1;min-width:0;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
 .q108add .zdatew{flex:none;min-width:0}
@@ -7297,6 +7297,10 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 
  .q108b{padding:4px 12px 12px}
 }
+/* v296: + on Plan my day; client chips sit above both columns so the plan card lines up with the first client card */
+.q108ebr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-4px -4px 0 0}
+.q108plus{flex:none;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.18);color:inherit;display:inline-grid;place-items:center;padding:0;cursor:pointer;min-height:0!important}
+.q108plus:hover{background:rgba(255,255,255,.28)}
 .q84tor{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 </style>
 </head>
@@ -7607,7 +7611,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v295';
+var BUILD='v296';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -28833,7 +28837,7 @@ function q108Plan(day,X){var td=iso(today()),every=[];
     :'<button class="zmini" data-zact="q108sun:'+e.key+'" aria-label="Take '+esc(o.title)+' off this day">×</button>')+'</div>'};
  var more=view.q108more?sugg.length:Math.min(sugg.length,4);
  return '<section class="q108plan"><div class="q108pt0" style="background:'+side+';color:'+ink+'">'
-  +'<div class="q108eb">Plan my day</div>'
+  +'<div class="q108ebr"><span class="q108eb">Plan my day</span><button class="q108plus" data-zact="q108tadd" aria-label="Add a to-do to '+esc(q108DayName(day).toLowerCase())+'" title="Add a to-do to '+esc(q108DayName(day).toLowerCase())+'">'+zI('<path d="M12 5v14M5 12h14"/>',18)+'</button></div>'
   +'<div class="q108nav"><button class="zmini" data-zact="q108dayn:-1" aria-label="Day before">‹</button><span class="q108dt"><b>'+esc(q108DayName(day))+'</b><small>'+esc(parseISO(day).toLocaleDateString('en-CA',{weekday:day===td||day===zAddDays(td,1)||day===zAddDays(td,-1)?'long':undefined,month:'long',day:'numeric'}))+'</small></span>'
   +'<button class="zmini" data-zact="q108dayn:1" aria-label="Day after">›</button></div>'
   +'<div class="q108sum">'+ring+'<span><b>'+(picked.length?dn+' of '+picked.length+' done':'Nothing planned yet')+'</b><small>'+(picked.length?(picked.length-dn?picked.length-dn+' left to work on':'All done. Nice work!'):'Tap the sun on any to-do to add it.')+'</small></span></div>'
@@ -28850,7 +28854,7 @@ function q108View(pg){
  var cards=X.length?X.map(function(x){return q108Card(x,day)}).join(''):'<section class="q108c q108none"><b>No clients yet</b><p>Add a client to keep their to-dos and projects together. You’ll see every client’s to-dos here at once.</p></section>';
  var head='<div class="q108top"><div><small>'+(X.length?X.length+' client'+(X.length===1?'':'s')+' · tap the '+zI(Q108SUN,12)+' on a to-do to plan it':'Your clients, their to-dos and projects')+'</small></div>'
   +'<button class="zbtn q108new" data-zact="q108cnew">+ New client</button></div>';
- return '<div class="q108"'+(pg?' data-pg="'+pg.id+'"':'')+'>'+head+'<div class="q108grid"><div class="q108main">'+chips+'<div class="q108cards">'+cards+'</div></div><aside class="q108rail">'+q108Plan(day,X)+'</aside></div></div>';
+ return '<div class="q108"'+(pg?' data-pg="'+pg.id+'"':'')+'>'+head+chips+'<div class="q108grid"><div class="q108main"><div class="q108cards">'+cards+'</div></div><aside class="q108rail">'+q108Plan(day,X)+'</aside></div></div>';
 }
 var _q108ViewPage=viewPage;
 viewPage=function(c){
@@ -28890,6 +28894,26 @@ var _q108CSave=ZM.q84client.save;
 ZM.q84client.save=function(){var here=q108Here(),r=_q108CSave.apply(this,arguments);if(here&&!view.modal){view.q84c=null;render()}return r};
 var _q108CDel=ZACT.q84cdel;
 ZACT.q84cdel=function(){var here=q108Here(),r=_q108CDel.apply(this,arguments);if(here){view.q84c=null;render()}return r};
+// v296: the + on Plan my day adds a to-do for a client straight onto the day you're planning (Jae plans every day)
+ZACT.q108tadd=function(){zOpen('q108today',{day:q108Day()})};
+ZM.q108today={html:function(m){var X=q108All(),last='';try{last=localStorage.getItem('hub:q108lc')||''}catch(e){}
+ var day=m.day||q108Day(),nm=q108DayName(day);
+ if(!X.length)return '<h3>Add to '+esc(nm.toLowerCase())+'</h3><p class="q53in">Add a client first, then you can plan their to-dos here.</p><button class="zbtn" data-zact="q108cnew">+ New client</button>';
+ var opts=X.map(function(x){var P=q108Projs(x.c,x.cl).filter(function(p){return p.status!=='done'}),v=x.c.id+'~'+x.cl.id;
+  return '<optgroup label="'+esc(x.cl.title)+'"><option value="'+v+'"'+(last===v?' selected':'')+'>'+esc(x.cl.title)+'</option>'
+   +P.map(function(p){var w=v+'~'+p.id;return '<option value="'+w+'"'+(last===w?' selected':'')+'>'+esc(x.cl.title)+' · '+esc(p.title)+'</option>'}).join('')+'</optgroup>'}).join('');
+ return '<h3>Add to '+esc(nm.toLowerCase())+'</h3><p class="q53in">'+esc(parseISO(day).toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+'</p>'
+  +'<div class="field"><label for="q108tn">To-do</label><input id="q108tn" placeholder="What will you work on?" data-zenter="q108tsave" autocomplete="off"></div>'
+  +'<div class="field"><label for="q108tc">Client</label><select id="q108tc">'+opts+'</select></div>'
+  +'<div class="field"><label for="q108td">Due <small class="q53opt">optional</small></label><input id="q108td" type="date"></div>'},
+ save:function(m){if(!q108All().length){ZACT.q108cnew();return}var n=zv('q108tn'),k=zv('q108tc').split('~'),c=classById(k[0]),cl=c&&zItem(c,k[1]);
+  if(!n){zToast('Type the to-do first.');var i=document.getElementById('q108tn');if(i)i.focus();return}
+  if(!cl){zToast('Pick a client.');return}
+  var p=k[2]&&zItem(c,k[2]);if(!p||p.t!=='proj'||p.client!==cl.id)p=cl;
+  var s={id:uid(),title:n,done:false,plan:[m.day||q108Day()]},d=zv('q108td');if(d)s.due=d;
+  p.steps=p.steps||[];p.steps.push(s);touch(p);try{localStorage.setItem('hub:q108lc',k.join('~'))}catch(e){}
+  save();view.modal=null;render();zToast('Added to '+q108DayName(m.day||q108Day()).toLowerCase()+' for '+cl.title+'.')},saveLabel:'Add'};
+ZACT.q108tsave=function(){var m=view.modal;if(m&&m.kind==='q108today')ZM.q108today.save(m)};
 ZACT.q108go=function(clid){var pg=q108Page();if(!pg)return;go('class',pg.id);if(clid)ZACT.q108jump(clid)};
 
 try{spBoot()}catch(e){}
