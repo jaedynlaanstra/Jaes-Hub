@@ -7360,10 +7360,11 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q109ndt small{font-size:11px;opacity:.78;line-height:1.2;display:block;overflow:hidden;white-space:nowrap;min-width:0}
 .q109ndt .q109fit{font-size:14px;font-weight:500}
 .q109gpa{background:var(--card,#fff);border:1px solid color-mix(in srgb,var(--ink) 9%,transparent);padding:0}
-.q109gb{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:100%;padding:10px 16px!important;box-sizing:border-box}
-.q109gl{display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:500;min-width:0}
-.q109gl small{font-size:11px;font-weight:400;color:var(--ink2);line-height:1.2}
-.q109gb>b{font-size:30px;font-weight:500;letter-spacing:-.02em;color:var(--ink);flex-shrink:0}
+.q109gb{display:flex;flex-direction:column;justify-content:center;gap:3px;width:100%;height:100%;padding:8px 16px!important;box-sizing:border-box;min-width:0}
+.q109gt{display:flex;align-items:baseline;justify-content:space-between;gap:10px;min-width:0}
+.q109gl{font-size:14px;font-weight:500;color:var(--ink)}
+.q109gt>b{font-size:24px;font-weight:500;letter-spacing:-.02em;color:var(--ink);line-height:1.1;flex-shrink:0}
+.q109gb>small{display:block;font-size:11.5px;color:var(--ink2);line-height:1.2;white-space:nowrap;overflow:hidden;min-width:0}
 .q109prof{color:#fff}
 .q109av{width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);font-size:19px;font-weight:500}
 .q109av img{width:100%;height:100%;object-fit:cover}
@@ -7536,7 +7537,7 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 /* ---------- Gifts (Shopping page) ---------- */
 .q109gadd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card,#fff);border:1px solid #e7e4dd;border-radius:18px;padding:10px;margin-bottom:18px}
 .q109gadd input{flex:1 1 160px;min-width:0;height:40px;border:1px solid #e7e4dd;border-radius:10px;padding:0 12px;font:inherit;font-size:15px;background:#faf9f6}
-.q109gadd #q109gi{flex:2 1 220px}
+.q109gadd #q109gp{flex:1 1 220px}
 .q109gempty{text-align:center;padding:36px 20px;color:#8a857a;background:var(--card,#fff);border:1px solid #e7e4dd;border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:8px}
 .q109gempty b{color:#2f2d29;font-weight:500;font-size:16px}
 .q109gempty p{margin:0;max-width:380px;font-size:14px;line-height:1.5}
@@ -7862,7 +7863,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v302';
+var BUILD='v303';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -29332,7 +29333,8 @@ function q109Mini(w,sp){
  }
  if(t==='gpa'){
   var a=q82All();
-  return '<section class="q109mini q109gpa"><button class="q109gb" data-zact="q82open"><span class="q109gl">GPA<small>'+(a.gpa==null?'Tap to add grades':q82Hon(a.gpa)?'Dean’s Honour Roll':'Cumulative')+'</small></span><b>'+q82Fmt(a.gpa)+'</b></button></section>';
+  /* top line: GPA and the number; under it, the note across the whole width (shrinks to fit, never runs into the number) */
+  return '<section class="q109mini q109gpa"><button class="q109gb" data-zact="q82open"><span class="q109gt"><span class="q109gl">GPA</span><b>'+q82Fmt(a.gpa)+'</b></span><small class="q109fit2">'+(a.gpa==null?'Tap to add grades':q82Hon(a.gpa)?'Dean’s Honour Roll':'Cumulative')+'</small></button></section>';
  }
  if(t==='profile'){
   var nm=firstName();
@@ -29347,7 +29349,7 @@ zWidgetHtml=function(w,sp){if(q107Sz(w)==='mini'||w.size==='mini'){var h=q109Min
 /* Mini words: one shared size that fits (q99Lay calls this for every Mini) */
 function q109MiniFit(w){var nd=w.classList.contains('zw-nextdue');
  q109Shrink(w.querySelectorAll('.q109fit'),nd?15:w.classList.contains('zw-profile')?13:14,10.5,2);
- q109Shrink(w.querySelectorAll('.q109fit2'),11,9.5,1)}
+ q109Shrink(w.querySelectorAll('.q109fit2'),w.classList.contains('zw-gpa')?12:11,9.5,1)}
 
 /* ---------- 3. pay that really landed (it changes with overdraft, fees, hours) ---------- */
 function q109PayLast(b){
@@ -29657,39 +29659,73 @@ q67Tabs=function(c,tab){
 var _q109Shop=z5Shop;
 z5Shop=function(c){if(z5Tab(c)==='gift')return q67Tabs(c,'gift')+q109Gifts(c);return _q109Shop.apply(this,arguments)};
 function q109GiftsOf(c){return (c.items||[]).filter(function(x){return x.t==='gift'})}
-function q109People(c){var o={},L=[];q109GiftsOf(c).forEach(function(g){var k=(g.who||'').trim();if(k&&!o[k.toLowerCase()]){o[k.toLowerCase()]=1;L.push(k)}});
- (S.classes||[]).forEach(function(p){(p.contacts||[]).forEach(function(x){var n=(x.name||'').trim();if(n&&!o[n.toLowerCase()]){o[n.toLowerCase()]=1;L.push(n)}})});return L}
+/* v303: people come first. A person is an item {t:'giftp', name}; ideas link to them by name (g.who). */
+function q109GPeople(c){return (c.items||[]).filter(function(x){return x.t==='giftp'&&x.name})}
+function q109People(c){var o={},L=[];var add=function(n){n=String(n||'').trim();if(n&&!o[n.toLowerCase()]){o[n.toLowerCase()]=1;L.push(n)}};
+ q109GPeople(c).forEach(function(p){add(p.name)});q109GiftsOf(c).forEach(function(g){add(g.who)});return L}
 function q109Host(u){try{return new URL(/^https?:/i.test(u)?u:'https://'+u).hostname.replace(/^www\./,'')}catch(e){return String(u||'').slice(0,24)}}
 function q109Url(u){u=String(u||'').trim();return !u?'':/^https?:\/\//i.test(u)?u:'https://'+u}
 function q109Gifts(c){
- var G=q109GiftsOf(c),last=q109Get('hub:q109who:'+c.id,'');
- var ppl=q109People(c);
- var add='<section class="q109gadd"><input id="q109gi" data-zenter="q109gadd:'+c.id+'" placeholder="Gift idea, like a cozy blanket" autocomplete="off" aria-label="Gift idea">'
-  +'<input id="q109gw" list="q109gwl" data-zenter="q109gadd:'+c.id+'" placeholder="Who it’s for" value="'+esc(last)+'" autocomplete="off" aria-label="Who it’s for"><datalist id="q109gwl">'+ppl.map(function(p){return '<option value="'+esc(p)+'">'}).join('')+'</datalist>'
-  +'<input id="q109gl" data-zenter="q109gadd:'+c.id+'" placeholder="Link (optional)" autocomplete="off" inputmode="url" aria-label="Link">'
-  +'<button class="zbtn" data-zact="q109gadd:'+c.id+'">Add</button></section>';
- if(!G.length)return add+'<section class="q109gempty">'+zI(Q109GIFT,28)+'<b>Gift ideas, all in one place</b><p>Add an idea and who it’s for. Each person gets their own card, and you can tick an idea off once you’ve bought it.</p></section>';
- var by={},order=[];G.forEach(function(g){var k=(g.who||'').trim()||'Anyone';var kl=k.toLowerCase();if(!by[kl]){by[kl]={name:k,L:[]};order.push(kl)}by[kl].L.push(g)});
- order.sort(function(a,b){if((a==='anyone')!==(b==='anyone'))return a==='anyone'?1:-1;var A=by[a].L.filter(function(g){return !g.got}).length,B=by[b].L.filter(function(g){return !g.got}).length;if(!A!==!B)return A?-1:1;return by[a].name.localeCompare(by[b].name)});
+ var G=q109GiftsOf(c),P=q109GPeople(c),V=q109V();
+ var add='<section class="q109gadd"><input id="q109gp" data-zenter="q109padd:'+c.id+'" placeholder="Add a person, like Mom" autocomplete="off" aria-label="Person’s name"><button class="zbtn" data-zact="q109padd:'+c.id+'">Add person</button></section>';
+ /* one card per person (people you added, plus anyone named on an idea), and "Anyone" for ideas with no name */
+ var by={},order=[];
+ var card0=function(name,p){var kl=name.toLowerCase();if(!by[kl]){by[kl]={name:name,p:p||null,L:[]};order.push(kl)}else if(p&&!by[kl].p)by[kl].p=p;return by[kl]};
+ P.slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name))}).forEach(function(p){card0(String(p.name).trim(),p)});
+ G.forEach(function(g){card0((g.who||'').trim()||'Anyone').L.push(g)});
+ if(!order.length)return add+'<section class="q109gempty">'+zI(Q109GIFT,28)+'<b>Gift ideas, all in one place</b><p>Start by adding the people you shop for. Then, whenever an idea comes to you, tap + on their card to add it, with as many links as you like.</p></section>';
+ order.sort(function(a,b){if((a==='anyone')!==(b==='anyone'))return a==='anyone'?1:-1;return by[a].name.localeCompare(by[b].name)});
  var bought=G.filter(function(g){return g.got}).length;
  var cards=order.map(function(k){var p=by[k],open=p.L.filter(function(g){return !g.got}),got=p.L.filter(function(g){return g.got}),hue=zWishHue(p.name);
-  var tint='hsl('+hue+' 32% 93%)',ink='hsl('+hue+' 24% 38%)';
+  var tint='hsl('+hue+' 32% 93%)',ink='hsl('+hue+' 24% 38%)',key=encodeURIComponent(p.name).replace(/%/g,'~'),adding=V.gadd===k;
   var row=function(g){var links=(g.links||[]).filter(Boolean);
    return '<div class="q109gr'+(g.got?' y':'')+'"><button class="q109ck'+(g.got?' y':'')+'" data-zact="q109ggot:'+c.id+':'+g.id+'" aria-label="'+(g.got?'Mark not bought':'Mark bought')+'">'+(g.got?'✓':'')+'</button>'
     +'<div class="q109rt"><button class="q109tt" data-zact="q109gedit:'+c.id+':'+g.id+'">'+esc(g.title)+(g.price?' <em>'+money(g.price)+'</em>':'')+'</button>'
     +(links.length||g.note?'<div class="q109meta">'+links.map(function(u){return '<a class="q109lk" href="'+esc(q109Url(u))+'" target="_blank" rel="noopener">'+linkIcon(q109Url(u),q109Host(u))+'<span>'+esc(q109Host(u))+'</span></a>'}).join('')+(g.note?'<span class="q109gnote">'+esc(g.note)+'</span>':'')+'</div>':'')+'</div>'
-    +'<button class="q109ib" data-zact="q109gedit:'+c.id+':'+g.id+'" aria-label="Edit '+esc(g.title)+'">'+zI(ZIC.dots,16)+'</button></div>'};
+    +'<button class="q109ib" data-zact="q109gedit:'+c.id+':'+g.id+'" aria-label="Links, price and notes for '+esc(g.title)+'">'+zI(ZIC.dots,16)+'</button></div>'};
+  var body=(adding?'<div class="q109inl"><input id="q109gi2" data-zenter="q109gin:'+c.id+':'+key+'" placeholder="Gift idea, then Enter" autocomplete="off" aria-label="Gift idea for '+esc(p.name)+'"></div>':'')
+   +(open.length?open.map(row).join(''):(adding?'':'<p class="q109empty">'+(got.length?'All bought. Nice.':'No ideas yet. Tap + to add one.')+'</p>'))+got.map(row).join('');
   return '<section class="q109card q109gc"><div class="q109ch" style="background:'+tint+'"><span class="q109sq" style="background:#fff;color:'+ink+'">'+esc(q109Abbr(p.name))+'</span><b class="q109cn">'+esc(p.name)+'</b>'
    +(got.length?'<span class="q109pill" style="color:'+ink+'">'+got.length+' bought</span>':'')+'<span class="q109pill q109cnt" style="color:'+ink+'">'+open.length+'</span>'
-   +'<button class="q109ib" style="color:'+ink+'" data-zact="q109gnew:'+c.id+':'+encodeURIComponent(p.name).replace(/%/g,'~')+'" aria-label="Add a gift for '+esc(p.name)+'">'+zI(ZIC.plus,16)+'</button></div>'
-   +'<div class="q109cb">'+(open.length?open.map(row).join(''):'<p class="q109empty">All bought. Nice.</p>')+got.map(row).join('')+'</div></section>'}).join('');
- return add+'<div class="q109bar"><span>'+G.length+' idea'+(G.length===1?'':'s')+' · '+bought+' bought</span></div><div class="q109grid">'+cards+'</div>';
+   +'<button class="q109ib" style="color:'+ink+'" data-zact="q109gopen:'+key+'" aria-label="Add a gift idea for '+esc(p.name)+'">'+zI(ZIC.plus,16)+'</button>'
+   +(k==='anyone'&&!p.p?'':'<button class="q109ib" style="color:'+ink+'" data-zact="q109pedit:'+c.id+':'+key+'" aria-label="Rename or remove '+esc(p.name)+'">'+zI(ZIC.dots,16)+'</button>')+'</div>'
+   +'<div class="q109cb">'+body+'</div></section>'}).join('');
+ return add+'<div class="q109bar"><span>'+order.filter(function(k){return k!=='anyone'}).length+' people · '+G.length+' idea'+(G.length===1?'':'s')+' · '+bought+' bought</span></div><div class="q109grid">'+cards+'</div>';
 }
-ZACT.q109gadd=function(cid){
- var c=classById(cid);if(!c)return;var i=document.getElementById('q109gi'),t=i&&i.value.trim();if(!t){if(i)i.focus();return}
- var w=(document.getElementById('q109gw')||{}).value||'',l=(document.getElementById('q109gl')||{}).value||'';w=w.trim();l=l.trim();
- c.items=c.items||[];c.items.push(touch({id:uid(),t:'gift',title:t,who:w,links:l?[l]:[],got:false}));q109Set('hub:q109who:'+cid,w);save();render();
- setTimeout(function(){var j=document.getElementById('q109gi');if(j)j.focus()},30);
+function q109Key(k){return decodeURIComponent(String(k||'').replace(/~/g,'%'))}
+ZACT.q109padd=function(cid){
+ var c=classById(cid),i=document.getElementById('q109gp'),n=i&&i.value.trim();if(!c)return;if(!n){if(i)i.focus();return}
+ if(!q109People(c).some(function(x){return x.toLowerCase()===n.toLowerCase()})){c.items=c.items||[];c.items.push(touch({id:uid(),t:'giftp',name:n}))}
+ save();render();setTimeout(function(){var j=document.getElementById('q109gp');if(j)j.focus()},30);
+};
+/* + on a card: a box right there for the idea (Enter adds it, Esc or an empty box closes it) */
+ZACT.q109gopen=function(key){var V=q109V(),k=q109Key(key).toLowerCase();V.gadd=V.gadd===k?null:k;render();setTimeout(function(){var i=document.getElementById('q109gi2');if(i)i.focus()},30)};
+ZACT.q109gin=function(cid,key){
+ var c=classById(cid),i=document.getElementById('q109gi2'),t=i&&i.value.trim();if(!c||!t)return;var who=q109Key(key);if(who.toLowerCase()==='anyone')who='';
+ c.items=c.items||[];c.items.push(touch({id:uid(),t:'gift',title:t,who:who,links:[],got:false}));save();render();
+ setTimeout(function(){var j=document.getElementById('q109gi2');if(j)j.focus()},30);
+};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&view.q109&&view.q109.gadd){view.q109.gadd=null;render()}});
+document.addEventListener('focusout',function(e){var t=e.target;if(!t||t.id!=='q109gi2'||t.value.trim())return;setTimeout(function(){var V=q109V();if(V.gadd&&!(document.activeElement&&document.activeElement.id==='q109gi2')&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.q109gc .q109ch'))){V.gadd=null;render()}},150)});
+/* rename or remove a person (their ideas follow the new name; removing asks first) */
+ZACT.q109pedit=function(cid,key){zOpen('q109person',{cid:cid,name:q109Key(key)})};
+ZM.q109person={html:function(m){
+ var c=classById(m.cid);if(!c)return null;var n=q109GiftsOf(c).filter(function(g){return String(g.who||'').trim().toLowerCase()===m.name.toLowerCase()}).length;
+ return '<h3>'+esc(m.name)+'</h3><div class="field"><label for="q109pn">Name</label><input id="q109pn" value="'+esc(m.name)+'" autocomplete="off"></div>'
+  +'<p class="hint" style="margin:2px 0 0">'+(n?n+' gift idea'+(n===1?'':'s')+' for '+esc(m.name)+'.':'No gift ideas yet.')+'</p>';
+},save:function(m){
+ var c=classById(m.cid);if(!c)return;var nn=zv('q109pn'),lo=m.name.toLowerCase();if(!nn)return;
+ q109GPeople(c).forEach(function(p){if(String(p.name).trim().toLowerCase()===lo&&p.name!==nn){p.name=nn;touch(p)}});
+ if(!q109GPeople(c).some(function(p){return p.name.toLowerCase()===nn.toLowerCase()}))c.items.push(touch({id:uid(),t:'giftp',name:nn}));
+ q109GiftsOf(c).forEach(function(g){if(String(g.who||'').trim().toLowerCase()===lo&&g.who!==nn){g.who=nn;touch(g)}});
+ save();view.modal=null;render();
+},del:function(m){return 'q109pdel:'+m.cid+':'+encodeURIComponent(m.name).replace(/%/g,'~')}};
+ZACT.q109pdel=function(cid,key){
+ var c=classById(cid),nm=q109Key(key),lo=nm.toLowerCase();if(!c)return;
+ var n=q109GiftsOf(c).filter(function(g){return String(g.who||'').trim().toLowerCase()===lo}).length;
+ if(!confirm('Remove '+nm+(n?' and their '+n+' gift idea'+(n===1?'':'s'):'')+'?'))return;
+ c.items=c.items.filter(function(x){return !((x.t==='giftp'&&String(x.name).trim().toLowerCase()===lo)||(x.t==='gift'&&String(x.who||'').trim().toLowerCase()===lo))});
+ save();view.modal=null;render();
 };
 ZACT.q109ggot=function(cid,id){var c=classById(cid),g=c&&zItem(c,id);if(!g)return;g.got=!g.got;touch(g);save();render()};
 ZACT.q109gedit=function(cid,id){zOpen('q109gift',{cid:cid,id:id})};
