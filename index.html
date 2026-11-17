@@ -7262,7 +7262,9 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108add.wsel{grid-template-columns:132px minmax(0,1fr) auto;justify-content:stretch}
 .q108add>input{grid-column:1/-1;min-width:0;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
 .q108add .zdatew{flex:none;min-width:0}
-.q108add .zdatew>input{font-size:13.5px;padding:8px;border:1px solid var(--line);border-radius:10px}
+.q108add .zdatew>input{font-size:13.5px;padding:0 8px;border:1px solid var(--line);border-radius:10px;height:38px;box-sizing:border-box}
+.q108add select{height:100%}
+.q108add>.zdatew,.q108add>select,.q108add>.zbtn{height:38px;min-height:0;box-sizing:border-box}
 .q108add select{width:100%;min-width:0;font-size:13.5px;padding:8px;border:1px solid var(--line);border-radius:10px}
 .q108add .zbtn{padding:8px 14px}
 .q108foot{display:flex;justify-content:flex-start;margin-top:10px}
@@ -7301,6 +7303,20 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108ebr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-4px -4px 0 0}
 .q108plus{flex:none;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.18);color:inherit;display:inline-grid;place-items:center;padding:0;cursor:pointer;min-height:0!important}
 .q108plus:hover{background:rgba(255,255,255,.28)}
+/* v297: dated notes on each client card (q108) */
+.q108n{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}
+.q108nh{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:4px}
+.q108nh em{font-style:normal;letter-spacing:0;font-size:11px;background:var(--gt);color:var(--gc);border-radius:99px;padding:1px 7px}
+.q108nl{list-style:none;margin:0;padding:0}
+.q108nl li{margin:0}
+.q108nl button{display:flex;align-items:baseline;gap:10px;width:100%;background:none;border:none;padding:5px 0;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.q108nl button>span{flex:1;min-width:0;font-size:13.5px;line-height:1.4;overflow-wrap:anywhere;position:relative;padding-left:14px}
+.q108nl button>span::before{content:"";position:absolute;left:2px;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--gc)}
+.q108nl button>small{flex:none;font-size:11.5px;color:var(--ink3);white-space:nowrap}
+.q108nl button:hover>span{color:var(--ink2)}
+.q108nadd{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-top:6px}
+.q108nadd input{min-width:0;font:inherit;font-size:13.5px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+.q108nadd .zbtn{padding:7px 12px}
 .q84tor{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 </style>
 </head>
@@ -7611,7 +7627,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v296';
+var BUILD='v297';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -28814,7 +28830,7 @@ function q108Card(x,day){var c=x.c,cl=x.cl,td=iso(today()),Z=q108Hue(cl);
   +'<span class="zdatew empty"><input type="date" id="q108d-'+cl.id+'" aria-label="Due date"><span class="zdph" aria-hidden="true">Due date</span></span>'
   +(pOpen.length?'<select id="q108w-'+cl.id+'" aria-label="Add it to">'+dests+'</select>':'')
   +'<button class="zbtn" data-zact="q108add:'+c.id+':'+cl.id+'">Add</button></div>'
-  +'<div class="q108foot"><button class="zlink" data-zact="q108pnew:'+c.id+':'+cl.id+'">+ New project</button></div>';
+  +q108Notes(c,cl)+'<div class="q108foot"><button class="zlink" data-zact="q108pnew:'+c.id+':'+cl.id+'">+ New project</button></div>';
  return '<section class="q108c'+(shut?' shut':'')+'" id="q108-'+cl.id+'" style="--gt:'+Z[0]+';--gc:'+Z[1]+'">'
   +'<div class="q108h"><button class="q108hb" data-zact="q108fold:'+cl.id+'" aria-expanded="'+(!shut)+'">'+q84Av(cl)+'<span class="q108ht"><b>'+esc(cl.title)+'</b><small>'+meta.join(' · ')+'</small></span></button>'
   +'<button class="zmini" data-zact="q84edit:'+c.id+':'+cl.id+'" aria-label="Edit '+esc(cl.title)+'">'+zI(ZIC.dots,16)+'</button>'
@@ -28914,6 +28930,29 @@ ZM.q108today={html:function(m){var X=q108All(),last='';try{last=localStorage.get
   p.steps=p.steps||[];p.steps.push(s);touch(p);try{localStorage.setItem('hub:q108lc',k.join('~'))}catch(e){}
   save();view.modal=null;render();zToast('Added to '+q108DayName(m.day||q108Day()).toLowerCase()+' for '+cl.title+'.')},saveLabel:'Add'};
 ZACT.q108tsave=function(){var m=view.modal;if(m&&m.kind==='q108today')ZM.q108today.save(m)};
+// v297: quick dated notes on each client card (Jae: point-form notes you can see without opening a Notes page).
+// They live on the client as cl.jot=[{id,text,date}] (newest date first), so they sync with the client like its tasks.
+function q108Jots(cl){return (cl.jot||[]).slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:(a.at||'')<(b.at||'')?1:-1})}
+function q108JotDay(d){var td=iso(today());return d===td?'Today':d===zAddDays(td,-1)?'Yesterday':parseISO(d).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:d.slice(0,4)===td.slice(0,4)?undefined:'numeric'}).replace(/\./g,'')}
+function q108Notes(c,cl){var J=q108Jots(cl),all=view.q108jall&&view.q108jall[cl.id],show=all?J:J.slice(0,5);
+ return '<div class="q108n"><div class="q108nh"><span>Notes</span>'+(J.length?'<em>'+J.length+'</em>':'')+'</div>'
+  +(show.length?'<ul class="q108nl">'+show.map(function(n){return '<li><button data-zact="q108jedit:'+c.id+':'+cl.id+':'+n.id+'"><span>'+esc(n.text)+'</span><small>'+esc(q108JotDay(n.date))+'</small></button></li>'}).join('')+'</ul>':'')
+  +(J.length>5?'<button class="q108more" data-zact="q108jall:'+cl.id+'">'+(all?'Show fewer':'Show all '+J.length+' notes')+'</button>':'')
+  +'<div class="q108nadd"><input id="q108j-'+cl.id+'" data-zenter="q108jadd:'+c.id+':'+cl.id+'" placeholder="Add a note" autocomplete="off" aria-label="New note for '+esc(cl.title)+'"><button class="zbtn" data-zact="q108jadd:'+c.id+':'+cl.id+'">Add</button></div></div>'}
+ZACT.q108jadd=function(cid,clid){var cl=zItem(classById(cid),clid),v=zv('q108j-'+clid);if(!cl)return;if(!v){var i0=document.getElementById('q108j-'+clid);if(i0)i0.focus();return}
+ cl.jot=(cl.jot||[]).concat(v.split(/\n+/).map(function(t){return t.replace(/^\s*[-•*]\s*/,'').trim()}).filter(Boolean).map(function(t){return {id:uid(),text:t,date:iso(today()),at:new Date().toISOString()}}));
+ touch(cl);save();render();setTimeout(function(){var i=document.getElementById('q108j-'+clid);if(i)i.focus()},30)};
+ZACT.q108jall=function(clid){view.q108jall=view.q108jall||{};view.q108jall[clid]=!view.q108jall[clid];render()};
+ZACT.q108jedit=function(cid,clid,nid){zOpen('q108jot',{cid:cid,clid:clid,nid:nid})};
+function q108JotFind(m){var cl=zItem(classById(m.cid),m.clid),n=cl&&(cl.jot||[]).filter(function(x){return x.id===m.nid})[0];return n?{cl:cl,n:n}:null}
+ZM.q108jot={html:function(m){var f=q108JotFind(m);if(!f)return null;
+ return '<h3>Note</h3><p class="q53in">For '+esc(f.cl.title)+'</p>'
+  +'<div class="field"><label for="q108jt">Note</label><textarea id="q108jt" rows="3">'+esc(f.n.text)+'</textarea></div>'
+  +'<div class="field"><label for="q108jd">Date</label><input id="q108jd" type="date" value="'+esc(f.n.date||'')+'"></div>'},
+ save:function(m){var f=q108JotFind(m);if(!f)return;var t=zv('q108jt');if(!t){zToast('Type the note, or tap Delete.');return}
+  f.n.text=t;f.n.date=zv('q108jd')||f.n.date||iso(today());touch(f.cl);save();view.modal=null;render()},
+ saveLabel:'Save',del:function(m){return 'q108jdel:'+m.cid+':'+m.clid+':'+m.nid}};
+ZACT.q108jdel=function(cid,clid,nid){var cl=zItem(classById(cid),clid);if(!cl)return;cl.jot=(cl.jot||[]).filter(function(x){return x.id!==nid});touch(cl);save();view.modal=null;render();zToast('Note deleted.')};
 ZACT.q108go=function(clid){var pg=q108Page();if(!pg)return;go('class',pg.id);if(clid)ZACT.q108jump(clid)};
 
 try{spBoot()}catch(e){}
