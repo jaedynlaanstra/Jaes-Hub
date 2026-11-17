@@ -7317,6 +7317,20 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
  .q108bc{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:start}
  .q108bc>.q108n{margin-top:6px}
 }
+/* v299: client colour swatches and the logo search note (q108) */
+.q108sws{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.q108sw{position:relative;width:25px;height:25px;flex:none;border-radius:50%;border:1.5px solid transparent;display:inline-grid;place-items:center;padding:0;cursor:pointer;min-height:0!important;box-sizing:border-box}
+.q108sw i{width:10px;height:10px;border-radius:50%}
+.q108sw.on{border-color:var(--sc,var(--ink2));box-shadow:0 0 0 2px var(--card) inset}
+.q108swc{border:1.5px dashed var(--line2);color:var(--ink3);overflow:hidden}
+.field label.q108swc{display:inline-grid;margin:0;font-size:inherit}
+.q108swc.on{border-style:solid;border-color:var(--ink2)}
+.q108swc input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;padding:0;border:0}
+.q108swd{width:1px;height:20px;background:var(--line2);margin:0 1px}
+.q108swh{display:block;margin-top:6px;font-size:12px;color:var(--ink3)}
+.q108swh .zlink{font-size:12px;text-decoration:underline}
+.q108lgn{display:block;margin-top:6px;font-size:12px;color:var(--ink3);min-height:0}
+.q108lgn:empty{display:none}
 .q84tor{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 </style>
 </head>
@@ -7627,7 +7641,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v298';
+var BUILD='v299';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26298,7 +26312,7 @@ function q83SaveTag(c){var m=view.modal||{};if(m.q85v==='tags')return false;retu
 function q84Clients(c){return ((c&&c.items)||[]).filter(function(x){return x.t==='client'}).sort(function(a,b){return String(a.title).localeCompare(String(b.title))})}
 function q84Sel(c){var k=String(view.q84c||'').split(':');if(!c||k[0]!==c.id)return null;var x=zItem(c,k[1]);return x&&x.t==='client'?x:null}
 function q84Projs(c,cl){return c.items.filter(function(x){return x.t==='proj'&&x.client===cl.id})}
-function q84Av(cl,sz){if(cl.logo)return '<span class="q84av q84img" style="background-image:url('+cl.logo+')" role="img" aria-label="'+esc(cl.title)+' logo"></span>';var K=Object.keys(ZC).filter(function(k){return k!=='grey'}),n=Math.abs(String(cl.title||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7)),z=ZC[K[n%K.length]];
+function q84Av(cl,sz){if(cl.logo)return '<span class="q84av q84img" style="background-image:url('+cl.logo+')" role="img" aria-label="'+esc(cl.title)+' logo"></span>';var z=q108Hue(cl);
  return '<span class="q84av" style="background:'+z[0]+';color:'+z[1]+'">'+esc((String(cl.title||'?').trim()[0]||'?').toUpperCase())+'</span>'}
 // everything still to do for a client: its own tasks and its projects' tasks
 function q84Open(c,cl){var L=(cl.steps||[]).filter(function(s){return !s.done});q84Projs(c,cl).forEach(function(p){L=L.concat((p.steps||[]).filter(function(s){return !s.done}))});return L}
@@ -26372,29 +26386,31 @@ ZACT.q84ladd=function(cid,clid){var cl=zItem(classById(cid),clid),u=zv('q84lu');
  cl.links=cl.links||[];cl.links.push({id:uid(),title:zv('q84lt')||cpHost(u),url:u});q84Keep();touch(cl);save();render()};
 ZACT.q84ldel=function(cid,clid,lid){var cl=zItem(classById(cid),clid);if(!cl)return;cl.links=(cl.links||[]).filter(function(l){return l.id!==lid});q84Keep();touch(cl);save();render()};
 // adding a link redraws the pop-up: keep what was typed in the other boxes
-function q84Keep(){var m=view.modal;if(m&&m.kind==='q84client')['q84n','q84ct','q84no'].forEach(function(i){var e=document.getElementById(i);if(e)m[i]=e.value})}
+function q84Keep(){var m=view.modal;if(m&&m.kind==='q84client')['q84n','q84ct','q84no','q108site'].forEach(function(i){var e=document.getElementById(i);if(e)m[i]=e.value})}
 ZM.q84client={html:function(m){var c=classById(m.cid),cl=m.clid&&zItem(c,m.clid);if(!c||(m.clid&&!cl))return null;
  var v=function(k,f){return m[k]!=null?m[k]:(cl&&cl[f])||''};
  return '<h3>'+(cl?'Edit client':'New client')+'</h3>'
-  +'<div class="field"><label>Logo or picture <small class="q53opt">optional</small></label><div class="q84lrow">'+q84Av({title:v('q84n','title')||'?',logo:m.logo!=null?m.logo:(cl&&cl.logo)||''})
+  +'<div class="field"><label>Logo or picture <small class="q53opt">optional</small></label><div class="q84lrow">'+q84Av({title:v('q84n','title')||'?',logo:m.logo!=null?m.logo:(cl&&cl.logo)||'',color:m.color!=null?m.color:(cl&&cl.color)||''})
   +'<label class="zbtn q53up">'+((m.logo!=null?m.logo:cl&&cl.logo)?'Change':'Add a logo')+'<input type="file" accept="image/*" data-q84mlogo="1" style="display:none"></label>'
-  +((m.logo!=null?m.logo:cl&&cl.logo)?'<button class="zlink" data-zact="q84lrm">Remove</button>':'')+'</div></div>'
-  +'<div class="field"><label for="q84n">Name</label><input id="q84n" value="'+esc(v('q84n','title'))+'" placeholder="Who is it for?"></div>'
+  +((m.logo!=null?m.logo:cl&&cl.logo)?'<button class="zlink" data-zact="q84lrm">Remove</button>':'')+'</div>'+q108LogoNote(m)+'</div>'
+  +'<div class="field"><label for="q84n">Name</label><input id="q84n" value="'+esc(v('q84n','title'))+'" placeholder="Who is it for?" autocomplete="off"></div>'
+  +'<div class="field"><label for="q108site">Website <small class="q53opt">optional, finds their logo</small></label><input id="q108site" value="'+esc(v('q108site','site'))+'" placeholder="theirbusiness.com" autocomplete="off" inputmode="url"></div>'
+  +q108ColField(m,cl)
   +'<div class="field"><label for="q84ct">Contact <small class="q53opt">optional</small></label><input id="q84ct" value="'+esc(v('q84ct','contact'))+'" placeholder="Name, email or phone"></div>'
   +'<div class="field"><label for="q84no">Notes <small class="q53opt">optional</small></label><textarea id="q84no" rows="3" placeholder="Anything to remember about them">'+esc(v('q84no','notes'))+'</textarea></div>'
   +(cl?'<div class="field"><label>Links</label>'+(cl.links||[]).map(function(l){return '<div class="zlk">'+linkIcon(l.url,l.title)+'<a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.title||cpHost(l.url))+'</a><small>'+esc(cpHost(l.url))+'</small><button class="zmini" data-zact="q84ldel:'+c.id+':'+cl.id+':'+l.id+'" aria-label="Remove link">×</button></div>'}).join('')
    +'<div class="zlkadd"><input id="q84lt" placeholder="Name"><input id="q84lu" placeholder="https://" data-zenter="q84ladd:'+c.id+':'+cl.id+'"><button class="zbtn" data-zact="q84ladd:'+c.id+':'+cl.id+'">Add</button></div></div>':'');
 },save:function(m){var c=classById(m.cid);if(!c)return;var n=zv('q84n');if(!n){zToast('Give the client a name.');return}
  var cl=m.clid&&zItem(c,m.clid);if(!cl){cl={id:uid(),t:'client',steps:[],links:[]};c.items.push(cl)}
- cl.title=n;cl.contact=zv('q84ct');cl.notes=zv('q84no');if(m.logo!=null)cl.logo=m.logo;if(!cl.logo)delete cl.logo;['contact','notes'].forEach(function(k){if(!cl[k])delete cl[k]});
+ cl.title=n;cl.contact=zv('q84ct');cl.notes=zv('q84no');cl.site=zv('q108site');if(m.logo!=null)cl.logo=m.logo;if(!cl.logo)delete cl.logo;if(m.color!=null)cl.color=m.color;if(m.lcol!==undefined)cl.lcol=m.lcol;['contact','notes','site','color','lcol'].forEach(function(k){if(!cl[k])delete cl[k]});
  touch(cl);save();view.modal=null;view.q84c=c.id+':'+cl.id;view.zproj=null;render()},
  saveLabel:'Save',del:function(m){return m.clid?'q84cdel:'+m.cid+':'+m.clid:''}};
-ZACT.q84lrm=function(){q84Keep();if(view.modal)view.modal.logo='';render()};
+ZACT.q84lrm=function(){q84Keep();var m=view.modal;if(m){m.logo='';m.lfrom=null;m.noauto=true;if(m.color&&m.color===m.lcol&&!m.colPicked)m.color='';m.lcol=null}render()};
 // logos: a small square PNG (keeps see-through backgrounds)
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute||!t.files||!t.files[0])return;
  var a=t.getAttribute('data-q84logo');
  if(a){var k=a.split(':');shrinkImage(t.files[0],256,function(url){var cl=zItem(classById(k[0]),k[1]);if(cl){cl.logo=url;touch(cl);save();render()}},true);return}
- if(t.getAttribute('data-q84mlogo')){q84Keep();shrinkImage(t.files[0],256,function(url){if(view.modal&&view.modal.kind==='q84client'){view.modal.logo=url;render()}},true)}});
+ if(t.getAttribute('data-q84mlogo')){q84Keep();shrinkImage(t.files[0],256,function(url){var m=view.modal;if(m&&m.kind==='q84client'){m.logo=url;m.lfrom=null;m.noauto=true;render();q108ColOf(url,function(col){if(view.modal!==m||!col)return;q84Keep();m.lcol=col;if(!m.colPicked)m.color=col;render()})}},true)}});
 // a new project made while a client is open belongs to that client
 var _q84New=ZACT.projnew;
 ZACT.projnew=function(cid){var cl=q84Sel(classById(cid));_q84New.apply(this,arguments);var p=cl&&zItem(classById(cid),view.zproj);if(p&&p.t==='proj'){p.client=cl.id;touch(p);save();render()}};
@@ -28795,7 +28811,7 @@ function q108Find(key){var k=String(key).split('~'),c=classById(k[1]);if(!c)retu
  if(k[0]==='t'){var t=zTask(c,k[2]);return t?q108E('t',c,null,t):null}
  var p=zItem(c,k[2]),s=p&&(p.steps||[]).filter(function(x){return x.id===k[3]})[0];return s?q108E('s',c,p,s):null}
 function q108Day(){var d=view.q108day;return d&&/^\d{4}-\d\d-\d\d$/.test(d)?d:iso(today())}
-function q108Hue(cl){var K=Object.keys(ZC).filter(function(k){return k!=='grey'}),n=Math.abs(String(cl.title||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7));return ZC[K[n%K.length]]}
+function q108Hue(cl){var own=q108Pair(cl&&cl.color);if(own)return own;var K=Object.keys(ZC).filter(function(k){return k!=='grey'}),n=Math.abs(String(cl.title||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7));return ZC[K[n%K.length]]}
 function q108DayName(d){var td=iso(today());return d===td?'Today':d===zAddDays(td,1)?'Tomorrow':d===zAddDays(td,-1)?'Yesterday':parseISO(d).toLocaleDateString('en-CA',{weekday:'long'})}
 var Q108SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>';
 function q108Due(o){if(!o.due)return '';var td=iso(today()),late=!o.done&&o.due<td;
@@ -28945,6 +28961,67 @@ ZM.q108jot={html:function(m){var f=q108JotFind(m);if(!f)return null;
   f.n.text=t;f.n.date=zv('q108jd')||f.n.date||iso(today());touch(f.cl);save();view.modal=null;render()},
  saveLabel:'Save',del:function(m){return 'q108jdel:'+m.cid+':'+m.clid+':'+m.nid}};
 ZACT.q108jdel=function(cid,clid,nid){var cl=zItem(classById(cid),clid);if(!cl)return;cl.jot=(cl.jot||[]).filter(function(x){return x.id!==nid});touch(cl);save();view.modal=null;render();zToast('Note deleted.')};
+// v299: client colours and logos (Jae: "I can't change the client's colour"; find a logo like Applications do and
+// match the colour to it). cl.color = a soft palette key (ZC) or a hex; cl.site = their website. A found logo is saved
+// as a small PNG in cl.logo (like an uploaded one), read through the wsrv.nl image relay, which is also what lets us
+// read its colours (the logo sites themselves don't allow that). Only the website's name is sent.
+function q108Pair(col){if(!col)return null;if(ZC[col])return ZC[col];var m=/^#([0-9a-f]{6})$/i.exec(col);if(!m)return null;
+ var h=rgb2hsl(parseInt(m[1].slice(0,2),16),parseInt(m[1].slice(2,4),16),parseInt(m[1].slice(4,6),16)),sat=Math.min(h[1],48);
+ return [hsl2hex(h[0],Math.min(sat,42),92),hsl2hex(h[0],sat,Math.max(30,Math.min(42,h[2]*.8)))]}
+var Q108COLS=['sand','peach','clay','brick','rose','lavender','mist','sage','grey'];
+function q108ColField(m,cl){var cur=m.color!=null?m.color:(cl&&cl.color)||'',lc=m.lcol!==undefined?m.lcol:(cl&&cl.lcol)||null,sw=function(v,label){var z=q108Pair(v);
+  return '<button class="q108sw'+(cur===v?' on':'')+'" data-zact="q108col:'+v+'" style="background:'+z[0]+';--sc:'+z[1]+'" aria-label="'+label+'" aria-pressed="'+(cur===v)+'" title="'+label+'"><i style="background:'+z[1]+'"></i></button>'};
+ var custom=cur&&!ZC[cur]&&cur!==lc;
+ return '<div class="field"><label>Colour</label><div class="q108sws">'+(lc?sw(lc,'Logo colour')+'<span class="q108swd"></span>':'')
+  +Q108COLS.map(function(k){return sw(k,k.charAt(0).toUpperCase()+k.slice(1))}).join('')
+  +'<label class="q108sw q108swc'+(custom?' on':'')+'" title="Any colour" style="'+(custom?'background:'+q108Pair(cur)[0]:'')+'"><input type="color" id="q108cc" value="'+(/^#/.test(cur)?cur:'#9e8b61')+'" aria-label="Any colour">'+zI('<path d="M12 5v14M5 12h14"/>',13)+'</label></div>'
+  +'<small class="q108swh">'+(cur?(cur===lc?'Matches their logo':'Used for their card and badge'):'Picked for you from their name')+(cur?' · <button class="zlink" data-zact="q108col:">Reset</button>':'')+'</small></div>'}
+ZACT.q108col=function(v){var m=view.modal;if(!m)return;q84Keep();m.color=v||'';m.colPicked=!!v;render()};
+document.addEventListener('input',function(e){var t=e.target,m=view.modal;if(!t||t.id!=='q108cc'||!m)return;q84Keep();m.color=t.value;m.colPicked=true;
+ var sw=t.parentNode;sw.classList.add('on');sw.style.background=q108Pair(t.value)[0]});
+document.addEventListener('change',function(e){var t=e.target;if(t&&t.id==='q108cc'&&view.modal)render()});
+// the main colour of a picture (skips see-through, white and near-black pixels), as a hex
+function q108ColOf(src,cb){var im=new Image();im.crossOrigin='anonymous';
+ im.onload=function(){try{var cv=document.createElement('canvas');cv.width=cv.height=32;var x=cv.getContext('2d');x.drawImage(im,0,0,32,32);var d=x.getImageData(0,0,32,32).data,R=0,G=0,B=0,W=0;
+  for(var i=0;i<d.length;i+=4){var a=d[i+3]/255;if(a<.5)continue;var h=rgb2hsl(d[i],d[i+1],d[i+2]);if(h[2]>93||h[2]<8)continue;var w=a*(0.1+h[1]/100);R+=d[i]*w;G+=d[i+1]*w;B+=d[i+2]*w;W+=w}
+  cb(W>0?'#'+[R,G,B].map(function(v){return ('0'+Math.round(v/W).toString(16)).slice(-2)}).join(''):null)}catch(er){cb(null)}};
+ im.onerror=function(){cb(null)};im.src=src}
+// which websites to try: the one typed in, a known brand, then the name as name.com / name.ca
+function q108Cands(name,site){var L=[],add=function(d){d=String(d||'').toLowerCase();if(d&&L.indexOf(d)<0)L.push(d)};
+ if(site){add(zBrandDomain('',site)||String(site).trim().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/.*$/,''));return L}
+ add(zBrandDomain(name));var sl=String(name||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]/g,'');if(sl.length>=3){add(sl+'.com');add(sl+'.ca')}return L}
+var Q108LG={};
+// a domain's logo: its big app icon if it has one, else Google's copy of its icon (16px means none). Then a 128px PNG + its colour
+function q108Logo(dom,cb){if(Q108LG[dom]!==undefined){cb(Q108LG[dom]);return}
+ var tries=['https://'+dom+'/apple-touch-icon.png','https://www.google.com/s2/favicons?domain='+encodeURIComponent(dom)+'&sz=128'],i=0;
+ var next=function(){if(i>=tries.length){Q108LG[dom]=false;cb(false);return}var u=tries[i++],im=new Image();
+  im.onload=function(){if((im.naturalWidth||0)<(i===1?57:17)){next();return}
+   var px=new Image();px.crossOrigin='anonymous';
+   px.onload=function(){var out={url:u,dom:dom};try{var cv=document.createElement('canvas');cv.width=cv.height=128;var x=cv.getContext('2d');x.drawImage(px,0,0,128,128);out.data=cv.toDataURL('image/png')}catch(er){}
+    q108ColOf(px.src,function(col){out.col=col;Q108LG[dom]=out;cb(out)})};
+   px.onerror=function(){Q108LG[dom]={url:u,dom:dom};cb(Q108LG[dom])};
+   px.src='https://wsrv.nl/?url='+encodeURIComponent(u)+'&w=128&h=128&fit=contain&output=png'};
+  im.onerror=next;im.src=u};
+ next()}
+var q108ST=0;
+function q108Search(m,force){if(!m||m.kind!=='q84client')return;var c=classById(m.cid),cl=m.clid&&zItem(c,m.clid);
+ var has=m.logo!=null?m.logo:(cl&&cl.logo)||'';if(has&&!m.lfrom&&!force)return;if(m.noauto&&!force)return;
+ var name=(document.getElementById('q84n')||{}).value||'',site=(document.getElementById('q108site')||{}).value||'';var C=q108Cands(name,site),run=++q108ST;
+ if(!C.length)return;m.lsearch=true;q108Note(m);
+ var k=0,go=function(){if(run!==q108ST||view.modal!==m)return;if(k>=C.length){m.lsearch=false;m.lmiss=!!site;if(m.lfrom){q84Keep();m.logo='';m.lfrom=null;if(!m.colPicked&&m.color===m.lcol)m.color='';m.lcol=null;q108Redraw()}else q108Note(m);return}
+  q108Logo(C[k++],function(r){if(run!==q108ST||view.modal!==m)return;if(!r){go();return}
+   q84Keep();m.lsearch=false;m.lmiss=false;m.logo=r.data||r.url;m.lfrom=r.dom;m.lcol=r.col||null;if(!m.colPicked)m.color=r.col||'';q108Redraw()})};
+ go()}
+// redraw the pop-up but keep the caret where you're typing
+function q108Redraw(){var a=document.activeElement,id=a&&a.id,ps=a&&a.selectionStart;render();if(id){var e=document.getElementById(id);if(e){e.focus();try{e.setSelectionRange(ps,ps)}catch(er){}}}}
+function q108LogoNote(m){return '<small class="q108lgn" id="q108lgn">'+(m.lsearch?'Looking for their logo…':m.lfrom?'Found on '+esc(m.lfrom)+'. Not them? Tap Remove, or type their website below.':m.lmiss?'No logo found on that website. You can add one yourself.':'')+'</small>'}
+function q108Note(m){var e=document.getElementById('q108lgn');if(e)e.outerHTML=q108LogoNote(m)}
+var q108T=null;
+document.addEventListener('input',function(e){var t=e.target,m=view.modal;if(!t||!m||m.kind!=='q84client'||(t.id!=='q84n'&&t.id!=='q108site'))return;
+ if(t.id==='q108site'){m.noauto=false;if(!m.lfrom)m.lmiss=false}clearTimeout(q108T);q108T=setTimeout(function(){q108Search(m,t.id==='q108site')},650)});
+// editing a client with no logo yet looks for one straight away
+var _q108Edit=ZACT.q84edit;
+ZACT.q84edit=function(){var r=_q108Edit.apply(this,arguments);setTimeout(function(){q108Search(view.modal)},120);return r};
 // v298: "+ Add a to-do" at the bottom of a client's to-dos opens this (the big inline box with date and Add is gone)
 ZACT.q108tnew=function(cid,clid){zOpen('q108todo',{cid:cid,clid:clid})};
 ZM.q108todo={html:function(m){var c=classById(m.cid),cl=c&&zItem(c,m.clid);if(!cl)return null;
