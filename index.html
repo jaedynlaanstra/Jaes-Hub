@@ -7347,18 +7347,17 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 }
 
 /* Mini widgets */
-.zhome .zw.zw-mini{overflow:hidden}
 .q109mini{height:100%;box-sizing:border-box;border-radius:22px;display:flex;align-items:center;gap:12px;padding:10px 16px;overflow:hidden;min-width:0}
 .q109mini button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;min-height:0;text-align:left}
 .q109fit{display:block;overflow:hidden;line-height:1.2;max-height:2.45em;min-width:0;overflow-wrap:break-word}
 .q109nd{color:#fff;padding:0}
 .q109ndb{display:flex;align-items:center;gap:12px;width:100%;height:100%;padding:10px 16px!important;box-sizing:border-box}
-.q109ndn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:40px;flex-shrink:0;line-height:1}
-.q109ndn b{font-size:28px;font-weight:500;letter-spacing:-.02em}
+.q109ndn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px;flex-shrink:0;line-height:1;padding-right:12px;border-right:1px solid rgba(255,255,255,.22);align-self:stretch}
+.q109ndn b{font-size:28px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
 .q109ndn.tdy b{font-size:17px}
 .q109ndn small{font-size:10.5px;opacity:.8;margin-top:3px;white-space:nowrap}
 .q109ndt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.q109ndt small{font-size:10.5px;opacity:.75;line-height:1.2}
+.q109ndt small{font-size:11px;opacity:.78;line-height:1.2;display:block;overflow:hidden;white-space:nowrap;min-width:0}
 .q109ndt .q109fit{font-size:14px;font-weight:500}
 .q109gpa{background:var(--card,#fff);border:1px solid color-mix(in srgb,var(--ink) 9%,transparent);padding:0}
 .q109gb{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:100%;padding:10px 16px!important;box-sizing:border-box}
@@ -28627,11 +28626,13 @@ function q99Lay(){
    if(w.parentNode!==g&&w.parentNode.parentNode!==g)return;
    if(!q99RO&&window.ResizeObserver)q99RO=new ResizeObserver(function(){clearTimeout(q99T);q99T=setTimeout(q99Lay,30)});
    if(q99RO&&!w.q99o){w.q99o=1;q99RO.observe(w)}
-   var c=w.classList,sm=c.contains('zw-small')||c.contains('zw-sq'),lg=c.contains('zw-large'),md=c.contains('zw-half');
-   var H=sm||md?U:lg?2*U+gap:0,colv=sm?'span 1':md||lg?'span '+Math.min(2,n):'1 / -1';
+   var c=w.classList,sm=c.contains('zw-small')||c.contains('zw-sq'),lg=c.contains('zw-large'),md=c.contains('zw-half'),mi=c.contains('zw-mini');
+   /* v300 (q109): Mini = half a square tall; the Hi card and Next due are two squares wide so their words fit */
+   var wide=mi&&(c.contains('zw-profile')||c.contains('zw-nextdue'));
+   var H=mi?Math.floor((U-gap)/2):sm||md?U:lg?2*U+gap:0,colv=mi?(wide?'span '+Math.min(2,n):'span 1'):sm?'span 1':md||lg?'span '+Math.min(2,n):'1 / -1';
    if(w.style.gridColumn!==colv)w.style.gridColumn=colv;
    w.style.minHeight='';
-   if(H){if(w.style.height!==H+'px')w.style.height=H+'px';c.add('q103fix');q103Fit(w,k)}
+   if(H){if(w.style.height!==H+'px')w.style.height=H+'px';c.add('q103fix');if(mi)q109MiniFit(w);else q103Fit(w,k)}
    else if(c.contains('q103fix')){w.style.height='';c.remove('q103fix');q103Fit(w,k)}
    var h=H||w.getBoundingClientRect().height/k;
    if(!h){w.style.gridRowEnd='';return}
@@ -29327,7 +29328,7 @@ function q109Mini(w,sp){
   var big=n===0?'Today':String(Math.abs(n)),unit=n===0?'':late?(Math.abs(n)===1?'day late':'days late'):(n===1?'day':'days');
   var ed=x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"';
   return '<section class="q109mini q109nd'+(late?' late':'')+'" style="background:'+bg+'"><button class="q109ndb" '+ed+' aria-label="'+esc(x.t.title)+'"><div class="q109ndn'+(n===0?' tdy':'')+'"><b>'+esc(big)+'</b>'+(unit?'<small>'+esc(unit)+'</small>':'')+'</div>'
-   +'<div class="q109ndt"><small>'+esc(classLabel(x.c))+'</small><span class="q109fit">'+esc(x.t.title)+'</span></div></button></section>';
+   +'<div class="q109ndt"><small class="q109fit2">'+esc(classLabel(x.c))+(n===0||late?'':' · '+esc(zShortDay(x.t.due)))+'</small><span class="q109fit">'+esc(x.t.title)+'</span></div></button></section>';
  }
  if(t==='gpa'){
   var a=q82All();
@@ -29343,19 +29344,10 @@ function q109Mini(w,sp){
 }
 var _q109WH=zWidgetHtml;
 zWidgetHtml=function(w,sp){if(q107Sz(w)==='mini'||w.size==='mini'){var h=q109Mini(w,sp);if(h)return h}return _q109WH.apply(this,arguments)};
-/* the grid: a Mini is one square wide (the Hi card two) and half a square tall, so two Minis stack into one Small */
-var _q109Lay=q99Lay;
-q99Lay=function(){
- var r=_q109Lay.apply(this,arguments);
- try{document.querySelectorAll('.zhome .zw.zw-mini').forEach(function(w){
-  var g=w.parentNode;if(!g||!g.style)return;var U=parseFloat(getComputedStyle(g).getPropertyValue('--q105u'))||0;if(!U)return;
-  var gap=Math.round(parseFloat(getComputedStyle(g).columnGap)||0),n=(g.style.gridTemplateColumns.match(/repeat\((\d+)/)||[0,2])[1]*1;
-  var H=Math.floor((U-gap)/2),col=w.classList.contains('zw-profile')?'span '+Math.min(2,n):'span 1';
-  if(w.style.gridColumn!==col)w.style.gridColumn=col;w.style.height=H+'px';w.classList.add('q103fix');
-  var span='span '+Math.max(1,Math.ceil((H+gap)/Q99_UNIT));if(w.style.gridRowEnd!==span)w.style.gridRowEnd=span;
-  q109Shrink(w.querySelectorAll('.q109fit'),w.classList.contains('zw-profile')?13:14,10.5,w.classList.contains('zw-nextdue')?3:2);
- })}catch(e){}
- return r};
+/* Mini words: one shared size that fits (q99Lay calls this for every Mini) */
+function q109MiniFit(w){var nd=w.classList.contains('zw-nextdue');
+ q109Shrink(w.querySelectorAll('.q109fit'),nd?15:w.classList.contains('zw-profile')?13:14,10.5,2);
+ q109Shrink(w.querySelectorAll('.q109fit2'),11,9.5,1)}
 
 /* ---------- 3. pay that really landed (it changes with overdraft, fees, hours) ---------- */
 function q109PayLast(b){
