@@ -7332,6 +7332,228 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108lgn{display:block;margin-top:6px;font-size:12px;color:var(--ink3);min-height:0}
 .q108lgn:empty{display:none}
 .q84tor{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* ===== v300 (q109): class pins, module scroll, tab line, Mini widgets, pay that landed, To do redesign, Gifts ===== */
+/* class page: pinned pills share the row evenly, all the same height; the words shrink to fit (q109Shrink) */
+.q86pins.q109pn{align-items:stretch}.q86pins.q109pn .q86pinw{align-self:center}
+.q86pins.q109pn .q86pill{flex:1 1 0;min-width:0;max-width:260px;min-height:48px;height:auto;box-sizing:border-box;padding:5px 12px;gap:8px}
+.q86pins.q109pn .q86pill>span.q20fade{flex:1 1 auto;min-width:0;overflow:hidden;line-height:1.2;text-align:left}
+@media (max-width:1240px){.q86pins.q109pn .q86pill{flex:1 0 150px;max-width:240px}}
+/* the white tab covers the panel's top line on iPad and iPhone too (the scrolling tab row used to clip it) */
+@media (max-width:980px){.q86tabs{margin-bottom:-1px;position:relative;z-index:2}.q86tab{margin-bottom:0}}
+/* a long module list scrolls inside its column (no scroll bar drawn) */
+@media (min-width:981px){
+ .q86fl .q86mods{max-height:calc(100vh - 170px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .q86fl .q86mods::-webkit-scrollbar{display:none}
+}
+
+/* Mini widgets */
+.zhome .zw.zw-mini{overflow:hidden}
+.q109mini{height:100%;box-sizing:border-box;border-radius:22px;display:flex;align-items:center;gap:12px;padding:10px 16px;overflow:hidden;min-width:0}
+.q109mini button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;min-height:0;text-align:left}
+.q109fit{display:block;overflow:hidden;line-height:1.2;max-height:2.45em;min-width:0;overflow-wrap:break-word}
+.q109nd{color:#fff;padding:0}
+.q109ndb{display:flex;align-items:center;gap:12px;width:100%;height:100%;padding:10px 16px!important;box-sizing:border-box}
+.q109ndn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:40px;flex-shrink:0;line-height:1}
+.q109ndn b{font-size:28px;font-weight:500;letter-spacing:-.02em}
+.q109ndn.tdy b{font-size:17px}
+.q109ndn small{font-size:10.5px;opacity:.8;margin-top:3px;white-space:nowrap}
+.q109ndt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.q109ndt small{font-size:10.5px;opacity:.75;line-height:1.2}
+.q109ndt .q109fit{font-size:14px;font-weight:500}
+.q109gpa{background:var(--card,#fff);border:1px solid color-mix(in srgb,var(--ink) 9%,transparent);padding:0}
+.q109gb{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:100%;padding:10px 16px!important;box-sizing:border-box}
+.q109gl{display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:500;min-width:0}
+.q109gl small{font-size:11px;font-weight:400;color:var(--ink2);line-height:1.2}
+.q109gb>b{font-size:30px;font-weight:500;letter-spacing:-.02em;color:var(--ink);flex-shrink:0}
+.q109prof{color:#fff}
+.q109av{width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);font-size:19px;font-weight:500}
+.q109av img{width:100%;height:100%;object-fit:cover}
+.q109pt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.q109pt>b{font-size:17px;font-weight:500;line-height:1.2}
+.q109tag{font-size:13px!important;opacity:.78;min-width:0;max-width:100%}
+.q109tag.add{text-decoration:underline;text-underline-offset:2px}
+/* the To do widget's quick add on the Small size */
+.q109sadd{margin:2px 0 4px}
+
+/* pay that landed */
+.q109pc{padding:0;overflow:hidden}
+.q109pl{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 22px 14px;font-size:13px;color:var(--q60m,var(--ink2));border-top:1px solid color-mix(in srgb,var(--ink) 7%,transparent);flex-wrap:wrap}
+.q109pl>span{min-width:0}
+.q109pl b{color:var(--ink);font-weight:500}
+.q109pl em,.q109ph em{font-style:normal}
+.q109pl em.lo,.q109ph em.lo{color:#a24d45}.q109pl em.hi,.q109ph em.hi{color:#5f8064}
+.q109plb{font:inherit;font-size:12.5px;font-weight:500;border-radius:999px;padding:6px 12px;border:1px solid var(--bp,#3a3631);background:var(--bp,#3a3631);color:#fff;cursor:pointer;min-height:0;white-space:nowrap}
+.q109plb.ghost{background:transparent;color:var(--ink2);border-color:color-mix(in srgb,var(--ink) 14%,transparent)}
+.q109pw .q109pl{padding:8px 0 0;font-size:12px}
+.q109ph{margin-top:16px;border-top:1px solid color-mix(in srgb,var(--ink) 8%,transparent);padding-top:12px;font-size:13px}
+.q109ph>b{display:block;font-weight:500;margin-bottom:6px}
+.q109ph>div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;color:var(--ink2)}
+.q109ph>div b{color:var(--ink);font-weight:500}
+
+/* ---------- To do page (Jae's redesign) ---------- */
+.q109page{display:flex;flex-direction:column;gap:22px;color:#2f2d29;position:relative}
+.q109page button,.q109gadd button,.q109grid button{font:inherit;min-height:0}
+.q109ov{position:fixed;inset:0;z-index:30;background:transparent}
+.q109add{background:var(--card,#fff);border:1px solid #e7e4dd;border-radius:18px;box-shadow:0 1px 2px rgba(60,50,30,.04);padding:10px 10px 10px 18px;position:relative;z-index:31}
+.q109ar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.q109dash{width:20px;height:20px;border-radius:6px;border:1.5px dashed #c9c4b8;flex-shrink:0;box-sizing:border-box}
+#q109in{flex:1 1 220px;min-width:0;border:0;background:transparent;font:inherit;font-size:16px;color:#2f2d29;padding:8px 4px;outline:none;box-shadow:none}
+#q109in::placeholder{color:#a19d93}
+.q109mw{position:relative;display:inline-flex}
+.q109sel{height:38px;border-radius:10px;background:#faf9f6;border:1px solid #e7e4dd;display:inline-flex;align-items:center;gap:8px;padding:0 12px 0 8px;font-size:14px;color:#2f2d29;cursor:pointer;max-width:220px}
+.q109sel .q109gn{white-space:nowrap;overflow:hidden;min-width:0}
+.q109sel>i{font-style:normal;font-size:10px;color:#8a857a}
+.q109dt{padding:0 12px;color:#6f6a5e}
+.q109sq{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;letter-spacing:.02em}
+.q109go{height:38px;border-radius:10px;background:#3a3631;color:#fff;border:0;padding:0 18px;font-size:14px!important;font-weight:500;cursor:pointer}
+.q109go:hover{background:#25221f}
+.q109menu{position:absolute;top:calc(100% + 6px);left:0;z-index:40;background:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(50,40,20,.14);padding:6px;width:250px;box-sizing:border-box;color:#2f2d29}
+.q109menu>button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:9px;padding:8px 10px;font-size:14px;cursor:pointer;color:#2f2d29}
+.q109menu>button:hover{background:#f6f4ef}
+.q109menu hr{border:0;border-top:1px solid #f0ede7;margin:6px 4px}
+.q109mh{font-size:12px;color:#a19d93;padding:8px 10px 4px}
+.q109gm .q109gn{flex:1;min-width:0;overflow-wrap:anywhere}
+.q109gm em{font-style:normal;font-size:12px;color:#a19d93}
+.q109gm i{font-style:normal;width:14px;color:#5f8064}
+.q109ng{display:flex;gap:6px;padding:4px}
+.q109ng input{flex:1;min-width:0;height:34px;border:1px solid #e7e4dd;border-radius:9px;padding:0 10px;font:inherit;font-size:13px;background:#faf9f6}
+.q109ng button{height:34px;border-radius:9px;border:0;background:#3a3631;color:#fff;padding:0 10px;font-size:13px;cursor:pointer;white-space:nowrap}
+.q109dp{width:276px;right:0;left:auto;padding:12px}
+.q109qd{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.q109qd button{display:flex;justify-content:space-between;align-items:center;gap:6px;border:1px solid #e7e4dd;background:#faf9f6;border-radius:10px;padding:8px 10px;font-size:13px;cursor:pointer;color:#2f2d29}
+.q109qd em{font-style:normal;font-size:12px;color:#a19d93}
+.q109calh{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 6px}
+.q109calh b{font-size:14px;font-weight:500}
+.q109calh button{width:28px;height:28px;border-radius:8px;border:0;background:none;font-size:18px;cursor:pointer;color:#6f6a5e}
+.q109calh button:hover{background:#f6f4ef}
+.q109wk,.q109days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.q109wk span{font-size:11px;color:#a19d93;padding:4px 0}
+.q109days button{height:32px;border-radius:9px;border:1px solid transparent;background:none;font-size:13px;cursor:pointer;color:#2f2d29;padding:0}
+.q109days button:hover{background:#f6f4ef}
+.q109days button.past{color:#c2bdb2}
+.q109days button.tdy{border-color:#cfcac0}
+.q109days button.on{background:#3a3631;color:#fff;border-color:#3a3631}
+.q109rm{display:block;margin:8px auto 0;background:none;border:0;color:#a24d45;font-size:13px;cursor:pointer}
+/* due status colours */
+.q109d-late{background:#f6e4e1!important;color:#a24d45!important;border-color:#f6e4e1!important}
+.q109d-today,.q109d-week{background:#f4ead6!important;color:#8a6726!important;border-color:#f4ead6!important}
+.q109d-later{background:#eeebe4!important;color:#6f6a5e!important;border-color:#eeebe4!important}
+/* toolbar */
+.q109bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.q109bar>span{font-size:14px;color:#6f6a5e}
+.q109seg{display:inline-flex;background:#e9e6df;border-radius:10px;padding:3px;gap:2px}
+.q109seg button{border:0;background:none;border-radius:8px;padding:6px 14px;font-size:13px;color:#6f6a5e;cursor:pointer}
+.q109seg button.on{background:#fff;color:#2f2d29;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* list cards */
+.q109grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(max(300px,calc(50% - 8px)),1fr));gap:16px;align-items:start}
+.q109card{background:var(--card,#fff);border:1px solid #e7e4dd;border-radius:18px;position:relative;z-index:1;min-width:0}
+.q109card.up{z-index:35}
+.q109card.q109focus{box-shadow:0 0 0 2px #cfcac0}
+.q109ch{display:flex;align-items:center;gap:6px;padding:11px 10px 11px 14px;border-radius:17px 17px 0 0}
+.q109cn{flex:1;min-width:0;font-size:15px;font-weight:500;overflow-wrap:anywhere;line-height:1.3}
+.q109nmi{flex:1;min-width:0;font:inherit;font-size:15px;font-weight:500;border:1px solid rgba(0,0,0,.08);border-radius:8px;padding:4px 8px;background:rgba(255,255,255,.8);outline:none}
+.q109pill{font-size:11px;background:rgba(255,255,255,.7);border-radius:999px;padding:2px 8px;white-space:nowrap;flex-shrink:0}
+.q109pill.q109cnt{font-size:12px}
+.q109pill.q109late{color:#a24d45;background:#fff}
+.q109ib{width:26px;height:26px;border-radius:8px;border:0;background:transparent;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;padding:0}
+.q109ib:hover{background:rgba(255,255,255,.7)}
+.q109lm{width:212px;left:auto;right:0}
+.q109red{color:#a24d45!important}
+.q109sws{display:flex;flex-wrap:wrap;gap:6px;padding:4px 8px 6px}
+.q109sw{width:24px;height:24px;border-radius:50%;border:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;box-shadow:0 0 0 2px #fff,0 0 0 3.5px transparent;position:relative}
+.q109sw.on{box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--r)}
+.q109sw i{width:7px;height:7px;border-radius:50%}
+.q109sw.any{border:1.5px dashed #c9c4b8;background:#fff;color:#a19d93;font-size:14px;box-sizing:border-box;overflow:hidden}
+.q109sw.any input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;border:0;padding:0}
+.q109cb{padding:4px 0 6px}
+.q109row{display:flex;align-items:flex-start;gap:10px;padding:8px 14px;transition:opacity .2s}
+.q109row:hover{background:rgba(0,0,0,.025)}
+.q109ck{width:20px;height:20px;border-radius:6px;border:1.5px solid #cfcac0;background:#fff;flex-shrink:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:#fff;padding:0;margin-top:0;box-sizing:border-box}
+.q109ck.on,.q109ck.y{background:#8fae94;border-color:#8fae94}
+.q109row.pend{opacity:.6}
+.q109row.pend .q109tt,.q109row.y .q109tt{text-decoration:line-through;color:#a19d93}
+.q109rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.q109tt{background:none;border:0;padding:0;text-align:left;font-size:14px;line-height:1.35;color:#2f2d29;cursor:pointer;overflow-wrap:anywhere;white-space:normal}
+.q109tt em{font-style:normal;color:#8a857a;font-size:13px}
+.q109meta{display:flex;flex-wrap:wrap;gap:6px}
+.q109lk{display:inline-flex;align-items:center;gap:5px;font-size:11px;border:1px solid #e7e4dd;border-radius:5px;padding:1px 6px;color:#6f6a5e;text-decoration:none;max-width:100%}
+.q109lk img,.q109lk .fi,.q109lk .favtile,.q109lk svg{width:12px!important;height:12px!important;font-size:8px!important;flex-shrink:0}
+.q109lk span{overflow-wrap:anywhere}
+.q109gchip{font-size:11px;border-radius:5px;padding:1px 6px}
+.q109due{font-size:11px;border-radius:5px;padding:2px 6px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.q109empty{font-size:13px;color:#a19d93;padding:8px 14px;margin:0}
+.q109dr{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .4s cubic-bezier(.4,0,.2,1),opacity .3s ease}
+.q109dr>.q109drin{overflow:hidden;min-height:0}
+.q109card.ex .q109dr{grid-template-rows:1fr;opacity:1}
+.q109foot{display:flex;justify-content:flex-end;padding:2px 14px 4px}
+.q109more{display:inline-flex;align-items:center;gap:4px;background:none;border:0;font-size:12px!important;color:#6f6a5e;cursor:pointer;padding:4px 0}
+.q109more i{display:inline-flex;transition:transform .2s}
+.q109card.ex .q109more i{transform:rotate(180deg)}
+.q109inl{padding:6px 14px}
+.q109inl input{width:100%;box-sizing:border-box;height:34px;border:1px solid #e7e4dd;border-radius:9px;padding:0 10px;font:inherit;font-size:14px;background:#faf9f6;outline:none}
+.q109er{display:flex;gap:8px;align-items:center;padding:5px 14px}
+.q109er input{flex:1;min-width:0;height:32px;border:1px solid #e7e4dd;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline:none}
+.q109x{width:28px;height:28px;border-radius:8px;border:0;background:#f6e4e1;color:#a24d45;font-size:16px;cursor:pointer;flex-shrink:0;padding:0;line-height:1}
+.q109doneed{display:block;width:calc(100% - 28px);margin:8px 14px 4px;height:36px;border:0;border-radius:10px;font-size:14px!important;font-weight:500;cursor:pointer}
+/* Coming up */
+.q109up{border:1px solid #e4e1d9;border-radius:18px;padding:14px 16px;background:var(--card,#fff)}
+.q109strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:6px}
+.q109tile{border-radius:12px;padding:9px 10px;border:1px solid transparent;background:transparent;display:flex;flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;color:#2f2d29;text-align:left}
+.q109tile:hover{background:#f6f4ef}
+.q109tile small{font-size:11px;color:inherit;opacity:.8}
+.q109tile b{font-size:18px;font-weight:500}
+.q109tile>span{display:flex;gap:3px;min-height:6px}
+.q109tile>span i{width:6px;height:6px;border-radius:50%}
+.q109tile.tdy{border-color:#cfcac0}
+.q109tile.late{background:#f6e4e1;color:#a24d45}
+.q109tile.on{background:#3a3631;color:#fff;border-color:#3a3631}
+.q109uh{font-size:15px;font-weight:500;margin:16px 0 4px;padding:0 0 0 0}
+.q109up .q109row{padding-left:0;padding-right:0}
+/* Done */
+.q109done{background:#f8f7f3;border:1px solid #e7e4dd;border-radius:18px}
+.q109dh{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:12px 16px;cursor:pointer;text-align:left;color:#2f2d29}
+.q109dck{width:28px;height:28px;border-radius:8px;background:#e3ecdf;color:#5f8064;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.q109dt2{flex:1;display:flex;flex-direction:column}
+.q109dt2 b{font-size:15px;font-weight:500}
+.q109dt2 small{font-size:12px;color:#8a857a}
+.q109dh>i{display:inline-flex;color:#8a857a;transition:transform .2s}
+.q109done.open .q109dh>i{transform:rotate(180deg)}
+.q109db{padding:0 0 10px}
+.q109clr{display:block;margin:6px 16px 0 auto;background:none;border:0;color:#8a857a;font-size:13px!important;cursor:pointer}
+@media (max-width:640px){
+ .q109add{padding:10px}
+ #q109in{flex:1 1 calc(100% - 40px)}
+ .q109ar>.q109mw{flex:1 1 30%;min-width:0}
+ .q109sel{width:100%;max-width:none;height:auto;min-height:38px;padding-top:4px;padding-bottom:4px}
+ .q109sel .q109gn{white-space:normal;overflow-wrap:anywhere;line-height:1.15;text-align:left;font-size:13px}
+ .q109go{flex:0 0 auto}
+ .q109grid{grid-template-columns:minmax(0,1fr)}
+ .q109strip{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .q109tile{padding:8px}
+ .q109dp{right:auto;left:auto}
+ .q109ar>.q109mw:nth-of-type(2) .q109dp{right:0}
+}
+
+/* ---------- Gifts (Shopping page) ---------- */
+.q109gadd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card,#fff);border:1px solid #e7e4dd;border-radius:18px;padding:10px;margin-bottom:18px}
+.q109gadd input{flex:1 1 160px;min-width:0;height:40px;border:1px solid #e7e4dd;border-radius:10px;padding:0 12px;font:inherit;font-size:15px;background:#faf9f6}
+.q109gadd #q109gi{flex:2 1 220px}
+.q109gempty{text-align:center;padding:36px 20px;color:#8a857a;background:var(--card,#fff);border:1px solid #e7e4dd;border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.q109gempty b{color:#2f2d29;font-weight:500;font-size:16px}
+.q109gempty p{margin:0;max-width:380px;font-size:14px;line-height:1.5}
+.q109gempty+*,.q109gadd+.q109bar{margin-top:0}
+.q109gadd~.q109bar{margin-bottom:14px}
+.q109gc .q109sq{width:26px;height:26px;border-radius:8px;font-size:11px}
+.q109gr{display:flex;align-items:flex-start;gap:10px;padding:9px 10px 9px 14px}
+.q109gr .q109ck{border-radius:50%}
+.q109gr.y .q109tt{text-decoration:line-through;color:#a19d93}
+.q109gr .q109ib{color:#8a857a;margin-top:-3px}
+.q109gr .q109ib:hover{background:#f6f4ef}
+.q109gnote{font-size:12px;color:#8a857a}
+.q109gls{display:flex;flex-direction:column;gap:6px}
+.q109glr{display:flex;gap:6px;align-items:center}
+.q109glr input{flex:1;min-width:0}
+.q109gls .zlink{align-self:flex-start}
 </style>
 </head>
 <body>
@@ -7641,7 +7863,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v299';
+var BUILD='v300';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -22017,7 +22239,7 @@ zBudgetPage=function(c){
  if(tab===0){
   var recent=q60Card('Recent transactions',rec.length?q60Link('See all '+rec.length+' ›','q60tab:'+c.id+':1'):'',rec.length?rec.slice(0,4).map(function(x){return q60Tx(c,x,catBy)}).join(''):'<p class="q60e">Nothing added yet. Tap + Spending after you buy something.</p>');
   var topc=q60Card('Top categories',q60Link('All categories ›','q60tab:'+c.id+':2'),b.cats.length?catsSorted.slice(0,4).map(function(x){return q60CatRow(c,b,x)}).join(''):'<p class="q60e">Add categories with a monthly limit, like groceries or eating out. '+q60Link('+ Category','catnew:'+c.id)+'</p>');
-  var pay='<section class="q60c q60pay"'+(nx?' data-zact="payedit:'+c.id+':'+nx.p.id+'" role="button" tabindex="0"':'')+'><b>'+esc(nx&&nx.p.title||'Pay day')+'</b>'+(nx?'<span>'+payTxt()+'</span>':q60Link('+ Add pay day','paynew:'+c.id))+'</section>';
+  var pay='<div class="q60c q109pc"><section class="q60pay"'+(nx?' data-zact="payedit:'+c.id+':'+nx.p.id+'" role="button" tabindex="0"':'')+'><b>'+esc(nx&&nx.p.title||'Pay day')+'</b>'+(nx?'<span>'+payTxt()+'</span>':q60Link('+ Add pay day','paynew:'+c.id))+'</section>'+(nx?q109PayLine(c,b):'')+'</div>';
   var nb=unpaid.filter(function(o){return o.d>=td||!o.later}).slice(0,3);
   var nbills=q60Card('Next bills',q60Link('All ›','q60tab:'+c.id+':3'),nb.length?nb.map(function(o){return '<div class="q60nb"><button class="q60ck" data-zact="billpaid:'+c.id+':'+o.x.id+':'+o.d+'" aria-label="Mark '+esc(o.x.title)+' paid"></button>'+zLogo(o.x.title,30,'wallet')+'<button class="q60nbt" data-zact="billedit:'+c.id+':'+o.x.id+'"><b>'+esc(o.x.title)+'</b>'+q60BillLine(o)+'</button><span class="q60amt">'+money(o.x.amount)+'</span></div>'}).join(''):'<p class="q60e">'+(b.bills.length?'All paid. Nice.':'No bills yet. '+q60Link('+ Bill','billnew:'+c.id))+'</p>');
   var goal=q60Card(b.goals.length>1?'Goals':'Goal',b.goals.length?q60Link('All ›','q60tab:'+c.id+':4'):'',b.goals.length?goalCard(b.goals[0],false):'<p class="q60e">Save toward something. '+q60Link('+ Add a goal','goalnew:'+c.id)+'</p>');
@@ -29039,6 +29261,471 @@ ZM.q108todo={html:function(m){var c=classById(m.cid),cl=c&&zItem(c,m.clid);if(!c
 ZACT.q108osave=function(){var m=view.modal;if(m&&m.kind==='q108todo')ZM.q108todo.save(m)};
 ZACT.q108go=function(clid){var pg=q108Page();if(!pg)return;go('class',pg.id);if(clid)ZACT.q108jump(clid)};
 
+/* ===== v300: To do page redesign, Daily tasks, Mini widgets, pay that landed, Gifts, class page fixes (prefix q109) =====
+   Jae: (1) pinned pills beside the class tabs were all different sizes: now they share the space evenly, the
+   same height, and the words shrink (all by the same amount) until every one fits; (2) Next due, GPA and the
+   "Hi, Jae" card were too big: new Mini size (half a square tall); (3) his sister's pay is different each time
+   (overdraft etc.): "Log what landed" on the pay day card records the real amount as money in; (4)+(6) every
+   To do page gets a "Daily tasks" list, and the To do widget shows whichever list you pick (Daily tasks by
+   default) with a quick add; (5) Gifts tab on the Shopping page (ideas per person, several links, tick when
+   bought); (7) long module lists on the class page scroll inside their column (no scroll bar shown); (8) the
+   thin line under the white class tab on iPad/iPhone; (9) the To do page redesign from Jae's design file. */
+
+/* ---------- shared bits ---------- */
+function q109Rgb(h){h=String(h||'').replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];var n=parseInt(h,16)||0;return [n>>16&255,n>>8&255,n&255]}
+function q109Mix(a,b,t){var A=q109Rgb(a),B=q109Rgb(b);return '#'+[0,1,2].map(function(i){var v=Math.round(A[i]+(B[i]-A[i])*t).toString(16);return v.length<2?'0'+v:v}).join('')}
+function q109Get(k,d){try{var v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}}
+function q109Set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+var Q109CAL='<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/>';
+var Q109CHEV='<path d="m6 9 6 6 6-6"/>';
+var Q109GIFT='<rect x="4" y="9" width="16" height="11" rx="2"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1.5S9 9 12 9zM12 9c2-4 6-4 6-1.5S15 9 12 9z"/>';
+ZIC.gift=Q109GIFT;
+
+/* shrink words until they fit: every element in the set gets the SAME size (so a row of pills matches).
+   Tries one line first; if even the smallest size can't fit on one line, allows two lines. */
+function q109Shrink(els,max,min,lines){
+ els=[].slice.call(els||[]).filter(function(e){return e.offsetParent});if(!els.length)return;lines=lines===true?2:lines||1;
+ var fits=function(){return els.every(function(e){return e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1})};
+ var go=function(n,lo){els.forEach(function(e){e.style.whiteSpace=n>1?'normal':'nowrap';e.style.maxHeight=(n*1.2+.05)+'em';e.setAttribute('data-q109l',n)});
+  for(var f=n>2?Math.min(max,12.5):max;f>=lo;f-=.5){els.forEach(function(e){e.style.fontSize=f+'px'});if(fits())return true}return false};
+ for(var n=1;n<=lines;n++)if(go(n,n===1?Math.max(min,12):min))return;
+}
+
+/* ---------- 1. pinned pills on the class page: same size, words shrink to fit ---------- */
+function q109Pins(){
+ document.querySelectorAll('.q86pins').forEach(function(row){
+  var P=row.querySelectorAll('.q86pill');row.classList.toggle('q109pn',P.length>0);row.style.setProperty('--q109n',P.length||1);
+  q109Shrink(row.querySelectorAll('.q86pill>span.q20fade'),14,11.5,3);
+ });
+}
+
+/* ---------- 2. Mini widgets: Next due, GPA and the "Hi" card, half a square tall ---------- */
+['nextdue','gpa','profile'].forEach(function(t){if(Q107SZ[t]&&Q107SZ[t].indexOf('mini')<0)Q107SZ[t].unshift('mini')});
+ZW_SIZES=[['mini','Mini']].concat(ZW_SIZES.filter(function(s){return s[0]!=='mini'}));
+var _q109Size=zwSize;
+zwSize=function(w){if(w&&w.size==='mini'){var L=zwSizes(w.type);if(L.indexOf('mini')>-1)return 'mini';return L.indexOf('small')>-1?'small':_q109Size(Object.assign({},w,{size:'small'}))}return _q109Size(w)};
+function q109Mini(w,sp){
+ var t=w.type;
+ if(t==='nextdue'){
+  var td=iso(today()),L=zOpenTasks().filter(function(x){return x.t.due}).sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0}),x=L[0];
+  var bg=zNdColor(x);
+  if(!x)return '<section class="q109mini q109nd" style="background:'+bg+'"><div class="q109ndn"><b>✓</b></div><div class="q109ndt"><small>Next due</small><span class="q109fit">Nothing due. Nice.</span></div></section>';
+  var cd=cpCountdown(x.t.due),n=cd.n,late=n<0;
+  var big=n===0?'Today':String(Math.abs(n)),unit=n===0?'':late?(Math.abs(n)===1?'day late':'days late'):(n===1?'day':'days');
+  var ed=x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"';
+  return '<section class="q109mini q109nd'+(late?' late':'')+'" style="background:'+bg+'"><button class="q109ndb" '+ed+' aria-label="'+esc(x.t.title)+'"><div class="q109ndn'+(n===0?' tdy':'')+'"><b>'+esc(big)+'</b>'+(unit?'<small>'+esc(unit)+'</small>':'')+'</div>'
+   +'<div class="q109ndt"><small>'+esc(classLabel(x.c))+'</small><span class="q109fit">'+esc(x.t.title)+'</span></div></button></section>';
+ }
+ if(t==='gpa'){
+  var a=q82All();
+  return '<section class="q109mini q109gpa"><button class="q109gb" data-zact="q82open"><span class="q109gl">GPA<small>'+(a.gpa==null?'Tap to add grades':q82Hon(a.gpa)?'Dean’s Honour Roll':'Cumulative')+'</small></span><b>'+q82Fmt(a.gpa)+'</b></button></section>';
+ }
+ if(t==='profile'){
+  var nm=firstName();
+  return '<section class="q109mini q109prof" style="background:'+q18Deep()+'"><label class="q109av" title="Change your picture"><input type="file" accept="image/*" data-photo="me" style="display:none">'
+   +(S.avatar?'<img src="'+S.avatar+'" alt="You">':'<span>'+(q91Unnamed()?zI(Q91PERSON,18):esc(String(nm).charAt(0).toUpperCase()))+'</span>')+'</label>'
+   +'<div class="q109pt"><b>'+(q91Unnamed()?'Hi there!':'Hi, '+esc(nm)+'!')+'</b><button class="q109tag'+(S.tagline?'':' add')+'" data-zact="z6me"><span class="q109fit">'+esc(S.tagline||'Add a line about you')+'</span></button></div></section>';
+ }
+ return null;
+}
+var _q109WH=zWidgetHtml;
+zWidgetHtml=function(w,sp){if(q107Sz(w)==='mini'||w.size==='mini'){var h=q109Mini(w,sp);if(h)return h}return _q109WH.apply(this,arguments)};
+/* the grid: a Mini is one square wide (the Hi card two) and half a square tall, so two Minis stack into one Small */
+var _q109Lay=q99Lay;
+q99Lay=function(){
+ var r=_q109Lay.apply(this,arguments);
+ try{document.querySelectorAll('.zhome .zw.zw-mini').forEach(function(w){
+  var g=w.parentNode;if(!g||!g.style)return;var U=parseFloat(getComputedStyle(g).getPropertyValue('--q105u'))||0;if(!U)return;
+  var gap=Math.round(parseFloat(getComputedStyle(g).columnGap)||0),n=(g.style.gridTemplateColumns.match(/repeat\((\d+)/)||[0,2])[1]*1;
+  var H=Math.floor((U-gap)/2),col=w.classList.contains('zw-profile')?'span '+Math.min(2,n):'span 1';
+  if(w.style.gridColumn!==col)w.style.gridColumn=col;w.style.height=H+'px';w.classList.add('q103fix');
+  var span='span '+Math.max(1,Math.ceil((H+gap)/Q99_UNIT));if(w.style.gridRowEnd!==span)w.style.gridRowEnd=span;
+  q109Shrink(w.querySelectorAll('.q109fit'),w.classList.contains('zw-profile')?13:14,10.5,w.classList.contains('zw-nextdue')?3:2);
+ })}catch(e){}
+ return r};
+
+/* ---------- 3. pay that really landed (it changes with overdraft, fees, hours) ---------- */
+function q109PayLast(b){
+ var nx=zPayNext(b);if(!nx)return null;var td=iso(today());
+ var d=nx.d===td?nx.d:nx.prev;if(!d||d>td)return null;return {p:nx.p,d:d,nx:nx};
+}
+function q109PayGot(c,p,d){var x=zItem(c,'pl-'+p.id+'-'+d);return x?+x.amount||0:null}
+function q109PayLine(c,b){
+ var L=q109PayLast(b);if(!L)return '';
+ var got=q109PayGot(c,L.p,L.d),day=zShortDay(L.d),us=+L.p.amount||0;
+ if(got==null)return '<div class="q109pl"><span>Last pay '+esc(day)+(us?' · usually '+money(us):'')+'</span><button class="q109plb" data-zact="q109pay:'+c.id+':'+L.p.id+':'+L.d+'">Log what landed</button></div>';
+ var diff=us?Math.round((got-us)*100)/100:0;
+ return '<div class="q109pl"><span><b>'+money(got)+'</b> landed '+esc(day)+(diff?' <em class="'+(diff<0?'lo':'hi')+'">'+(diff<0?money(-diff)+' less':money(diff)+' more')+' than usual</em>':'')+'</span><button class="q109plb ghost" data-zact="q109pay:'+c.id+':'+L.p.id+':'+L.d+'">Edit</button></div>';
+}
+ZACT.q109pay=function(cid,pid,d){zOpen('q109pay',{cid:cid,pid:pid,d:d})};
+ZM.q109pay={html:function(m){
+ var c=classById(m.cid),p=c&&zItem(c,m.pid);if(!p)return null;
+ var got=q109PayGot(c,p,m.d),x=zItem(c,'pl-'+p.id+'-'+m.d),us=+p.amount||0;
+ var hist=(c.items||[]).filter(function(i){return i.t==='spend'&&i.q109pay===p.id&&i.id!=='pl-'+p.id+'-'+m.d}).sort(function(a,z){return a.date<z.date?1:-1}).slice(0,5);
+ return '<h3>What landed in your account?</h3><p class="hint" style="margin:-4px 0 14px">'+esc(p.title||'Pay day')+' on '+esc(parseISO(m.d).toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}))+'. Type the amount that really came in (after overdraft, fees or fewer hours). It counts as money in for that month.</p>'
+  +'<div class="zfrow"><div class="field"><label for="q109p1">Amount that landed ($)</label><input id="q109p1" type="number" min="0" step="0.01" inputmode="decimal" value="'+esc(got!=null?got:(us||''))+'"></div>'
+  +'<div class="field"><label for="q109p2">Why it was different (optional)</label><input id="q109p2" value="'+esc(x&&x.note||'')+'" placeholder="Overdraft fee"></div></div>'
+  +(us?'<p class="hint" style="margin:2px 0 0">Your usual pay is '+money(us)+'.</p>':'')
+  +(hist.length?'<div class="q109ph"><b>Recent pays</b>'+hist.map(function(h){var df=us?h.amount-us:0;return '<div><span>'+esc(zShortDay(h.date))+(h.note?' · '+esc(h.note):'')+'</span><b>'+money(h.amount)+(df?' <em class="'+(df<0?'lo':'hi')+'">'+(df<0?'−':'+')+money(Math.abs(df))+'</em>':'')+'</b></div>'}).join('')+'</div>':'');
+},save:function(m){
+ var c=classById(m.cid),p=c&&zItem(c,m.pid);if(!p)return;var a=parseFloat(zv('q109p1'));if(!(a>=0))return;
+ var id='pl-'+p.id+'-'+m.d,x=zItem(c,id);if(!x){x={id:id,t:'spend'};c.items.push(x)}
+ x.title=p.title&&p.title!=='Pay day'?p.title:'Paycheque';x.amount=Math.round(a*100)/100;x.income=true;x.date=m.d;x.cat='';x.q109pay=p.id;x.note=zv('q109p2')||'';
+ touch(x);save();view.modal=null;render();
+},del:function(m){var c=classById(m.cid);return c&&zItem(c,'pl-'+m.pid+'-'+m.d)?'q109paydel:'+m.cid+':'+m.pid+':'+m.d:''}};
+ZACT.q109paydel=function(cid,pid,d){var c=classById(cid);if(!c)return;c.items=c.items.filter(function(i){return i.id!=='pl-'+pid+'-'+d});save();view.modal=null;render()};
+/* the Pay day card on the Budget page and the Pay day widget show the line */
+var _q109PayCard=zPayCard;
+zPayCard=function(c,b,compact){var h=_q109PayCard.apply(this,arguments),l=q109PayLine(c,b);if(!l)return h;
+ return '<div class="q109pw">'+h+l+'</div>'};
+
+/* ---------- 4 + 6. Daily tasks on every To do page; the To do widget shows the list you pick ---------- */
+function q109DailyId(c){return 'daily-'+c.id}
+function q109Daily(c){var id=q109DailyId(c);return (c.sections||[]).filter(function(s){return s.id===id})[0]||null}
+function q109EnsureDaily(){
+ var made=false;(S.classes||[]).forEach(function(c){
+  if(c.kind!=='todo'||c.q109nd||q109Daily(c))return;
+  if(S.deleted&&Object.keys(S.deleted).some(function(k){return k.indexOf(q109DailyId(c))>-1}))return;
+  c.sections=c.sections||[];var lo=c.sections.reduce(function(m,s){return Math.min(m,s.ord||0)},0);
+  /* an old time stamp: a rename, colour change or removal made on any other device always wins over this default */
+  c.sections.push({id:q109DailyId(c),name:'Daily tasks',ord:lo-1,pin:true,color:'sage',q109daily:1,savedAt:'2000-01-01T00:00:00.000Z'});made=true;
+ });
+ return made;
+}
+function q109TodoPages(){var sp=curSpace(),L=(S.classes||[]).filter(function(c){return c.kind==='todo'});var rank=function(c){var p=pageSpace(c);return p===sp?0:p==='personal'?1:2};return L.slice().sort(function(a,b){return rank(a)-rank(b)})}
+/* which page and list a widget shows: w.list = "pageId~listId" ("all" = every task on the page) */
+function q109WList(w,sp){
+ var P=q109TodoPages();if(!P.length)return null;
+ var v=String(w.list||''),pid=v.split('~')[0],lid=v.split('~')[1]||'';
+ var c=P.filter(function(p){return p.id===pid})[0]||firstPage(sp,'todo')||P[0];
+ if(!c)return null;if(!v||c.id!==pid)lid=q109Daily(c)?q109DailyId(c):'all';
+ var s=lid==='all'?null:(c.sections||[]).filter(function(x){return x.id===lid})[0];
+ if(lid!=='all'&&!s)lid='all';
+ var T=(c.tasks||[]).filter(function(t){return lid==='all'||t.sec===lid});
+ return {c:c,s:s,lid:lid,pc:Object.assign({},c,{tasks:T,name:s?s.name:c.name})};
+}
+var _q109Todo=q21Todo;
+q21Todo=function(w,sp){
+ var r=q109WList(w,sp);if(!r)return _q109Todo(w,sp);
+ var fp=firstPage,h;firstPage=function(s,k){return k==='todo'?r.pc:fp.apply(this,arguments)};
+ try{h=_q109Todo(w,sp)}finally{firstPage=fp}
+ if(!h)return h;
+ var wid=String(w.id).replace(/:/g,'~'),daily=r.s&&r.s.q109daily;
+ var inp='<input id="q109w-'+wid+'" data-zenter="q109wadd:'+wid+'" placeholder="'+(q107Sz(w)==='small'?'Add':daily?'Add something for today':'New task')+'" autocomplete="off" aria-label="Add a task">';
+ h=h.replace(/<input id="zadd-[^"]*" data-zenter="taskadd:[^"]*"[^>]*>/,inp);
+ /* the small list gets a quick add too */
+ if(h.indexOf('q109w-')<0&&/q21td sq q103tl/.test(h))h=h.replace(/(<div class="q21list">)/,'<label class="q20add q21add q109sadd"><span class="q20plus">'+zI(ZIC.plus,12)+'</span>'+inp+'</label>$1');
+ return h.replace('data-open="'+r.c.id+'"','data-open="'+r.c.id+'" data-q109grp="'+(r.s?r.s.id:'')+'"');
+};
+Q20.todo=q21Todo;
+WDEF.todo.sp='all';
+ZACT.q109wadd=function(wid){
+ wid=String(wid).replace(/~/g,':');var w=homeWidgets(curSpace()).filter(function(x){return x.id===wid})[0];if(!w)return;
+ var r=q109WList(w,curSpace());if(!r)return;var inp=document.getElementById('q109w-'+String(wid).replace(/:/g,'~')),t=inp&&inp.value.trim();if(!t)return;
+ var x=touch({id:uid(),title:t,due:r.s&&r.s.q109daily?iso(today()):'',done:false});if(r.s)x.sec=r.s.id;
+ r.c.tasks.push(x);save();render();
+ setTimeout(function(){var i=document.getElementById('q109w-'+String(wid).replace(/:/g,'~'));if(i)i.focus()},30);
+};
+/* tapping the widget's title opens that list on the To do page */
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-q109grp]');if(!b)return;var g=b.getAttribute('data-q109grp');if(g){view.q109=view.q109||{};view.q109.mode='lists';view.q109.focus=g}},true);
+/* the widget menu: pick which list it shows */
+var _q109Menu=ZM.zwmenu.html;
+ZM.zwmenu.html=function(m){
+ var h=_q109Menu(m);if(!h)return h;var sp=curSpace(),w=homeWidgets(sp).filter(function(x){return x.id===m.wid})[0];if(!w||w.type!=='todo')return h;
+ var r=q109WList(w,sp),P=q109TodoPages();if(!r)return h;
+ var opts=P.map(function(c){var ps=pageSpace(c)||'',lab=P.length>1?(ps?ps.charAt(0).toUpperCase()+ps.slice(1)+' · ':'')+c.name:c.name;
+  return '<optgroup label="'+esc(lab)+'">'+zSecs(c).slice().sort(function(a,b){return (b.q109daily?1:0)-(a.q109daily?1:0)}).map(function(s){return '<option value="'+c.id+'~'+s.id+'"'+(r.c.id===c.id&&r.lid===s.id?' selected':'')+'>'+esc(s.name)+'</option>'}).join('')
+   +'<option value="'+c.id+'~all"'+(r.c.id===c.id&&r.lid==='all'?' selected':'')+'>Everything on '+esc(c.name)+'</option></optgroup>'}).join('');
+ var field='<div class="field"><label for="q109wl">Which list</label><select id="q109wl" data-q109wl="'+esc(w.id)+'">'+opts+'</select></div>';
+ var i=h.indexOf('<div class="field"><label>Size</label>');
+ return i>-1?h.slice(0,i)+field+h.slice(i):h+field;
+};
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;var id=t.getAttribute('data-q109wl');if(!id)return;ZACT.wset(id,'list',t.value)});
+/* a removed Daily tasks list stays removed (on every device) */
+var _q109SecDel=ZACT.secdel;
+ZACT.secdel=function(cid,sid){var c=classById(cid);var r=_q109SecDel.apply(this,arguments);
+ if(c&&sid===q109DailyId(c)&&!q109Daily(c)){c.q109nd=1;touch(c);save()}return r};
+
+/* ---------- 9. the To do page (Jae's redesign) ---------- */
+function q109V(){view.q109=view.q109||{};return view.q109}
+function q109Abbr(n){var w=String(n||'').trim().split(/\s+/).filter(Boolean);return ((w[0]||'?').charAt(0)+(w[1]?w[1].charAt(0):'')).toUpperCase()}
+function q109WeekEnd(td){var d=parseISO(td);return zAddDays(td,(7-d.getDay())%7)}
+function q109Status(due,td){if(!due)return 'none';if(due<td)return 'late';if(due===td)return 'today';if(due<=q109WeekEnd(td))return 'week';return 'later'}
+function q109Fmt(k,o){return parseISO(k).toLocaleDateString('en-US',o).replace(/\./g,'')}
+function q109DueLab(due,td){if(due===td)return 'Today';if(due===zAddDays(td,1))return 'Tomorrow';var s=q109Fmt(due,{month:'short',day:'numeric'});return due<td?'Late · '+s:s}
+function q109Col(s){
+ if(!s)return ['#ecebe6','#77746b'];var v=s.color;
+ if(v&&/^#[0-9a-f]{6}$/i.test(v))return [q109Mix(v,'#ffffff',.8),q109Mix(v,'#1e1e1e',.35)];
+ return ZC[v&&ZC[v]?v:zHueOf(s.name)]||ZC.grey;
+}
+function q109Groups(c){
+ var S2=zSecs(c).slice().sort(function(a,b){return (b.pin?1:0)-(a.pin?1:0)});
+ return S2;
+}
+function q109GroupOf(c,t){var ids={};zSecs(c).forEach(function(s){ids[s.id]=s});return t.sec&&ids[t.sec]?ids[t.sec]:null}
+function q109Ck(c,t,pend){return '<button class="q109ck'+(pend?' on':'')+'" data-q109tick="'+c.id+'|'+t.id+'" aria-label="'+(pend?'Undo':'Mark '+esc(t.title)+' done')+'">'+(pend?'✓':'')+'</button>'}
+function q109Row(c,t,td,o){
+ o=o||{};var V=q109V(),pend=!!(V.pend&&V.pend[t.id]),st=q109Status(t.due,td),g=o.group?q109GroupOf(c,t):null,gc=g?q109Col(g):null;
+ var chip=t.due&&(!o.noDue)?'<span class="q109due q109d-'+st+'">'+esc(q109DueLab(t.due,td))+'</span>':'';
+ var meta=(t.link?'<a class="q109lk" href="'+esc(t.link)+'" target="_blank" rel="noopener">↗ '+esc(t.linkName||(function(){try{return new URL(t.link).hostname.replace(/^www\./,'')}catch(e){return 'Link'}})())+'</a>':'')
+  +(g?'<span class="q109gchip" style="background:'+gc[0]+';color:'+gc[1]+'">'+esc(g.name)+'</span>':'');
+ return '<div class="q109row'+(pend?' pend':'')+'" data-q109row="'+t.id+'">'+q109Ck(c,t,pend)
+  +'<div class="q109rt"><button class="q109tt" data-zact="taskedit:'+c.id+':'+t.id+'">'+esc(t.title)+'</button>'+(meta?'<div class="q109meta">'+meta+'</div>':'')+'</div>'+chip+'</div>';
+}
+function q109Card(c,s,L,td){
+ var V=q109V(),key=s?s.id:'none',col=q109Col(s),ex=!!(V.ex&&V.ex[c.id+'|'+key]),ed=V.edit===c.id+'|'+key,add=V.adding===c.id+'|'+key,menu=V.menu==='list:'+key;
+ var late=L.filter(function(t){return t.due&&t.due<td}).length,nm=s?s.name:'No group';
+ var head='<div class="q109ch" style="background:'+col[0]+'">'
+  +(ed&&s?'<input class="q109nmi" id="q109nm-'+key+'" value="'+esc(s.name)+'" aria-label="List name" autocomplete="off">':'<b class="q109cn">'+esc(nm)+'</b>')
+  +(s&&s.pin?'<span class="q109pill" style="color:'+col[1]+'">Pinned</span>':'')
+  +(late?'<span class="q109pill q109late">'+late+' late</span>':'')
+  +'<span class="q109pill q109cnt" style="color:'+col[1]+'">'+L.length+'</span>'
+  +'<button class="q109ib" data-zact="q109add:'+c.id+':'+key+'" aria-label="Add a task to '+esc(nm)+'" style="color:'+col[1]+'">'+zI(ZIC.plus,16)+'</button>'
+  +'<span class="q109mw"><button class="q109ib" data-zact="q109menu:list~'+key+'" aria-label="More for '+esc(nm)+'" style="color:'+col[1]+'">'+zI(ZIC.dots,16)+'</button>'+(menu?q109ListMenu(c,s,ex):'')+'</span></div>';
+ var body='';
+ if(add)body+='<div class="q109inl"><input id="q109inl" data-zenter="q109inl:'+c.id+':'+key+'" placeholder="New task, then Enter" autocomplete="off"></div>';
+ if(ed){
+  body+=L.map(function(t){return '<div class="q109er"><input data-q109et="'+t.id+'" value="'+esc(t.title)+'" aria-label="Task" autocomplete="off"><button class="q109x" data-zact="q109tdel:'+c.id+':'+t.id+'" aria-label="Delete '+esc(t.title)+'">×</button></div>'}).join('')
+   +'<button class="q109doneed" style="background:'+col[0]+';color:'+col[1]+'" data-zact="q109edone:'+c.id+':'+key+'">Done editing</button>';
+ }else if(!L.length&&!add)body+='<p class="q109empty">Nothing here yet.</p>';
+ else if(L.length){
+  body+=L.slice(0,2).map(function(t){return q109Row(c,t,td)}).join('');
+  if(L.length>2)body+='<div class="q109dr"><div class="q109drin">'+L.slice(2).map(function(t){return q109Row(c,t,td)}).join('')+'</div></div>'
+   +'<div class="q109foot"><button class="q109more" data-q109ex="'+c.id+'|'+key+'" data-n="'+(L.length-2)+'"><span>'+(ex?'Show less':(L.length-2)+' more')+'</span><i style="color:'+col[1]+'">'+zI(Q109CHEV,14)+'</i></button></div>';
+ }
+ return '<section class="q109card'+(ex?' ex':'')+(menu?' up':'')+(V.focus===key?' q109focus':'')+'" data-q109card="'+c.id+'|'+key+'">'+head+'<div class="q109cb">'+body+'</div></section>';
+}
+var Q109SW=['grey','clay','peach','sand','sage','mist','lavender','rose','brick'].filter(function(k){return ZC[k]});
+function q109ListMenu(c,s,ex){
+ var key=s?s.id:'none',cur=s&&s.color||'';
+ var sw=s?'<div class="q109mh">Colour</div><div class="q109sws">'+Q109SW.map(function(k){var p=ZC[k];return '<button class="q109sw'+(cur===k?' on':'')+'" style="background:'+p[0]+';--r:'+p[1]+'" data-zact="q109col:'+c.id+':'+key+':'+k+'" aria-label="'+k+'"><i style="background:'+p[1]+'"></i></button>'}).join('')
+  +'<label class="q109sw any'+(/^#/.test(cur)?' on':'')+'" style="--r:'+(/^#/.test(cur)?q109Col(s)[1]:'transparent')+'" title="Any colour">+<input type="color" data-q109col="'+c.id+'|'+key+'" value="'+(/^#/.test(cur)?cur:'#8fae94')+'"></label></div>':'';
+ return '<div class="q109menu q109lm" role="menu">'
+  +'<button data-zact="q109exm:'+c.id+':'+key+'">'+(ex?'Shrink list':'Expand list')+'</button>'
+  +(s?'<button data-zact="q109edit:'+c.id+':'+key+'">Edit list</button><button data-zact="q109pin:'+c.id+':'+key+'">'+(s.pin?'Unpin list':'Pin to front')+'</button>':'')
+  +(s?'<hr>'+sw+'<hr><button class="q109red" data-zact="q109gdel:'+c.id+':'+key+'">Delete list</button>':'')+'</div>';
+}
+/* the group a new task goes into: the last one you picked, else Daily tasks */
+function q109DefG(c){var V=q109V(),ids={};zSecs(c).forEach(function(s){ids[s.id]=1});
+ var g=V.g!=null?V.g:q109Get('hub:q109g:'+c.id,null);if(g==null)g=q109Daily(c)?q109DailyId(c):'';return g&&!ids[g]?'':g}
+function q109TodoPage(c){
+ var V=q109V(),td=iso(today()),secs=zSecs(c),ids={};secs.forEach(function(s){ids[s.id]=s});
+ if(V.cid!==c.id){V.cid=c.id;V.draft='';V.due='';V.menu=null;V.edit=null;V.adding=null;V.daySel=null;V.g=null}
+ var T=c.tasks||[],open=T.filter(function(t){return !t.done}).sort(function(a,b){return (a.due||'9999')<(b.due||'9999')?-1:(a.due||'9999')>(b.due||'9999')?1:0}),done=T.filter(function(t){return t.done});
+ var inG=function(s){return open.filter(function(t){return s?t.sec===s.id:!(t.sec&&ids[t.sec])})};
+ /* quick add */
+ var dg=q109DefG(c);
+ var gs=dg?ids[dg]:null,gc=q109Col(gs);
+ var gmenu=V.menu==='group'?'<div class="q109menu q109gm" role="menu"><div class="q109mh">Add to group</div>'
+  +[null].concat(q109Groups(c)).map(function(s){var k=s?s.id:'',p=q109Col(s),n=inG(s).length;return '<button data-zact="q109pickg:'+c.id+':'+(k||'none')+'"><span class="q109sq" style="background:'+p[0]+';color:'+p[1]+'">'+esc(q109Abbr(s?s.name:'No group'))+'</span><span class="q109gn">'+esc(s?s.name:'No group')+'</span><em>'+(n||'')+'</em>'+(k===dg?'<i>✓</i>':'<i></i>')+'</button>'}).join('')
+  +'<hr><div class="q109ng"><input id="q109ng" data-zenter="q109newg:'+c.id+'" placeholder="New group name" autocomplete="off"><button data-zact="q109newg:'+c.id+'">+ Group</button></div></div>':'';
+ var dl=V.due?q109DueLab(V.due,td):'Due date',ds=V.due?q109Status(V.due,td):'';
+ var add='<section class="q109add"><div class="q109ar"><span class="q109dash" aria-hidden="true"></span><input id="q109in" data-zenter="q109go:'+c.id+'" placeholder="Add a task…" value="'+esc(V.draft||'')+'" autocomplete="off" aria-label="Add a task">'
+  +'<span class="q109mw"><button class="q109sel" data-zact="q109menu:group" aria-label="Group"><span class="q109sq" style="background:'+gc[0]+';color:'+gc[1]+'">'+esc(q109Abbr(gs?gs.name:'No group'))+'</span><span class="q109gn">'+esc(gs?gs.name:'No group')+'</span><i>▾</i></button>'+gmenu+'</span>'
+  +'<span class="q109mw"><button class="q109sel q109dt'+(ds?' q109d-'+ds:'')+'" data-zact="q109menu:date" aria-label="Due date">'+zI(Q109CAL,15)+'<span>'+esc(dl)+'</span></button>'+(V.menu==='date'?q109DatePop(c,td):'')+'</span>'
+  +'<button class="q109go" data-zact="q109go:'+c.id+'">Add</button></div></section>';
+ /* toolbar */
+ var late=open.filter(function(t){return t.due&&t.due<td}).length,wk=open.filter(function(t){return t.due&&t.due>=td&&t.due<=q109WeekEnd(td)}).length;
+ var sum=[open.length+' open'];if(late)sum.push(late+' late');if(wk)sum.push(wk+' due this week');
+ var mode=V.mode==='up'?'up':'lists';
+ var bar='<div class="q109bar"><span>'+esc(sum.join(' · '))+'</span><div class="q109seg" role="tablist"><button role="tab" aria-selected="'+(mode==='lists')+'" class="'+(mode==='lists'?'on':'')+'" data-zact="q109mode:lists">Lists</button><button role="tab" aria-selected="'+(mode==='up')+'" class="'+(mode==='up'?'on':'')+'" data-zact="q109mode:up">Coming up</button></div></div>';
+ var main;
+ if(mode==='lists'){
+  var cards=[];
+  var GG=q109Groups(c),pinned=GG.filter(function(s){return s.pin});
+  pinned.forEach(function(s){cards.push(q109Card(c,s,inG(s),td))});
+  if(inG(null).length)cards.push(q109Card(c,null,inG(null),td));
+  GG.filter(function(s){return !s.pin}).forEach(function(s){cards.push(q109Card(c,s,inG(s),td))});
+  main='<div class="q109grid">'+(cards.join('')||'<p class="q109empty">Nothing to do. Add a task above.</p>')+'</div>';
+ }else main=q109Up(c,open,td);
+ /* done */
+ var dn='';
+ if(done.length){var dO=!!V.doneOpen;
+  dn='<section class="q109done'+(dO?' open':'')+'"><button class="q109dh" data-zact="q109doneo"><span class="q109dck">'+zI(ZIC.check,15)+'</span><span class="q109dt2"><b>Done</b><small>'+done.length+' finished</small></span><i>'+zI(Q109CHEV,16)+'</i></button>'
+   +(dO?'<div class="q109db">'+done.map(function(t){return '<div class="q109row y"><button class="q109ck y" data-tick="'+t.id+'" data-c="'+c.id+'" aria-label="Mark '+esc(t.title)+' not done">✓</button><div class="q109rt"><span class="q109tt">'+esc(t.title)+'</span></div></div>'}).join('')+'<button class="q109clr" data-zact="cleardone:'+c.id+'">Clear finished tasks</button></div>':'')+'</section>';
+ }
+ var ov=V.menu?'<div class="q109ov" data-zact="q109menu:"></div>':'';
+ return '<div class="q109page">'+ov+add+bar+main+dn+'</div>';
+}
+function q109DatePop(c,td){
+ var V=q109V(),d=parseISO(td),sat=zAddDays(td,(6-d.getDay()+7)%7||7),mon=zAddDays(td,(8-d.getDay())%7||7);
+ if(d.getDay()===6)sat=td;
+ var q=[['Today',td],['Tomorrow',zAddDays(td,1)],['This weekend',sat],['Next week',mon]].map(function(x){return '<button data-zact="q109due:'+x[1]+'"><span>'+x[0]+'</span><em>'+esc(q109Fmt(x[1],{weekday:'short'}))+'</em></button>'}).join('');
+ var mo=V.calMonth||(V.due||td).slice(0,7),first=parseISO(mo+'-01'),pad=first.getDay(),days=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
+ var cells='';for(var i=0;i<pad;i++)cells+='<span></span>';
+ for(var k=1;k<=days;k++){var ds=mo+'-'+(k<10?'0':'')+k;cells+='<button class="'+(ds===V.due?'on':'')+(ds===td?' tdy':'')+(ds<td?' past':'')+'" data-zact="q109due:'+ds+'">'+k+'</button>'}
+ return '<div class="q109menu q109dp" role="dialog" aria-label="Pick a due date"><div class="q109qd">'+q+'</div>'
+  +'<div class="q109cal"><div class="q109calh"><button data-zact="q109cm:-1" aria-label="Previous month">‹</button><b>'+esc(first.toLocaleDateString('en-US',{month:'long',year:'numeric'}))+'</b><button data-zact="q109cm:1" aria-label="Next month">›</button></div>'
+  +'<div class="q109wk">'+['S','M','T','W','T','F','S'].map(function(x){return '<span>'+x+'</span>'}).join('')+'</div><div class="q109days">'+cells+'</div></div>'
+  +(V.due?'<button class="q109rm" data-zact="q109due:">Remove date</button>':'')+'</div>';
+}
+function q109Up(c,open,td){
+ var V=q109V(),days=[];for(var i=0;i<7;i++)days.push(zAddDays(td,i));var last=days[6];
+ var bucket=function(t){if(!t.due)return null;if(t.due<td)return 'late';if(t.due>last)return 'later';return t.due};
+ var keys=['late'].concat(days).concat(['later']),sel=V.daySel&&keys.indexOf(V.daySel)>-1?V.daySel:td;
+ var ink=function(t){var g=q109GroupOf(c,t);return q109Col(g)[1]};
+ var tiles=keys.map(function(k){var L=open.filter(function(t){return bucket(t)===k}),on=k===sel,lt=k==='late';
+  var top=lt?'Overdue':k==='later'?'After':k===td?'Today':q109Fmt(k,{weekday:'short'}),big=lt||k==='later'?String(L.length):String(parseISO(k).getDate());
+  return '<button class="q109tile'+(on?' on':'')+(k===td?' tdy':'')+(lt&&L.length?' late':'')+'" data-zact="q109day:'+k+'" aria-pressed="'+on+'"><small>'+esc(top)+'</small><b>'+esc(big)+'</b><span>'+L.slice(0,4).map(function(t){return '<i style="background:'+(on?'#fff':ink(t))+'"></i>'}).join('')+'</span></button>'}).join('');
+ var L=open.filter(function(t){return bucket(t)===sel});
+ var title=sel==='late'?'Overdue':sel==='later'?'After '+q109Fmt(last,{month:'short',day:'numeric'}):q109Fmt(sel,{weekday:'long',month:'long',day:'numeric'});
+ return '<section class="q109up"><div class="q109strip">'+tiles+'</div><h3 class="q109uh">'+esc(title)+'</h3>'
+  +(L.length?L.map(function(t){return q109Row(c,t,td,{group:true,noDue:!(sel==='late'||sel==='later')})}).join(''):'<p class="q109empty">Nothing due.</p>')+'</section>';
+}
+/* the page uses the new layout on computers, iPads and phones */
+var _q109List=zListPage;
+zListPage=function(c){if(c&&c.kind==='todo')return q109TodoPage(c);return _q109List.apply(this,arguments)};
+
+/* actions */
+ZACT.q109menu=function(k){var V=q109V();k=String(k||'').replace('~',':');V.menu=k&&V.menu!==k?k:null;if(V.menu==='date')V.calMonth=null;q109Keep();render()};
+function q109Keep(){var i=document.getElementById('q109in');if(i)q109V().draft=i.value}
+ZACT.q109pickg=function(cid,k){var V=q109V();V.g=k==='none'?'':k;q109Set('hub:q109g:'+cid,V.g);V.menu=null;q109Keep();render();q109Focus()};
+function q109Focus(){setTimeout(function(){var i=document.getElementById('q109in');if(i&&!('ontouchstart' in window))i.focus()},30)}
+ZACT.q109newg=function(cid){var c=classById(cid),i=document.getElementById('q109ng'),n=i&&i.value.trim();if(!c||!n)return;q109Keep();
+ var used={};zSecs(c).forEach(function(s){used[s.color]=1});var col=Q109SW.filter(function(k){return !used[k]&&k!=='grey'})[0]||Q109SW[zSecs(c).length%Q109SW.length];
+ var hi=zSecs(c).reduce(function(m,s){return Math.max(m,s.ord||0)},0),s=touch({id:uid(),name:n,ord:hi+1,color:col});
+ c.sections=c.sections||[];c.sections.push(s);var V=q109V();V.g=s.id;q109Set('hub:q109g:'+cid,s.id);V.menu=null;save();render();q109Focus()};
+ZACT.q109due=function(d){var V=q109V();V.due=d||'';V.menu=null;q109Keep();render();q109Focus()};
+ZACT.q109cm=function(n){var V=q109V(),td=iso(today()),mo=V.calMonth||(V.due||td).slice(0,7);V.calMonth=zMoShift(mo,+n);q109Keep();render()};
+ZACT.q109go=function(cid){
+ var c=classById(cid),V=q109V(),i=document.getElementById('q109in'),t=i&&i.value.trim();if(!c)return;if(!t){if(i)i.focus();return}
+ var g=q109DefG(c);
+ var x=touch({id:uid(),title:t,due:V.due||'',done:false});if(g&&zSecs(c).some(function(s){return s.id===g}))x.sec=g;
+ if(x.sec&&x.sec===q109DailyId(c)&&!x.due)x.due=iso(today());
+ if(x.due&&S.autoPlan)x.plan=[x.due];
+ c.tasks.push(x);V.draft='';V.due='';V.menu=null;save();render();q109Focus();
+};
+ZACT.q109mode=function(m){var V=q109V();V.mode=m;V.menu=null;q109Keep();render()};
+ZACT.q109day=function(k){q109V().daySel=k;render()};
+ZACT.q109doneo=function(){var V=q109V();V.doneOpen=!V.doneOpen;render()};
+ZACT.q109add=function(cid,key){var V=q109V();V.adding=V.adding===cid+'|'+key?null:cid+'|'+key;V.menu=null;V.edit=null;q109Keep();render();setTimeout(function(){var i=document.getElementById('q109inl');if(i)i.focus()},30)};
+ZACT.q109inl=function(cid,key){var c=classById(cid),i=document.getElementById('q109inl'),t=i&&i.value.trim();if(!c||!t)return;
+ var x=touch({id:uid(),title:t,due:'',done:false});if(key!=='none')x.sec=key;if(key===q109DailyId(c))x.due=iso(today());
+ c.tasks.push(x);save();q109Keep();render();setTimeout(function(){var j=document.getElementById('q109inl');if(j)j.focus()},30)};
+ZACT.q109exm=function(cid,key){var V=q109V();V.ex=V.ex||{};var k=cid+'|'+key;V.ex[k]=!V.ex[k];V.menu=null;q109Keep();render()};
+ZACT.q109edit=function(cid,key){var V=q109V();V.edit=cid+'|'+key;V.menu=null;V.adding=null;q109Keep();render()};
+ZACT.q109edone=function(cid,key){var c=classById(cid);if(!c)return;
+ var s=zSecs(c).filter(function(x){return x.id===key})[0],ni=document.getElementById('q109nm-'+key);
+ if(s&&ni){var n=ni.value.trim()||'Untitled';if(n!==s.name){s.name=n;touch(s)}}
+ document.querySelectorAll('[data-q109et]').forEach(function(e){var t=zTask(c,e.getAttribute('data-q109et')),v=e.value.trim();if(t&&v&&v!==t.title){t.title=v;touch(t)}});
+ q109V().edit=null;save();render()};
+ZACT.q109tdel=function(cid,tid){var c=classById(cid);if(!c)return;
+ /* keep words typed into the other boxes */
+ var keep={};document.querySelectorAll('[data-q109et]').forEach(function(e){keep[e.getAttribute('data-q109et')]=e.value});
+ var ni=document.querySelector('.q109nmi'),nv=ni&&ni.value;
+ c.tasks=c.tasks.filter(function(t){return t.id!==tid});save();render();
+ document.querySelectorAll('[data-q109et]').forEach(function(e){var k=e.getAttribute('data-q109et');if(keep[k]!=null)e.value=keep[k]});var n2=document.querySelector('.q109nmi');if(n2&&nv!=null)n2.value=nv};
+ZACT.q109pin=function(cid,key){var c=classById(cid),s=c&&zSecs(c).filter(function(x){return x.id===key})[0];if(!s)return;s.pin=!s.pin;touch(s);q109V().menu=null;save();render()};
+ZACT.q109col=function(cid,key,k){var c=classById(cid),s=c&&zSecs(c).filter(function(x){return x.id===key})[0];if(!s)return;s.color=k;touch(s);save();if(typeof q58BuildNames==='function')q58BuildNames();render()};
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;var v=t.getAttribute('data-q109col');if(!v)return;var p=v.split('|');ZACT.q109col(p[0],p[1],t.value.toLowerCase())});
+ZACT.q109gdel=function(cid,key){var V=q109V();V.menu=null;ZACT.secdel(cid,key);render()};
+/* tick: the box fills and the words are struck through; after a moment the task moves to Done (tap again to undo) */
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q109tick]');if(!b)return;e.preventDefault();e.stopPropagation();
+ var p=b.getAttribute('data-q109tick').split('|'),cid=p[0],tid=p[1],V=q109V();V.pend=V.pend||{};
+ var rows=document.querySelectorAll('[data-q109row="'+tid+'"]');
+ if(V.pend[tid]){clearTimeout(V.pend[tid]);delete V.pend[tid];rows.forEach(function(r){r.classList.remove('pend');var k=r.querySelector('.q109ck');if(k){k.classList.remove('on');k.textContent=''}});return}
+ rows.forEach(function(r){r.classList.add('pend');var k=r.querySelector('.q109ck');if(k){k.classList.add('on');k.textContent='✓'}});
+ V.pend[tid]=setTimeout(function(){delete V.pend[tid];var c=classById(cid),t=c&&zTask(c,tid);if(!t)return;t.done=true;t.doneAt=iso(today());touch(t);save();render()},700);
+},true);
+/* "N more": the hidden rows slide open without redrawing the page */
+document.addEventListener('click',function(e){
+ var b=e.target.closest&&e.target.closest('[data-q109ex]');if(!b)return;e.preventDefault();
+ var k=b.getAttribute('data-q109ex'),V=q109V();V.ex=V.ex||{};V.ex[k]=!V.ex[k];
+ var card=b.closest('.q109card');if(card)card.classList.toggle('ex',V.ex[k]);
+ var s=b.querySelector('span');if(s)s.textContent=V.ex[k]?'Show less':b.getAttribute('data-n')+' more';
+});
+/* the typed words survive a redraw; Esc closes menus and the inline box */
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='q109in')q109V().draft=e.target.value});
+document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;var V=view.q109;if(!V||!(V.menu||V.adding))return;V.menu=null;V.adding=null;q109Keep();render()});
+document.addEventListener('focusout',function(e){var t=e.target;if(!t||t.id!=='q109inl'||t.value.trim())return;setTimeout(function(){var V=q109V();if(V.adding&&document.activeElement&&document.activeElement.id!=='q109inl'&&!(document.activeElement.closest&&document.activeElement.closest('.q109ch'))){V.adding=null;render()}},150)});
+
+/* ---------- 5. Gifts on the Shopping page ---------- */
+var _q109Tab=z5Tab;
+z5Tab=function(c){return q58Get('hub:shoptab:'+c.id,'all')==='gift'?'gift':_q109Tab(c)};
+var _q109Tabs=q67Tabs;
+q67Tabs=function(c,tab){
+ var h=_q109Tabs(c,tab),n=(c.items||[]).filter(function(x){return x.t==='gift'&&!x.got}).length;
+ var b='<button role="tab" aria-selected="'+(tab==='gift')+'" class="'+(tab==='gift'?'on':'')+'" data-zact="shoptab:'+c.id+':gift">'+zI(Q109GIFT,16)+'<span>Gifts</span><em>'+n+'</em></button>';
+ return h.replace(/<\/div>$/,b+'</div>');
+};
+var _q109Shop=z5Shop;
+z5Shop=function(c){if(z5Tab(c)==='gift')return q67Tabs(c,'gift')+q109Gifts(c);return _q109Shop.apply(this,arguments)};
+function q109GiftsOf(c){return (c.items||[]).filter(function(x){return x.t==='gift'})}
+function q109People(c){var o={},L=[];q109GiftsOf(c).forEach(function(g){var k=(g.who||'').trim();if(k&&!o[k.toLowerCase()]){o[k.toLowerCase()]=1;L.push(k)}});
+ (S.classes||[]).forEach(function(p){(p.contacts||[]).forEach(function(x){var n=(x.name||'').trim();if(n&&!o[n.toLowerCase()]){o[n.toLowerCase()]=1;L.push(n)}})});return L}
+function q109Host(u){try{return new URL(/^https?:/i.test(u)?u:'https://'+u).hostname.replace(/^www\./,'')}catch(e){return String(u||'').slice(0,24)}}
+function q109Url(u){u=String(u||'').trim();return !u?'':/^https?:\/\//i.test(u)?u:'https://'+u}
+function q109Gifts(c){
+ var G=q109GiftsOf(c),last=q109Get('hub:q109who:'+c.id,'');
+ var ppl=q109People(c);
+ var add='<section class="q109gadd"><input id="q109gi" data-zenter="q109gadd:'+c.id+'" placeholder="Gift idea, like a cozy blanket" autocomplete="off" aria-label="Gift idea">'
+  +'<input id="q109gw" list="q109gwl" data-zenter="q109gadd:'+c.id+'" placeholder="Who it’s for" value="'+esc(last)+'" autocomplete="off" aria-label="Who it’s for"><datalist id="q109gwl">'+ppl.map(function(p){return '<option value="'+esc(p)+'">'}).join('')+'</datalist>'
+  +'<input id="q109gl" data-zenter="q109gadd:'+c.id+'" placeholder="Link (optional)" autocomplete="off" inputmode="url" aria-label="Link">'
+  +'<button class="zbtn" data-zact="q109gadd:'+c.id+'">Add</button></section>';
+ if(!G.length)return add+'<section class="q109gempty">'+zI(Q109GIFT,28)+'<b>Gift ideas, all in one place</b><p>Add an idea and who it’s for. Each person gets their own card, and you can tick an idea off once you’ve bought it.</p></section>';
+ var by={},order=[];G.forEach(function(g){var k=(g.who||'').trim()||'Anyone';var kl=k.toLowerCase();if(!by[kl]){by[kl]={name:k,L:[]};order.push(kl)}by[kl].L.push(g)});
+ order.sort(function(a,b){if((a==='anyone')!==(b==='anyone'))return a==='anyone'?1:-1;var A=by[a].L.filter(function(g){return !g.got}).length,B=by[b].L.filter(function(g){return !g.got}).length;if(!A!==!B)return A?-1:1;return by[a].name.localeCompare(by[b].name)});
+ var bought=G.filter(function(g){return g.got}).length;
+ var cards=order.map(function(k){var p=by[k],open=p.L.filter(function(g){return !g.got}),got=p.L.filter(function(g){return g.got}),hue=zWishHue(p.name);
+  var tint='hsl('+hue+' 32% 93%)',ink='hsl('+hue+' 24% 38%)';
+  var row=function(g){var links=(g.links||[]).filter(Boolean);
+   return '<div class="q109gr'+(g.got?' y':'')+'"><button class="q109ck'+(g.got?' y':'')+'" data-zact="q109ggot:'+c.id+':'+g.id+'" aria-label="'+(g.got?'Mark not bought':'Mark bought')+'">'+(g.got?'✓':'')+'</button>'
+    +'<div class="q109rt"><button class="q109tt" data-zact="q109gedit:'+c.id+':'+g.id+'">'+esc(g.title)+(g.price?' <em>'+money(g.price)+'</em>':'')+'</button>'
+    +(links.length||g.note?'<div class="q109meta">'+links.map(function(u){return '<a class="q109lk" href="'+esc(q109Url(u))+'" target="_blank" rel="noopener">'+linkIcon(q109Url(u),q109Host(u))+'<span>'+esc(q109Host(u))+'</span></a>'}).join('')+(g.note?'<span class="q109gnote">'+esc(g.note)+'</span>':'')+'</div>':'')+'</div>'
+    +'<button class="q109ib" data-zact="q109gedit:'+c.id+':'+g.id+'" aria-label="Edit '+esc(g.title)+'">'+zI(ZIC.dots,16)+'</button></div>'};
+  return '<section class="q109card q109gc"><div class="q109ch" style="background:'+tint+'"><span class="q109sq" style="background:#fff;color:'+ink+'">'+esc(q109Abbr(p.name))+'</span><b class="q109cn">'+esc(p.name)+'</b>'
+   +(got.length?'<span class="q109pill" style="color:'+ink+'">'+got.length+' bought</span>':'')+'<span class="q109pill q109cnt" style="color:'+ink+'">'+open.length+'</span>'
+   +'<button class="q109ib" style="color:'+ink+'" data-zact="q109gnew:'+c.id+':'+encodeURIComponent(p.name).replace(/%/g,'~')+'" aria-label="Add a gift for '+esc(p.name)+'">'+zI(ZIC.plus,16)+'</button></div>'
+   +'<div class="q109cb">'+(open.length?open.map(row).join(''):'<p class="q109empty">All bought. Nice.</p>')+got.map(row).join('')+'</div></section>'}).join('');
+ return add+'<div class="q109bar"><span>'+G.length+' idea'+(G.length===1?'':'s')+' · '+bought+' bought</span></div><div class="q109grid">'+cards+'</div>';
+}
+ZACT.q109gadd=function(cid){
+ var c=classById(cid);if(!c)return;var i=document.getElementById('q109gi'),t=i&&i.value.trim();if(!t){if(i)i.focus();return}
+ var w=(document.getElementById('q109gw')||{}).value||'',l=(document.getElementById('q109gl')||{}).value||'';w=w.trim();l=l.trim();
+ c.items=c.items||[];c.items.push(touch({id:uid(),t:'gift',title:t,who:w,links:l?[l]:[],got:false}));q109Set('hub:q109who:'+cid,w);save();render();
+ setTimeout(function(){var j=document.getElementById('q109gi');if(j)j.focus()},30);
+};
+ZACT.q109ggot=function(cid,id){var c=classById(cid),g=c&&zItem(c,id);if(!g)return;g.got=!g.got;touch(g);save();render()};
+ZACT.q109gedit=function(cid,id){zOpen('q109gift',{cid:cid,id:id})};
+ZACT.q109gnew=function(cid,who){zOpen('q109gift',{cid:cid,who:decodeURIComponent(String(who||'').replace(/~/g,'%'))})};
+function q109GDraft(m){
+ if(m.d)return m.d;var c=classById(m.cid),g=m.id&&c&&zItem(c,m.id);
+ m.d={title:g?g.title:'',who:g?g.who||'':(m.who||''),price:g&&g.price?g.price:'',note:g?g.note||'':'',links:(g&&g.links&&g.links.length?g.links.slice():['']),got:!!(g&&g.got)};return m.d}
+function q109GRead(m){var d=q109GDraft(m),v=function(id){var e=document.getElementById(id);return e?e.value:null};
+ ['title','who','price','note'].forEach(function(k){var x=v('q109g-'+k);if(x!=null)d[k]=x});
+ var L=[];document.querySelectorAll('[data-q109gl]').forEach(function(e){L.push(e.value)});if(L.length)d.links=L;return d}
+ZM.q109gift={html:function(m){
+ var c=classById(m.cid);if(!c)return null;var d=q109GDraft(m),ppl=q109People(c);
+ return '<h3>'+(m.id?'Gift idea':'Add a gift idea')+'</h3>'
+  +'<div class="field"><label for="q109g-title">Gift</label><input id="q109g-title" value="'+esc(d.title)+'" placeholder="A cozy blanket"></div>'
+  +'<div class="zfrow"><div class="field"><label for="q109g-who">Who it’s for</label><input id="q109g-who" list="q109gwl2" value="'+esc(d.who)+'" placeholder="Mom"><datalist id="q109gwl2">'+ppl.map(function(p){return '<option value="'+esc(p)+'">'}).join('')+'</datalist></div>'
+  +'<div class="field"><label for="q109g-price">Price ($, optional)</label><input id="q109g-price" type="number" min="0" step="0.01" inputmode="decimal" value="'+esc(d.price)+'"></div></div>'
+  +'<div class="field"><label>Links</label><div class="q109gls">'+d.links.map(function(u,i){return '<div class="q109glr"><input data-q109gl="'+i+'" value="'+esc(u)+'" placeholder="Paste a link" inputmode="url" autocomplete="off" aria-label="Link '+(i+1)+'">'+(d.links.length>1?'<button type="button" class="q109x" data-zact="q109glx:'+i+'" aria-label="Remove link">×</button>':'')+'</div>'}).join('')
+  +'<button type="button" class="zlink" data-zact="q109gl">+ Add another link</button></div></div>'
+  +'<div class="field"><label for="q109g-note">Notes</label><input id="q109g-note" value="'+esc(d.note)+'" placeholder="Size medium, the green one"></div>'
+  +(m.id?'<label class="zcheck"><input type="checkbox" id="q109g-got"'+(d.got?' checked':'')+'> I bought it</label>':'');
+},save:function(m){
+ var c=classById(m.cid);if(!c)return;var d=q109GRead(m),t=String(d.title||'').trim();if(!t)return;
+ var g=m.id&&zItem(c,m.id);if(!g){g={id:uid(),t:'gift'};c.items=c.items||[];c.items.push(g)}
+ g.title=t;g.who=String(d.who||'').trim();g.price=parseFloat(d.price)||0;g.note=String(d.note||'').trim();
+ g.links=d.links.map(function(u){return String(u||'').trim()}).filter(Boolean);var gc=document.getElementById('q109g-got');g.got=gc?gc.checked:!!g.got;
+ touch(g);save();view.modal=null;render();
+},del:function(m){return m.id?'q109gdel2:'+m.cid+':'+m.id:''}};
+ZACT.q109gl=function(){var m=view.modal;if(!m)return;var d=q109GRead(m);d.links.push('');render();setTimeout(function(){var L=document.querySelectorAll('[data-q109gl]');if(L.length)L[L.length-1].focus()},30)};
+ZACT.q109glx=function(i){var m=view.modal;if(!m)return;var d=q109GRead(m);d.links.splice(+i,1);if(!d.links.length)d.links=[''];render()};
+ZACT.q109gdel2=function(cid,id){var c=classById(cid);if(!c||!confirm('Delete this gift idea?'))return;c.items=c.items.filter(function(x){return x.id!==id});save();view.modal=null;render()};
+
+/* ---------- after each redraw: Daily tasks exist, pills fit ---------- */
+var _q109Render=render;
+render=function(){
+ var made=false;try{made=q109EnsureDaily()}catch(e){}
+ var r=_q109Render.apply(this,arguments);
+ if(made)try{save()}catch(e){}
+ try{q109Pins()}catch(e){}
+ setTimeout(function(){try{q109Pins()}catch(e){}},60);
+ return r};
+var q109RT=0;window.addEventListener('resize',function(){clearTimeout(q109RT);q109RT=setTimeout(function(){try{q109Pins()}catch(e){}},80)});
 try{spBoot()}catch(e){}
 load();
 setTimeout(function(){try{if(view.page==='home')spPoll(true)}catch(e){}},1500);
