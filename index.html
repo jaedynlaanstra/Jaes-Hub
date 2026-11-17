@@ -7214,7 +7214,7 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108chip:hover{border-color:var(--line2)}
 .q108chip .q84av{width:26px;height:26px;font-size:12px}
 .q108chip em{font-style:normal;font-size:11.5px;color:var(--ink3);background:var(--paper,#F6F4F0);border-radius:99px;padding:1px 7px}
-.q108cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:16px;align-items:start}
+.q108cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,520px),1fr));gap:16px;align-items:start}
 .q108c{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-width:0;--wc:var(--gc);transition:box-shadow .3s}
 .q108c.q108lit{box-shadow:0 0 0 3px var(--gt),0 0 0 4px var(--gc)}
 .q108h{display:flex;align-items:center;gap:4px;background:var(--gt);padding:10px 8px 10px 12px}
@@ -7227,7 +7227,7 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108h .zmini{flex:none;color:var(--gc)}
 .q108fold svg{transition:transform .2s}
 .q108c.shut .q108fold svg{transform:rotate(-90deg)}
-.q108b{padding:6px 14px 12px}
+.q108b{padding:6px 14px 14px;container-type:inline-size}
 .q108rows{display:flex;flex-direction:column}
 .q108r,.q108pr{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
 .q108rows>.q108r:last-child{border-bottom:none}
@@ -7258,17 +7258,7 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108empty{margin:8px 0;font-size:13px;color:var(--ink3);line-height:1.45}
 .q108empty.sm{font-size:12.5px;margin:4px 0 8px}
 .q108empty svg{vertical-align:-2px;color:#B08A2E}
-.q108add{display:grid;grid-template-columns:minmax(0,150px) auto minmax(0,1fr);gap:6px;margin-top:12px}
-.q108add.wsel{grid-template-columns:132px minmax(0,1fr) auto;justify-content:stretch}
-.q108add>input{grid-column:1/-1;min-width:0;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
-.q108add .zdatew{flex:none;min-width:0}
-.q108add .zdatew>input{font-size:13.5px;padding:0 8px;border:1px solid var(--line);border-radius:10px;height:38px;box-sizing:border-box}
-.q108add select{height:100%}
-.q108add>.zdatew,.q108add>select,.q108add>.zbtn{height:38px;min-height:0;box-sizing:border-box}
-.q108add select{width:100%;min-width:0;font-size:13.5px;padding:8px;border:1px solid var(--line);border-radius:10px}
-.q108add .zbtn{padding:8px 14px}
-.q108foot{display:flex;justify-content:flex-start;margin-top:10px}
-.q108foot .zlink{font-size:13px;color:var(--gc)}
+.q108foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
 .q108none{padding:22px 20px}
 .q108none b{font-size:16px;font-weight:600}
 .q108none p{margin:6px 0 0;font-size:13.5px;color:var(--ink2);line-height:1.5}
@@ -7304,7 +7294,7 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108plus{flex:none;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.18);color:inherit;display:inline-grid;place-items:center;padding:0;cursor:pointer;min-height:0!important}
 .q108plus:hover{background:rgba(255,255,255,.28)}
 /* v297: dated notes on each client card (q108) */
-.q108n{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}
+.q108n{margin-top:14px;background:color-mix(in srgb,var(--gt) 40%,var(--card));border-radius:14px;padding:10px 12px;min-width:0}
 .q108nh{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:4px}
 .q108nh em{font-style:normal;letter-spacing:0;font-size:11px;background:var(--gt);color:var(--gc);border-radius:99px;padding:1px 7px}
 .q108nl{list-style:none;margin:0;padding:0}
@@ -7314,9 +7304,19 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q108nl button>span::before{content:"";position:absolute;left:2px;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--gc)}
 .q108nl button>small{flex:none;font-size:11.5px;color:var(--ink3);white-space:nowrap}
 .q108nl button:hover>span{color:var(--ink2)}
-.q108nadd{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-top:6px}
-.q108nadd input{min-width:0;font:inherit;font-size:13.5px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
-.q108nadd .zbtn{padding:7px 12px}
+.q108nadd{position:relative;margin-top:6px}
+.q108nadd input{width:100%;box-sizing:border-box;font:inherit;font-size:13px;padding:6px 36px 6px 10px;border:1px solid transparent;border-radius:9px;background:rgba(255,255,255,.6);color:var(--ink)}
+.q108nadd input:focus{border-color:var(--line2);background:var(--card);outline:none}
+.q108nplus{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;border:none;background:var(--gt);color:var(--gc);display:inline-grid;place-items:center;padding:0;cursor:pointer;min-height:0!important}
+/* v298: a small "+ Add a to-do" instead of the big add box; notes sit beside the to-dos when the card is wide enough */
+.q108addb{display:inline-flex;align-items:center;gap:6px;background:none;border:none;padding:6px 2px;font:inherit;font-size:13px;color:var(--gc);cursor:pointer;min-height:0!important}
+.q108addb svg{width:18px;height:18px;padding:2px;border-radius:50%;background:var(--gt);box-sizing:border-box}
+.q108addb:hover{color:var(--ink)}
+.q108foot .zlink{color:var(--ink3);font-size:12.5px}
+@container (min-width:480px){
+ .q108bc{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:start}
+ .q108bc>.q108n{margin-top:6px}
+}
 .q84tor{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 </style>
 </head>
@@ -7627,7 +7627,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v297';
+var BUILD='v298';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -28817,7 +28817,7 @@ function q108Card(x,day){var c=x.c,cl=x.cl,td=iso(today()),Z=q108Hue(cl);
  var meta=[open.length+' to do'];if(late)meta.push('<span class="q108late">'+late+' late</span>');if(P.length)meta.push(P.length+' project'+(P.length===1?'':'s'));
  var body='';
  body+=ownOpen.length?'<div class="q108rows">'+ownOpen.map(function(e){return q108Row(e,day,e.k==='t'?'From To do':'')}).join('')+'</div>'
-  :(pOpen.length?'':'<p class="q108empty">Nothing to do for '+esc(cl.title)+'. Add a to-do below.</p>');
+  :(pOpen.length?'':'<p class="q108empty">Nothing to do for '+esc(cl.title)+' yet.</p>');
  pOpen.forEach(function(p){var st=p.steps||[],dn=st.filter(function(s){return s.done}).length,po=st.filter(function(s){return !s.done}).map(function(s){return q108E('s',c,p,s)});
   body+='<div class="q108p"><button class="q108ph" data-zact="q108popen:'+c.id+':'+cl.id+':'+p.id+'" title="Open the project">'
    +'<span class="q108pic">'+zI(ZIC.folder,14)+'</span><span class="q108pt">'+esc(p.title)+'</span>'
@@ -28825,12 +28825,8 @@ function q108Card(x,day){var c=x.c,cl=x.cl,td=iso(today()),Z=q108Hue(cl);
    +(st.length?'<span class="q108pn">'+dn+' of '+st.length+'</span>':'')+'<span class="q108chev">'+zI('<path d="m9 6 6 6-6 6"/>',14)+'</span></button>'
    +(po.length?'<div class="q108rows">'+po.map(function(e){return q108Row(e,day)}).join('')+'</div>':'<p class="q108empty sm">No open tasks in this project.</p>')+'</div>'});
  if(pDone)body+='<p class="q108empty sm">'+pDone+' finished project'+(pDone===1?'':'s')+'</p>';
- var dests='<option value="'+cl.id+'">No project</option>'+pOpen.map(function(p){return '<option value="'+p.id+'">'+esc(p.title)+'</option>'}).join('');
- body+='<div class="q108add'+(pOpen.length?' wsel':'')+'"><input id="q108a-'+cl.id+'" data-zenter="q108add:'+c.id+':'+cl.id+'" placeholder="Add a to-do" autocomplete="off" aria-label="New to-do for '+esc(cl.title)+'">'
-  +'<span class="zdatew empty"><input type="date" id="q108d-'+cl.id+'" aria-label="Due date"><span class="zdph" aria-hidden="true">Due date</span></span>'
-  +(pOpen.length?'<select id="q108w-'+cl.id+'" aria-label="Add it to">'+dests+'</select>':'')
-  +'<button class="zbtn" data-zact="q108add:'+c.id+':'+cl.id+'">Add</button></div>'
-  +q108Notes(c,cl)+'<div class="q108foot"><button class="zlink" data-zact="q108pnew:'+c.id+':'+cl.id+'">+ New project</button></div>';
+ body+='<div class="q108foot"><button class="q108addb" data-zact="q108tnew:'+c.id+':'+cl.id+'">'+zI('<path d="M12 5v14M5 12h14"/>',14)+'Add a to-do</button><button class="zlink" data-zact="q108pnew:'+c.id+':'+cl.id+'">+ New project</button></div>';
+ body='<div class="q108bc"><div class="q108td">'+body+'</div>'+q108Notes(c,cl)+'</div>';
  return '<section class="q108c'+(shut?' shut':'')+'" id="q108-'+cl.id+'" style="--gt:'+Z[0]+';--gc:'+Z[1]+'">'
   +'<div class="q108h"><button class="q108hb" data-zact="q108fold:'+cl.id+'" aria-expanded="'+(!shut)+'">'+q84Av(cl)+'<span class="q108ht"><b>'+esc(cl.title)+'</b><small>'+meta.join(' · ')+'</small></span></button>'
   +'<button class="zmini" data-zact="q84edit:'+c.id+':'+cl.id+'" aria-label="Edit '+esc(cl.title)+'">'+zI(ZIC.dots,16)+'</button>'
@@ -28889,10 +28885,6 @@ ZACT.q108fold=function(id){try{if(q108Fold(id))localStorage.removeItem('hub:q108
 ZACT.q108jump=function(id){try{localStorage.removeItem('hub:q108f:'+id)}catch(e){}render();setTimeout(function(){var el=document.getElementById('q108-'+id);if(!el)return;
  var y=el.getBoundingClientRect().top+window.scrollY-90;window.scrollTo({top:Math.max(0,y),behavior:'smooth'});el.classList.add('q108lit');setTimeout(function(){el.classList.remove('q108lit')},1400)},40)};
 ZACT.q108cnew=function(){var h=q108Home(true);ZACT.q84cnew(h.id)};
-ZACT.q108add=function(cid,clid){var c=classById(cid),cl=zItem(c,clid),v=zv('q108a-'+clid);if(!cl)return;if(!v){var i0=document.getElementById('q108a-'+clid);if(i0)i0.focus();return}
- var w=zv('q108w-'+clid),p=w&&w!==clid?zItem(c,w):null;if(!p||p.t!=='proj')p=cl;
- var s={id:uid(),title:v,done:false},d=zv('q108d-'+clid);if(d)s.due=d;p.steps=p.steps||[];p.steps.push(s);touch(p);save();render();
- setTimeout(function(){var i=document.getElementById('q108a-'+clid);if(i)i.focus();var sel=document.getElementById('q108w-'+clid);if(sel&&p!==cl)sel.value=p.id},30)};
 ZACT.q108pnew=function(cid,clid){zOpen('q108proj',{cid:cid,clid:clid})};
 ZM.q108proj={html:function(m){var cl=zItem(classById(m.cid),m.clid);if(!cl)return null;
  return '<h3>New project</h3><p class="q53in">For '+esc(cl.title)+'</p>'
@@ -28938,7 +28930,7 @@ function q108Notes(c,cl){var J=q108Jots(cl),all=view.q108jall&&view.q108jall[cl.
  return '<div class="q108n"><div class="q108nh"><span>Notes</span>'+(J.length?'<em>'+J.length+'</em>':'')+'</div>'
   +(show.length?'<ul class="q108nl">'+show.map(function(n){return '<li><button data-zact="q108jedit:'+c.id+':'+cl.id+':'+n.id+'"><span>'+esc(n.text)+'</span><small>'+esc(q108JotDay(n.date))+'</small></button></li>'}).join('')+'</ul>':'')
   +(J.length>5?'<button class="q108more" data-zact="q108jall:'+cl.id+'">'+(all?'Show fewer':'Show all '+J.length+' notes')+'</button>':'')
-  +'<div class="q108nadd"><input id="q108j-'+cl.id+'" data-zenter="q108jadd:'+c.id+':'+cl.id+'" placeholder="Add a note" autocomplete="off" aria-label="New note for '+esc(cl.title)+'"><button class="zbtn" data-zact="q108jadd:'+c.id+':'+cl.id+'">Add</button></div></div>'}
+  +'<div class="q108nadd"><input id="q108j-'+cl.id+'" data-zenter="q108jadd:'+c.id+':'+cl.id+'" placeholder="Add a note" autocomplete="off" aria-label="New note for '+esc(cl.title)+'"><button class="q108nplus" data-zact="q108jadd:'+c.id+':'+cl.id+'" aria-label="Add the note">'+zI('<path d="M12 5v14M5 12h14"/>',14)+'</button></div></div>'}
 ZACT.q108jadd=function(cid,clid){var cl=zItem(classById(cid),clid),v=zv('q108j-'+clid);if(!cl)return;if(!v){var i0=document.getElementById('q108j-'+clid);if(i0)i0.focus();return}
  cl.jot=(cl.jot||[]).concat(v.split(/\n+/).map(function(t){return t.replace(/^\s*[-•*]\s*/,'').trim()}).filter(Boolean).map(function(t){return {id:uid(),text:t,date:iso(today()),at:new Date().toISOString()}}));
  touch(cl);save();render();setTimeout(function(){var i=document.getElementById('q108j-'+clid);if(i)i.focus()},30)};
@@ -28953,6 +28945,21 @@ ZM.q108jot={html:function(m){var f=q108JotFind(m);if(!f)return null;
   f.n.text=t;f.n.date=zv('q108jd')||f.n.date||iso(today());touch(f.cl);save();view.modal=null;render()},
  saveLabel:'Save',del:function(m){return 'q108jdel:'+m.cid+':'+m.clid+':'+m.nid}};
 ZACT.q108jdel=function(cid,clid,nid){var cl=zItem(classById(cid),clid);if(!cl)return;cl.jot=(cl.jot||[]).filter(function(x){return x.id!==nid});touch(cl);save();view.modal=null;render();zToast('Note deleted.')};
+// v298: "+ Add a to-do" at the bottom of a client's to-dos opens this (the big inline box with date and Add is gone)
+ZACT.q108tnew=function(cid,clid){zOpen('q108todo',{cid:cid,clid:clid})};
+ZM.q108todo={html:function(m){var c=classById(m.cid),cl=c&&zItem(c,m.clid);if(!cl)return null;
+ var P=q108Projs(c,cl).filter(function(p){return p.status!=='done'});
+ return '<h3>New to-do</h3><p class="q53in">For '+esc(cl.title)+'</p>'
+  +'<div class="field"><label for="q108on">To-do</label><input id="q108on" placeholder="What needs doing?" data-zenter="q108osave" autocomplete="off"></div>'
+  +(P.length?'<div class="field"><label for="q108op">Project <small class="q53opt">optional</small></label><select id="q108op"><option value="">No project</option>'+P.map(function(p){return '<option value="'+p.id+'">'+esc(p.title)+'</option>'}).join('')+'</select></div>':'')
+  +'<div class="field"><label for="q108od">Due <small class="q53opt">optional</small></label><input id="q108od" type="date"></div>'
+  +'<label class="zcheck"><input type="checkbox" id="q108ot"> Plan it for today</label>'},
+ save:function(m){var c=classById(m.cid),cl=c&&zItem(c,m.clid),n=zv('q108on');if(!cl)return;
+  if(!n){zToast('Type the to-do first.');var i=document.getElementById('q108on');if(i)i.focus();return}
+  var p=zv('q108op')&&zItem(c,zv('q108op'));if(!p||p.t!=='proj')p=cl;
+  var s={id:uid(),title:n,done:false},d=zv('q108od'),t=document.getElementById('q108ot');if(d)s.due=d;if(t&&t.checked)s.plan=[iso(today())];
+  p.steps=p.steps||[];p.steps.push(s);touch(p);save();view.modal=null;render();zToast('Added to '+(p===cl?cl.title:p.title)+'.')},saveLabel:'Add'};
+ZACT.q108osave=function(){var m=view.modal;if(m&&m.kind==='q108todo')ZM.q108todo.save(m)};
 ZACT.q108go=function(clid){var pg=q108Page();if(!pg)return;go('class',pg.id);if(clid)ZACT.q108jump(clid)};
 
 try{spBoot()}catch(e){}
