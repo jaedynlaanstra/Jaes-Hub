@@ -7197,6 +7197,107 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 #q104top .zpill{margin:0 0 0 8px}
 #q104top .zpillbtn b{font-size:11px;font-weight:400;overflow:visible;opacity:.8}
 #q104top .zpill-band .zpilllist{top:40px}
+/* v295: Clients page (q108): every client's to-dos and projects at once, with Plan my day beside them */
+.q108 button{white-space:normal}.q108 .q108chip{white-space:nowrap}
+.q108top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 16px;flex-wrap:wrap}
+.q108top small{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:13.5px;color:var(--ink2)}
+.q108top small svg{color:#B08A2E}
+.q108grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.q108rail{order:-1;min-width:0}
+.q108main{min-width:0}
+@media(min-width:1100px){
+ .q108grid{grid-template-columns:minmax(0,1fr) 340px;gap:20px}
+ .q108rail{order:0;position:sticky;top:var(--q108top,84px)}
+}
+.q108chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.q108chip{display:inline-flex;align-items:center;gap:7px;flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:4px 12px 4px 4px;font:inherit;font-size:13px;color:var(--ink);cursor:pointer;min-height:0!important}
+.q108chip:hover{border-color:var(--line2)}
+.q108chip .q84av{width:26px;height:26px;font-size:12px}
+.q108chip em{font-style:normal;font-size:11.5px;color:var(--ink3);background:var(--paper,#F6F4F0);border-radius:99px;padding:1px 7px}
+.q108cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:16px;align-items:start}
+.q108c{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-width:0;--wc:var(--gc);transition:box-shadow .3s}
+.q108c.q108lit{box-shadow:0 0 0 3px var(--gt),0 0 0 4px var(--gc)}
+.q108h{display:flex;align-items:center;gap:4px;background:var(--gt);padding:10px 8px 10px 12px}
+.q108hb{flex:1;min-width:0;display:flex;align-items:center;gap:12px;background:none;border:none;padding:0;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.q108hb .q84av{width:40px;height:40px;font-size:17px;box-shadow:0 0 0 2px var(--card)}
+.q108ht{min-width:0;display:flex;flex-direction:column;gap:2px}
+.q108ht b{font-size:16px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.q108ht small{font-size:12.5px;color:var(--gc)}
+.q108late{color:#A34A3F}
+.q108h .zmini{flex:none;color:var(--gc)}
+.q108fold svg{transition:transform .2s}
+.q108c.shut .q108fold svg{transform:rotate(-90deg)}
+.q108b{padding:6px 14px 12px}
+.q108rows{display:flex;flex-direction:column}
+.q108r,.q108pr{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.q108rows>.q108r:last-child{border-bottom:none}
+.q108r.sub{padding-left:22px}
+.q108ck{width:20px;height:20px;border-radius:6px}
+.q108rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;background:none;border:none;padding:0;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.q108rt>span{font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.q108rt>small{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink3);overflow-wrap:anywhere}
+.q108rt>small .q84av{width:16px;height:16px;font-size:9px;flex:none}
+.q108r.y .q108rt>span,.q108pr.y .q108rt>span{color:var(--ink3);text-decoration:line-through}
+.q108due{flex:none;font-size:11.5px;color:var(--ink2);background:var(--paper,#F6F4F0);border-radius:99px;padding:3px 8px;white-space:nowrap}
+.q108due.late{color:#A34A3F;background:#F6E7E4}
+.q108due.today{color:var(--gc,#8A6A1F);background:var(--gt,#F5E9C9)}
+.q108sun{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:4px;height:28px;min-width:28px;padding:0 6px;border:1px solid var(--line);background:var(--card);border-radius:99px;color:var(--ink3);cursor:pointer;font:inherit;min-height:0!important}
+.q108sun:hover{color:#9A7524;border-color:#E6D3A0}
+.q108sun.on{background:#F6EBCB;border-color:#E9D6A1;color:#86671F;padding:0 9px 0 7px}
+.q108sun b{font-size:12px;font-weight:500}
+.q108p{margin-top:10px;border:1px solid var(--line);border-radius:14px;padding:2px 12px 4px;background:color-mix(in srgb,var(--gt) 30%,var(--card))}
+.q108ph{display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;padding:9px 0 7px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;min-height:0!important}
+.q108pic{flex:none;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--gt);color:var(--gc)}
+.q108pt{flex:1;min-width:0;font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.q108ps{flex:none;font-size:11px;border-radius:99px;padding:2px 8px;background:#ECEBE9;color:#7A756E;white-space:nowrap}
+.q108ps.doing{background:var(--gt);color:var(--gc)}
+.q108ps.done{background:#E3EDE1;color:#5F7D58}
+.q108pn{flex:none;font-size:11.5px;color:var(--ink3);white-space:nowrap}
+.q108chev{flex:none;color:var(--ink3);display:inline-flex}
+.q108p .q108r{border-bottom-color:color-mix(in srgb,var(--line) 70%,transparent)}
+.q108empty{margin:8px 0;font-size:13px;color:var(--ink3);line-height:1.45}
+.q108empty.sm{font-size:12.5px;margin:4px 0 8px}
+.q108empty svg{vertical-align:-2px;color:#B08A2E}
+.q108add{display:grid;grid-template-columns:minmax(0,150px) auto;justify-content:start;gap:6px;margin-top:12px}
+.q108add.wsel{grid-template-columns:132px minmax(0,1fr) auto;justify-content:stretch}
+.q108add>input{grid-column:1/-1;min-width:0;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+.q108add .zdatew{flex:none;min-width:0}
+.q108add .zdatew>input{font-size:13.5px;padding:8px;border:1px solid var(--line);border-radius:10px}
+.q108add select{width:100%;min-width:0;font-size:13.5px;padding:8px;border:1px solid var(--line);border-radius:10px}
+.q108add .zbtn{padding:8px 14px}
+.q108foot{display:flex;justify-content:flex-start;margin-top:10px}
+.q108foot .zlink{font-size:13px;color:var(--gc)}
+.q108none{padding:22px 20px}
+.q108none b{font-size:16px;font-weight:600}
+.q108none p{margin:6px 0 0;font-size:13.5px;color:var(--ink2);line-height:1.5}
+/* Plan my day */
+.q108plan{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.q108pt0{padding:14px 16px 16px}
+.q108eb{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.8;font-weight:500}
+.q108nav{display:flex;align-items:center;gap:6px;margin-top:6px}
+.q108nav .zmini{color:inherit;opacity:.85;width:30px;height:30px;font-size:18px}
+.q108nav .zmini:hover{background:rgba(255,255,255,.15);opacity:1}
+.q108dt{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column}
+.q108dt b{font-size:20px;font-weight:500;line-height:1.2}
+.q108dt small{font-size:12.5px;opacity:.8}
+.q108sum{display:flex;align-items:center;gap:12px;margin-top:12px;background:rgba(255,255,255,.12);border-radius:14px;padding:8px 12px}
+.q108sum>span{display:flex;flex-direction:column;gap:1px;min-width:0}
+.q108sum b{font-size:14.5px;font-weight:600}
+.q108sum small{font-size:12px;opacity:.85}
+.q108ring{flex:none}
+.q108back{display:block;margin:10px auto 0;background:rgba(255,255,255,.16);color:inherit;border:none;border-radius:99px;padding:5px 14px;font:inherit;font-size:12.5px;cursor:pointer;min-height:0!important}
+.q108pb{padding:4px 14px 14px;--wc:#86671F}
+.q108pb .q108pr:last-of-type{border-bottom:none}
+.q108sh{display:flex;align-items:center;justify-content:space-between;margin:14px 0 2px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:500}
+.q108sh span{letter-spacing:0;font-size:11.5px;background:#F6E7E4;color:#A34A3F;border-radius:99px;padding:1px 8px}
+.q108more{display:block;background:none;border:none;padding:6px 0 0;font:inherit;font-size:12.5px;color:var(--ink3);cursor:pointer;min-height:0!important}
+.q108wk{display:block;width:100%;margin-top:12px;border:1px solid var(--line);background:var(--paper,#F6F4F0);border-radius:12px;padding:9px 12px;font:inherit;font-size:13px;color:var(--ink2);cursor:pointer;min-height:0!important}
+.q108wk:hover{border-color:var(--line2)}
+@media(max-width:700px){
+
+ .q108b{padding:4px 12px 12px}
+}
+.q84tor{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 </style>
 </head>
 <body>
@@ -7506,7 +7607,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v294';
+var BUILD='v295';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -26188,6 +26289,10 @@ function q84Row(c,p,s){var td=iso(today());
 // All clients: a card for each, with what's left and the next thing due
 function q84Grid(c){
  var C=q84Clients(c),td=iso(today());
+ // v295: clients have their own page now; Projects shows a short card that opens it (the full grid is the fallback)
+ var cpg=q108Page();
+ if(cpg&&c.space==='work')return '<section class="z3card q84to"><div class="z3h"><h3>Clients</h3><button class="zbtn" data-zact="q108go">Open Clients ›</button></div>'
+  +'<div class="q84tor">'+(C.length?C.slice(0,8).map(function(cl){return '<button class="q108chip" data-zact="q108go:'+cl.id+'">'+q84Av(cl)+'<span>'+esc(cl.title)+'</span></button>'}).join('')+(C.length>8?'<span class="zsoft">'+(C.length-8)+' more</span>':''):'<span class="zsoft">Your clients, their to-dos and projects are on the Clients page.</span>')+'</div></section>';
  var cards=C.map(function(cl){var P=q84Projs(c,cl),O=q84Open(c,cl),D=O.filter(function(s){return s.due}).sort(function(a,b){return a.due<b.due?-1:1}),late=D.filter(function(s){return s.due<td}).length;
   return '<button class="q84cc" data-zact="q84open:'+c.id+':'+cl.id+'">'+q84Av(cl)+'<b>'+esc(cl.title)+'</b>'
    +'<small>'+P.length+' project'+(P.length===1?'':'s')+' · '+O.length+' task'+(O.length===1?'':'s')+' to do</small>'
@@ -28623,6 +28728,169 @@ setSpace=function(id){var y=window.scrollY,r=_q107SetSpace.apply(this,arguments)
 /* 6. The space pill (School / Work / Personal) sits beside your name in the band at the top on computers */
 var _q107TopHtml=q104Html;
 q104Html=function(){return _q107TopHtml()+spacePill('band')};
+
+/* ---------- v295: Clients page (prefix q108) ----------
+   Jae: a Clients page in Work (not only inside Projects) that shows every client with ALL their to-dos at once
+   (he jumps between clients a lot), projects inside each client, and a way to plan the day's client work.
+   Nothing moves: clients stay {t:'client'} items on a Projects page (v243, q84) so projects keep p.client.
+   This page is a view over them. A client's to-dos = its own tasks (cl.steps), its projects' tasks (p.steps) and the
+   tasks in a To do group with the client's name (Jae made a group per client before clients existed).
+   Plan my day uses the same plan field as Plan my week (x.plan=[day]), so planned tasks also show on Home and Plan my week.
+   view.q108day = the day being planned (default today). Folded client cards per device: hub:q108f:<clientId>. */
+KINDS.clients={name:'Clients',tpl:'Clients',desc:'Every client’s to-dos and projects on one page, and a plan for your day',ico:'people',col:'sand'};
+PAGE_PAL.clients='sand';
+if(TEMPLATES.work.indexOf('clients')<0)TEMPLATES.work.splice(2,0,'clients');
+if(!STARTER.work.some(function(p){return p[0]==='clients'}))STARTER.work.splice(1,0,['clients','Clients']);
+// the work space gets a Clients page once (after the first sync, like the starter pages; deleting it is respected)
+function q108Ensure(){
+ if(!S.spacesInit||!S.spacesInit.work||S.spacesInit.q108)return;
+ if(sbUser&&(!S.everSynced||!q21Pulled))return;
+ if(!spacePages('work').some(function(p){return p.kind==='clients'})){
+  var pr=spacePages('work').filter(function(p){return p.kind==='projects'})[0],id='pg-work-clients';
+  if(classById(id)||Object.keys(S.deleted||{}).some(function(k){return k.indexOf(id)>-1}))id+='-'+uid(); // a deleted id would be removed again by sync
+  S.classes.push(newPage('work','clients','Clients',id,pr?(pr.ord||0)+0.5:0.5));
+ }
+ S.spacesInit=Object.assign({},S.spacesInit,{q108:true});save();
+}
+var _q108Render=render;
+render=function(){try{q108Ensure()}catch(e){}return _q108Render.apply(this,arguments)};
+function q108Page(){return spacePages('work').filter(function(p){return p.kind==='clients'})[0]||null}
+// the Projects page new clients go on (made if there is none yet)
+function q108Home(make){var p=spacePages('work').filter(function(x){return x.kind==='projects'})[0]||null;
+ if(!p&&make){p=newPage('work','projects','Projects',classById('pg-work-projects')?uid():'pg-work-projects',0);S.classes.push(p);save()}return p}
+function q108All(){var L=[];spacePages('work').forEach(function(c){if(c.kind!=='projects')return;q84Clients(c).forEach(function(cl){L.push({c:c,cl:cl})})});
+ return L.sort(function(a,b){return String(a.cl.title).localeCompare(String(b.cl.title))})}
+function q108Norm(s){return String(s||'').trim().toLowerCase().replace(/\s+/g,' ')}
+// To do groups named like the client
+function q108Groups(cl){var n=q108Norm(cl.title),out=[];if(!n)return out;
+ spacePages('work').forEach(function(p){if(p.kind!=='todo')return;zSecs(p).forEach(function(s){if(q108Norm(s.name)===n)out.push({c:p,s:s})})});return out}
+// an entry: {k:'s', c, p (client or project), s} or {k:'t', c, t}. o = the thing itself
+function q108E(k,c,p,x){return k==='s'?{k:'s',c:c,p:p,s:x,o:x,key:'s~'+c.id+'~'+p.id+'~'+x.id}:{k:'t',c:c,t:x,o:x,key:'t~'+c.id+'~'+x.id}}
+function q108Own(c,cl){var L=(cl.steps||[]).map(function(s){return q108E('s',c,cl,s)});
+ q108Groups(cl).forEach(function(g){(g.c.tasks||[]).forEach(function(t){if(t.sec===g.s.id)L.push(q108E('t',g.c,null,t))})});return L}
+function q108Projs(c,cl){return q84Projs(c,cl).sort(function(a,b){var o={doing:0,todo:1,done:2};return (o[a.status]||1)-(o[b.status]||1)||String(a.title).localeCompare(String(b.title))})}
+function q108Every(c,cl){var L=q108Own(c,cl);q84Projs(c,cl).forEach(function(p){(p.steps||[]).forEach(function(s){L.push(q108E('s',c,p,s))})});return L}
+function q108ByDue(a,b){var p=a.o.due||'9',q=b.o.due||'9';return p<q?-1:p>q?1:String(a.o.title).localeCompare(String(b.o.title))}
+function q108Find(key){var k=String(key).split('~'),c=classById(k[1]);if(!c)return null;
+ if(k[0]==='t'){var t=zTask(c,k[2]);return t?q108E('t',c,null,t):null}
+ var p=zItem(c,k[2]),s=p&&(p.steps||[]).filter(function(x){return x.id===k[3]})[0];return s?q108E('s',c,p,s):null}
+function q108Day(){var d=view.q108day;return d&&/^\d{4}-\d\d-\d\d$/.test(d)?d:iso(today())}
+function q108Hue(cl){var K=Object.keys(ZC).filter(function(k){return k!=='grey'}),n=Math.abs(String(cl.title||'').split('').reduce(function(a,ch){return a*31+ch.charCodeAt(0)|0},7));return ZC[K[n%K.length]]}
+function q108DayName(d){var td=iso(today());return d===td?'Today':d===zAddDays(td,1)?'Tomorrow':d===zAddDays(td,-1)?'Yesterday':parseISO(d).toLocaleDateString('en-CA',{weekday:'long'})}
+var Q108SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>';
+function q108Due(o){if(!o.due)return '';var td=iso(today()),late=!o.done&&o.due<td;
+ return '<span class="q108due'+(late?' late':o.due===td?' today':'')+'">'+(late?esc(cpCountdown(o.due).t):o.due===td?'Today':o.due===zAddDays(td,1)?'Tomorrow':esc(zShortDay(o.due)))+'</span>'}
+function q108Tick(e){var o=e.o;
+ return '<button class="zck q108ck'+(o.done?' y':'')+'" '+(e.k==='s'?'data-tick="ps~'+e.p.id+'~'+o.id+'"':'data-tick="'+o.id+'"')+' data-c="'+e.c.id+'" aria-label="'+(o.done?'Mark not done':'Mark done')+'">'+(o.done?zI(ZIC.check,11):'')+'</button>'}
+function q108Edit(e){return e.k==='s'?'q53edit:'+e.c.id+':'+e.p.id+':'+e.o.id:'taskedit:'+e.c.id+':'+e.o.id}
+// a to-do row on a client card: tick, name, due, and the sun that puts it on the day you're planning
+function q108Row(e,day,from){var o=e.o,on=planDay(o)===day;
+ return '<div class="q108r'+(o.done?' y':'')+(e.k==='s'&&o.sub?' sub':'')+'">'+q108Tick(e)
+  +'<button class="q108rt" data-zact="'+q108Edit(e)+'"><span>'+esc(o.title)+'</span>'+(from?'<small>'+esc(from)+'</small>':'')+'</button>'
+  +q108Due(o)+(o.done?'':'<button class="q108sun'+(on?' on':'')+'" data-zact="q108sun:'+e.key+'" aria-pressed="'+on+'" aria-label="'+(on?'Take off ':'Plan for ')+esc(q108DayName(day).toLowerCase())+'" title="'+(on?'Planned for ':'Plan for ')+esc(q108DayName(day).toLowerCase())+'">'+zI(Q108SUN,15)+(on?'<b>'+esc(q108DayName(day))+'</b>':'')+'</button>')+'</div>'}
+function q108Fold(id){try{return localStorage.getItem('hub:q108f:'+id)==='1'}catch(e){return false}}
+var Q108ST={todo:'Not started',doing:'In progress',done:'Done'};
+function q108Card(x,day){var c=x.c,cl=x.cl,td=iso(today()),Z=q108Hue(cl);
+ var own=q108Own(c,cl),P=q108Projs(c,cl),all=q108Every(c,cl),open=all.filter(function(e){return !e.o.done});
+ var late=open.filter(function(e){return e.o.due&&e.o.due<td}).length,ownOpen=own.filter(function(e){return !e.o.done}).sort(q108ByDue);
+ var pOpen=P.filter(function(p){return p.status!=='done'}),pDone=P.length-pOpen.length,shut=q108Fold(cl.id);
+ var meta=[open.length+' to do'];if(late)meta.push('<span class="q108late">'+late+' late</span>');if(P.length)meta.push(P.length+' project'+(P.length===1?'':'s'));
+ var body='';
+ body+=ownOpen.length?'<div class="q108rows">'+ownOpen.map(function(e){return q108Row(e,day,e.k==='t'?'From To do':'')}).join('')+'</div>'
+  :(pOpen.length?'':'<p class="q108empty">Nothing to do for '+esc(cl.title)+'. Add a to-do below.</p>');
+ pOpen.forEach(function(p){var st=p.steps||[],dn=st.filter(function(s){return s.done}).length,po=st.filter(function(s){return !s.done}).map(function(s){return q108E('s',c,p,s)});
+  body+='<div class="q108p"><button class="q108ph" data-zact="q108popen:'+c.id+':'+cl.id+':'+p.id+'" title="Open the project">'
+   +'<span class="q108pic">'+zI(ZIC.folder,14)+'</span><span class="q108pt">'+esc(p.title)+'</span>'
+   +'<span class="q108ps '+esc(p.status||'todo')+'">'+esc(Q108ST[p.status]||Q108ST.todo)+'</span>'
+   +(st.length?'<span class="q108pn">'+dn+' of '+st.length+'</span>':'')+'<span class="q108chev">'+zI('<path d="m9 6 6 6-6 6"/>',14)+'</span></button>'
+   +(po.length?'<div class="q108rows">'+po.map(function(e){return q108Row(e,day)}).join('')+'</div>':'<p class="q108empty sm">No open tasks in this project.</p>')+'</div>'});
+ if(pDone)body+='<p class="q108empty sm">'+pDone+' finished project'+(pDone===1?'':'s')+'</p>';
+ var dests='<option value="'+cl.id+'">No project</option>'+pOpen.map(function(p){return '<option value="'+p.id+'">'+esc(p.title)+'</option>'}).join('');
+ body+='<div class="q108add'+(pOpen.length?' wsel':'')+'"><input id="q108a-'+cl.id+'" data-zenter="q108add:'+c.id+':'+cl.id+'" placeholder="Add a to-do" autocomplete="off" aria-label="New to-do for '+esc(cl.title)+'">'
+  +'<span class="zdatew empty"><input type="date" id="q108d-'+cl.id+'" aria-label="Due date"><span class="zdph" aria-hidden="true">Due date</span></span>'
+  +(pOpen.length?'<select id="q108w-'+cl.id+'" aria-label="Add it to">'+dests+'</select>':'')
+  +'<button class="zbtn" data-zact="q108add:'+c.id+':'+cl.id+'">Add</button></div>'
+  +'<div class="q108foot"><button class="zlink" data-zact="q108pnew:'+c.id+':'+cl.id+'">+ New project</button></div>';
+ return '<section class="q108c'+(shut?' shut':'')+'" id="q108-'+cl.id+'" style="--gt:'+Z[0]+';--gc:'+Z[1]+'">'
+  +'<div class="q108h"><button class="q108hb" data-zact="q108fold:'+cl.id+'" aria-expanded="'+(!shut)+'">'+q84Av(cl)+'<span class="q108ht"><b>'+esc(cl.title)+'</b><small>'+meta.join(' · ')+'</small></span></button>'
+  +'<button class="zmini" data-zact="q84edit:'+c.id+':'+cl.id+'" aria-label="Edit '+esc(cl.title)+'">'+zI(ZIC.dots,16)+'</button>'
+  +'<button class="zmini q108fold" data-zact="q108fold:'+cl.id+'" aria-label="'+(shut?'Show':'Hide')+' '+esc(cl.title)+'’s to-dos">'+zI('<path d="m6 9 6 6 6-6"/>',16)+'</button></div>'
+  +(shut?'':'<div class="q108b">'+body+'</div>')+'</section>';
+}
+// Plan my day: what you picked for the day, then what's late or due that isn't picked yet
+function q108Plan(day,X){var td=iso(today()),every=[];
+ X.forEach(function(x){q108Every(x.c,x.cl).forEach(function(e){e.cl=x.cl;every.push(e)})});
+ var picked=every.filter(function(e){return planDay(e.o)===day}).sort(function(a,b){return (a.o.done?1:0)-(b.o.done?1:0)||q108ByDue(a,b)});
+ var dn=picked.filter(function(e){return e.o.done}).length;
+ var sugg=every.filter(function(e){return !e.o.done&&e.o.due&&e.o.due<=day&&planDay(e.o)!==day}).sort(q108ByDue);
+ var side=chromeHex('sideBg'),ink=contrast(side,'#ffffff')>=2.6?'#ffffff':'#26221d';
+ var pct=picked.length?dn/picked.length:0,r=17,C=2*Math.PI*r;
+ var ring='<svg class="q108ring" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="5"/>'
+  +(pct>0?'<circle cx="22" cy="22" r="'+r+'" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+(C*pct).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 22 22)"/>':'')+'</svg>';
+ var row=function(e,add){var o=e.o;
+  return '<div class="q108pr'+(o.done?' y':'')+'">'+q108Tick(e)+'<button class="q108rt" data-zact="'+q108Edit(e)+'"><span>'+esc(o.title)+'</span><small>'+q84Av(e.cl)+esc(e.cl.title)+(e.k==='s'&&e.p.t==='proj'?' · '+esc(e.p.title):'')+'</small></button>'+q108Due(o)
+   +(add?'<button class="q108sun" data-zact="q108sun:'+e.key+'" aria-label="Plan '+esc(o.title)+' for '+esc(q108DayName(day).toLowerCase())+'" title="Plan for '+esc(q108DayName(day).toLowerCase())+'">'+zI(Q108SUN,15)+'</button>'
+    :'<button class="zmini" data-zact="q108sun:'+e.key+'" aria-label="Take '+esc(o.title)+' off this day">×</button>')+'</div>'};
+ var more=view.q108more?sugg.length:Math.min(sugg.length,4);
+ return '<section class="q108plan"><div class="q108pt0" style="background:'+side+';color:'+ink+'">'
+  +'<div class="q108eb">Plan my day</div>'
+  +'<div class="q108nav"><button class="zmini" data-zact="q108dayn:-1" aria-label="Day before">‹</button><span class="q108dt"><b>'+esc(q108DayName(day))+'</b><small>'+esc(parseISO(day).toLocaleDateString('en-CA',{weekday:day===td||day===zAddDays(td,1)||day===zAddDays(td,-1)?'long':undefined,month:'long',day:'numeric'}))+'</small></span>'
+  +'<button class="zmini" data-zact="q108dayn:1" aria-label="Day after">›</button></div>'
+  +'<div class="q108sum">'+ring+'<span><b>'+(picked.length?dn+' of '+picked.length+' done':'Nothing planned yet')+'</b><small>'+(picked.length?(picked.length-dn?picked.length-dn+' left to work on':'All done. Nice work!'):'Tap the sun on any to-do to add it.')+'</small></span></div>'
+  +(day!==td?'<button class="q108back" data-zact="q108dayn:0">Back to today</button>':'')+'</div>'
+  +'<div class="q108pb">'+(picked.length?picked.map(function(e){return row(e,false)}).join(''):'<p class="q108empty">Pick the client to-dos you’ll work on '+esc(day===td?'today':'this day')+' with the '+zI(Q108SUN,13)+' on each one.</p>')
+  +(sugg.length?'<div class="q108sh">'+(day===td?'Late or due today':'Late or due by then')+'<span>'+sugg.length+'</span></div>'+sugg.slice(0,more).map(function(e){return row(e,true)}).join('')
+   +(sugg.length>4?'<button class="q108more" data-zact="q108more">'+(view.q108more?'Show less':sugg.length-4+' more')+'</button>':''):'')
+  +'<button class="q108wk" data-go="plan">Plan my week ›</button></div></section>';
+}
+function q108View(pg){
+ var X=q108All(),day=q108Day(),home=q108Home(false);
+ var chips=X.length>1?'<div class="q108chips" role="navigation" aria-label="Jump to a client">'+X.map(function(x){var n=q108Every(x.c,x.cl).filter(function(e){return !e.o.done}).length;
+  return '<button class="q108chip" data-zact="q108jump:'+x.cl.id+'">'+q84Av(x.cl)+'<span>'+esc(x.cl.title)+'</span>'+(n?'<em>'+n+'</em>':'')+'</button>'}).join('')+'</div>':'';
+ var cards=X.length?X.map(function(x){return q108Card(x,day)}).join(''):'<section class="q108c q108none"><b>No clients yet</b><p>Add a client to keep their to-dos and projects together. You’ll see every client’s to-dos here at once.</p></section>';
+ var head='<div class="q108top"><div><small>'+(X.length?X.length+' client'+(X.length===1?'':'s')+' · tap the '+zI(Q108SUN,12)+' on a to-do to plan it':'Your clients, their to-dos and projects')+'</small></div>'
+  +'<button class="zbtn q108new" data-zact="q108cnew">+ New client</button></div>';
+ return '<div class="q108"'+(pg?' data-pg="'+pg.id+'"':'')+'>'+head+'<div class="q108grid"><div class="q108main">'+chips+'<div class="q108cards">'+cards+'</div></div><aside class="q108rail">'+q108Plan(day,X)+'</aside></div></div>';
+}
+var _q108ViewPage=viewPage;
+viewPage=function(c){
+ if(c.kind!=='clients')return _q108ViewPage(c);
+ return '<div class="zpage" style="'+zcv(zSoftOf(c))+'">'+q108View(c)
+  +cpSetHead('Page settings','pg')+'<button data-zact="pageedit:'+c.id+'">Rename or recolour</button>'+coverControls(c.id,c)
+  +'<button class="cpdelcls" data-zact="pagedel:'+c.id+'">Delete page</button></div></div>';
+};
+// actions
+ZACT.q108sun=function(key){var e=q108Find(key);if(!e)return;var day=q108Day(),on=planDay(e.o)===day;
+ if(on)delete e.o.plan;else e.o.plan=[day];touch(e.k==='s'?e.p:e.o);save();render();
+ if(!on)zToast('Planned for '+q108DayName(day).toLowerCase()+'.')};
+ZACT.q108dayn=function(n){n=+n;view.q108day=n?zAddDays(q108Day(),n):null;render()};
+ZACT.q108more=function(){view.q108more=!view.q108more;render()};
+ZACT.q108fold=function(id){try{if(q108Fold(id))localStorage.removeItem('hub:q108f:'+id);else localStorage.setItem('hub:q108f:'+id,'1')}catch(e){}render()};
+ZACT.q108jump=function(id){try{localStorage.removeItem('hub:q108f:'+id)}catch(e){}render();setTimeout(function(){var el=document.getElementById('q108-'+id);if(!el)return;
+ var y=el.getBoundingClientRect().top+window.scrollY-90;window.scrollTo({top:Math.max(0,y),behavior:'smooth'});el.classList.add('q108lit');setTimeout(function(){el.classList.remove('q108lit')},1400)},40)};
+ZACT.q108cnew=function(){var h=q108Home(true);ZACT.q84cnew(h.id)};
+ZACT.q108add=function(cid,clid){var c=classById(cid),cl=zItem(c,clid),v=zv('q108a-'+clid);if(!cl)return;if(!v){var i0=document.getElementById('q108a-'+clid);if(i0)i0.focus();return}
+ var w=zv('q108w-'+clid),p=w&&w!==clid?zItem(c,w):null;if(!p||p.t!=='proj')p=cl;
+ var s={id:uid(),title:v,done:false},d=zv('q108d-'+clid);if(d)s.due=d;p.steps=p.steps||[];p.steps.push(s);touch(p);save();render();
+ setTimeout(function(){var i=document.getElementById('q108a-'+clid);if(i)i.focus();var sel=document.getElementById('q108w-'+clid);if(sel&&p!==cl)sel.value=p.id},30)};
+ZACT.q108pnew=function(cid,clid){zOpen('q108proj',{cid:cid,clid:clid})};
+ZM.q108proj={html:function(m){var cl=zItem(classById(m.cid),m.clid);if(!cl)return null;
+ return '<h3>New project</h3><p class="q53in">For '+esc(cl.title)+'</p>'
+  +'<div class="field"><label for="q108pn">Name</label><input id="q108pn" placeholder="What is the project?" data-zenter="q108psave"></div>'
+  +'<div class="field"><label for="q108pd">Due <small class="q53opt">optional</small></label><input id="q108pd" type="date"></div>'},
+ save:function(m){var c=classById(m.cid),cl=c&&zItem(c,m.clid),n=zv('q108pn');if(!cl)return;if(!n){zToast('Give the project a name.');return}
+  var p=touch({id:uid(),t:'proj',title:n,status:'todo',steps:[],links:[],client:cl.id});var d=zv('q108pd');if(d)p.due=d;
+  c.items.push(p);save();view.modal=null;render();zToast('Project added. Add its to-dos from the box under '+cl.title+'.')},saveLabel:'Add project'};
+ZACT.q108psave=function(){var m=view.modal;if(m&&m.kind==='q108proj')ZM.q108proj.save(m)};
+// a project opens in full on its Projects page (status, due date, links, notes, files)
+ZACT.q108popen=function(cid,clid,pid){go('class',cid);view.q84c=cid+':'+clid;view.zproj=pid;render()};
+// the client pop-up opens that client on the Projects page when saved; on this page, stay here
+function q108Here(){var c=view.page==='page'&&classById(view.classId);return !!(c&&c.kind==='clients')}
+var _q108CSave=ZM.q84client.save;
+ZM.q84client.save=function(){var here=q108Here(),r=_q108CSave.apply(this,arguments);if(here&&!view.modal){view.q84c=null;render()}return r};
+var _q108CDel=ZACT.q84cdel;
+ZACT.q84cdel=function(){var here=q108Here(),r=_q108CDel.apply(this,arguments);if(here){view.q84c=null;render()}return r};
+ZACT.q108go=function(clid){var pg=q108Page();if(!pg)return;go('class',pg.id);if(clid)ZACT.q108jump(clid)};
 
 try{spBoot()}catch(e){}
 load();
