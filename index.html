@@ -7863,7 +7863,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v300';
+var BUILD='v301';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -8066,7 +8066,14 @@ var PRIOS={High:{bg:'#F7ECEA',ink:'#A34A3F'},Medium:{bg:'#F5F1E8',ink:'#7A6543'}
 function prioPill(v){if(!v||!PRIOS[v])return '';var q=PRIOS[v];return '<span class="prio" style="background:'+q.bg+';color:'+q.ink+'">'+v+'</span>'}
 function contactById(c,id){for(var i=0;i<c.contacts.length;i++){if(c.contacts[i].id===id)return c.contacts[i]}return null}
 function linkById(c,id){for(var i=0;i<c.links.length;i++){if(c.links[i].id===id)return c.links[i]}return null}
-function mailto(ct,c){return 'https://outlook.office.com/mail/deeplink/compose?to='+encodeURIComponent(ct.email)+'&subject='+encodeURIComponent(c.code||c.name)}
+/* v301: photo picker on the add/edit person screen */
+function ctPhotoField(ph){
+ return '<div class="field" id="ctphotof"><label>Photo <small class="q53opt">optional</small></label><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+  +(ph?'<img class="cpphoto" src="'+ph+'" alt="">':'<div class="cpphoto cpphotoempty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg></div>')
+  +'<label class="fakebtn"><input type="file" accept="image/*" data-ctphotopick="1" style="display:none">'+(ph?'Change photo':'Choose a photo')+'</label>'
+  +(ph?'<button class="ghost" data-zact="ctphotodel">Remove photo</button>':'')+'</div></div>';
+}
+function mailto(ct,c){return 'https://outlook.office.com/mail/deeplink/compose?to='+encodeURIComponent(ct.email)+(c&&c.id!==REF_CID?'&subject='+encodeURIComponent(c.code||c.name):'')}
 function classById(id){for(var i=0;i<S.classes.length;i++){if(S.classes[i].id===id)return S.classes[i]}return null}
 /* on phone the sidebar is always an off-canvas drawer (opened by the menu button), never an inline
    column, so the desktop "hide the sidebar to reclaim width" setting must not apply there -- otherwise
@@ -11291,9 +11298,9 @@ function viewCalendar(){
 }
 function viewProfessors(){
  var classes=S.classes.filter(function(c){return !isRefClass(c)}),col=cpVarRefs(['kppl']),real=cpSiteColors('professors');
- var people=[];classes.forEach(function(c){c.contacts.forEach(function(ct){people.push({ct:ct,c:c})})});
+ var people=[];classes.concat([classById(REF_CID)]).forEach(function(c){if(c)(c.contacts||[]).forEach(function(ct){people.push({ct:ct,c:c})})});
  var q=(view.pplQ||'').trim().toLowerCase();
- var shown=people.filter(function(x){return !q||[x.ct.name,x.ct.role,x.ct.email,x.ct.office,x.c.name,x.c.code].join(' ').toLowerCase().indexOf(q)>-1});
+ var shown=people.filter(function(x){return !q||[x.ct.name,x.ct.role,x.ct.email,x.ct.office,x.c.id===REF_CID?'':x.c.name,x.c.code].join(' ').toLowerCase().indexOf(q)>-1});
  var P='<section class="cpsec" id="k-ppl">'+cpHead('kppl',col.kppl,'People',people.length?people.length+'':'',people.length?'Professors and contacts from all your classes':'Professors, TAs and anyone else worth keeping handy',
    (people.length>4?'<label class="cpsearch">'+CP_ICO.search+'<input type="text" id="pplsearch" placeholder="Search people" value="'+esc(view.pplQ||'')+'"></label>':'')
    +cpBtn(col.kppl,'+ Add','data-add="contact"'));
@@ -11308,7 +11315,7 @@ function viewProfessors(){
    +(ct.office?'<div class="cpmeta">'+esc(ct.office)+'</div>':'')
    +(ct.hours?'<div class="cpmeta">'+esc(ct.hours)+'</div>':'')
    +(ct.email?'<a class="cpemail" data-phoneapp="1" href="'+mailto(ct,c)+'" target="_blank" rel="noopener">'+esc(ct.email)+'</a>':'')
-   +'<div class="cppfoot"><button class="cpclspill cppclass" data-open="'+c.id+'" style="background:'+p.bg+';color:'+p.ink2+'" title="Open '+esc(c.name)+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(c))+'</button>'
+   +'<div class="cppfoot">'+(c.id===REF_CID?'<span></span>':'<button class="cpclspill cppclass" data-open="'+c.id+'" style="background:'+p.bg+';color:'+p.ink2+'" title="Open '+esc(c.name)+'"><i style="background:'+p.bar+'"></i>'+esc(classLabel(c))+'</button>')
    +'<button class="cpghost" data-edit="contact" data-id="'+ct.id+'" data-c="'+c.id+'">Edit</button></div>'
    +'</div></div>';
  }).join('')+'</div>';
@@ -11670,13 +11677,14 @@ function modalHtml(){
  }else if(m.kind==='contact'){
   var c=m.classId?classById(m.classId):null,ct=(c&&m.id)?contactById(c,m.id):null;
   h='<h3>'+(ct?'Edit person':'Add a person')+'</h3>'
-   +(c?'':'<div class="field"><label for="m8">Which class</label><select id="m8">'
+   +(c?'':'<div class="field"><label for="m8">Which class <small class="q53opt">optional</small></label><select id="m8"><option value="'+REF_CID+'">No class, like the dean or an advisor</option>'
      +S.classes.filter(function(cl){return !isRefClass(cl)}).map(function(cl){return '<option value="'+cl.id+'">'+esc(cl.name)+'</option>'}).join('')+'</select></div>')
    +'<div class="field"><label for="m1">Name</label><input id="m1" value="'+esc(ct?ct.name:'')+'" placeholder="Dr. Casey Boyle"></div>'
    +'<div class="field"><label for="m5">Role</label><input id="m5" value="'+esc(ct?ct.role:'Professor')+'" placeholder="Professor, dean, tutor"></div>'
    +'<div class="field"><label for="m2">Email</label><input id="m2" value="'+esc(ct?ct.email:'')+'" placeholder="name@school.ca"></div>'
    +'<div class="field"><label for="m3">Office</label><input id="m3" value="'+esc(ct?ct.office:'')+'" placeholder="B2043"></div>'
-   +'<div class="field"><label for="m4">Office hours</label><input id="m4" value="'+esc(ct?ct.hours:'')+'" placeholder="Tuesdays 1 to 3 pm"></div>';
+   +'<div class="field"><label for="m4">Office hours</label><input id="m4" value="'+esc(ct?ct.hours:'')+'" placeholder="Tuesdays 1 to 3 pm"></div>'
+   +ctPhotoField(view.modal.pendingPhoto!==undefined?view.modal.pendingPhoto:(ct?(ct.photo||''):''));
  }else if(m.kind==='refedit'){
   var rf=(FILES[m.classId||REF_CID]||[])[m.i];
   if(!rf)return '';
@@ -11780,12 +11788,13 @@ function saveModal(){
    lcls.links.push(touch(nlk));
   }
  }else if(m.kind==='contact'){
-  var c=classById(m.classId||val('m8'));
+  var cid8=m.classId||val('m8');
+  var c=cid8===REF_CID?ensureRefClass():classById(cid8);
   if(!c)return;
-  if(m.id){var ct=contactById(c,m.id);ct.name=val('m1');ct.role=val('m5');ct.email=val('m2');ct.office=val('m3');ct.hours=val('m4');touch(ct)}
+  if(m.id){var ct=contactById(c,m.id);ct.name=val('m1');ct.role=val('m5');ct.email=val('m2');ct.office=val('m3');ct.hours=val('m4');if(m.pendingPhoto!==undefined)ct.photo=m.pendingPhoto;touch(ct)}
   else{
    var nm=val('m1');if(!nm&&!val('m2')){zNeed('m1','Add a name or an email first.');return}
-   c.contacts.push(touch({id:uid(),name:nm,role:val('m5'),email:val('m2'),office:val('m3'),hours:val('m4'),photo:''}));
+   c.contacts.push(touch({id:uid(),name:nm,role:val('m5'),email:val('m2'),office:val('m3'),hours:val('m4'),photo:m.pendingPhoto||''}));
   }
  }else if(m.kind==='note'){
   var nn2=val('m1').trim()||('Notes '+new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'}));
@@ -14332,6 +14341,9 @@ document.addEventListener('change',function(e){
    if(pv)pv.innerHTML='<img src="'+url+'" alt="" style="max-width:32px;max-height:32px;object-fit:contain">';
   },true);
  }
+ if(t.dataset&&t.dataset.ctphotopick&&t.files[0]&&view.modal){
+  shrinkImage(t.files[0],320,function(url){view.modal.pendingPhoto=url;var f=document.getElementById('ctphotof');if(f)f.outerHTML=ctPhotoField(url)},true);
+ }
  if(t.dataset&&t.dataset.linkiconpick&&t.files[0]&&view.modal){
   shrinkImage(t.files[0],160,function(url){
    view.modal.pendingIcon=url;
@@ -14992,6 +15004,7 @@ document.addEventListener('change',function(e){
 
 /* every data-zact="name:arg:arg" goes through here */
 var ZACT={};
+ZACT.ctphotodel=function(){if(!view.modal)return;view.modal.pendingPhoto='';var f=document.getElementById('ctphotof');if(f)f.outerHTML=ctPhotoField('')}; /* v301 */
 document.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('[data-zact]');if(!b)return;
  var a=b.getAttribute('data-zact').split(':'),fn=ZACT[a[0]];if(!fn)return;
