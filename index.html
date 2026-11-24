@@ -7362,12 +7362,16 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q109ndt small{font-size:11px;opacity:.78;line-height:1.2;display:block;overflow:hidden;white-space:nowrap;min-width:0}
 .q109ndt .q109fit{font-size:14px;font-weight:500}
 .q109gpa{background:var(--card,#fff);border:1px solid color-mix(in srgb,var(--ink) 9%,transparent);padding:0}
-.q109gb{display:flex;flex-direction:column;justify-content:center;gap:3px;width:100%;height:100%;padding:8px 16px!important;box-sizing:border-box;min-width:0}
-.q109gt{display:flex;align-items:baseline;justify-content:space-between;gap:10px;min-width:0}
-.q109gl{font-size:14px;font-weight:500;color:var(--ink)}
-.q109gt>b{font-size:24px;font-weight:500;letter-spacing:-.02em;color:var(--ink);line-height:1.1;flex-shrink:0}
+.q109gb{display:flex;flex-direction:column;justify-content:center;gap:2px;width:100%;height:100%;padding:8px 16px!important;box-sizing:border-box;min-width:0}
+.q109gt{display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-width:0} /* v307: stacked, GPA / number / note */
+.q109gl{font-size:11.5px;font-weight:500;color:var(--ink2);line-height:1.2}
+.q109gt>b{font-size:23px;font-weight:500;letter-spacing:-.02em;color:var(--ink);line-height:1.05;flex-shrink:0}
 .q109gb>small{display:block;font-size:11.5px;color:var(--ink2);line-height:1.2;white-space:nowrap;overflow:hidden;min-width:0}
 .q109prof{color:#fff}
+/* v307: the Mini "Hi" card switches to dark words on a light colour (q44Ink adds q44ink), like the big one */
+.q109prof.q44ink{color:#2E2B27}
+.q109prof.q44ink .q109tag{opacity:.66}
+.q109prof.q44ink .q109av{background:rgba(46,43,39,.08)}
 .q109av{width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);font-size:19px;font-weight:500}
 .q109av img{width:100%;height:100%;object-fit:cover}
 .q109pt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
@@ -7886,7 +7890,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v306';
+var BUILD='v307';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -20890,7 +20894,7 @@ function q44Rgb(s){var n=String(s||'').match(/[\d.]+/g);if(!n||n.length<3)return
  if(/^color\(/.test(s))return [n[0]*255,n[1]*255,n[2]*255,n.length>3?n[3]:1];return [n[0],n[1],n[2],n.length>3?n[3]:1]}
 function q44Lum(c){var f=function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(c[0])+.7152*f(c[1])+.0722*f(c[2])}
 function q44Ink(){
- document.querySelectorAll('.q19prof').forEach(function(el){
+ document.querySelectorAll('.q19prof,.q109prof').forEach(function(el){
   var c=q44Rgb(getComputedStyle(el).backgroundColor);if(!c||c[3]<.5)return;
   var dark=(1.05)/(q44Lum(c)+.05)<3;  // white words would be hard to read
   el.classList.toggle('q44ink',dark);
@@ -20899,7 +20903,7 @@ function q44Ink(){
 var q44Q=0;function q44Soon(){if(q44Q)return;q44Q=setTimeout(function(){q44Q=0;q44Ink()},30)}
 var _q44Render=render;
 render=function(){var r=_q44Render.apply(this,arguments);q44Soon();return r};
-try{new MutationObserver(function(){if(document.querySelector('.q19prof'))q44Soon()}).observe(document.getElementById('app')||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']})}catch(e){}
+try{new MutationObserver(function(){if(document.querySelector('.q19prof,.q109prof'))q44Soon()}).observe(document.getElementById('app')||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']})}catch(e){}
 // Colours panel: an × in its top bar, always in view, so you don't have to find Done at the bottom
 var _q44Pick=pickerHtml;
 pickerHtml=function(){var h=_q44Pick.apply(this,arguments);if(!h)return h;
@@ -29352,7 +29356,7 @@ function q109Mini(w,sp){
  if(t==='nextdue'){
   var td=iso(today()),L=zOpenTasks().filter(function(x){return x.t.due}).sort(function(a,b){return a.t.due<b.t.due?-1:a.t.due>b.t.due?1:0}),x=L[0];
   var bg=zNdColor(x);
-  if(!x)return '<section class="q109mini q109nd" style="background:'+bg+'"><div class="q109ndn"><b>✓</b></div><div class="q109ndt"><small>Next due</small><span class="q109fit">Nothing due. Nice.</span></div></section>';
+  if(!x)return '<section class="q109mini q109nd" style="background:'+bg+'"><div class="q109ndb"><div class="q109ndn"><b>✓</b></div><div class="q109ndt"><small>Next due</small><span class="q109fit">Nothing due. Nice.</span></div></div></section>';
   var cd=cpCountdown(x.t.due),n=cd.n,late=n<0;
   var big=n===0?'Today':String(Math.abs(n)),unit=n===0?'':late?(Math.abs(n)===1?'day late':'days late'):(n===1?'day':'days');
   var ed=x.kind==='assign'?'data-edit="assign" data-id="'+x.t.id+'" data-c="'+x.c.id+'"':'data-open="'+x.c.id+'"';
@@ -29361,7 +29365,7 @@ function q109Mini(w,sp){
  }
  if(t==='gpa'){
   var a=q82All();
-  /* top line: GPA and the number; under it, the note across the whole width (shrinks to fit, never runs into the number) */
+  /* stacked (v307, Jae's pick): small GPA label, the number, then the note (shrinks to fit one line) */
   return '<section class="q109mini q109gpa"><button class="q109gb" data-zact="q82open"><span class="q109gt"><span class="q109gl">GPA</span><b>'+q82Fmt(a.gpa)+'</b></span><small class="q109fit2">'+(a.gpa==null?'Tap to add grades':q82Hon(a.gpa)?'Dean’s Honour Roll':'Cumulative')+'</small></button></section>';
  }
  if(t==='profile'){
