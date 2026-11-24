@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- v305 safety net: scripts may only come from Doable itself and the two libraries it uses (pdf reader, text-from-photo), plus Apple's book search. Blocks plugins and base-URL tricks. -->
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://itunes.apple.com; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#23201B">
@@ -7561,6 +7563,19 @@ html body .q101po:hover{background:var(--card)}html body .q101po.on:hover{backgr
 .q109gls{display:flex;flex-direction:column;gap:6px}
 .q109glr{display:flex;gap:6px;align-items:center}
 .q109glr input{flex:1;min-width:0}
+/* v306: a real add button on every gift box, and 16px text on touch screens (iPhone zooms in on anything smaller) */
+.q109ginl{display:flex;gap:8px;align-items:center}
+.q109ginl input{flex:1;min-width:0}
+.q109send{width:34px;height:34px;border-radius:10px;border:0;background:#3a3631;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;cursor:pointer;min-height:0}
+.q109send:hover,.q109addb:hover{background:#25221f}
+.q109addb{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;border-radius:10px;border:0;background:#3a3631;color:#fff;padding:0 16px 0 13px;font:inherit;font-size:14px!important;font-weight:500;cursor:pointer;flex-shrink:0;min-height:0}
+.q109pbox .q109addb{height:38px}
+@media (pointer:coarse),(max-width:760px){
+ .q109gadd input,.q109pbox input,.q109inl input{font-size:16px}
+ .q109ginl input,.q109send{height:40px}
+ .q109send{width:40px;border-radius:11px}
+ .q109gadd .q109addb{height:42px}
+}
 .q109gls .zlink{align-self:flex-start}
 </style>
 </head>
@@ -7871,7 +7886,7 @@ function applyTheme(){
  root.style.setProperty('--doneInk',hsl2hex(c[0],Math.min(c[1]*0.8,30),32));
 }
 
-var BUILD='v304';
+var BUILD='v306';
 /* data format version (v140 safety check). An app only syncs data whose format it understands: if the
    cloud copy was saved by a NEWER format (e.g. the coming School/Work/Personal spaces), this copy stops
    uploading and asks to update, so it can never quietly drop data it doesn't know about. Raise this
@@ -11853,7 +11868,9 @@ function openFile(cid,i){
   if(!f.data){alert(f.cloud?'This file is still downloading from your account. Give it a moment, then try again (Settings > Sync now).':'This file is not saved, so there is nothing to open.');return}
   var bin=atob(f.data),arr=new Uint8Array(bin.length);
   for(var j=0;j<bin.length;j++)arr[j]=bin.charCodeAt(j);
-  url=URL.createObjectURL(new Blob([arr],{type:f.mime||'application/octet-stream'}));
+  // v305: a file opened in a tab runs on Doable's own address, so web-page-like types (which can carry code) never open as pages.
+  var safeMime=/html|svg|xml|javascript/i.test(f.mime||'')?'text/plain':(f.mime||'application/octet-stream');
+  url=URL.createObjectURL(new Blob([arr],{type:safeMime}));
  }
  // Excel, Word and other files: on iPhone/iPad hand them to the share sheet ("Open in Excel", Save to Files);
  // a download link does little inside a Home Screen app. Computers download the file to open it there.
@@ -29682,10 +29699,10 @@ function q109Gifts(c){
  var add='<section class="q109gadd"><input id="q109gi" data-zenter="q109gadd:'+c.id+'" placeholder="Gift idea, like a cozy blanket" autocomplete="off" aria-label="Gift idea">'
   +'<input id="q109gw" list="q109gwl" data-zenter="q109gadd:'+c.id+'" placeholder="Who it’s for" value="'+esc(last)+'" autocomplete="off" aria-label="Who it’s for"><datalist id="q109gwl">'+ppl.map(function(p){return '<option value="'+esc(p)+'">'}).join('')+'</datalist>'
   +'<input id="q109gl" data-zenter="q109gadd:'+c.id+'" placeholder="Link (optional)" autocomplete="off" inputmode="url" aria-label="Link">'
-  +'<button class="zbtn" data-zact="q109gadd:'+c.id+'">Add</button></section>';
+  +'<button class="q109addb" data-zact="q109gadd:'+c.id+'">'+zI(ZIC.plus,16)+'<span>Add gift</span></button></section>';
  /* underneath: a separate + to add a person on their own (ideas can come later) */
  var pbtn='<button class="q109padd" data-zact="q109popen">'+zI(ZIC.plus,14)+'<span>Add person</span></button>';
- var pbox=V.padd?'<div class="q109pbox"><input id="q109gp" data-zenter="q109padd:'+c.id+'" placeholder="Their name, like Mom" autocomplete="off" aria-label="Person’s name"><button class="zbtn" data-zact="q109padd:'+c.id+'">Add</button><button class="q109x2" data-zact="q109popen" aria-label="Close">×</button></div>':'';
+ var pbox=V.padd?'<div class="q109pbox"><input id="q109gp" data-zenter="q109padd:'+c.id+'" placeholder="Their name, like Mom" autocomplete="off" aria-label="Person’s name"><button class="q109addb" data-zact="q109padd:'+c.id+'">'+zI(ZIC.plus,16)+'<span>Add</span></button><button class="q109x2" data-zact="q109popen" aria-label="Close">×</button></div>':'';
  /* one card per person (people you added, plus anyone named on an idea), and "Anyone" for ideas with no name */
  var by={},order=[];
  var card0=function(name,p){var kl=name.toLowerCase();if(!by[kl]){by[kl]={name:name,p:p||null,L:[]};order.push(kl)}else if(p&&!by[kl].p)by[kl].p=p;return by[kl]};
@@ -29701,7 +29718,7 @@ function q109Gifts(c){
     +'<div class="q109rt"><button class="q109tt" data-zact="q109gedit:'+c.id+':'+g.id+'">'+esc(g.title)+(g.price?' <em>'+money(g.price)+'</em>':'')+'</button>'
     +(links.length||g.note?'<div class="q109meta">'+links.map(function(u){return '<a class="q109lk" href="'+esc(q109Url(u))+'" target="_blank" rel="noopener">'+linkIcon(q109Url(u),q109Host(u))+'<span>'+esc(q109Host(u))+'</span></a>'}).join('')+(g.note?'<span class="q109gnote">'+esc(g.note)+'</span>':'')+'</div>':'')+'</div>'
     +'<button class="q109ib" data-zact="q109gedit:'+c.id+':'+g.id+'" aria-label="Links, price and notes for '+esc(g.title)+'">'+zI(ZIC.dots,16)+'</button></div>'};
-  var body=(adding?'<div class="q109inl"><input id="q109gi2" data-zenter="q109gin:'+c.id+':'+key+'" placeholder="Gift idea, then Enter" autocomplete="off" aria-label="Gift idea for '+esc(p.name)+'"></div>':'')
+  var body=(adding?'<div class="q109inl q109ginl"><input id="q109gi2" data-zenter="q109gin:'+c.id+':'+key+'" placeholder="Gift idea" autocomplete="off" enterkeyhint="done" aria-label="Gift idea for '+esc(p.name)+'"><button class="q109send" data-zact="q109gin:'+c.id+':'+key+'" aria-label="Add this gift idea">'+zI(ZIC.plus,18)+'</button></div>':'')
    +(open.length?open.map(row).join(''):(adding?'':'<p class="q109empty">'+(got.length?'All bought. Nice.':'No ideas yet. Tap + to add one.')+'</p>'))+got.map(row).join('');
   return '<section class="q109card q109gc"><div class="q109ch" style="background:'+tint+'"><span class="q109sq" style="background:#fff;color:'+ink+'">'+esc(q109Abbr(p.name))+'</span><b class="q109cn">'+esc(p.name)+'</b>'
    +(got.length?'<span class="q109pill" style="color:'+ink+'">'+got.length+' bought</span>':'')+'<span class="q109pill q109cnt" style="color:'+ink+'">'+open.length+'</span>'
@@ -29728,10 +29745,13 @@ ZACT.q109gopen=function(key){var V=q109V(),k=q109Key(key).toLowerCase();V.gadd=V
 ZACT.q109gin=function(cid,key){
  var c=classById(cid),i=document.getElementById('q109gi2'),t=i&&i.value.trim();if(!c||!t)return;var who=q109Key(key);if(who.toLowerCase()==='anyone')who='';
  c.items=c.items||[];c.items.push(touch({id:uid(),t:'gift',title:t,who:who,links:[],got:false}));save();render();
- setTimeout(function(){var j=document.getElementById('q109gi2');if(j)j.focus()},30);
+ var j0=document.getElementById('q109gi2');if(j0)j0.focus();
+ setTimeout(function(){var j=document.getElementById('q109gi2');if(j&&document.activeElement!==j)j.focus()},30);
 };
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&view.q109&&view.q109.gadd){view.q109.gadd=null;render()}});
 document.addEventListener('focusout',function(e){var t=e.target;if(!t||t.id!=='q109gi2'||t.value.trim())return;setTimeout(function(){var V=q109V();if(V.gadd&&!(document.activeElement&&document.activeElement.id==='q109gi2')&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.q109gc .q109ch'))){V.gadd=null;render()}},150)});
+/* v306: tapping a gift add button keeps the typing box focused, so the phone keyboard stays open */
+document.addEventListener('mousedown',function(e){var b=e.target&&e.target.closest&&e.target.closest('.q109send,.q109gadd .q109addb,.q109pbox .q109addb');if(b)e.preventDefault()});
 /* rename or remove a person (their ideas follow the new name; removing asks first) */
 ZACT.q109pedit=function(cid,key){zOpen('q109person',{cid:cid,name:q109Key(key)})};
 ZM.q109person={html:function(m){
